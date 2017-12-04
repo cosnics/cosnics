@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
@@ -32,7 +33,8 @@ class CreatorComponent extends Manager
                 $this->getEntityIdentifier(),
                 $this->getUser()->getId(),
                 \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects(),
-                $this->getRequest()->server->get('REMOTE_ADDR'));
+                $this->getRequest()->server->get('REMOTE_ADDR')
+            );
 
             if ($entry instanceof Entry)
             {
@@ -42,22 +44,27 @@ class CreatorComponent extends Manager
                     array(
                         self::PARAM_ACTION => self::ACTION_BROWSE,
                         self::PARAM_ENTITY_TYPE => $entry->getEntityType(),
-                        self::PARAM_ENTITY_ID => $entry->getEntityId()));
+                        self::PARAM_ENTITY_ID => $entry->getEntityId()
+                    )
+                );
             }
             else
             {
                 $this->redirect(
                     Translation::get('EntryNotCreated'),
                     true,
-                    array(self::PARAM_ACTION => self::ACTION_VIEW));
+                    array(self::PARAM_ACTION => self::ACTION_VIEW)
+                );
             }
         }
         else
         {
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            );
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
+
             return $component->run();
         }
     }
@@ -70,8 +77,9 @@ class CreatorComponent extends Manager
         {
             $date = DatetimeUtilities::format_locale_date(
                 Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                     Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
-                    $assignment->get_start_time());
+                Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
+                $assignment->get_start_time()
+            );
 
             $message = Translation::get('AssignmentNotStarted') . Translation::get('StartTime') . ': ' . $date;
 
@@ -82,8 +90,9 @@ class CreatorComponent extends Manager
         {
             $date = DatetimeUtilities::format_locale_date(
                 Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                     Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
-                    $assignment->get_end_time());
+                Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
+                $assignment->get_end_time()
+            );
 
             $message = Translation::get('AssignmentEnded') . Translation::get('EndTime') . ': ' . $date;
 

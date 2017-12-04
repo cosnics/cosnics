@@ -18,38 +18,42 @@ class EntityTableDataProvider
     /**
      *
      * @see \Chamilo\Libraries\Format\Table\TableDataProvider::retrieve_data()
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param null $order_property
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Libraries\Storage\Iterator\RecordIterator|\Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return new ArrayResultSet($this->generateUsers());
+        return $this->getTable()->getLearningPathAssignmentService()->findTargetUsersForTreeNodeData(
+            $this->getTable()->getTreeNodeData(), $this->getTable()->getUserIds(), $condition, $offset, $count,
+            $order_property
+        );
     }
 
     /**
      *
      * @see \Chamilo\Libraries\Format\Table\TableDataProvider::count_data()
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
      */
     public function count_data($condition)
     {
-        return 10;
+        return $this->getTable()->getLearningPathAssignmentService()->countTargetUsersForTreeNodeData(
+            $this->getTable()->getTreeNodeData(), $this->getTable()->getUserIds(), $condition
+        );
     }
 
-    private function generateUsers()
+    /**
+     * @return \Chamilo\Libraries\Format\Table\Table | \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entity\EntityTable
+     */
+    protected function getTable()
     {
-        $users = array();
-
-        for ($i = 1; $i <= 10; $i ++)
-        {
-            $user = array();
-            $user[EntityTableColumnModel::PROPERTY_NAME] = 'Preview User ' . $i;
-            // $user = new User();
-            // $user->set_lastname('User');
-            // $user->set_firstname('Test ' . $i);
-            // $user->set_email('test.' . $i . '@user.com');
-            // $user->set_username('test.' . $i . '@user.com');
-
-            $users[] = $user;
-        }
-
-        return $users;
+        return $this->get_table();
     }
 }

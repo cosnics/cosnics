@@ -1,5 +1,8 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entity;
+
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
@@ -8,7 +11,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EntityTableCellRenderer extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableCellRenderer
+class EntityTableCellRenderer
+    extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableCellRenderer
 {
 
     /**
@@ -19,6 +23,6 @@ class EntityTableCellRenderer extends \Chamilo\Core\Repository\ContentObject\Ass
      */
     protected function isEntity($entityId, $userId)
     {
-        // TODO Auto-generated method stub
+        return $entityId == $userId;
     }
 }

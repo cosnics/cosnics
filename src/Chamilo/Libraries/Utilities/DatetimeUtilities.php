@@ -18,9 +18,11 @@ class DatetimeUtilities
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Christophe Gesch� <gesche@ipm.ucl.ac.be> originally inspired from from PhpMyAdmin
+     *
      * @param string $dateFormat date pattern
-     * @param integer $timestamp, default is NOW.
-     * @return the formatted date
+     * @param int $timeStamp
+     *
+     * @return string
      */
     public static function format_locale_date($dateFormat = null, $timeStamp = -1)
     {

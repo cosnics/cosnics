@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
@@ -26,9 +27,11 @@ abstract class EntryTableColumnModel extends RecordTableColumnModel implements T
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE)
+        );
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION)
+        );
         $this->add_column(new DataClassPropertyTableColumn(Entry::class_name(), Entry::PROPERTY_SUBMITTED));
         $this->add_column(new StaticTableColumn(Score::PROPERTY_SCORE));
         $this->add_column(new StaticTableColumn(self::PROPERTY_FEEDBACK_COUNT));

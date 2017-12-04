@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Filter\Renderer;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Filter\FilterData;
@@ -6,7 +7,7 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Render the parameters set via FilterData as HTML
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HtmlFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\HtmlFilterRenderer
@@ -19,71 +20,85 @@ class HtmlFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\HtmlFi
     {
         $filter_data = $this->get_filter_data();
         $html = array();
-        
+
         $html[] = parent::add_properties();
-        
+
         // Start time
         if ($filter_data->has_date(FilterData::FILTER_START_TIME))
         {
             $html[] = $this->renderParameter(
-                $this->get_parameter_name(FilterData::FILTER_START_TIME), 
+                $this->get_parameter_name(FilterData::FILTER_START_TIME),
                 Translation::get(
-                    'StartsBetween', 
+                    'StartsBetween',
                     array(
-                        'FROM' => $filter_data->get_start_time(FilterData::FILTER_FROM_DATE), 
-                        'TO' => $filter_data->get_start_time(FilterData::FILTER_TO_DATE))));
+                        'FROM' => $filter_data->get_start_time(FilterData::FILTER_FROM_DATE),
+                        'TO' => $filter_data->get_start_time(FilterData::FILTER_TO_DATE)
+                    )
+                )
+            );
         }
         else
         {
             if ($filter_data->get_start_time(FilterData::FILTER_FROM_DATE))
             {
                 $html[] = $this->renderParameter(
-                    $this->get_parameter_name(FilterData::FILTER_START_TIME), 
+                    $this->get_parameter_name(FilterData::FILTER_START_TIME),
                     Translation::get(
-                        'StartsAfter', 
-                        array('FROM' => $filter_data->get_start_time(FilterData::FILTER_FROM_DATE))));
+                        'StartsAfter',
+                        array('FROM' => $filter_data->get_start_time(FilterData::FILTER_FROM_DATE))
+                    )
+                );
             }
             elseif ($filter_data->get_start_time(FilterData::FILTER_TO_DATE))
             {
                 $html[] = $this->renderParameter(
-                    $this->get_parameter_name(FilterData::FILTER_START_TIME), 
+                    $this->get_parameter_name(FilterData::FILTER_START_TIME),
                     Translation::get(
-                        'StartsBefore', 
-                        array('TO' => $filter_data->get_start_time(FilterData::FILTER_TO_DATE))));
+                        'StartsBefore',
+                        array('TO' => $filter_data->get_start_time(FilterData::FILTER_TO_DATE))
+                    )
+                );
             }
         }
-        
+
         // End time
         if ($filter_data->has_date(FilterData::FILTER_END_TIME))
         {
             $html[] = $this->renderParameter(
-                $this->get_parameter_name(FilterData::FILTER_END_TIME), 
+                $this->get_parameter_name(FilterData::FILTER_END_TIME),
                 Translation::get(
-                    'EndsBetween', 
+                    'EndsBetween',
                     array(
-                        'FROM' => $filter_data->get_end_time(FilterData::FILTER_FROM_DATE), 
-                        'TO' => $filter_data->get_end_time(FilterData::FILTER_TO_DATE))));
+                        'FROM' => $filter_data->get_end_time(FilterData::FILTER_FROM_DATE),
+                        'TO' => $filter_data->get_end_time(FilterData::FILTER_TO_DATE)
+                    )
+                )
+            );
         }
         else
         {
             if ($filter_data->get_end_time(FilterData::FILTER_FROM_DATE))
             {
                 $html[] = $this->renderParameter(
-                    $this->get_parameter_name(FilterData::FILTER_END_TIME), 
+                    $this->get_parameter_name(FilterData::FILTER_END_TIME),
                     Translation::get(
-                        'EndsAfter', 
-                        array('FROM' => $filter_data->get_modification_time(FilterData::FILTER_FROM_DATE))));
+                        'EndsAfter',
+                        array('FROM' => $filter_data->get_modification_time(FilterData::FILTER_FROM_DATE))
+                    )
+                );
             }
             elseif ($filter_data->get_end_time(FilterData::FILTER_TO_DATE))
             {
                 $html[] = $this->renderParameter(
-                    $this->get_parameter_name(FilterData::FILTER_END_TIME), 
+                    $this->get_parameter_name(FilterData::FILTER_END_TIME),
                     Translation::get(
-                        'EndsBefore', 
-                        array('TO' => $filter_data->get_end_time(FilterData::FILTER_TO_DATE))));
+                        'EndsBefore',
+                        array('TO' => $filter_data->get_end_time(FilterData::FILTER_TO_DATE))
+                    )
+                );
             }
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 }

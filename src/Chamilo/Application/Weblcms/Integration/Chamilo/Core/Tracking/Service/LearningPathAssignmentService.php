@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\E
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -98,17 +99,6 @@ class LearningPathAssignmentService
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     *
-     * @return integer
-     */
-    public function countEntitiesByTreeNodeDataAndEntityType(TreeNodeData $treeNodeData)
-    {
-        return $this->countTargetUsersForTreeNodeData($treeNodeData);
-    }
-
-    /**
-     *
      * @param TreeNodeData $treeNodeData
      * @param int[] $userIds
      * @param Condition $condition
@@ -173,19 +163,20 @@ class LearningPathAssignmentService
      * @param TreeNodeData $treeNodeData
      * @param integer $entityType
      * @param integer $entityId
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
-     * @return integer
+     * @return int
      */
     public function countEntriesForTreeNodeDataEntityTypeAndId(
         TreeNodeData $treeNodeData, $entityType,
-        $entityId
+        $entityId, Condition $condition = null
     )
     {
         return $this->assignmentRepository->countEntriesForTreeNodeDataEntityTypeAndId(
             $treeNodeData,
             $entityType,
             $entityId,
-            null
+            $condition
         );
     }
 
@@ -397,6 +388,7 @@ class LearningPathAssignmentService
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt $treeNodeAttempt
      * @param integer $entityType
      * @param integer $entityId
      * @param integer $userId
@@ -406,12 +398,14 @@ class LearningPathAssignmentService
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
      */
     public function createEntry(
-        TreeNodeData $treeNodeData, $entityType, $entityId, $userId, $contentObjectId, $ipAddress
+        TreeNodeData $treeNodeData, TreeNodeAttempt $treeNodeAttempt, $entityType, $entityId, $userId, $contentObjectId,
+        $ipAddress
     )
     {
         $entry = $this->createEntryInstance();
 
         $entry->setTreeNodeDataId($treeNodeData->getId());
+        $entry->setTreeNodeAttemptId($treeNodeAttempt->getId());
         $entry->setContentObjectId($contentObjectId);
         $entry->setSubmitted(time());
         $entry->setEntityId($entityId);
@@ -419,13 +413,12 @@ class LearningPathAssignmentService
         $entry->setUserId($userId);
         $entry->setIpAddress($ipAddress);
 
-        if(!$this->assignmentRepository->createEntry($entry))
+        if (!$this->assignmentRepository->createEntry($entry))
         {
             throw new \RuntimeException('Could not create a new score for entry ' . $entry->getId());
         }
 
         return $entry;
-
     }
 
     /**
@@ -446,7 +439,7 @@ class LearningPathAssignmentService
         $score->setModified(time());
         $score->setUserId($user->getId());
 
-        if(!$this->assignmentRepository->createScore($score))
+        if (!$this->assignmentRepository->createScore($score))
         {
             throw new \RuntimeException('Could not create a new score for entry ' . $entry->getId());
         }
@@ -460,7 +453,7 @@ class LearningPathAssignmentService
      */
     public function updateScore(Score $score)
     {
-        if(!$this->assignmentRepository->updateScore($score))
+        if (!$this->assignmentRepository->updateScore($score))
         {
             throw new \RuntimeException('Could not update the score ' . $score->getId());
         }
@@ -484,7 +477,7 @@ class LearningPathAssignmentService
         $note->setModified(time());
         $note->setUserId($user->getId());
 
-        if(!$this->assignmentRepository->createNote($note))
+        if (!$this->assignmentRepository->createNote($note))
         {
             throw new \RuntimeException('Could not create a new note for entry ' . $note->getId());
         }
@@ -498,7 +491,7 @@ class LearningPathAssignmentService
      */
     public function updateNote(Note $note)
     {
-        if(!$this->assignmentRepository->updateNote($note))
+        if (!$this->assignmentRepository->updateNote($note))
         {
             throw new \RuntimeException('Could not update the note ' . $note->getId());
         }
@@ -520,7 +513,8 @@ class LearningPathAssignmentService
      */
     protected function createEntryInstance()
     {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry();
+        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry(
+        );
     }
 
     /**
@@ -530,7 +524,8 @@ class LearningPathAssignmentService
      */
     protected function createScoreInstance()
     {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score();
+        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score(
+        );
     }
 
     /**
@@ -540,7 +535,8 @@ class LearningPathAssignmentService
      */
     protected function createFeedbackInstance()
     {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Feedback();
+        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Feedback(
+        );
     }
 
     /**
@@ -550,6 +546,7 @@ class LearningPathAssignmentService
      */
     protected function createNoteInstance()
     {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Note();
+        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Note(
+        );
     }
 }

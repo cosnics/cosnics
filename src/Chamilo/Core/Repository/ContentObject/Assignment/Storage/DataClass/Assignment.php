@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -34,15 +35,16 @@ class Assignment extends ContentObject implements AttachmentSupport
     public static function get_additional_property_names()
     {
         return array(
-            self::PROPERTY_START_TIME, 
-            self::PROPERTY_END_TIME, 
-            self::PROPERTY_VISIBILITY_SUBMISSIONS, 
-            self::PROPERTY_ALLOW_GROUP_SUBMISSIONS, 
-            self::PROPERTY_ALLOW_LATE_SUBMISSIONS, 
-            self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT, 
-            self::PROPERTY_VISIBILTY_FEEDBACK, 
-            self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS, 
-            self::PROPERTY_ALLOWED_TYPES);
+            self::PROPERTY_START_TIME,
+            self::PROPERTY_END_TIME,
+            self::PROPERTY_VISIBILITY_SUBMISSIONS,
+            self::PROPERTY_ALLOW_GROUP_SUBMISSIONS,
+            self::PROPERTY_ALLOW_LATE_SUBMISSIONS,
+            self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT,
+            self::PROPERTY_VISIBILTY_FEEDBACK,
+            self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS,
+            self::PROPERTY_ALLOWED_TYPES
+        );
     }
 
     public function get_allow_group_submissions()

@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry;
 
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;

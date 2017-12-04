@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -21,17 +22,20 @@ abstract class Note extends DataClass
     /**
      *
      * @param string[] $extendedPropertyNames
+     *
      * @return string[]
      */
     public static function get_default_property_names($extendedPropertyNames = array())
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_ENTRY_ID, 
-                self::PROPERTY_CREATED, 
-                self::PROPERTY_MODIFIED, 
-                self::PROPERTY_NOTE, 
-                self::PROPERTY_USER_ID));
+                self::PROPERTY_ENTRY_ID,
+                self::PROPERTY_CREATED,
+                self::PROPERTY_MODIFIED,
+                self::PROPERTY_NOTE,
+                self::PROPERTY_USER_ID
+            )
+        );
     }
 
     /**

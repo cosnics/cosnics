@@ -2,51 +2,51 @@
 <object name="assignment">
     <properties>
         <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
+                name="id"
+                type="integer"
+                unsigned="1"
+                notnull="1"/>
         <property
-            name="start_time"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
+                name="start_time"
+                type="integer"
+                unsigned="1"
+                notnull="1"/>
         <property
-            name="end_time"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
+                name="end_time"
+                type="integer"
+                unsigned="1"
+                notnull="1"/>
         <property
-            name="visibility_submissions"
-            type="boolean"
-            notnull="1" />
+                name="visibility_submissions"
+                type="boolean"
+                notnull="1"/>
         <property
-            name="allow_group_submissions"
-            type="boolean"
-            notnull="1" />
+                name="allow_group_submissions"
+                type="boolean"
+                notnull="1"/>
         <property
-            name="allow_late_submissions"
-            type="boolean"
-            notnull="1" />
+                name="allow_late_submissions"
+                type="boolean"
+                notnull="1"/>
         <property
-            name="automatic_feedback_text"
-            type="text" />
+                name="automatic_feedback_text"
+                type="text"/>
         <property
-            name="automatic_feedback_co_ids"
-            type="text" />
+                name="automatic_feedback_co_ids"
+                type="text"/>
         <property
-            name="visibility_feedback"
-            type="integer"
-            length="1"
-            unsigned="1" />
+                name="visibility_feedback"
+                type="integer"
+                length="1"
+                unsigned="1"/>
         <property
-            name="allowed_types"
-            type="text"
-            notnull="1" />
+                name="allowed_types"
+                type="text"
+                notnull="1"/>
     </properties>
     <index
-        name="id"
-        type="primary">
-        <indexproperty name="id" />
+            name="id"
+            type="primary">
+        <indexproperty name="id"/>
     </index>
 </object>

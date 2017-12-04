@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -75,7 +76,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $this->getPager()->getNumberOfItemsPerPage(),
                 $this->getPager()->getCurrentRangeOffset());
 
-            if ($feedbacks->size() == 0 && ! $this->get_parent()->is_allowed_to_create_feedback())
+            $feedbackCount = $feedbacks instanceof ResultSet ? $feedbacks->size() : count($feedbacks);
+
+            if ($feedbackCount && ! $this->get_parent()->is_allowed_to_create_feedback())
             {
                 $html[] = $this->renderFeedbackButtonToolbar();
                 $html[] = '<div class="clearfix"></div>';
@@ -84,7 +87,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = '</div>';
             }
 
-            if ($feedbacks->size() > 0)
+            if ($feedbackCount > 0)
             {
                 if (! $this->get_parent()->is_allowed_to_create_feedback())
                 {
@@ -99,7 +102,12 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = '<div class="panel panel-default panel-feedback">';
                 $html[] = '<div class="list-group">';
 
-                while ($feedback = $feedbacks->next_result())
+                if($feedbacks instanceof ResultSet)
+                {
+                    $feedbacks = $feedbacks->as_array();
+                }
+
+                foreach($feedbacks as $feedback)
                 {
                     $html[] = '<div class="list-group-item">';
 
@@ -135,7 +143,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = '</div>';
                 $html[] = '</div>';
 
-                if ($this->get_parent()->count_feedbacks() > $feedbacks->size())
+                if ($this->get_parent()->count_feedbacks() > $feedbackCount)
                 {
                     $html[] = '<div class="row">';
                     $html[] = '<div class="col-xs-12 feedback-pagination">';

@@ -77,6 +77,8 @@ class AssignmentDataProvider
                 'The given treenode does not reference a valid assignment and should not be used'
             );
         }
+
+        $this->treeNode = $treeNode;
     }
 
     /**
@@ -158,8 +160,8 @@ class AssignmentDataProvider
      */
     public function countEntitiesByEntityType($entityType)
     {
-        return $this->learningPathAssignmentService->countEntitiesByTreeNodeDataAndEntityType(
-            $this->treeNode->getTreeNodeData()
+        return $this->learningPathAssignmentService->countTargetUsersForTreeNodeData(
+            $this->treeNode->getTreeNodeData(), $this->targetUserIds
         );
     }
 
@@ -186,7 +188,10 @@ class AssignmentDataProvider
      */
     public function getEntityTableForType(Application $application, $entityType)
     {
-        return new EntityTable($application, $this);
+        return new EntityTable(
+            $application, $this, $this->learningPathAssignmentService, $this->treeNode->getTreeNodeData(),
+            $this->targetUserIds
+        );
     }
 
     /**
@@ -199,7 +204,9 @@ class AssignmentDataProvider
      */
     public function getEntryTableForEntityTypeAndId(Application $application, $entityType, $entityId)
     {
-        return new EntryTable($application, $this, $entityId);
+        return new EntryTable(
+            $application, $this, $entityId, $this->learningPathAssignmentService, $this->treeNode->getTreeNodeData()
+        );
     }
 
     /**
@@ -258,7 +265,8 @@ class AssignmentDataProvider
     public function createEntry($entityType, $entityId, $userId, $contentObjectId, $ipAdress)
     {
         return $this->learningPathAssignmentService->createEntry(
-            $this->treeNode->getTreeNodeData(), $entityType, $entityId, $userId, $contentObjectId, $ipAdress
+            $this->treeNode->getTreeNodeData(), $this->treeNodeAttempt, $entityType, $entityId, $userId,
+            $contentObjectId, $ipAdress
         );
     }
 
@@ -379,7 +387,7 @@ class AssignmentDataProvider
                 $entry, $user, $submittedScore
             );
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             return false;
         }
@@ -399,7 +407,7 @@ class AssignmentDataProvider
         {
             $this->learningPathAssignmentService->updateScore($score);
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             return false;
         }
@@ -423,7 +431,7 @@ class AssignmentDataProvider
                 $entry, $user, $submittedNote
             );
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             return false;
         }
@@ -443,7 +451,7 @@ class AssignmentDataProvider
         {
             $this->learningPathAssignmentService->updateNote($note);
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             return false;
         }

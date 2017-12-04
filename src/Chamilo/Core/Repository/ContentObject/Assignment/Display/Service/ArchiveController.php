@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
 use Chamilo\Libraries\File\Compression\Filecompression;
@@ -80,8 +81,8 @@ class ArchiveController
     protected function prepareFileSystem($temporaryPath)
     {
         $this->temporaryPath = $temporaryPath;
-        
-        if (! is_dir($this->temporaryPath))
+
+        if (!is_dir($this->temporaryPath))
         {
             mkdir($this->temporaryPath, 0777, true);
         }
@@ -103,6 +104,7 @@ class ArchiveController
         $fileCompressor->set_filename($this->getFileName(), 'zip');
         $archivePath = $fileCompressor->create_archive($this->temporaryPath);
         Filesystem::remove($this->temporaryPath);
+
         return $archivePath;
     }
 }

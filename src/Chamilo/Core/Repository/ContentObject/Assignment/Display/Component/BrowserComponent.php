@@ -100,9 +100,10 @@ class BrowserComponent extends Manager implements TableSupport
 
         $properties = array();
         $properties[Translation::get('EntriesWithScore')] =
-            '<div class="badge">' . $scoreCount . '/' . $entryCount . '</div>';
-        $properties[Translation::get('EntriesWithFeedback')] = $feedbackCount . '/' . $entryCount;
-        $properties[Translation::get('AverageScore')] = $averageScoreValue;
+            '<div class="badge">' . $scoreCount . ' / ' . $entryCount . '</div>';
+        $properties[Translation::get('EntriesWithFeedback')] =
+            '<div class="badge">' . $feedbackCount . ' / ' . $entryCount . '</div>';
+        $properties[Translation::get('AverageScore')] = '<div class="badge">' . $averageScoreValue . '</div>';
 
         $table = new PropertiesTable($properties);
         $html[] = $table->toHtml();
@@ -125,7 +126,7 @@ class BrowserComponent extends Manager implements TableSupport
             $this->getEntityIdentifier()
         );
 
-        if(!empty($table))
+        if (!empty($table))
         {
             return $table->render();
         }
@@ -153,26 +154,40 @@ class BrowserComponent extends Manager implements TableSupport
                     array(
                         new Button(
                             Translation::get('Download'),
-                            Theme::getInstance()->getCommonImagePath('Action/Download')
+                            Theme::getInstance()->getCommonImagePath('Action/Download'),
+                            $this->get_url(
+                                [
+                                    self::PARAM_ACTION => self::ACTION_DOWNLOAD,
+                                    self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                                    self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
+                                ]
+                            )
                         ),
                         new Button(
                             Translation::get('SubmissionSubmit'),
-                            Theme::getInstance()->getCommonImagePath('Action/Add')
+                            Theme::getInstance()->getCommonImagePath('Action/Add'),
+                            $this->get_url(
+                                [
+                                    self::PARAM_ACTION => self::ACTION_CREATE,
+                                    self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                                    self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
+                                ]
+                            )
                         )
                     )
                 )
             );
 
-            $buttonToolBar->addButtonGroup(
-                new ButtonGroup(
-                    array(
-                        new Button(
-                            Translation::get('ScoreOverview'),
-                            Theme::getInstance()->getCommonImagePath('Action/Statistics')
-                        )
-                    )
-                )
-            );
+//            $buttonToolBar->addButtonGroup(
+//                new ButtonGroup(
+//                    array(
+//                        new Button(
+//                            Translation::get('ScoreOverview'),
+//                            Theme::getInstance()->getCommonImagePath('Action/Statistics')
+//                        )
+//                    )
+//                )
+//            );
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
         }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
@@ -85,11 +86,11 @@ abstract class EntityRenderer
      */
     public function getEntity()
     {
-        if (! isset($this->entity))
+        if (!isset($this->entity))
         {
             $this->entity = $this->findEntity();
         }
-        
+
         return $this->entity;
     }
 

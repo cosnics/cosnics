@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
@@ -31,9 +32,9 @@ class ClearParameterComponent extends \Chamilo\Core\Repository\ContentObject\Ass
     {
         $parameter = $this->getPostDataValue(self::PARAM_PARAMETER);
         $parameter = explode('_', $parameter, 3);
-        
+
         $session = unserialize(Session::retrieve('advanced_filter'));
-        
+
         if ($parameter[1] == 'assignment')
         {
             switch ($parameter[2])
@@ -49,7 +50,7 @@ class ClearParameterComponent extends \Chamilo\Core\Repository\ContentObject\Ass
                     unset($session[Assignment::PROPERTY_END_TIME]);
                     break;
             }
-            
+
             Session::register('advanced_filter', serialize($session));
             JsonAjaxResult::success();
         }

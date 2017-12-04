@@ -1,11 +1,12 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Filter;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 
 /**
  * The data set via Session, $_POST and $_GET variables related to filtering a set of content objects
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
@@ -16,7 +17,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
 
     /**
      * Determine whether one or more of the parameters were set
-     * 
+     *
      * @return boolean
      */
     public function is_set()
@@ -27,13 +28,14 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
     /**
      *
      * @param string[] $filter_properties
+     *
      * @return string[]
      */
     public function get_filter_properties($filter_properties = array())
     {
         $filter_properties[] = self::FILTER_START_TIME;
         $filter_properties[] = self::FILTER_END_TIME;
-        
+
         return parent::get_filter_properties($filter_properties);
     }
 
@@ -58,6 +60,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
     /**
      *
      * @param string $type
+     *
      * @return int NULL
      */
     public function get_start_time($type = self :: FILTER_FROM_DATE)
@@ -68,6 +71,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
     /**
      *
      * @param string $type
+     *
      * @return int NULL
      */
     public function get_end_time($type = self :: FILTER_FROM_DATE)

@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
@@ -62,9 +63,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     public function run()
     {
         $entryIdentifier = $this->getRequest()->query->get(self::PARAM_ENTRY_ID);
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
-        if (! $entryIdentifier)
+        if (!$entryIdentifier)
         {
             throw new NoObjectSelectedException(Translation::get('Entry'));
         }
@@ -75,12 +75,14 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $this->entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
 
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+
         $this->processSubmittedData();
 
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = $this->ButtonToolbarRenderer->render();
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $this->renderTabs();
         $html[] = $this->render_footer();
 
@@ -99,9 +101,10 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 $this->getEntry(),
                 $this->getScore(),
                 $this->getNote(),
-                $detailsForm->exportValues());
+                $detailsForm->exportValues()
+            );
 
-            if (! $detailsProcessor->run())
+            if (!$detailsProcessor->run())
             {
                 return false;
             }
@@ -116,7 +119,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getScore()
     {
-        if (! isset($this->score))
+        if (!isset($this->score))
         {
             $this->score = $this->getDataProvider()->findScoreByEntry($this->getEntry());
         }
@@ -130,7 +133,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getNote()
     {
-        if (! isset($this->note))
+        if (!isset($this->note))
         {
             $this->note = $this->getDataProvider()->findNoteByEntry($this->getEntry());
         }
@@ -151,14 +154,18 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 'details',
                 Translation::get('Details'),
                 Theme::getInstance()->getImagePath(self::package(), 'Tab/Details'),
-                $this->renderDetails()));
+                $this->renderDetails()
+            )
+        );
 
         $tabsRenderer->add_tab(
             new DynamicContentTab(
                 'entry',
                 Translation::get('Entry'),
                 Theme::getInstance()->getImagePath(self::package(), 'Tab/Entry'),
-                $this->renderContentObject()));
+                $this->renderContentObject()
+            )
+        );
 
         return $tabsRenderer->render();
     }
@@ -184,7 +191,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $contentObject,
             ContentObjectRendition::FORMAT_HTML,
             ContentObjectRendition::VIEW_FULL,
-            $this);
+            $this
+        );
 
         return $display->render();
     }
@@ -205,7 +213,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $entityRenderer = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
             $this->getEntry()->getEntityType(),
-            $this->getEntry()->getEntityId());
+            $this->getEntry()->getEntityId()
+        );
 
         $properties = array_merge($properties, $entityRenderer->getProperties());
 
@@ -213,7 +222,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $html[] = $this->getDetailsForm()->toHtml();
         $html[] = $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Repository\Feedback\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this))->run();
+            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
+        )->run();
 
         return implode(PHP_EOL, $html);
     }
@@ -221,6 +231,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     /**
      *
      * @param string[] $properties
+     *
      * @return string
      */
     protected function renderPropertiesRows($properties)
@@ -239,6 +250,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      *
      * @param string $label
      * @param string $value
+     *
      * @return string
      */
     protected function renderRow($label, $value)
@@ -259,13 +271,14 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getDetailsForm()
     {
-        if (! isset($this->detailsForm))
+        if (!isset($this->detailsForm))
         {
             $this->detailsForm = new DetailsForm(
                 $this->getScore(),
                 $this->getNote(),
                 $this->getDataProvider(),
-                $this->get_url(array(self::PARAM_ENTRY_ID => $this->getEntry()->getId())));
+                $this->get_url(array(self::PARAM_ENTRY_ID => $this->getEntry()->getId()))
+            );
         }
 
         return $this->detailsForm;
@@ -306,6 +319,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     {
         $feedback = $this->getDataProvider()->initializeFeedback();
         $feedback->setEntryId($this->getEntry()->getId());
+
         return $feedback;
     }
 
@@ -351,31 +365,42 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
     protected function getButtonToolbarRenderer()
     {
-        if (! isset($this->actionBar))
+        $buttonToolBar = new ButtonToolBar();
+
+        if (!isset($this->actionBar))
         {
-            $buttonToolBar = new ButtonToolBar();
+
             $buttonToolBar->addButtonGroup(
                 new ButtonGroup(
                     array(
                         new Button(
                             Translation::get('Download'),
-                            Theme::getInstance()->getCommonImagePath('Action/Download')),
-                        new Button(
-                            Translation::get('SubmissionSubmit'),
-                            Theme::getInstance()->getCommonImagePath('Action/Add')))));
+                            Theme::getInstance()->getCommonImagePath('Action/Download'),
+                            $this->get_url(
+                                [
+                                    self::PARAM_ACTION => self::ACTION_DOWNLOAD,
+                                    self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                                    self::PARAM_ENTITY_ID => $this->getEntityIdentifier(),
+                                    self::PARAM_ENTRY_ID => $this->getEntry()->getId()
+                                ]
+                            )
+                        )
+                    )
+                )
+            );
 
-            $buttonToolBar->addButtonGroup(
-                new ButtonGroup(
-                    array(
-                        new Button(
-                            Translation::get('ScoreOverview'),
-                            Theme::getInstance()->getCommonImagePath('Action/Statistics')),
-                        new Button(
-                            Translation::get('ScoreOverview'),
-                            Theme::getInstance()->getCommonImagePath('Action/Statistics')))));
-
-            $this->actionBar = new ButtonToolBarRenderer($buttonToolBar);
+//            $buttonToolBar->addButtonGroup(
+//                new ButtonGroup(
+//                    array(
+//                        new Button(
+//                            Translation::get('ScoreOverview'),
+//                            Theme::getInstance()->getCommonImagePath('Action/Statistics')),
+//                        new Button(
+//                            Translation::get('ScoreOverview'),
+//                            Theme::getInstance()->getCommonImagePath('Action/Statistics')))));
         }
+
+        $this->actionBar = new ButtonToolBarRenderer($buttonToolBar);
 
         return $this->actionBar;
     }
