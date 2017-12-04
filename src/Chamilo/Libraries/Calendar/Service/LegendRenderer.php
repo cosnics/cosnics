@@ -19,6 +19,12 @@ class LegendRenderer
 
     /**
      *
+     * @var \Twig_Environment
+     */
+    private $twigEnvironment;
+
+    /**
+     *
      * @var \Chamilo\Libraries\Calendar\CalendarSources
      */
     private $calendarSources;
@@ -43,18 +49,29 @@ class LegendRenderer
 
     /**
      *
+     * @param \Twig_Environment $twigEnvironment
      * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
      */
-    public function __construct(CalendarSources $calendarSources, Translator $translator, PathBuilder $pathBuilder, 
-        ResourceManager $resourceManager)
+    public function __construct(\Twig_Environment $twigEnvironment, CalendarSources $calendarSources,
+        Translator $translator, PathBuilder $pathBuilder, ResourceManager $resourceManager)
     {
+        $this->twigEnvironment = $twigEnvironment;
         $this->calendarSources = $calendarSources;
         $this->translator = $translator;
         $this->pathBuilder = $pathBuilder;
         $this->resourceManager = $resourceManager;
+    }
+
+    /**
+     *
+     * @return Twig_Environment
+     */
+    protected function getTwigEnvironment()
+    {
+        return $this->twigEnvironment;
     }
 
     /**
@@ -95,33 +112,39 @@ class LegendRenderer
 
     /**
      * Builds a color-based legend for the calendar to help users to see the origin of the the published events
-     * 
+     *
      * @param \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface $dataProvider
      * @return string
      */
     public function render(CalendarRendererProviderInterface $dataProvider)
     {
+        return $this->getTwigEnvironment()->render(
+            'Chamilo\Libraries\Calendar:Legend.html.twig',
+            [
+                'calendarSources' => $this->getCalendarSources(),
+                'supportsVisibility' => $dataProvider->supportsVisibility()]);
+
         $result = [];
-        
-        if ($this->hasSources())
+
+        if ($this->getCalendarSources()->hasSources())
         {
             $visibleSources = 0;
-            
+
             $result[] = '<div class="panel panel-default table-calendar-legend">';
             $result[] = '<div class="panel-heading">';
             $result[] = '<h4 class="panel-title">' .
                  $this->getTranslator()->trans('Legend', [], 'Chamilo\Libraries\Calendar') . '</h4>';
             $result[] = '</div>';
             $result[] = '<ul class="list-group">';
-            
-            $sources = $this->getSources();
-            
+
+            $sources = $this->getCalendarSources()->getSources();
+
             sort($sources);
-            
+
             foreach ($sources as $source)
             {
                 $sourceClasses = $this->getCalendarSources()->getSourceClasses($source);
-                
+
                 if ($dataProvider->supportsVisibility())
                 {
                     $isSourceVisible = $dataProvider->isSourceVisible($source);
@@ -129,10 +152,10 @@ class LegendRenderer
                 }
                 else
                 {
-                    
+
                     $eventClasses = '';
                 }
-                
+
                 $result[] = '<li class="list-group-item">';
                 $result[] = '<div class="event-source' . $eventClasses . '" data-source-key="' .
                      $this->addSource($source) . '" data-source="' . $source . '">';
@@ -140,7 +163,7 @@ class LegendRenderer
                 $result[] = $source;
                 $result[] = '</div>';
                 $result[] = '</li>';
-                
+
                 if ($dataProvider->supportsVisibility())
                 {
                     if ($isSourceVisible)
@@ -149,30 +172,30 @@ class LegendRenderer
                     }
                 }
             }
-            
+
             $result[] = '</ul>';
             $result[] = '</div>';
-            
+
             if ($dataProvider->supportsVisibility())
             {
                 $result[] = '<script type="text/javascript">';
                 $result[] = 'var calendarVisibilityContext = ' . json_encode($dataProvider->getVisibilityContext()) . ';';
                 $result[] = '</script>';
-                
+
                 $result[] = $this->getResourceManager()->get_resource_html(
                     $this->getPathBuilder()->getJavascriptPath(__NAMESPACE__, true) . 'Highlight.js');
-                
+
                 if ($visibleSources == 0)
                 {
                     $notificationMessageManager = new NotificationMessageManager();
                     $notificationMessageManager->addMessage(
                         new NotificationMessage(
-                            $this->getTranslator()->trans('AllEventSourcesHidden', [], 'Chamilo\Libraries\Calendar'), 
+                            $this->getTranslator()->trans('AllEventSourcesHidden', [], 'Chamilo\Libraries\Calendar'),
                             NotificationMessage::TYPE_WARNING));
                 }
             }
         }
-        
+
         return implode(PHP_EOL, $result);
     }
 }

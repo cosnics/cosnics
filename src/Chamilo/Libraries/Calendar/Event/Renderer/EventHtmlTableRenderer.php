@@ -20,7 +20,7 @@ abstract class EventHtmlTableRenderer extends EventHtmlRenderer
     {
         $eventClasses = 'event-container';
 
-        if (! $this->getDataProvider()->isSourceVisible($event->getSource()->getTitle()))
+        if (! $this->getDataProvider()->isSourceVisible($event->getSource()))
         {
             $eventClasses .= ' event-container-hidden';
         }
@@ -35,7 +35,7 @@ abstract class EventHtmlTableRenderer extends EventHtmlRenderer
     public function determineEventClasses(Event $event)
     {
         $eventClasses = $this->getEventClasses($event);
-        $sourceClasses = $this->getCalendarSources()->getSourceClasses($event->getSource()->getTitle());
+        $sourceClasses = $this->getCalendarSources()->getSourceClasses($event->getSource());
         return implode(' ', array($eventClasses, $sourceClasses));
     }
 
@@ -121,7 +121,7 @@ abstract class EventHtmlTableRenderer extends EventHtmlRenderer
         $html = array();
 
         $html[] = '<div class="' . $this->determineEventClasses($event) . '" data-source-key="' .
-             $this->getCalendarSources()->getSourceKey($event->getSource()->getTitle()) . '">';
+             $this->getCalendarSources()->getSourceKey($event->getSource()) . '">';
         $html[] = '<div class="event-data">';
 
         return implode(PHP_EOL, $html);

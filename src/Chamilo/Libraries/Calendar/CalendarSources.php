@@ -11,18 +11,34 @@ class CalendarSources
 
     /**
      *
-     * @var string[]
+     * @var \Chamilo\Libraries\Calendar\Event\EventSource[]
      */
     private $sources;
+
+    /**
+     *
+     * @var string[]
+     */
+    private $sourceKeys;
 
     public function __construct()
     {
         $this->sources = array();
+        $this->sourceKeys = array();
     }
 
     /**
      *
      * @return string[]
+     */
+    public function getSourceKeys()
+    {
+        return $this->sourceKeys;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Event\EventSource[]
      */
     public function getSources()
     {
@@ -49,34 +65,26 @@ class CalendarSources
 
     /**
      *
-     * @param string[] $sources
-     */
-    public function setSources($sources)
-    {
-        $this->sources = $sources;
-    }
-
-    /**
-     *
-     * @param string $source
+     * @param \Chamilo\Libraries\Calendar\Event\EventSource $source
      */
     public function addSource($source)
     {
-        if (! in_array($source, $this->getSources()))
+        if (! in_array($source->hash(), $this->getSourceKeys()))
         {
-            $this->sources[] = $source;
+            $this->sources[$source->hash()] = $source;
+            $this->sourceKeys[] = $source->hash();
         }
     }
 
     /**
      *
-     * @param string $source
+     * @param \Chamilo\Libraries\Calendar\Event\EventSource $source
      * @return integer
      */
     public function getSourceKey($source)
     {
         $this->addSource($source);
-        return array_search($source, $this->getSources());
+        return array_search($source->hash(), $this->getSourceKeys());
     }
 
     /**

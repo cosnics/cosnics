@@ -13,6 +13,10 @@
             <argument
                 type="service"
                 id="chamilo.libraries.calendar.format.service.format_html_table_renderer_factory" />
+            <argument
+                type="service"
+                id="chamilo.libraries.calendar.service.legend_renderer" />
+
         </service>
     </services>
 </container>

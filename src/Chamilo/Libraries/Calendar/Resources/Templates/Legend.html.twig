@@ -1,0 +1,28 @@
+{% set appContext = 'Chamilo\\Libraries\\Calendar' %}
+
+{% if calendarSources.hasSources() == true %}
+<div class="panel panel-default table-calendar-legend">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            {{ 'Legend'|trans({}, appContext) }}
+        </h4>
+    </div>
+    <ul class="list-group">
+        {% for source in calendarSources.getSources() %}
+        <li class="list-group-item">
+            <div class="event-source">
+                <span class="event-container {{ calendarSources.getSourceClasses(source) }}"></span>
+                {{ source.getTitle() }}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% if supportsVisibility == true %}
+<script type="text/javascript">
+    var calendarVisibilityContext = {{ visibilityContext|raw }};
+</script>
+{% endif %}
+
+{% endif %}

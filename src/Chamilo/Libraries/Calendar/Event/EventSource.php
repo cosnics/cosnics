@@ -1,13 +1,16 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event;
 
+use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+
 /**
  *
  * @package Chamilo\Libraries\Calendar\Event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class EventSource
+class EventSource implements Hashable
 {
+    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
     /**
      *
@@ -144,6 +147,15 @@ class EventSource
     public function setUrl($url)
     {
         $this->url = $url;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
+     */
+    public function getHashParts()
+    {
+        return [$this->getId(), $this->getContext(), $this->getTitle(), $this->getContent(), $this->getUrl()];
     }
 }
 

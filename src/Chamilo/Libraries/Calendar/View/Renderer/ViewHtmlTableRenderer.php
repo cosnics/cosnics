@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 
 /**
  *
@@ -44,17 +45,25 @@ class ViewHtmlTableRenderer
 
     /**
      *
+     * @var \Chamilo\Libraries\Calendar\Service\LegendRenderer
+     */
+    private $legendRenderer;
+
+    /**
+     *
      * @param \Twig_Environment $twigEnvironment
      * @param \Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlTableRenderer $formatRenderer
      * @param \Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer $miniMonthRenderer
+     * @param \Chamilo\Libraries\Calendar\Service\LegendRenderer $legendRenderer
      */
     public function __construct(\Twig_Environment $twigEnvironment, FormatHtmlTableRenderer $formatRenderer,
-        MiniMonthRenderer $miniMonthRenderer)
+        MiniMonthRenderer $miniMonthRenderer, LegendRenderer $legendRenderer)
 
     {
         $this->twigEnvironment = $twigEnvironment;
         $this->formatRenderer = $formatRenderer;
         $this->miniMonthRenderer = $miniMonthRenderer;
+        $this->legendRenderer = $legendRenderer;
     }
 
     /**
@@ -86,6 +95,15 @@ class ViewHtmlTableRenderer
 
     /**
      *
+     * @return \Chamilo\Libraries\Calendar\Service\LegendRenderer
+     */
+    protected function getLegendRenderer()
+    {
+        return $this->legendRenderer;
+    }
+
+    /**
+     *
      * @return string
      */
     public function render($viewActions)
@@ -98,7 +116,8 @@ class ViewHtmlTableRenderer
                 'actions' => $this->renderViewActions($viewActions),
                 'navigation' => $this->renderNavigation(),
                 'title' => Translation::get(date('F', time()) . 'Long', null, Utilities::COMMON_LIBRARIES) . ' ' .
-                     date('Y', time())]);
+                     date('Y', time()),
+                    'legend' => $this->getLegendRenderer()->render($this->getFormatRenderer()->getDataProvider())]);
     }
 
     /**

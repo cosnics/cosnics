@@ -116,7 +116,7 @@ class ListRenderer extends FormatHtmlRenderer
 
                 foreach ($dateEvents as $dateEvent)
                 {
-                    if (! $this->isSourceVisible($dateEvent->getSource()->getTitle()))
+                    if (! $this->isSourceVisible($dateEvent->getSource()))
                     {
                         $hiddenEvents ++;
                     }
