@@ -78,5 +78,4 @@ abstract class HtmlTableRenderer extends ViewRenderer
     {
         return $this->eventHtmlTableRendererFactory;
     }
-
 }

@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component;
 use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -12,6 +11,7 @@ use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Calendar\Format\Service\ViewRendererFactory;
 use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
+use Chamilo\Libraries\Calendar\Service\Legend;
 
 class BrowserComponent extends Manager
 {
@@ -86,29 +86,25 @@ class BrowserComponent extends Manager
         return $this->defaultComponent;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function renderCalendar()
     {
-        $dataProvider = $this->getCalendarDataProvider();
-        $calendarLegend = new Legend($dataProvider);
-
-        $rendererFactory = new ViewRendererFactory(
+        return $this->getHtmlTableRendererFactory()->getHtmlTableRenderer(
             $this->getCurrentRendererType(),
-            $dataProvider,
-            $calendarLegend,
-            $this->getCurrentRendererTime());
-        $renderer = $rendererFactory->getRenderer();
+            $this->getCalendarDataProvider(),
+            $this->getCurrentRendererTime())->render();
+    }
 
-        if ($this->getCurrentRendererType() == ViewRenderer::TYPE_DAY ||
-             $this->getCurrentRendererType() == ViewRenderer::TYPE_WEEK)
-        {
-            $renderer->setStartHour(
-                LocalSetting::getInstance()->get('working_hours_start', 'Chamilo\Libraries\Calendar'));
-            $renderer->setEndHour(LocalSetting::getInstance()->get('working_hours_end', 'Chamilo\Libraries\Calendar'));
-            $renderer->setHideOtherHours(
-                LocalSetting::getInstance()->get('hide_none_working_hours', 'Chamilo\Libraries\Calendar'));
-        }
-
-        return $renderer->render();
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Format\Service\HtmlTableRendererFactory
+     */
+    protected function getHtmlTableRendererFactory()
+    {
+        return $this->getService('chamilo.libraries.calendar.format.service.html_table_renderer_factory');
     }
 
     /**

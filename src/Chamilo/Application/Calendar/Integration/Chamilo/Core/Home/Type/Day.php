@@ -4,6 +4,9 @@ namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniDayRenderer;
 use Chamilo\Libraries\Calendar\Service\Legend;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -18,10 +21,29 @@ use Chamilo\Libraries\Platform\Session\Request;
 class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implements ConfigurableInterface,
     StaticBlockTitleInterface
 {
+    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+
+    /**
+     * Constants
+     */
     const CONFIGURATION_HOUR_STEP = 'hour_step';
     const CONFIGURATION_TIME_START = 'time_start';
     const CONFIGURATION_TIME_END = 'time_end';
     const CONFIGURATION_TIME_HIDE = 'time_hide';
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Home\Service\HomeService $homeService
+     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     * @param int $source
+     */
+    public function __construct(Application $application, HomeService $homeService, Block $block,
+        $source = self::SOURCE_DEFAULT)
+    {
+        parent::__construct($application, $homeService, $block, $source);
+        $this->initializeContainer();
+    }
 
     /**
      *
