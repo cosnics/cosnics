@@ -22,33 +22,39 @@ class WeekCalendar extends Calendar
     /**
      * Gets the first date which will be displayed by this calendar.
      * This is always a monday.
-     * 
+     *
      * @return integer
      */
     public function getStartTime()
     {
-        if ($this->getCalendarConfiguration()->getFirstDayOfTheWeek() == 'sunday')
+        $startTime = $this->getStrictStartTime();
+        $calenderConfiguration = $this->getCalendarConfiguration();
+
+        if ($calenderConfiguration->getHideNonWorkingHours())
         {
-            return strtotime('Next Sunday', strtotime('-1 Week', $this->getDisplayTime()));
+            return strtotime(date('Y-m-d ' . $calenderConfiguration->getWorkingHoursStart() . ':00:00', $startTime));
         }
-        
-        return strtotime('Next Monday', strtotime('-1 Week', $this->getDisplayTime()));
+
+        return $startTime;
     }
 
     /**
      * Gets the end date which will be displayed by this calendar.
      * This is always a sunday.
-     * 
+     *
      * @return integer
      */
     public function getEndTime()
     {
-        if ($this->getCalendarConfiguration()->getFirstDayOfTheWeek() == 'sunday')
+        $endTime = $this->getStrictEndTime();
+        $calenderConfiguration = $this->getCalendarConfiguration();
+
+        if ($calenderConfiguration->getHideNonWorkingHours())
         {
-            return strtotime('Next Saterday', strtotime('-1 Week', $this->getDisplayTime()));
+            return strtotime(date('Y-m-d ' . ($calenderConfiguration->getWorkingHoursEnd() - 1) . ':59:59', $endTime));
         }
-        
-        return strtotime('Next Sunday', $this->getStartTime());
+
+        return $endTime;
     }
 
     /**
@@ -58,36 +64,36 @@ class WeekCalendar extends Calendar
     {
         $calendarConfiguration = $this->getCalendarConfiguration();
         $events = $this->getEventsToShow();
-        
+
         $workingStart = $calendarConfiguration->getWorkingHoursStart();
         $workingEnd = $calendarConfiguration->getWorkingHoursEnd();
         $hide = $calendarConfiguration->getHideNonWorkingHours();
-        
+
         $start = 0;
         $end = 24;
-        
+
         if ($hide)
         {
             $start = $workingStart;
             $end = $workingEnd;
         }
-        
+
         foreach ($events as $time => $items)
         {
             $row = date('H', $time) - $start;
-            
+
             if ($row > $end - $start - 1)
             {
                 continue;
             }
-            
+
             $column = date('w', $time);
-            
+
             if ($column == 0)
             {
                 $column = 7;
             }
-            
+
             foreach ($items as $index => $item)
             {
                 try
@@ -101,5 +107,33 @@ class WeekCalendar extends Calendar
                 }
             }
         }
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar::getStrictStartTime()
+     */
+    public function getStrictStartTime()
+    {
+        if ($this->getCalendarConfiguration()->getFirstDayOfTheWeek() == 'sunday')
+        {
+            return strtotime('Next Sunday', strtotime('-1 Week', $this->getDisplayTime()));
+        }
+
+        return strtotime('Next Monday', strtotime('-1 Week', $this->getDisplayTime()));
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar::getStrictEndTime()
+     */
+    public function getStrictEndTime()
+    {
+        if ($this->getCalendarConfiguration()->getFirstDayOfTheWeek() == 'sunday')
+        {
+            return strtotime('Next Saterday', strtotime('-1 Week', $this->getDisplayTime()));
+        }
+
+        return strtotime('Next Sunday', $this->getStartTime());
     }
 }

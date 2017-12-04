@@ -8,7 +8,6 @@ use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer;
 use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
-use Chamilo\Libraries\Calendar\Service\Legend;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -40,7 +39,7 @@ class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer impleme
 
     public function getTitle()
     {
-        return $this->getCalendarRenderer()->renderTitle();
+//         return $this->getCalendarRenderer()->renderTitle();
     }
 
     /**
@@ -69,12 +68,12 @@ class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer impleme
 
     public function displayContent()
     {
-        return $this->getCalendarRenderer()->renderCalendar();
+        return $this->getCalendarRenderer()->render();
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer
+     * @return \Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer
      */
     protected function getCalendarRenderer()
     {
@@ -88,12 +87,51 @@ class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer impleme
                     Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
                     ViewRenderer::PARAM_TYPE => ViewRenderer::TYPE_DAY));
 
-            $calendarLegend = new Legend($dataProvider);
-
             $time = Request::get('time') ? intval(Request::get('time')) : time();
-            return new MiniMonthRenderer($dataProvider, $calendarLegend, $time, array());
+            return new MiniMonthRenderer(
+                $dataProvider,
+                $this->getCalendarSources(),
+                $this->getCalendarConfiguration(),
+                $this->getCalendarBuilderFactory()->getCalendarBuilder('MiniMonth')->buildCalendar($time),
+                $this->getHtmlTableRendererFactory());
         }
 
         return $this->calendarRenderer;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\CalendarSources
+     */
+    protected function getCalendarSources()
+    {
+        return $this->getService('chamilo.libraries.calendar.calendar_sources');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\CalendarConfiguration
+     */
+    protected function getCalendarConfiguration()
+    {
+        return $this->getService('chamilo.libraries.calendar.calendar_configuration');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Format\Service\CalendarBuilderFactory
+     */
+    protected function getCalendarBuilderFactory()
+    {
+        return $this->getService('chamilo.libraries.calendar.format.service.calendar_builder_factory');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory
+     */
+    protected function getHtmlTableRendererFactory()
+    {
+        return $this->getService('chamilo.libraries.calendar.event.service.html_table_renderer_factory');
     }
 }

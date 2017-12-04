@@ -20,38 +20,38 @@ class DayCalendar extends Calendar
 
     /**
      * Gets the first date which will be displayed by this calendar.
-     * 
+     *
      * @return integer
      */
     public function getStartTime()
     {
         $calenderConfiguration = $this->getCalendarConfiguration();
-        
+
         if ($calenderConfiguration->getHideNonWorkingHours())
         {
             return strtotime(
                 date('Y-m-d ' . $calenderConfiguration->getWorkingHoursStart() . ':00:00', $this->getDisplayTime()));
         }
-        
-        return strtotime(date('Y-m-d 00:00:00', $this->getDisplayTime()));
+
+        return $this->getStrictStartTime();
     }
 
     /**
      * Gets the end date which will be displayed by this calendar.
-     * 
+     *
      * @return integer
      */
     public function getEndTime()
     {
         $calenderConfiguration = $this->getCalendarConfiguration();
-        
+
         if ($calenderConfiguration->getHideNonWorkingHours())
         {
             return strtotime(
                 date('Y-m-d ' . ($calenderConfiguration->getWorkingHoursEnd() - 1) . ':59:59', $this->getDisplayTime()));
         }
-        
-        return strtotime('+24 Hours', $this->getStartTime());
+
+        return $this->getStrictEndTime();
     }
 
     /**
@@ -60,27 +60,27 @@ class DayCalendar extends Calendar
     public function addEvents()
     {
         $calenderConfiguration = $this->getCalendarConfiguration();
-        
+
         $events = $this->getEventsToShow();
-        
+
         $start = 0;
         $end = 24;
-        
+
         if ($calenderConfiguration->getHideNonWorkingHours())
         {
             $start = $calenderConfiguration->getWorkingHoursStart();
             $end = $calenderConfiguration->getWorkingHoursEnd();
         }
-        
+
         foreach ($events as $time => $items)
         {
             if ($time >= $this->getEndTime())
             {
                 continue;
             }
-            
+
             $row = (date('H', $time) - $start);
-            
+
             foreach ($items as $index => $item)
             {
                 try
@@ -94,5 +94,23 @@ class DayCalendar extends Calendar
                 }
             }
         }
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar::getStrictStartTime()
+     */
+    public function getStrictStartTime()
+    {
+        return strtotime(date('Y-m-d 00:00:00', $this->getDisplayTime()));
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar::getStrictEndTime()
+     */
+    public function getStrictEndTime()
+    {
+        return strtotime('+24 Hours', $this->getStrictStartTime());
     }
 }

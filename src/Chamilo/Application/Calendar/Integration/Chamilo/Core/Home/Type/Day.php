@@ -60,7 +60,7 @@ class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implement
 
     public function getTitle()
     {
-        return $this->getCalendarRenderer()->renderTitle();
+//         return $this->getCalendarRenderer()->renderTitle();
     }
 
     public function displayContent()
@@ -110,15 +110,48 @@ class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implement
 
             return new MiniDayRenderer(
                 $dataProvider,
-                $calendarLegend,
-                $time,
-                array(),
-                $hourStep,
-                $this->getBlock()->getSetting(self::CONFIGURATION_TIME_START, 8),
-                $this->getBlock()->getSetting(self::CONFIGURATION_TIME_END, 17),
-                $this->getBlock()->getSetting(self::CONFIGURATION_TIME_HIDE, 17));
+                $this->getCalendarSources(),
+                $this->getCalendarConfiguration(),
+                $this->getCalendarBuilderFactory()->getCalendarBuilder('Day')->buildCalendar($time),
+                $this->getHtmlTableRendererFactory());
         }
 
         return $this->calendarRenderer;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\CalendarSources
+     */
+    protected function getCalendarSources()
+    {
+        return $this->getService('chamilo.libraries.calendar.calendar_sources');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\CalendarConfiguration
+     */
+    protected function getCalendarConfiguration()
+    {
+        return $this->getService('chamilo.libraries.calendar.calendar_configuration');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Format\Service\CalendarBuilderFactory
+     */
+    protected function getCalendarBuilderFactory()
+    {
+        return $this->getService('chamilo.libraries.calendar.format.service.calendar_builder_factory');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory
+     */
+    protected function getHtmlTableRendererFactory()
+    {
+        return $this->getService('chamilo.libraries.calendar.event.service.html_table_renderer_factory');
     }
 }
