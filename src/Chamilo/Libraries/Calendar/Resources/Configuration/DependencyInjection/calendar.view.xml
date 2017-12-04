@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.libraries.calendar.view.service.html_table_renderer_factory"
+            class="Chamilo\Libraries\Calendar\View\Service\HtmlTableRendererFactory">
+            <argument
+                type="service"
+                id="twig.environment" />
+            <argument
+                type="service"
+                id="chamilo.libraries.calendar.format.service.html_table_renderer_factory" />
+        </service>
+    </services>
+</container>

@@ -34,6 +34,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $loader->load('calendar.xml');
         $loader->load('calendar.event.xml');
         $loader->load('calendar.format.xml');
+        $loader->load('calendar.view.xml');
     }
 
     /**

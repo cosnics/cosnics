@@ -94,11 +94,11 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Format\Service\HtmlTableRendererFactory
+     * @return \Chamilo\Libraries\Calendar\View\Service\HtmlTableRendererFactory
      */
     protected function getHtmlTableRendererFactory()
     {
-        return $this->getService('chamilo.libraries.calendar.format.service.html_table_renderer_factory');
+        return $this->getService('chamilo.libraries.calendar.view.service.html_table_renderer_factory');
     }
 
     protected function getViewActions()
