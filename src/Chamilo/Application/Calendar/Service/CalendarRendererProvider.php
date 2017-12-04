@@ -85,7 +85,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport::isSourceVisible()
+     * @see \Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport::isSourceVisible()
      */
     public function isSourceVisible($source)
     {

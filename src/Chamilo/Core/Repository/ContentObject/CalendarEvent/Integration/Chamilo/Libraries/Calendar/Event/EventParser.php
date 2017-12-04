@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\CalendarEvent\Integration\Chamilo\Libraries\Calendar\Event;
 
-use Chamilo\Libraries\Translation\Translation;
-
 /**
  * Parser to covert CalendarEvent-instances to renderable calender events
  *

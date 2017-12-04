@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Task\Integration\Chamilo\Libraries\Calendar\Event;
 
-use Chamilo\Libraries\Translation\Translation;
-
 /**
  * Parser to covert Task-instances to renderable calender events
  *

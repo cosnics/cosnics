@@ -61,9 +61,8 @@ class HtmlTableRendererFactory
      */
     public function getEventRenderer($htmlTableRendererType, $eventContext, VisibilitySupport $dataProvider)
     {
-        $eventRendererClassName = $eventContext . '\Event\Renderer\Type\\' . $htmlTableRendererType;
-
-        var_dump($eventRendererClassName);
+        $eventRendererClassName = $eventContext . '\Integration\Chamilo\Libraries\Calendar\Event\Renderer\Type\\' .
+             $htmlTableRendererType;
 
         if (! class_exists($eventRendererClassName))
         {
