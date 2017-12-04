@@ -37,9 +37,6 @@
             class="Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory">
             <argument
                 type="service"
-                id="chamilo.libraries.architecture.classname_utilities" />
-            <argument
-                type="service"
                 id="chamilo.libraries.calendar.calendar_sources" />
         </service>
 

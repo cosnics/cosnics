@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event\Service;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Calendar\CalendarSources;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport;
@@ -16,34 +15,17 @@ class HtmlTableRendererFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    private $classnameUtilities;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Calendar\CalendarSources
      */
     private $calendarSources;
 
     /**
      *
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
      */
-    public function __construct(ClassnameUtilities $classnameUtilities, CalendarSources $calendarSources)
+    public function __construct(CalendarSources $calendarSources)
     {
-        $this->classnameUtilities = $classnameUtilities;
         $this->calendarSources = $calendarSources;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    protected function getClassnameUtilities()
-    {
-        return $this->classnameUtilities;
     }
 
     /**
@@ -79,8 +61,7 @@ class HtmlTableRendererFactory
      */
     public function getEventRenderer($htmlTableRendererType, $eventContext, VisibilitySupport $dataProvider)
     {
-        $eventRendererClassName = ClassnameUtilities::getInstance()->getNamespaceParent($eventContext) .
-             '\Event\Renderer\Type\\' . $htmlTableRendererType;
+        $eventRendererClassName = $eventContext . '\Event\Renderer\Type\\' . $htmlTableRendererType;
 
         var_dump($eventRendererClassName);
 
