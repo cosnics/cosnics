@@ -10,7 +10,7 @@ use Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport;
  * @package Chamilo\Libraries\Calendar\Event\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class HtmlTableRendererFactory
+class EventHtmlTableRendererFactory
 {
 
     /**
@@ -47,7 +47,7 @@ class HtmlTableRendererFactory
      */
     public function render($htmlTableRendererType, VisibilitySupport $dataProvider, Event $event, $startDate)
     {
-        return $this->getEventRenderer($htmlTableRendererType, $event->getContext(), $dataProvider)->render(
+        return $this->getEventHtmlTableRenderer($htmlTableRendererType, $event->getContext(), $dataProvider)->render(
             $event,
             $startDate);
     }
@@ -57,9 +57,9 @@ class HtmlTableRendererFactory
      * @param string $htmlTableRendererType
      * @param \Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport $dataProvider
      * @param string $eventContext
-     * @return \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer
+     * @return \Chamilo\Libraries\Calendar\Event\Renderer\EventHtmlTableRenderer
      */
-    public function getEventRenderer($htmlTableRendererType, $eventContext, VisibilitySupport $dataProvider)
+    public function getEventHtmlTableRenderer($htmlTableRendererType, $eventContext, VisibilitySupport $dataProvider)
     {
         $eventRendererClassName = $eventContext . '\Integration\Chamilo\Libraries\Calendar\Event\Renderer\Type\\' .
              $htmlTableRendererType;

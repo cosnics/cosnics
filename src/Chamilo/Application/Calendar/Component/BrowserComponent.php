@@ -8,6 +8,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Component\UserSettingsComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -18,7 +19,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
 
 /**
  *
@@ -46,8 +46,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         $header = Page::getInstance()->getHeader();
         $header->addCssFile(Theme::getInstance()->getCssPath(self::package(), true) . 'Print.css', 'print');
 
-        $this->set_parameter(ViewRenderer::PARAM_TYPE, $this->getCurrentRendererType());
-        $this->set_parameter(ViewRenderer::PARAM_TIME, $this->getCurrentRendererTime());
+        $this->set_parameter(FormatHtmlRenderer::PARAM_TYPE, $this->getCurrentRendererType());
+        $this->set_parameter(FormatHtmlRenderer::PARAM_TIME, $this->getCurrentRendererTime());
 
         $html = array();
 
@@ -67,8 +67,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             $displayParameters = array(
                 self::PARAM_CONTEXT => self::package(),
                 self::PARAM_ACTION => self::ACTION_BROWSE,
-                ViewRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
-                ViewRenderer::PARAM_TIME => $this->getCurrentRendererTime());
+                FormatHtmlRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
+                FormatHtmlRenderer::PARAM_TIME => $this->getCurrentRendererTime());
 
             $this->calendarDataProvider = new CalendarRendererProvider(
                 $this->getService('chamilo.application.calendar.service.visibility_service'),
@@ -86,7 +86,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     protected function renderNormalCalendar()
     {
-        return $this->getHtmlTableRendererFactory()->getHtmlTableRenderer(
+        return $this->getViewHtmlTableRendererFactory()->getViewHtmlTableRenderer(
             $this->getCurrentRendererType(),
             $this->getCalendarDataProvider(),
             $this->getCurrentRendererTime())->render($this->getViewActions());
@@ -94,11 +94,11 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\View\Service\HtmlTableRendererFactory
+     * @return \Chamilo\Libraries\Calendar\View\Service\ViewHtmlTableRendererFactory
      */
-    protected function getHtmlTableRendererFactory()
+    protected function getViewHtmlTableRendererFactory()
     {
-        return $this->getService('chamilo.libraries.calendar.view.service.html_table_renderer_factory');
+        return $this->getService('chamilo.libraries.calendar.view.service.view_html_table_renderer_factory');
     }
 
     protected function getViewActions()
@@ -141,8 +141,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             array(
                 self::PARAM_CONTEXT => self::package(),
                 self::PARAM_ACTION => self::ACTION_PRINT,
-                ViewRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
-                ViewRenderer::PARAM_TIME => $this->getCurrentRendererTime()));
+                FormatHtmlRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
+                FormatHtmlRenderer::PARAM_TIME => $this->getCurrentRendererTime()));
 
         $buttonGroup->addButton(
             new Button(

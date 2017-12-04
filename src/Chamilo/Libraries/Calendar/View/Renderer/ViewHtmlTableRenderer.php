@@ -1,17 +1,19 @@
 <?php
 namespace Chamilo\Libraries\Calendar\View\Renderer;
 
+use Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar;
+use Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlRenderer;
+use Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlTableRenderer;
+use Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -19,7 +21,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package Chamilo\Libraries\Calendar\View\Renderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class HtmlTableRenderer
+class ViewHtmlTableRenderer
 {
 
     /**
@@ -30,30 +32,29 @@ class HtmlTableRenderer
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer
+     * @var \Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlTableRenderer
      */
-    private $formatHtmlTableRenderer;
+    private $formatRenderer;
 
     /**
      *
      * @var \Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer
      */
-    private $miniMonthFormatHtmlTableRenderer;
+    private $miniMonthRenderer;
 
     /**
      *
      * @param \Twig_Environment $twigEnvironment
-     * @param \Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer $formatHtmlTableRenderer
-     * @param \Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer $miniMonthFormatHtmlTableRenderer
+     * @param \Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlTableRenderer $formatRenderer
+     * @param \Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer $miniMonthRenderer
      */
-    public function __construct(\Twig_Environment $twigEnvironment,
-        \Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer $formatHtmlTableRenderer,
-        \Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer $miniMonthFormatHtmlTableRenderer)
+    public function __construct(\Twig_Environment $twigEnvironment, FormatHtmlTableRenderer $formatRenderer,
+        MiniMonthRenderer $miniMonthRenderer)
 
     {
         $this->twigEnvironment = $twigEnvironment;
-        $this->formatHtmlTableRenderer = $formatHtmlTableRenderer;
-        $this->miniMonthFormatHtmlTableRenderer = $miniMonthFormatHtmlTableRenderer;
+        $this->formatRenderer = $formatRenderer;
+        $this->miniMonthRenderer = $miniMonthRenderer;
     }
 
     /**
@@ -67,20 +68,20 @@ class HtmlTableRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer
+     * @return \Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlTableRenderer
      */
-    protected function getFormatHtmlTableRenderer()
+    protected function getFormatRenderer()
     {
-        return $this->formatHtmlTableRenderer;
+        return $this->formatRenderer;
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer
      */
-    protected function getMiniMonthFormatHtmlTableRenderer()
+    protected function getMiniMonthRenderer()
     {
-        return $this->miniMonthFormatHtmlTableRenderer;
+        return $this->miniMonthRenderer;
     }
 
     /**
@@ -92,8 +93,8 @@ class HtmlTableRenderer
         return $this->getTwigEnvironment()->render(
             'Chamilo\Libraries\Calendar:HtmlTable.html.twig',
             [
-                'baseCalendar' => $this->getFormatHtmlTableRenderer()->render(),
-                'miniMonthCalendar' => $this->getMiniMonthFormatHtmlTableRenderer()->render(),
+                'baseCalendar' => $this->getFormatRenderer()->render(),
+                'miniMonthCalendar' => $this->getMiniMonthRenderer()->render(),
                 'actions' => $this->renderViewActions($viewActions),
                 'navigation' => $this->renderNavigation(),
                 'title' => Translation::get(date('F', time()) . 'Long', null, Utilities::COMMON_LIBRARIES) . ' ' .
@@ -127,17 +128,20 @@ class HtmlTableRenderer
      */
     protected function renderTypeButton()
     {
-        $rendererTypes = array(ViewRenderer::TYPE_MONTH, ViewRenderer::TYPE_WEEK, ViewRenderer::TYPE_DAY);
+        $rendererTypes = array(
+            FormatHtmlRenderer::TYPE_MONTH,
+            FormatHtmlRenderer::TYPE_WEEK,
+            FormatHtmlRenderer::TYPE_DAY);
 
         // $displayParameters = $this->getDataProvider()->getDisplayParameters();
-        $currentRendererType = $displayParameters[ViewRenderer::PARAM_TYPE];
+        $currentRendererType = $displayParameters[FormatHtmlRenderer::PARAM_TYPE];
 
         $button = new DropdownButton(Translation::get($currentRendererType . 'View'), new FontAwesomeGlyph('calendar'));
         $button->setDropdownClasses('dropdown-menu-right');
 
         foreach ($rendererTypes as $rendererType)
         {
-            $displayParameters[ViewRenderer::PARAM_TYPE] = $rendererType;
+            $displayParameters[FormatHtmlRenderer::PARAM_TYPE] = $rendererType;
             $typeUrl = new Redirect($displayParameters);
 
             $button->addSubButton(
@@ -196,7 +200,7 @@ class HtmlTableRenderer
     protected function determineNavigationUrl()
     {
         // $parameters = $this->getDataProvider()->getDisplayParameters();
-        $parameters[ViewRenderer::PARAM_TIME] = Calendar::TIME_PLACEHOLDER;
+        $parameters[FormatHtmlRenderer::PARAM_TIME] = Calendar::TIME_PLACEHOLDER;
 
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();

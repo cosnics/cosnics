@@ -5,8 +5,8 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service
-            id="chamilo.libraries.calendar.event.service.html_table_renderer_factory"
-            class="Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory">
+            id="chamilo.libraries.calendar.event.service.event_html_table_renderer_factory"
+            class="Chamilo\Libraries\Calendar\Event\Service\EventHtmlTableRendererFactory">
             <argument
                 type="service"
                 id="chamilo.libraries.calendar.calendar_sources" />

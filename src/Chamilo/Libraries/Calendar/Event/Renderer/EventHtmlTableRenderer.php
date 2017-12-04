@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Calendar\Event\Renderer;
 
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Event\Renderer\ViewRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
@@ -10,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  * @package Chamilo\Libraries\Calendar\Event\Renderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class HtmlTableRenderer extends ViewRenderer
+abstract class EventHtmlTableRenderer extends EventHtmlRenderer
 {
 
     /**

@@ -6,8 +6,8 @@ use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlRenderer;
 use Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer;
-use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -39,7 +39,7 @@ class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer impleme
 
     public function getTitle()
     {
-//         return $this->getCalendarRenderer()->renderTitle();
+        // return $this->getCalendarRenderer()->renderTitle();
     }
 
     /**
@@ -85,7 +85,7 @@ class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer impleme
                 $this->getUser(),
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
-                    ViewRenderer::PARAM_TYPE => ViewRenderer::TYPE_DAY));
+                    FormatHtmlRenderer::PARAM_TYPE => FormatHtmlRenderer::TYPE_DAY));
 
             $time = Request::get('time') ? intval(Request::get('time')) : time();
             return new MiniMonthRenderer(

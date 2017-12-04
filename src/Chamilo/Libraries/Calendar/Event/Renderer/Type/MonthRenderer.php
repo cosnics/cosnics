@@ -2,14 +2,14 @@
 namespace Chamilo\Libraries\Calendar\Event\Renderer\Type;
 
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer;
+use Chamilo\Libraries\Calendar\Event\Renderer\EventHtmlTableRenderer;
 
 /**
  *
  * @package Chamilo\Libraries\Calendar\Event\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class MonthRenderer extends HtmlTableRenderer
+class MonthRenderer extends EventHtmlTableRenderer
 {
 
     /**

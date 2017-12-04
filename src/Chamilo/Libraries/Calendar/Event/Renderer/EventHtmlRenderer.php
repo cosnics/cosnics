@@ -10,7 +10,7 @@ use Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport;
  * @package Chamilo\Libraries\Calendar\Event\Renderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class ViewRenderer
+abstract class EventHtmlRenderer
 {
 
     /**

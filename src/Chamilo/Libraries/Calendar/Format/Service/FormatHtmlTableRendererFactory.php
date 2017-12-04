@@ -10,7 +10,7 @@ use Chamilo\Libraries\Calendar\CalendarConfiguration;
  * @package Chamilo\Libraries\Calendar\Format\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class HtmlTableRendererFactory
+class FormatHtmlTableRendererFactory
 {
 
     /**
@@ -33,7 +33,7 @@ class HtmlTableRendererFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory
+     * @var \Chamilo\Libraries\Calendar\Event\Service\EventHtmlTableRendererFactory
      */
     private $eventHtmlTableRendererFactory;
 
@@ -42,11 +42,11 @@ class HtmlTableRendererFactory
      * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
      * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param \Chamilo\Libraries\Calendar\Format\Service\CalendarBuilderFactory $calendarBuilderFactory
-     * @param \Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory $eventHtmlTableRendererFactory
+     * @param \Chamilo\Libraries\Calendar\Event\Service\EventHtmlTableRendererFactory $eventHtmlTableRendererFactory
      */
     public function __construct(CalendarSources $calendarSources, CalendarConfiguration $calendarConfiguration,
         CalendarBuilderFactory $calendarBuilderFactory,
-        \Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory $eventHtmlTableRendererFactory)
+        \Chamilo\Libraries\Calendar\Event\Service\EventHtmlTableRendererFactory $eventHtmlTableRendererFactory)
     {
         $this->calendarSources = $calendarSources;
         $this->calendarConfiguration = $calendarConfiguration;
@@ -96,9 +96,10 @@ class HtmlTableRendererFactory
      * @param \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface $dataProvider
      * @param integer $displayTime
      * @throws \Exception
-     * @return \Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer
+     * @return \Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlTableRenderer
      */
-    public function getHtmlTableRenderer($rendererType, CalendarRendererProviderInterface $dataProvider, $displayTime)
+    public function getFormatHtmlTableRenderer($rendererType, CalendarRendererProviderInterface $dataProvider,
+        $displayTime)
     {
         $className = 'Chamilo\Libraries\Calendar\Format\Renderer\Type\\' . $rendererType . 'Renderer';
 

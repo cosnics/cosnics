@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Event\Renderer\Type;
 
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Event\Renderer\ViewRenderer;
+use Chamilo\Libraries\Calendar\Event\Renderer\EventHtmlRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package Chamilo\Libraries\Calendar\Event\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ListRenderer extends ViewRenderer
+class ListRenderer extends EventHtmlRenderer
 {
 
     /**
