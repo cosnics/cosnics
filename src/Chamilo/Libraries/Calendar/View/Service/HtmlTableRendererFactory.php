@@ -69,6 +69,14 @@ class HtmlTableRendererFactory
             $calendarDataProvider,
             $rendererTime);
 
-        return new HtmlTableRenderer($this->getTwigEnvironment(), $formatHtmlTableRenderer);
+        $miniMonthFormatHtmlTableRenderer = $this->getHtmlTableRendererFactory()->getHtmlTableRenderer(
+            'MiniMonth',
+            $calendarDataProvider,
+            $rendererTime);
+
+        return new HtmlTableRenderer(
+            $this->getTwigEnvironment(),
+            $formatHtmlTableRenderer,
+            $miniMonthFormatHtmlTableRenderer);
     }
 }

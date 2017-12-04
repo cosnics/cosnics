@@ -2,35 +2,60 @@
 
 {% if error %}
 
-    <div class="alert alert-danger">{{ error }}</div>
+<div class="alert alert-danger">
+    {{ error }}
+</div>
 
 {% endif %}
 
 <div class="col-xs-12 col-lg-9 table-calendar-main">
 
-	<div class="row">
-		<div class="col-xs-12 col-lg-4">
-			<div class="pull-left">
-			{{ navigation|raw }}
-			</div>
-			
-			<div class="table-calendar-current-time pull-left">
-				<h4>{{ title|raw }}</h4>
-			</div>
-		</div>
-			
-		<div class="col-xs-12 col-lg-8">
-			<div class="pull-right">{{ actions|raw }}</div>
-		</div>
-	</div>
-	
-	{{ baseCalendar|raw }}
+    <div class="row">
+        <div class="col-xs-12 col-lg-4">
+            <div class="pull-left">
+                {{ navigation|raw }}
+            </div>
+
+            <div class="table-calendar-current-time pull-left">
+                <h4>
+                    {{ title|raw }}
+                </h4>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-lg-8">
+            <div class="pull-right">
+                {{ actions|raw }}
+            </div>
+        </div>
+    </div>
+
+    {{ baseCalendar|raw }}
 </div>
 
 <div class="col-xs-12 col-lg-3 table-calendar-sidebar">
-	{{ miniMonthCalendar|raw }}
-	{{ legend|raw }}
-	{{ jumpForm|raw }}
+
+    <div class="panel panel-default">
+        <div class="panel-heading table-calendar-mini-navigation">
+            <a href="">
+                <span class="glyphicon glyphicon-chevron-left pull-left"></span>
+            </a>
+            <a href="">
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+            </a>
+            <h4 class="panel-title">
+                {{ title|raw }}
+            </h4>
+        </div>
+        <div class="panel-body">
+            {{ miniMonthCalendar|raw }}
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+
+    {{ legend|raw }}
+    {{ jumpForm|raw }}
 </div>
 
 <div class="clearfix"></div>

@@ -89,7 +89,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->getHtmlTableRendererFactory()->getHtmlTableRenderer(
             $this->getCurrentRendererType(),
             $this->getCalendarDataProvider(),
-            $this->getCurrentRendererTime())->render();
+            $this->getCurrentRendererTime())->render($this->getViewActions());
     }
 
     /**
