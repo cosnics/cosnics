@@ -16,18 +16,34 @@ class HtmlTableRendererFactory
 
     /**
      *
+     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    private $classnameUtilities;
+
+    /**
+     *
      * @var \Chamilo\Libraries\Calendar\CalendarSources
      */
     private $calendarSources;
 
     /**
      *
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
-     * @param integer $startDate
      */
-    public function __construct(CalendarSources $calendarSources)
+    public function __construct(ClassnameUtilities $classnameUtilities, CalendarSources $calendarSources)
     {
+        $this->classnameUtilities = $classnameUtilities;
         $this->calendarSources = $calendarSources;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    protected function getClassnameUtilities()
+    {
+        return $this->classnameUtilities;
     }
 
     /**
@@ -65,12 +81,12 @@ class HtmlTableRendererFactory
     {
         $eventRendererClassName = ClassnameUtilities::getInstance()->getNamespaceParent($eventContext) .
              '\Event\Renderer\Type\\' . $htmlTableRendererType;
-        // $this->getRenderer()->class_name(false);
+
+        var_dump($eventRendererClassName);
 
         if (! class_exists($eventRendererClassName))
         {
             $eventRendererClassName = 'Chamilo\Libraries\Calendar\Event\Renderer\Type\\' . $htmlTableRendererType;
-            // $this->getRenderer()->class_name(false);
         }
 
         return new $eventRendererClassName($dataProvider, $this->getCalendarSources());

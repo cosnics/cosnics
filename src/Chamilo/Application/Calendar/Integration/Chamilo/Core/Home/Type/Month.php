@@ -6,7 +6,7 @@ use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer;
 use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Service\Legend;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
