@@ -154,7 +154,7 @@ class EventParser
             $office365CalendarEvent->getSubject(),
             $office365CalendarEvent->getBody()->getContent(),
             $office365CalendarEvent->getLocation()->getDisplayName(),
-            $this->getEventSource($office365CalendarEvent, $this->getAvailableCalendar()->getName()),
+            $this->getEventSource($this->getAvailableCalendar()),
             \Chamilo\Application\Calendar\Extension\Office365\Manager::context());
 
         $event->setOffice365CalendarEvent($office365CalendarEvent);
@@ -208,13 +208,14 @@ class EventParser
      * @param string $calendarName
      * @return string
      */
-    private function getEventSource(\Microsoft\Graph\Model\Event $office365CalendarEvent, $calendarName)
+    private function getEventSource(AvailableCalendar $availableCalendar)
     {
         $eventContext = \Chamilo\Application\Calendar\Extension\Office365\Manager::context();
 
         $eventSource = new EventSource();
-        $eventSource->setId($office365CalendarEvent->getCalendar()->getId());
-        $eventSource->setTitle(Translation::get('SourceName', array('CALENDAR' => $calendarName), $eventContext));
+        $eventSource->setId($availableCalendar->getIdentifier());
+        $eventSource->setTitle(
+            Translation::get('SourceName', array('CALENDAR' => $availableCalendar->getName()), $eventContext));
         $eventSource->setContext($eventContext);
 
         return $eventSource;
