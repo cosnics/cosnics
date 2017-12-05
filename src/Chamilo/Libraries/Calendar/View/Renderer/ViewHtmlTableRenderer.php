@@ -163,11 +163,22 @@ abstract class ViewHtmlTableRenderer
                 'miniCalendar' => $this->getMiniMonthRenderer()->render(),
                 'miniPreviousUrl' => $this->getPreviousMonthUrl($displayParameters, $currentRendererTime),
                 'miniNextUrl' => $this->getNextMonthUrl($displayParameters, $currentRendererTime),
-                'title' => $this->getTitle($currentRendererTime),
+                'mainTitle' => $this->getTitle($currentRendererTime),
+                'miniTitle' => $this->getMiniTitle($currentRendererTime),
                 'legend' => $this->getLegendRenderer()->render($this->getFormatRenderer()->getDataProvider()),
                 'dateSelection' => $this->getDateSelectionRenderer()->render(
                     $this->determineNavigationUrl($displayParameters),
                     $currentRendererTime)]);
+    }
+
+
+    /**
+     * @param integer $currentRendererTime
+     * @return string
+     */
+    protected function getMiniTitle($currentRendererTime)
+    {
+        return $this->getDatetimeUtilities()->getDate($currentRendererTime)->format('F Y');
     }
 
     /**
