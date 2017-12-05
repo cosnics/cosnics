@@ -217,8 +217,7 @@ class EventParser
     /**
      *
      * @param \Chamilo\Application\Calendar\Extension\Google\CalendarProperties $calendarProperties
-     *
-     * @return string
+     * @return \Chamilo\Libraries\Calendar\Event\EventSource
      */
     private function getEventSource(CalendarProperties $calendarProperties)
     {

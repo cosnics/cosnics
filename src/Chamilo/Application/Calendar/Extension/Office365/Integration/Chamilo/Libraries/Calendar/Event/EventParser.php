@@ -205,8 +205,8 @@ class EventParser
 
     /**
      *
-     * @param string $calendarName
-     * @return string
+     * @param \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $calendarName
+     * @return \Chamilo\Libraries\Calendar\Event\EventSource
      */
     private function getEventSource(AvailableCalendar $availableCalendar)
     {
