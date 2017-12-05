@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Calendar\View\Service;
 
 use Chamilo\Libraries\Calendar\Format\Service\FormatHtmlTableRendererFactory;
 use Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Service\DateSelectionRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
@@ -40,18 +41,27 @@ class ViewHtmlTableRendererFactory
 
     /**
      *
+     * @var \Chamilo\Libraries\Calendar\Service\DateSelectionRenderer
+     */
+    private $dateSelectionRenderer;
+
+    /**
+     *
      * @param \Twig_Environment $twigEnvironment
      * @param \Chamilo\Libraries\Utilities\DatetimeUtilities $datetimeUtilities
      * @param \Chamilo\Libraries\Calendar\Format\Service\HtmlTableRendererFactory $formatHtmlTableRendererFactory
      * @param \Chamilo\Libraries\Calendar\Service\LegendRenderer $legendRenderer
+     * @param \Chamilo\Libraries\Calendar\Service\DateSelectionRenderer $dateSelectionRenderer
      */
     public function __construct(\Twig_Environment $twigEnvironment, DatetimeUtilities $datetimeUtilities,
-        FormatHtmlTableRendererFactory $formatHtmlTableRendererFactory, LegendRenderer $legendRenderer)
+        FormatHtmlTableRendererFactory $formatHtmlTableRendererFactory, LegendRenderer $legendRenderer,
+        DateSelectionRenderer $dateSelectionRenderer)
     {
         $this->twigEnvironment = $twigEnvironment;
         $this->datetimeUtilities = $datetimeUtilities;
         $this->formatHtmlTableRendererFactory = $formatHtmlTableRendererFactory;
         $this->legendRenderer = $legendRenderer;
+        $this->dateSelectionRenderer = $dateSelectionRenderer;
     }
 
     /**
@@ -92,6 +102,15 @@ class ViewHtmlTableRendererFactory
 
     /**
      *
+     * @return \Chamilo\Libraries\Calendar\Service\DateSelectionRenderer
+     */
+    protected function getDateSelectionRenderer()
+    {
+        return $this->dateSelectionRenderer;
+    }
+
+    /**
+     *
      * @param string $rendererType
      * @param \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface $calendarDataProvider
      * @param integer $rendererTime
@@ -119,6 +138,7 @@ class ViewHtmlTableRendererFactory
             $this->getDatetimeUtilities(),
             $formatRenderer,
             $miniMontRenderer,
-            $this->getLegendRenderer());
+            $this->getLegendRenderer(),
+            $this->getDateSelectionRenderer());
     }
 }

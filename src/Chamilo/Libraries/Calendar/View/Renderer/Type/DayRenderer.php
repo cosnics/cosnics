@@ -24,7 +24,7 @@ class DayRenderer extends ViewHtmlTableRenderer
      *
      * @see \Chamilo\Libraries\Calendar\View\Renderer\ViewHtmlTableRenderer::getPreviousDisplayTime()
      */
-    public function getPreviousDisplayTime($currentRendererTime)
+    protected function getPreviousDisplayTime($currentRendererTime)
     {
         return strtotime('-1 Day', $currentRendererTime);
     }
@@ -33,7 +33,7 @@ class DayRenderer extends ViewHtmlTableRenderer
      *
      * @see \Chamilo\Libraries\Calendar\View\Renderer\ViewHtmlTableRenderer::getNextDisplayTime()
      */
-    public function getNextDisplayTime($currentRendererTime)
+    protected function getNextDisplayTime($currentRendererTime)
     {
         return strtotime('+1 Day', $currentRendererTime);
     }

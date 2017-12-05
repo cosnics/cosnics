@@ -34,5 +34,10 @@
             factory-service="chamilo.libraries.calendar.service.calendar_configuration_factory"
             factory-method="getCalendarConfiguration">
         </service>
+
+        <service
+            id="chamilo.libraries.calendar.service.date_selection_renderer"
+            class="Chamilo\Libraries\Calendar\Service\DateSelectionRenderer">
+        </service>
     </services>
 </container>

@@ -19,7 +19,10 @@
             <argument
                 type="service"
                 id="chamilo.libraries.calendar.service.legend_renderer" />
-
+            <argument
+                type="service"
+                id="chamilo.libraries.calendar.service.date_selection_renderer" />
         </service>
+
     </services>
 </container>

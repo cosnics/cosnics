@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Calendar\Service\DateSelectionRenderer;
 
 /**
  *
@@ -57,14 +58,22 @@ abstract class ViewHtmlTableRenderer
 
     /**
      *
+     * @var \Chamilo\Libraries\Calendar\Service\DateSelectionRenderer
+     */
+    private $dateSelectionRenderer;
+
+    /**
+     *
      * @param \Twig_Environment $twigEnvironment
      * @param \Chamilo\Libraries\Utilities\DatetimeUtilities $datetimeUtilities
      * @param \Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlTableRenderer $formatRenderer
      * @param \Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer $miniMonthRenderer
      * @param \Chamilo\Libraries\Calendar\Service\LegendRenderer $legendRenderer
+     * @param \Chamilo\Libraries\Calendar\Service\DateSelectionRenderer $dateSelectionRenderer
      */
     public function __construct(\Twig_Environment $twigEnvironment, DatetimeUtilities $datetimeUtilities,
-        FormatHtmlTableRenderer $formatRenderer, MiniMonthRenderer $miniMonthRenderer, LegendRenderer $legendRenderer)
+        FormatHtmlTableRenderer $formatRenderer, MiniMonthRenderer $miniMonthRenderer, LegendRenderer $legendRenderer,
+        DateSelectionRenderer $dateSelectionRenderer)
 
     {
         $this->twigEnvironment = $twigEnvironment;
@@ -72,6 +81,7 @@ abstract class ViewHtmlTableRenderer
         $this->formatRenderer = $formatRenderer;
         $this->miniMonthRenderer = $miniMonthRenderer;
         $this->legendRenderer = $legendRenderer;
+        $this->dateSelectionRenderer = $dateSelectionRenderer;
     }
 
     /**
@@ -121,6 +131,15 @@ abstract class ViewHtmlTableRenderer
 
     /**
      *
+     * @return \Chamilo\Libraries\Calendar\Service\DateSelectionRenderer
+     */
+    protected function getDateSelectionRenderer()
+    {
+        return $this->dateSelectionRenderer;
+    }
+
+    /**
+     *
      * @param integer $currentRendererTime
      * @return string
      */
@@ -145,7 +164,10 @@ abstract class ViewHtmlTableRenderer
                 'miniPreviousUrl' => $this->getPreviousMonthUrl($displayParameters, $currentRendererTime),
                 'miniNextUrl' => $this->getNextMonthUrl($displayParameters, $currentRendererTime),
                 'title' => $this->getTitle($currentRendererTime),
-                'legend' => $this->getLegendRenderer()->render($this->getFormatRenderer()->getDataProvider())]);
+                'legend' => $this->getLegendRenderer()->render($this->getFormatRenderer()->getDataProvider()),
+                'dateSelection' => $this->getDateSelectionRenderer()->render(
+                    $this->determineNavigationUrl($displayParameters),
+                    $currentRendererTime)]);
     }
 
     /**
@@ -288,12 +310,12 @@ abstract class ViewHtmlTableRenderer
      * @param integer $currentRendererTime
      * @return integer
      */
-    abstract public function getPreviousDisplayTime($currentRendererTime);
+    abstract protected function getPreviousDisplayTime($currentRendererTime);
 
     /**
      *
      * @param integer $currentRendererTime
      * @return integer
      */
-    abstract public function getNextDisplayTime($currentRendererTime);
+    abstract protected function getNextDisplayTime($currentRendererTime);
 }
