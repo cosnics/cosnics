@@ -94,6 +94,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
                     $defaults[AssessmentSelectQuestionOption::PROPERTY_SCORE][$option_number] = 0;
                 }
 
+                $defaults[AssessmentSelectQuestionOption::PROPERTY_SCORE][0] = 1;
                 $defaults[AssessmentSelectQuestionOption::PROPERTY_CORRECT] = 0;
             }
         }

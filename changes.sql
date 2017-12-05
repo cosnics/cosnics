@@ -284,8 +284,6 @@ DELETE FROM `configuration_setting` WHERE `variable` LIKE 'maintenance_mode' AND
 
 ALTER TABLE `repository_learning_path_tree_node_data` ADD `enforce_default_traversing_order` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER `added_date`;
 
-ALTER TABLE `repository_learning_path_tree_node_data` ADD `enforce_default_traversing_order` INT(10) UNSIGNED NOT NULL AFTER `blocked`;
-
 /** 16 OCT 2017 **/
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration', 'Integration', 'Document', '1', '1.0.0', '1');
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Forum\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Forum\\Integration', 'Integration', 'Forum', '1', '1.0.0', '1');
@@ -318,3 +316,9 @@ INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user
   (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'cosnics_prefix', NULL, 'cosnics_'),
   (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'planner_base_uri', 'https://tasks.office.com/tenantName.onmicrosoft.com/nl-NL/Home/Planner', '0'),
   (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'group_base_uri', 'https://outlook.office.com/owa/?realm=realm&amp;exsvurl=1&amp;ll-cc=1043&amp;modurl=0&amp;path=/group/{GROUP_ID}@tenant.onmicrosoft.com/people', '0');
+
+INSERT INTO weblcms_course_group_publication_category
+    SELECT NULL, CG.id, CG.document_category_id FROM weblcms_course_group CG WHERE CG.document_category_id > 0;
+
+INSERT INTO weblcms_course_group_publication_category
+  SELECT NULL, CG.id, CG.forum_category_id FROM weblcms_course_group CG WHERE CG.forum_category_id > 0;

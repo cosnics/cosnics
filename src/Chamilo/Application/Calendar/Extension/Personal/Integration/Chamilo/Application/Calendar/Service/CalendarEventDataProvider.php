@@ -190,8 +190,12 @@ class CalendarEventDataProvider extends MixedCalendar
     /**
      *
      * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getCalendars()
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
+     *
+     * @return array|\Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
-    public function getCalendars(User $user)
+    public function getCalendars(User $user = null)
     {
         $calendars = array();
 

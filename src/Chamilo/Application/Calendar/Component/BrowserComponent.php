@@ -6,7 +6,9 @@ use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Component\UserSettingsComponent;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
@@ -42,6 +44,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function run()
     {
         $this->checkAuthorization(Manager::context());
+        $this->checkLoggedInAs();
 
         $header = Page::getInstance()->getHeader();
         $header->addCssFile(Theme::getInstance()->getCssPath(self::package(), true) . 'Print.css', 'print');
@@ -58,6 +61,28 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
+    }
+
+    protected function checkLoggedInAs()
+    {
+        $sessionUtilities = $this->getSessionUtilities();
+        $asAdmin = $sessionUtilities->get('_as_admin');
+        if($asAdmin && $asAdmin > 0)
+        {
+            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $asAdmin);
+            if(!$user instanceof User || !$user->is_platform_admin())
+            {
+                throw new NotAllowedException();
+            }
+        }
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    protected function getSessionUtilities()
+    {
+        return $this->getService('chamilo.libraries.platform.session.session_utilities');
     }
 
     protected function getCalendarDataProvider()
