@@ -38,6 +38,9 @@
         <service
             id="chamilo.libraries.calendar.service.date_selection_renderer"
             class="Chamilo\Libraries\Calendar\Service\DateSelectionRenderer">
+            <argument
+                type="service"
+                id="symfony.component.translation.translator" />
         </service>
     </services>
 </container>

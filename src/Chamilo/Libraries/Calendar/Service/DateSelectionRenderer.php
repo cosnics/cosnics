@@ -8,8 +8,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -18,6 +18,30 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class DateSelectionRenderer
 {
+
+    /**
+     *
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     *
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function __construct(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     *
+     * @return \Symfony\Component\Translation\Translator
+     */
+    protected function getTranslator()
+    {
+        return $this->translator;
+    }
 
     /**
      *
@@ -45,7 +69,13 @@ class DateSelectionRenderer
         $buttonGroup = new ButtonGroup();
 
         $buttonToolbar->addItem(
-            new Button(Translation::get('JumpTo'), null, null, Button::DISPLAY_LABEL, false, 'btn-link'));
+            new Button(
+                $this->getTranslator()->trans('JumpTo', [], 'Chamilo\Libraries\Calendar'),
+                null,
+                null,
+                Button::DISPLAY_LABEL,
+                false,
+                'btn-link'));
         $buttonToolbar->addItem($buttonGroup);
 
         $dateButton = new DropdownButton(date('j', $currentRendererTime));
@@ -119,19 +149,21 @@ class DateSelectionRenderer
      */
     public function getMonths()
     {
+        $translator = $this->getTranslator();
+
         $monthNames = array(
-            Translation::get("JanuaryLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("FebruaryLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("MarchLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("AprilLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("MayLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("JuneLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("JulyLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("AugustLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("SeptemberLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("OctoberLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("NovemberLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("DecemberLong", null, Utilities::COMMON_LIBRARIES));
+            $translator->trans("JanuaryLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->trans("FebruaryLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->trans("MarchLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->trans("AprilLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->trans("MayLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->trans("JuneLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->trans("JulyLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->trans("AugustLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->trans("SeptemberLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->trans("OctoberLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->trans("NovemberLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->trans("DecemberLong", [], Utilities::COMMON_LIBRARIES));
         $months = array();
 
         foreach ($monthNames as $key => $month)
