@@ -15,7 +15,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Symfony\Component\Translation\Translator;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
@@ -31,12 +30,6 @@ abstract class ViewHtmlTableRenderer
      * @var \Twig_Environment
      */
     private $twigEnvironment;
-
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
 
     /**
      *
@@ -65,19 +58,16 @@ abstract class ViewHtmlTableRenderer
     /**
      *
      * @param \Twig_Environment $twigEnvironment
-     * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Libraries\Utilities\DatetimeUtilities $datetimeUtilities
      * @param \Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlTableRenderer $formatRenderer
      * @param \Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer $miniMonthRenderer
      * @param \Chamilo\Libraries\Calendar\Service\LegendRenderer $legendRenderer
      */
-    public function __construct(\Twig_Environment $twigEnvironment, Translator $translator,
-        DatetimeUtilities $datetimeUtilities, FormatHtmlTableRenderer $formatRenderer,
-        MiniMonthRenderer $miniMonthRenderer, LegendRenderer $legendRenderer)
+    public function __construct(\Twig_Environment $twigEnvironment, DatetimeUtilities $datetimeUtilities,
+        FormatHtmlTableRenderer $formatRenderer, MiniMonthRenderer $miniMonthRenderer, LegendRenderer $legendRenderer)
 
     {
         $this->twigEnvironment = $twigEnvironment;
-        $this->translator = $translator;
         $this->datetimeUtilities = $datetimeUtilities;
         $this->formatRenderer = $formatRenderer;
         $this->miniMonthRenderer = $miniMonthRenderer;
@@ -91,15 +81,6 @@ abstract class ViewHtmlTableRenderer
     protected function getTwigEnvironment()
     {
         return $this->twigEnvironment;
-    }
-
-    /**
-     *
-     * @return \Symfony\Component\Translation\Translator
-     */
-    protected function getTranslator()
-    {
-        return $this->translator;
     }
 
     /**
@@ -316,4 +297,3 @@ abstract class ViewHtmlTableRenderer
      */
     abstract public function getNextDisplayTime($currentRendererTime);
 }
-

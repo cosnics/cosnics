@@ -12,9 +12,6 @@
                 id="twig.environment" />
             <argument
                 type="service"
-                id="symfony.component.translation.translator" />
-            <argument
-                type="service"
                 id="chamilo.libraries.utilities.datetime_utilities" />
             <argument
                 type="service"

@@ -5,7 +5,6 @@ use Chamilo\Libraries\Calendar\Format\Service\FormatHtmlTableRendererFactory;
 use Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -20,12 +19,6 @@ class ViewHtmlTableRendererFactory
      * @var \Twig_Environment
      */
     private $twigEnvironment;
-
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
 
     /**
      *
@@ -48,17 +41,14 @@ class ViewHtmlTableRendererFactory
     /**
      *
      * @param \Twig_Environment $twigEnvironment
-     * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Libraries\Utilities\DatetimeUtilities $datetimeUtilities
      * @param \Chamilo\Libraries\Calendar\Format\Service\HtmlTableRendererFactory $formatHtmlTableRendererFactory
      * @param \Chamilo\Libraries\Calendar\Service\LegendRenderer $legendRenderer
      */
-    public function __construct(\Twig_Environment $twigEnvironment, Translator $translator,
-        DatetimeUtilities $datetimeUtilities, FormatHtmlTableRendererFactory $formatHtmlTableRendererFactory,
-        LegendRenderer $legendRenderer)
+    public function __construct(\Twig_Environment $twigEnvironment, DatetimeUtilities $datetimeUtilities,
+        FormatHtmlTableRendererFactory $formatHtmlTableRendererFactory, LegendRenderer $legendRenderer)
     {
         $this->twigEnvironment = $twigEnvironment;
-        $this->translator = $translator;
         $this->datetimeUtilities = $datetimeUtilities;
         $this->formatHtmlTableRendererFactory = $formatHtmlTableRendererFactory;
         $this->legendRenderer = $legendRenderer;
@@ -71,15 +61,6 @@ class ViewHtmlTableRendererFactory
     protected function getTwigEnvironment()
     {
         return $this->twigEnvironment;
-    }
-
-    /**
-     *
-     * @return \Symfony\Component\Translation\Translator
-     */
-    protected function getTranslator()
-    {
-        return $this->translator;
     }
 
     /**
@@ -135,7 +116,6 @@ class ViewHtmlTableRendererFactory
 
         return new $className(
             $this->getTwigEnvironment(),
-            $this->getTranslator(),
             $this->getDatetimeUtilities(),
             $formatRenderer,
             $miniMontRenderer,
