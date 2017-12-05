@@ -64,20 +64,28 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         if (! isset($this->calendarDataProvider))
         {
-            $displayParameters = array(
-                self::PARAM_CONTEXT => self::package(),
-                self::PARAM_ACTION => self::ACTION_BROWSE,
-                FormatHtmlRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
-                FormatHtmlRenderer::PARAM_TIME => $this->getCurrentRendererTime());
 
             $this->calendarDataProvider = new CalendarRendererProvider(
                 $this->getService('chamilo.application.calendar.service.visibility_service'),
                 \Chamilo\Application\Calendar\Manager::context(),
                 $this->getUser(),
-                $displayParameters);
+                $this->getDisplayParameters());
         }
 
         return $this->calendarDataProvider;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    protected function getDisplayParameters()
+    {
+        return array(
+            self::PARAM_CONTEXT => self::package(),
+            self::PARAM_ACTION => self::ACTION_BROWSE,
+            FormatHtmlRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
+            FormatHtmlRenderer::PARAM_TIME => $this->getCurrentRendererTime());
     }
 
     /**
@@ -86,10 +94,15 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     protected function renderNormalCalendar()
     {
-        return $this->getViewHtmlTableRendererFactory()->getViewHtmlTableRenderer(
+        $viewTableHtmlRenderer = $this->getViewHtmlTableRendererFactory()->getViewHtmlTableRenderer(
             $this->getCurrentRendererType(),
             $this->getCalendarDataProvider(),
-            $this->getCurrentRendererTime())->render($this->getViewActions());
+            $this->getCurrentRendererTime());
+
+        return $viewTableHtmlRenderer->render(
+            $this->getCurrentRendererTime(),
+            $this->getDisplayParameters(),
+            $this->getViewActions());
     }
 
     /**

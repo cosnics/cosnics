@@ -103,4 +103,16 @@ abstract class FormatHtmlRenderer extends FormatRenderer
 
         return $events;
     }
+
+    /**
+     *
+     * @return integer
+     */
+    abstract public function getStartTime();
+
+    /**
+     *
+     * @return integer
+     */
+    abstract public function getEndTime();
 }

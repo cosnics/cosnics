@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Calendar\View\Service;
 use Chamilo\Libraries\Calendar\Format\Service\FormatHtmlTableRendererFactory;
 use Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\View\Renderer\ViewHtmlTableRenderer;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -22,6 +23,18 @@ class ViewHtmlTableRendererFactory
 
     /**
      *
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Utilities\DatetimeUtilities
+     */
+    private $datetimeUtilities;
+
+    /**
+     *
      * @var \Chamilo\Libraries\Calendar\Format\Service\HtmlTableRendererFactory
      */
     private $formatHtmlTableRendererFactory;
@@ -35,13 +48,18 @@ class ViewHtmlTableRendererFactory
     /**
      *
      * @param \Twig_Environment $twigEnvironment
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Utilities\DatetimeUtilities $datetimeUtilities
      * @param \Chamilo\Libraries\Calendar\Format\Service\HtmlTableRendererFactory $formatHtmlTableRendererFactory
      * @param \Chamilo\Libraries\Calendar\Service\LegendRenderer $legendRenderer
      */
-    public function __construct(\Twig_Environment $twigEnvironment,
-        FormatHtmlTableRendererFactory $formatHtmlTableRendererFactory, LegendRenderer $legendRenderer)
+    public function __construct(\Twig_Environment $twigEnvironment, Translator $translator,
+        DatetimeUtilities $datetimeUtilities, FormatHtmlTableRendererFactory $formatHtmlTableRendererFactory,
+        LegendRenderer $legendRenderer)
     {
         $this->twigEnvironment = $twigEnvironment;
+        $this->translator = $translator;
+        $this->datetimeUtilities = $datetimeUtilities;
         $this->formatHtmlTableRendererFactory = $formatHtmlTableRendererFactory;
         $this->legendRenderer = $legendRenderer;
     }
@@ -53,6 +71,24 @@ class ViewHtmlTableRendererFactory
     protected function getTwigEnvironment()
     {
         return $this->twigEnvironment;
+    }
+
+    /**
+     *
+     * @return \Symfony\Component\Translation\Translator
+     */
+    protected function getTranslator()
+    {
+        return $this->translator;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Utilities\DatetimeUtilities
+     */
+    protected function getDatetimeUtilities()
+    {
+        return $this->datetimeUtilities;
     }
 
     /**
@@ -78,7 +114,7 @@ class ViewHtmlTableRendererFactory
      * @param string $rendererType
      * @param \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface $calendarDataProvider
      * @param integer $rendererTime
-     * @return \Chamilo\Libraries\Calendar\View\Renderer\HtmlTableRenderer
+     * @return \Chamilo\Libraries\Calendar\View\Renderer\ViewHtmlTableRenderer
      */
     public function getViewHtmlTableRenderer($rendererType, CalendarRendererProviderInterface $calendarDataProvider,
         $rendererTime)
@@ -95,8 +131,12 @@ class ViewHtmlTableRendererFactory
             $calendarDataProvider,
             $rendererTime);
 
-        return new ViewHtmlTableRenderer(
+        $className = 'Chamilo\Libraries\Calendar\View\Renderer\Type\\' . $rendererType . 'Renderer';
+
+        return new $className(
             $this->getTwigEnvironment(),
+            $this->getTranslator(),
+            $this->getDatetimeUtilities(),
             $formatRenderer,
             $miniMontRenderer,
             $this->getLegendRenderer());

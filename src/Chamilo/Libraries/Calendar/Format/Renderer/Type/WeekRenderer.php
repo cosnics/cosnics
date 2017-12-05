@@ -20,8 +20,8 @@ class WeekRenderer extends FormatHtmlTableRenderer
         $calendarConfiguration = $this->getCalendarConfiguration();
         $calendar = $this->getCalendar();
 
-        $startTime = $calendar->getStartTime();
-        $endTime = $calendar->getEndTime();
+        $startTime = $this->getStartTime();
+        $endTime = $this->getEndTime();
 
         $events = $this->getEvents($startTime, $endTime);
 

@@ -7,5 +7,12 @@
         <service
             id="chamilo.libraries.utilities.string_utilities"
             class="Chamilo\Libraries\Utilities\StringUtilities" />
+        <service
+            id="chamilo.libraries.utilities.datetime_utilities"
+            class="Chamilo\Libraries\Utilities\DatetimeUtilities">
+            <argument
+                type="service"
+                id="symfony.component.translation.translator" />
+        </service>
     </services>
 </container>

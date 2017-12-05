@@ -5,13 +5,62 @@ use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 use DateTime;
 use DateTimeZone;
+use Symfony\Component\Translation\Translator;
+use Jenssegers\Date\Date;
 
 /**
  *
- * @package common.datetime
+ * @package Chamilo\Libraries\Utilities
  */
 class DatetimeUtilities
 {
+
+    /**
+     *
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     *
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function __construct(Translator $translator)
+
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     *
+     * @return \Symfony\Component\Translation\Translator
+     */
+    protected function getTranslator()
+    {
+        return $this->translator;
+    }
+
+    /**
+     *
+     * @param integer $unixTimestamp
+     * @throws \Exception
+     * @return \Jenssegers\Date\Date
+     */
+    public function getDate($unixTimestamp = null)
+    {
+        if (! is_numeric($unixTimestamp))
+        {
+            throw new \Exception('Not a valid Unix Timestamp');
+        }
+
+        if (is_null($unixTimestamp))
+        {
+            $unixTimestamp = time();
+        }
+
+        Date::setLocale($this->getTranslator()->getLocale());
+        return new Date((int) $unixTimestamp);
+    }
 
     /**
      * formats the date according to the locale settings

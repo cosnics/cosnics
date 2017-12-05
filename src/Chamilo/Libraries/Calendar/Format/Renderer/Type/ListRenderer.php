@@ -85,7 +85,7 @@ class ListRenderer extends FormatHtmlRenderer
      *
      * @return integer
      */
-    protected function getStartTime()
+    public function getStartTime()
     {
         return $this->getDisplayTime();
     }
@@ -94,7 +94,7 @@ class ListRenderer extends FormatHtmlRenderer
      *
      * @return integer
      */
-    protected function getEndTime()
+    public function getEndTime()
     {
         return strtotime('+6 Months', $this->getStartTime());
     }

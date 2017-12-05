@@ -78,4 +78,22 @@ abstract class FormatHtmlTableRenderer extends FormatHtmlRenderer
     {
         return $this->eventHtmlTableRendererFactory;
     }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlTableRenderer::getStartTime()
+     */
+    public function getStartTime()
+    {
+        return $this->getCalendar()->getStartTime();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlTableRenderer::getEndTime()
+     */
+    public function getEndTime()
+    {
+        return $this->getCalendar()->getEndTime();
+    }
 }
