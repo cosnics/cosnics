@@ -263,6 +263,12 @@ class GraphRepository
     protected function executeRequestWithDelegatedAccess(GraphRequest $graphRequest)
     {
         $this->activateDelegatedAccessToken();
+
+        /**
+         * Change the authorization header since graph doesn't do this automatically when the new token is set
+         */
+        $graphRequest->addHeaders(['Authorization' => 'Bearer ' . $this->delegatedAccessToken->getToken()]);
+
         $result = $graphRequest->execute();
         $this->initializeApplicationAccessToken();
 
