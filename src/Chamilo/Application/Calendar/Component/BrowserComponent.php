@@ -67,10 +67,10 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $sessionUtilities = $this->getSessionUtilities();
         $asAdmin = $sessionUtilities->get('_as_admin');
-        if($asAdmin && $asAdmin > 0)
+        if ($asAdmin && $asAdmin > 0)
         {
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $asAdmin);
-            if(!$user instanceof User || !$user->is_platform_admin())
+            if (! $user instanceof User || ! $user->is_platform_admin())
             {
                 throw new NotAllowedException();
             }
@@ -78,6 +78,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     }
 
     /**
+     *
      * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
     protected function getSessionUtilities()
@@ -139,6 +140,10 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->getService('chamilo.libraries.calendar.view.service.view_html_table_renderer_factory');
     }
 
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
+     */
     protected function getViewActions()
     {
         $actions = array();
@@ -171,6 +176,10 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $actions;
     }
 
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup
+     */
     protected function getGeneralActions()
     {
         $buttonGroup = new ButtonGroup();
