@@ -45,6 +45,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
         $this->set_parameter(self::PARAM_COURSE_GROUP, $course_group_id);
 
+        /** @var CourseGroup $course_group */
         $course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $course_group_id);
         if (! $course_group)
             throw new ObjectNotExistException(Translation::get('CourseGroup'), $course_group_id);
@@ -74,6 +75,10 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             foreach ($users as $user)
             {
                 $course_group->unsubscribe_users($user);
+
+                $userObject = new User();
+                $userObject->setId($user);
+                $this->getCourseGroupDecoratorsManager()->unsubscribeUser($course_group, $userObject);
             }
 
             $message = Translation::get(count($users) > 1 ? 'UsersUnsubscribed' : 'UserUnsubscribed');
@@ -225,48 +230,48 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                         ToolbarItem::DISPLAY_ICON_AND_LABEL));
             }
 
-            if ($course_group->get_document_category_id())
-            {
-                $type_name = 'document';
-                $params = array();
-                $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-                $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-                $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_group->get_course_code();
-                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $type_name;
-                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager::ACTION_BROWSE;
-                $params[\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY] = $course_group->get_document_category_id();
-                $url = $this->get_url($params);
-
-                $namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($type_name);
-                $toolActions->addButton(
-                    new Button(
-                        Translation::get('TypeName', null, $namespace),
-                        Theme::getInstance()->getImagePath($namespace, 'Logo/16'),
-                        $url,
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
-            }
-
-            if ($course_group->get_forum_category_id())
-            {
-                $type_name = 'forum';
-                $params = array();
-                $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-                $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-                $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_group->get_course_code();
-                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $type_name;
-                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager::ACTION_BROWSE;
-                $params[\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY] = $course_group->get_forum_category_id();
-                $url = $this->get_url($params);
-
-                $namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($type_name);
-                $toolActions->addButton(
-                    new Button(
-                        Translation::get('TypeName', null, $namespace),
-                        Theme::getInstance()->getImagePath($namespace, 'Logo/16'),
-                        $url,
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
-            }
-
+//            if ($course_group->get_document_category_id())
+//            {
+//                $type_name = 'document';
+//                $params = array();
+//                $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+//                $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
+//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_group->get_course_code();
+//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $type_name;
+//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager::ACTION_BROWSE;
+//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY] = $course_group->get_document_category_id();
+//                $url = $this->get_url($params);
+//
+//                $namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($type_name);
+//                $toolActions->addButton(
+//                    new Button(
+//                        Translation::get('TypeName', null, $namespace),
+//                        Theme::getInstance()->getImagePath($namespace, 'Logo/16'),
+//                        $url,
+//                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+//            }
+//
+//            if ($course_group->get_forum_category_id())
+//            {
+//                $type_name = 'forum';
+//                $params = array();
+//                $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+//                $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
+//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_group->get_course_code();
+//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $type_name;
+//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager::ACTION_BROWSE;
+//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY] = $course_group->get_forum_category_id();
+//                $url = $this->get_url($params);
+//
+//                $namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($type_name);
+//                $toolActions->addButton(
+//                    new Button(
+//                        Translation::get('TypeName', null, $namespace),
+//                        Theme::getInstance()->getImagePath($namespace, 'Logo/16'),
+//                        $url,
+//                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+//            }
+//TODO ADD LINKS
             $buttonToolbar->addButtonGroup($commonActions);
             $buttonToolbar->addButtonGroup($toolActions);
 

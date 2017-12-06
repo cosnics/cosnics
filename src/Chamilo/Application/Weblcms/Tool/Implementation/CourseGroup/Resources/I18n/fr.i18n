@@ -62,8 +62,6 @@ RandomRegistration = "Inscription aléatoire"
 RegisterCourseUsersRandomly = "Inscrire membres au hasard"
 
 NoCourseGroupFound = "Course group not found."
-DocumentToolUncheckedWarning = "You have unchecked the Document tool. The linked document category and ALL containing documents will be deleted when you submit this form."
-ForumToolUncheckedWarning = "You have unchecked the Forum tool. The linked forum and ALL containing subforums, topics and posts will be deleted when you submit this form."
 
 CourseGroupParent = "Parent course group"
 ParentGroupType = "Parent coures group"
@@ -77,9 +75,7 @@ CountedTitle = "Title {COUNT}"
 CourseGroups = "CourseGroups"
 
 DeleteConfirm = "Are you you wish to delete course group {NAME}?"
-DeleteConfirmChildren = "This course group contains child course groups. These will also be deleted, along with their related document categories, forum categories and their documents, subforums, topics and posts."
-DeleteConfirmDocument = "This course group is linked to a document category. This category and ALL containing documents will be deleted"
-DeleteConfirmForum = "This course group is linked to a forum category. This category and ALL containing subforums, topics and posts will be deleted when you submit this form."
+DeleteConfirmChildren = "This course group contains child course groups. These will also be deleted."
 
 CourseGroupChildren = "Child course groups"
 CourseGroupTitleExists = "A course group with name {NAME} already exists"

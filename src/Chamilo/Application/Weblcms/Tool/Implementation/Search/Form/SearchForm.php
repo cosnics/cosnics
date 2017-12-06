@@ -70,14 +70,6 @@ class SearchForm extends FormValidator
     }
 
     /**
-     * Display the form
-     */
-    public function render()
-    {
-        return $this->toHtml();
-    }
-
-    /**
      * Gets the conditions that this form introduces.
      * 
      * @return String the query

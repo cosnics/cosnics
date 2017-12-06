@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = Chamilo\Libraries\Protocol\Microsoft\Graph
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Microsoft Graph"
+TypeCategory = "Libraries"
+AccessToken = "Inlog token (wordt automatisch ingevuld door het systeem)"
+ExternalUserId = "Externe gebruikers identifier (wordt automatisch ingevuld door het systeem)"
+ClientId = "Client ID"
+ClientSecret = "Client Secret"
+TenantId = "Tenant ID"
+PlannerBaseUri = "Basis URL voor toegang Planner"
+GroupBaseUri = "Base URL voor toegang groepen (gebruik {GROUP_ID} als variabele)"
+CosnicsPrefix = "Cosnics Prefix (wordt gebruikt als identificatiemiddel)"
+Groups = "Groepen"

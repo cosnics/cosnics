@@ -1,0 +1,7 @@
+Typename = "Office 365 integration for course groups"
+UseOffice365Group = "Office365 Group (BETA)"
+CourseGroupSyncSuccessful = "Successfully synced the course group and teacher subscriptions to the Office365 group"
+CourseGroupSyncFailed= "Failed to sync the course group and teacher subscriptions to the Office365 group"
+VisitPlanner = "Go to planner (Office365)"
+VisitGroup = "Go to Office365 group"
+SynchronizeUsersToPlanner = "Synchronize the group users"

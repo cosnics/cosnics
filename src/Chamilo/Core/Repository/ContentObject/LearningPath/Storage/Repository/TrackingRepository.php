@@ -326,7 +326,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
 
         $condition = $this->getConditionForTargetUsersForLearningPath($learningPath, $condition);
 
-        return $this->dataClassRepository->count(User::class_name(), $condition);
+        return $this->dataClassRepository->count(User::class_name(), new DataClassCountParameters($condition));
     }
 
     /**

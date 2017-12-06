@@ -383,7 +383,7 @@ class CourseService implements CourseServiceInterface
      * @param Course $course
      * @param int $status
      *
-     * @return User
+     * @return User[]
      */
     protected function getUsersFromCourseByStatus(Course $course, $status = CourseEntityRelation::STATUS_STUDENT)
     {
