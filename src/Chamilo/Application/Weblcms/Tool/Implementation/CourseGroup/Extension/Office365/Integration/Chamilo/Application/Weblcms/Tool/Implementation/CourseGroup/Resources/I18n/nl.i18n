@@ -4,4 +4,4 @@ CourseGroupSyncSuccessful = "De cursusgroep en cursusbeheerder inschrijvingen we
 CourseGroupSyncFailed = "De cursusgroep en cursusbeheerder inschrijvingen konden niet worden gesynchroniseerd in de gekoppelde office365 groep"
 VisitPlanner = "Ga naar planner (Office365)"
 VisitGroup = "Ga naar de Office365 groep"
-SynchronizeUsersToPlanner = "Synchroniseer de gebruikers met planner"
+SynchronizeUsersToPlanner = "Synchroniseer de gebruikers van deze groep"
