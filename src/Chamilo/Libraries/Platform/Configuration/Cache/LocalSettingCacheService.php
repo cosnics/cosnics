@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Cache\DataClassCache;
 
 /**
  *
@@ -51,6 +52,16 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
         }
 
         return $this->getCacheProvider()->save($identifier, $localSettings);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::clearForIdentifier()
+     */
+    public function clearForIdentifier($identifier)
+    {
+        DataClassCache::truncate(UserSetting::class_name());
+        return parent::clearForIdentifier($identifier);
     }
 
     /**
