@@ -551,8 +551,13 @@ abstract class Manager extends Application
                     }
                 }
 
-                if ($category_id != 0 && $category instanceof ContentObjectPublicationCategory)
+                if ($category_id != 0)
                 {
+                    $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                        ContentObjectPublicationCategory::class_name(),
+                        $category_id
+                    );
+
                     if (!$category->is_recursive_visible())
                     {
                         return false;
