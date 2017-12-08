@@ -480,6 +480,13 @@ abstract class Manager extends Application
                 throw new NotAllowedException();
             }
 
+            if (is_array($publication) && array_key_exists('course_id', $publication) &&
+                !empty($this->get_course_id()) &&
+                $publication['course_id'] != $this->get_course_id())
+            {
+                throw new NotAllowedException();
+            }
+
             $category = null;
             if ($category_id != 0)
             {
