@@ -551,7 +551,7 @@ abstract class Manager extends Application
                     }
                 }
 
-                if ($category_id != 0)
+                if ($category_id != 0 && $category instanceof ContentObjectPublicationCategory)
                 {
                     if (!$category->is_recursive_visible())
                     {
