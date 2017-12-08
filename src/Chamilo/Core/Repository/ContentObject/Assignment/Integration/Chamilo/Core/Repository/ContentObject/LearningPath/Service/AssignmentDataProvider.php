@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment\EntityRenderer;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment\LearningPathAssignmentService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
@@ -30,7 +30,7 @@ class AssignmentDataProvider
     protected $translator;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
+     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment\LearningPathAssignmentService
      */
     protected $learningPathAssignmentService;
 
@@ -58,7 +58,7 @@ class AssignmentDataProvider
      * AssignmentDataProvider constructor.
      *
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService $learningPathAssignmentService
+     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment\LearningPathAssignmentService $learningPathAssignmentService
      */
     public function __construct(Translator $translator, LearningPathAssignmentService $learningPathAssignmentService)
     {
