@@ -558,7 +558,7 @@ abstract class Manager extends Application
                         $category_id
                     );
 
-                    if (!$category->is_recursive_visible())
+                    if ($category instanceof ContentObjectPublicationCategory && !$category->is_recursive_visible())
                     {
                         return false;
                     }
