@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entry;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment\LearningPathAssignmentService;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -17,7 +17,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 class EntryTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
 {
     /**
-     * @var LearningPathAssignmentService
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService
      */
     protected $learningPathAssignmentService;
 
@@ -32,7 +32,7 @@ class EntryTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Displ
      * @param \Chamilo\Libraries\Architecture\Application\Application $component
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
      * @param int $entityId
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment\LearningPathAssignmentService $learningPathAssignmentService
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService $learningPathAssignmentService
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      */
     public function __construct(
@@ -47,7 +47,7 @@ class EntryTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Displ
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment\LearningPathAssignmentService
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService
      */
     public function getLearningPathAssignmentService()
     {

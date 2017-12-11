@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment;
+namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service;
 
 /**
  *

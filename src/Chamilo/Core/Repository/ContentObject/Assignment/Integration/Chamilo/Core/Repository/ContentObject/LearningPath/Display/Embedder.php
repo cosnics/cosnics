@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment\LearningPathAssignmentService;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
@@ -33,7 +33,7 @@ class Embedder extends ContentObjectEmbedder
 
         $assignmentDataProvider = new AssignmentDataProvider(
             $this->get_application()->getTranslator(),
-            new LearningPathAssignmentService(new LearningPathAssignmentRepository($this->getDataClassRepository()))
+            new AssignmentService(new LearningPathAssignmentRepository($this->getDataClassRepository()))
         );
 
         $activeAttempt = $this->trackingService->getActiveAttempt(

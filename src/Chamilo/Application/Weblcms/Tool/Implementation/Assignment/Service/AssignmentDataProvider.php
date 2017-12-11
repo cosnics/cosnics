@@ -1,16 +1,14 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
-use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entity\EntityTable;
-use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entry\EntryTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\User\EntityTable;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Symfony\Component\Translation\Translator;
@@ -31,17 +29,12 @@ class AssignmentDataProvider
     /**
      * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
      */
-    protected $learningPathAssignmentService;
+    protected $assignmentService;
 
     /**
-     * @var TreeNode
+     * @var ContentObjectPublication
      */
-    protected $treeNode;
-
-    /**
-     * @var \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt
-     */
-    protected $treeNodeAttempt;
+    protected $contentObjectPublication;
 
     /**
      * @var int[]
@@ -57,27 +50,27 @@ class AssignmentDataProvider
      * AssignmentDataProvider constructor.
      *
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $learningPathAssignmentService
+     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService
      */
-    public function __construct(Translator $translator, AssignmentService $learningPathAssignmentService)
+    public function __construct(Translator $translator, AssignmentService $assignmentService)
     {
         $this->translator = $translator;
-        $this->learningPathAssignmentService = $learningPathAssignmentService;
+        $this->assignmentService = $assignmentService;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     * @param ContentObjectPublication $contentObjectPublication
      */
-    public function setTreeNode(TreeNode $treeNode)
+    public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
     {
-        if (!$treeNode->getContentObject() instanceof Assignment)
+        if (!$contentObjectPublication->getContentObject() instanceof Assignment)
         {
             throw new \RuntimeException(
                 'The given treenode does not reference a valid assignment and should not be used'
             );
         }
 
-        $this->treeNode = $treeNode;
+        $this->contentObjectPublication = $contentObjectPublication;
     }
 
     /**
@@ -85,15 +78,7 @@ class AssignmentDataProvider
      */
     protected function getAssignment()
     {
-        return $this->treeNode->getContentObject();
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt $treeNodeAttempt
-     */
-    public function setTreeNodeAttempt(TreeNodeAttempt $treeNodeAttempt)
-    {
-        $this->treeNodeAttempt = $treeNodeAttempt;
+        return $this->contentObjectPublication->getContentObject();
     }
 
     /**
@@ -120,8 +105,8 @@ class AssignmentDataProvider
      */
     public function countDistinctEntriesByEntityType($entityType)
     {
-        return $this->learningPathAssignmentService->countDistinctEntriesByTreeNodeDataAndEntityType(
-            $this->treeNode->getTreeNodeData(), $entityType
+        return $this->assignmentService->countDistinctEntriesByContentObjectPublicationAndEntityType(
+            $this->contentObjectPublication, $entityType
         );
     }
 
@@ -133,8 +118,8 @@ class AssignmentDataProvider
      */
     public function countDistinctFeedbackByEntityType($entityType)
     {
-        return $this->learningPathAssignmentService->countDistinctFeedbackByTreeNodeDataAndEntityType(
-            $this->treeNode->getTreeNodeData(), $entityType
+        return $this->assignmentService->countDistinctFeedbackByContentObjectPublicationAndEntityType(
+            $this->contentObjectPublication, $entityType
         );
     }
 
@@ -146,8 +131,8 @@ class AssignmentDataProvider
      */
     public function countDistinctLateEntriesByEntityType($entityType)
     {
-        return $this->learningPathAssignmentService->countDistinctLateEntriesByTreeNodeDataAndEntityType(
-            $this->getAssignment(), $this->treeNode->getTreeNodeData(), $entityType
+        return $this->assignmentService->countDistinctLateEntriesByContentObjectPublicationAndEntityType(
+            $this->getAssignment(), $this->contentObjectPublication, $entityType
         );
     }
 
@@ -159,8 +144,8 @@ class AssignmentDataProvider
      */
     public function countEntitiesByEntityType($entityType)
     {
-        return $this->learningPathAssignmentService->countTargetUsersForTreeNodeData(
-            $this->treeNode->getTreeNodeData(), $this->targetUserIds
+        return $this->assignmentService->countTargetUsersForContentObjectPublication(
+            $this->contentObjectPublication, $this->targetUserIds
         );
     }
 
@@ -188,7 +173,7 @@ class AssignmentDataProvider
     public function getEntityTableForType(Application $application, $entityType)
     {
         return new EntityTable(
-            $application, $this, $this->learningPathAssignmentService, $this->treeNode->getTreeNodeData(),
+            $application, $this, $this->assignmentService, $this->contentObjectPublication,
             $this->targetUserIds
         );
     }
@@ -204,7 +189,7 @@ class AssignmentDataProvider
     public function getEntryTableForEntityTypeAndId(Application $application, $entityType, $entityId)
     {
         return new EntryTable(
-            $application, $this, $entityId, $this->learningPathAssignmentService, $this->treeNode->getTreeNodeData()
+            $application, $this, $entityId, $this->assignmentService, $this->contentObjectPublication
         );
     }
 
@@ -237,8 +222,8 @@ class AssignmentDataProvider
      */
     public function countFeedbackByEntityTypeAndEntityId($entityType, $entityId)
     {
-        return $this->learningPathAssignmentService->countFeedbackForTreeNodeDataByEntityTypeAndEntityId(
-            $this->treeNode->getTreeNodeData(), $entityType, $entityId
+        return $this->assignmentService->countFeedbackForContentObjectPublicationByEntityTypeAndEntityId(
+            $this->contentObjectPublication, $entityType, $entityId
         );
     }
 
@@ -263,8 +248,8 @@ class AssignmentDataProvider
      */
     public function createEntry($entityType, $entityId, $userId, $contentObjectId, $ipAdress)
     {
-        return $this->learningPathAssignmentService->createEntry(
-            $this->treeNode->getTreeNodeData(), $this->treeNodeAttempt, $entityType, $entityId, $userId,
+        return $this->assignmentService->createEntry(
+            $this->contentObjectPublication, $entityType, $entityId, $userId,
             $contentObjectId, $ipAdress
         );
     }
@@ -278,8 +263,8 @@ class AssignmentDataProvider
      */
     public function countEntriesForEntityTypeAndId($entityType, $entityId)
     {
-        return $this->learningPathAssignmentService->countEntriesForTreeNodeDataEntityTypeAndId(
-            $this->treeNode->getTreeNodeData(), $entityType, $entityId
+        return $this->assignmentService->countEntriesForContentObjectPublicationEntityTypeAndId(
+            $this->contentObjectPublication, $entityType, $entityId
         );
     }
 
@@ -292,8 +277,8 @@ class AssignmentDataProvider
      */
     public function countDistinctFeedbackForEntityTypeAndId($entityType, $entityId)
     {
-        return $this->learningPathAssignmentService->countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
-            $this->treeNode->getTreeNodeData(), $entityType, $entityId
+        return $this->assignmentService->countDistinctFeedbackForContentObjectPublicationEntityTypeAndId(
+            $this->contentObjectPublication, $entityType, $entityId
         );
     }
 
@@ -306,8 +291,8 @@ class AssignmentDataProvider
      */
     public function countDistinctScoreForEntityTypeAndId($entityType, $entityId)
     {
-        return $this->learningPathAssignmentService->countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
-            $this->treeNode->getTreeNodeData(), $entityType, $entityId
+        return $this->assignmentService->countDistinctFeedbackForContentObjectPublicationEntityTypeAndId(
+            $this->contentObjectPublication, $entityType, $entityId
         );
     }
 
@@ -320,8 +305,8 @@ class AssignmentDataProvider
      */
     public function getAverageScoreForEntityTypeAndId($entityType, $entityId)
     {
-        return $this->learningPathAssignmentService->getAverageScoreForTreeNodeDataEntityTypeAndId(
-            $this->treeNode->getTreeNodeData(), $entityType, $entityId
+        return $this->assignmentService->getAverageScoreForContentObjectPublicationEntityTypeAndId(
+            $this->contentObjectPublication, $entityType, $entityId
         );
     }
 
@@ -333,7 +318,7 @@ class AssignmentDataProvider
      */
     public function countFeedbackByEntryIdentifier($entryIdentifier)
     {
-        return $this->learningPathAssignmentService->countFeedbackByEntryIdentifier($entryIdentifier);
+        return $this->assignmentService->countFeedbackByEntryIdentifier($entryIdentifier);
     }
 
     /**
@@ -344,7 +329,7 @@ class AssignmentDataProvider
      */
     public function findEntryByIdentifier($entryIdentifier)
     {
-        return $this->learningPathAssignmentService->findEntryByIdentifier($entryIdentifier);
+        return $this->assignmentService->findEntryByIdentifier($entryIdentifier);
     }
 
     /**
@@ -355,7 +340,7 @@ class AssignmentDataProvider
      */
     public function findEntriesByIdentifiers($entryIdentifiers)
     {
-        return $this->learningPathAssignmentService->findEntriesByIdentifiers($entryIdentifiers);
+        return $this->assignmentService->findEntriesByIdentifiers($entryIdentifiers);
     }
 
     /**
@@ -382,7 +367,7 @@ class AssignmentDataProvider
     {
         try
         {
-            $this->learningPathAssignmentService->createScore(
+            $this->assignmentService->createScore(
                 $entry, $user, $submittedScore
             );
         }
@@ -404,7 +389,7 @@ class AssignmentDataProvider
     {
         try
         {
-            $this->learningPathAssignmentService->updateScore($score);
+            $this->assignmentService->updateScore($score);
         }
         catch (\Exception $ex)
         {
@@ -426,7 +411,7 @@ class AssignmentDataProvider
     {
         try
         {
-            $this->learningPathAssignmentService->createNote(
+            $this->assignmentService->createNote(
                 $entry, $user, $submittedNote
             );
         }
@@ -448,7 +433,7 @@ class AssignmentDataProvider
     {
         try
         {
-            $this->learningPathAssignmentService->updateNote($note);
+            $this->assignmentService->updateNote($note);
         }
         catch (\Exception $ex)
         {
@@ -466,7 +451,7 @@ class AssignmentDataProvider
      */
     public function findScoreByEntry(Entry $entry)
     {
-        return $this->learningPathAssignmentService->findScoreByEntry($entry);
+        return $this->assignmentService->findScoreByEntry($entry);
     }
 
     /**
@@ -477,7 +462,7 @@ class AssignmentDataProvider
      */
     public function findNoteByEntry(Entry $entry)
     {
-        return $this->learningPathAssignmentService->findNoteByEntry($entry);
+        return $this->assignmentService->findNoteByEntry($entry);
     }
 
     /**
@@ -486,7 +471,7 @@ class AssignmentDataProvider
      */
     public function initializeFeedback()
     {
-        return $this->learningPathAssignmentService->initializeFeedback();
+        return $this->assignmentService->initializeFeedback();
     }
 
     /**
@@ -497,7 +482,7 @@ class AssignmentDataProvider
      */
     public function findFeedbackByIdentifier($feedbackIdentifier)
     {
-        return $this->learningPathAssignmentService->findFeedbackByIdentifier($feedbackIdentifier);
+        return $this->assignmentService->findFeedbackByIdentifier($feedbackIdentifier);
     }
 
     /**
@@ -508,7 +493,7 @@ class AssignmentDataProvider
      */
     public function countFeedbackByEntry(Entry $entry)
     {
-        return $this->learningPathAssignmentService->countFeedbackByEntry($entry);
+        return $this->assignmentService->countFeedbackByEntry($entry);
     }
 
     /**
@@ -519,7 +504,7 @@ class AssignmentDataProvider
      */
     public function findFeedbackByEntry(Entry $entry)
     {
-        return $this->learningPathAssignmentService->findFeedbackByEntry($entry);
+        return $this->assignmentService->findFeedbackByEntry($entry);
     }
 
     /**
@@ -531,8 +516,8 @@ class AssignmentDataProvider
      */
     public function findEntriesByEntityTypeAndIdentifiers($entityType, $entityIdentifiers)
     {
-        return $this->learningPathAssignmentService->findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
-            $this->treeNode->getTreeNodeData(), $entityType, $entityIdentifiers
+        return $this->assignmentService->findEntriesByContentObjectPublicationEntityTypeAndIdentifiers(
+            $this->contentObjectPublication, $entityType, $entityIdentifiers
         );
     }
 
@@ -542,6 +527,6 @@ class AssignmentDataProvider
      */
     public function findEntries()
     {
-        return $this->learningPathAssignmentService->findEntriesByTreeNodeData($this->treeNode->getTreeNodeData());
+        return $this->assignmentService->findEntriesByContentObjectPublication($this->contentObjectPublication);
     }
 }

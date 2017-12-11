@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;

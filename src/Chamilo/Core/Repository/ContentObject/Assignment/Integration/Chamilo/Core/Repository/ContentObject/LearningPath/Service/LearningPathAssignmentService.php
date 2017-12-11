@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNod
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
- * Abstract service that can be used as a base for the LearningPathAssignmentService
+ * Abstract service that can be used as a base for the AssignmentService
  *
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service
  *
@@ -182,12 +182,12 @@ abstract class LearningPathAssignmentService extends AssignmentService
      *
      * @return integer
      */
-    public function countDistinctFeedbackForEntityTypeAndId(
+    public function countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
         TreeNodeData $treeNodeData, $entityType,
         $entityId
     )
     {
-        return $this->assignmentRepository->countDistinctFeedbackForEntityTypeAndId(
+        return $this->assignmentRepository->countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
             $treeNodeData,
             $entityType,
             $entityId
@@ -202,9 +202,9 @@ abstract class LearningPathAssignmentService extends AssignmentService
      *
      * @return integer
      */
-    public function countDistinctScoreForEntityTypeAndId(TreeNodeData $treeNodeData, $entityType, $entityId)
+    public function countDistinctScoreForTreeNodeDataEntityTypeAndId(TreeNodeData $treeNodeData, $entityType, $entityId)
     {
-        return $this->assignmentRepository->countDistinctScoreForEntityTypeAndId(
+        return $this->assignmentRepository->countDistinctScoreForTreeNodeDataEntityTypeAndId(
             $treeNodeData,
             $entityType,
             $entityId
@@ -219,9 +219,9 @@ abstract class LearningPathAssignmentService extends AssignmentService
      *
      * @return int
      */
-    public function getAverageScoreForEntityTypeAndId(TreeNodeData $treeNodeData, $entityType, $entityId)
+    public function getAverageScoreForTreeNodeDataEntityTypeAndId(TreeNodeData $treeNodeData, $entityType, $entityId)
     {
-        return $this->assignmentRepository->retrieveAverageScoreForEntityTypeAndId(
+        return $this->assignmentRepository->retrieveAverageScoreForTreeNodeDataEntityTypeAndId(
             $treeNodeData,
             $entityType,
             $entityId

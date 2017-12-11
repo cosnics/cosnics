@@ -2,8 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entity;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment\LearningPathAssignmentService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -20,7 +20,7 @@ class EntityTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Disp
     const TABLE_IDENTIFIER = User::PROPERTY_ID;
 
     /**
-     * @var LearningPathAssignmentService
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService
      */
     protected $learningPathAssignmentService;
 
@@ -39,25 +39,25 @@ class EntityTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Disp
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $component
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment\LearningPathAssignmentService $learningPathAssignmentService
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService $assignmentService
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param int[] $userIds
      */
     public function __construct(
         Application $component, AssignmentDataProvider $assignmentDataProvider,
-        LearningPathAssignmentService $learningPathAssignmentService,
+        LearningPathAssignmentService $assignmentService,
         TreeNodeData $treeNodeData,
         $userIds = []
     )
     {
         parent::__construct($component, $assignmentDataProvider);
-        $this->learningPathAssignmentService = $learningPathAssignmentService;
+        $this->learningPathAssignmentService = $assignmentService;
         $this->treeNodeData = $treeNodeData;
         $this->userIds = $userIds;
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPath\Assignment\LearningPathAssignmentService
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService
      */
     public function getLearningPathAssignmentService()
     {
