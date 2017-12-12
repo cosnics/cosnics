@@ -28,9 +28,7 @@ class EntityTableColumnModel
     {
         $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_FIRSTNAME));
         $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_LASTNAME));
-        $this->add_column(new StaticTableColumn(self::PROPERTY_FIRST_ENTRY_DATE));
-        $this->add_column(new StaticTableColumn(self::PROPERTY_LAST_ENTRY_DATE));
-        $this->add_column(new StaticTableColumn(self::PROPERTY_ENTRY_COUNT));
-        $this->add_column(new StaticTableColumn(self::PROPERTY_FEEDBACK_COUNT));
+
+        parent::initialize_columns();
     }
 }

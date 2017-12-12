@@ -12,6 +12,8 @@ class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\St
 
     // Entity types
     const ENTITY_TYPE_USER = 0;
+    const ENTITY_TYPE_COURSE_GROUP = 1;
+    const ENTITY_TYPE_PLATFORM_GROUP = 2;
 
     /**
      *

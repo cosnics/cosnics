@@ -13,6 +13,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\User\
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Symfony\Component\Translation\Translator;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntityRenderer\UserEntityRenderer;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service
@@ -353,7 +354,7 @@ class AssignmentDataProvider
      */
     public function getEntityRendererForEntityTypeAndId($entityType, $entityId)
     {
-        return new EntityRenderer($this, $entityId);
+        return new UserEntityRenderer($this, $entityId);
     }
 
     /**

@@ -1,17 +1,17 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntityRenderer;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * @package Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntityRenderer
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class EntityRenderer extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer\EntityRenderer
+class PlatformGroupEntityRenderer extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer\EntityRenderer
 {
     /**
      *
@@ -19,7 +19,7 @@ class EntityRenderer extends \Chamilo\Core\Repository\ContentObject\Assignment\D
      */
     public function findEntity()
     {
-        return DataManager::retrieve_by_id(User::class_name(), $this->getEntityId());
+        return DataManager::retrieve_by_id(Group::class_name(), $this->getEntityId());
     }
 
     /**
@@ -39,8 +39,8 @@ class EntityRenderer extends \Chamilo\Core\Repository\ContentObject\Assignment\D
      */
     public function getEntityName()
     {
-        /** @var User $entity */
+        /** @var Group $entity */
         $entity = $this->getEntity();
-        return $entity->get_fullname();
+        return $entity->get_name();
     }
 }

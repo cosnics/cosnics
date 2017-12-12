@@ -45,7 +45,9 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      */
     public function countEntriesForContentObjectPublicationIdentifier($contentObjectPublicationIdentifier)
     {
-        return $this->assignmentRepository->countEntriesForContentObjectPublicationIdentifier($contentObjectPublicationIdentifier);
+        return $this->assignmentRepository->countEntriesForContentObjectPublicationIdentifier(
+            $contentObjectPublicationIdentifier
+        );
     }
 
     /**
@@ -55,7 +57,9 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @return integer
      */
-    public function countDistinctEntriesByContentObjectPublicationAndEntityType(ContentObjectPublication $contentObjectPublication, $entityType)
+    public function countDistinctEntriesByContentObjectPublicationAndEntityType(
+        ContentObjectPublication $contentObjectPublication, $entityType
+    )
     {
         return $this->assignmentRepository->countDistinctEntriesByContentObjectPublicationAndEntityType(
             $contentObjectPublication,
@@ -70,7 +74,9 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @return integer
      */
-    public function countDistinctFeedbackByContentObjectPublicationAndEntityType(ContentObjectPublication $contentObjectPublication, $entityType)
+    public function countDistinctFeedbackByContentObjectPublicationAndEntityType(
+        ContentObjectPublication $contentObjectPublication, $entityType
+    )
     {
         return $this->assignmentRepository->countDistinctFeedbackByContentObjectPublicationAndEntityType(
             $contentObjectPublication,
@@ -107,7 +113,8 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetUsersForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, $userIds = [], $condition = null, $offset = null, $count = null,
+        ContentObjectPublication $contentObjectPublication, $userIds = [], $condition = null, $offset = null,
+        $count = null,
         $orderProperty = null
     )
     {
@@ -133,7 +140,94 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
         ContentObjectPublication $contentObjectPublication, $userIds = [], $condition = null
     )
     {
-        return $this->findTargetUsersForContentObjectPublication($contentObjectPublication, $userIds, $condition)->count();
+        return $this->findTargetUsersForContentObjectPublication($contentObjectPublication, $userIds, $condition)
+            ->count();
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int[] $courseGroupIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetCourseGroupsForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $courseGroupIds = [], $condition = null, $offset = null,
+        $count = null, $orderProperty = null
+    )
+    {
+        return $this->assignmentRepository->findTargetCourseGroupsForContentObjectPublication(
+            $contentObjectPublication,
+            $courseGroupIds,
+            $condition,
+            $offset,
+            $count,
+            $orderProperty
+        );
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int[] $courseGroupIds
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countTargetCourseGroupsForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $courseGroupIds = [], $condition = null
+    )
+    {
+        return $this->findTargetCourseGroupsForContentObjectPublication(
+            $contentObjectPublication, $courseGroupIds, $condition
+        )->count();
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int[] $platformGroupIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetPlatformGroupsForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $platformGroupIds = [], $condition = null, $offset = null,
+        $count = null, $orderProperty = null
+    )
+    {
+        return $this->assignmentRepository->findTargetPlatformGroupsForContentObjectPublication(
+            $contentObjectPublication,
+            $platformGroupIds,
+            $condition,
+            $offset,
+            $count,
+            $orderProperty
+        );
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int[] $platformGroupIds
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countTargetPlatformGroupsForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $platformGroupIds = [], $condition = null
+    )
+    {
+        return $this->findTargetPlatformGroupsForContentObjectPublication(
+            $contentObjectPublication, $platformGroupIds, $condition
+        )->count();
     }
 
     /**
@@ -206,7 +300,9 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @return integer
      */
-    public function countDistinctScoreForContentObjectPublicationEntityTypeAndId(ContentObjectPublication $contentObjectPublication, $entityType, $entityId)
+    public function countDistinctScoreForContentObjectPublicationEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityId
+    )
     {
         return $this->assignmentRepository->countDistinctScoreForContentObjectPublicationEntityTypeAndId(
             $contentObjectPublication,
@@ -223,7 +319,9 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @return int
      */
-    public function getAverageScoreForContentObjectPublicationEntityTypeAndId(ContentObjectPublication $contentObjectPublication, $entityType, $entityId)
+    public function getAverageScoreForContentObjectPublicationEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityId
+    )
     {
         return $this->assignmentRepository->retrieveAverageScoreForContentObjectPublicationEntityTypeAndId(
             $contentObjectPublication,
@@ -303,7 +401,8 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry
      */
     public function createEntry(
-        ContentObjectPublication $contentObjectPublication, $entityType, $entityId, $userId, $contentObjectId, $ipAddress
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityId, $userId, $contentObjectId,
+        $ipAddress
     )
     {
         $entry = $this->createEntryInstance();

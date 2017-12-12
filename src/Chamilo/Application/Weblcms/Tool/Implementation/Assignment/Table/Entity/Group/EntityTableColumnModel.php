@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\User;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\Group;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
@@ -16,19 +16,16 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 class EntityTableColumnModel
     extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableColumnModel
 {
-    const DEFAULT_ORDER_COLUMN_INDEX = 2;
+    const DEFAULT_ORDER_COLUMN_INDEX = 1;
 
-    const PROPERTY_FIRSTNAME = 'firstname';
-    const PROPERTY_LASTNAME = 'lastname';
+    const PROPERTY_GROUP_MEMBERS = 'group_members';
 
     /**
      * Initializes the columns for the table
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_FIRSTNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_LASTNAME));
-
         parent::initialize_columns();
+        $this->add_column(new StaticTableColumn(self::PROPERTY_GROUP_MEMBERS), 1);
     }
 }
