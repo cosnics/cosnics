@@ -16,10 +16,7 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 class EntityTableColumnModel
     extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableColumnModel
 {
-    const DEFAULT_ORDER_COLUMN_INDEX = 2;
-
-    const PROPERTY_FIRSTNAME = 'firstname';
-    const PROPERTY_LASTNAME = 'lastname';
+    const DEFAULT_ORDER_COLUMN_INDEX = 1;
 
     /**
      * Initializes the columns for the table
