@@ -6,6 +6,10 @@
     <services>
         <service
             id="chamilo.libraries.translation.translator_factory"
-            class="Chamilo\Libraries\Translation\TranslatorFactory" />
+            class="Chamilo\Libraries\Translation\TranslatorFactory" >
+            <argument
+                    type="service"
+                    id="chamilo.libraries.file.configurable_path_builder" />
+        </service>
     </services>
 </container>
