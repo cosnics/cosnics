@@ -343,8 +343,8 @@ CREATE TABLE `tracking_weblcms_learning_path_assignment_entry` (
 );
 
 CREATE TABLE `tracking_weblcms_learning_path_assignment_feedback` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `comment` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
-CREATE TABLE `tracking_weblcms_learning_path_assignment_note` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `note` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
-CREATE TABLE `tracking_weblcms_learning_path_assignment_score` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `score` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_learning_path_assignment_note` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `note` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_learning_path_assignment_score` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `score` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 CREATE TABLE `tracking_weblcms_assignment_entry` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -359,5 +359,5 @@ CREATE TABLE `tracking_weblcms_assignment_entry` (
 );
 
 CREATE TABLE `tracking_weblcms_assignment_feedback` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `comment` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
-CREATE TABLE `tracking_weblcms_assignment_note` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `note` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
-CREATE TABLE `tracking_weblcms_assignment_score` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `score` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_assignment_note` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `note` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_assignment_score` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `score` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;

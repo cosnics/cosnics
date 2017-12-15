@@ -1,0 +1,41 @@
+<div class="row form-row">
+    <div id="slider" style="display:inline-block; vertical-align: middle; margin-left: 7px; margin-right: 20px;">
+        <div id="custom-handle" class="ui-slider-handle"></div>
+    </div>
+    <button class="btn btn-default" id="scoreSaveButtonJavascript" value="Opslaan">
+        <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>&nbsp;
+        Opslaan
+    </button>
+</div>
+
+<script type="text/javascript">
+    (function() {
+        $(document).on('ready', function() {
+            var handle = $("#custom-handle");
+            var scoreSelector = $('select[name="score"]');
+            var sliderSelector = $('#slider');
+
+            scoreSelector.parents('.form-row').hide();
+            $('#scoreSaveButton').hide();
+
+            sliderSelector.slider({
+                orientation: 'horizontal',
+                range: "min",
+                max: 100,
+                change: function () {
+                    var value = sliderSelector.slider('value');
+                    scoreSelector.val(value);
+                    handle.text(value);
+                },
+                create: function () {
+                    handle.text($(this).slider("value"));
+                },
+                slide: function (event, ui) {
+                    handle.text(ui.value);
+                }
+            });
+
+            sliderSelector.slider('value', scoreSelector.val());
+        });
+    })();
+</script>

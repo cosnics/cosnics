@@ -1,0 +1,143 @@
+{{ HEADER|raw }}
+
+<style>
+    .assignment-properties table {
+        width: 100%;
+    }
+
+    .value-true {
+        color: green;
+        font-size: 18px;
+    }
+
+    .value-false {
+        color: red;
+        font-size: 18px;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+    }
+
+    .badge-failed {
+        background-color: #dc3545;
+    }
+</style>
+
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
+
+{% set valueTrue = '<i class="fa fa-check value-true" aria-hidden="true"></i>' %}
+{% set valueFalse = '<i class="fa fa-remove value-false" aria-hidden="true"></i>' %}
+
+{{ BUTTON_TOOLBAR|raw }}
+
+<div class="row">
+    <div class="col-sm-8">
+        {{ CONTENT_OBJECT_RENDITION|raw }}
+    </div>
+    <div class="col-sm-4">
+        {{ DETAILS_RENDITION|raw }}
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'Properties'|trans({}, appContext) }}</h3>
+            </div>
+
+            <div class="panel-body">
+
+                <div class="assignment-properties">
+                    <table class="table table-striped table-bordered table-hover table-responsive table-properties">
+                        <tbody>
+                        <tr>
+                            <td class="header" style="vertical-align: middle;">
+                                {{ 'StartTime'|trans({}, appContext) }}
+                            </td>
+                            <td>{{ START_TIME }}</td>
+                        </tr>
+                        <tr>
+                            <td class="header" style="vertical-align: middle;">
+                                {{ 'EndTime'|trans({}, appContext) }}
+                            </td>
+                            <td>{{ END_TIME }}</td>
+                        </tr>
+                        <tr>
+                            <td class="header" style="vertical-align: middle;">
+                                {{ 'AllowLateSubmissions'|trans({}, appContext) }}
+                            </td>
+                            <td>
+                                {% if ALLOW_LATE_SUBMISSIONS %}
+                                    {{ valueTrue|raw }}
+                                {% else %}
+                                    {{ valueFalse|raw }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="header" style="vertical-align: middle;">
+                                {{ 'AllowGroupSubmissions'|trans({}, appContext) }}
+                            </td>
+                            <td>
+                                {% if ALLOW_GROUP_SUBMISSIONS %}
+                                    {{ valueTrue }}
+                                {% else %}
+                                    {{ valueFalse|raw }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="header" style="vertical-align: middle;">
+                                {{ 'VisibilitySubmissions'|trans({}, appContext) }}
+                            </td>
+                            <td>
+                                {% if VISIBILITY_SUBMISSIONS %}
+                                    {{ valueTrue|raw }}
+                                {% else %}
+                                    {{ valueFalse|raw }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="header" style="vertical-align: middle;">
+                                {{ 'EntriesForEntityType'|trans({'{NAME}': ENTITY_NAME}, appContext) }}
+                            </td>
+                            <td>
+                                <div class="badge badge-success">
+                                    {{ ENTRY_COUNT }} / {{ ENTITY_COUNT }}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="header" style="vertical-align: middle;">
+                                {{ 'FeedbackForEntityType'|trans({'{NAME}': ENTITY_NAME}, appContext) }}
+                            </td>
+                            <td>
+                                <div class="badge">
+                                    {{ FEEDBACK_COUNT }} / {{ ENTITY_COUNT }}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="header" style="vertical-align: middle;">
+                                {{ 'LateEntriesForEntityType'|trans({'{NAME}': ENTITY_NAME}, appContext) }}
+                            </td>
+                            <td>
+                                <div class="badge badge-failed">
+                                    {{ LATE_ENTRY_COUNT }} / {{ ENTITY_COUNT }}
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        {{ ENTITY_TABLE|raw }}
+    </div>
+</div>
+
+{{ FOOTER|raw }}

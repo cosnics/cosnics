@@ -61,7 +61,7 @@ class PropertiesTable extends HTML_Table
                 $this->addRow($contents);
             }
 
-            $this->setColAttributes(0, array('class' => 'header'));
+            $this->setColAttributes(0, array('class' => 'header', 'style' => 'vertical-align: middle;'));
         }
         else
         {

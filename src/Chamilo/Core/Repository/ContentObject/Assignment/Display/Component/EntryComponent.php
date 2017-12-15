@@ -4,17 +4,15 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\DetailsForm;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\DetailsProcessor;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreFormProcessor;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -44,15 +42,9 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
     /**
      *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm
      */
-    private $note;
-
-    /**
-     *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\detailsForm
-     */
-    private $detailsForm;
+    private $scoreForm;
 
     /**
      *
@@ -62,46 +54,56 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
     public function run()
     {
-        $entryIdentifier = $this->getRequest()->query->get(self::PARAM_ENTRY_ID);
-
-        if (!$entryIdentifier)
-        {
-            throw new NoObjectSelectedException(Translation::get('Entry'));
-        }
-        else
-        {
-            $this->set_parameter(self::PARAM_ENTRY_ID, $entryIdentifier);
-        }
-
-        $this->entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
-
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
+        $this->initializeEntry();
         $this->processSubmittedData();
 
-        $html = array();
+        return $this->getTwig()->render(Manager::context() . ':EntryViewer.html.twig', $this->getTemplateProperties());
+    }
 
-        $html[] = $this->render_header();
-        $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $this->renderTabs();
-        $html[] = $this->render_footer();
+    /**
+     *
+     * @return string[]
+     */
+    protected function getTemplateProperties()
+    {
+        $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $submittedDate = DatetimeUtilities::format_locale_date($dateFormat, $this->getEntry()->getSubmitted());
 
-        return implode(PHP_EOL, $html);
+        $entityRenderer = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
+            $this->getEntry()->getEntityType(),
+            $this->getEntry()->getEntityId()
+        );
+
+        $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
+        $configuration->set(\Chamilo\Core\Repository\Feedback\Manager::CONFIGURATION_SHOW_FEEDBACK_HEADER, false);
+
+        $feedbackManagerHtml = $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Repository\Feedback\Manager::context(), $configuration
+        )->run();
+
+        return [
+            'HEADER' => $this->render_header(),
+            'FOOTER' => $this->render_footer(),
+            'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
+            'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
+            'FEEDBACK_MANAGER' => $feedbackManagerHtml,
+            'SUBMITTED_DATE' => $submittedDate, 'SUBMITTED_BY' => $entityRenderer->getEntityName(),
+            'SCORE_FORM' => $this->getScoreForm()->render()
+        ];
     }
 
     protected function processSubmittedData()
     {
-        $detailsForm = $this->getDetailsForm();
+        $scoreForm = $this->getScoreForm();
 
-        if ($detailsForm->validate())
+        if ($scoreForm->validate())
         {
-            $detailsProcessor = new DetailsProcessor(
+            $detailsProcessor = new ScoreFormProcessor(
                 $this->getDataProvider(),
                 $this->getUser(),
                 $this->getEntry(),
                 $this->getScore(),
-                $this->getNote(),
-                $detailsForm->exportValues()
+                $scoreForm->exportValues()
             );
 
             if (!$detailsProcessor->run())
@@ -125,49 +127,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         }
 
         return $this->score;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note
-     */
-    protected function getNote()
-    {
-        if (!isset($this->note))
-        {
-            $this->note = $this->getDataProvider()->findNoteByEntry($this->getEntry());
-        }
-
-        return $this->note;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function renderTabs()
-    {
-        $tabsRenderer = new DynamicTabsRenderer('entry');
-
-        $tabsRenderer->add_tab(
-            new DynamicContentTab(
-                'details',
-                Translation::get('Details'),
-                Theme::getInstance()->getImagePath(self::package(), 'Tab/Details'),
-                $this->renderDetails()
-            )
-        );
-
-        $tabsRenderer->add_tab(
-            new DynamicContentTab(
-                'entry',
-                Translation::get('Entry'),
-                Theme::getInstance()->getImagePath(self::package(), 'Tab/Entry'),
-                $this->renderContentObject()
-            )
-        );
-
-        return $tabsRenderer->render();
     }
 
     /**
@@ -199,89 +158,21 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
     /**
      *
-     * @return string
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm
      */
-    protected function renderDetails()
+    protected function getScoreForm()
     {
-        $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
-        $submittedDate = DatetimeUtilities::format_locale_date($dateFormat, $this->getEntry()->getSubmitted());
-
-        $html = array();
-
-        $properties = array();
-        $properties[Translation::get('Submitted')] = $submittedDate;
-
-        $entityRenderer = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
-            $this->getEntry()->getEntityType(),
-            $this->getEntry()->getEntityId()
-        );
-
-        $properties = array_merge($properties, $entityRenderer->getProperties());
-
-        $html[] = $this->renderPropertiesRows($properties);
-        $html[] = $this->getDetailsForm()->toHtml();
-        $html[] = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\Feedback\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
-        )->run();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @param string[] $properties
-     *
-     * @return string
-     */
-    protected function renderPropertiesRows($properties)
-    {
-        $html = array();
-
-        foreach ($properties as $label => $value)
+        if (!isset($this->scoreForm))
         {
-            $html[] = $this->renderRow($label, $value);
-        }
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @param string $label
-     * @param string $value
-     *
-     * @return string
-     */
-    protected function renderRow($label, $value)
-    {
-        $html = array();
-
-        $html[] = '<div class="form-row">';
-        $html[] = '<div class="form-label">' . $label . '</div>';
-        $html[] = '<div class="formw">' . $value . '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\DetailsForm
-     */
-    protected function getDetailsForm()
-    {
-        if (!isset($this->detailsForm))
-        {
-            $this->detailsForm = new DetailsForm(
+            $this->scoreForm = new ScoreForm(
                 $this->getScore(),
-                $this->getNote(),
                 $this->getDataProvider(),
-                $this->get_url(array(self::PARAM_ENTRY_ID => $this->getEntry()->getId()))
+                $this->get_url(array(self::PARAM_ENTRY_ID => $this->getEntry()->getId())),
+                $this->getTwig()
             );
         }
 
-        return $this->detailsForm;
+        return $this->scoreForm;
     }
 
     /**
@@ -388,20 +279,26 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                     )
                 )
             );
-
-//            $buttonToolBar->addButtonGroup(
-//                new ButtonGroup(
-//                    array(
-//                        new Button(
-//                            Translation::get('ScoreOverview'),
-//                            Theme::getInstance()->getCommonImagePath('Action/Statistics')),
-//                        new Button(
-//                            Translation::get('ScoreOverview'),
-//                            Theme::getInstance()->getCommonImagePath('Action/Statistics')))));
         }
 
         $this->actionBar = new ButtonToolBarRenderer($buttonToolBar);
 
         return $this->actionBar;
+    }
+
+    protected function initializeEntry()
+    {
+        $entryIdentifier = $this->getRequest()->query->get(self::PARAM_ENTRY_ID);
+
+        if (!$entryIdentifier)
+        {
+            throw new NoObjectSelectedException(Translation::get('Entry'));
+        }
+        else
+        {
+            $this->set_parameter(self::PARAM_ENTRY_ID, $entryIdentifier);
+        }
+
+        $this->entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
     }
 }

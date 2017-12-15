@@ -22,6 +22,8 @@ abstract class Manager extends Application
     // Default action
     const DEFAULT_ACTION = self::ACTION_BROWSE;
 
+    const CONFIGURATION_SHOW_FEEDBACK_HEADER = 'showFeedbackHeader';
+
     /**
      * Returns the notification service
      * 
@@ -52,5 +54,15 @@ abstract class Manager extends Application
         {
             $this->getNotificationService()->notify($feedback, $application->retrieve_notifications()->as_array());
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function showFeedbackHeader()
+    {
+        $configuration = $this->getApplicationConfiguration()->get(self::CONFIGURATION_SHOW_FEEDBACK_HEADER);
+
+        return isset($configuration) ? $configuration : true;
     }
 }

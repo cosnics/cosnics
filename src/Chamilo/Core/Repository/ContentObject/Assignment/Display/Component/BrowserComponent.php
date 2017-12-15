@@ -35,8 +35,16 @@ class BrowserComponent extends Manager implements TableSupport
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-sm-8">';
         $html[] = $this->renderDetails();
+        $html[] = '</div>';
+        $html[] = '<div class="col-sm-4">';
         $html[] = $this->renderReporting();
+        $html[] = '</div>';
+        $html[] = '</div>';
+
         $html[] = $this->renderEntryTable();
         $html[] = $this->render_footer();
 
@@ -106,7 +114,17 @@ class BrowserComponent extends Manager implements TableSupport
         $properties[Translation::get('AverageScore')] = '<div class="badge">' . $averageScoreValue . '</div>';
 
         $table = new PropertiesTable($properties);
+
+        $html[] = '<div class="assignment-properties">';
         $html[] = $table->toHtml();
+        $html[] = '</div>';
+
+
+        $html[] = '<style>';
+        $html[] = '.assignment-properties table {';
+        $html[] = '     width: 100%;';
+        $html[] = '}';
+        $html[] = '</style>';
 
         $html[] = '</div>';
         $html[] = '</div>';

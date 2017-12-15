@@ -94,10 +94,13 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $html[] = $this->renderFeedbackButtonToolbar();
                 }
 
-                $html[] = '<h3>';
-                $html[] = Translation::get('Feedback');
-                $html[] = '<div class="clearfix"></div>';
-                $html[] = '</h3>';
+                if($this->showFeedbackHeader())
+                {
+                    $html[] = '<h3>';
+                    $html[] = Translation::get('Feedback');
+                    $html[] = '<div class="clearfix"></div>';
+                    $html[] = '</h3>';
+                }
 
                 $html[] = '<div class="panel panel-default panel-feedback">';
                 $html[] = '<div class="list-group">';

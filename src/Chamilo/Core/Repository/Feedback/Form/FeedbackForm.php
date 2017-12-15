@@ -45,7 +45,7 @@ class FeedbackForm extends FormValidator
             Feedback::PROPERTY_COMMENT, 
             Translation::get('AddFeedback'), 
             true, 
-            array('width' => '100%', 'collapse_toolbar' => true));
+            array('width' => '100%', 'collapse_toolbar' => true, 'height' => 100));
         
         $renderer->setElementTemplate('<div class="form-group">{element}</div>', Feedback::PROPERTY_COMMENT);
         
@@ -62,6 +62,7 @@ class FeedbackForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         
         $renderer->setElementTemplate('<div class="form-group">{element}</div>', 'buttons');
+        $renderer->setRequiredNoteTemplate(null);
     }
 
     /**

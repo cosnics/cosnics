@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -13,6 +14,8 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -32,25 +35,54 @@ class ViewerComponent extends Manager implements TableSupport
 
     public function run()
     {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        return $this->getTwig()->render(Manager::context() . ':EntityBrowser.html.twig', $this->getTemplateProperties());
+    }
 
-        $html = array();
+    /**
+     *
+     * @return string[]
+     */
+    protected function getTemplateProperties()
+    {
+        $entityName = $this->getDataProvider()->getEntityNameByType($this->getEntityType());
+        $entryCount = $this->getDataProvider()->countDistinctEntriesByEntityType($this->getEntityType());
+        $feedbackCount = $this->getDataProvider()->countDistinctFeedbackByEntityType($this->getEntityType());
+        $lateEntryCount = $this->getDataProvider()->countDistinctLateEntriesByEntityType($this->getEntityType());
+        $entityCount = $this->getDataProvider()->countEntitiesByEntityType($this->getEntityType());
 
-        $html[] = $this->render_header();
-        $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $this->renderDetails();
-        $html[] = $this->renderReporting();
-        $html[] = $this->renderEntityTable();
-        $html[] = $this->render_footer();
+        /** @var Assignment $assignment */
+        $assignment = $this->get_root_content_object();
 
-        return implode(PHP_EOL, $html);
+        $startTime = DatetimeUtilities::format_locale_date(
+            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+            $assignment->get_start_time()
+        );
+
+        $endTime = DatetimeUtilities::format_locale_date(
+            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+            $assignment->get_end_time()
+        );
+
+        return [
+            'HEADER' => $this->render_header(),
+            'FOOTER' => $this->render_footer(),
+            'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
+            'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
+            'ENTITY_NAME' => $entityName, 'ENTITY_COUNT' => $entityCount, 'ENTRY_COUNT' => $entryCount,
+            'FEEDBACK_COUNT' => $feedbackCount, 'LATE_ENTRY_COUNT' => $lateEntryCount,
+            'START_TIME' => $startTime, 'END_TIME' => $endTime,
+            'ALLOW_LATE_SUBMISSIONS' => $assignment->get_allow_late_submissions(),
+            'ALLOW_GROUP_SUBMISSIONS' => $assignment->get_allow_group_submissions(),
+            'VISIBILITY_SUBMISSIONS' => $assignment->get_visibility_submissions(),
+            'ENTITY_TABLE' => $this->renderEntityTable()
+        ];
     }
 
     /**
      *
      * @return string
      */
-    protected function renderDetails()
+    protected function renderContentObject()
     {
         $display = ContentObjectRenditionImplementation::factory(
             $this->get_root_content_object(),
@@ -60,51 +92,6 @@ class ViewerComponent extends Manager implements TableSupport
         );
 
         return $display->render();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function renderReporting()
-    {
-        $html = array();
-
-        $html[] = '<div class="panel panel-default">';
-
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title"><img src="' .
-            Theme::getInstance()->getImagePath('Chamilo\Core\Reporting', 'Logo/16') . '" /> ' .
-            Translation::get('Reporting') . '</h3>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="panel-body">';
-
-        $entityName = $this->getDataProvider()->getEntityNameByType($this->getEntityType());
-        $entryCount = $this->getDataProvider()->countDistinctEntriesByEntityType($this->getEntityType());
-        $feedbackCount = $this->getDataProvider()->countDistinctFeedbackByEntityType($this->getEntityType());
-        $lateEntryCount = $this->getDataProvider()->countDistinctLateEntriesByEntityType($this->getEntityType());
-        $entityCount = $this->getDataProvider()->countEntitiesByEntityType($this->getEntityType());
-
-        $properties = array();
-        $properties[Translation::get('EntriesForEntityType', array('NAME' => $entityName))] =
-            '<div class="badge">' . $entryCount . ' / ' .
-            $entityCount . '</div>';
-        $properties[Translation::get('FeedbackForEntityType', array('NAME' => $entityName))] =
-            '<div class="badge">' . $feedbackCount . ' / ' .
-            $entityCount . '</div>';
-        $properties[Translation::get('LateEntriesForEntityType', array('NAME' => $entityName))] =
-            '<div class="badge">' . $lateEntryCount . ' / ' .
-            $entityCount . '</div>';
-
-        $table = new PropertiesTable($properties);
-
-        $html[] = $table->toHtml();
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
     }
 
     /**
