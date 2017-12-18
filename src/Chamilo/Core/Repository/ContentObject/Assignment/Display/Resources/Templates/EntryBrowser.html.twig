@@ -7,7 +7,6 @@
 </style>
 
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
-
 {{ BUTTON_TOOLBAR|raw }}
 
 <div class="row">
@@ -16,9 +15,8 @@
     </div>
     <div class="col-sm-4">
         <div class="panel panel-default">
-
             <div class="panel-heading">
-                <h3 class="panel-title">{{ 'Properties'|trans([], appContext) }}</h3>
+                <h3 class="panel-title">{{ 'Reporting'|trans({}, appContext) }}</h3>
             </div>
 
             <div class="panel-body">
@@ -28,21 +26,21 @@
                         <tbody>
                             <tr>
                                 <td class="header" style="vertical-align: middle;">
-                                    {{ 'Submitted'|trans([], appContext) }}
+                                    {{ 'EntriesWithScore'|trans({}, appContext) }}
                                 </td>
-                                <td>{{ SUBMITTED_DATE }}</td>
+                                <td><div class="badge">{{ SCORE_COUNT }} / {{ ENTRY_COUNT }}</div></td>
                             </tr>
                             <tr>
                                 <td class="header" style="vertical-align: middle;">
-                                    {{ 'SubmittedBy'|trans([], appContext) }}
+                                    {{ 'EntriesWithFeedback'|trans({}, appContext) }}
                                 </td>
-                                <td>{{ SUBMITTED_BY }}</td>
+                                <td><div class="badge">{{ FEEDBACK_COUNT }} / {{ ENTRY_COUNT }}</div></td>
                             </tr>
                             <tr>
                                 <td class="header" style="vertical-align: middle;">
-                                    {{ 'Score'|trans([], appContext) }}
+                                    {{ 'AverageScore'|trans({}, appContext) }}
                                 </td>
-                                <td>{{ SCORE_FORM|raw }}</td>
+                                <td><div class="badge">{{ AVERAGE_SCORE }}</div></td>
                             </tr>
                         </tbody>
                     </table>
@@ -50,18 +48,11 @@
 
             </div>
         </div>
-        <div class="panel panel-default">
-
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ 'Feedback'|trans([], appContext) }}</h3>
-            </div>
-
-            <div class="panel-body">
-
-                {{ FEEDBACK_MANAGER|raw }}
-
-            </div>
-        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        {{ ENTRY_TABLE|raw }}
     </div>
 </div>
 

@@ -305,7 +305,7 @@ class AssignmentDataProvider
      */
     public function countDistinctScoreForEntityTypeAndId($entityType, $entityId)
     {
-        return $this->learningPathAssignmentService->countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
+        return $this->learningPathAssignmentService->countDistinctScoreForTreeNodeDataEntityTypeAndId(
             $this->treeNode->getTreeNodeData(), $entityType, $entityId
         );
     }

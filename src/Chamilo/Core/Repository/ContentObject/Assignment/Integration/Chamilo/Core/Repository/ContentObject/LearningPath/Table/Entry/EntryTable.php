@@ -41,9 +41,10 @@ class EntryTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Displ
         TreeNodeData $treeNodeData
     )
     {
-        parent::__construct($component, $assignmentDataProvider, $entityId);
         $this->learningPathAssignmentService = $learningPathAssignmentService;
         $this->treeNodeData = $treeNodeData;
+
+        parent::__construct($component, $assignmentDataProvider, $entityId);
     }
 
     /**

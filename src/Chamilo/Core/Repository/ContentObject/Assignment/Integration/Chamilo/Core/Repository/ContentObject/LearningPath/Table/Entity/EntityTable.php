@@ -50,10 +50,11 @@ class EntityTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Disp
         $userIds = []
     )
     {
-        parent::__construct($component, $assignmentDataProvider);
         $this->learningPathAssignmentService = $assignmentService;
         $this->treeNodeData = $treeNodeData;
         $this->userIds = $userIds;
+
+        parent::__construct($component, $assignmentDataProvider);
     }
 
     /**

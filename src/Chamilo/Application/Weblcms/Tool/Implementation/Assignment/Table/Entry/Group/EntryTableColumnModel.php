@@ -33,4 +33,20 @@ abstract class EntryTableColumnModel
         parent::initialize_columns();
         $this->add_column(new StaticTableColumn(self::PROPERTY_GROUP_MEMBERS), 1);
     }
+
+    /**
+     * @return string
+     */
+    function getEntryClassName()
+    {
+        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::class;
+    }
+
+    /**
+     * @return string
+     */
+    function getScoreClassName()
+    {
+        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Score::class;
+    }
 }

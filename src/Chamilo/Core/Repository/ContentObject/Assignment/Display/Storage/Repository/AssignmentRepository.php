@@ -607,9 +607,15 @@ abstract class AssignmentRepository
             )
         );
 
+        $property = new FunctionConditionVariable(
+            FunctionConditionVariable::DISTINCT,
+            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID)
+        );
+
         $parameters = new DataClassCountParameters(
             $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition),
-            $joins
+            $joins,
+            $property
         );
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
@@ -637,9 +643,15 @@ abstract class AssignmentRepository
             )
         );
 
+        $property = new FunctionConditionVariable(
+            FunctionConditionVariable::DISTINCT,
+            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID)
+        );
+
         $parameters = new DataClassCountParameters(
             $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition),
-            $joins
+            $joins,
+            $property
         );
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);

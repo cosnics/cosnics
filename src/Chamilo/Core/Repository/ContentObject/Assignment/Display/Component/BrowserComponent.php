@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Format\Theme;
@@ -29,33 +30,53 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function run()
     {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        return $this->getTwig()->render(Manager::context() . ':EntryBrowser.html.twig', $this->getTemplateProperties());
+    }
 
-        $html = array();
+    /**
+     *
+     * @return string[]
+     */
+    protected function getTemplateProperties()
+    {
+        $entryCount = $this->getDataProvider()->countEntriesForEntityTypeAndId(
+            $this->getEntityType(),
+            $this->getEntityIdentifier()
+        );
 
-        $html[] = $this->render_header();
-        $html[] = $this->buttonToolbarRenderer->render();
+        $feedbackCount = $this->getDataProvider()->countDistinctFeedbackForEntityTypeAndId(
+            $this->getEntityType(),
+            $this->getEntityIdentifier()
+        );
 
-        $html[] = '<div class="row">';
-        $html[] = '<div class="col-sm-8">';
-        $html[] = $this->renderDetails();
-        $html[] = '</div>';
-        $html[] = '<div class="col-sm-4">';
-        $html[] = $this->renderReporting();
-        $html[] = '</div>';
-        $html[] = '</div>';
+        $scoreCount = $this->getDataProvider()->countDistinctScoreForEntityTypeAndId(
+            $this->getEntityType(),
+            $this->getEntityIdentifier()
+        );
 
-        $html[] = $this->renderEntryTable();
-        $html[] = $this->render_footer();
+        $averageScore = $this->getDataProvider()->getAverageScoreForEntityTypeAndId(
+            $this->getEntityType(),
+            $this->getEntityIdentifier()
+        );
 
-        return implode(PHP_EOL, $html);
+        $averageScoreValue = $averageScore ? round($averageScore, 2) . '%' : '-';
+
+        return [
+            'HEADER' => $this->render_header(),
+            'FOOTER' => $this->render_footer(),
+            'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
+            'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
+            'ENTRY_COUNT' => $entryCount, 'FEEDBACK_COUNT' => $feedbackCount, 'SCORE_COUNT' => $scoreCount,
+            'AVERAGE_SCORE' => $averageScoreValue,
+            'ENTRY_TABLE' => $this->renderEntryTable()
+        ];
     }
 
     /**
      *
      * @return string
      */
-    private function renderDetails()
+    private function renderContentObject()
     {
         $display = ContentObjectRenditionImplementation::factory(
             $this->get_root_content_object(),
@@ -65,71 +86,6 @@ class BrowserComponent extends Manager implements TableSupport
         );
 
         return $display->render();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    private function renderReporting()
-    {
-        $html = array();
-
-        $html[] = '<div class="panel panel-default">';
-
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title"><img src="' .
-            Theme::getInstance()->getImagePath('Chamilo\Core\Reporting', 'Logo/16') . '" /> ' .
-            Translation::get('Reporting') . '</h3>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="panel-body">';
-
-        $entryCount = $this->getDataProvider()->countEntriesForEntityTypeAndId(
-            $this->getEntityType(),
-            $this->getEntityIdentifier()
-        );
-        $feedbackCount = $this->getDataProvider()->countDistinctFeedbackForEntityTypeAndId(
-            $this->getEntityType(),
-            $this->getEntityIdentifier()
-        );
-        $scoreCount = $this->getDataProvider()->countDistinctScoreForEntityTypeAndId(
-            $this->getEntityType(),
-            $this->getEntityIdentifier()
-        );
-        $averageScore = $this->getDataProvider()->getAverageScoreForEntityTypeAndId(
-            $this->getEntityType(),
-            $this->getEntityIdentifier()
-        );
-
-        $averageScoreValue = isset($averageScore[AssignmentDataProvider::AVERAGE_SCORE]) ?
-            $averageScore[AssignmentDataProvider::AVERAGE_SCORE] .
-            ' %' : '-';
-
-        $properties = array();
-        $properties[Translation::get('EntriesWithScore')] =
-            '<div class="badge">' . $scoreCount . ' / ' . $entryCount . '</div>';
-        $properties[Translation::get('EntriesWithFeedback')] =
-            '<div class="badge">' . $feedbackCount . ' / ' . $entryCount . '</div>';
-        $properties[Translation::get('AverageScore')] = '<div class="badge">' . $averageScoreValue . '</div>';
-
-        $table = new PropertiesTable($properties);
-
-        $html[] = '<div class="assignment-properties">';
-        $html[] = $table->toHtml();
-        $html[] = '</div>';
-
-
-        $html[] = '<style>';
-        $html[] = '.assignment-properties table {';
-        $html[] = '     width: 100%;';
-        $html[] = '}';
-        $html[] = '</style>';
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -158,7 +114,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($tableClassName)
     {
-        // TODO Auto-generated method stub
+        return null;
     }
 
     protected function getButtonToolbarRenderer()
@@ -172,7 +128,7 @@ class BrowserComponent extends Manager implements TableSupport
                     array(
                         new Button(
                             Translation::get('Download'),
-                            Theme::getInstance()->getCommonImagePath('Action/Download'),
+                            new FontAwesomeGlyph('download'),
                             $this->get_url(
                                 [
                                     self::PARAM_ACTION => self::ACTION_DOWNLOAD,
@@ -183,7 +139,7 @@ class BrowserComponent extends Manager implements TableSupport
                         ),
                         new Button(
                             Translation::get('SubmissionSubmit'),
-                            Theme::getInstance()->getCommonImagePath('Action/Add'),
+                            new FontAwesomeGlyph('plus'),
                             $this->get_url(
                                 [
                                     self::PARAM_ACTION => self::ACTION_CREATE,
@@ -196,20 +152,29 @@ class BrowserComponent extends Manager implements TableSupport
                 )
             );
 
-//            $buttonToolBar->addButtonGroup(
-//                new ButtonGroup(
-//                    array(
-//                        new Button(
-//                            Translation::get('ScoreOverview'),
-//                            Theme::getInstance()->getCommonImagePath('Action/Statistics')
-//                        )
-//                    )
-//                )
-//            );
+            $buttonToolBar->addItem(
+                new Button(
+                    Translation::get(
+                        'BrowseEntities',
+                        ['NAME' => strtolower($this->getDataProvider()->getEntityNameByType($this->getEntityType()))]
+                    ),
+                    new FontAwesomeGlyph('user'),
+                    $this->get_url(
+                        [
+                            self::PARAM_ACTION => self::ACTION_VIEW
+                        ]
+                    )
+                )
+            );
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_ENTITY_ID, self::PARAM_ENTITY_TYPE);
     }
 }

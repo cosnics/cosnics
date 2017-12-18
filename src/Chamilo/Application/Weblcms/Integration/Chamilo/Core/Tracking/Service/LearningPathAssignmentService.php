@@ -56,4 +56,28 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
         return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Note(
         );
     }
+
+    /**
+     * @return string
+     */
+    public function getEntryClassName()
+    {
+        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getScoreClassName()
+    {
+        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score::class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFeedbackClassName()
+    {
+        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Feedback::class;
+    }
 }

@@ -50,7 +50,8 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
                             Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
-                        )
+                        ),
+                        [Manager::PARAM_ENTITY_TYPE, Manager::PARAM_ENTITY_ID]
                     );
 
                     return '<a href="' . $url . '">' . $title . '</a>';
@@ -111,7 +112,8 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
                             Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
-                        )
+                        ),
+                        [Manager::PARAM_ENTITY_TYPE, Manager::PARAM_ENTITY_ID]
                     ),
                     ToolbarItem::DISPLAY_ICON
                 )
@@ -129,7 +131,7 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('DownloadEntry'),
+                        Translation::get('Download'),
                         Theme::getInstance()->getCommonImagePath('Action/Download'),
                         $this->get_component()->get_url(
                             array(

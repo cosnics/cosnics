@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Format\Theme;
@@ -121,8 +122,8 @@ class ViewerComponent extends Manager implements TableSupport
                 new ButtonGroup(
                     array(
                         new Button(
-                            Translation::get('Download'),
-                            Theme::getInstance()->getCommonImagePath('Action/Download'),
+                            Translation::get('DownloadAll'),
+                            new FontAwesomeGlyph('download'),
                             $this->get_url([self::PARAM_ACTION => self::ACTION_DOWNLOAD])
                         ),
 //                        new Button(

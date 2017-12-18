@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -266,14 +267,50 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                     array(
                         new Button(
                             Translation::get('Download'),
-                            Theme::getInstance()->getCommonImagePath('Action/Download'),
+                            new FontAwesomeGlyph('download'),
                             $this->get_url(
                                 [
                                     self::PARAM_ACTION => self::ACTION_DOWNLOAD,
                                     self::PARAM_ENTITY_TYPE => $this->getEntityType(),
-                                    self::PARAM_ENTITY_ID => $this->getEntityIdentifier(),
+                                    self::PARAM_ENTITY_ID => $this->entry->getEntityId(),
                                     self::PARAM_ENTRY_ID => $this->getEntry()->getId()
                                 ]
+                            )
+                        )
+                    )
+                )
+            );
+
+            $buttonToolBar->addButtonGroup(
+                new ButtonGroup(
+                    array(
+                        new Button(
+                            Translation::get(
+                                'BrowseEntities',
+                                [
+                                    'NAME' => strtolower(
+                                        $this->getDataProvider()->getEntityNameByType($this->getEntityType())
+                                    )
+                                ]
+                            ),
+                            new FontAwesomeGlyph('user'),
+                            $this->get_url(
+                                [
+                                    self::PARAM_ACTION => self::ACTION_VIEW
+                                ],
+                                [self::PARAM_ENTRY_ID]
+                            )
+                        ),
+                        new Button(
+                            Translation::get('BrowseEntries'),
+                            new FontAwesomeGlyph('file-text'),
+                            $this->get_url(
+                                [
+                                    self::PARAM_ACTION => self::ACTION_BROWSE,
+                                    self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                                    self::PARAM_ENTITY_ID => $this->entry->getEntityId()
+                                ],
+                                [self::PARAM_ENTRY_ID]
                             )
                         )
                     )

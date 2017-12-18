@@ -24,4 +24,6 @@ class EntryTableColumnModel extends \Chamilo\Application\Weblcms\Tool\Implementa
 
         parent::initialize_columns();
     }
+
+
 }

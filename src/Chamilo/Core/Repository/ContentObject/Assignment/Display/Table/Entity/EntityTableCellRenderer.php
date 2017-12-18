@@ -104,7 +104,7 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('DownloadAllSubmissions'),
+                    Translation::get('DownloadAll'),
                     Theme::getInstance()->getCommonImagePath('Action/Download'),
                     $this->get_component()->get_url(
                         array(

@@ -313,4 +313,19 @@ abstract class LearningPathAssignmentService extends AssignmentService
         return $this->createEntryByInstance($entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress);
 
     }
+
+    /**
+     * @return string
+     */
+    abstract public function getEntryClassName();
+
+    /**
+     * @return string
+     */
+    abstract public function getScoreClassName();
+
+    /**
+     * @return string
+     */
+    abstract public function getFeedbackClassName();
 }
