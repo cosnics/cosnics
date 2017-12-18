@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365Connector;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference;
@@ -12,6 +11,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
@@ -201,7 +201,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
 
         $this->groupServiceMock->expects($this->at(1))
             ->method('addMemberToGroup')
-            ->will($this->throwException(new Office365UserNotExistsException($teacher)));
+            ->will($this->throwException(new AzureUserNotExistsException($teacher)));
 
         $this->courseGroupOffice365Connector->createGroupFromCourseGroup($courseGroup, $user);
     }
@@ -224,7 +224,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
 
         $this->groupServiceMock->expects($this->at(1))
             ->method('addMemberToGroup')
-            ->will($this->throwException(new Office365UserNotExistsException($courseGroupMember)));
+            ->will($this->throwException(new AzureUserNotExistsException($courseGroupMember)));
 
         $this->courseGroupOffice365Connector->createGroupFromCourseGroup($courseGroup, $user);
     }
@@ -448,7 +448,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
 
         $this->groupServiceMock->expects($this->once())
             ->method('addMemberToGroup')
-            ->will($this->throwException(new Office365UserNotExistsException($user)));
+            ->will($this->throwException(new AzureUserNotExistsException($user)));
 
         $this->courseGroupOffice365Connector->unlinkOffice365GroupFromCourseGroup($courseGroup, $user);
     }
@@ -523,7 +523,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
 
         $this->groupServiceMock->expects($this->once())
             ->method('addMemberToGroup')
-            ->will($this->throwException(new Office365UserNotExistsException($user)));
+            ->will($this->throwException(new AzureUserNotExistsException($user)));
 
         $this->courseGroupOffice365Connector->subscribeUser($courseGroup, $user);
     }
@@ -598,7 +598,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
 
         $this->groupServiceMock->expects($this->once())
             ->method('removeMemberFromGroup')
-            ->will($this->throwException(new Office365UserNotExistsException($user)));
+            ->will($this->throwException(new AzureUserNotExistsException($user)));
 
         $this->courseGroupOffice365Connector->unsubscribeUser($courseGroup, $user);
     }

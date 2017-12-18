@@ -35,7 +35,7 @@ class PackageFactory
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param \Chamilo\Libraries\Platform\Translation $translation
      */
-    public function __construct(PathBuilder $pathBuilder, Translation $translation)
+    public function __construct(PathBuilder $pathBuilder, Translation $translation = null)
     {
         $this->pathBuilder = $pathBuilder;
         $this->translation = $translation;

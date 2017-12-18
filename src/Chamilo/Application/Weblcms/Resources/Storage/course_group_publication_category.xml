@@ -18,9 +18,7 @@
                 unsigned="1"
                 notnull="1"/>
     </properties>
-    <index
-            name="publication_category_id"
-            type="primary">
+    <index name="publication_category_id">
         <indexproperty name="publication_category_id"/>
     </index>
     <index name="course_group_id">

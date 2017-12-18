@@ -4,11 +4,11 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
@@ -158,7 +158,7 @@ class CourseGroupOffice365Connector
         {
             $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
         }
-        catch (Office365UserNotExistsException $ex)
+        catch (AzureUserNotExistsException $ex)
         {
 
         }
@@ -184,7 +184,7 @@ class CourseGroupOffice365Connector
         {
             $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
         }
-        catch (Office365UserNotExistsException $ex)
+        catch (AzureUserNotExistsException $ex)
         {
 
         }
@@ -209,7 +209,7 @@ class CourseGroupOffice365Connector
         {
             $this->groupService->removeMemberFromGroup($reference->getOffice365GroupId(), $user);
         }
-        catch (Office365UserNotExistsException $ex)
+        catch (AzureUserNotExistsException $ex)
         {
 
         }
@@ -363,7 +363,7 @@ class CourseGroupOffice365Connector
             {
                 $this->groupService->addMemberToGroup($office365GroupId, $groupUser);
             }
-            catch (Office365UserNotExistsException $ex)
+            catch (AzureUserNotExistsException $ex)
             {
 
             }
@@ -388,7 +388,7 @@ class CourseGroupOffice365Connector
             {
                 $this->groupService->addMemberToGroup($office365GroupId, $user);
             }
-            catch (Office365UserNotExistsException $ex)
+            catch (AzureUserNotExistsException $ex)
             {
 
             }

@@ -188,7 +188,7 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/owners',
-            \Microsoft\Graph\Model\User::class
+            \Microsoft\Graph\Model\User::class, true
         );
     }
 
@@ -262,7 +262,7 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/members',
-            \Microsoft\Graph\Model\User::class
+            \Microsoft\Graph\Model\User::class, true
         );
     }
 
@@ -277,7 +277,7 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeGetWithDelegatedAccess(
             '/groups/' . $groupIdentifier . '/planner/plans',
-            \Microsoft\Graph\Model\PlannerPlan::class
+            \Microsoft\Graph\Model\PlannerPlan::class, true
         );
     }
 

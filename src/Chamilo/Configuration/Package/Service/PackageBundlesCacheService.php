@@ -32,7 +32,7 @@ class PackageBundlesCacheService extends DoctrineFilesystemCacheService
      */
     public function warmUpForIdentifier($identifier)
     {
-        $packageFactory = new PackageFactory(PathBuilder::getInstance(), Translation::getInstance());
+        $packageFactory = new PackageFactory(PathBuilder::getInstance());
         $packageListBuilder = new PackageBundles(PackageList::ROOT, $identifier, $packageFactory);
         $packageList = $packageListBuilder->getPackageList();
         $packageList->get_all_packages();

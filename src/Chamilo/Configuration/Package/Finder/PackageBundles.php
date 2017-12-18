@@ -130,7 +130,7 @@ class PackageBundles extends BasicBundles
     {
         if ($packageNamespace === PackageList::ROOT)
         {
-            $typeName = Translation::get('Platform');
+            $typeName = 'Platform';
             $packageImageNamespace = 'Chamilo\Configuration';
         }
         else
