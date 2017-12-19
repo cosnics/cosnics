@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
+use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
@@ -91,7 +92,19 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                 $params = array();
                 $params[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-                $this->redirect($message, (!$succes), $params, array(self::PARAM_CONTENT_OBJECT_ID));
+                $values = $form->exportValues();
+                $addMetadataSchema = $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA];
+                if(isset($addMetadataSchema))
+                {
+                    $params[self::PARAM_ACTION] = self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM;
+                    $filters = [];
+                }
+                else
+                {
+                    $filters = [self::PARAM_CONTENT_OBJECT_ID];
+                }
+
+                $this->redirect($message, (!$succes), $params, $filters);
             }
             else
             {
