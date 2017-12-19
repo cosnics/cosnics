@@ -42,7 +42,7 @@ class CreatorComponent extends Manager
                     Translation::get('EntryCreated'),
                     false,
                     array(
-                        self::PARAM_ACTION => self::ACTION_BROWSE,
+                        self::PARAM_ACTION => self::ACTION_CREATE_CONFIRMATION,
                         self::PARAM_ENTITY_TYPE => $entry->getEntityType(),
                         self::PARAM_ENTITY_ID => $entry->getEntityId()
                     )
@@ -65,10 +65,15 @@ class CreatorComponent extends Manager
             );
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
 
-            $component->run();
-
-//            return $this->getTwig()->render(Manager::context() . ':Creator.html.twig');
+            return $component->run();
         }
+    }
+
+    public function render_header()
+    {
+        return $this->getTwig()->render(
+            Manager::context() . ':CreatorWizardHeader.html.twig', ['HEADER' => parent::render_header()]
+        );
     }
 
     protected function verifyStartEndTime()

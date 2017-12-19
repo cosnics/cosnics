@@ -1,0 +1,21 @@
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
+
+{{ HEADER|raw }}
+
+<ul class="nav nav-wizard publication-wizard entry-wizard">
+    <li class=""><a href="#">1. {{ 'SelectContentObject'|trans({}, appContext) }}</a></li>
+    <li class="active"><a href="#">2. {{ 'CreatorConfirmation'|trans({}, appContext) }}</a></li>
+</ul>
+
+<div class="alert alert-success" style="font-size: 18px; text-align: center;">
+    <span class="inline-glyph fa fa-check assignment-success-check"></span>
+    {{ 'EntryReceived'|trans({'{ASSIGNMENT}': ASSIGNMENT_TITLE}, appContext)|raw }}
+</div>
+
+<div class="text-center">
+    <a class="btn btn-default btn-primary" title="{{ 'ReturnToEntries'|trans({}, appContext) }}" href="{{ RETURN_URL }}">
+        <span>{{ 'ReturnToEntries'|trans({}, appContext) }}</span>
+    </a>
+</div>
+
+{{ FOOTER|raw }}
