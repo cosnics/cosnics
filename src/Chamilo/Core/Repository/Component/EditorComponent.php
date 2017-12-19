@@ -104,15 +104,6 @@ class EditorComponent extends Manager implements DelegateComponent
                 {
                     $values = $form->exportValues();
 
-                    $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($object);
-                    $entityService = new EntityService();
-                    $entityService->updateEntitySchemaValues(
-                        $this->get_user(),
-                        new RelationService(),
-                        new ElementService(),
-                        $entity,
-                        $values[EntityService::PROPERTY_METADATA_SCHEMA]);
-
                     Event::trigger(
                         'Activity',
                         Manager::context(),
@@ -123,18 +114,11 @@ class EditorComponent extends Manager implements DelegateComponent
                             Activity::PROPERTY_CONTENT_OBJECT_ID => $object->get_id(),
                             Activity::PROPERTY_CONTENT => $object->get_title()));
 
-                    $instanceService = new InstanceService();
-                    $selectedTab = $instanceService->updateInstances(
-                        $this->get_user(),
-                        $object,
-                        (array) $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA]);
-
-                    if ($selectedTab)
+                    $addMetadataSchema = $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA];
+                    if(isset($addMetadataSchema))
                     {
                         $parameters[Application::PARAM_ACTION] = self::ACTION_EDIT_CONTENT_OBJECTS;
                         $parameters[self::PARAM_CONTENT_OBJECT_ID] = $object->get_id();
-                        $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = array(
-                            self::TABS_CONTENT_OBJECT => $selectedTab);
 
                         $this->simple_redirect($parameters);
                     }
