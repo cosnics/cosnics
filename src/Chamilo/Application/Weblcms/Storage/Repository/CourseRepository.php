@@ -78,6 +78,27 @@ class CourseRepository implements CourseRepositoryInterface
     }
 
     /**
+     * @param int $courseTypeId
+     * @return Course[]
+     */
+    public function findCoursesByCourseTypeId(int $courseTypeId): array
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                Course::class_name(),
+                Course::PROPERTY_COURSE_TYPE_ID
+            ),
+            new StaticConditionVariable($courseTypeId)
+        );
+
+        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
+            Course::class_name(),
+            new DataClassRetrievesParameters($condition));
+
+        return $courses->as_array();
+    }
+
+    /**
      * Returns Courses with an array of course ids and a given set of parameters
      * 
      * @param DataClassRetrievesParameters $retrievesParameters

@@ -22,7 +22,7 @@ class ElementForm extends FormValidator
     public function __construct($form_url, Element $element)
     {
         parent::__construct('element', 'post', $form_url);
-        
+
         $this->element = $element;
         $this->build_form();
         
@@ -43,11 +43,11 @@ class ElementForm extends FormValidator
         $schemaName = $schema->get_namespace() . ' - ' . $schema->get_name();
         
         $this->addElement('static', null, Translation::get('Prefix', null, 'Chamilo\Core\Metadata'), $schemaName);
-        
-        $this->addRule(
-            Element::PROPERTY_SCHEMA_ID, 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
-            'required');
+
+        //$this->addRule(
+          //  Element::PROPERTY_SCHEMA_ID,
+           // Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+           // 'required');
         
         $this->addElement(
             'text', 
@@ -72,21 +72,21 @@ class ElementForm extends FormValidator
             Element::PROPERTY_VALUE_TYPE, 
             Translation::get('ValueType'), 
             Translation::get('ValueTypePredefined'), 
-            Element::VALUE_TYPE_PREDEFINED);
+            Element::VALUE_TYPE_VOCABULARY_PREDEFINED);
         
         $this->addElement(
             'radio', 
             Element::PROPERTY_VALUE_TYPE, 
             null, 
             Translation::get('ValueTypeUser'), 
-            Element::VALUE_TYPE_USER);
+            Element::VALUE_TYPE_VOCABULARY_USER);
         
         $this->addElement(
             'radio', 
             Element::PROPERTY_VALUE_TYPE, 
             null, 
             Translation::get('ValueTypeBoth'), 
-            Element::VALUE_TYPE_BOTH);
+            Element::VALUE_TYPE_VOCABULARY_BOTH);
         
         $buttons[] = $this->createElement(
             'style_submit_button', 

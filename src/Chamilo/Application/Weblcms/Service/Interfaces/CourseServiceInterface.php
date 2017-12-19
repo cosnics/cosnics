@@ -30,6 +30,12 @@ interface CourseServiceInterface
     public function getCourseById($courseId);
 
     /**
+     * @param int $courseTypeId
+     * @return Course[]
+     */
+    public function getCoursesByCourseTypeId(int $courseTypeId): array;
+
+    /**
      * Returns a course for a given user by a given visual code.
      * Checks if the course exists and the user has
      * the correct rights for the course

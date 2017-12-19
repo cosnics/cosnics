@@ -45,6 +45,12 @@ interface CourseRepositoryInterface
     public function findCourses(array $courseIds);
 
     /**
+     * @param int $courseTypeId
+     * @return Course[]
+     */
+    public function findCoursesByCourseTypeId(int $courseTypeId): array;
+
+    /**
      * Returns Courses with a given set of parameters
      * 
      * @param DataClassRetrievesParameters $retrievesParameters
