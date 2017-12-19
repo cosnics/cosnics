@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entity\EntityTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -132,6 +133,13 @@ class AssignmentDataProvider implements
     public function createEntry($entityType, $entityId, $userId, $contentObjectId, $ipAdress)
     {
         // TODO Auto-generated method stub
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     */
+    public function deleteEntry(Entry $entry)
+    {
     }
 
     /**

@@ -78,6 +78,46 @@ abstract class AssignmentRepository
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
+     * @return bool
+     */
+    public function deleteEntry(Entry $entry)
+    {
+        return $this->dataClassRepository->delete($entry);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
+     * @return bool
+     */
+    public function deleteScoreForEntry(Entry $entry)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_ENTRY_ID),
+            new StaticConditionVariable($entry->getId())
+        );
+
+        return $this->dataClassRepository->deletes($this->getScoreClassName(), $condition);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
+     * @return bool
+     */
+    public function deleteFeedbackForEntry(Entry $entry)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID),
+            new StaticConditionVariable($entry->getId())
+        );
+
+        return $this->dataClassRepository->deletes($this->getFeedbackClassName(), $condition);
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score
      *
      * @return bool

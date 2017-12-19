@@ -36,7 +36,9 @@ class ViewerComponent extends Manager implements TableSupport
 
     public function run()
     {
-        return $this->getTwig()->render(Manager::context() . ':EntityBrowser.html.twig', $this->getTemplateProperties());
+        return $this->getTwig()->render(
+            Manager::context() . ':EntityBrowser.html.twig', $this->getTemplateProperties()
+        );
     }
 
     /**
@@ -93,6 +95,18 @@ class ViewerComponent extends Manager implements TableSupport
         );
 
         return $display->render();
+    }
+
+    public function get_content_object_display_attachment_url(
+        $attachment
+    )
+    {
+        return $this->get_url(
+            array(
+                self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
+                self::PARAM_ATTACHMENT_ID => $attachment->get_id()
+            )
+        );
     }
 
     /**

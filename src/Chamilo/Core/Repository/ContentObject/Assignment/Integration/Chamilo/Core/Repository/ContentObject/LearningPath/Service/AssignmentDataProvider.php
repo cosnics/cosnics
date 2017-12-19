@@ -10,6 +10,8 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Re
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Symfony\Component\Translation\Translator;
@@ -31,6 +33,16 @@ class AssignmentDataProvider
      * @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService
      */
     protected $learningPathAssignmentService;
+
+    /**
+     * @var \Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService
+     */
+    protected $learningPathTrackingService;
+
+    /**
+     * @var \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath
+     */
+    protected $learningPath;
 
     /**
      * @var TreeNode
@@ -109,6 +121,22 @@ class AssignmentDataProvider
     public function setCanEditAssignment($canEditAssignment = true)
     {
         $this->canEditAssignment = $canEditAssignment;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath
+     */
+    public function setLearningPath(LearningPath $learningPath)
+    {
+        $this->learningPath = $learningPath;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService $trackingService
+     */
+    public function setLearningPathTrackingService(TrackingService $trackingService)
+    {
+        $this->learningPathTrackingService = $trackingService;
     }
 
     /**
@@ -262,10 +290,23 @@ class AssignmentDataProvider
      */
     public function createEntry($entityType, $entityId, $userId, $contentObjectId, $ipAdress)
     {
+        $user = new User();
+        $user->setId($userId);
+
+        $this->learningPathTrackingService->setActiveAttemptCompleted($this->learningPath, $this->treeNode, $user);
+
         return $this->learningPathAssignmentService->createEntry(
             $this->treeNode->getTreeNodeData(), $this->treeNodeAttempt, $entityType, $entityId, $userId,
             $contentObjectId, $ipAdress
         );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     */
+    public function deleteEntry(Entry $entry)
+    {
+        $this->learningPathAssignmentService->deleteEntry($entry);
     }
 
     /**
@@ -371,11 +412,11 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $submittedScore
      *
-     * @return boolean
+     * @return bool
      */
     public function createScore(Entry $entry, User $user, $submittedScore)
     {
@@ -389,6 +430,13 @@ class AssignmentDataProvider
         {
             return false;
         }
+
+        $entryUser = new User();
+        $entryUser->setId($entry->getEntityId());
+
+        $this->learningPathTrackingService->changeAssessmentScore(
+            $this->learningPath, $entryUser, $this->treeNode, $entry->getTreeNodeAttemptId(), $submittedScore
+        );
 
         return true;
     }
@@ -409,6 +457,20 @@ class AssignmentDataProvider
         {
             return false;
         }
+
+        /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry $entry */
+        $entry = $this->findEntryByIdentifier($score->getEntryId());
+        if (!$entry instanceof Entry)
+        {
+            return false;
+        }
+
+        $entryUser = new User();
+        $entryUser->setId($entry->getEntityId());
+
+        $this->learningPathTrackingService->changeAssessmentScore(
+            $this->learningPath, $entryUser, $this->treeNode, $entry->getTreeNodeAttemptId(), $score->getScore()
+        );
 
         return true;
     }

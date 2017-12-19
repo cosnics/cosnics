@@ -2,6 +2,9 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display;
 
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Translation\Translation;
+
 /**
  *
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display
@@ -35,13 +38,18 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @var integer
      */
-    private $entityType;
+    protected $entityType;
 
     /**
      *
      * @var integer
      */
-    private $entityIdentifier;
+    protected $entityIdentifier;
+
+    /**
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+     */
+    protected $entry;
 
     /**
      *
@@ -78,5 +86,24 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
 
         return $this->entityIdentifier;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     */
+    protected function initializeEntry()
+    {
+        $entryIdentifier = $this->getRequest()->query->get(self::PARAM_ENTRY_ID);
+
+        if (!$entryIdentifier)
+        {
+            throw new NoObjectSelectedException(Translation::get('Entry'));
+        }
+        else
+        {
+            $this->set_parameter(self::PARAM_ENTRY_ID, $entryIdentifier);
+        }
+
+        $this->entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
     }
 }

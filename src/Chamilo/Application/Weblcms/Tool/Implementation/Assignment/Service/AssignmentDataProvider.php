@@ -257,6 +257,14 @@ class AssignmentDataProvider
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     */
+    public function deleteEntry(Entry $entry)
+    {
+        $this->assignmentService->deleteEntry($entry);
+    }
+
+    /**
      *
      * @param integer $entityType
      * @param integer $entityId

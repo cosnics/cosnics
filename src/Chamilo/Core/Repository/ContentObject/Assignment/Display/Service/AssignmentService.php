@@ -33,6 +33,20 @@ abstract class AssignmentService
     }
 
     /**
+     * @param Entry $entry
+     */
+    public function deleteEntry(Entry $entry)
+    {
+        if(!$this->assignmentRepository->deleteEntry($entry))
+        {
+            throw new \RuntimeException('Could not delete entry ' . $entry->getId());
+        }
+
+        $this->assignmentRepository->deleteScoreForEntry($entry);
+        $this->assignmentRepository->deleteFeedbackForEntry($entry);
+    }
+
+    /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\User\Storage\DataClass\User $user

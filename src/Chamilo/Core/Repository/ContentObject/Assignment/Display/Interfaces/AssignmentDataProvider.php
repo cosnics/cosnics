@@ -119,6 +119,11 @@ interface AssignmentDataProvider
     public function createEntry($entityType, $entityId, $userId, $contentObjectId, $ipAdress);
 
     /**
+     * @param Entry $entry
+     */
+    public function deleteEntry(Entry $entry);
+
+    /**
      *
      * @param integer $entityType
      * @param integer $entityId

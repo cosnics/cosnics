@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreFormProcessor;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -15,6 +16,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -28,12 +31,6 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedback\FeedbackSupport
 {
-
-    /**
-     *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
-     */
-    private $entry;
 
     /**
      *
@@ -67,6 +64,9 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getTemplateProperties()
     {
+        /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
+        $assignment = $this->get_root_content_object();
+
         $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
         $submittedDate = DatetimeUtilities::format_locale_date($dateFormat, $this->getEntry()->getSubmitted());
 
@@ -82,6 +82,14 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             \Chamilo\Core\Repository\Feedback\Manager::context(), $configuration
         )->run();
 
+        $automaticFeedbackContentObjectIds = $assignment->get_automatic_feedback_co_ids();
+        $contentObjects = \Chamilo\Core\Repository\Storage\DataManager::retrieves(
+            ContentObject::class_name(), new InCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
+                explode(',', $automaticFeedbackContentObjectIds)
+            )
+        )->as_array();
+
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
@@ -89,7 +97,10 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
             'SUBMITTED_DATE' => $submittedDate, 'SUBMITTED_BY' => $entityRenderer->getEntityName(),
-            'SCORE_FORM' => $this->getScoreForm()->render()
+            'SCORE_FORM' => $this->getScoreForm()->render(),
+            'SHOW_AUTOMATIC_FEEDBACK' => $assignment->isAutomaticFeedbackVisible(),
+            'AUTOMATIC_FEEDBACK_TEXT' => $assignment->get_automatic_feedback_text(),
+            'AUTOMATIC_FEEDBACK_CONTENT_OBJECTS' => $contentObjects
         ];
     }
 
@@ -321,21 +332,5 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $this->actionBar = new ButtonToolBarRenderer($buttonToolBar);
 
         return $this->actionBar;
-    }
-
-    protected function initializeEntry()
-    {
-        $entryIdentifier = $this->getRequest()->query->get(self::PARAM_ENTRY_ID);
-
-        if (!$entryIdentifier)
-        {
-            throw new NoObjectSelectedException(Translation::get('Entry'));
-        }
-        else
-        {
-            $this->set_parameter(self::PARAM_ENTRY_ID, $entryIdentifier);
-        }
-
-        $this->entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
     }
 }

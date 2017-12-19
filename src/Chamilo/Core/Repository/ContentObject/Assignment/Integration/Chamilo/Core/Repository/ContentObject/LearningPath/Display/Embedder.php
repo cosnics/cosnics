@@ -22,9 +22,10 @@ class Embedder extends ContentObjectEmbedder
     use DependencyInjectionContainerTrait;
 
     /**
-     * @return string
+     *
+     * @see \core\repository\content_object\learning_path\display\Embedder::run()
      */
-    public function render()
+    public function run()
     {
         $this->initializeContainer();
 
@@ -44,6 +45,8 @@ class Embedder extends ContentObjectEmbedder
         /** @var \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface $trackingParameters * */
         $trackingParameters = $this->get_application()->get_parent()->getTrackingParameters();
 
+        $assignmentDataProvider->setLearningPath($this->learningPath);
+        $assignmentDataProvider->setLearningPathTrackingService($this->trackingService);
         $assignmentDataProvider->setTreeNode($this->treeNode);
         $assignmentDataProvider->setTreeNodeAttempt($activeAttempt);
         $assignmentDataProvider->setCanEditAssignment($this->get_application()->canEditCurrentTreeNode());
