@@ -9,6 +9,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -97,6 +98,10 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                 if(isset($addMetadataSchema))
                 {
                     $params[self::PARAM_ACTION] = self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM;
+                    $params[DynamicTabsRenderer::PARAM_SELECTED_TAB] = array(
+                        \Chamilo\Core\Repository\Manager::TABS_CONTENT_OBJECT => $form->getSelectedTabIdentifier()
+                    );
+
                     $filters = [];
                 }
                 else

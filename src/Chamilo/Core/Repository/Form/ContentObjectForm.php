@@ -105,6 +105,11 @@ abstract class ContentObjectForm extends FormValidator
     protected $form_type;
 
     /**
+     * @var string
+     */
+    protected $selectedTabIdentifier;
+
+    /**
      *
      * @var DynamicFormTabsRenderer
      */
@@ -1156,7 +1161,7 @@ EOT;
         $user->setId($this->get_owner_id());
 
         $instanceService = new InstanceService();
-        $instanceService->updateInstances(
+        $this->selectedTabIdentifier = $instanceService->updateInstances(
             $user,
             $object,
             (array) $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA]
@@ -1172,6 +1177,11 @@ EOT;
             $values[EntityService::PROPERTY_METADATA_SCHEMA]);
 
         return $result;
+    }
+
+    public function getSelectedTabIdentifier()
+    {
+        return $this->selectedTabIdentifier;
     }
 
     public function is_version()

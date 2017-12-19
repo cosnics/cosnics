@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Filter\FilterData;
@@ -28,6 +29,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  *
  * @package repository.lib.repository_manager.component
  */
+
 /**
  * Repository manager component to edit an existing content object.
  */
@@ -46,10 +48,11 @@ class EditorComponent extends Manager implements DelegateComponent
         {
             $object = DataManager::retrieve_by_id(ContentObject::class_name(), $id);
 
-            if (! $object)
+            if (!$object)
             {
                 return $this->display_error_page(
-                    Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES));
+                    Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES)
+                );
             }
 
             $template_registration = $object->get_template_registration();
@@ -60,13 +63,15 @@ class EditorComponent extends Manager implements DelegateComponent
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
-                    Translation::get('EditContentObject', array('CONTENT_OBJECT' => $object->get_title()))));
+                    Translation::get('EditContentObject', array('CONTENT_OBJECT' => $object->get_title()))
+                )
+            );
 
-            if (! RightsService::getInstance()->canEditContentObject($this->get_user(), $object, $this->getWorkspace()))
+            if (!RightsService::getInstance()->canEditContentObject($this->get_user(), $object, $this->getWorkspace()))
             {
                 throw new NotAllowedException();
             }
-            elseif (! $object->is_latest_version())
+            elseif (!$object->is_latest_version())
             {
                 $parameters = array();
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
@@ -75,8 +80,9 @@ class EditorComponent extends Manager implements DelegateComponent
                 $this->redirect(Translation::get('EditNotAllowed'), true, $parameters);
             }
 
-            if (! \Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::is_content_object_editable(
-                $object->get_id()))
+            if (!\Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::is_content_object_editable(
+                $object->get_id()
+            ))
             {
                 $parameters = array();
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
@@ -90,7 +96,8 @@ class EditorComponent extends Manager implements DelegateComponent
                 $object,
                 'edit',
                 'post',
-                $this->get_url(array(self::PARAM_CONTENT_OBJECT_ID => $id)));
+                $this->get_url(array(self::PARAM_CONTENT_OBJECT_ID => $id))
+            );
 
             if ($form->validate())
             {
@@ -112,13 +119,18 @@ class EditorComponent extends Manager implements DelegateComponent
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
                             Activity::PROPERTY_CONTENT_OBJECT_ID => $object->get_id(),
-                            Activity::PROPERTY_CONTENT => $object->get_title()));
+                            Activity::PROPERTY_CONTENT => $object->get_title()
+                        )
+                    );
 
                     $addMetadataSchema = $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA];
-                    if(isset($addMetadataSchema))
+                    if (isset($addMetadataSchema))
                     {
                         $parameters[Application::PARAM_ACTION] = self::ACTION_EDIT_CONTENT_OBJECTS;
                         $parameters[self::PARAM_CONTENT_OBJECT_ID] = $object->get_id();
+                        $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = array(
+                            self::TABS_CONTENT_OBJECT => $form->getSelectedTabIdentifier()
+                        );
 
                         $this->simple_redirect($parameters);
                     }
@@ -134,9 +146,11 @@ class EditorComponent extends Manager implements DelegateComponent
                     Translation::get(
                         $success == ContentObjectForm::RESULT_SUCCESS ? 'ObjectUpdated' : 'ObjectNotUpdated',
                         array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES),
+                        Utilities::COMMON_LIBRARIES
+                    ),
                     ($success == ContentObjectForm::RESULT_SUCCESS ? false : true),
-                    $parameters);
+                    $parameters
+                );
             }
             else
             {
@@ -156,7 +170,10 @@ class EditorComponent extends Manager implements DelegateComponent
                     Translation::get(
                         'NoObjectSelected',
                         array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES)));
+                        Utilities::COMMON_LIBRARIES
+                    )
+                )
+            );
         }
     }
 
