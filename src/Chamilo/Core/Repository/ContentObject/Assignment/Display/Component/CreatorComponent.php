@@ -65,7 +65,9 @@ class CreatorComponent extends Manager
             );
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
 
-            return $component->run();
+            $component->run();
+
+//            return $this->getTwig()->render(Manager::context() . ':Creator.html.twig');
         }
     }
 
