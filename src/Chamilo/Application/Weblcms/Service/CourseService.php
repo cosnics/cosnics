@@ -138,6 +138,15 @@ class CourseService implements CourseServiceInterface
     }
 
     /**
+     * @param int $courseTypeId
+     * @return Course[]
+     */
+    public function getCoursesByCourseTypeId(int $courseTypeId): array
+    {
+        return $this->courseRepository->findCoursesByCourseTypeId($courseTypeId);
+    }
+
+    /**
      * Returns all the courses for the given user
      * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user

@@ -172,6 +172,14 @@ interface PublicationServiceInterface
     public function getPublicationCategoriesForCourseAndTool(Course $course, $tool);
 
     /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param $tool
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory $parentCategory
+     * @return mixed
+     */
+    public function getPublicationCategoriesForCourseAndToolInCategory(Course $course, string $tool, ContentObjectPublicationCategory $parentCategory);
+
+    /**
      * Returns the publication categories which a user can access
      * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user

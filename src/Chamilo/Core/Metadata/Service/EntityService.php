@@ -71,10 +71,9 @@ class EntityService
     }
 
     /**
-     *
      * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $entity
-     * @return integer[]
+     * @param $entity
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public function getSchemaInstancesForEntity(RelationService $relationService, $entity)
     {
