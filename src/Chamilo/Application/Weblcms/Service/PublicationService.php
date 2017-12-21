@@ -345,6 +345,24 @@ class PublicationService implements PublicationServiceInterface
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param string $tool
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory|null $parentCategory
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory[]
+     */
+    public function getPublicationCategoriesForCourseAndToolInCategory(Course $course, string $tool, ContentObjectPublicationCategory $parentCategory = null)
+    {
+
+
+        return $this->publicationRepository->findPublicationCategoriesByParentCategoryId(
+            $course,
+            $tool,
+            is_null($parentCategory) ? 0 : $parentCategory->getId()
+        );
+    }
+
+
+    /**
      * Returns the publication categories which a user can access
      * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
