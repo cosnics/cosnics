@@ -5,6 +5,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  *
@@ -166,5 +168,57 @@ class Assignment extends ContentObject implements AttachmentSupport
     {
         return $this->isAutomaticFeedbackVisibleAfterSubmission() ||
             ($this->isAutomaticFeedbackVisibleAfterEndTime() && $this->hasEndTimePassed());
+    }
+
+    public function is_attached_to_or_included_in($object_id)
+    {
+        if(parent::is_attached_to_or_included_in($object_id))
+        {
+            return true;
+        }
+
+        if ($this->isObjectPartOfAutomaticFeedback($object_id))
+        {
+            return true;
+        }
+
+        $attachments = $this->getAutomaticFeedbackObjects();
+        foreach ($attachments as $attachment)
+        {
+            if ($attachment->is_attached_to_or_included_in($object_id))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param int $objectId
+     *
+     * @return bool
+     */
+    protected function isObjectPartOfAutomaticFeedback($objectId)
+    {
+        $automaticFeedbackContentObjectIds = explode(',', $this->get_automatic_feedback_co_ids());
+
+        return in_array($objectId, $automaticFeedbackContentObjectIds);
+    }
+
+    /**
+     * @return ContentObject[]
+     */
+    public function getAutomaticFeedbackObjects()
+    {
+        $automaticFeedbackContentObjectIds = $this->get_automatic_feedback_co_ids();
+        $contentObjects = \Chamilo\Core\Repository\Storage\DataManager::retrieves(
+            ContentObject::class_name(), new InCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
+                explode(',', $automaticFeedbackContentObjectIds)
+            )
+        )->as_array();
+
+        return $contentObjects;
     }
 }

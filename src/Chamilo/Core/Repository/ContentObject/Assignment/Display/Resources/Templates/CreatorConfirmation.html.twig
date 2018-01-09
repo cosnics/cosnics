@@ -12,6 +12,32 @@
     {{ 'EntryReceived'|trans({'{ASSIGNMENT}': ASSIGNMENT_TITLE}, appContext)|raw }}
 </div>
 
+{% if SHOW_AUTOMATIC_FEEDBACK %}
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'AutomaticFeedback'|trans([], appContext) }}</h3>
+        </div>
+
+        <div class="panel-body">
+
+            {{ AUTOMATIC_FEEDBACK_TEXT|nl2br }}
+
+            <ul class="list-group" style="margin-top: 30px;">
+
+                {% for CONTENT_OBJECT in AUTOMATIC_FEEDBACK_CONTENT_OBJECTS %}
+                    <li class="list-group-item">
+                        <a href="#" onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': CONTENT_OBJECT.id}) }}'); return false;">
+                            {{ CONTENT_OBJECT.get_icon_image()|raw }} {{ CONTENT_OBJECT.get_title() }}
+                        </a>
+                    </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+    </div>
+{% endif %}
+
 <div class="text-center">
     <a class="btn btn-default btn-primary" title="{{ 'ReturnToEntries'|trans({}, appContext) }}" href="{{ RETURN_URL }}">
         <span>{{ 'ReturnToEntries'|trans({}, appContext) }}</span>

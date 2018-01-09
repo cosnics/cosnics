@@ -82,13 +82,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             \Chamilo\Core\Repository\Feedback\Manager::context(), $configuration
         )->run();
 
-        $automaticFeedbackContentObjectIds = $assignment->get_automatic_feedback_co_ids();
-        $contentObjects = \Chamilo\Core\Repository\Storage\DataManager::retrieves(
-            ContentObject::class_name(), new InCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                explode(',', $automaticFeedbackContentObjectIds)
-            )
-        )->as_array();
+        $contentObjects = $assignment->getAutomaticFeedbackObjects();
 
         return [
             'HEADER' => $this->render_header(),
@@ -100,7 +94,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'SCORE_FORM' => $this->getScoreForm()->render(),
             'SHOW_AUTOMATIC_FEEDBACK' => $assignment->isAutomaticFeedbackVisible(),
             'AUTOMATIC_FEEDBACK_TEXT' => $assignment->get_automatic_feedback_text(),
-            'AUTOMATIC_FEEDBACK_CONTENT_OBJECTS' => $contentObjects
+            'AUTOMATIC_FEEDBACK_CONTENT_OBJECTS' => $contentObjects,
+            'ATTACHMENT_VIEWER_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
+                    self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__'
+                ]
+            )
         ];
     }
 
