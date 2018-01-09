@@ -25,7 +25,7 @@
     },
     "extra": {
         "cosnics": {
-            "name": "Fill-in-the-blanks Question",
+            "name": "Fill In Blanks Question",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\FillInBlanksQuestion",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
             "category": "Assessment",
