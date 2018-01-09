@@ -29,7 +29,7 @@
     },
     "extra": {
         "cosnics": {
-            "name": "YouTube Video",
+            "name": "Youtube",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Youtube",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
             "category": "Media",
