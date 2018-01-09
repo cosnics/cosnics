@@ -146,11 +146,11 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
 
         $packageInformation = $packageFactory->getPackage(static::package());
 
-        $extra = $packageInformation->get_extra();
+        $extra = (array) $packageInformation->get_extra();
 
-        if (isset($extra->course_section))
+        if (isset($extra['course-section']))
         {
-            $section_type = CourseSection::get_type_from_type_name($extra->course_section);
+            $section_type = CourseSection::get_type_from_type_name($extra['course-section']);
         }
 
         return $section_type;
