@@ -23,7 +23,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -112,7 +111,13 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this->learningPath,
             $this->getCurrentTreeNode());
 
+        return $embedder->run();
+    }
+
+    public function render_header()
+    {
         $buttonToolbarRenderer = new ButtonToolBarRenderer($this->getButtonToolbar());
+        $translator = Translation::getInstance();
 
         $html = array();
 
@@ -152,12 +157,15 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $translator->getTranslation('ThisStepEnforcesDefaultTraversingOrder') . '</div>';
         }
 
-        $html[] = $embedder->run();
+        return implode(PHP_EOL, $html);
+    }
 
+    public function render_footer()
+    {
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'KeyboardNavigation.js');
 
-        $html[] = $this->render_footer();
+        $html[] = parent::render_footer();
 
         return implode(PHP_EOL, $html);
     }
@@ -596,11 +604,4 @@ class ViewerComponent extends BaseHtmlTreeComponent
         return $this->getCurrentTreeNode()->getContentObject();
     }
 
-    public function render_header()
-    {
-        $page = Page::getInstance();
-        $page->setViewMode(Page::VIEW_MODE_HEADERLESS);
-
-        return Application::render_header();
-    }
 }
