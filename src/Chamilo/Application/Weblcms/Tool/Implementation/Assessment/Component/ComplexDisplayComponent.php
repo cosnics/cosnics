@@ -84,6 +84,10 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
             }
 
+            $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
+                BreadcrumbTrail::getInstance(), $this, $this->publication
+            );
+
             $this->assessment = $this->publication->get_content_object();
             $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id);
         }

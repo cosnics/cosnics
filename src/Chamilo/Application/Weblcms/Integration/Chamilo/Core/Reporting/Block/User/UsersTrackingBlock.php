@@ -27,7 +27,7 @@ class UsersTrackingBlock extends CourseBlock
                 Translation::get('TotalPublications'), 
                 Translation::get('UserDetail')));
         
-        $course_id = $this->get_course_id();
+        $course_id = $this->getCourseId();
         $img = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
              Translation::get('Details') . '" />';
         

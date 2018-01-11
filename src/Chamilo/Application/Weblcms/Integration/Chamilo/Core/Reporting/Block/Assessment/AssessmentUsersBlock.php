@@ -32,8 +32,8 @@ class AssessmentUsersBlock extends AssessmentBlock
         $reporting_data->set_rows($this->get_user_reporting_info_headers());
         $reporting_data->add_row(Translation::get('UserDetails'));
         
-        $pub_id = $this->get_publication_id();
-        $course_id = $this->get_course_id();
+        $pub_id = $this->getPublicationId();
+        $course_id = $this->getCourseId();
         
         $count = 1;
         
@@ -229,6 +229,6 @@ class AssessmentUsersBlock extends AssessmentBlock
     {
         return new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID), 
-            new StaticConditionVariable($this->get_publication_id()));
+            new StaticConditionVariable($this->getPublicationId()));
     }
 }

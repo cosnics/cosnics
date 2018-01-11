@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
+use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
@@ -8,6 +9,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -91,7 +93,23 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                 $params = array();
                 $params[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-                $this->redirect($message, (!$succes), $params, array(self::PARAM_CONTENT_OBJECT_ID));
+                $values = $form->exportValues();
+                $addMetadataSchema = $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA];
+                if(isset($addMetadataSchema))
+                {
+                    $params[self::PARAM_ACTION] = self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM;
+                    $params[DynamicTabsRenderer::PARAM_SELECTED_TAB] = array(
+                        \Chamilo\Core\Repository\Manager::TABS_CONTENT_OBJECT => $form->getSelectedTabIdentifier()
+                    );
+
+                    $filters = [];
+                }
+                else
+                {
+                    $filters = [self::PARAM_CONTENT_OBJECT_ID];
+                }
+
+                $this->redirect($message, (!$succes), $params, $filters);
             }
             else
             {

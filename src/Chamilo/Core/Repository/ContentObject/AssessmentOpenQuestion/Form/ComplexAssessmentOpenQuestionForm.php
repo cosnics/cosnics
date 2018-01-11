@@ -58,7 +58,17 @@ class ComplexAssessmentOpenQuestionForm extends ComplexContentObjectItemForm
             $defaults[ComplexAssessmentOpenQuestion::PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
             $defaults[ComplexAssessmentOpenQuestion::PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
         }
-        
+
+        if ($complex_content_object_item->get_show_answer_feedback() == Configuration::ANSWER_FEEDBACK_TYPE_NONE)
+        {
+            $defaults[self::PROPERTY_ANSWER_FEEDBACK_OPTION] = 0;
+        }
+        else
+        {
+            $defaults[self::PROPERTY_ANSWER_FEEDBACK_OPTION] = 1;
+            $defaults[Configuration::PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
+        }
+
         return $defaults;
     }
 

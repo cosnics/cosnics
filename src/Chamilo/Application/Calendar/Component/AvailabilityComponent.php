@@ -3,7 +3,6 @@ namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Form\AvailabilityForm;
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
@@ -18,11 +17,20 @@ use Chamilo\Libraries\File\Redirect;
 class AvailabilityComponent extends Manager
 {
 
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
+     */
+    protected function getAvailabilityService()
+    {
+        return $this->getService('chamilo.application.calendar.service.availability_service');
+    }
+
     public function run()
     {
         $this->checkAuthorization(Manager::context());
 
-        $availabilityService = new AvailabilityService(new AvailabilityRepository());
+        $availabilityService = $this->getAvailabilityService();
         $form = $this->getForm($availabilityService);
 
         if ($form->validate())

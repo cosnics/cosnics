@@ -103,7 +103,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
                 $trackingService,
                 $translator,
                 $panelRenderer,
-                $this->get_root_content_object(),
+                $this->learningPath,
                 $this->getReportingUser(),
                 $currentTreeNode
             );
@@ -241,7 +241,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         $informationValues[$translator->getTranslation('TotalTime')] = DatetimeUtilities::format_seconds_to_hours(
             $trackingService->getTotalTimeSpentInTreeNode(
-                $this->get_root_content_object(),
+                $this->learningPath,
                 $this->getReportingUser(),
                 $currentTreeNode
             )
@@ -253,7 +253,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
             $informationValues[$translator->getTranslation('AverageScore')] = $progressBarRenderer->render(
                 (int) $trackingService->getAverageScoreInTreeNode(
-                    $this->get_root_content_object(),
+                    $this->learningPath,
                     $this->getReportingUser(),
                     $currentTreeNode
                 )
@@ -261,7 +261,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
             $informationValues[$translator->getTranslation('MaximumScore')] = $progressBarRenderer->render(
                 $trackingService->getMaximumScoreInTreeNode(
-                    $this->get_root_content_object(),
+                    $this->learningPath,
                     $this->getReportingUser(),
                     $currentTreeNode
                 )
@@ -269,7 +269,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
             $informationValues[$translator->getTranslation('MinimumScore')] = $progressBarRenderer->render(
                 $trackingService->getMinimumScoreInTreeNode(
-                    $this->get_root_content_object(),
+                    $this->learningPath,
                     $this->getReportingUser(),
                     $currentTreeNode
                 )
@@ -277,7 +277,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
             $informationValues[$translator->getTranslation('LastScore')] = $progressBarRenderer->render(
                 $trackingService->getLastAttemptScoreForTreeNode(
-                    $this->get_root_content_object(),
+                    $this->learningPath,
                     $this->getReportingUser(),
                     $currentTreeNode
                 )
@@ -306,7 +306,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         $notCompletedLabel = $translator->getTranslation('NotCompleted');
 
         $progress = $trackingService->getLearningPathProgress(
-            $this->get_root_content_object(),
+            $this->learningPath,
             $this->getReportingUser(),
             $currentTreeNode
         );

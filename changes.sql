@@ -285,4 +285,131 @@ DELETE FROM `configuration_setting` WHERE `variable` LIKE 'maintenance_mode' AND
 ALTER TABLE `repository_learning_path_tree_node_data` ADD `enforce_default_traversing_order` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER `added_date`;
 
 /** 16 OCT 2017 **/
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension', 'Extension', 'Office365', '1', '1.0.0', '1');
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365\\Integration', 'Integration', 'Office365', '1', '1.0.0', '1');
+
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration', 'Integration', 'Document', '1', '1.0.0', '1');
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Forum\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Forum\\Integration', 'Integration', 'Forum', '1', '1.0.0', '1');
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'Chamilo\\Libraries', NULL, 'MicrosoftGraph', '1', '1.0.0', '1');
+
+CREATE TABLE `weblcms_course_group_publication_category` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `course_group_id` int(10) UNSIGNED NOT NULL,
+  `publication_category_id` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `weblcms_course_group_office365_reference` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `course_group_id` int(10) UNSIGNED NOT NULL,
+  `office365_group_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `office365_plan_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `linked` TINYINT(1) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'client_id', NULL, '0'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'client_secret', NULL, '0'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'access_token', NULL, '1'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'external_user_id', NULL, '1'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'tenant_id', NULL, '0'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'cosnics_prefix', NULL, 'cosnics_'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'planner_base_uri', 'https://tasks.office.com/tenantName.onmicrosoft.com/nl-NL/Home/Planner', '0'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'group_base_uri', 'https://outlook.office.com/owa/?realm=realm&amp;exsvurl=1&amp;ll-cc=1043&amp;modurl=0&amp;path=/group/{GROUP_ID}@tenant.onmicrosoft.com/people', '0');
+
+INSERT INTO weblcms_course_group_publication_category
+    SELECT NULL, CG.id, CG.document_category_id FROM weblcms_course_group CG WHERE CG.document_category_id > 0;
+
+INSERT INTO weblcms_course_group_publication_category
+  SELECT NULL, CG.id, CG.forum_category_id FROM weblcms_course_group CG WHERE CG.forum_category_id > 0;
+
+
+/** Learning Path Assigments **/
+
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath', 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Integration', NULL, 'Repository', '1', '1.0.0', '1');
+
+
+CREATE TABLE `tracking_weblcms_learning_path_assignment_entry` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `tree_node_attempt_id` int(10) UNSIGNED NOT NULL,
+  `tree_node_data_id` int(10) UNSIGNED NOT NULL,
+  `content_object_id` int(10) UNSIGNED NOT NULL,
+  `entity_id` int(10) UNSIGNED NOT NULL,
+  `entity_type` tinyint(2) UNSIGNED NOT NULL,
+  `submitted` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `ip_address` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `twlpae_tree_node_attempt_id` (`tree_node_attempt_id`),
+  KEY `twlpae_tree_node_data_id` (`tree_node_data_id`),
+  KEY `twlpae_content_object_id` (`content_object_id`),
+  KEY `twlpae_entity` (`entity_id`, `entity_type`),
+  KEY `twlpae_user_id` (`user_id`)
+);
+
+CREATE TABLE `tracking_weblcms_learning_path_assignment_feedback` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `comment` TEXT NULL , PRIMARY KEY (`id`), KEY `twlpaf_entry_id` (`entry_id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_learning_path_assignment_note` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `note` TEXT NULL , PRIMARY KEY (`id`), KEY `twlpan_entry_id` (`entry_id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_learning_path_assignment_score` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `score` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`), KEY `twlpas_entry_id` (`entry_id`)) ENGINE = InnoDB;
+
+CREATE TABLE `tracking_weblcms_assignment_entry` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `content_object_publication_id` int(10) UNSIGNED NOT NULL,
+  `content_object_id` int(10) UNSIGNED NOT NULL,
+  `entity_id` int(10) UNSIGNED NOT NULL,
+  `entity_type` tinyint(2) UNSIGNED NOT NULL,
+  `submitted` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `ip_address` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `twae_content_object_publication_id` (`content_object_publication_id`),
+  KEY `twae_content_object_id` (`content_object_id`),
+  KEY `twae_entity` (`entity_id`, `entity_type`),
+  KEY `twae_user_id` (`user_id`)
+);
+
+CREATE TABLE `tracking_weblcms_assignment_feedback` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `comment` TEXT NULL , PRIMARY KEY (`id`), KEY `twaf_entry_id` (`entry_id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_assignment_note` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `note` TEXT NULL , PRIMARY KEY (`id`), KEY `twan_entry_id` (`entry_id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_assignment_score` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `score` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`), KEY `twas_entry_id` (`entry_id`)) ENGINE = InnoDB;
+
+
+/** Assignment tool refactoring **/
+
+CREATE TABLE `weblcms_assignment_publication` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `publication_id` int(10) UNSIGNED NOT NULL,
+  `entity_type` int(3) UNSIGNED NOT NULL,
+   PRIMARY KEY (`id`),
+   UNIQUE KEY `wap_publication_id` (`publication_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+INSERT IGNORE INTO weblcms_assignment_publication
+SELECT NULL, COP.id, 0 FROM weblcms_content_object_publication COP
+JOIN repository_content_object RCO on RCO.id = COP.content_object_id
+WHERE COP.tool = 'Assignment' AND RCO.type LIKE '%Assignment%';
+
+UPDATE weblcms_assignment_publication WAP
+JOIN weblcms_content_object_publication COP on WAP.publication_id = COP.id
+JOIN repository_assignment COA on COP.content_object_id = COA.id
+SET WAP.entity_type = 1 WHERE COA.allow_group_submissions = 1;
+
+ALTER TABLE `repository_assignment` DROP `allow_group_submissions`;
+
+CREATE TABLE `tracking_weblcms_assignment_entry_attachment` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `attachment_id` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`), KEY `twaea_attachment_id` (`attachment_id`), KEY `twaea_entry_id` (`entry_id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_learning_path_assignment_entry_attachment` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `attachment_id` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`), KEY `twlpaea_attachment_id` (`attachment_id`), KEY `twlpaea_entry_id` (`entry_id`)) ENGINE = InnoDB;
+
+/** EXECUTE WHEN THE INDEXES OF ASSIGNMENT HAS NOT BEEN SET **/
+
+/**ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `entity_id`, `entity_type`);
+ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `content_object_publication_id`);
+ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `content_object_id`);
+ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `user_id`);
+
+ALTER TABLE `tracking_weblcms_assignment_feedback` ADD INDEX( `user_id`);
+ALTER TABLE `tracking_weblcms_assignment_note` ADD INDEX( `user_id`);
+ALTER TABLE `tracking_weblcms_assignment_score` ADD INDEX( `user_id`);
+
+ALTER TABLE `tracking_weblcms_assignment_feedback` ADD INDEX( `entry_id`);
+ALTER TABLE `tracking_weblcms_assignment_note` ADD INDEX( `entry_id`);
+ALTER TABLE `tracking_weblcms_assignment_score` ADD INDEX( `entry_id`);**/

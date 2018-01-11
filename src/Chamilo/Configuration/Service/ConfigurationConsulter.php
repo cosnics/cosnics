@@ -33,26 +33,35 @@ class ConfigurationConsulter extends DataConsulter
      */
     public function getSetting($keys)
     {
-        $variables = $keys;
-        $values = $this->getSettings();
-
-        while (count($variables) > 0)
+        try
         {
-            $key = array_shift($variables);
+            $variables = $keys;
+            $values = $this->getSettings();
 
-            if (! array_key_exists($key, $values))
+            while (count($variables) > 0)
             {
-                throw new \Exception(
-                    'The requested variable is not available in an unconfigured environment (' . implode(' > ', $keys) .
-                         ')');
+                $key = array_shift($variables);
+
+                if (!array_key_exists($key, $values))
+                {
+                    throw new \Exception(
+                        'The requested variable is not available in an unconfigured environment (' .
+                        implode(' > ', $keys) .
+                        ')'
+                    );
+                }
+                else
+                {
+                    $values = $values[$key];
+                }
             }
-            else
-            {
-                $values = $values[$key];
-            }
+
+            return $values;
         }
-
-        return $values;
+        catch(\Exception $ex)
+        {
+            return null;
+        }
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\User\Storage\Repository;
 
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -13,6 +14,8 @@ use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -51,17 +54,43 @@ class UserRepository implements UserRepositoryInterface
     public function findUsers(Condition $condition = null, $count = null, $offset = null, $order_by = array())
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by);
+
         return DataManager::retrieves(User::class_name(), $parameters)->as_array();
+    }
+
+    /**
+     * @param int[] $userIdentifiers
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function findUsersByIdentifiersOrderedByName($userIdentifiers)
+    {
+        $orderProperties = array();
+        $orderProperties[] = new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+        $orderProperties[] = new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
+
+        $condition =
+            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIdentifiers);
+
+        /** @var User[] $users */
+        $users = DataManager::retrieves(
+            User::class_name(),
+            new DataClassRetrievesParameters($condition, null, null, $orderProperties)
+        )->as_array();
+
+        return $users;
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
      * @return integer
      */
     public function countUsers(Condition $condition = null)
     {
         $parameters = new DataClassCountParameters($condition);
+
         return DataManager::count(User::class_name(), $parameters);
     }
 
@@ -77,9 +106,11 @@ class UserRepository implements UserRepositoryInterface
         $condition = new ComparisonCondition(
             new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL),
             ComparisonCondition::EQUAL,
-            new StaticConditionVariable($email));
+            new StaticConditionVariable($email)
+        );
 
         $users = $this->findUsers($condition);
+
         return $users[0];
     }
 
@@ -116,6 +147,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      *
      * @param $status
+     *
      * @return User[]
      */
     protected function findActiveUsersByStatus($status)
@@ -124,11 +156,13 @@ class UserRepository implements UserRepositoryInterface
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(User::class_name(), User::PROPERTY_STATUS),
             ComparisonCondition::EQUAL,
-            new StaticConditionVariable($status));
+            new StaticConditionVariable($status)
+        );
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE),
             ComparisonCondition::EQUAL,
-            new StaticConditionVariable(1));
+            new StaticConditionVariable(1)
+        );
 
         $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
 
@@ -164,27 +198,31 @@ class UserRepository implements UserRepositoryInterface
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_USER_ID),
-            new StaticConditionVariable($user->getId()));
+            new StaticConditionVariable($user->getId())
+        );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_SETTING_ID),
-            new StaticConditionVariable($setting->getId()));
+            new StaticConditionVariable($setting->getId())
+        );
 
         $condition = new AndCondition($conditions);
 
         return \Chamilo\Core\User\Storage\DataManager::retrieve(
             UserSetting::class_name(),
-            new DataClassRetrieveParameters($condition));
+            new DataClassRetrieveParameters($condition)
+        );
     }
 
     public function createUserSettingForSettingAndUser($context, $variable, User $user, $value = null)
     {
         $userSetting = $this->getUserSettingForSettingAndUser($context, $variable, $user);
-        if (! $userSetting instanceof UserSetting)
+        if (!$userSetting instanceof UserSetting)
         {
             $setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
                 $variable,
-                $context);
+                $context
+            );
 
             $userSetting = new UserSetting();
             $userSetting->set_setting_id($setting->getId());
@@ -196,6 +234,7 @@ class UserRepository implements UserRepositoryInterface
         else
         {
             $userSetting->set_value($value);
+
             return $this->update($userSetting);
         }
     }
@@ -205,6 +244,7 @@ class UserRepository implements UserRepositoryInterface
         Event::trigger(
             'Import',
             'Chamilo\Core\User',
-            ['target_user_id' => $targetUser->getId(), 'action_user_id' => $actionUser->getId()]);
+            ['target_user_id' => $targetUser->getId(), 'action_user_id' => $actionUser->getId()]
+        );
     }
 }

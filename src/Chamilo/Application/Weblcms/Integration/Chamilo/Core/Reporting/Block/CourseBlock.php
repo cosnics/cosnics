@@ -23,7 +23,7 @@ abstract class CourseBlock extends ReportingBlock
     const SCORE_TYPE_FIRST = 4;
     const SCORE_TYPE_LAST = 5;
 
-    public function get_course_id()
+    public function getCourseId()
     {
         return $this->get_parent()->get_parent()->get_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
     }

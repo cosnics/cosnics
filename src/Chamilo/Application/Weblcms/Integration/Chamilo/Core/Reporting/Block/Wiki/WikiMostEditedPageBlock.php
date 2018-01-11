@@ -22,7 +22,7 @@ class WikiMostEditedPageBlock extends ToolBlock
         
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
-            $this->get_publication_id());
+            $this->getPublicationId());
         
         $wiki = $publication->get_content_object();
         $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
@@ -57,8 +57,8 @@ class WikiMostEditedPageBlock extends ToolBlock
             }
             
             $url = 'index.php?go=' . \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE . '&course=' .
-                 $this->get_course_id() . '&tool=' . $this->get_tool() . '&application=weblcms&' .
-                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID . '=' . $this->get_publication_id() .
+                 $this->getCourseId() . '&tool=' . $this->get_tool() . '&application=weblcms&' .
+                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID . '=' . $this->getPublicationId() .
                  '&tool_action=' . \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW .
                  '&display_action=view_item&selected_cloi=' . $most_edited_page->get_id();
             

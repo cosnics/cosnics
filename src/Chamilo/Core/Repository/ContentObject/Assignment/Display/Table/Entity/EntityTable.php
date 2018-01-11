@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
@@ -35,7 +36,7 @@ abstract class EntityTable extends RecordTable implements TableFormActionsSuppor
     public function __construct($component, AssignmentDataProvider $assignmentDataProvider)
     {
         parent::__construct($component);
-        
+
         $this->assignmentDataProvider = $assignmentDataProvider;
     }
 
@@ -59,18 +60,20 @@ abstract class EntityTable extends RecordTable implements TableFormActionsSuppor
 
     /**
      * Returns the implemented form actions
-     * 
+     *
      * @return TableFormActions
      */
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
-        
+
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD)), 
-                Translation::get('DownloadSelected')));
-        
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD)),
+                Translation::get('DownloadSelected')
+            )
+        );
+
         return $actions;
     }
 }

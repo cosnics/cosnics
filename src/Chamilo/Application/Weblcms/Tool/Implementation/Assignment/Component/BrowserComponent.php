@@ -1,15 +1,18 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntriesDownloader\EntriesDownloaderFactory;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -33,9 +36,13 @@ class BrowserComponent extends Manager
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => \Chamilo\Application\Weblcms\Manager::ACTION_REPORTING,
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentScoresTemplate::class_name(),
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::ACTION_VIEW)),
-                Button::DISPLAY_ICON_AND_LABEL);
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentScoresTemplate::class_name(
+                        ),
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::ACTION_VIEW
+                    )
+                ),
+                Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
+            );
         }
 
         return $tool_actions;
@@ -45,7 +52,8 @@ class BrowserComponent extends Manager
     {
         $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             Assignment::class_name(),
-            $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+            $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+        );
 
         $calendar_event = ContentObject::factory(CalendarEvent::class_name());
 
@@ -65,6 +73,31 @@ class BrowserComponent extends Manager
         $calendar_event->set_frequency(CalendarEvent::FREQUENCY_NONE);
 
         return $calendar_event;
+    }
+
+    public function get_additional_form_actions()
+    {
+        return array(
+            new TableFormAction(
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD_ENTRIES
+                    )
+                ),
+                Translation::get('DownloadEntriesSelectedAssignments'),
+                false
+            ),
+            new TableFormAction(
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD_ENTRIES,
+                        EntriesDownloaderComponent::PARAM_ENTRIES_DOWNLOAD_STRATEGY => EntriesDownloaderFactory::ENTRIES_DOWNLOADER_ENTITY
+                    )
+                ),
+                Translation::get('DownloadEntriesSelectedAssignmentsByEntities'),
+                false
+            )
+        );
     }
 
     /**

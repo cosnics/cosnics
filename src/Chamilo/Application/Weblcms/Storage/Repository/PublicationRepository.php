@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
@@ -98,7 +99,7 @@ class PublicationRepository implements PublicationRepositoryInterface
         );
 
         $conditions[] = $this->getPublicationConditionForTool($tool);
-        
+
         return new AndCondition($conditions);
     }
 
@@ -126,7 +127,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return ContentObjectPublication[]
+     * @return mixed[] | ContentObjectPublication[]
      */
     protected function findPublicationsByCondition(Condition $condition)
     {
@@ -136,6 +137,21 @@ class PublicationRepository implements PublicationRepositoryInterface
         );
 
         return $result->as_array();
+    }
+
+    /**
+     * @param array $publicationIds
+     *
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication[]
+     */
+    public function findPublicationsByIds(array $publicationIds = [])
+    {
+        return $this->findPublicationsByCondition(
+            new InCondition(
+                new PropertyConditionVariable(ContentObjectPublication::class, ContentObjectPublication::PROPERTY_ID),
+                $publicationIds
+            )
+        );
     }
 
     /**

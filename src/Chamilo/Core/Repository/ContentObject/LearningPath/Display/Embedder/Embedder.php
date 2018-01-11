@@ -112,8 +112,10 @@ abstract class Embedder
     {
         $html = array();
 
+        $html[] = $this->get_application()->render_header();
         $html[] = $this->track();
         $html[] = $this->render();
+        $html[] = $this->get_application()->render_footer();
 
         return implode(PHP_EOL, $html);
     }

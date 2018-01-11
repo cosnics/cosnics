@@ -59,7 +59,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
         $this->set_question_complex_content_object_item($complex_content_object_item);
         
         $this->question_attempts = $this->get_question_attempts_from_publication_and_question(
-            $this->get_publication_id(), 
+            $this->getPublicationId(), 
             $complex_content_object_item->get_id());
     }
 

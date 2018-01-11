@@ -111,6 +111,14 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     */
+    public function getRegistrationConsulter()
+    {
+        return $this->getService('chamilo.configuration.service.registration_consulter');
+    }
+
+    /**
      *
      * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
@@ -200,11 +208,45 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     */
+    protected function getDataClassRepository()
+    {
+        return $this->getService(
+            'chamilo.libraries.storage.data_manager.doctrine.data_class_repository'
+        );
+    }
+
+    /**
      *
      * @return \Chamilo\Libraries\Architecture\Factory\ApplicationFactory
      */
     public function getApplicationFactory()
     {
         return $this->getService('chamilo.libraries.architecture.factory.application_factory');
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    public function getClassnameUtilities()
+    {
+        return $this->getService('chamilo.libraries.architecture.classname_utilities');
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Utilities\StringUtilities
+     */
+    public function getStringUtilities()
+    {
+        return $this->getService('chamilo.libraries.utilities.string_utilities');
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    public function getSessionUtilities()
+    {
+        return $this->getService('chamilo.libraries.platform.session.session_utilities');
     }
 }

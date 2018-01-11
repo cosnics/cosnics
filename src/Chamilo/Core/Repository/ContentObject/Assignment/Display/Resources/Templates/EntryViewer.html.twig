@@ -1,0 +1,347 @@
+{{ HEADER|raw }}
+
+<style>
+    img {
+        max-width: 100%;
+    }
+
+    #droppy {
+        border: 2px dashed #D4D4D4;
+        border-radius: 5px;
+        background: white;
+        cursor: pointer;
+        margin-bottom: 15px;
+        padding: 5px;
+    }
+
+    .dz-drag-hover {
+        border: 2px solid #D4D4D4 !important;
+
+    }
+
+    .dz-drag-hover .dz-message {
+        opacity: 0.5;
+    }
+
+    .droppy-message {
+        font-size: 16px;
+        text-align: center;
+        margin: 1em 0;
+        font-weight: lighter;
+    }
+
+    .table-borderless > tbody > tr > td,
+    .table-borderless > tbody > tr > th,
+    .table-borderless > tfoot > tr > td,
+    .table-borderless > tfoot > tr > th,
+    .table-borderless > thead > tr > td,
+    .table-borderless > thead > tr > th {
+        border: none;
+    }
+
+</style>
+
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
+{% set commonContext = 'Chamilo\\Libraries' %}
+
+<div class="button-toolbar">{{ BUTTON_TOOLBAR|raw }}</div>
+<div class="button-toolbar">{{ NAVIGATOR_BUTTON_TOOLBAR|raw }}</div>
+
+{% if IS_USER_PART_OF_ENTITY %}
+    {% include 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display:MultipleEntitiesWarning.html.twig' %}
+{% endif %}
+
+{% if HAS_ENTRY %}
+    <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#entry" aria-controls="entry" role="tab"
+                                                  data-toggle="tab">{{ 'SelectedEntry'|trans({}, appContext) }}</a></li>
+
+        {% if SHOW_AUTOMATIC_FEEDBACK %}
+            <li role="presentation"><a href="#automatic-feedback" aria-controls="entries" role="tab"
+                                       data-toggle="tab">{{ 'AutomaticFeedback'|trans({}, appContext) }}</a></li>
+        {% endif %}
+
+        {% if ENTRY_COUNT > 1 %}
+            <li role="presentation"><a href="#entries" aria-controls="entries" role="tab"
+                                       data-toggle="tab">{{ 'OtherEntries'|trans({}, appContext) }}</a></li>
+        {% endif %}
+
+        <li role="presentation"><a href="#assignment" aria-controls="assignment" role="tab"
+                                   data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
+    </ul>
+{% endif %}
+
+<div class="dynamic-visual-tab-content tab-content">
+    {% if HAS_ENTRY %}
+        <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entry">
+            <div class="row">
+                <div class="col-sm-8 content-object-rendition">
+                    <h3 class="entry-title">{{ CONTENT_OBJECT_TITLE }} <span
+                                class="badge score-badge {% if SCORE > 0 %}score-success{% else %}no-score{% endif %}">{% if SCORE %}{{ SCORE }}%{% else %}{{ 'NoScore'|trans({}, appContext) }}{% endif %}</span>
+                    </h3>
+                    <div class="submitted-details">{{ SUBMITTED_BY }} {% if SUBMITTED_BY != ENTITY_NAME %}({{ ENTITY_NAME }}) {% endif %}{{ 'At'|trans({}, appContext) }} {{ SUBMITTED_DATE }}</div>
+                    {{ CONTENT_OBJECT_RENDITION|raw }}
+                </div>
+                <div class="col-sm-4">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            {% if CAN_EDIT_ASSIGNMENT %}
+
+                                <style> label {
+                                        margin-bottom: 5px !important;
+                                    }
+                                </style>
+                                <div style="margin-bottom: 10px;">
+                                    {% form_theme SCORE_FORM 'bootstrap_3_layout.html.twig' %}
+                                    {{ form_start(SCORE_FORM, { 'attr': {'class': 'form-inline'} }) }}
+                                    {{ form_row(SCORE_FORM.score) }}
+                                    <button type="submit" class="btn btn-default btn-score"
+                                            style="margin-left: 20px;">{{ 'Save'|trans({}, commonContext) }}</button>
+                                    {{ form_end(SCORE_FORM) }}
+                                </div>
+
+
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-xs-12">
+                            <div style="display:none">
+                                <div id="template-container">
+                                    <div id="attachments-upload" class="file-upload">
+                                        <div class="file-previews files" id="attachments-previews">
+                                            <div id="attachments-template" class="thumbnail pull-left"
+                                                 style="display: flex; align-items: center; width: 100%;">
+                                                <div class="preview" style="display: flex; align-items: center;">
+                                                    <div class="file-upload-no-preview"
+                                                         style="width: auto; height: auto;">
+                                                <span class="glyphicon glyphicon-file"
+                                                      style="font-size: 50px; width: auto; line-height: normal;"></span>
+                                                    </div>
+                                                    <img data-dz-thumbnail style="max-height: 75px;"/>
+                                                </div>
+                                                <div class="caption">
+                                                    <h3 data-dz-name></h3>
+                                                    <strong class="error text-danger dz-error-message"
+                                                            data-dz-errormessage></strong>
+                                                    <p class="size" data-dz-size></p>
+                                                    <div>
+                                                        <div class="progress progress-striped active" role="progressbar"
+                                                             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+                                                             style="margin-bottom: 0;">
+                                                            <div class="progress-bar progress-bar-success"
+                                                                 style="width: 0%;"
+                                                                 data-dz-uploadprogress></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <a href="#" data-dz-remove class="btn btn-default btn-xs"><span
+                                                            class="fa fa-remove"></span></a>
+                                            </div>
+                                        </div>
+
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><i class="fa fa-upload" aria-hidden="true"></i> Verbeterde versies
+                                    </h3>
+                                </div>
+                                <div class="panel-body"!-->
+                            {% if CAN_EDIT_ASSIGNMENT %}
+                                <div id="droppy">
+
+                                    <table class="table table-striped table-data table-borderless"
+                                           id="entry-attachments-list">
+                                        <tbody>
+                                        {% for ATTACHED_CONTENT_OBJECT in ATTACHED_CONTENT_OBJECTS %}
+                                            <tr id="attachment{{ ATTACHED_CONTENT_OBJECT.attachment_id }}">
+                                                <td><a href="#"
+                                                       onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': ATTACHED_CONTENT_OBJECT.content_object.id}) }}'); return false;">{{ ATTACHED_CONTENT_OBJECT.content_object.title }}
+                                                </td>
+                                                <td>{{ ATTACHED_CONTENT_OBJECT.content_object.user }}</td>
+                                                <td>{{ ATTACHED_CONTENT_OBJECT.content_object.date }}</td>
+                                                <td align="center"><a href="#"
+                                                                      onclick="javascript:removeAssignmentEntryAttachment({{ ATTACHED_CONTENT_OBJECT.attachment_id }}); return false;"
+                                                                      class="btn btn-default btn-xs"><span
+                                                                class="fa fa-remove"></span></a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                    <div class="droppy-message dz-message">Versleep verbeterde versies naar hier of klik
+                                        om
+                                        op te laden.
+                                    </div>
+
+                                </div>
+                            {% endif %}
+                            <!--/div>
+                        </div!-->
+                        </div>
+                    </div>
+                    {{ getJavascript('Plugin\\Jquery\\jquery.file.upload.js', 'Chamilo\\Libraries') }}
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            {{ FEEDBACK_MANAGER|raw }}
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+
+                            function processThumbnail(file) {
+                                var previewElement = $(file.previewElement);
+                                var previewSpan = $('.preview', previewElement);
+                                $('.file-upload-no-preview', previewSpan).hide();
+                            }
+
+                            function processUploadedFile(file, serverResponse) {
+
+                                /*
+                                * Generic code? maybe it stays with the template/
+                                */
+                                var previewElement = $(file.previewElement);
+                                $('.progress', previewElement).hide();
+                                $(' button.cancel', previewElement).hide();
+
+                                /*
+                                * Code to update table => move to angular
+                                 */
+                                var properties = serverResponse.properties;
+
+                                var attachmentId = properties.attachment_id;
+
+                                var element = $('<tr></tr>').attr('id', 'attachment' + attachmentId);
+
+                                var attachmentUrl = '{{ ATTACHMENT_VIEWER_URL|raw }}';
+                                attachmentUrl = attachmentUrl.replace("__ATTACHMENT_ID__", properties.id);
+
+                                var title = properties.filename;
+                                title = $('<a></a>').attr('onclick', 'javascript:openPopup("' + attachmentUrl + '"); return false;').text(title).attr('href', '#');
+
+                                var titleElement = $('<td></td>').html(title);
+                                var nameElement = $('<td></td>').text(properties.user);
+                                var dateElement = $('<td></td>').text(properties.date);
+
+
+                                var deleteButton = $('<a></a>')
+                                    .attr('type', 'button')
+                                    .attr('class', 'btn btn-default btn-xs')
+                                    .attr('href', '#')
+                                    .on('click', function (event) {
+                                        event.stopPropagation();
+                                        removeAssignmentEntryAttachment(attachmentId);
+                                    });
+
+                                var deleteIcon = $('<span></span>').attr('class', 'fa fa-remove');
+
+                                deleteButton.append(deleteIcon);
+                                var deleteElement = $('<td></td>').append(deleteButton).attr('align', 'center');
+
+                                element.append(titleElement);
+                                element.append(nameElement);
+                                element.append(dateElement);
+                                element.append(deleteElement);
+
+                                var body = $('#entry-attachments-list').find('tbody');
+                                body.append(element);
+
+                                body.find('tr.no-results').hide();
+                                $(file.previewElement).hide();
+                            }
+
+                            window.removeAssignmentEntryAttachment = function (assignmentEntryAttachmentId) {
+                                if (!confirm('{{ 'ConfirmDelete'|trans({}, 'Chamilo\\Libraries') }}')) {
+                                    return;
+                                }
+
+                                var deleteUrl = '{{ DELETE_ENTRY_ATTACHMENT_URL|raw }}';
+                                $.post(deleteUrl, {'entry_attachment_id': assignmentEntryAttachmentId})
+                                    .done(function (data) {
+                                        $('#attachment' + assignmentEntryAttachmentId).remove();
+                                        var body = $('#entry-attachments-list');
+                                        var attachmentListCount = body.find('tr').length;
+
+                                        if (attachmentListCount === 1) {
+                                            body.find('tr.no-results').show();
+                                        }
+
+                                    });
+
+                            };
+                            {% if CAN_EDIT_ASSIGNMENT %}
+                            Dropzone.autoDiscover = false;
+
+                            var myDropzone = new Dropzone("div#droppy", {
+                                url: '{{ UPLOAD_ENTRY_ATTACHMENT_URL|raw }}',
+                                paramName: "attachments",
+                                //maxFiles: 1,
+                                previewTemplate: document.querySelector('#template-container').innerHTML,
+                                //previewsContainer: "#droppy"
+                            });
+
+                            myDropzone.on(
+                                "success", processUploadedFile
+                            );
+
+                            myDropzone.on(
+                                "error", function (file, message, xhr) {
+                                    $(file.previewElement).find('.dz-error-message').text(message.result_message);
+                                    console.log(message.result_message);
+                                }
+                            );
+
+                            myDropzone.on(
+                                "thumbnail", processThumbnail
+                            );
+                            {% endif %}
+                        });
+                    </script>
+
+
+                </div>
+            </div>
+
+        </div>
+
+        {% if SHOW_AUTOMATIC_FEEDBACK %}
+            <div role="tabpanel" class="tab-pane tab-pane-with-border" id="automatic-feedback">
+                {{ AUTOMATIC_FEEDBACK_TEXT|raw }}
+
+                <ul class="list-group" style="margin-top: 30px;">
+
+                    {% for CONTENT_OBJECT in AUTOMATIC_FEEDBACK_CONTENT_OBJECTS %}
+                        <li class="list-group-item">
+                            <a href="#"
+                               onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': CONTENT_OBJECT.id}) }}'); return false;">
+                                {{ CONTENT_OBJECT.get_icon_image()|raw }} {{ CONTENT_OBJECT.get_title() }}
+                            </a>
+                        </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        {% endif %}
+
+        {% if ENTRY_COUNT > 1 %}
+            <div role="tabpanel" class="tab-pane tab-pane-with-border" id="entries">
+                {{ ENTRY_TABLE|raw }}
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <div role="tabpanel" class="{% if HAS_ENTRY -%}tab-pane tab-pane-with-border{%- endif %}" id="assignment">
+        <h3>{{ ASSIGNMENT_TITLE }}</h3>
+
+        {{ ASSIGNMENT_RENDITION|raw }}
+    </div>
+</div>
+
+{{ FOOTER|raw }}

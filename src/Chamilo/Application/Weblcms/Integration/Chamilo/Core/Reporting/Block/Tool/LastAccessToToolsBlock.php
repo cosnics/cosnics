@@ -36,7 +36,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
         
         $reporting_data->add_row(Translation::get('Actions'));
         
-        $course_id = $this->get_course_id();
+        $course_id = $this->getCourseId();
         $user_id = $this->get_user_id();
         
         $tool_names = $reporting_data->get_categories();
@@ -123,7 +123,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
      */
     public function retrieve_course_summary_data()
     {
-        return WeblcmsTrackingDataManager::retrieve_tools_access_summary_data($this->get_course_id());
+        return WeblcmsTrackingDataManager::retrieve_tools_access_summary_data($this->getCourseId());
     }
 
     /**
@@ -143,7 +143,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
             new PropertyConditionVariable(
                 ContentObjectPublication::class_name(), 
                 ContentObjectPublication::PROPERTY_COURSE_ID), 
-            new StaticConditionVariable($this->get_course_id()));
+            new StaticConditionVariable($this->getCourseId()));
         
         return new AndCondition($conditions);
     }

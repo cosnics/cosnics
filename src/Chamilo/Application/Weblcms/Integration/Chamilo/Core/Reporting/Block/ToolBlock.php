@@ -26,7 +26,7 @@ abstract class ToolBlock extends CourseBlock
         return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_course_tool_by_name($tool);
     }
 
-    public function get_publication_id()
+    public function getPublicationId()
     {
         return $this->get_parent()->get_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
     }

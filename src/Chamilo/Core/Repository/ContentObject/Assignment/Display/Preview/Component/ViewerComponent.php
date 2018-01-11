@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\AssignmentDataProvider;
@@ -20,10 +21,12 @@ class ViewerComponent extends Manager
         $configuration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
         $configuration->set(
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::CONFIGURATION_DATA_PROVIDER,
-            new AssignmentDataProvider());
+            new AssignmentDataProvider()
+        );
 
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(),
-            $configuration)->run();
+            $configuration
+        )->run();
     }
 }

@@ -41,6 +41,14 @@
             <argument
                 type="service"
                 id="chamilo.core.user.storage.repository.user_repository" />
+            <argument
+                type="service"
+                id="chamilo.libraries.hashing.hashing_utilities" />
+        </service>
+
+        <service
+                id="chamilo.core.user.service.password_generator"
+                class="Chamilo\Core\User\Service\PasswordGenerator">
         </service>
 
         <service

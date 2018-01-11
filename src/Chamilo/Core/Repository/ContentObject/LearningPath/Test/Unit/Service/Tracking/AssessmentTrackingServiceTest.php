@@ -384,14 +384,6 @@ class AssessmentTrackingServiceTest extends ChamiloTestCase
         $this->assertTrue($activeAttempt->get_total_time() == 53 || $activeAttempt->get_total_time() == 54);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testSaveAssessmentScoreWithNoAssessmentNode()
-    {
-        $this->assessmentTrackingService->saveAssessmentScore($this->learningPath, $this->user, $this->treeNodes[1]);
-    }
-
     public function testChangeAssessmentScore()
     {
         $activeAttempt = $this->treeNodeAttempts[12][1];
@@ -408,19 +400,6 @@ class AssessmentTrackingServiceTest extends ChamiloTestCase
             67);
 
         $this->assertEquals(67, $activeAttempt->get_score());
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testChangeAssessmentScoreWithNoAssessmentNode()
-    {
-        $this->assessmentTrackingService->changeAssessmentScore(
-            $this->learningPath,
-            $this->user,
-            $this->treeNodes[1],
-            48,
-            67);
     }
 
     public function testChangeQuestionScoreAndFeedback()
@@ -555,19 +534,6 @@ class AssessmentTrackingServiceTest extends ChamiloTestCase
                 $this->user,
                 $this->treeNodes[12],
                 48));
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testGetQuestionAttemptsByIdWithNoAssessmentNode()
-    {
-        $this->assessmentTrackingService->changeAssessmentScore(
-            $this->learningPath,
-            $this->user,
-            $this->treeNodes[1],
-            48,
-            67);
     }
 
     public function testRegisterQuestionAttempts()

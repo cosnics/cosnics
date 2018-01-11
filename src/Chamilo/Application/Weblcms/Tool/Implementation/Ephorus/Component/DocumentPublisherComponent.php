@@ -1,11 +1,10 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -22,17 +21,16 @@ class DocumentPublisherComponent extends Manager implements \Chamilo\Core\Reposi
      */
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights::ADD_RIGHT))
-        {
-            throw new NotAllowedException();
-        }
+        $this->validateAccess();
 
-        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            );
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
+
             return $component->run();
         }
         else
@@ -40,9 +38,9 @@ class DocumentPublisherComponent extends Manager implements \Chamilo\Core\Reposi
             $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
 
             $parameters = array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_EPHORUS_REQUEST,
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CREATE,
-                Manager::PARAM_CONTENT_OBJECT_IDS => $objects);
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_CREATE,
+                Manager::PARAM_CONTENT_OBJECT_IDS => $objects
+            );
 
             $this->redirect('', false, $parameters);
         }
@@ -55,9 +53,12 @@ class DocumentPublisherComponent extends Manager implements \Chamilo\Core\Reposi
      */
     public function get_allowed_content_object_types()
     {
-        return array(File::class_name());
+        return array(File::class);
     }
 
+    /**
+     * @return string
+     */
     public function render_header()
     {
         $html = array();

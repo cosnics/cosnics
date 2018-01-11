@@ -153,5 +153,13 @@ class ImpactViewRenderer implements TableSupport
                 \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
                 \Chamilo\Core\Repository\Manager::PARAM_CATEGORY_ID => $content_object->get_parent_id()));
     }
+
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface
+     */
+    public function getContentObjectPublicationManager()
+    {
+        return $this->parent->getContentObjectPublicationManager();
+    }
 }
 

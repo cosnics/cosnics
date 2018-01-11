@@ -397,6 +397,12 @@ EOT;
         {
             $attributes['size'] = 50;
         }
+
+        if (! array_key_exists('class', $attributes))
+        {
+            $attributes['class'] = 'form-control';
+        }
+
         $element = $this->createElement('password', $name, $label, $attributes);
 
         return $element;
@@ -1474,7 +1480,7 @@ EOT;
                  Theme::getInstance()->getCommonImagePath('Action/Required') . '" alt="*" title ="*"/></span>';
         }
 
-        $this->addElement('static', null, $label, implode(PHP_EOL, $dropzoneHtml));
+        $this->addElement('static', $elementName . '_static_data', $label, implode(PHP_EOL, $dropzoneHtml));
         $this->addElement('hidden', $elementName . '_upload_data');
 
         $dropzoneOptionsString = array();

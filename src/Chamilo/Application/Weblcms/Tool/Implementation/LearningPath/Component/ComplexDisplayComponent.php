@@ -2,21 +2,26 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
+use Chamilo\Application\Weblcms\CourseSettingsConnector;
+use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Interfaces\EphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -32,6 +37,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -99,6 +105,10 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
                 )
             );
         }
+
+        $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
+            BreadcrumbTrail::getInstance(), $this, $this->publication
+        );
 
         if ($this->get_root_content_object()->get_type() == Assessment::class_name())
         {
@@ -582,5 +592,19 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     protected function getSelectedLearningPath()
     {
         return $this->publication->getContentObject();
+    }
+
+    /**
+     * @return null|string
+     */
+    public function isEphorusEnabled()
+    {
+        $toolActive = CourseSettingsController::getInstance()->get_course_setting(
+            $this->get_course(),
+            CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
+            $this->get_tool_registration()->get_id()
+        );
+
+        return $toolActive;
     }
 }

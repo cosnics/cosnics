@@ -1,9 +1,13 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -17,9 +21,15 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class CreatorComponent extends Manager
 {
-
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Exception
+     */
     public function run()
     {
+        $this->checkAccessRights();
+
         $this->verifyStartEndTime();
 
         $this->set_parameter(self::PARAM_ENTITY_TYPE, $this->getEntityType());
@@ -27,12 +37,19 @@ class CreatorComponent extends Manager
 
         if (\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
+            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            if(is_array($objects))
+            {
+                $objects = $objects[0];
+            }
+
             $entry = $this->getDataProvider()->createEntry(
                 $this->getEntityType(),
                 $this->getEntityIdentifier(),
                 $this->getUser()->getId(),
-                \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects(),
-                $this->getRequest()->server->get('REMOTE_ADDR'));
+                $objects,
+                $this->getRequest()->server->get('REMOTE_ADDR')
+            );
 
             if ($entry instanceof Entry)
             {
@@ -40,54 +57,99 @@ class CreatorComponent extends Manager
                     Translation::get('EntryCreated'),
                     false,
                     array(
-                        self::PARAM_ACTION => self::ACTION_BROWSE,
+                        self::PARAM_ACTION => self::ACTION_CREATE_CONFIRMATION,
                         self::PARAM_ENTITY_TYPE => $entry->getEntityType(),
-                        self::PARAM_ENTITY_ID => $entry->getEntityId()));
+                        self::PARAM_ENTITY_ID => $entry->getEntityId()
+                    )
+                );
             }
             else
             {
                 $this->redirect(
                     Translation::get('EntryNotCreated'),
                     true,
-                    array(self::PARAM_ACTION => self::ACTION_VIEW));
+                    array(self::PARAM_ACTION => self::ACTION_VIEW)
+                );
             }
         }
         else
         {
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            );
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
+
             return $component->run();
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
+    protected function checkAccessRights()
+    {
+        if (!$this->getRightsService()->canUserCreateEntry(
+            $this->getUser(), $this->getAssignment(), $this->getEntityType(), $this->getEntityIdentifier()
+        ))
+        {
+            throw new NotAllowedException();
+        }
+    }
+
+    /**
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function render_header()
+    {
+        $parameters = [
+            'HEADER' => parent::render_header(),
+            'CHANGE_ENTITY_URL' => $this->get_url([self::PARAM_ENTITY_ID => '__ENTITY_ID__'])
+        ];
+
+        $parameters = $this->getAvailableEntitiesParameters($parameters);
+
+        return $this->getTwig()->render(
+            Manager::context() . ':CreatorWizardHeader.html.twig', $parameters
+        );
+    }
+
+    /**
+     * @return bool
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
     protected function verifyStartEndTime()
     {
+        /** @var Assignment $assignment */
         $assignment = $this->get_root_content_object();
 
         if ($assignment->get_start_time() > time())
         {
             $date = DatetimeUtilities::format_locale_date(
                 Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                     Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
-                    $assignment->get_start_time());
+                Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
+                $assignment->get_start_time()
+            );
 
-            $message = Translation::get('AssignmentNotStarted') . Translation::get('StartTime') . ': ' . $date;
+            $message = Translation::get('AssignmentNotStarted') . ' - ' . Translation::get('StartTime') . ': ' . $date;
 
-            throw new \Exception($message);
+            throw new UserException($message);
         }
 
         if ($assignment->get_end_time() < time() && $assignment->get_allow_late_submissions() == 0)
         {
             $date = DatetimeUtilities::format_locale_date(
                 Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                     Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
-                    $assignment->get_end_time());
+                Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
+                $assignment->get_end_time()
+            );
 
-            $message = Translation::get('AssignmentEnded') . Translation::get('EndTime') . ': ' . $date;
+            $message = Translation::get('AssignmentEnded') . ' - ' . Translation::get('EndTime') . ': ' . $date;
 
-            throw new \Exception($message);
+            throw new UserException($message);
         }
 
         return true;

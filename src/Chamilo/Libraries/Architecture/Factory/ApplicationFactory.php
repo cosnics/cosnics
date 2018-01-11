@@ -104,26 +104,27 @@ class ApplicationFactory
     }
 
     /**
-     *
-     * @param string $context
-     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfiguration $applicationConfiguration
-     * @return \Chamilo\Libraries\Architecture\Application\Application
+     * @param string $context Package namespace
+     * @param ApplicationConfiguration $applicationConfiguration
+     * @param string $fallBackAction When no action is available in request, use this if you want an action other then the default
+     * @return Application
      */
-    public function getApplication($context, ApplicationConfiguration $applicationConfiguration)
+    public function getApplication(string $context, ApplicationConfiguration $applicationConfiguration, string $fallBackAction = null)
     {
-        $application = $this->createApplication($context, $applicationConfiguration);
+        $application = $this->createApplication($context, $applicationConfiguration, $fallBackAction);
         $application->get_breadcrumb_generator()->generate_breadcrumbs();
         return $application;
     }
 
     /**
-     *
      * @param string $context
-     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfiguration $applicationConfiguration
-     * @param string $action
+     * @param ApplicationConfiguration $applicationConfiguration
+     * @param string|null $action
      * @return string
+     * @throws ClassNotExistException
+     * @throws \Exception
      */
-    public function getClassName($context, ApplicationConfiguration $applicationConfiguration, $action = null)
+    public function getClassName(string $context, ApplicationConfiguration $applicationConfiguration, string $action = null)
     {
         if (is_null($action))
         {
@@ -144,14 +145,16 @@ class ApplicationFactory
     }
 
     /**
-     *
      * @param string $context
-     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfiguration $applicationConfiguration
-     * @return \Chamilo\Libraries\Architecture\Application\Application
+     * @param ApplicationConfiguration $applicationConfiguration
+     * @param string $fallBackAction
+     * @return mixed
+     * @throws ClassNotExistException
+     * @throws \Exception
      */
-    protected function createApplication($context, ApplicationConfiguration $applicationConfiguration)
+    protected function createApplication(string $context, ApplicationConfiguration $applicationConfiguration, string $fallBackAction = null)
     {
-        $action = $this->getAction($context, $applicationConfiguration);
+        $action = $this->getAction($context, $applicationConfiguration, $fallBackAction);
         $className = $this->getClassName($context, $applicationConfiguration, $action);
 
         $application = new $className($applicationConfiguration);
@@ -174,17 +177,19 @@ class ApplicationFactory
     }
 
     /**
-     *
      * @param string $context
-     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfiguration $applicationConfiguration
+     * @param ApplicationConfiguration $applicationConfiguration
+     * @param string|null $fallBackAction
      * @return string
+     * @throws \Exception
      */
-    protected function getAction($context, ApplicationConfiguration $applicationConfiguration)
+    protected function getAction(string $context, ApplicationConfiguration $applicationConfiguration, string $fallBackAction = null)
     {
         $actionParameter = $this->getActionParameter($context);
         $managerClass = $this->getManagerClass($context);
         $level = $this->determineLevel($applicationConfiguration->getApplication());
-        $actions = $this->getRequestedAction($actionParameter, $context);
+
+        $actions = $this->getRequestedAction($actionParameter, $context, $fallBackAction);
 
         if (is_array($actions))
         {
@@ -258,35 +263,46 @@ class ApplicationFactory
     }
 
     /**
-     *
      * @param string $actionParameter
      * @param string $context
+     * @param string|null $fallBackAction
      * @return string
+     * @throws \Exception
      */
-    protected function getRequestedAction($actionParameter, $context)
+    protected function getRequestedAction(string $actionParameter, string $context, string $fallBackAction = null)
     {
         $request = $this->getRequest();
 
         $getAction = $request->query->get($actionParameter);
 
-        if (! $getAction)
-        {
-            $postAction = $request->request->get($actionParameter);
-
-            if (! $postAction)
-            {
-                $managerClass = $this->getManagerClass($context);
-                return $managerClass::DEFAULT_ACTION;
-            }
-            else
-            {
-                return $postAction;
-            }
-        }
-        else
-        {
+        if($getAction) {
             return $getAction;
         }
+
+        $postAction = $request->request->get($actionParameter);
+
+        if($postAction) {
+            return $postAction;
+        }
+
+        if($fallBackAction) {
+            return $fallBackAction;
+        }
+
+        return $this->getDefaultAction($context);
+    }
+
+    /**
+     * @param $context
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    protected function getDefaultAction($context)
+    {
+        $managerClass = $this->getManagerClass($context);
+        return $managerClass::DEFAULT_ACTION;
     }
 
     /**

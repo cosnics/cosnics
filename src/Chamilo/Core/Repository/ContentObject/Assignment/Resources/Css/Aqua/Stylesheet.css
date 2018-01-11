@@ -20,3 +20,90 @@ ul.tree-menu li div a.assignment, ul.tree-menu li div a.type_assignment,
 ul.tree-menu li div a.type_assignment_default {
     background-image: url(../../Images/Aqua/Logo/16.png);
 }
+
+ul.tree-menu li div a.assignment.type_completed, ul.tree-menu li div a.type_assignment.type_completed, ul.tree-menu li div a.type_assignment_default.type_completed,
+.fancytree-custom-icon.type_assignment.type_completed,
+.fancytree-custom-icon.type_assignment_default.type_completed,
+.treeview .list-group .list-group-item .icon.node-icon.type_assignment.type_completed,
+.treeview .list-group .list-group-item .icon.node-icon.type_assignment_default.type_completed {
+    background-image: url(../../Images/Aqua/Logo/16Completed.png);
+}
+
+.assignment-properties table {
+    width: 100%;
+}
+
+.value-true {
+    color: green;
+    font-size: 18px;
+}
+
+.value-false {
+    color: red;
+    font-size: 18px;
+}
+
+.badge-success {
+    background-color: #28a745;
+}
+
+.badge-failed {
+    background-color: #dc3545;
+}
+
+#assignment h3 {
+    margin: 5px 0 20px;
+}
+
+#assignment h3 {
+    margin: 5px 0 20px;
+}
+
+#automatic-feedback .list-group-item {
+    border-top: 1px solid #dddddd;
+}
+
+.panel-feedback h3 {
+    margin-top: 0;
+}
+
+.submitted-details {
+    color: #AAAAAA;
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+.entry-title {
+    margin-bottom: 3px;
+    margin-top: 5px;
+}
+
+.content-object-rendition {
+    border-right: 1px dotted #dddddd;
+}
+
+.score-badge {
+    margin-top: -4px;
+}
+
+.score-success {
+    color: white;
+    background-color: #28a745;
+    font-size: 14px;
+}
+
+.no-score {
+    background-color: #dddddd;
+    color: white;
+}
+
+.score-form {
+    background-color: #f9f9f9;
+    border: 1px solid #dddddd;
+    padding: 2px 8px;
+    margin-bottom: 15px;
+}
+
+.btn-score {
+    background-color: white;
+}

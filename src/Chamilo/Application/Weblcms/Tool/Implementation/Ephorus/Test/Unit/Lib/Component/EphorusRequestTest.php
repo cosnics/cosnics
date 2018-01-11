@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Test\Unit\Lib\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Libraries\Architecture\Test;
 
 /**
  * This test case test the ephorus tool ephorus request component class

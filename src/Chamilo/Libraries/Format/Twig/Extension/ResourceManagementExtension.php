@@ -152,6 +152,8 @@ class ResourceManagementExtension extends \Twig_Extension
             return '';
         }
 
+        $cssPath = $this->addModificationTimeToResourcePath($cssPath);
+
         return '<link href="' . $cssPath . '" type="text/css" rel="stylesheet" />';
     }
 
@@ -204,7 +206,31 @@ class ResourceManagementExtension extends \Twig_Extension
      */
     protected function getJavascriptHtml($javascriptPath)
     {
+        if (! $this->isUniquePath($javascriptPath))
+        {
+            return '';
+        }
+
+        $javascriptPath = $this->addModificationTimeToResourcePath($javascriptPath);
+
         return '<script src="' . $javascriptPath . '" type="text/javascript" ></script>';
+    }
+
+    /**
+     * @param $resourceWebPath
+     *
+     * @return string
+     */
+    protected function addModificationTimeToResourcePath($resourceWebPath)
+    {
+        $pathUtil = Path::getInstance();
+        $webPath = $pathUtil->getBasePath(true);
+        $basePath = $pathUtil->getBasePath() . '../web/';
+
+        $systemPath = str_replace($webPath, $basePath, $resourceWebPath);
+        $modificationTime = filemtime($systemPath);
+
+        return $resourceWebPath . '?' . $modificationTime;
     }
 
     /**

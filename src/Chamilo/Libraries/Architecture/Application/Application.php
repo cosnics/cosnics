@@ -6,6 +6,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -94,6 +95,11 @@ abstract class Application
      */
     public function checkAuthorization($context, $action = null)
     {
+        if($this instanceof NoAuthenticationSupport)
+        {
+            return;
+        }
+
         if (! $this->getUser() instanceof User)
         {
             throw new NotAllowedException();
@@ -614,10 +620,12 @@ abstract class Application
      * @param string $failMessageMultiple
      * @param string $succesMessageSingle
      * @param string $succesMessageMultiple
+     * @param null $context
+     *
      * @return string
      */
     public function get_result($failures, $count, $failMessageSingle, $failMessageMultiple, $succesMessageSingle,
-        $succesMessageMultiple)
+        $succesMessageMultiple, $context = null)
     {
         if ($failures)
         {
@@ -642,7 +650,7 @@ abstract class Application
             }
         }
 
-        return Translation::get($message);
+        return Translation::get($message, [], $context);
     }
 
     /**

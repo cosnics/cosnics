@@ -88,10 +88,29 @@ class ImpactViewRecyclerComponent extends Manager
         $parameters = new DataClassRetrievesParameters($condition);
         
         $objects = DataManager::retrieves(ContentObject::class_name(), $parameters);
-        
+
+        $contentObjectPublicationManager = $this->getContentObjectPublicationManager();
+
         while ($content_object = $objects->next_result())
         {
             $versions = $content_object->get_content_object_versions();
+
+            $canUnlinkVersions = true;
+            foreach($versions as $version)
+            {
+                if(!$contentObjectPublicationManager->canContentObjectBeUnlinked($version))
+                {
+                    $canUnlinkVersions = false;
+                    break;
+                }
+            }
+
+            if(!$canUnlinkVersions)
+            {
+                $failures++;
+                continue;
+            }
+
             foreach ($versions as $version)
             {
                 if (! $version->delete_links())
@@ -189,6 +208,8 @@ class ImpactViewRecyclerComponent extends Manager
         $parameters = new DataClassRetrievesParameters($condition);
         
         $objects = DataManager::retrieves(ContentObject::class_name(), $parameters);
+
+        $contentObjectPublicationManager = $this->getContentObjectPublicationManager();
         
         $failed = 0;
         while ($content_object = $objects->next_result())
@@ -196,6 +217,12 @@ class ImpactViewRecyclerComponent extends Manager
             if (! DataManager::content_object_deletion_allowed($content_object))
             {
                 $failed ++;
+                continue;
+            }
+
+            if(!$contentObjectPublicationManager->canContentObjectBeUnlinked($content_object))
+            {
+                $failed++;
             }
         }
         

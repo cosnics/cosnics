@@ -46,8 +46,10 @@ class Embedder extends ContentObjectEmbedder
 
         $html = array();
 
+        $html[] = $this->get_application()->render_header();
         $html[] = '<iframe frameborder="0" class="link_iframe" src="' . $link . '" width="100%" height="700px">';
         $html[] = '<p>Your browser does not support iframes.</p></iframe>';
+        $html[] = $this->get_application()->render_footer();
 
         return implode(PHP_EOL, $html);
     }

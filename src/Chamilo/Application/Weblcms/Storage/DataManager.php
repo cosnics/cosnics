@@ -213,7 +213,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $offset
      * @param int $max_objects
      *
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public static function retrieve_content_object_publications($condition = null, $order_by = array(), $offset = 0,
         $max_objects = - 1)
@@ -304,7 +304,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $identifier
      * @param Condition $condition
      *
-     * @return multitype:\core\repository\publication\Attributes
+     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
      */
     public static function get_content_object_publication_attributes($identifier,
         $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, $offset = null, $order_properties = null)
@@ -1964,10 +1964,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $course_id
      * @param int $offset
      * @param int $count
-     * @param \libraries\ObjectTableOrder[] $order_by
-     * @param \libraries\storage\Condition $condition
+     * @param OrderBy $order_by
+     * @param Condition $condition
      *
-     * @return \libraries\ObjectTableOrder[] <\user\User>
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public static function retrieve_publication_target_users($publication_id, $course_id, $offset = null, $count = null,
         $order_by = null, $condition = null)

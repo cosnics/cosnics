@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
@@ -42,7 +43,7 @@ abstract class EntryTable extends RecordTable implements TableFormActionsSupport
     public function __construct($component, AssignmentDataProvider $assignmentDataProvider, $entityId)
     {
         parent::__construct($component);
-        
+
         $this->assignmentDataProvider = $assignmentDataProvider;
         $this->entityId = $entityId;
     }
@@ -85,23 +86,30 @@ abstract class EntryTable extends RecordTable implements TableFormActionsSupport
 
     /**
      * Returns the implemented form actions
-     * 
+     *
      * @return TableFormActions
      */
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__, Manager::PARAM_ENTRY_ID);
-        
+
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD)), 
-                Translation::get('DownloadSelected')));
-        
-        $actions->add_form_action(
-            new TableFormAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)), 
-                Translation::get('DeleteSelected')));
-        
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD)),
+                Translation::get('DownloadSelected')
+            )
+        );
+
+//        if($this->get_component()->getDataProvider()->canEditAssignment())
+//        {
+//            $actions->add_form_action(
+//                new TableFormAction(
+//                    $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)),
+//                    Translation::get('DeleteSelected')
+//                )
+//            );
+//        }
+
         return $actions;
     }
 }

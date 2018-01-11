@@ -1,7 +1,9 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  *
@@ -21,21 +23,25 @@ abstract class Score extends DataClass
     /**
      *
      * @param string[] $extendedPropertyNames
+     *
      * @return string[]
      */
     public static function get_default_property_names($extendedPropertyNames = array())
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_SCORE, 
-                self::PROPERTY_ENTRY_ID, 
-                self::PROPERTY_CREATED, 
-                self::PROPERTY_MODIFIED, 
-                self::PROPERTY_USER_ID));
+                self::PROPERTY_SCORE,
+                self::PROPERTY_ENTRY_ID,
+                self::PROPERTY_CREATED,
+                self::PROPERTY_MODIFIED,
+                self::PROPERTY_USER_ID
+            )
+        );
     }
 
     /**
      *
+     * @Assert\LessThanOrEqual(value=100, message="LessThanOrEqual", payload = {"context": "Chamilo\Libraries"})
      * @return integer
      */
     public function getScore()

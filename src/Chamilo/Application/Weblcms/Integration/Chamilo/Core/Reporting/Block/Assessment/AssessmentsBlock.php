@@ -38,7 +38,7 @@ class AssessmentsBlock extends AssessmentBlock
         
         $reporting_data->set_rows($rows);
         
-        $course_id = $this->get_course_id();
+        $course_id = $this->getCourseId();
         $tool = ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class_name(), true);
         
         $img = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .

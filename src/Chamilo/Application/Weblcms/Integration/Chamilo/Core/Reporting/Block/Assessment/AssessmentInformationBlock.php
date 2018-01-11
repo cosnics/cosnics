@@ -24,7 +24,7 @@ class AssessmentInformationBlock extends AssessmentsBlock
         
         $reporting_data->set_categories($categories);
         
-        $publication_id = $this->get_publication_id();
+        $publication_id = $this->getPublicationId();
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
             $publication_id);

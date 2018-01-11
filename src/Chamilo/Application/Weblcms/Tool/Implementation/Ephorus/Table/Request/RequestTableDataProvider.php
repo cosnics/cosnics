@@ -2,10 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager\Implementation\DoctrineExtension;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -36,10 +34,10 @@ class RequestTableDataProvider extends DataClassTableDataProvider
         if ($order_property == null)
         {
             $order_property = new OrderBy(
-                new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_REQUEST_TIME));
+                new PropertyConditionVariable(Request::class, Request::PROPERTY_REQUEST_TIME));
         }
-        return $this->getExtension()->retrieve_results_content_objects_by_params(
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
+        return $this->getRequestManager()->findRequestsWithContentObjects(
+            new RecordRetrievesParameters(null, $condition, $count, $offset, $order_property));
     }
 
     /**
@@ -49,16 +47,14 @@ class RequestTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return $this->getExtension()->count_results_content_objects_by_params($condition);
+        return $this->getRequestManager()->countRequestsWithContentObjects($condition);
     }
 
-    public function getExtension()
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager
+     */
+    public function getRequestManager()
     {
-        if (! isset($this->extension))
-        {
-            $this->extension = new DoctrineExtension(DataManager::getInstance());
-        }
-        
-        return $this->extension;
+        return $this->get_component()->getRequestManager();
     }
 }

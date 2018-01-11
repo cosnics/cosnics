@@ -203,10 +203,11 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                 new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), SORT_ASC),
                 new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), SORT_ASC));
 
-            if ($format == User::NAME_FORMAT_LAST)
-            {
-                $order = array_reverse($order);
-            }
+// Users want to see their students ordered by last name, always, even if the last name is shown first.
+//            if ($format == User::NAME_FORMAT_LAST)
+//            {
+//                $order = array_reverse($order);
+//            }
 
             $user_result_set = \Chamilo\Core\User\Storage\DataManager::retrieves(
                 User::class_name(),

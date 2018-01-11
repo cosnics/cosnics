@@ -54,7 +54,7 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
     public function retrieve_course_summary_data()
     {
         return WeblcmsTrackingDataManager::retrieve_tools_access_summary_data(
-            $this->get_course_id(),
+            $this->getCourseId(),
             $this->get_user_id()
         );
     }

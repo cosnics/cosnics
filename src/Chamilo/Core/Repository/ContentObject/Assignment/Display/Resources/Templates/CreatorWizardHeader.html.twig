@@ -1,0 +1,16 @@
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
+
+{{ HEADER|raw }}
+
+<style>
+    .entry-wizard li a {
+        cursor: default;
+    }
+</style>
+
+{% include 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display:MultipleEntitiesWarning.html.twig' %}
+
+<ul class="nav nav-wizard publication-wizard entry-wizard">
+    <li class="active"><a href="#">1. {{ 'SelectContentObject'|trans({}, appContext) }}</a></li>
+    <li class=""><a href="#">2. {{ 'CreatorConfirmation'|trans({}, appContext) }}</a></li>
+</ul>

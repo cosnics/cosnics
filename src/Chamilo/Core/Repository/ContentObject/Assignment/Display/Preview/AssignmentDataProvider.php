@@ -1,8 +1,15 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entity\EntityTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -12,9 +19,14 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class AssignmentDataProvider implements 
+class AssignmentDataProvider implements
     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
 {
+
+    public function initializeScore()
+    {
+        // TODO Auto-generated method stub
+    }
 
     /**
      *
@@ -53,8 +65,38 @@ class AssignmentDataProvider implements
     }
 
     /**
+     * @param int $entityType
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getEntityNameByType()
+     * @return int
+     */
+    public function countEntitiesWithEntriesByEntityType($entityType)
+    {
+        return 0;
+    }
+
+    /**
+     * @param int $entityType
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    public function findEntitiesWithEntriesByEntityType($entityType)
+    {
+        return [];
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getPluralEntityNameByType()
+     */
+    public function getPluralEntityNameByType($entityType)
+    {
+        return Translation::get('Users');
+    }
+
+    /**
+     * @param $entityType
+     *
+     * @return mixed
      */
     public function getEntityNameByType($entityType)
     {
@@ -116,6 +158,18 @@ class AssignmentDataProvider implements
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return bool
+     */
+    public function isUserPartOfEntity(User $user, $entityType, $entityId)
+    {
+        return false;
+    }
+
+    /**
      *
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::countFeedbackByEntryIdentifier()
      */
@@ -134,6 +188,13 @@ class AssignmentDataProvider implements
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     */
+    public function deleteEntry(Entry $entry)
+    {
+    }
+
+    /**
      *
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findEntryByIdentifier()
      */
@@ -148,7 +209,16 @@ class AssignmentDataProvider implements
      */
     public function getAverageScoreForEntityTypeAndId($entityType, $entityId)
     {
-        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getAverageScoreForEntityTypeAndId()
+     */
+    public function getLastScoreForEntityTypeAndId($entityType, $entityId)
+    {
+        return null;
     }
 
     /**
@@ -161,11 +231,33 @@ class AssignmentDataProvider implements
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int
+     */
+    public function getCurrentEntityIdentifier(User $currentUser)
+    {
+        return $currentUser->getId();
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(User $currentUser)
+    {
+        return [$currentUser->getId()];
+    }
+
+    /**
      *
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getEntryTableForEntityTypeAndId()
      */
-    public function getEntryTableForEntityTypeAndId(\Chamilo\Libraries\Architecture\Application\Application $application, 
-        $entityType, $entityId)
+    public function getEntryTableForEntityTypeAndId(
+        \Chamilo\Libraries\Architecture\Application\Application $application,
+        $entityType, $entityId
+    )
     {
         // TODO Auto-generated method stub
     }
@@ -184,7 +276,8 @@ class AssignmentDataProvider implements
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::countFeedbackByEntry()
      */
     public function countFeedbackByEntry(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry)
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+    )
     {
         // TODO Auto-generated method stub
     }
@@ -193,18 +286,20 @@ class AssignmentDataProvider implements
      *
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::createNote()
      */
-    public function createNote(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry, 
-        \Chamilo\Core\User\Storage\DataClass\User $user, $submittedNote)
+    public function createNote(
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry,
+        \Chamilo\Core\User\Storage\DataClass\User $user, $submittedNote
+    )
     {
         // TODO Auto-generated method stub
     }
 
     /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::createScore()
+     * @inheritdoc
      */
-    public function createScore(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry, 
-        \Chamilo\Core\User\Storage\DataClass\User $user, $submittedScore)
+    public function createScore(
+        Score $score
+    )
     {
         // TODO Auto-generated method stub
     }
@@ -241,7 +336,8 @@ class AssignmentDataProvider implements
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findFeedbackByEntry()
      */
     public function findFeedbackByEntry(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry)
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+    )
     {
         // TODO Auto-generated method stub
     }
@@ -260,7 +356,8 @@ class AssignmentDataProvider implements
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findNoteByEntry()
      */
     public function findNoteByEntry(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry)
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+    )
     {
         // TODO Auto-generated method stub
     }
@@ -270,18 +367,32 @@ class AssignmentDataProvider implements
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findScoreByEntry()
      */
     public function findScoreByEntry(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry)
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+    )
     {
         // TODO Auto-generated method stub
     }
 
     /**
+     * @param int $entityType
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getEntityRendererForEntityTypeAndId()
+     * @return String
      */
-    public function getEntityRendererForEntityTypeAndId($entityType, $entityId)
+    public function renderEntityNameByEntityTypeAndEntity($entityType, DataClass $entity)
     {
-        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        return null;
     }
 
     /**
@@ -306,8 +417,70 @@ class AssignmentDataProvider implements
      *
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::updateScore()
      */
-    public function updateScore(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score)
+    public function updateScore(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score
+    )
     {
         // TODO Auto-generated method stub
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityIdentifier
+     *
+     * @return Entry
+     */
+    public function findLastEntryForEntity($entityType, $entityIdentifier)
+    {
+        return null;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     */
+    public function attachContentObjectToEntry(Entry $entry, ContentObject $contentObject)
+    {
+        return null;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment $entryAttachment
+     */
+    public function deleteEntryAttachment(EntryAttachment $entryAttachment)
+    {
+
+    }
+
+    /**
+     * @param int $entryAttachmentId
+     *
+     * @return EntryAttachment
+     */
+    public function findEntryAttachmentById($entryAttachmentId)
+    {
+        return null;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
+     * @return EntryAttachment[]
+     */
+    public function findAttachmentsByEntry(Entry $entry)
+    {
+        return [];
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function isContentObjectAttachedToEntry(Entry $entry, ContentObject $contentObject)
+    {
+        return false;
     }
 }

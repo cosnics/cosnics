@@ -9,7 +9,8 @@ $original_include_path = get_include_path();
 
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
-require_once realpath(__DIR__ . '/../../../../../') . '/vendor/autoload.php';
+$autoloader = require realpath(__DIR__ . '/../../../../../') . '/vendor/autoload.php';
+\Doctrine\Common\Annotations\AnnotationRegistry::registerLoader([$autoloader, 'loadClass']);
 
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 $container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();

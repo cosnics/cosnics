@@ -5,8 +5,8 @@
 
 TypeName = "Feedback"
 BrowserComponent = "Feedback"
-AddFeedback = "Voeg feedback toe"
-Feedback = "Existing feedback"
+AddFeedback = "Add feedback"
+Feedback = "Feedback"
 Comment = "Comment"
 NoFeedbackYet = "No feedback available yet"
 StopReceivingNotifications = "Stop receiving feedback notifications by email"

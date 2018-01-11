@@ -320,7 +320,7 @@ abstract class AssessmentBlock extends ToolBlock
         
         $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
         $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->get_course_id();
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->getCourseId();
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
             Assessment::package());
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager::ACTION_ATTEMPT_RESULT_VIEWER;
@@ -331,7 +331,7 @@ abstract class AssessmentBlock extends ToolBlock
             $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager::PARAM_QUESTION_ATTEMPT] = $question_id;
         }
         
-        $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager::PARAM_ASSESSMENT] = $this->get_publication_id();
+        $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager::PARAM_ASSESSMENT] = $this->getPublicationId();
         
         $redirect = new Redirect($params);
         $link = $redirect->getUrl();

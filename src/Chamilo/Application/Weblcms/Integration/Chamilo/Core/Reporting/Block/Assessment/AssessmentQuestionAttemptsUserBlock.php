@@ -32,7 +32,7 @@ class AssessmentQuestionAttemptsUserBlock extends AssessmentBlock
         $weight = $question->get_weight();
         
         $question_attempts = $this->get_question_attempts_from_publication_and_question(
-            $this->get_publication_id(), 
+            $this->getPublicationId(), 
             $question_id, 
             $this->get_user_id());
         

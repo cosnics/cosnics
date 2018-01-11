@@ -64,7 +64,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
-            $this->get_publication_id());
+            $this->getPublicationId());
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -98,8 +98,8 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         $this->reporting_data->set_rows($question_headers);
         
         $users = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_users(
-            $this->get_publication_id(), 
-            $this->get_course_id())->as_array();
+            $this->getPublicationId(),
+            $this->getCourseId())->as_array();
         
         foreach ($users as $user)
         {

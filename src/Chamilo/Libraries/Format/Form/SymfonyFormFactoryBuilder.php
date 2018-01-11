@@ -7,7 +7,9 @@ use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRenderer;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Forms;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 
@@ -23,21 +25,21 @@ class SymfonyFormFactoryBuilder
 {
 
     /**
-     * Builds the FormFactory
-     *
-     * @param \Twig_Environment $twig
-     * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
-     *
+     * @param Twig_Environment $twig
+     * @param Validation $validator
      * @return \Symfony\Component\Form\FormFactoryInterface
      */
-    public function buildFormFactory(\Twig_Environment $twig)
+    public function buildFormFactory(\Twig_Environment $twig, ValidatorInterface $validator)
     {
         $chamilo_form_templates_path = __DIR__ . '/../../Resources/Templates/Form';
 
         $this->addTwigLoader($twig, $chamilo_form_templates_path);
         $this->addTwigExtension($twig, $chamilo_form_templates_path);
 
-        return Forms::createFormFactoryBuilder()->addExtension(new HttpFoundationExtension())->getFormFactory();
+        return Forms::createFormFactoryBuilder()
+            ->addExtension(new HttpFoundationExtension())
+            ->addExtension(new ValidatorExtension($validator))
+            ->getFormFactory();
     }
 
     /**

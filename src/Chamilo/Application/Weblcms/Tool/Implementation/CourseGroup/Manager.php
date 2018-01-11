@@ -32,7 +32,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     const ACTION_SUBSCRIPTIONS_OVERVIEW = 'SubscriptionsOverviewer';
     const ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW = 'Exporter';
     const ACTION_GROUP_DETAILS = 'Details';
+    const ACTION_LAUNCH_INTEGRATION = 'IntegrationLauncher';
 
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass | CourseGroup
+     */
     public function get_course_group()
     {
         $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
@@ -45,5 +49,13 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public function get_additional_parameters()
     {
         return array(self::PARAM_COURSE_GROUP);
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager
+     */
+    protected function getCourseGroupDecoratorsManager()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.course_group.decorator.manager');
     }
 }

@@ -17,7 +17,6 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class DeleterComponent extends Manager
 {
-
     /**
      * Runs this component and displays its output.
      */
@@ -25,12 +24,14 @@ class DeleterComponent extends Manager
     {
         $id = Request::get(self::PARAM_PUBLICATION_ID);
         $application = Request::get(self::PARAM_PUBLICATION_APPLICATION);
+        $publicationContext = $this->getRequest()->getFromPostOrUrl(self::PARAM_PUBLICATION_CONTEXT);
+
         $this->set_parameter(self::PARAM_PUBLICATION_ID, $id);
         $this->set_parameter(self::PARAM_PUBLICATION_APPLICATION, $application);
 
         if (! empty($id) && ! empty($application))
         {
-            $succes = DataManager::delete_content_object_publication($application, $id);
+            $succes = DataManager::delete_content_object_publication($application, $id, $publicationContext);
 
             if ($succes)
             {

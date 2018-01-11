@@ -83,9 +83,23 @@ class AttemptTrackingService
         LearningPath $learningPath, TreeNode $treeNode, User $user
     )
     {
-        $activeAttempt = $this->attemptService->getOrCreateActiveTreeNodeAttempt($learningPath, $treeNode, $user);
+        return $this->getActiveAttempt($learningPath, $treeNode, $user)->getId();
+    }
 
-        return $activeAttempt->getId();
+    /**
+     * Returns the identifier for the active TreeNodeAttempt
+     *
+     * @param LearningPath $learningPath
+     * @param TreeNode $treeNode
+     * @param User $user
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt
+     */
+    public function getActiveAttempt(
+        LearningPath $learningPath, TreeNode $treeNode, User $user
+    )
+    {
+        return $this->attemptService->getOrCreateActiveTreeNodeAttempt($learningPath, $treeNode, $user);
     }
 
     /**

@@ -33,32 +33,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
         
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_GUID), 
+            new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID),
             new StaticConditionVariable($guid));
         
-        return static::retrieve(Request::class_name(), new DataClassRetrieveParameters($condition));
-    }
-
-    /**
-     * Retrieves a request by a given id
-     * 
-     * @param string $id
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return \application\weblcms\tool\ephorus\Request
-     */
-    public static function retrieve_request_by_id($id)
-    {
-        if (! $id)
-        {
-            throw new \InvalidArgumentException('A valid id is required to retrieve a request by id');
-        }
-        
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_ID), 
-            new StaticConditionVariable($id));
-        
-        return static::retrieve(Request::class_name(), new DataClassRetrieveParameters($condition));
+        return static::retrieve(Request::class, new DataClassRetrieveParameters($condition));
     }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Libraries\Protocol\Microsoft\Graph">
+    <settings>
+        <category name="general">
+            <setting
+                name="client_id"
+                field="text"
+                default="" />
+            <setting
+                name="client_secret"
+                field="password"
+                default="" />
+            <setting
+                name="access_token"
+                field="text"
+                default=""
+                user_setting="true"
+                locked="true"
+                hidden="true" />
+            <setting
+                name="external_user_id"
+                field="text"
+                default=""
+                user_setting="true"
+                locked="true"
+                hidden="true" />
+            <setting
+                name="tenant_id"
+                field="text"
+                default="" />
+            <setting
+                    name="cosnics_prefix"
+                    field="text"
+                    default="cosnics_"/>
+        </category>
+        <category name="groups">
+            <setting
+                    name="planner_base_uri"
+                    field="text"
+                    default="https://tasks.office.com/tenantName.onmicrosoft.com/nl-NL/Home/Planner" />
+            <setting
+                    name="group_base_uri"
+                    field="text"
+                    default="https://outlook.office.com/owa/?realm=realm&amp;exsvurl=1&amp;ll-cc=1043&amp;modurl=0&amp;path=/group/{GROUP_ID}@tenant.onmicrosoft.com/people" />
+        </category>
+    </settings>
+</package>

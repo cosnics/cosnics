@@ -13,6 +13,7 @@ abstract class Manager extends Application
     const PARAM_FEEDBACK_ID = 'feedback_id';
     
     // Actions
+    const ACTION_BROWSE_V2 = 'BrowserV2';
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
     const ACTION_UPDATE = 'Updater';
@@ -21,6 +22,8 @@ abstract class Manager extends Application
     
     // Default action
     const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    const CONFIGURATION_SHOW_FEEDBACK_HEADER = 'showFeedbackHeader';
 
     /**
      * Returns the notification service
@@ -52,5 +55,15 @@ abstract class Manager extends Application
         {
             $this->getNotificationService()->notify($feedback, $application->retrieve_notifications()->as_array());
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function showFeedbackHeader()
+    {
+        $configuration = $this->getApplicationConfiguration()->get(self::CONFIGURATION_SHOW_FEEDBACK_HEADER);
+
+        return isset($configuration) ? $configuration : true;
     }
 }

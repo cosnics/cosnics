@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
 use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -19,16 +21,37 @@ class LinkItem extends Bar
         return false;
     }
 
-    public function getContent()
-    {
-        $html = array();
-        $html[] = '<a href="' . $this->getItem()->get_url() . '" target="' . $this->getItem()->get_target_string() . '">';
-        
-        $html[] = '<div class="chamilo-menu-item-label">' .
-             $this->getItem()->get_titles()->get_translation(Translation::getInstance()->getLanguageIsocode()) . '</div>';
-        
-        $html[] = '</a>';
-        
-        return implode(PHP_EOL, $html);
-    }
+	public function getContent()
+	{
+		$html = array();
+
+		$html[] = '<a href="' . $this->getItem()->get_url() . '" target="' . $this->getItem()->get_target_string() . '">';
+
+		$title = $this->getItem()->get_titles()->get_translation( Translation::getInstance()->getLanguageIsocode() );
+
+		$itemNamespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname( $this->getItem()->get_type() );
+		$itemNamespace = ClassnameUtilities::getInstance()->getNamespaceParent( $itemNamespace, 2 );
+		$itemType      = ClassnameUtilities::getInstance()->getClassnameFromNamespace( $this->getItem()->get_type() );
+		$imagePath     = Theme::getInstance()->getImagePath( $itemNamespace, $itemType );
+
+        if ($this->getItem()->show_icon())
+        {
+            $html[] = '<img class="chamilo-menu-item-icon' .
+                ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '
+                    " src="' . $imagePath . '" alt="' . $title . '" />';
+        }
+
+        if($this->getItem()->show_title())
+        {
+            $html[] = '<div class="chamilo-menu-item-label' .
+                ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' .
+                $title . '</div>';
+        }
+
+		$html[] = '<div class="clearfix"></div>';
+
+		$html[] = '</a>';
+
+		return implode( PHP_EOL, $html );
+	}
 }

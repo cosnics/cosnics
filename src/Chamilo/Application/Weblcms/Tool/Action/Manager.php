@@ -31,6 +31,7 @@ abstract class Manager extends Application implements NoContextComponent
     const ACTION_MOVE = 'Mover';
     const ACTION_UPDATE_CONTENT_OBJECT = 'ContentObjectUpdater';
     const ACTION_UPDATE_PUBLICATION = 'PublicationUpdater';
+    const ACTION_INTEGRATION_LAUNCHER = 'IntegrationLauncher';
     const MOVE_TO_CATEGORY_COMPONENT = 'CategoryMover';
     const INTRODUCTION_PUBLISHER_COMPONENT = 'IntroductionPublisher';
     const MANAGE_CATEGORIES_COMPONENT = 'CategoryManager';
@@ -174,5 +175,13 @@ abstract class Manager extends Application implements NoContextComponent
     public function get_content_object_display_attachment_url($attachment)
     {
         return $this->get_parent()->get_content_object_display_attachment_url($attachment);
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator
+     */
+    public function getCategoryBreadcrumbsGenerator()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.service.category_breadcrumbs_generator');
     }
 }

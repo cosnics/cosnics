@@ -83,7 +83,7 @@ class PublicationAccessBlock extends ToolBlock
      */
     public function retrieve_course_visits()
     {
-        $content_object_publication_id = $this->get_publication_id();
+        $content_object_publication_id = $this->getPublicationId();
         $content_object_publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
             $content_object_publication_id

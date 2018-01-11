@@ -31,3 +31,14 @@
 		margin-left: -7px;
 	}
 }
+
+.feedback-date {
+	font-size: 11px;
+	color: #777;
+	margin-top: 2px;
+}
+
+.feedback-content {
+	margin-top: 12px;
+	margin-left: 57px;
+}

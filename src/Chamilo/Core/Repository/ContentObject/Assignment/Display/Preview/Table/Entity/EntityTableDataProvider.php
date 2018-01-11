@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entity;
 
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
@@ -10,7 +11,8 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EntityTableDataProvider extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableDataProvider
+class EntityTableDataProvider
+    extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableDataProvider
 {
 
     /**
@@ -34,7 +36,7 @@ class EntityTableDataProvider extends \Chamilo\Core\Repository\ContentObject\Ass
     private function generateUsers()
     {
         $users = array();
-        
+
         for ($i = 1; $i <= 10; $i ++)
         {
             $user = array();
@@ -44,10 +46,10 @@ class EntityTableDataProvider extends \Chamilo\Core\Repository\ContentObject\Ass
             // $user->set_firstname('Test ' . $i);
             // $user->set_email('test.' . $i . '@user.com');
             // $user->set_username('test.' . $i . '@user.com');
-            
+
             $users[] = $user;
         }
-        
+
         return $users;
     }
 }

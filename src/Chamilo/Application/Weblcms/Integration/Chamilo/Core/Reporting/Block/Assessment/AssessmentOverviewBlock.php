@@ -35,7 +35,7 @@ class AssessmentOverviewBlock extends ToolBlock
                 Translation::get('Date'), 
                 Translation::get('Score')));
         
-        $course_id = $this->get_course_id();
+        $course_id = $this->getCourseId();
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(

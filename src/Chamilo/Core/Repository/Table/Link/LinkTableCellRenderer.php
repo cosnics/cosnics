@@ -74,7 +74,7 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
         
         if ($object instanceof Attributes)
         {
-            $link_id = $object->get_application() . '|' . $this->render_id_cell($object);
+            $link_id = $object->get_application() . '|' . $this->render_id_cell($object) . '|' . $object->getPublicationContext();
         }
         else
         {

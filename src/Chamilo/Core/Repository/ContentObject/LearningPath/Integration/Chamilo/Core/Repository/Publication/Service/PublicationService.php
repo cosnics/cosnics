@@ -86,7 +86,7 @@ class PublicationService
             }
         }
 
-        return $count;
+        return $count > 0;
     }
 
     /**

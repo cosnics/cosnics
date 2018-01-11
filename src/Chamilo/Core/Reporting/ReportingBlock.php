@@ -2,11 +2,13 @@
 namespace Chamilo\Core\Reporting;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class ReportingBlock
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use DependencyInjectionContainerTrait;
     
     // Constants
     const PARAM_DISPLAY_MODE = "display_mode";
@@ -25,6 +27,7 @@ abstract class ReportingBlock
     {
         $this->parent = $parent;
         $this->vertical = $vertical;
+        $this->initializeContainer();
     }
 
     public function get_parent()
@@ -47,7 +50,10 @@ abstract class ReportingBlock
 
     public function get_title()
     {
-        return Translation::get(static::get_name(), null, static::context());
+        return Translation::get(
+            ClassnameUtilities::getInstance()->getClassnameFromObject($this),
+            null,
+            ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
     }
 
     public function get_id()

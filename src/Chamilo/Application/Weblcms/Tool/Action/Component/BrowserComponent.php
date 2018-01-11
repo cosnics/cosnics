@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
+use Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
@@ -25,6 +26,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
@@ -178,6 +180,9 @@ class BrowserComponent extends Manager implements DelegateComponent
             else
             {
                 $category = $this->retrieve_category($categoryId);
+                $this->getCategoryBreadcrumbsGenerator()
+                    ->generateBreadcrumbsForCategory(BreadcrumbTrail::getInstance(), $this, $category);
+
                 if ($category)
                 {
                     $categoryName = $category->get_name();

@@ -3,17 +3,20 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition;
 
 use Chamilo\Core\Repository\ContentObject\File\Common\RenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class HtmlRenditionImplementation extends RenditionImplementation
 {
-
+    use DependencyInjectionContainerTrait;
     /**
      *
      * @param array $parameters
@@ -25,7 +28,12 @@ class HtmlRenditionImplementation extends RenditionImplementation
 
         if (! $object->getShowInline())
         {
-            return $this->renderActions();
+            $this->initializeContainer();
+            return $this->getTwig()->render(
+                'Chamilo\Core\Repository\ContentObject\File:file_thumbnail.html.twig', [
+                    "icon_path" => $object->get_icon_path(Theme::ICON_BIG)
+                ]
+            );
         }
 
         $class = __NAMESPACE__ . '\Html\Extension\HtmlInline' .
@@ -75,6 +83,36 @@ class HtmlRenditionImplementation extends RenditionImplementation
                 '_blank'));
 
         return $buttonToolBar;
+    }
+
+    /**
+     * @param File $file
+     * @return string
+     */
+    public function renderCompactView(File $file)
+    {
+        $buttonToolBar = new ButtonToolBar();
+
+        $button = new Button(
+            //Translation::get('DownloadFile', array('LABEL' => 'qsdf')),
+            Translation::get($file->get_filename(), array('LABEL' => 'qsdf')),
+            $file->get_icon_path(Theme::ICON_MEDIUM),
+            $this->getDownloadUrl(),
+            Button::DISPLAY_ICON_AND_LABEL,
+            false,
+            '',
+            '_blank');
+
+        $buttonToolBar->addItem($button);
+
+        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        return $buttonToolBarRenderer->render();
+
+        return implode(PHP_EOL, [
+            $object->get_icon_image(Theme::ICON_MEDIUM),
+            $this->renderActions()
+        ]);
     }
 
     /**

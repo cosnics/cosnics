@@ -23,22 +23,24 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
     public function render($parameters)
     {
         $html = array();
-        
+
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
                  'Plugin/MediaElementJS/build/mediaelement-and-player.min.js');
-        
+
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
                  'Plugin/MediaElementJS/build/mediaelementplayer.css');
-        
+
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(File::package(), true) . 'MediaElementJS.js');
-        
-        $html[] = $this->getMediaElement();
-        
+
+//        $html[] = '<link href="http://vjs.zencdn.net/6.6.3/video-js.css" rel="stylesheet">';
+        $html[] = $this->getMediaElement($parameters);
+//        $html[] = '<script src="http://vjs.zencdn.net/6.6.3/video.js"></script>';
+
         $html[] = '<div class="clearfix"></div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -51,10 +53,10 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
     public function getMediaElement($parameters)
     {
         $html = array();
-        
+
         $html[] = '<div class="media-element-js-container">';
-        
-        $html[] = '<' . $this->getMediaElementType() . ' class="media-element-js-element">';
+
+        $html[] = '<' . $this->getMediaElementType() . ' class="media-element-js-element" style="max-width: 100%">';
         $html[] = $this->getSources($parameters);
         $html[] = '</' . $this->getMediaElementType() . '>';
         

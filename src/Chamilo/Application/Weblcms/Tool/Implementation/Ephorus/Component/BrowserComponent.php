@@ -1,14 +1,12 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTableInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -17,11 +15,11 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Browser component for ephorus tool.
@@ -29,7 +27,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Tom Goethals - Hogeschool Gent
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class BrowserComponent extends Manager implements TableSupport, RequestTableInterface
+class BrowserComponent extends Manager implements TableSupport
 {
 
     /**
@@ -49,6 +47,8 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
      */
     public function run()
     {
+        $this->validateAccess();
+
         $html = array();
 
         $html[] = $this->render_header();
@@ -69,49 +69,28 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
      *
      * @param $object_table_class_name string
      *
-     * @return \libraries\storage\Condition
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_table_condition($object_table_class_name)
     {
-        if ($object_table_class_name ==
-            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTable'
-        )
+        $search_conditions = $this->buttonToolbarRenderer->getConditions(
+            array(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
+            )
+        );
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Request::class, Request::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($this->get_course_id())
+        );
+
+        if ($search_conditions != null)
         {
-            $search_conditions = $this->buttonToolbarRenderer->getConditions(
-                array(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION)
-                )
-            );
-
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_COURSE_ID),
-                new StaticConditionVariable($this->get_course_id())
-            );
-            if ($search_conditions != null)
-            {
-                $condition = new AndCondition(array($condition, $search_conditions));
-            }
-
-            return $condition;
+            $condition = new AndCondition(array($condition, $search_conditions));
         }
-    }
 
-    /**
-     * Returns the url to the ephorus request component
-     *
-     * @param int $object_id
-     *
-     * @return string
-     */
-    public function get_ephorus_request_url($object_id)
-    {
-        $parameters[self::PARAM_ACTION] = self::ACTION_EPHORUS_REQUEST;
-        $parameters[self::PARAM_CONTENT_OBJECT_IDS] = $object_id;
-        $parameters[\Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION] =
-            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_VIEW_RESULT;
-
-        return $this->get_url($parameters);
+        return $condition;
     }
 
     /**
@@ -127,21 +106,14 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
      */
     protected function as_html()
     {
-        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
-        {
-            $html = array();
-            $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-            $html[] = $this->buttonToolbarRenderer->render();
+        $html = array();
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        $html[] = $this->buttonToolbarRenderer->render();
 
-            $table = new RequestTable($this);
-            $html[] = $table->as_html();
+        $table = new RequestTable($this);
+        $html[] = $table->as_html();
 
-            return implode(PHP_EOL, $html);
-        }
-        else
-        {
-            throw new NotAllowedException(false);
-        }
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -161,7 +133,7 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
                     Translation::get(
                         'AddDocument',
                         array(),
-                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class_name())
+                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
                     ),
                     Theme::getInstance()->getCommonImagePath('Action/Add'),
                     $this->get_url(

@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AttemptService;
@@ -217,7 +218,7 @@ class ProgressCalculator
                 );
             }
 
-            if (!$completed)
+            if(!$completed)
             {
                 return false;
             }
@@ -232,6 +233,13 @@ class ProgressCalculator
             {
                 return true;
             }
+        }
+
+        // TODO: move this to a hooked system where this isn't anymore depending on fixed content object definitions
+        $contentObject = $treeNode->getContentObject();
+        if($contentObject instanceof Assignment && $contentObject->hasEndTimePassed() && !$contentObject->canSubmit())
+        {
+            return true;
         }
 
         return false;

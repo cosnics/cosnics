@@ -6,6 +6,7 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLoader;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\File\Path;
@@ -23,6 +24,20 @@ use Symfony\Component\Translation\Translator;
  */
 class TranslatorFactory
 {
+    /**
+     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
+     */
+    protected $configurablePathBuilder;
+
+    /**
+     * TranslatorFactory constructor.
+     *
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+     */
+    public function __construct(\Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder)
+    {
+        $this->configurablePathBuilder = $configurablePathBuilder;
+    }
 
     /**
      * Builds and returns the Symfony Translator
@@ -60,14 +75,13 @@ class TranslatorFactory
      */
     protected function addOptimizedTranslationResources(Translator $translator)
     {
-        $translationCachePath = Path::getInstance()->getCachePath(__NAMESPACE__);
+        $translationCachePath = $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
 
         if (! is_dir($translationCachePath))
         {
             Filesystem::create_dir($translationCachePath);
         }
 
-        // TODO: Improve caching?
         $internationalizationBundlesCacheService = new InternationalizationBundlesCacheService();
         $packageNamespaces = $internationalizationBundlesCacheService->getAllPackages();
 

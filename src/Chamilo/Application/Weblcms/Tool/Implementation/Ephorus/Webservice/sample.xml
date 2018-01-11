@@ -1,7 +1,6 @@
 <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
     <s:Body
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    >
         <report xmlns="http://reporting.ephorus.org/">
             <document_guid>55dc2a85-017f-49b0-a740-23372df544bc</document_guid>
             <student_number>123</student_number>

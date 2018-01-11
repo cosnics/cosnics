@@ -42,7 +42,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
                 Translation::get('TotalTime'), 
                 Translation::get('AverageScore'), 
                 Translation::get('Attempts')));
-        $course_id = $this->get_course_id();
+        $course_id = $this->getCourseId();
         $user_id = $this->get_user_id();
         
         $img = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .

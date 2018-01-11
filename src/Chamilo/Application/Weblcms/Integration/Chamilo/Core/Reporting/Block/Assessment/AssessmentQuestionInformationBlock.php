@@ -35,7 +35,7 @@ class AssessmentQuestionInformationBlock extends AssessmentQuestionsBlock
         
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
-            $this->get_publication_id());
+            $this->getPublicationId());
         
         $this->add_category_from_array(
             Translation::get('Details'), 

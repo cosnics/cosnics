@@ -29,25 +29,10 @@ class RequestTable extends DataClassTable implements TableFormActionsSupport
                 new TableFormAction(
                     $this->get_component()->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => Manager::ACTION_INDEX_VISIBILITY_CHANGER)), 
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_INDEX_VISIBILITY_CHANGER)),
                     Translation::get('ToggleIndexVisibility')));
         }
         
         return $actions;
-    }
-
-    public static function handle_table_action()
-    {
-        $ids = static::get_selected_ids();
-        \Chamilo\Libraries\Platform\Session\Request::set_get(static::TABLE_IDENTIFIER, $ids);
-        
-        $action = \Chamilo\Libraries\Platform\Session\Request::get(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION);
-        if ($action == Manager::ACTION_INDEX_VISIBILITY_CHANGER)
-        {
-            \Chamilo\Libraries\Platform\Session\Request::set_get(
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION, 
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CHANGE_INDEX_VISIBILITY);
-        }
     }
 }

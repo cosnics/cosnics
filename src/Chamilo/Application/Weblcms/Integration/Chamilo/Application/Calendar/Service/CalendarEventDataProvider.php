@@ -2,8 +2,6 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\Service;
 
 use Chamilo\Application\Calendar\Architecture\InternalCalendar;
-use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
-use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
@@ -21,6 +19,21 @@ use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
  */
 abstract class CalendarEventDataProvider extends InternalCalendar
 {
+    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+
+    public function __construct()
+    {
+        $this->initializeContainer();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
+     */
+    protected function getAvailabilityService()
+    {
+        return $this->getService('chamilo.application.calendar.service.availability_service');
+    }
 
     /**
      *
@@ -33,64 +46,68 @@ abstract class CalendarEventDataProvider extends InternalCalendar
      *
      * @return array|\Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $requestedSourceType, $fromDate, 
+    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $requestedSourceType, $fromDate,
         $toDate)
     {
         $rightsService = ServiceFactory::getInstance()->getRightsService();
-        
+
         $events = array();
-        
-        $availabilityService = new AvailabilityService(new AvailabilityRepository());
+
+        $availabilityService = $this->getAvailabilityService();
         $packageContext = $this->getCalendarContext();
         $packageName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($packageContext);
-        
+
         if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
-            $calendarRendererProvider->getDataUser(), 
-            $packageContext, 
+            $calendarRendererProvider->getDataUser(),
+            $packageContext,
             $packageName))
         {
             $publications = $this->getPublications($calendarRendererProvider->getDataUser(), $fromDate, $toDate);
-            
+
             foreach ($publications as $publication)
             {
                 $course = new Course();
                 $course->setId($publication->get_course_id());
-                
+
                 if (! $rightsService->canUserViewPublication(
-                    $calendarRendererProvider->getDataUser(), 
-                    $publication, 
+                    $calendarRendererProvider->getDataUser(),
+                    $publication,
                     $course))
                 {
                     continue;
                 }
-                
+
                 $eventParser = new EventParser($publication, $fromDate, $toDate);
                 $events = array_merge($events, $eventParser->getEvents());
             }
         }
-        
+
         return $events;
     }
 
     /**
      *
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getCalendars()
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
+     *
+     * @return array|\Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
-    public function getCalendars()
+    public function getCalendars(User $user = null)
     {
         $package = $this->getCalendarContext();
-        
+
         $calendar = new AvailableCalendar();
         $calendar->setIdentifier(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($package));
         $calendar->setType($package);
         $calendar->setName($this->getCalendarName());
-        
+
         return array($calendar);
     }
 
     /**
      * Retrieves the valid publications for the user
-     * 
+     *
      * @param User $user
      * @param int $fromData
      * @param int $toDate
@@ -101,14 +118,14 @@ abstract class CalendarEventDataProvider extends InternalCalendar
 
     /**
      * Returns the context for the calendar
-     * 
+     *
      * @return string
      */
     abstract protected function getCalendarContext();
 
     /**
      * Returns the name for the calendar
-     * 
+     *
      * @return string
      */
     abstract protected function getCalendarName();

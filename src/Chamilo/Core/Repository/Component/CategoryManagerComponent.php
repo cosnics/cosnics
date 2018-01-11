@@ -167,7 +167,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      *
      * @return ResultSet<RepositoryCategory>
      */
-    public function retrieve_categories($condition, $offset, $count, $order_property)
+    public function retrieve_categories($condition, $offset = null, $count = null, $order_property = [])
     {
         if ($condition)
         {

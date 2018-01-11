@@ -98,6 +98,20 @@ class TrackingService
     }
 
     /**
+     * Returns the active TreeNodeAttempt
+     *
+     * @param LearningPath $learningPath
+     * @param TreeNode $treeNode
+     * @param User $user
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt
+     */
+    public function getActiveAttempt(LearningPath $learningPath, TreeNode $treeNode, User $user)
+    {
+        return $this->attemptTrackingService->getActiveAttempt($learningPath, $treeNode, $user);
+    }
+
+    /**
      * Calculates and stores the total time for the active attempt of the given learning path three node for a given
      * user
      *

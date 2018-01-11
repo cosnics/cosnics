@@ -25,6 +25,8 @@ class ViewerComponent extends Manager
 
         $template_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID);
 
+        $this->registerParameters();
+
         if (! isset($template_id))
         {
             $component = $this->getApplicationFactory()->getApplication(
@@ -53,11 +55,7 @@ class ViewerComponent extends Manager
 
     function get_additional_parameters()
     {
-        return array(
-            \Chamilo\Application\Weblcms\Manager::PARAM_USERS,
-            \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID,
-            \Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID,
-            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        return [];
     }
 
     /**
@@ -66,5 +64,19 @@ class ViewerComponent extends Manager
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
+    }
+
+    protected function registerParameters()
+    {
+        $parameters = [
+            \Chamilo\Application\Weblcms\Manager::PARAM_USERS,
+            \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID,
+            \Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID
+        ];
+
+        foreach($parameters as $parameter)
+        {
+            $this->set_parameter($parameter, $this->getRequest()->getFromUrl($parameter));
+        }
     }
 }

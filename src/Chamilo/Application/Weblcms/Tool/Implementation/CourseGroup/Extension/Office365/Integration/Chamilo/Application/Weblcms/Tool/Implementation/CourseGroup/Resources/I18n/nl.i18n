@@ -1,0 +1,8 @@
+Typename = "Office 365 integratie voor cursusgroepen"
+UseOffice365Group = "Office365 Groep (BETA)"
+CourseGroupSyncSuccessful = "De cursusgroep en cursusbeheerder inschrijvingen werden successvol gesynchroniseerd met de gekoppelde office365 groep"
+CourseGroupSyncFailed = "De cursusgroep en cursusbeheerder inschrijvingen konden niet worden gesynchroniseerd in de gekoppelde office365 groep"
+VisitPlanner = "Ga naar planner (Office365)"
+VisitGroup = "Ga naar de Office365 groep"
+SynchronizeUsersToPlanner = "Synchroniseer de gebruikers van deze groep"
+CouldNotVisitPlaner = "Het systeem is er niet in geslaagd om de planner (Office 365) URL aan te maken en je correct door te verwijzen. Gelieve binnen enkele ogenblikken opnieuw te proberen."

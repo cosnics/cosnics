@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\DependencyInjection;
 
+use Chamilo\Core\Repository\DependencyInjection\CompilerPass\ContentObjectPublicationManagerCompilerPass;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Config\FileLocator;
@@ -20,16 +22,15 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DependencyInjectionExtension extends Extension implements ExtensionInterface
+class DependencyInjectionExtension extends Extension implements ExtensionInterface, ICompilerPassExtension
 {
 
     /**
      * Loads a specific configuration.
-     * 
-     * @param string[] $config
+     *
+     * @param array $configuration
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
      *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
      */
     public function load(array $configuration, ContainerBuilder $container)
     {
@@ -53,5 +54,15 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function getAlias()
     {
         return 'chamilo.core.repository';
+    }
+
+    /**
+     * Registers the compiler passes in the container
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    public function registerCompilerPasses(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new ContentObjectPublicationManagerCompilerPass());
     }
 }

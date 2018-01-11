@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
@@ -73,34 +74,40 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
             $object = DataManager::retrieve_by_id(ContentObject::class_name(), $id);
 
-            if (! $object)
+            if (!$object)
             {
                 return $this->display_error_page(
-                    Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES));
+                    Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES)
+                );
             }
 
             $this->object = $object;
 
-            $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($this->object);
-
-            if (! RightsService::getInstance()->canViewContentObject(
+            if (!RightsService::getInstance()->canViewContentObject(
                 $this->get_user(),
                 $this->object,
-                $this->getWorkspace()))
+                $this->getWorkspace()
+            ))
             {
                 throw new NotAllowedException();
             }
 
             $this->allowed_to_modify = RightsService::getInstance()->canEditContentObject(
-                $this->get_user(),
-                $this->object,
-                $this->getWorkspace());
+                    $this->get_user(),
+                    $this->object,
+                    $this->getWorkspace()
+                ) && \Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::is_content_object_editable(
+                    $this->object->getId()
+                );
+
+            $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($this->object);
 
             $display = ContentObjectRenditionImplementation::factory(
                 $object,
                 ContentObjectRendition::FORMAT_HTML,
                 ContentObjectRendition::VIEW_FULL,
-                $this);
+                $this
+            );
             $trail = BreadcrumbTrail::getInstance();
 
             BreadcrumbTrail::getInstance()->add(
@@ -117,8 +124,13 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                 null,
                                 ToolbarItem::DISPLAY_ICON,
                                 false,
-                                $object->package())),
-                        self::package())));
+                                $object->package()
+                            )
+                        ),
+                        self::package()
+                    )
+                )
+            );
 
             if ($object->get_state() == ContentObject::STATE_RECYCLED)
             {
@@ -131,20 +143,24 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $version_parameters = array(
                     self::PARAM_CONTEXT => self::context(),
                     self::PARAM_CONTENT_OBJECT_ID => $this->object->get_id(),
-                    self::PARAM_ACTION => self::ACTION_COMPARE_CONTENT_OBJECTS);
+                    self::PARAM_ACTION => self::ACTION_COMPARE_CONTENT_OBJECTS
+                );
 
                 $version_browser = new VersionTable($this);
 
                 $version_tab_content = array();
                 $version_tab_content[] = $version_browser->as_html();
                 $version_tab_content[] = ResourceManager::getInstance()->get_resource_html(
-                    Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Repository.js');
+                    Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Repository.js'
+                );
                 $this->tabs->add_tab(
                     new DynamicContentTab(
                         'versions',
                         Translation::get('Versions'),
                         Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Versions'),
-                        implode(PHP_EOL, $version_tab_content)));
+                        implode(PHP_EOL, $version_tab_content)
+                    )
+                );
             }
 
             $this->add_links_to_content_object_tabs($object);
@@ -169,13 +185,16 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     Translation::get(
                         'NoObjectSelected',
                         array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES)));
+                        Utilities::COMMON_LIBRARIES
+                    )
+                )
+            );
         }
     }
 
     private function getButtonToolbarRenderer($contentObject)
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
             $baseActions = new ButtonGroup();
@@ -184,7 +203,10 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
             $rightsService = RightsService::getInstance();
 
+            $contentObjectUnlinkAllowed =
+                $this->getContentObjectPublicationManager()->canContentObjectBeUnlinked($contentObject);
             $contentObjectDeletionAllowed = DataManager::content_object_deletion_allowed($contentObject);
+
             $isRecycled = $contentObject->get_state() == ContentObject::STATE_RECYCLED;
 
             if ($contentObject->is_latest_version())
@@ -192,7 +214,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 if ($rightsService->canDestroyContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
                 {
                     // Move to recycle bin
-                    if (! $isRecycled)
+                    if ($contentObjectUnlinkAllowed && !$isRecycled)
                     {
                         $recycle_url = $this->get_content_object_recycling_url($contentObject);
                         $stateActions->addButton(
@@ -200,7 +222,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                 Translation::get('Remove', null, Utilities::COMMON_LIBRARIES),
                                 new FontAwesomeGlyph('trash'),
                                 $recycle_url,
-                                Button::DISPLAY_ICON_AND_LABEL));
+                                Button::DISPLAY_ICON_AND_LABEL
+                            )
+                        );
                     }
 
                     // Delete permanently
@@ -213,16 +237,20 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                 new FontAwesomeGlyph('times'),
                                 $delete_url,
                                 Button::DISPLAY_ICON_AND_LABEL,
-                                Translation::get('ConfirmDelete', null, Utilities::COMMON_LIBRARIES)));
+                                Translation::get('ConfirmDelete', null, Utilities::COMMON_LIBRARIES)
+                            )
+                        );
                     }
 
                     // Unlink
-                    if (! $contentObjectDeletionAllowed && ! $isRecycled)
+                    if (!$contentObjectDeletionAllowed && !$isRecycled && $contentObjectUnlinkAllowed)
                     {
                         $unlink_url = $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_UNLINK_CONTENT_OBJECTS,
-                                self::PARAM_CONTENT_OBJECT_ID => $contentObject->get_id()));
+                                self::PARAM_CONTENT_OBJECT_ID => $contentObject->get_id()
+                            )
+                        );
 
                         $stateActions->addButton(
                             new Button(
@@ -230,7 +258,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                 new FontAwesomeGlyph('link'),
                                 $unlink_url,
                                 Button::DISPLAY_ICON_AND_LABEL,
-                                true));
+                                true
+                            )
+                        );
                     }
 
                     // Restore
@@ -243,22 +273,29 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                 new FontAwesomeGlyph('repeat'),
                                 $restore_url,
                                 Button::DISPLAY_ICON_AND_LABEL,
-                                true));
+                                true
+                            )
+                        );
                     }
                 }
 
                 if ($rightsService->canEditContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
                 {
-                    if (! $isRecycled)
+                    if (!$isRecycled)
                     {
-                        // Edit
-                        $edit_url = $this->get_content_object_editing_url($contentObject);
-                        $baseActions->addButton(
-                            new Button(
-                                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                                new FontAwesomeGlyph('pencil'),
-                                $edit_url,
-                                Button::DISPLAY_ICON_AND_LABEL));
+                        if ($this->is_allowed_to_modify())
+                        {
+                            // Edit
+                            $edit_url = $this->get_content_object_editing_url($contentObject);
+                            $baseActions->addButton(
+                                new Button(
+                                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
+                                    new FontAwesomeGlyph('pencil'),
+                                    $edit_url,
+                                    Button::DISPLAY_ICON_AND_LABEL
+                                )
+                            );
+                        }
 
                         // Move
                         if (DataManager::workspace_has_categories($this->getWorkspace()))
@@ -269,7 +306,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                     Translation::get('Move', null, Utilities::COMMON_LIBRARIES),
                                     new FontAwesomeGlyph('folder-open'),
                                     $move_url,
-                                    Button::DISPLAY_ICON_AND_LABEL));
+                                    Button::DISPLAY_ICON_AND_LABEL
+                                )
+                            );
                         }
 
                         if (\Chamilo\Core\Repository\Builder\Manager::exists($contentObject->package()))
@@ -279,7 +318,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                     Translation::get('BuildComplexObject', null, Utilities::COMMON_LIBRARIES),
                                     new FontAwesomeGlyph('cubes'),
                                     $this->get_browse_complex_content_object_url($contentObject),
-                                    Button::DISPLAY_ICON_AND_LABEL));
+                                    Button::DISPLAY_ICON_AND_LABEL
+                                )
+                            );
 
                             $preview_url = $this->get_preview_content_object_url($contentObject);
                             $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
@@ -292,7 +333,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                     Button::DISPLAY_ICON_AND_LABEL,
                                     false,
                                     $onclick,
-                                    '_blank'));
+                                    '_blank'
+                                )
+                            );
                         }
                         else
                         {
@@ -317,7 +360,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                     Button::DISPLAY_ICON_AND_LABEL,
                                     false,
                                     $onclick,
-                                    '_blank'));
+                                    '_blank'
+                                )
+                            );
                         }
                     }
                 }
@@ -329,7 +374,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         new Button(
                             Translation::get('Duplicate', null, Utilities::COMMON_LIBRARIES),
                             new FontAwesomeGlyph('files-o'),
-                            $this->get_copy_content_object_url($contentObject->get_id())));
+                            $this->get_copy_content_object_url($contentObject->get_id())
+                        )
+                    );
                 }
 
                 // Publish
@@ -339,7 +386,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         new Button(
                             Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
                             new FontAwesomeGlyph('share-quare-o'),
-                            $this->get_publish_content_object_url($contentObject)));
+                            $this->get_publish_content_object_url($contentObject)
+                        )
+                    );
                 }
 
                 // Share
@@ -353,17 +402,25 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                 array(
                                     Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
                                     Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->get_id(),
-                                    \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE))));
+                                    \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE
+                                )
+                            )
+                        )
+                    );
                 }
                 else
                 {
-                    if ($rightsService->canDeleteContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
+                    if ($rightsService->canDeleteContentObject(
+                        $this->get_user(), $contentObject, $this->getWorkspace()
+                    ))
                     {
                         $url = $this->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
                                 \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_UNSHARE,
-                                Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId()));
+                                Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId()
+                            )
+                        );
 
                         $stateActions->addButton(
                             new Button(
@@ -371,7 +428,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                 new FontAwesomeGlyph('unlock'),
                                 $url,
                                 Button::DISPLAY_ICON_AND_LABEL,
-                                true));
+                                true
+                            )
+                        );
                     }
                 }
             }
@@ -386,11 +445,13 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                             Translation::get('Revert', null, Utilities::COMMON_LIBRARIES),
                             new FontAwesomeGlyph('repeat'),
                             $revert_url,
-                            Button::DISPLAY_ICON_AND_LABEL));
+                            Button::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
                 }
 
                 // Delete
-                if ($rightsService->canDestroyContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
+                if ($this->canDestroyContentObject($contentObject))
                 {
                     $deleteUrl = $this->get_content_object_deletion_url($contentObject, 'version');
                     $stateActions->addButton(
@@ -398,7 +459,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                             Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
                             new FontAwesomeGlyph('times'),
                             $deleteUrl,
-                            Button::DISPLAY_ICON_AND_LABEL));
+                            Button::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
                 }
             }
 
@@ -413,6 +476,18 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         return $this->buttonToolbarRenderer;
     }
 
+    public function canDestroyContentObject(ContentObject $contentObject)
+    {
+        $rightsService = RightsService::getInstance();
+
+        if (!$rightsService->canDestroyContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
+        {
+            return false;
+        }
+
+        return $this->getContentObjectPublicationManager()->canContentObjectBeUnlinked($contentObject);
+    }
+
     public function add_links_to_content_object_tabs($content_object)
     {
         $renderer_name = ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
@@ -420,7 +495,8 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         $parameters = array(
             self::PARAM_CONTEXT => self::context(),
             self::PARAM_CONTENT_OBJECT_ID => $this->object->get_id(),
-            self::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS);
+            self::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS
+        );
 
         // EXTERNAL INSTANCES
         if ($content_object->is_external())
@@ -432,7 +508,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     'external_instances',
                     Translation::get('ExternalInstances'),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/ExternalInstance'),
-                    $browser->as_html()));
+                    $browser->as_html()
+                )
+            );
         }
 
         // LINKS | PUBLICATIONS
@@ -445,7 +523,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     LinkTable::TYPE_PUBLICATIONS,
                     Translation::get('Publications'),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Publications'),
-                    $browser->as_html()));
+                    $browser->as_html()
+                )
+            );
         }
 
         if ($this->getWorkspace() instanceof PersonalWorkspace)
@@ -466,7 +546,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $tabName,
                         Translation::get('SharedIn'),
                         Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Rights'),
-                        $browser->as_html()));
+                        $browser->as_html()
+                    )
+                );
             }
         }
 
@@ -480,7 +562,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     LinkTable::TYPE_PARENTS,
                     Translation::get('UsedIn'),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Parents'),
-                    $browser->as_html()));
+                    $browser->as_html()
+                )
+            );
         }
 
         // LINKS | CHILDREN
@@ -493,7 +577,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     LinkTable::TYPE_CHILDREN,
                     Translation::get('Uses'),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Children'),
-                    $browser->as_html()));
+                    $browser->as_html()
+                )
+            );
         }
 
         // LINKS | ATTACHED TO
@@ -506,7 +592,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     LinkTable::TYPE_ATTACHED_TO,
                     Translation::get('AttachedTo'),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/AttachedTo'),
-                    $browser->as_html()));
+                    $browser->as_html()
+                )
+            );
         }
 
         // LINKS | ATTACHES
@@ -519,7 +607,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     LinkTable::TYPE_ATTACHES,
                     Translation::get('Attaches'),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Attaches'),
-                    $browser->as_html()));
+                    $browser->as_html()
+                )
+            );
         }
 
         // LINKS | INCLUDED IN
@@ -532,7 +622,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     LinkTable::TYPE_INCLUDED_IN,
                     Translation::get('IncludedIn'),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/IncludedIn'),
-                    $browser->as_html()));
+                    $browser->as_html()
+                )
+            );
         }
 
         // LINKS | INCLUDES
@@ -545,7 +637,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     LinkTable::TYPE_INCLUDES,
                     Translation::get('Includes'),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Includes'),
-                    $browser->as_html()));
+                    $browser->as_html()
+                )
+            );
         }
     }
 
@@ -570,7 +664,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         new SubButton(
                             $this->getExportTypeLabel($type),
                             null,
-                            $this->get_content_object_exporting_url($this->object, $type)));
+                            $this->get_content_object_exporting_url($this->object, $type)
+                        )
+                    );
                 }
 
                 $buttonToolBar->addItem($dropdownButton);
@@ -582,7 +678,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     new Button(
                         $this->getExportTypeLabel($exportType),
                         new FontAwesomeGlyph('upload'),
-                        $this->get_content_object_exporting_url($this->object, $exportType)));
+                        $this->get_content_object_exporting_url($this->object, $exportType)
+                    )
+                );
             }
         }
     }
@@ -590,12 +688,13 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
     /**
      *
      * @param string $type
+     *
      * @return string
      */
     private function getExportTypeLabel($type)
     {
         $translationVariable = 'ExportType' .
-             StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString();
+            StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString();
         $translation = Translation::get($translationVariable, null, $this->object->package());
 
         if ($translation == $translationVariable)
@@ -611,7 +710,8 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
     {
         return new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER),
-            new StaticConditionVariable($this->object->get_object_number()));
+            new StaticConditionVariable($this->object->get_object_number())
+        );
     }
 
     /**

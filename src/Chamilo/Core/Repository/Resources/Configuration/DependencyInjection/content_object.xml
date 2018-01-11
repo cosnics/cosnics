@@ -58,6 +58,11 @@
                 factory-method="buildResourceFixerDirector" >
         </service>
 
+        <service
+                id="chamilo.core.repository.publication.service.content_object_publication_manager"
+                class="Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManager">
+        </service>
+
 
     </services>
 </container>

@@ -97,7 +97,7 @@ class Result extends EphorusDataClass
         }
         
         $data_manager = $this->get_data_manager_class();
-        $request = $data_manager::retrieve_by_id(Request::class_name(), (int) $this->get_request_id());
+        $request = $data_manager::retrieve_by_id(Request::class, (int) $this->get_request_id());
         if (! $request)
         {
             $this->add_error(Translation::get('RequestNotFound'));

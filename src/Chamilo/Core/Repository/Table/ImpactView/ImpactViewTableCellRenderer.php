@@ -77,7 +77,12 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
         }
         else
         {
-            return '<img src="' . Theme::getInstance()->getCommonImagePath('Status/OkMini') . '" />';
+            if($this->getContentObjectPublicationManager()->canContentObjectBeUnlinked($content_object))
+            {
+                return '<img src="' . Theme::getInstance()->getCommonImagePath('Status/OkMini') . '" />';
+            }
+
+            return '<img src="' . Theme::getInstance()->getCommonImagePath('Status/ErrorMini') . '" />';
         }
     }
 
@@ -95,5 +100,13 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
                 Manager::PARAM_ACTION => Manager::ACTION_VIEW_CONTENT_OBJECTS, 
                 Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
                 Manager::PARAM_CATEGORY_ID => $content_object->get_parent_id()));
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface
+     */
+    public function getContentObjectPublicationManager()
+    {
+        return $this->get_component()->getContentObjectPublicationManager();
     }
 }

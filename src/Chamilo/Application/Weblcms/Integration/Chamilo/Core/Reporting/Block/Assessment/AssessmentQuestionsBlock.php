@@ -111,7 +111,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         $weight = $complex_question->get_weight();
         
         $question_attempts = $this->get_question_attempts_from_publication_and_question(
-            $this->get_publication_id(), 
+            $this->getPublicationId(),
             $complex_question->get_id());
         
         $score = $min = $max = null;
@@ -181,7 +181,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
 
     private function get_questions()
     {
-        $pid = $this->get_publication_id();
+        $pid = $this->getPublicationId();
         
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
