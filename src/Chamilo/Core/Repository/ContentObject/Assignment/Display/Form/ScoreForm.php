@@ -65,7 +65,7 @@ class ScoreForm extends FormValidator
         $this->addElement(
             'style_button',
             null,
-            Translation::get('Save', null, Utilities::COMMON_LIBRARIES),
+            '',//Translation::get('Save', null, Utilities::COMMON_LIBRARIES),
             ['id' => 'scoreSaveButton'],
             null,
             'floppy-save'

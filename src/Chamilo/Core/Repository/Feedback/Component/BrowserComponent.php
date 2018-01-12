@@ -137,8 +137,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $html[] = '</div>';
 
                     $html[] = '<h4 class="list-group-item-heading">' . $feedback->get_user()->get_fullname() .
-                         ' <small>(' . $this->format_date($feedback->get_creation_date()) . ')</small></h4>';
-                    $html[] = '<p class="list-group-item-text">' . $feedback->get_comment() . '</p>';
+                         '<div class="feedback-date">' . $this->format_date($feedback->get_creation_date()) . '</div></h4>';
+                    $html[] = '<div class="list-group-item-text feedback-content">' . $feedback->get_comment() . '</div>';
 
                     $html[] = '</div>';
                 }
