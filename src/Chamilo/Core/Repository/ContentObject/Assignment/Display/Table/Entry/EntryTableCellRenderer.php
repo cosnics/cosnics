@@ -111,9 +111,10 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
-                            Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
-                        ),
-                        [Manager::PARAM_ENTITY_TYPE, Manager::PARAM_ENTITY_ID]
+                            Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID],
+                            Manager::PARAM_ENTITY_ID => $this->get_component()->getEntityIdentifier(),
+                            Manager::PARAM_ENTITY_TYPE => $this->get_component()->getEntityType()
+                        )
                     ),
                     ToolbarItem::DISPLAY_ICON
                 )

@@ -70,6 +70,7 @@ class ViewerComponent extends Manager implements TableSupport
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
             'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
+            'CONTENT_OBJECT_TITLE' => $this->get_root_content_object()->get_title(),
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
             'ENTITY_NAME' => $entityName, 'ENTITY_COUNT' => $entityCount, 'ENTRY_COUNT' => $entryCount,
             'FEEDBACK_COUNT' => $feedbackCount, 'LATE_ENTRY_COUNT' => $lateEntryCount,
@@ -90,7 +91,7 @@ class ViewerComponent extends Manager implements TableSupport
         $display = ContentObjectRenditionImplementation::factory(
             $this->get_root_content_object(),
             ContentObjectRendition::FORMAT_HTML,
-            ContentObjectRendition::VIEW_FULL,
+            ContentObjectRendition::VIEW_DESCRIPTION,
             $this
         );
 

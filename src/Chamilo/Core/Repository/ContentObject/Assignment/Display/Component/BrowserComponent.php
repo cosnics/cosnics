@@ -14,6 +14,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -66,6 +68,7 @@ class BrowserComponent extends Manager implements TableSupport
             'FOOTER' => $this->render_footer(),
             'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
+            'CONTENT_OBJECT_TITLE' => $this->get_root_content_object()->get_title(),
             'ENTRY_COUNT' => $entryCount, 'FEEDBACK_COUNT' => $feedbackCount, 'SCORE_COUNT' => $scoreCount,
             'AVERAGE_SCORE' => $averageScoreValue,
             'ENTRY_TABLE' => $this->renderEntryTable()
@@ -81,7 +84,7 @@ class BrowserComponent extends Manager implements TableSupport
         $display = ContentObjectRenditionImplementation::factory(
             $this->get_root_content_object(),
             ContentObjectRendition::FORMAT_HTML,
-            ContentObjectRendition::VIEW_FULL,
+            ContentObjectRendition::VIEW_DESCRIPTION,
             $this
         );
 
@@ -114,7 +117,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($tableClassName)
     {
-        return null;
+
     }
 
     protected function getButtonToolbarRenderer()

@@ -129,6 +129,9 @@ abstract class Manager extends Application
         return $this->get_parent()->is_allowed($right);
     }
 
+    /**
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
+     */
     public function get_root_content_object()
     {
         return $this->get_parent()->get_root_content_object();

@@ -41,7 +41,7 @@ class DeleterComponent extends Manager
             Translation::get($message),
             !$success,
             array(
-                self::PARAM_ACTION => self::ACTION_BROWSE, self::PARAM_ENTITY_ID => $this->getEntityIdentifier(),
+                self::PARAM_ACTION => self::ACTION_ENTRY, self::PARAM_ENTITY_ID => $this->getEntityIdentifier(),
                 self::PARAM_ENTITY_TYPE => $this->getEntityType()
             )
         );

@@ -4,90 +4,113 @@
     .assignment-properties table {
         width: 100%;
     }
+
+    .tab-pane {
+        border: 1px solid #dddddd;
+        border-top: none;
+        padding: 10px 15px;
+    }
+
+    #assignment h3 {
+        margin: 5px 0 20px;
+    }
+
+    #automatic-feedback .list-group-item {
+        border-top: 1px solid #dddddd;
+    }
+
+    #properties-row {
+        margin-bottom: 15px;
+    }
 </style>
 
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
 
 {{ BUTTON_TOOLBAR|raw }}
 
-<div class="row">
-    <div class="col-sm-8">
-        {{ CONTENT_OBJECT_RENDITION|raw }}
-    </div>
-    <div class="col-sm-4">
-        <div class="panel panel-default">
+<ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#entry" aria-controls="entry" role="tab" data-toggle="tab">{{ 'Entry'|trans({}, appContext) }}</a></li>
 
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ 'Properties'|trans([], appContext) }}</h3>
-            </div>
+    {% if SHOW_AUTOMATIC_FEEDBACK %}
+    <li role="presentation"><a href="#automatic-feedback" aria-controls="entries" role="tab" data-toggle="tab">{{ 'AutomaticFeedback'|trans({}, appContext) }}</a></li>
+    {% endif %}
 
-            <div class="panel-body">
+    <li role="presentation"><a href="#entries" aria-controls="entries" role="tab" data-toggle="tab">{{ 'OtherEntries'|trans({}, appContext) }}</a></li>
+    <li role="presentation"><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
+</ul>
 
+<div class="dynamic-visual-tab-content tab-content">
+    <div role="tabpanel" class="tab-pane active" id="entry">
+        <div class="row" id="properties-row">
+            <div class="col-xs-12">
                 <div class="assignment-properties">
                     <table class="table table-striped table-bordered table-hover table-responsive table-properties">
                         <tbody>
-                            <tr>
-                                <td class="header" style="vertical-align: middle;">
-                                    {{ 'Submitted'|trans([], appContext) }}
-                                </td>
-                                <td>{{ SUBMITTED_DATE }}</td>
-                            </tr>
-                            <tr>
-                                <td class="header" style="vertical-align: middle;">
-                                    {{ 'SubmittedBy'|trans([], appContext) }}
-                                </td>
-                                <td>{{ SUBMITTED_BY }}</td>
-                            </tr>
-                            <tr>
-                                <td class="header" style="vertical-align: middle;">
-                                    {{ 'Score'|trans([], appContext) }}
-                                </td>
-                                <td>{{ SCORE_FORM|raw }}</td>
-                            </tr>
+                        <tr>
+                            <td class="header" style="vertical-align: middle;">
+                                {{ 'SubmittedBy'|trans([], appContext) }}
+                            </td>
+                            <td>{{ SUBMITTED_BY }} op {{ SUBMITTED_DATE }}</td>
+                        </tr>
+                        <tr>
+                            <td class="header" style="vertical-align: middle;">
+                                {{ 'Score'|trans([], appContext) }}
+                            </td>
+                            <td>{{ SCORE_FORM|raw }}</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
-        <div class="panel panel-default">
-
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ 'Feedback'|trans([], appContext) }}</h3>
+        <div class="row">
+            <div class="col-sm-8">
+                {{ CONTENT_OBJECT_RENDITION|raw }}
             </div>
+            <div class="col-sm-4">
 
-            <div class="panel-body">
+                <div class="panel panel-default">
 
-                {{ FEEDBACK_MANAGER|raw }}
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ 'Feedback'|trans([], appContext) }}</h3>
+                    </div>
 
+                    <div class="panel-body">
+
+                        {{ FEEDBACK_MANAGER|raw }}
+
+                    </div>
+                </div>
             </div>
         </div>
 
-        {% if SHOW_AUTOMATIC_FEEDBACK %}
-            <div class="panel panel-default">
+    </div>
 
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{ 'AutomaticFeedback'|trans([], appContext) }}</h3>
-                </div>
+    {% if SHOW_AUTOMATIC_FEEDBACK %}
+    <div role="tabpanel" class="tab-pane" id="automatic-feedback">
+            {{ AUTOMATIC_FEEDBACK_TEXT|nl2br }}
 
-                <div class="panel-body">
+            <ul class="list-group" style="margin-top: 30px;">
 
-                    {{ AUTOMATIC_FEEDBACK_TEXT|nl2br }}
+                {% for CONTENT_OBJECT in AUTOMATIC_FEEDBACK_CONTENT_OBJECTS %}
+                    <li class="list-group-item">
+                        <a href="#" onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': CONTENT_OBJECT.id}) }}'); return false;">
+                            {{ CONTENT_OBJECT.get_icon_image()|raw }} {{ CONTENT_OBJECT.get_title() }}
+                        </a>
+                    </li>
+                {% endfor %}
 
-                    <ul class="list-group" style="margin-top: 30px;">
+            </ul>
+    </div>
+    {% endif %}
 
-                        {% for CONTENT_OBJECT in AUTOMATIC_FEEDBACK_CONTENT_OBJECTS %}
-                        <li class="list-group-item">
-                            <a href="#" onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': CONTENT_OBJECT.id}) }}'); return false;">
-                                {{ CONTENT_OBJECT.get_icon_image()|raw }} {{ CONTENT_OBJECT.get_title() }}
-                            </a>
-                        </li>
-                        {% endfor %}
+    <div role="tabpanel" class="tab-pane" id="entries">
+        {{ ENTRY_TABLE|raw }}
+    </div>
+    <div role="tabpanel" class="tab-pane" id="assignment">
+        <h3>{{ ASSIGNMENT_TITLE }}</h3>
 
-                    </ul>
-                </div>
-            </div>
-        {% endif %}
+        {{ ASSIGNMENT_RENDITION|raw }}
     </div>
 </div>
 

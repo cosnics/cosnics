@@ -89,7 +89,7 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
                     Theme::getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_component()->get_url(
                         array(
-                            Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
+                            Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
                             Manager::PARAM_ENTITY_TYPE => $entity[Entry::PROPERTY_ENTITY_TYPE],
                             Manager::PARAM_ENTITY_ID => $entity[Entry::PROPERTY_ENTITY_ID]
                         )
