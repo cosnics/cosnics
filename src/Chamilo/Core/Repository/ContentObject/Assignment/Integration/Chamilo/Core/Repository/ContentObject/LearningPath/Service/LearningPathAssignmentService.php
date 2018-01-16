@@ -288,6 +288,20 @@ abstract class LearningPathAssignmentService extends AssignmentService
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param int $entityType
+     * @param int $entityIdentifier
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry
+     */
+    public function findLastEntryForEntity(TreeNodeData $treeNodeData, $entityType, $entityIdentifier)
+    {
+        return $this->assignmentRepository->findLastEntryForEntityByTreeNodeData(
+            $treeNodeData, $entityType, $entityIdentifier
+        );
+    }
+
+    /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt $treeNodeAttempt
@@ -311,7 +325,6 @@ abstract class LearningPathAssignmentService extends AssignmentService
         $entry->setTreeNodeAttemptId($treeNodeAttempt->getId());
 
         return $this->createEntryByInstance($entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress);
-
     }
 
     /**

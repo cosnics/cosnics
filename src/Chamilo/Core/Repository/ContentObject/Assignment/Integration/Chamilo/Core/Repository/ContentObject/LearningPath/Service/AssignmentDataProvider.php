@@ -605,4 +605,17 @@ class AssignmentDataProvider
     {
         return $this->learningPathAssignmentService->findEntriesByTreeNodeData($this->treeNode->getTreeNodeData());
     }
+
+    /**
+     * @param int $entityType
+     * @param int $entityIdentifier
+     *
+     * @return Entry
+     */
+    public function findLastEntryForEntity($entityType, $entityIdentifier)
+    {
+        return $this->learningPathAssignmentService->findLastEntryForEntity(
+            $this->treeNode->getTreeNodeData(), $entityType, $entityIdentifier
+        );
+    }
 }

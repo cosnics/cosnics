@@ -36,4 +36,5 @@ EntryReceived = "We hebben jouw inzending voor de opdracht <b>{ASSIGNMENT}</b> g
 AutomaticFeedback = "Automatische feedback"
 Assignment = "Opdracht"
 Entry = "Inzending"
-OtherEntries = "Andere inzendingen"
+LastEntry = "Laatste inzending"
+OtherEntries = "Alle inzendingen"

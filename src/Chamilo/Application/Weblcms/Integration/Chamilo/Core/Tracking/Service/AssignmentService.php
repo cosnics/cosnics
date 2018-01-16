@@ -390,6 +390,22 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $entityType
+     * @param int $entityIdentifier
+     *
+     * @return Entry
+     */
+    public function findLastEntryForEntityByContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityIdentifier
+    )
+    {
+        return $this->assignmentRepository->findLastEntryForEntityByContentObjectPublication(
+            $contentObjectPublication, $entityType, $entityIdentifier
+        );
+    }
+
+    /**
      *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param integer $entityType

@@ -330,4 +330,15 @@ class AssignmentDataProvider implements
     {
         // TODO Auto-generated method stub
     }
+
+    /**
+     * @param int $entityType
+     * @param int $entityIdentifier
+     *
+     * @return Entry
+     */
+    public function findLastEntryForEntity($entityType, $entityIdentifier)
+    {
+        return null;
+    }
 }

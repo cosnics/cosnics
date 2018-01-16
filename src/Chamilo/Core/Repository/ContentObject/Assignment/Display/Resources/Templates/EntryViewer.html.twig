@@ -22,11 +22,17 @@
     #properties-row {
         margin-bottom: 15px;
     }
+
+    #entity-name {
+        margin-bottom: 20px;
+    }
 </style>
 
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
 
 {{ BUTTON_TOOLBAR|raw }}
+
+<h2 id="entity-name">{{ ENTITY_NAME }}</h2>
 
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#entry" aria-controls="entry" role="tab" data-toggle="tab">{{ 'Entry'|trans({}, appContext) }}</a></li>

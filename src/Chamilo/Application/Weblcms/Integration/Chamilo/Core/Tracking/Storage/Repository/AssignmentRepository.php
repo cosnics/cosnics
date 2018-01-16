@@ -335,6 +335,22 @@ class AssignmentRepository
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $entityType
+     * @param int $entityIdentifier
+     *
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function findLastEntryForEntityByContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityIdentifier
+    )
+    {
+        return $this->findLastEntryForEntity(
+            $entityType, $entityIdentifier, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        );
+    }
+
+    /**
      * @param ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *

@@ -846,6 +846,25 @@ abstract class AssignmentRepository
     }
 
     /**
+     * @param int $entityType
+     * @param int $entityIdentifier
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return Entry | DataClass
+     */
+    protected function findLastEntryForEntity($entityType, $entityIdentifier, Condition $condition = null)
+    {
+        $condition = $this->getEntityTypeAndIdCondition($entityType, $entityIdentifier, $condition);
+
+        $retrieveParameters = new DataClassRetrieveParameters(
+            $condition,
+            new OrderBy(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED), SORT_DESC)
+        );
+
+        return $this->dataClassRepository->retrieve($this->getEntryClassName(), $retrieveParameters);
+    }
+
+    /**
      *
      * @param integer $entityType
      * @param $entityId

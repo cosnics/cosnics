@@ -539,4 +539,17 @@ class AssignmentDataProvider
     {
         return $this->assignmentService->findEntriesByContentObjectPublication($this->contentObjectPublication);
     }
+
+    /**
+     * @param int $entityType
+     * @param int $entityIdentifier
+     *
+     * @return Entry
+     */
+    public function findLastEntryForEntity($entityType, $entityIdentifier)
+    {
+        return $this->assignmentService->findLastEntryForEntityByContentObjectPublication(
+            $this->contentObjectPublication, $entityType, $entityIdentifier
+        );
+    }
 }

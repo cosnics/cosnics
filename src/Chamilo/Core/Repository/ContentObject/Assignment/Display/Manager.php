@@ -88,6 +88,22 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         return $this->entityIdentifier;
     }
 
+    public function getEntry()
+    {
+        if(!isset($this->entry))
+        {
+            try
+            {
+                $this->initializeEntry();
+            }
+            catch(\Exception $ex)
+            {
+            }
+        }
+
+        return $this->entry;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      */

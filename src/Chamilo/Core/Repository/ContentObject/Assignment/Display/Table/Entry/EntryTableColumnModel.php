@@ -21,6 +21,8 @@ use Chamilo\Libraries\Translation\Translation;
 abstract class EntryTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport
 {
     const PROPERTY_FEEDBACK_COUNT = 'feedback_count';
+    const DEFAULT_ORDER_COLUMN_INDEX = 2;
+    const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_DESC;
 
     /**
      * Initializes the columns for the table

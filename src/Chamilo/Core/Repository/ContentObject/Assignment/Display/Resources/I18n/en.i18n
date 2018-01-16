@@ -36,4 +36,5 @@ EntryReceived = "We have succesfully received your entry for the assignment <b>{
 AutomaticFeedback = "Automatic feedback"
 Assignment = "Assignment"
 Entry = "Entry"
-OtherEntries = "Other entries"
+LastEntry = "Last entry"
+OtherEntries = "All entries"

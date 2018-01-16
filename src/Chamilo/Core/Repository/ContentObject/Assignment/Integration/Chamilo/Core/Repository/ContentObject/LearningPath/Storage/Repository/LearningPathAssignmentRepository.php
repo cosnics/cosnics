@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -245,6 +246,20 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
     public function findEntriesByTreeNodeData(TreeNodeData $treeNodeData)
     {
         return $this->findEntries($this->getTreeNodeDataCondition($treeNodeData));
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param int $entityType
+     * @param int $entityIdentifier
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function findLastEntryForEntityByTreeNodeData(TreeNodeData $treeNodeData, $entityType, $entityIdentifier)
+    {
+        return $this->findLastEntryForEntity(
+            $entityType, $entityIdentifier, $this->getTreeNodeDataCondition($treeNodeData)
+        );
     }
 
     /**

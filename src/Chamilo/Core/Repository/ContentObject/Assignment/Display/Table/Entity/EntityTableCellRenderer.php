@@ -79,9 +79,10 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
 
         /** @var Assignment $assignment */
         $assignment = $this->get_table()->get_component()->get_root_content_object();
+        $hasEntries = $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0;
 
-        if ($isEntity || $assignment->get_visibility_submissions() == 1 ||
-            $this->getAssignmentDataProvider()->canEditAssignment())
+        if ($hasEntries && ($isEntity || $assignment->get_visibility_submissions() == 1 ||
+            $this->getAssignmentDataProvider()->canEditAssignment()))
         {
             $toolbar->add_item(
                 new ToolbarItem(

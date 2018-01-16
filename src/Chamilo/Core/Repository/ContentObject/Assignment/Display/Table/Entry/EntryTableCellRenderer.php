@@ -98,6 +98,11 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
     {
         $toolbar = new Toolbar();
 
+        if($this->get_component()->getEntry()->getId() == $entry[Entry::PROPERTY_ID])
+        {
+            return null;
+        }
+
         $isUser = $entry[Entry::PROPERTY_USER_ID] == $this->get_component()->get_user_id();
         $assignment = $this->get_table()->get_component()->get_root_content_object();
 

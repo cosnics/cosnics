@@ -60,6 +60,22 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     }
 
     /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     */
+    protected function initializeEntry()
+    {
+        try
+        {
+            parent::initializeEntry();
+        }
+        catch (\Exception $ex)
+        {
+            $this->entry =
+                $this->getDataProvider()->findLastEntryForEntity($this->getEntityType(), $this->getEntityIdentifier());
+        }
+    }
+
+    /**
      *
      * @return string[]
      */
@@ -90,6 +106,9 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'FOOTER' => $this->render_footer(),
             'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
+            'ENTITY_NAME' => $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
+                $this->getEntityType(), $this->getEntityIdentifier()
+            )->getEntityName(),
             'ASSIGNMENT_TITLE' => $this->get_root_content_object()->get_title(),
             'ASSIGNMENT_RENDITION' => $this->renderAssignment(),
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
@@ -143,15 +162,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         }
 
         return $this->score;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
-     */
-    protected function getEntry()
-    {
-        return $this->entry;
     }
 
     /**
@@ -350,7 +360,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                                     self::PARAM_ACTION => self::ACTION_DOWNLOAD,
                                     self::PARAM_ENTITY_TYPE => $this->getEntityType(),
                                     self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
-                                ]
+                                ],
+                                [self::PARAM_ENTRY_ID]
                             )
                         ),
                     )
