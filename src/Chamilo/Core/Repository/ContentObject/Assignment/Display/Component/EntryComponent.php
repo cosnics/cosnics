@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreFormProcessor;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -54,7 +55,11 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     public function run()
     {
         $this->initializeEntry();
-        $this->processSubmittedData();
+
+        if ($this->getEntry() instanceof Entry)
+        {
+            $this->processSubmittedData();
+        }
 
         return $this->getTwig()->render(Manager::context() . ':EntryViewer.html.twig', $this->getTemplateProperties());
     }
@@ -84,13 +89,25 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
         $assignment = $this->get_root_content_object();
 
+        $baseParameters = [
+            'HAS_ENTRY' => false,
+            'HEADER' => $this->render_header(),
+            'FOOTER' => $this->render_footer(),
+            'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
+            'ENTITY_NAME' => $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
+                $this->getEntityType(), $this->getEntityIdentifier()
+            )->getEntityName(),
+            'ASSIGNMENT_TITLE' => $this->get_root_content_object()->get_title(),
+            'ASSIGNMENT_RENDITION' => $this->renderAssignment(),
+        ];
+
+        if (!$this->getEntry() instanceof Entry)
+        {
+            return $baseParameters;
+        }
+
         $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
         $submittedDate = DatetimeUtilities::format_locale_date($dateFormat, $this->getEntry()->getSubmitted());
-
-        $entityRenderer = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
-            $this->getEntry()->getEntityType(),
-            $this->getEntry()->getEntityId()
-        );
 
         $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
         $configuration->set(\Chamilo\Core\Repository\Feedback\Manager::CONFIGURATION_SHOW_FEEDBACK_HEADER, false);
@@ -101,16 +118,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $contentObjects = $assignment->getAutomaticFeedbackObjects();
 
-        return [
-            'HEADER' => $this->render_header(),
-            'FOOTER' => $this->render_footer(),
-            'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
+        $entityRenderer = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
+            $this->getEntityType(), $this->getEntityIdentifier()
+        );
+
+        $extendParameters = [
+            'HAS_ENTRY' => true,
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
-            'ENTITY_NAME' => $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
-                $this->getEntityType(), $this->getEntityIdentifier()
-            )->getEntityName(),
-            'ASSIGNMENT_TITLE' => $this->get_root_content_object()->get_title(),
-            'ASSIGNMENT_RENDITION' => $this->renderAssignment(),
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
             'SUBMITTED_DATE' => $submittedDate, 'SUBMITTED_BY' => $entityRenderer->getEntityName(),
             'SCORE_FORM' => $this->getScoreForm()->render(),
@@ -125,6 +139,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 ]
             )
         ];
+
+        return array_merge($baseParameters, $extendParameters);
     }
 
     protected function processSubmittedData()
@@ -325,48 +341,56 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         if (!isset($this->actionBar))
         {
 
-
-            $buttonToolBar->addButtonGroup(
-                new ButtonGroup(
-                    array(
-                        new Button(
-                            Translation::get('SubmissionSubmit'),
-                            new FontAwesomeGlyph('plus'),
-                            $this->get_url(
-                                [
-                                    self::PARAM_ACTION => self::ACTION_CREATE,
-                                    self::PARAM_ENTITY_TYPE => $this->getEntityType(),
-                                    self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
-                                ]
-                            )
-                        ),
-                        new Button(
-                            Translation::get('DownloadCurrent'),
-                            new FontAwesomeGlyph('download'),
-                            $this->get_url(
-                                [
-                                    self::PARAM_ACTION => self::ACTION_DOWNLOAD,
-                                    self::PARAM_ENTITY_TYPE => $this->getEntityType(),
-                                    self::PARAM_ENTITY_ID => $this->entry->getEntityId(),
-                                    self::PARAM_ENTRY_ID => $this->getEntry()->getId()
-                                ]
-                            )
-                        ),
-                        new Button(
-                            Translation::get('DownloadAll'),
-                            new FontAwesomeGlyph('download'),
-                            $this->get_url(
-                                [
-                                    self::PARAM_ACTION => self::ACTION_DOWNLOAD,
-                                    self::PARAM_ENTITY_TYPE => $this->getEntityType(),
-                                    self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
-                                ],
-                                [self::PARAM_ENTRY_ID]
-                            )
-                        ),
+            $buttonGroup = new ButtonGroup();
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('SubmissionSubmit'),
+                    new FontAwesomeGlyph('plus'),
+                    $this->get_url(
+                        [
+                            self::PARAM_ACTION => self::ACTION_CREATE,
+                            self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                            self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
+                        ]
                     )
                 )
             );
+
+            if ($this->getEntry() instanceof Entry)
+            {
+                $buttonGroup->addButton(
+                    new Button(
+                        Translation::get('DownloadCurrent'),
+                        new FontAwesomeGlyph('download'),
+                        $this->get_url(
+                            [
+                                self::PARAM_ACTION => self::ACTION_DOWNLOAD,
+                                self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                                self::PARAM_ENTITY_ID => $this->getEntityIdentifier(),
+                                self::PARAM_ENTRY_ID => $this->getEntry()->getId()
+                            ]
+
+                        )
+                    )
+                );
+
+                $buttonGroup->addButton(
+                    new Button(
+                        Translation::get('DownloadAll'),
+                        new FontAwesomeGlyph('download'),
+                        $this->get_url(
+                            [
+                                self::PARAM_ACTION => self::ACTION_DOWNLOAD,
+                                self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                                self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
+                            ],
+                            [self::PARAM_ENTRY_ID]
+                        )
+                    )
+                );
+            }
+
+            $buttonToolBar->addButtonGroup($buttonGroup);
 
             $buttonToolBar->addButtonGroup(
                 new ButtonGroup(

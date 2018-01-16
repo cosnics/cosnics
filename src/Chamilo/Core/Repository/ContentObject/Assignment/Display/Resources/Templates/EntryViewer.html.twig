@@ -32,8 +32,11 @@
 
 {{ BUTTON_TOOLBAR|raw }}
 
-<h2 id="entity-name">{{ ENTITY_NAME }}</h2>
+{% if HAS_ENTRY %}
+    <h2 id="entity-name">{{ ENTITY_NAME }}</h2>
+{% endif %}
 
+{% if HAS_ENTRY %}
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#entry" aria-controls="entry" role="tab" data-toggle="tab">{{ 'Entry'|trans({}, appContext) }}</a></li>
 
@@ -42,10 +45,12 @@
     {% endif %}
 
     <li role="presentation"><a href="#entries" aria-controls="entries" role="tab" data-toggle="tab">{{ 'OtherEntries'|trans({}, appContext) }}</a></li>
-    <li role="presentation"><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
+    <li role="presentation" {% if not HAS_ENTRY %}class="active"{% endif %}><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
 </ul>
+{% endif %}
 
 <div class="dynamic-visual-tab-content tab-content">
+    {% if HAS_ENTRY %}
     <div role="tabpanel" class="tab-pane active" id="entry">
         <div class="row" id="properties-row">
             <div class="col-xs-12">
@@ -113,7 +118,9 @@
     <div role="tabpanel" class="tab-pane" id="entries">
         {{ ENTRY_TABLE|raw }}
     </div>
-    <div role="tabpanel" class="tab-pane" id="assignment">
+    {% endif %}
+
+    <div role="tabpanel" class="{% if HAS_ENTRY -%}tab-pane{%- endif %}" id="assignment">
         <h3>{{ ASSIGNMENT_TITLE }}</h3>
 
         {{ ASSIGNMENT_RENDITION|raw }}
