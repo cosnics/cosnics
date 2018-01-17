@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -18,9 +19,15 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class CreatorComponent extends Manager
 {
-
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Exception
+     */
     public function run()
     {
+        $this->checkAccessRights();
+
         $this->verifyStartEndTime();
 
         $this->set_parameter(self::PARAM_ENTITY_TYPE, $this->getEntityType());
@@ -69,6 +76,23 @@ class CreatorComponent extends Manager
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
+    protected function checkAccessRights()
+    {
+        if(!$this->canUserAccessEntity($this->getEntityType(), $this->getEntityIdentifier()))
+        {
+            throw new NotAllowedException();
+        }
+    }
+
+    /**
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function render_header()
     {
         return $this->getTwig()->render(

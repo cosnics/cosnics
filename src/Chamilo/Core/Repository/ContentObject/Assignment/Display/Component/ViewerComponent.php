@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -34,11 +35,33 @@ class ViewerComponent extends Manager implements TableSupport
      */
     private $buttonToolbarRenderer;
 
+    /**
+     * @return string
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function run()
     {
+        $this->checkAccessRights();
+
         return $this->getTwig()->render(
             Manager::context() . ':EntityBrowser.html.twig', $this->getTemplateProperties()
         );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
+    protected function checkAccessRights()
+    {
+        if(!$this->getDataProvider()->canEditAssignment() && !$this->getAssignment()->get_visibility_submissions())
+        {
+            throw new NotAllowedException();
+        }
+
     }
 
     /**

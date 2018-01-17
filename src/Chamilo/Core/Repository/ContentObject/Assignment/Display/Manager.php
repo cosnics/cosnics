@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -61,6 +62,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject | \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment
+     */
+    public function getAssignment()
+    {
+        return $this->get_root_content_object();
+    }
+
+    /**
      *
      * @return integer
      */
@@ -83,9 +92,40 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         if (!isset($this->entityIdentifier))
         {
             $this->entityIdentifier = $this->getRequest()->query->get(self::PARAM_ENTITY_ID);
+
+            if(empty($this->entityIdentifier))
+            {
+                $this->entityIdentifier = $this->getDataProvider()->getCurrentEntityIdentifier($this->getUser());
+            }
         }
 
         return $this->entityIdentifier;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
+     * @return bool
+     */
+    public function canUserAccessEntry(Entry $entry)
+    {
+        return $this->canUserAccessEntity($entry->getEntityType(), $entry->getEntityId());
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return bool
+     */
+    public function canUserAccessEntity($entityType, $entityId)
+    {
+        if($this->getDataProvider()->canEditAssignment())
+        {
+            return true;
+        }
+
+        return $this->getDataProvider()->isUserPartOfEntity($this->getUser(), $entityType, $entityId);
     }
 
     public function getEntry()

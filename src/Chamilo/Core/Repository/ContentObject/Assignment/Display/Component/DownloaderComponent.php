@@ -15,6 +15,9 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryDownlo
 class DownloaderComponent extends Manager
 {
 
+    /**
+     * @return string|void
+     */
     public function run()
     {
         $entryCompressor = new EntryDownloader($this->getDataProvider(), $this->get_root_content_object());

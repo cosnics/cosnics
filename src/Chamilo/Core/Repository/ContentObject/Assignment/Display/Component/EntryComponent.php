@@ -8,9 +8,11 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreFormProcessor;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -52,20 +54,25 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     private $buttonToolbarRenderer;
 
+    /**
+     * @return string
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function run()
     {
         $this->initializeEntry();
-
-        if ($this->getEntry() instanceof Entry)
-        {
-            $this->processSubmittedData();
-        }
+        $this->checkAccessRights();
+        $this->processSubmittedData();
 
         return $this->getTwig()->render(Manager::context() . ':EntryViewer.html.twig', $this->getTemplateProperties());
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     *
      */
     protected function initializeEntry()
     {
@@ -77,6 +84,27 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         {
             $this->entry =
                 $this->getDataProvider()->findLastEntryForEntity($this->getEntityType(), $this->getEntityIdentifier());
+        }
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
+    protected function checkAccessRights()
+    {
+        if($this->getAssignment()->get_visibility_submissions())
+        {
+            return;
+        }
+
+        if($this->getEntry() instanceof Entry && !$this->canUserAccessEntry($this->getEntry()))
+        {
+            throw new NotAllowedException();
+        }
+
+        if(!$this->canUserAccessEntity($this->getEntityType(), $this->getEntityIdentifier()))
+        {
+            throw new NotAllowedException();
         }
     }
 
@@ -122,12 +150,16 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $this->getEntityType(), $this->getEntityIdentifier()
         );
 
+        $score = $this->getScore() instanceof Score ? $this->getScore()->getScore() : 0;
+
         $extendParameters = [
             'HAS_ENTRY' => true,
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
             'SUBMITTED_DATE' => $submittedDate, 'SUBMITTED_BY' => $entityRenderer->getEntityName(),
             'SCORE_FORM' => $this->getScoreForm()->render(),
+            'SCORE' => $score,
+            'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
             'ENTRY_TABLE' => $this->renderEntryTable(),
             'SHOW_AUTOMATIC_FEEDBACK' => $assignment->isAutomaticFeedbackVisible(),
             'AUTOMATIC_FEEDBACK_TEXT' => $assignment->get_automatic_feedback_text(),
@@ -145,6 +177,11 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
     protected function processSubmittedData()
     {
+        if(!$this->getDataProvider()->canEditAssignment() || !$this->getEntry() instanceof Entry)
+        {
+            return;
+        }
+
         $scoreForm = $this->getScoreForm();
 
         if ($scoreForm->validate())
@@ -300,7 +337,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     public function is_allowed_to_view_feedback()
     {
-        // TODO: Only course managers / teachers should be able to do this
         return true;
     }
 
@@ -310,18 +346,17 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     public function is_allowed_to_create_feedback()
     {
-        // TODO: Only course managers / teachers should be able to do this
         return true;
     }
 
     /**
+     * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback
      *
-     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_update_feedback()
+     * @return bool
      */
     public function is_allowed_to_update_feedback($feedback)
     {
-        // TODO: Only course managers / teachers should be able to do this
-        return true;
+        return $feedback->get_user_id() == $this->getUser()->getId();
     }
 
     /**
@@ -330,8 +365,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     public function is_allowed_to_delete_feedback($feedback)
     {
-        // TODO: Only course managers / teachers should be able to do this
-        return true;
+        return $feedback->get_user_id() == $this->getUser()->getId();
     }
 
     protected function getButtonToolbarRenderer()
@@ -392,29 +426,32 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $buttonToolBar->addButtonGroup($buttonGroup);
 
-            $buttonToolBar->addButtonGroup(
-                new ButtonGroup(
-                    array(
-                        new Button(
-                            Translation::get(
-                                'BrowseEntities',
-                                [
-                                    'NAME' => strtolower(
-                                        $this->getDataProvider()->getEntityNameByType($this->getEntityType())
-                                    )
-                                ]
-                            ),
-                            new FontAwesomeGlyph('user'),
-                            $this->get_url(
-                                [
-                                    self::PARAM_ACTION => self::ACTION_VIEW
-                                ],
-                                [self::PARAM_ENTRY_ID]
+            if ($this->getDataProvider()->canEditAssignment() || $this->getAssignment()->get_visibility_submissions())
+            {
+                $buttonToolBar->addButtonGroup(
+                    new ButtonGroup(
+                        array(
+                            new Button(
+                                Translation::get(
+                                    'BrowseEntities',
+                                    [
+                                        'NAME' => strtolower(
+                                            $this->getDataProvider()->getEntityNameByType($this->getEntityType())
+                                        )
+                                    ]
+                                ),
+                                new FontAwesomeGlyph('user'),
+                                $this->get_url(
+                                    [
+                                        self::PARAM_ACTION => self::ACTION_VIEW
+                                    ],
+                                    [self::PARAM_ENTRY_ID]
+                                )
                             )
                         )
                     )
-                )
-            );
+                );
+            }
         }
 
         $this->actionBar = new ButtonToolBarRenderer($buttonToolBar);

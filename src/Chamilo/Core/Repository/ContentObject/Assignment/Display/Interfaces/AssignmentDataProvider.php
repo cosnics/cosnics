@@ -86,6 +86,13 @@ interface AssignmentDataProvider
     public function getCurrentEntityType();
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int
+     */
+    public function getCurrentEntityIdentifier(User $currentUser);
+
+    /**
      *
      * @param integer $date
      *
@@ -99,6 +106,15 @@ interface AssignmentDataProvider
      * @param integer $entityId
      */
     public function countFeedbackByEntityTypeAndEntityId($entityType, $entityId);
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return bool
+     */
+    public function isUserPartOfEntity(User $user, $entityType, $entityId);
 
     /**
      *

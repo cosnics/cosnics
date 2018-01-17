@@ -114,30 +114,40 @@ class BrowserComponent extends Manager implements DelegateComponent
                 {
                     $html[] = '<div class="list-group-item">';
 
+                    $html[] ='<div style="display:flex;">';
                     $profilePhotoUrl = new Redirect(
                         array(
                             Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
                             Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
                             \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedback->get_user()->get_id()));
 
-                    $html[] = '<img class="panel-feedback-profile pull-left" src="' . $profilePhotoUrl->getUrl() . '" />';
+                    $html[] = '<img class="panel-feedback-profile" src="' . $profilePhotoUrl->getUrl() . '" />';
 
-                    $html[] = '<div class="pull-right">';
+                    $html[] = '<h4 class="list-group-item-heading" style="flex-grow: 2;">' . $feedback->get_user()->get_fullname() .
+                        '<div class="feedback-date">' . $this->format_date($feedback->get_creation_date()) . '</div></h4>';
 
-                    if ($this->get_parent()->is_allowed_to_update_feedback($feedback))
+
+                    $allowedToUpdateFeedback = $this->get_parent()->is_allowed_to_update_feedback($feedback);
+                    $allowedToDeleteFeedback = $this->get_parent()->is_allowed_to_delete_feedback($feedback);
+
+                    if($allowedToUpdateFeedback || $allowedToDeleteFeedback)
                     {
-                        $html[] = $this->render_update_action($feedback);
-                    }
+                        $html[] = '<div class="text-right" style="min-width: 40px;">';
 
-                    if ($this->get_parent()->is_allowed_to_delete_feedback($feedback))
-                    {
-                        $html[] = $this->render_delete_action($feedback);
+                        if ($allowedToUpdateFeedback)
+                        {
+                            $html[] = $this->render_update_action($feedback);
+                        }
+
+                        if ($allowedToDeleteFeedback)
+                        {
+                            $html[] = $this->render_delete_action($feedback);
+                        }
+
+                        $html[] = '</div>';
                     }
 
                     $html[] = '</div>';
-
-                    $html[] = '<h4 class="list-group-item-heading">' . $feedback->get_user()->get_fullname() .
-                         '<div class="feedback-date">' . $this->format_date($feedback->get_creation_date()) . '</div></h4>';
                     $html[] = '<div class="list-group-item-text feedback-content">' . $feedback->get_comment() . '</div>';
 
                     $html[] = '</div>';

@@ -245,6 +245,16 @@ class AssignmentDataProvider
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int
+     */
+    public function getCurrentEntityIdentifier(User $currentUser)
+    {
+        return $currentUser->getId();
+    }
+
+    /**
      *
      * @param integer $date
      *
@@ -267,6 +277,19 @@ class AssignmentDataProvider
         return $this->learningPathAssignmentService->countFeedbackForTreeNodeDataByEntityTypeAndEntityId(
             $this->treeNode->getTreeNodeData(), $entityType, $entityId
         );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return bool
+     */
+    public function isUserPartOfEntity(User $user, $entityType, $entityId)
+    {
+        return $entityType == \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER &&
+            $entityId == $user->getId();
     }
 
     /**

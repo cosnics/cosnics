@@ -5,10 +5,13 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -60,6 +63,7 @@ class Embedder extends ContentObjectEmbedder
         );
 
         $applicationFactory = $this->getApplicationFactory();
+        $applicationFactory->setAssignmentDataProvider($assignmentDataProvider);
 
         return $applicationFactory->getApplication(
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(),
@@ -75,6 +79,14 @@ class Embedder extends ContentObjectEmbedder
         return $this->get_application()->getService(
             'chamilo.libraries.storage.data_manager.doctrine.data_class_repository'
         );
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory
+     */
+    protected function getApplicationFactory()
+    {
+        return new ApplicationFactory($this->getRequest(), StringUtilities::getInstance(), Translation::getInstance());
     }
 
 }

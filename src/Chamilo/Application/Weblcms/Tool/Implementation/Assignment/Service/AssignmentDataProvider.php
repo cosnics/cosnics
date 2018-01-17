@@ -205,6 +205,16 @@ class AssignmentDataProvider
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int
+     */
+    public function getCurrentEntityIdentifier(User $currentUser)
+    {
+        return $currentUser->getId();
+    }
+
+    /**
      *
      * @param integer $date
      *
@@ -212,6 +222,24 @@ class AssignmentDataProvider
      */
     public function isDateAfterAssignmentEndTime($date)
     {
+        return false;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return bool
+     */
+    public function isUserPartOfEntity(User $user, $entityType, $entityId)
+    {
+        switch($entityType)
+        {
+            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_USER:
+                return $entityId == $user->getId();
+        }
+
         return false;
     }
 

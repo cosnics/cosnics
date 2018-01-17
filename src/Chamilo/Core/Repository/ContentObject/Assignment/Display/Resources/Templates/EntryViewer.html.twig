@@ -67,7 +67,17 @@
                             <td class="header" style="vertical-align: middle;">
                                 {{ 'Score'|trans([], appContext) }}
                             </td>
-                            <td>{{ SCORE_FORM|raw }}</td>
+                            <td>
+                            {% if CAN_EDIT_ASSIGNMENT %}
+                                {{ SCORE_FORM|raw }}
+                            {% else %}
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ SCORE }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ SCORE }}%;">
+                                        {{ SCORE }}%
+                                    </div>
+                                </div>
+                            {% endif %}
+                            </td>
                         </tr>
                         </tbody>
                     </table>

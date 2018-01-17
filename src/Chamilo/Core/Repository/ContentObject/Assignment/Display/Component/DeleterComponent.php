@@ -19,6 +19,11 @@ use Chamilo\Libraries\Utilities\Utilities;
 class DeleterComponent extends Manager
 {
 
+    /**
+     * @return string|void
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function run()
     {
         $this->checkAccessRights();

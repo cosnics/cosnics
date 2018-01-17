@@ -126,41 +126,41 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
             );
         }
 
+        $usesFileStorage = is_subclass_of(
+            $entry[ContentObject::PROPERTY_TYPE],
+            '\Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport'
+        );
+
+        if ($usesFileStorage)
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('Download'),
+                    Theme::getInstance()->getCommonImagePath('Action/Download'),
+                    $this->get_component()->get_url(
+                        array(
+                            Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD,
+                            Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
+                        )
+                    ),
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+        else
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('DownloadNotPossible'),
+                    Theme::getInstance()->getCommonImagePath('Action/DownloadNa'),
+                    null,
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+
         if ($this->get_table()->getAssignmentDataProvider()->canEditAssignment())
         {
-            $usesFileStorage = is_subclass_of(
-                $entry[ContentObject::PROPERTY_TYPE],
-                '\Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport'
-            );
-
-            if ($usesFileStorage)
-            {
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation::get('Download'),
-                        Theme::getInstance()->getCommonImagePath('Action/Download'),
-                        $this->get_component()->get_url(
-                            array(
-                                Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD,
-                                Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
-                            )
-                        ),
-                        ToolbarItem::DISPLAY_ICON
-                    )
-                );
-            }
-            else
-            {
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation::get('DownloadNotPossible'),
-                        Theme::getInstance()->getCommonImagePath('Action/DownloadNa'),
-                        null,
-                        ToolbarItem::DISPLAY_ICON
-                    )
-                );
-            }
-
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('DeleteEntry'),
