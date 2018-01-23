@@ -7,7 +7,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Form type to declare the html_editor form type
@@ -22,7 +22,7 @@ class HtmlEditorFormType extends AbstractType
      *
      * @see \Symfony\Component\Form\AbstractType::setDefaultOptions()
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function setDefaultOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('html_editor_options' => array(), 'html_editor_attributes' => array()));
 
