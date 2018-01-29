@@ -42,7 +42,7 @@ class ComplexFillInBlanksQuestionForm extends ComplexContentObjectItemForm
         $elements[] = $this->createElement(
             'checkbox', 
             ComplexFillInBlanksQuestion::PROPERTY_RANDOM, 
-            Translation::get('RandomizeHotspots'));
+            Translation::get('RandomizeOptions'));
         
         $elements[] = ConfigurationForm::build_answer_feedback(
             $this, 

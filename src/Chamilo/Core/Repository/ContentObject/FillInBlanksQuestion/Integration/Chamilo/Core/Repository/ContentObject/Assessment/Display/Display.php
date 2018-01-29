@@ -174,7 +174,7 @@ class Display extends QuestionDisplay
         $formvalidator = $this->get_formvalidator();
         $select = $formvalidator->createElement('select', $name, '');
 
-        $select->addOption('-- ' . Translation::get('SelectAnswer') . ' --');
+        $select->addOption('-- ' . Translation::get('SelectAnswer') . ' --', -1);
         foreach ($options as $key => $value)
         {
             $select->addOption($value, $key);
@@ -195,7 +195,7 @@ class Display extends QuestionDisplay
         );
     }
 
-    public function add_question($name, $id, $index, $question_type, $answers, $multiple_answers)
+    public function add_question($name, $id, $index, $question_type, $answers, $multiple_answers = false)
     {
         $formvalidator = $this->get_formvalidator();
 
