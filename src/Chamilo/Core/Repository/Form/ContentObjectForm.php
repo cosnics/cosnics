@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Form;
 
 use Chamilo\Configuration\Configuration;
@@ -26,6 +27,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\ForcedVersionSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
@@ -116,6 +118,8 @@ abstract class ContentObjectForm extends FormValidator
      * @param $form_name string The name to use in the form tag.
      * @param $method string The method to use ('post' or 'get').
      * @param $action string The URL to which the form should be submitted.
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function __construct(
         $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = 'post',
@@ -123,6 +127,13 @@ abstract class ContentObjectForm extends FormValidator
     )
     {
         parent::__construct($form_name, $method, $action);
+
+        if (!\Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::is_content_object_editable(
+            $content_object->getId()
+        ))
+        {
+            throw new NotAllowedException();
+        }
 
         $this->form_type = $form_type;
         $this->workspace = $workspace;
@@ -1163,7 +1174,7 @@ EOT;
     protected function allows_category_selection()
     {
         return ($this->form_type == self::TYPE_CREATE || $this->form_type == self::TYPE_REPLY ||
-            $this->form_type == self::TYPE_EDIT) && Session::get_user_id() == $this->get_owner_id();
+                $this->form_type == self::TYPE_EDIT) && Session::get_user_id() == $this->get_owner_id();
     }
 
     /**

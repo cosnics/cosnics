@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service"
+                 class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService">
+            <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.storage.repository.assignment_repository" />
+        </service>
+
+        <service id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service"
+                 class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService">
+            <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.storage.repository.learning_path_assignment_repository" />
+        </service>
+
+        <service id="chamilo.application.weblcms.integration.chamilo.core.tracking.storage.repository.assignment_repository"
+                 class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository">
+            <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+        </service>
+
+        <service id="chamilo.application.weblcms.integration.chamilo.core.tracking.storage.repository.learning_path_assignment_repository"
+                 class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository">
+            <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+        </service>
+    </services>
+</container>

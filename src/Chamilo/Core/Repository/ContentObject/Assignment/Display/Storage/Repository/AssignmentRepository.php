@@ -904,6 +904,21 @@ abstract class AssignmentRepository
     }
 
     /**
+     * @param int[] $contentObjectIds
+     *
+     * @return int
+     */
+    public function countContentObjectsUsedAsEntryByContentObjectIds($contentObjectIds = [])
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_CONTENT_OBJECT_ID),
+            $contentObjectIds
+        );
+
+        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters($condition));
+    }
+
+    /**
      * @return string
      */
     abstract protected function getEntryClassName();

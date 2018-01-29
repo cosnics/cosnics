@@ -22,6 +22,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -39,7 +40,28 @@ class Manager implements PublicationInterface
      */
     public static function is_content_object_editable($object_id)
     {
-        // TODO: Please implement me !
+        $containerBuilder = DependencyInjectionContainerBuilder::getInstance();
+        $container = $containerBuilder->createContainer();
+
+        /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService */
+        $assignmentService = $container->get('chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service');
+
+        /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService $learningPathAssignmentService */
+        $learningPathAssignmentService = $container->get('chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service');
+
+        $contentObject = new ContentObject();
+        $contentObject->setId($object_id);
+
+        if($assignmentService->isContentObjectUsedAsEntry($contentObject))
+        {
+            return false;
+        }
+
+        if($learningPathAssignmentService->isContentObjectUsedAsEntry($contentObject))
+        {
+            return false;
+        }
+
         return true;
     }
 

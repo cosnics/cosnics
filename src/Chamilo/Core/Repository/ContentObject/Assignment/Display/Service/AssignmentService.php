@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\E
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -37,7 +38,7 @@ abstract class AssignmentService
      */
     public function deleteEntry(Entry $entry)
     {
-        if(!$this->assignmentRepository->deleteEntry($entry))
+        if (!$this->assignmentRepository->deleteEntry($entry))
         {
             throw new \RuntimeException('Could not delete entry ' . $entry->getId());
         }
@@ -133,7 +134,8 @@ abstract class AssignmentService
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
      */
-    protected function createEntryByInstance(Entry $entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress)
+    protected function createEntryByInstance(Entry $entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress
+    )
     {
         $entry->setContentObjectId($contentObjectId);
         $entry->setSubmitted(time());
@@ -249,6 +251,18 @@ abstract class AssignmentService
     public function initializeFeedback()
     {
         return $this->createFeedbackInstance();
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function isContentObjectUsedAsEntry(ContentObject $contentObject)
+    {
+        return $this->assignmentRepository->countContentObjectsUsedAsEntryByContentObjectIds(
+                [$contentObject->getId()]
+            ) > 0;
     }
 
     /**
