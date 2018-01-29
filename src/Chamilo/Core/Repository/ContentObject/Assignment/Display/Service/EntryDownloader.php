@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\Assignme
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -29,19 +31,36 @@ class EntryDownloader
     private $assignmentDataProvider;
 
     /**
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService
+     */
+    protected $rightsService;
+
+    /**
      *
      * @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment
      */
     private $assignment;
 
     /**
+     * @var \Chamilo\Core\User\Storage\DataClass\User
+     */
+    protected $user;
+
+    /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService $rightsService
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
      */
-    public function __construct(AssignmentDataProvider $assignmentDataProvider, Assignment $assignment)
+    public function __construct(
+        AssignmentDataProvider $assignmentDataProvider, RightsService $rightsService, User $user, Assignment $assignment
+    )
     {
         $this->assignmentDataProvider = $assignmentDataProvider;
+        $this->rightsService = $rightsService;
         $this->assignment = $assignment;
+        $this->user = $user;
     }
 
     /**
@@ -223,9 +242,14 @@ class EntryDownloader
     /**
      *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function downloadByRequest(ChamiloRequest $request)
     {
+        $entityType = $request->get(Manager::PARAM_ENTITY_TYPE);
+        $entityIdentifiers = $request->get(Manager::PARAM_ENTITY_ID);
+
         $entryIdentifiers = $request->get(Manager::PARAM_ENTRY_ID);
 
         if (!is_null($entryIdentifiers))
@@ -235,22 +259,43 @@ class EntryDownloader
                 $entryIdentifiers = array($entryIdentifiers);
             }
 
+            if (!$this->rightsService->canUserDownloadEntriesFromEntity(
+                $this->user, $this->assignment, $entityType, $entityIdentifiers
+            ))
+            {
+                throw new NotAllowedException();
+            }
+
             $this->downloadByEntryIdentifiers($request, $entryIdentifiers);
         }
-
-        $entityType = $request->get(Manager::PARAM_ENTITY_TYPE);
-        $entityIdentifiers = $request->get(Manager::PARAM_ENTITY_ID);
 
         if (!is_null($entityType) && !is_null($entityIdentifiers))
         {
             if (!is_array($entityIdentifiers))
             {
+                if (!$this->rightsService->canUserDownloadEntriesFromEntity(
+                    $this->user, $this->assignment, $entityType, $entityIdentifiers
+                ))
+                {
+                    throw new NotAllowedException();
+                }
+
                 $this->downloadForEntityTypeAndIdentifier($request, $entityType, $entityIdentifiers);
             }
             else
             {
+                if (!$this->rightsService->canUserDownloadAllEntries($this->user, $this->assignment))
+                {
+                    throw new NotAllowedException();
+                }
+
                 $this->downloadForEntityTypeAndIdentifiers($request, $entityType, $entityIdentifiers);
             }
+        }
+
+        if (!$this->rightsService->canUserDownloadAllEntries($this->user, $this->assignment))
+        {
+            throw new NotAllowedException();
         }
 
         $this->downloadAll($request);

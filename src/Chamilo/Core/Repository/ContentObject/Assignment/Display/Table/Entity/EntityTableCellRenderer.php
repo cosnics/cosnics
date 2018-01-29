@@ -81,8 +81,7 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
         $assignment = $this->get_table()->get_component()->get_root_content_object();
         $hasEntries = $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0;
 
-        if ($hasEntries && ($isEntity || $assignment->get_visibility_submissions() == 1 ||
-            $this->getAssignmentDataProvider()->canEditAssignment()))
+        if ($this->getRightsService()->canUserViewEntity($this->get_component()->getUser(), $this->get_component()->getAssignment(), $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]))
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -100,7 +99,7 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
             );
         }
 
-        if ($this->getAssignmentDataProvider()->canEditAssignment() &&
+        if ($this->getRightsService()->canUserDownloadEntriesFromEntity($this->get_component()->getUser(), $this->get_component()->getAssignment(), $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]) &&
             $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0)
         {
             $toolbar->add_item(
@@ -168,6 +167,14 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
     protected function getAssignmentDataProvider()
     {
         return $this->getTable()->getAssignmentDataProvider();
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService
+     */
+    protected function getRightsService()
+    {
+        return $this->getTable()->get_component()->getRightsService();
     }
 
     /**

@@ -81,7 +81,9 @@ class CreatorComponent extends Manager
      */
     protected function checkAccessRights()
     {
-        if(!$this->canUserAccessEntity($this->getEntityType(), $this->getEntityIdentifier()))
+        if (!$this->getRightsService()->canUserCreateEntry(
+            $this->getUser(), $this->getAssignment(), $this->getEntityType(), $this->getEntityIdentifier()
+        ))
         {
             throw new NotAllowedException();
         }

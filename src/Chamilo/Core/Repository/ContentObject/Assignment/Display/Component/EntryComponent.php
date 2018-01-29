@@ -92,20 +92,20 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function checkAccessRights()
     {
-        if($this->getAssignment()->get_visibility_submissions())
+        if ($this->getEntry() &&
+            $this->getRightsService()->canUserViewEntry($this->getUser(), $this->getAssignment(), $this->getEntry()))
         {
             return;
         }
 
-        if($this->getEntry() instanceof Entry && !$this->canUserAccessEntry($this->getEntry()))
+        if ($this->getRightsService()->canUserViewEntity(
+            $this->getUser(), $this->getAssignment(), $this->getEntityType(), $this->getEntityIdentifier()
+        ))
         {
-            throw new NotAllowedException();
+            return;
         }
 
-        if(!$this->canUserAccessEntity($this->getEntityType(), $this->getEntityIdentifier()))
-        {
-            throw new NotAllowedException();
-        }
+        throw new NotAllowedException();
     }
 
     /**
@@ -177,7 +177,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
     protected function processSubmittedData()
     {
-        if(!$this->getDataProvider()->canEditAssignment() || !$this->getEntry() instanceof Entry)
+        if (!$this->getDataProvider()->canEditAssignment() || !$this->getEntry() instanceof Entry)
         {
             return;
         }

@@ -17,10 +17,14 @@ class DownloaderComponent extends Manager
 
     /**
      * @return string|void
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
-        $entryCompressor = new EntryDownloader($this->getDataProvider(), $this->get_root_content_object());
+        $entryCompressor = new EntryDownloader(
+            $this->getDataProvider(), $this->getRightsService(), $this->getUser(), $this->getAssignment()
+        );
+
         $entryCompressor->downloadByRequest($this->getRequest());
     }
 }

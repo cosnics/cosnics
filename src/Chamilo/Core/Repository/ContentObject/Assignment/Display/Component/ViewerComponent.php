@@ -57,7 +57,7 @@ class ViewerComponent extends Manager implements TableSupport
      */
     protected function checkAccessRights()
     {
-        if(!$this->getDataProvider()->canEditAssignment() && !$this->getAssignment()->get_visibility_submissions())
+        if(!$this->getRightsService()->canUserViewEntityBrowser($this->getUser(), $this->getAssignment()))
         {
             throw new NotAllowedException();
         }

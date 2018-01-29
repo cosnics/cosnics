@@ -83,7 +83,7 @@ class DeleterComponent extends Manager
      */
     protected function checkAccessRights()
     {
-        if (!$this->getDataProvider()->canEditAssignment())
+        if (!$this->getRightsService()->canUserDeleteEntries($this->getUser(), $this->getAssignment()))
         {
             throw new NotAllowedException();
         }

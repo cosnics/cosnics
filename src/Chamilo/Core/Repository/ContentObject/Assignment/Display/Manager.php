@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Translation\Translation;
@@ -51,6 +52,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
      */
     protected $entry;
+
+    /**
+     * @var RightsService
+     */
+    protected $rightsService;
 
     /**
      *
@@ -103,29 +109,17 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
-     *
-     * @return bool
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService
      */
-    public function canUserAccessEntry(Entry $entry)
+    public function getRightsService()
     {
-        return $this->canUserAccessEntity($entry->getEntityType(), $entry->getEntityId());
-    }
-
-    /**
-     * @param int $entityType
-     * @param int $entityId
-     *
-     * @return bool
-     */
-    public function canUserAccessEntity($entityType, $entityId)
-    {
-        if($this->getDataProvider()->canEditAssignment())
+        if(!isset($this->rightsService))
         {
-            return true;
+            $this->rightsService = new RightsService();
+            $this->rightsService->setAssignmentDataProvider($this->getDataProvider());
         }
 
-        return $this->getDataProvider()->isUserPartOfEntity($this->getUser(), $entityType, $entityId);
+        return $this->rightsService;
     }
 
     public function getEntry()
