@@ -48,4 +48,20 @@ class TranslationCacheService extends FileBasedCacheService
     {
         return Path::getInstance()->getCachePath(__NAMESPACE__);
     }
+
+    /**
+     * Clears the cache.
+     */
+    public function clear()
+    {
+        $cachePaths = [];
+
+        $cachePaths[] = Path::getInstance()->getCachePath('Chamilo\Configuration\Package\InternationalizationBundles');
+        $cachePaths[] = $this->getCachePath();
+
+        foreach($cachePaths as $cachePath)
+        {
+            $this->removeCachePath($cachePath);
+        }
+    }
 }
