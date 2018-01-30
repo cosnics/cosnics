@@ -149,9 +149,11 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
     /**
      * Delete a LearningPath and all of it's node data
      *
+     * @param bool $only_version
+     *
      * @return boolean Returns whether the delete was succesfull.
      */
-    public function delete($only_version)
+    public function delete($only_version = false)
     {
         if ($only_version)
         {

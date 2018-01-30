@@ -46,6 +46,7 @@ class DeleterComponent extends Manager
             foreach ($ids as $object_id)
             {
                 $object = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
+                $unlinkAllowed = $this->getContentObjectPublicationManager()->canContentObjectBeUnlinked($object);
 
                 if (RightsService::getInstance()->canDestroyContentObject(
                     $this->get_user(),
@@ -109,6 +110,12 @@ class DeleterComponent extends Manager
                             }
                             elseif ($recycled)
                             {
+                                if(!$unlinkAllowed)
+                                {
+                                    $failures ++;
+                                    continue;
+                                }
+
                                 $versions = $object->get_content_object_versions();
                                 foreach ($versions as $version)
                                 {

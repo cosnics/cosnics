@@ -17,6 +17,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
@@ -963,10 +964,22 @@ class ContentObject extends CompositeDataClass
      * change the last modification date.
      *
      * @param $trueUpdate boolean True if the update is a true update (default), false otherwise.
-     * @return boolean True if the update succeeded, false otherwise.
+     *
+     * @return boolean True if the update succeeded, false otherwise
+     * .
+     * @throws \Exception
      */
     public function update($trueUpdate = true)
     {
+        $versions = $this->get_content_object_versions();
+        foreach($versions as $version)
+        {
+            if(!\Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::is_content_object_editable($version->getId()))
+            {
+                return false;
+            }
+        }
+
         if ($trueUpdate)
         {
             $this->set_modification_date(time());
@@ -993,27 +1006,8 @@ class ContentObject extends CompositeDataClass
 
     public function move($new_parent_id)
     {
-        $content_object = $this;
-
-        // TRANSACTION
-        $success = DataManager::transactional(
-            function ($c) use ($new_parent_id, $content_object)
-            {
-                $content_object->set_parent_id($new_parent_id);
-                $succes = call_user_func_array(
-                    array($content_object, '\Chamilo\Libraries\Storage\DataClass\DataClass::update'),
-                    array());
-
-                if (! $succes)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            });
-        return $success;
+        $this->set_parent_id($new_parent_id);
+        return DataManager::moveContentObjectToNewParent($this, $new_parent_id);
     }
 
     // create a version
@@ -1027,6 +1021,15 @@ class ContentObject extends CompositeDataClass
      */
     public function delete($only_version = false)
     {
+        $versions = $this->get_content_object_versions();
+        foreach($versions as $version)
+        {
+            if(!$this->getContentObjectPublicationManager()->canContentObjectBeUnlinked($version))
+            {
+                return false;
+            }
+        }
+
         $content_object = $this;
 
         // TRANSACTION
@@ -1109,8 +1112,28 @@ class ContentObject extends CompositeDataClass
         return parent::delete();
     }
 
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface | object
+     */
+    public function getContentObjectPublicationManager()
+    {
+        $containerBuilder = DependencyInjectionContainerBuilder::getInstance();
+        $container = $containerBuilder->createContainer();
+
+        return $container->get('chamilo.core.repository.publication.service.content_object_publication_manager');
+    }
+
     public function delete_links()
     {
+        $versions = $this->get_content_object_versions();
+        foreach($versions as $version)
+        {
+            if(!$this->getContentObjectPublicationManager()->canContentObjectBeUnlinked($version))
+            {
+                return false;
+            }
+        }
+
         // Delete link with workspaces
         $condition = new EqualityCondition(
             new PropertyConditionVariable(

@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication;
+namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
