@@ -11,6 +11,7 @@
             var handle = $("#custom-handle");
             var scoreSelector = $('select[name="score"]');
             var sliderSelector = $('#slider');
+            var initial = true;
 
             scoreSelector.parents('.form-row').hide();
             $('#scoreSaveButton').hide();
@@ -23,6 +24,13 @@
                     var value = sliderSelector.slider('value');
                     scoreSelector.val(value);
                     handle.text(value);
+
+                    if(!initial) {
+                        $('#scoreSaveButtonJavascript').addClass('btn-success');
+                    }
+
+                    initial = false;
+
                 },
                 create: function () {
                     handle.text($(this).slider("value"));

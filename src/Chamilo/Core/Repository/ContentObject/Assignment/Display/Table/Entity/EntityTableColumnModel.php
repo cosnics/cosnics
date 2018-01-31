@@ -22,6 +22,9 @@ abstract class EntityTableColumnModel extends RecordTableColumnModel implements 
     const PROPERTY_ENTRY_COUNT = 'entry_count';
     const PROPERTY_FEEDBACK_COUNT = 'feedback_count';
 
+    const DEFAULT_ORDER_COLUMN_INDEX = 4;
+    const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_DESC;
+
     /**
      * Initializes the columns for the table
      */
