@@ -17,7 +17,7 @@
         <property name="display_order" type="integer" unsigned="1" notnull="1" />
         <property name="user_id" type="integer" unsigned="1" notnull="1" />
         <property name="added_date" type="integer" unsigned="1" notnull="1" />
-        <property name="enforce_default_traversing_order" type="tinyint" unsigned="1" notnull="1" default="0" />
+        <property name="enforce_default_traversing_order" type="boolean" unsigned="1" notnull="1" default="0" />
     </properties>
     <index name="learning_path_id">
         <indexproperty name="learning_path_id" />
