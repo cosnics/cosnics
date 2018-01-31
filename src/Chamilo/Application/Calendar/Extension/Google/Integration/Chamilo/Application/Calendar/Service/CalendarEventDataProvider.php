@@ -133,7 +133,7 @@ class CalendarEventDataProvider extends ExternalCalendar
      *
      * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getCalendars()
      */
-    public function getCalendars(User $user)
+    public function getCalendars(User $user = null)
     {
         $calendarService = new CalendarService(CalendarRepository::getInstance());
         $calendars = array();

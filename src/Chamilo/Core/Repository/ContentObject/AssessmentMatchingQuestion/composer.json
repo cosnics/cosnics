@@ -25,7 +25,7 @@
     },
     "extra": {
         "cosnics": {
-            "name": "Matching Question",
+            "name": "Assessment Matching Question",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\AssessmentMatchingQuestion",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
             "category": "Assessment",

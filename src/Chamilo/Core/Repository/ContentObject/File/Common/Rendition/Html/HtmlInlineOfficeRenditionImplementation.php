@@ -1,8 +1,10 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -87,15 +89,15 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
 
             $alertText[] = '<span class="glyphicon glyphicon-lock"></span>';
             $alertText[] = '<span class="office-viewer-full-screen-message">' .
-                 Translation::get('OfficeViewerFullScreen') . '</span>';
+                Translation::get('OfficeViewerFullScreen') . '</span>';
             $alertText[] = '<a class="btn btn-default btn-office-viewer-minimize">' .
-                 Translation::get('OfficeViewerExitFullScreen') . '</a>';
+                Translation::get('OfficeViewerExitFullScreen') . '</a>';
 
             $html[] = implode(' ', $alertText);
             $html[] = '</div>';
 
             $html[] = '<iframe class="' . implode(' ', $this->getViewerFrameClasses()) . '" data-url="' .
-                 $this->getIFrameSource() . '">';
+                $this->getIFrameSource() . '">';
             $html[] = '</iframe>';
 
             $html[] = '</div>';
@@ -105,10 +107,12 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
             $html[] = '</div>';
 
             $html[] = ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(File::package(), true) . 'OfficeViewer.js');
+                Path::getInstance()->getJavascriptPath(File::package(), true) . 'OfficeViewer.js'
+            );
             $html[] = ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
-                     'Plugin/Jquery/jquery.fullscreen.min.js');
+                'Plugin/Jquery/jquery.fullscreen.min.js'
+            );
         }
         else
         {
@@ -146,6 +150,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     /**
      *
      * @param string $classes
+     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
      */
     public function getButtonToolbar($classes = '')
@@ -161,7 +166,9 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
                     '#',
                     Button::DISPLAY_ICON_AND_LABEL,
                     false,
-                    'btn-office-viewer-full-screen'));
+                    'btn-office-viewer-full-screen'
+                )
+            );
         }
 
         return $buttonToolBar;
@@ -170,6 +177,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     /**
      *
      * @param string[] $parameters
+     *
      * @return string
      */
     public function getErrorMessage()
@@ -178,8 +186,16 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
 
         $html[] = '<div class="alert alert-info">';
         $html[] = '<h4>' . Translation::get('LiveViewNotSupportedTitle') . '</h4>';
-        $html[] = Translation::get('LiveViewNotSupported');
-        $html[] = '<br />';
+
+        $html[] = Translation::get(
+            'LiveViewNotSupported',
+            [
+                'MAX_FILESIZE' => Filesystem::format_file_size($this->getSizeLimit()),
+                'CURRENT_FILESIZE' => Filesystem::format_file_size($this->get_content_object()->get_filesize())
+            ]
+        );
+
+        $html[] = '<br /><br />';
         $html[] = $this->renderActions('btn-info');
         $html[] = '</div>';
 

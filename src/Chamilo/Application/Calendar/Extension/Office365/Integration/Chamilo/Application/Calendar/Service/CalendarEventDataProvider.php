@@ -178,8 +178,12 @@ class CalendarEventDataProvider extends ExternalCalendar
     /**
      *
      * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getCalendars()
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
+     *
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]|false|mixed
      */
-    public function getCalendars(User $user)
+    public function getCalendars(User $user = null)
     {
         $identifier = [__METHOD__, $user->getId()];
         $identifierString = md5(serialize($identifier));

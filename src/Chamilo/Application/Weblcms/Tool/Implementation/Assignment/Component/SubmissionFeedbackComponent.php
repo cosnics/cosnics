@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -64,17 +65,21 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
                     self::PARAM_TARGET_ID => $target_id,
                     self::PARAM_SUBMITTER_TYPE => $submitter_type,
-                    self::PARAM_SUBMISSION => $this->submission_id));
+                    self::PARAM_SUBMISSION => $this->submission_id
+                )
+            );
         }
 
         // construct RepoViewer when no content object created yet
-        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            );
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
             $component->set_parameter(self::PARAM_SUBMISSION, $this->submission_id);
+
             return $component->run();
         }
     }
@@ -86,14 +91,31 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
      */
     public function create_tracker()
     {
-        // TODO: Check for correctness
-        $arguments = array(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback::PROPERTY_SUBMISSION_ID => $this->submission_id,
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback::PROPERTY_CREATED => time(),
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback::PROPERTY_MODIFIED => time(),
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback::PROPERTY_USER_ID => $this->get_user_id(),
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback::PROPERTY_CONTENT_OBJECT_ID => $this->get_repo_object());
-        Event::trigger('FeedbackSubmission', \Chamilo\Application\Weblcms\Manager::context(), $arguments);
+        $repo_object = $this->get_repo_object();
+        if (empty($repo_object))
+        {
+            return;
+        }
+
+        if (!is_array($repo_object))
+        {
+            $repo_object = [$repo_object];
+        }
+
+        foreach ($repo_object as $objectId)
+        {
+            $arguments = array(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback::PROPERTY_SUBMISSION_ID => $this->submission_id,
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback::PROPERTY_CREATED =>
+                    time(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback::PROPERTY_MODIFIED =>
+                    time(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback::PROPERTY_USER_ID =>
+                    $this->get_user_id(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback::PROPERTY_CONTENT_OBJECT_ID => $objectId
+            );
+            Event::trigger('FeedbackSubmission', \Chamilo\Application\Weblcms\Manager::context(), $arguments);
+        }
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
@@ -108,21 +130,30 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
             throw new NoObjectSelectedException($submissionTranslation);
         }
 
-        $tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission();
+        $tracker =
+            new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_ID),
-            new StaticConditionVariable($this->submission_id));
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(
+                ),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_ID
+            ),
+            new StaticConditionVariable($this->submission_id)
+        );
 
         $submission_tracker = DataManager::retrieve(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(),
-            new DataClassRetrieveParameters($condition));
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(
+            ),
+            new DataClassRetrieveParameters($condition)
+        );
 
-        $submissions = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::get_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(),
-            null,
-            $condition)->as_array();
+        $submissions =
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::get_data(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(
+                ),
+                null,
+                $condition
+            )->as_array();
 
         if (empty($submissions))
         {
@@ -133,9 +164,10 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
 
         $pub = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
-            $publication_id);
+            $publication_id
+        );
 
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $pub))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT, $pub))
         {
             $this->redirect(
                 Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
@@ -146,7 +178,9 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID,
                     self::PARAM_TARGET_ID,
                     self::PARAM_SUBMITTER_TYPE,
-                    self::PARAM_SUBMISSION));
+                    self::PARAM_SUBMISSION
+                )
+            );
         }
         $this->assignment = $pub->get_content_object();
 
@@ -155,27 +189,41 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE_SUBMITTERS,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id)),
-                $this->assignment->get_title()));
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                    )
+                ),
+                $this->assignment->get_title()
+            )
+        );
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE_SUBMISSIONS,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $submission_tracker->get_publication_id(),
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $submission_tracker->get_publication_id(
+                        ),
                         self::PARAM_TARGET_ID => $submission_tracker->get_submitter_id(),
-                        self::PARAM_SUBMITTER_TYPE => $submission_tracker->get_submitter_type())),
-                $this->get_submitter_name($submission_tracker)));
+                        self::PARAM_SUBMITTER_TYPE => $submission_tracker->get_submitter_type()
+                    )
+                ),
+                $this->get_submitter_name($submission_tracker)
+            )
+        );
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_SUBMISSION,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $submission_tracker->get_publication_id(),
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $submission_tracker->get_publication_id(
+                        ),
                         self::PARAM_TARGET_ID => $submission_tracker->get_submitter_id(),
                         self::PARAM_SUBMITTER_TYPE => $submission_tracker->get_submitter_type(),
-                        self::PARAM_SUBMISSION => $this->submission_id)),
-                $submission->get_title() . ' - ' . Translation::get('Detail')));
+                        self::PARAM_SUBMISSION => $this->submission_id
+                    )
+                ),
+                $submission->get_title() . ' - ' . Translation::get('Detail')
+            )
+        );
     }
 
     public function get_allowed_content_object_types()
@@ -199,7 +247,8 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID,
             self::PARAM_TARGET_ID,
             self::PARAM_SUBMITTER_TYPE,
-            self::PARAM_SUBMISSION);
+            self::PARAM_SUBMISSION
+        );
     }
 
     /**
@@ -214,20 +263,24 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
         // name of the user who submitted
         $user_name = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
             \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            $submission_tracker->get_user_id());
+            $submission_tracker->get_user_id()
+        );
 
         switch ($submission_tracker->get_submitter_type())
         {
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER :
                 return $user_name->get_fullname();
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP :
-                return $user_name->get_fullname() . ' - ' . \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                    CourseGroup::class_name(),
-                    $submission_tracker->get_submitter_id())->get_name();
+                return $user_name->get_fullname() . ' - ' .
+                    \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                        CourseGroup::class_name(),
+                        $submission_tracker->get_submitter_id()
+                    )->get_name();
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP :
                 return $user_name->get_fullname() . ' - ' . \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-                    Group::class_name(),
-                    $submission_tracker->get_submitter_id())->get_name();
+                        Group::class_name(),
+                        $submission_tracker->get_submitter_id()
+                    )->get_name();
         }
     }
 }

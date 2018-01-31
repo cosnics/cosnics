@@ -179,6 +179,8 @@ class GraphRepository
 
         $redirectResponse = new RedirectResponse($authorizationUrl);
         $redirectResponse->send();
+
+        exit;
     }
 
     /**
@@ -259,10 +261,23 @@ class GraphRepository
      * @param \Microsoft\Graph\Http\GraphRequest $graphRequest
      *
      * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
+     *
+     * @throws \Exception
      */
     protected function executeRequestWithDelegatedAccess(GraphRequest $graphRequest)
     {
         $this->activateDelegatedAccessToken();
+
+        if(!$this->delegatedAccessToken instanceof AccessToken)
+        {
+            throw new \Exception('The delegated access token could not be activated');
+        }
+
+        /**
+         * Change the authorization header since graph doesn't do this automatically when the new token is set
+         */
+        $graphRequest->addHeaders(['Authorization' => 'Bearer ' . $this->delegatedAccessToken->getToken()]);
+
         $result = $graphRequest->execute();
         $this->initializeApplicationAccessToken();
 

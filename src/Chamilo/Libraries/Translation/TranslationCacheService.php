@@ -13,6 +13,20 @@ use Chamilo\Libraries\Cache\FileBasedCacheService;
  */
 class TranslationCacheService extends FileBasedCacheService
 {
+    /**
+     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
+     */
+    protected $configurablePathBuilder;
+
+    /**
+     * TranslationCacheService constructor.
+     *
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+     */
+    public function __construct(\Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder)
+    {
+        $this->configurablePathBuilder = $configurablePathBuilder;
+    }
 
     /**
      *
@@ -20,7 +34,7 @@ class TranslationCacheService extends FileBasedCacheService
      */
     public function warmUp()
     {
-        $translatorFactory = new TranslatorFactory();
+        $translatorFactory = new TranslatorFactory($this->configurablePathBuilder);
         $translatorFactory->createTranslator('en_EN');
 
         return $this;
@@ -33,5 +47,21 @@ class TranslationCacheService extends FileBasedCacheService
     function getCachePath()
     {
         return Path::getInstance()->getCachePath(__NAMESPACE__);
+    }
+
+    /**
+     * Clears the cache.
+     */
+    public function clear()
+    {
+        $cachePaths = [];
+
+        $cachePaths[] = Path::getInstance()->getCachePath('Chamilo\Configuration\Package\InternationalizationBundles');
+        $cachePaths[] = $this->getCachePath();
+
+        foreach($cachePaths as $cachePath)
+        {
+            $this->removeCachePath($cachePath);
+        }
     }
 }

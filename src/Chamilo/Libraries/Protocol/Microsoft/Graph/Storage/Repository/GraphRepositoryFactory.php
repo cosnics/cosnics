@@ -76,7 +76,7 @@ class GraphRepositoryFactory
             $tenantId = 'common';
         }
 
-        $redirect = new Redirect(['application' => 'Chamilo\Libraries\Protocol\Microsoft\Graph']);
+        $redirect = new Redirect();
 
         $currentParameters = $this->chamiloRequest->query->all();
         $landingPageParameters = ['application' => 'Chamilo\Libraries\Protocol\Microsoft\Graph'];

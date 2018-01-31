@@ -32,7 +32,7 @@ interface CalendarInterface
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
-    public function getCalendars(User $user);
+    public function getCalendars(User $user = null);
 
     /**
      * Get the source type of the implementing context

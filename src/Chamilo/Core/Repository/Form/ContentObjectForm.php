@@ -3,11 +3,13 @@
 namespace Chamilo\Core\Repository\Form;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Service\EntityFormService;
 use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Core\Metadata\Service\InstanceFormService;
+use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Repository\Common\Includes\ContentObjectIncludeParser;
 use Chamilo\Core\Repository\Exception\NoTemplateException;
@@ -103,6 +105,11 @@ abstract class ContentObjectForm extends FormValidator
     private $extra;
 
     protected $form_type;
+
+    /**
+     * @var string
+     */
+    protected $selectedTabIdentifier;
 
     /**
      *
@@ -1161,7 +1168,31 @@ EOT;
             $object->attach_content_objects($values['attachments']['lo'], ContentObject::ATTACHMENT_NORMAL);
         }
 
+        $user = new User();
+        $user->setId($this->get_owner_id());
+
+        $instanceService = new InstanceService();
+        $this->selectedTabIdentifier = $instanceService->updateInstances(
+            $user,
+            $object,
+            (array) $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA]
+        );
+
+        $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($object);
+        $entityService = new EntityService();
+        $entityService->updateEntitySchemaValues(
+            $user,
+            new RelationService(),
+            new ElementService(),
+            $entity,
+            $values[EntityService::PROPERTY_METADATA_SCHEMA]);
+
         return $result;
+    }
+
+    public function getSelectedTabIdentifier()
+    {
+        return $this->selectedTabIdentifier;
     }
 
     public function is_version()
