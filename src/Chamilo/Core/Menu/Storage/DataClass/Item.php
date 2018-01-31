@@ -3,11 +3,10 @@ namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Core\Menu\ItemTitles;
 use Chamilo\Core\Menu\Rights;
-use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
-use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
-use Chamilo\Core\Menu\Storage\DataClass\LinkApplicationItem;
-use Chamilo\Core\Menu\Storage\DataClass\LinkItem;
 use Chamilo\Core\Menu\Storage\DataManager;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationCategoryItem;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceCategoryItem;
+use Chamilo\Core\User\Integration\Chamilo\Core\Menu\Storage\DataClass\WidgetItem;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
@@ -341,6 +340,18 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
             case LinkApplicationItem::class_name() :
                 return self::TYPE_LINK_APPLICATION;
                 break;
+			case LanguageCategoryItem::class_name() :
+	        	return self::TYPE_CATEGORY;
+	        	break;
+			case RepositoryImplementationCategoryItem::class_name() :
+	        	return self::TYPE_APPLICATION;
+	        	break;
+			case WorkspaceCategoryItem::class_name() :
+	        	return self::TYPE_APPLICATION;
+	        	break;
+			case WidgetItem::class_name() :
+	        	return self::TYPE_APPLICATION;
+	        	break;
         }
     }
 

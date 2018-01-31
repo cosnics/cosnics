@@ -715,7 +715,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
         }
         
         return $registration[Registration::PROPERTY_CONTEXT] . '\Storage\DataClass\\' .
-             $registration[Registration::PROPERTY_NAME];
+               ClassnameUtilities::getInstance()->getPackageNameFromNamespace($registration[Registration::PROPERTY_CONTEXT]);
     }
 
     public static function get_allowed_extensions()
