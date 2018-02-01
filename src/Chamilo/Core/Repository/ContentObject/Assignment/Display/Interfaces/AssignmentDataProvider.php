@@ -53,10 +53,31 @@ interface AssignmentDataProvider
     public function countEntitiesByEntityType($entityType);
 
     /**
+     * @param int $entityType
+     *
+     * @return int
+     */
+    public function countEntitiesWithSubmissionsByEntityType($entityType);
+
+    /**
+     * @param int $entityType
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    public function findEntitiesWithSubmissionsByEntityType($entityType);
+
+    /**
      *
      * @param integer $entityType
      *
      * @return string
+     */
+    public function getPluralEntityNameByType($entityType);
+
+    /**
+     * @param $entityType
+     *
+     * @return mixed
      */
     public function getEntityNameByType($entityType);
 

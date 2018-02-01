@@ -56,8 +56,38 @@ class AssignmentDataProvider implements
     }
 
     /**
+     * @param int $entityType
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getEntityNameByType()
+     * @return int
+     */
+    public function countEntitiesWithSubmissionsByEntityType($entityType)
+    {
+        return 0;
+    }
+
+    /**
+     * @param int $entityType
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    public function findEntitiesWithSubmissionsByEntityType($entityType)
+    {
+        return [];
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getPluralEntityNameByType()
+     */
+    public function getPluralEntityNameByType($entityType)
+    {
+        return Translation::get('Users');
+    }
+
+    /**
+     * @param $entityType
+     *
+     * @return mixed
      */
     public function getEntityNameByType($entityType)
     {

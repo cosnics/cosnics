@@ -30,7 +30,8 @@
 
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
 
-{{ BUTTON_TOOLBAR|raw }}
+<div class="button-toolbar">{{ BUTTON_TOOLBAR|raw }}</div>
+<div class="button-toolbar">{{ NAVIGATOR_BUTTON_TOOLBAR|raw }}</div>
 
 {% if HAS_ENTRY %}
     <h2 id="entity-name">{{ ENTITY_NAME }}</h2>

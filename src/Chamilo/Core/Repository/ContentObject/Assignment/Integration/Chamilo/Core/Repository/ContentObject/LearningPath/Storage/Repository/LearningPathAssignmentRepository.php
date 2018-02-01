@@ -71,6 +71,25 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     *
+     * @param int[] $userIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param OrderBy[] $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithSubmissionsByEntityTypeForTreeNodeData(
+        TreeNodeData $treeNodeData, array $userIds, $condition = null, $offset = null, $count = null,
+        $orderBy = []
+    )
+    {
+
+    }
+
+    /**
      *
      * @param TreeNodeData $treeNodeData
      * @param integer $entityType

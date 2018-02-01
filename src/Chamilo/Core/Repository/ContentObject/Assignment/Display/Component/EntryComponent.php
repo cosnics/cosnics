@@ -18,8 +18,10 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -122,6 +124,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
             'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
+            'NAVIGATOR_BUTTON_TOOLBAR' => $this->getNavigatorButtonToolbarRenderer()->render(),
             'ENTITY_NAME' => $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
                 $this->getEntityType(), $this->getEntityIdentifier()
             )->getEntityName(),
@@ -436,7 +439,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                                     'BrowseEntities',
                                     [
                                         'NAME' => strtolower(
-                                            $this->getDataProvider()->getEntityNameByType($this->getEntityType())
+                                            $this->getDataProvider()->getPluralEntityNameByType($this->getEntityType())
                                         )
                                     ]
                                 ),
@@ -457,6 +460,244 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $this->actionBar = new ButtonToolBarRenderer($buttonToolBar);
 
         return $this->actionBar;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
+     */
+    protected function getNavigatorButtonToolbarRenderer()
+    {
+        $this->calculateNavigatorOptions();
+
+        $translator = Translation::getInstance();
+        $entityName = $this->getDataProvider()->getEntityNameByType($this->getEntityType());
+
+        $entitiesCount = $this->getDataProvider()->countEntitiesByEntityType($this->getEntityType());
+        $entriesCount = $this->getDataProvider()->countEntriesForEntityTypeAndId(
+            $this->getEntityType(), $this->getEntityIdentifier()
+        );
+
+        $buttonToolBar = new ButtonToolBar();
+
+        $submittersNavigatorActions = new ButtonGroup();
+        $submissionsNavigatorActions = new ButtonGroup();
+
+        $submittersNavigatorActions->addButton(
+            new Button(
+                $translator->getTranslation('PreviousSubmitter', ['ENTITY_NAME' => strtolower($entityName)]),
+                new FontAwesomeGlyph('backward'),
+                $this->getPreviousEntityUrl(),
+                ToolbarItem::DISPLAY_ICON_AND_LABEL
+            )
+        );
+
+        $submittersNavigatorActions->addButton(
+            new Button(
+                '<span class="badge" style="color: white; background-color: #5bc0de;">'
+                . $this->currentEntityPosition . ' / ' . $entitiesCount . '</span>',
+                null,
+                '#',
+                ToolbarItem::DISPLAY_LABEL
+            )
+        );
+
+        $submittersNavigatorActions->addButton(
+            new Button(
+                $translator->getTranslation('NextSubmitter', ['ENTITY_NAME' => strtolower($entityName)]),
+                new FontAwesomeGlyph('forward'),
+                $this->getNextEntityUrl(),
+                ToolbarItem::DISPLAY_ICON_AND_LABEL
+            )
+        );
+
+        $submissionsNavigatorActions->addButton(
+            new Button(
+                $translator->getTranslation('EarlierSubmission'),
+                new FontAwesomeGlyph('backward'),
+                $this->getPreviousEntryUrl(),
+                ToolbarItem::DISPLAY_ICON_AND_LABEL
+            )
+        );
+
+        $submissionsNavigatorActions->addButton(
+            new Button(
+                '<span class="badge" style="color: white; background-color: #28a745;">'
+                . $this->currentEntryPosition . ' / ' . $entriesCount . '</span>',
+                null,
+                '#',
+                ToolbarItem::DISPLAY_LABEL
+            )
+        );
+
+        $submissionsNavigatorActions->addButton(
+            new Button(
+                $translator->getTranslation('LaterSubmission'),
+                new FontAwesomeGlyph('forward'),
+                $this->getNextEntryUrl(),
+                ToolbarItem::DISPLAY_ICON_AND_LABEL
+            )
+        );
+
+        $buttonToolBar->addButtonGroup($submissionsNavigatorActions);
+        $buttonToolBar->addButtonGroup($submittersNavigatorActions);
+
+        return new ButtonToolBarRenderer($buttonToolBar);
+    }
+
+    /**
+     * @var Entry
+     */
+    protected $previousEntry;
+
+    /**
+     * @var Entry
+     */
+    protected $currentEntry;
+
+    /**
+     * @var int
+     */
+    protected $currentEntryPosition;
+
+    /**
+     * @var Entry
+     */
+    protected $nextEntry;
+
+    /**
+     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    protected $previousEntity;
+
+    /**
+     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    protected $currentEntity;
+
+    /**
+     * @var int
+     */
+    protected $currentEntityPosition;
+
+    /**
+     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    protected $nextEntity;
+
+    /**
+     * Calculates the position of the current entry and the current entity
+     */
+    protected function calculateNavigatorOptions()
+    {
+        if (!$this->getEntry() instanceof Entry)
+        {
+            return;
+        }
+
+        $entries = $this->getDataProvider()->findEntriesByEntityTypeAndIdentifiers(
+            $this->getEntityType(), [$this->getEntityIdentifier()]
+        );
+
+        $this->currentEntryPosition = 1;
+
+        foreach ($entries as $entry)
+        {
+            if ($entry->getId() == $this->getEntry()->getId())
+            {
+                $this->currentEntry = $entry;
+                continue;
+            }
+
+            if (!$this->currentEntry)
+            {
+                $this->currentEntryPosition ++;
+                $this->previousEntry = $entry;
+            }
+            else
+            {
+                $this->nextEntry = $entry;
+                break;
+            }
+        }
+
+        $entities = $this->getDataProvider()->findEntitiesWithSubmissionsByEntityType($this->getEntityType());
+        $this->currentEntityPosition = 1;
+
+        foreach ($entities as $entity)
+        {
+            if ($entity[DataClass::PROPERTY_ID] == $this->getEntityIdentifier())
+            {
+                $this->currentEntity = $entity;
+                continue;
+            }
+
+            if (!$this->currentEntry)
+            {
+                $this->currentEntryPosition ++;
+                $this->previousEntity = $entity;
+            }
+            else
+            {
+                $this->nextEntity = $entity;
+                break;
+            }
+        }
+    }
+
+    /**
+     * @return string
+     */
+    protected function getPreviousEntryUrl()
+    {
+        if (!$this->previousEntry instanceof Entry)
+        {
+            return null;
+        }
+
+        return $this->get_url(array(self::PARAM_ENTRY_ID => $this->previousEntry->getId()));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getNextEntryUrl()
+    {
+        if (!$this->nextEntry instanceof Entry)
+        {
+            return null;
+        }
+
+        return $this->get_url(array(self::PARAM_ENTRY_ID => $this->nextEntry->getId()));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getPreviousEntityUrl()
+    {
+        if (empty($this->previousEntity[DataClass::PROPERTY_ID]))
+        {
+            return null;
+        }
+
+        return $this->get_url(
+            array(self::PARAM_ENTITY_ID => $this->previousEntity[DataClass::PROPERTY_ID]), array(self::PARAM_ENTRY_ID)
+        );
+    }
+
+    /**
+     * @return string
+     */
+    protected function getNextEntityUrl()
+    {
+        if (empty($this->nextEntity[DataClass::PROPERTY_ID]))
+        {
+            return null;
+        }
+
+        return $this->get_url(
+            array(self::PARAM_ENTITY_ID => $this->nextEntity[DataClass::PROPERTY_ID]), array(self::PARAM_ENTRY_ID)
+        );
     }
 
     /**

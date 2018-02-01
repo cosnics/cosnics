@@ -192,15 +192,52 @@ class AssignmentDataProvider
     }
 
     /**
+     * @param int $entityType
+     *
+     * @return int
+     */
+    public function countEntitiesWithSubmissionsByEntityType($entityType)
+    {
+        return $this->learningPathAssignmentService->countTargetUsersWithSubmissionsForTreeNodeData(
+            $this->treeNode->getTreeNodeData(), $this->targetUserIds
+        );
+    }
+
+    /**
+     * @param int $entityType
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findEntitiesWithSubmissionsByEntityType($entityType)
+    {
+        return $this->learningPathAssignmentService->findTargetUsersWithSubmissionsByEntityTypeForTreeNodeData(
+            $this->treeNode->getTreeNodeData(), $this->targetUserIds
+        );
+    }
+
+    /**
      *
      * @param integer $entityType
      *
      * @return string
      */
-    public function getEntityNameByType($entityType)
+    public function getPluralEntityNameByType($entityType)
     {
         return $this->translator->trans(
             'Users', [],
+            'Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath'
+        );
+    }
+
+    /**
+     * @param $entityType
+     *
+     * @return mixed
+     */
+    public function getEntityNameByType($entityType)
+    {
+        return $this->translator->trans(
+            'User', [],
             'Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath'
         );
     }

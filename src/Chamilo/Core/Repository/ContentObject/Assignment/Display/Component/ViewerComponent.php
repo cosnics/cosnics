@@ -70,7 +70,7 @@ class ViewerComponent extends Manager implements TableSupport
      */
     protected function getTemplateProperties()
     {
-        $entityName = $this->getDataProvider()->getEntityNameByType($this->getEntityType());
+        $entityName = $this->getDataProvider()->getPluralEntityNameByType($this->getEntityType());
         $entryCount = $this->getDataProvider()->countDistinctEntriesByEntityType($this->getEntityType());
         $feedbackCount = $this->getDataProvider()->countDistinctFeedbackByEntityType($this->getEntityType());
         $lateEntryCount = $this->getDataProvider()->countDistinctLateEntriesByEntityType($this->getEntityType());

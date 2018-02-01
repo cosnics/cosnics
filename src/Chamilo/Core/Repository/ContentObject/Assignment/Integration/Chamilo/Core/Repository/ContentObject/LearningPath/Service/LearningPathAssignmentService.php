@@ -133,6 +133,38 @@ abstract class LearningPathAssignmentService extends AssignmentService
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param array $userIds
+     *
+     * @return int
+     */
+    public function countTargetUsersWithSubmissionsForTreeNodeData(
+        TreeNodeData $treeNodeData, $userIds = []
+    )
+    {
+        return $this->findTargetUsersWithSubmissionsByEntityTypeForTreeNodeData($treeNodeData, $userIds)->count();
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param int[] $userIds
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithSubmissionsByEntityTypeForTreeNodeData(
+        TreeNodeData $treeNodeData, $userIds = [], $condition = null, $offset = null, $count = null, $orderProperty = []
+    )
+    {
+        return $this->assignmentRepository->findTargetUsersWithSubmissionsByEntityTypeForTreeNodeData(
+            $treeNodeData, $userIds, $condition, $offset, $count, $orderProperty
+        );
+    }
+
+    /**
      *
      * @param TreeNodeData $treeNodeData
      * @param integer $entityType

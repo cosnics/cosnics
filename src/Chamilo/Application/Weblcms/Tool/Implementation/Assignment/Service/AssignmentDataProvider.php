@@ -152,16 +152,49 @@ class AssignmentDataProvider
     }
 
     /**
+     * @param int $entityType
+     *
+     * @return int
+     */
+    public function countEntitiesWithSubmissionsByEntityType($entityType)
+    {
+        return 0;
+    }
+
+    /**
+     * @param int $entityType
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    public function findEntitiesWithSubmissionsByEntityType($entityType)
+    {
+        return [];
+    }
+
+    /**
      *
      * @param integer $entityType
      *
      * @return string
      */
-    public function getEntityNameByType($entityType)
+    public function getPluralEntityNameByType($entityType)
     {
         return $this->translator->trans(
             'Users', [],
-            'Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath'
+            'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
+        );
+    }
+
+    /**
+     * @param $entityType
+     *
+     * @return mixed
+     */
+    public function getEntityNameByType($entityType)
+    {
+        return $this->translator->trans(
+            'User', [],
+            'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
         );
     }
 
