@@ -604,6 +604,8 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function process_content_object($content_object_node)
     {
+	    $configuration = Configuration::getInstance();
+
         $content_object_parameter = new CpoContentObjectImportParameters($content_object_node);
         
         $this->process_attachments($content_object_node);
@@ -611,7 +613,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
         $this->process_sub_items($content_object_node);
         $this->process_helpers($content_object_node);
         $this->process_external_sync($content_object_node);
-        
+
         $content_object = ContentObjectImportImplementation::launch(
             $this, 
             $this->determine_content_object_type(
@@ -621,8 +623,13 @@ class CpoContentObjectImportController extends ContentObjectImportController
         $external_sync = $this->set_external_sync($content_object_node, $content_object);
         
         $this->update_helpers($content_object_node, $content_object);
+
+        if (($configuration->get_setting(array('Chamilo\Core\Repository', 'description_required')) == '1') && $content_object->get_description() == '') {
+	        $content_object->set_description($content_object->get_title());
+        }
+
         $content_object->create();
-        
+
         $this->process_workspace_category($content_object_node, $content_object);
         
         $this->set_content_object_id_cache_id($content_object_node->getAttribute('id'), $content_object->get_id());
