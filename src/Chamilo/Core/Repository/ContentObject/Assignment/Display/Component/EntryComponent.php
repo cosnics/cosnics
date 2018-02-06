@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryNavigator;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreFormProcessor;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
@@ -55,6 +56,11 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
+
+    /**
+     * @var EntryNavigator
+     */
+    protected $entryNavigator;
 
     /**
      * @return string
@@ -467,12 +473,18 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getNavigatorButtonToolbarRenderer()
     {
-        $this->calculateNavigatorOptions();
+        $currentEntityPosition = $this->getEntryNavigator()->getCurrentEntityPosition(
+            $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
+        );
+
+        $currentEntryPosition = $this->getEntryNavigator()->getCurrentEntryPosition(
+            $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
+        );
 
         $translator = Translation::getInstance();
         $entityName = $this->getDataProvider()->getEntityNameByType($this->getEntityType());
 
-        $entitiesCount = $this->getDataProvider()->countEntitiesByEntityType($this->getEntityType());
+        $entitiesCount = $this->getDataProvider()->countEntitiesWithSubmissionsByEntityType($this->getEntityType());
         $entriesCount = $this->getDataProvider()->countEntriesForEntityTypeAndId(
             $this->getEntityType(), $this->getEntityIdentifier()
         );
@@ -494,7 +506,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $submittersNavigatorActions->addButton(
             new Button(
                 '<span class="badge" style="color: white; background-color: #5bc0de;">'
-                . $this->currentEntityPosition . ' / ' . $entitiesCount . '</span>',
+                . $currentEntityPosition . ' / ' . $entitiesCount . '</span>',
                 null,
                 '#',
                 ToolbarItem::DISPLAY_LABEL
@@ -522,7 +534,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $submissionsNavigatorActions->addButton(
             new Button(
                 '<span class="badge" style="color: white; background-color: #28a745;">'
-                . $this->currentEntryPosition . ' / ' . $entriesCount . '</span>',
+                . $currentEntryPosition . ' / ' . $entriesCount . '</span>',
                 null,
                 '#',
                 ToolbarItem::DISPLAY_LABEL
@@ -545,116 +557,20 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     }
 
     /**
-     * @var Entry
-     */
-    protected $previousEntry;
-
-    /**
-     * @var Entry
-     */
-    protected $currentEntry;
-
-    /**
-     * @var int
-     */
-    protected $currentEntryPosition;
-
-    /**
-     * @var Entry
-     */
-    protected $nextEntry;
-
-    /**
-     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    protected $previousEntity;
-
-    /**
-     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    protected $currentEntity;
-
-    /**
-     * @var int
-     */
-    protected $currentEntityPosition;
-
-    /**
-     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    protected $nextEntity;
-
-    /**
-     * Calculates the position of the current entry and the current entity
-     */
-    protected function calculateNavigatorOptions()
-    {
-        if (!$this->getEntry() instanceof Entry)
-        {
-            return;
-        }
-
-        $entries = $this->getDataProvider()->findEntriesByEntityTypeAndIdentifiers(
-            $this->getEntityType(), [$this->getEntityIdentifier()]
-        );
-
-        $this->currentEntryPosition = 1;
-
-        foreach ($entries as $entry)
-        {
-            if ($entry->getId() == $this->getEntry()->getId())
-            {
-                $this->currentEntry = $entry;
-                continue;
-            }
-
-            if (!$this->currentEntry)
-            {
-                $this->currentEntryPosition ++;
-                $this->previousEntry = $entry;
-            }
-            else
-            {
-                $this->nextEntry = $entry;
-                break;
-            }
-        }
-
-        $entities = $this->getDataProvider()->findEntitiesWithSubmissionsByEntityType($this->getEntityType());
-        $this->currentEntityPosition = 1;
-
-        foreach ($entities as $entity)
-        {
-            if ($entity[DataClass::PROPERTY_ID] == $this->getEntityIdentifier())
-            {
-                $this->currentEntity = $entity;
-                continue;
-            }
-
-            if (!$this->currentEntry)
-            {
-                $this->currentEntryPosition ++;
-                $this->previousEntity = $entity;
-            }
-            else
-            {
-                $this->nextEntity = $entity;
-                break;
-            }
-        }
-    }
-
-    /**
      * @return string
      */
     protected function getPreviousEntryUrl()
     {
-        if (!$this->previousEntry instanceof Entry)
+        $previousEntry = $this->getEntryNavigator()->getPreviousEntry(
+            $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
+        );
+
+        if (!$previousEntry instanceof Entry)
         {
             return null;
         }
 
-        return $this->get_url(array(self::PARAM_ENTRY_ID => $this->previousEntry->getId()));
+        return $this->get_url(array(self::PARAM_ENTRY_ID => $previousEntry->getId()));
     }
 
     /**
@@ -662,12 +578,16 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getNextEntryUrl()
     {
-        if (!$this->nextEntry instanceof Entry)
+        $nextEntry = $this->getEntryNavigator()->getNextEntry(
+            $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
+        );
+
+        if (!$nextEntry instanceof Entry)
         {
             return null;
         }
 
-        return $this->get_url(array(self::PARAM_ENTRY_ID => $this->nextEntry->getId()));
+        return $this->get_url(array(self::PARAM_ENTRY_ID => $nextEntry->getId()));
     }
 
     /**
@@ -675,13 +595,17 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getPreviousEntityUrl()
     {
-        if (empty($this->previousEntity[DataClass::PROPERTY_ID]))
+        $previousEntity = $this->getEntryNavigator()->getPreviousEntity(
+            $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
+        );
+
+        if (empty($previousEntity[DataClass::PROPERTY_ID]))
         {
             return null;
         }
 
         return $this->get_url(
-            array(self::PARAM_ENTITY_ID => $this->previousEntity[DataClass::PROPERTY_ID]), array(self::PARAM_ENTRY_ID)
+            array(self::PARAM_ENTITY_ID => $previousEntity[DataClass::PROPERTY_ID]), array(self::PARAM_ENTRY_ID)
         );
     }
 
@@ -690,13 +614,17 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getNextEntityUrl()
     {
-        if (empty($this->nextEntity[DataClass::PROPERTY_ID]))
+        $nextEntity = $this->getEntryNavigator()->getNextEntity(
+            $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
+        );
+
+        if (empty($nextEntity[DataClass::PROPERTY_ID]))
         {
             return null;
         }
 
         return $this->get_url(
-            array(self::PARAM_ENTITY_ID => $this->nextEntity[DataClass::PROPERTY_ID]), array(self::PARAM_ENTRY_ID)
+            array(self::PARAM_ENTITY_ID => $nextEntity[DataClass::PROPERTY_ID]), array(self::PARAM_ENTRY_ID)
         );
     }
 
@@ -715,5 +643,18 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     public function get_additional_parameters()
     {
         return array(self::PARAM_ENTRY_ID, self::PARAM_ENTITY_ID, self::PARAM_ENTITY_TYPE);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryNavigator
+     */
+    protected function getEntryNavigator()
+    {
+        if(!isset($this->entryNavigator))
+        {
+            $this->entryNavigator = new EntryNavigator();
+        }
+
+        return $this->entryNavigator;
     }
 }

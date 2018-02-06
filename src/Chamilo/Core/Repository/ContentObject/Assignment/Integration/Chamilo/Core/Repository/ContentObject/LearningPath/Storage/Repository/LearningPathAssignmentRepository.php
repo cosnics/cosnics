@@ -51,12 +51,6 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
         $orderBy = []
     )
     {
-        $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
-
-        $baseClass = User::class_name();
-
         return $this->findTargetsForEntityType(
             \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER,
             $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
@@ -64,9 +58,9 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
             $offset,
             $count,
             $orderBy,
-            $properties,
-            $baseClass,
-            $this->getTargetBaseVariable($baseClass)
+            $this->getDataClassPropertiesForUser(),
+            User::class_name(),
+            $this->getTargetBaseVariable(User::class_name())
         );
     }
 
@@ -86,7 +80,30 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
         $orderBy = []
     )
     {
+        return $this->findTargetsForEntityTypeWithSubmissions(
+            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER,
+            $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
+            $this->getTreeNodeDataCondition($treeNodeData),
+            $offset,
+            $count,
+            $orderBy,
+            $this->getDataClassPropertiesForUser(),
+            User::class_name(),
+            $this->getTargetBaseVariable(User::class_name())
+        );
+    }
 
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     */
+    protected function getDataClassPropertiesForUser()
+    {
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+
+        return $properties;
     }
 
     /**

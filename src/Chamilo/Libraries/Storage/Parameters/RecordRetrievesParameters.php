@@ -27,9 +27,10 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $havingCondition
      */
     public function __construct(DataClassProperties $dataClassProperties = null, Condition $condition = null, $count = null,
-        $offset = null, $orderBy = array(), Joins $joins = null, GroupBy $groupBy = null)
+        $offset = null, $orderBy = array(), Joins $joins = null, GroupBy $groupBy = null, Condition $havingCondition = null)
     {
         DataClassParameters::__construct(
             $condition,
@@ -37,7 +38,7 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
             $dataClassProperties,
             $orderBy,
             $groupBy,
-            null,
+            $havingCondition,
             $count,
             $offset);
     }

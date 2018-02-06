@@ -366,7 +366,6 @@ abstract class AssignmentRepository
     }
 
     /**
-     *
      * @param integer $entityType
      * @param Condition $condition
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $joinCondition
@@ -381,7 +380,7 @@ abstract class AssignmentRepository
      */
     protected function findTargetsForEntityType(
         $entityType, Condition $condition = null, Condition $joinCondition = null, $offset, $count, $orderBy,
-        DataClassProperties $properties, $baseClass, $baseVariable
+        DataClassProperties $properties, $baseClass, $baseVariable, Condition $havingCondition = null
     )
     {
         $properties->add(
@@ -446,10 +445,46 @@ abstract class AssignmentRepository
             $offset,
             $orderBy,
             $joins,
-            $group_by
+            $group_by,
+            $havingCondition
         );
 
         return $this->dataClassRepository->records($baseClass, $parameters);
+    }
+
+    /**
+     * @param integer $entityType
+     * @param Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $joinCondition
+     * @param integer $offset
+     * @param integer $count
+     * @param OrderBy[] $orderBy
+     * @param DataClassProperties $properties
+     * @param string $baseClass
+     * @param PropertyConditionVariable $baseVariable
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    protected function findTargetsForEntityTypeWithSubmissions(
+        $entityType, Condition $condition = null, Condition $joinCondition = null, $offset, $count, $orderBy,
+        DataClassProperties $properties, $baseClass, $baseVariable
+    )
+    {
+        $submittedVariable = new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED);
+
+        $havingCondition = new ComparisonCondition(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::COUNT,
+                $submittedVariable
+            ),
+            ComparisonCondition::GREATER_THAN_OR_EQUAL,
+            new StaticConditionVariable(1)
+        );
+
+        return $this->findTargetsForEntityType(
+            $entityType, $condition, $joinCondition, $offset, $count, $orderBy, $properties, $baseClass,
+            $baseVariable, $havingCondition
+        );
     }
 
     /**
