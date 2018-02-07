@@ -751,7 +751,7 @@ class Filesystem
 
         if (isset($newChmodValue) && file_exists($filePath))
         {
-            $newChmodValue = octdec($newChmodValue);
+            $newChmodValue = decoct($newChmodValue);
 
             if(is_dir($filePath) && $recursive)
             {
