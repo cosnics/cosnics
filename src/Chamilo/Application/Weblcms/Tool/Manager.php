@@ -1085,4 +1085,12 @@ abstract class Manager extends Application
     {
         $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator
+     */
+    public function getCategoryBreadcrumbsGenerator()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.service.category_breadcrumbs_generator');
+    }
 }
