@@ -153,7 +153,11 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         );
 
         $cacheManager->addCacheService(
-            'symfony_translations',
+            'chamilo_translation_bundles', new \Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheService()
+        );
+
+        $cacheManager->addCacheService(
+            'chamilo_translations',
             new \Chamilo\Libraries\Translation\TranslationCacheService($configurablePathBuilder)
         );
 
