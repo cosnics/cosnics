@@ -87,7 +87,10 @@
     <li role="presentation"><a href="#automatic-feedback" aria-controls="entries" role="tab" data-toggle="tab">{{ 'AutomaticFeedback'|trans({}, appContext) }}</a></li>
     {% endif %}
 
+    {% if ENTRY_COUNT > 1 %}
     <li role="presentation"><a href="#entries" aria-controls="entries" role="tab" data-toggle="tab">{{ 'OtherEntries'|trans({}, appContext) }}</a></li>
+    {% endif %}
+
     <li role="presentation" {% if not HAS_ENTRY %}class="active"{% endif %}><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
 </ul>
 {% endif %}
@@ -179,9 +182,11 @@
     </div>
     {% endif %}
 
+    {% if ENTRY_COUNT > 1 %}
     <div role="tabpanel" class="tab-pane" id="entries">
         {{ ENTRY_TABLE|raw }}
     </div>
+    {% endif %}
     {% endif %}
 
     <div role="tabpanel" class="{% if HAS_ENTRY -%}tab-pane{%- endif %}" id="assignment">

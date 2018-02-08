@@ -173,6 +173,9 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'SCORE' => $score,
             'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
             'ENTRY_TABLE' => $this->renderEntryTable(),
+            'ENTRY_COUNT' => $this->getDataProvider()->countEntriesForEntityTypeAndId(
+                $this->getEntityType(), $this->getEntityIdentifier()
+            ),
             'SHOW_AUTOMATIC_FEEDBACK' => $assignment->isAutomaticFeedbackVisible(),
             'AUTOMATIC_FEEDBACK_TEXT' => $assignment->get_automatic_feedback_text(),
             'AUTOMATIC_FEEDBACK_CONTENT_OBJECTS' => $contentObjects,
@@ -388,22 +391,28 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         {
 
             $buttonGroup = new ButtonGroup();
-            $buttonGroup->addButton(
-                new Button(
-                    Translation::get('SubmissionSubmit'),
-                    new FontAwesomeGlyph('plus'),
-                    $this->get_url(
-                        [
-                            self::PARAM_ACTION => self::ACTION_CREATE,
-                            self::PARAM_ENTITY_TYPE => $this->getEntityType(),
-                            self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
-                        ]
-                    ),
-                    Button::DISPLAY_ICON_AND_LABEL,
-                    false,
-                    'btn-success'
-                )
-            );
+
+            if ($this->getRightsService()->canUserCreateEntry(
+                $this->getUser(), $this->getAssignment(), $this->getEntityType(), $this->getEntityIdentifier()
+            ))
+            {
+                $buttonGroup->addButton(
+                    new Button(
+                        Translation::get('SubmissionSubmit'),
+                        new FontAwesomeGlyph('plus'),
+                        $this->get_url(
+                            [
+                                self::PARAM_ACTION => self::ACTION_CREATE,
+                                self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                                self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
+                            ]
+                        ),
+                        Button::DISPLAY_ICON_AND_LABEL,
+                        false,
+                        'btn-success'
+                    )
+                );
+            }
 
             $buttonToolBar->addButtonGroup($buttonGroup);
 
@@ -411,7 +420,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             if ($this->getEntry() instanceof Entry)
             {
-                $splitDropdownButton = new SplitDropdownButton(Translation::get('DownloadAll'),
+                $splitDropdownButton = new SplitDropdownButton(
+                    Translation::get('DownloadAll'),
                     new FontAwesomeGlyph('download'),
                     $this->get_url(
                         [
@@ -420,8 +430,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                             self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
                         ],
                         [self::PARAM_ENTRY_ID]
-                    ));
-
+                    )
+                );
 
                 $splitDropdownButton->addSubButton(
                     new SubButton(
@@ -484,7 +494,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     {
         $buttonToolBar = new ButtonToolBar();
 
-        if(!$this->getDataProvider()->canEditAssignment() || empty($this->getEntry()))
+        if (!$this->getDataProvider()->canEditAssignment() || empty($this->getEntry()))
         {
             return new ButtonToolBarRenderer($buttonToolBar);
         }
@@ -505,67 +515,75 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $this->getEntityType(), $this->getEntityIdentifier()
         );
 
-        $submittersNavigatorActions = new ButtonGroup();
-        $submissionsNavigatorActions = new ButtonGroup();
+        if ($entitiesCount > 1)
+        {
+            $submittersNavigatorActions = new ButtonGroup();
 
-        $submittersNavigatorActions->addButton(
-            new Button(
-                $translator->getTranslation('PreviousSubmitter', ['ENTITY_NAME' => strtolower($entityName)]),
-                new FontAwesomeGlyph('backward'),
-                $this->getPreviousEntityUrl(),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL
-            )
-        );
+            $submittersNavigatorActions->addButton(
+                new Button(
+                    $translator->getTranslation('PreviousSubmitter', ['ENTITY_NAME' => strtolower($entityName)]),
+                    new FontAwesomeGlyph('backward'),
+                    $this->getPreviousEntityUrl(),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
-        $submittersNavigatorActions->addButton(
-            new Button(
-                '<span class="badge" style="color: white; background-color: #5bc0de;">'
-                . $currentEntityPosition . ' / ' . $entitiesCount . '</span>',
-                null,
-                '#',
-                ToolbarItem::DISPLAY_LABEL
-            )
-        );
+            $submittersNavigatorActions->addButton(
+                new Button(
+                    '<span class="badge" style="color: white; background-color: #5bc0de;">'
+                    . $currentEntityPosition . ' / ' . $entitiesCount . '</span>',
+                    null,
+                    '#',
+                    ToolbarItem::DISPLAY_LABEL
+                )
+            );
 
-        $submittersNavigatorActions->addButton(
-            new Button(
-                $translator->getTranslation('NextSubmitter', ['ENTITY_NAME' => strtolower($entityName)]),
-                new FontAwesomeGlyph('forward'),
-                $this->getNextEntityUrl(),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL
-            )
-        );
+            $submittersNavigatorActions->addButton(
+                new Button(
+                    $translator->getTranslation('NextSubmitter', ['ENTITY_NAME' => strtolower($entityName)]),
+                    new FontAwesomeGlyph('forward'),
+                    $this->getNextEntityUrl(),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
-        $submissionsNavigatorActions->addButton(
-            new Button(
-                $translator->getTranslation('EarlierSubmission'),
-                new FontAwesomeGlyph('backward'),
-                $this->getPreviousEntryUrl(),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL
-            )
-        );
+            $buttonToolBar->addButtonGroup($submittersNavigatorActions);
+        }
 
-        $submissionsNavigatorActions->addButton(
-            new Button(
-                '<span class="badge" style="color: white; background-color: #28a745;">'
-                . $currentEntryPosition . ' / ' . $entriesCount . '</span>',
-                null,
-                '#',
-                ToolbarItem::DISPLAY_LABEL
-            )
-        );
+        if ($entriesCount > 1)
+        {
+            $submissionsNavigatorActions = new ButtonGroup();
 
-        $submissionsNavigatorActions->addButton(
-            new Button(
-                $translator->getTranslation('LaterSubmission'),
-                new FontAwesomeGlyph('forward'),
-                $this->getNextEntryUrl(),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL
-            )
-        );
+            $submissionsNavigatorActions->addButton(
+                new Button(
+                    $translator->getTranslation('EarlierSubmission'),
+                    new FontAwesomeGlyph('backward'),
+                    $this->getPreviousEntryUrl(),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
-        $buttonToolBar->addButtonGroup($submissionsNavigatorActions);
-        $buttonToolBar->addButtonGroup($submittersNavigatorActions);
+            $submissionsNavigatorActions->addButton(
+                new Button(
+                    '<span class="badge" style="color: white; background-color: #28a745;">'
+                    . $currentEntryPosition . ' / ' . $entriesCount . '</span>',
+                    null,
+                    '#',
+                    ToolbarItem::DISPLAY_LABEL
+                )
+            );
+
+            $submissionsNavigatorActions->addButton(
+                new Button(
+                    $translator->getTranslation('LaterSubmission'),
+                    new FontAwesomeGlyph('forward'),
+                    $this->getNextEntryUrl(),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
+
+            $buttonToolBar->addButtonGroup($submissionsNavigatorActions);
+        }
 
         return new ButtonToolBarRenderer($buttonToolBar);
     }
@@ -664,7 +682,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getEntryNavigator()
     {
-        if(!isset($this->entryNavigator))
+        if (!isset($this->entryNavigator))
         {
             $this->entryNavigator = new EntryNavigator();
         }

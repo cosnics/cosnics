@@ -159,23 +159,23 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
             );
         }
 
-        if ($this->get_table()->getAssignmentDataProvider()->canEditAssignment())
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('DeleteEntry'),
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'),
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_DELETE,
-                            Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON,
-                    true
-                )
-            );
-        }
+//        if ($this->get_table()->getAssignmentDataProvider()->canEditAssignment())
+//        {
+//            $toolbar->add_item(
+//                new ToolbarItem(
+//                    Translation::get('DeleteEntry'),
+//                    Theme::getInstance()->getCommonImagePath('Action/Delete'),
+//                    $this->get_component()->get_url(
+//                        array(
+//                            Manager::PARAM_ACTION => Manager::ACTION_DELETE,
+//                            Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
+//                        )
+//                    ),
+//                    ToolbarItem::DISPLAY_ICON,
+//                    true
+//                )
+//            );
+//        }
 
         return $toolbar->as_html();
     }
