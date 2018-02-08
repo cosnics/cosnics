@@ -254,7 +254,7 @@
 .navbar-chamilo ul.navbar-nav li a img.chamilo-menu-item-icon-account {
 	height: 76px;
 	width: 76px;
-	margin: 0;
+	margin: 1px 0 0 0;
 	padding: 0 !important;
 }
 
@@ -267,7 +267,7 @@
 	white-space: normal;
 	position: fixed;
 	right: 0;
-	top: 76px;
+	top: 78px;
 	padding: 16px;
 	color: #8eadd8;
 	-webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
