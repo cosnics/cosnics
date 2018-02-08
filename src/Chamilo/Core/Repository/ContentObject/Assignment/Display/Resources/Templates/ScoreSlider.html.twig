@@ -1,8 +1,14 @@
+<style>
+    .btn-score {
+        background-color: white;
+    }
+</style>
+
 <div class="row form-row">
-    <div id="slider" style="display:inline-block; vertical-align: middle; margin-left: 7px; margin-right: 20px;">
+    <div id="slider" style="display:inline-block; vertical-align: middle; margin-left: 7px; margin-right: 20px; width: 60%;">
         <div id="custom-handle" class="ui-slider-handle"></div>
     </div>
-    <button class="btn btn-default" id="scoreSaveButtonJavascript"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Opslaan</button>
+    <button class="pull-right btn btn-default btn-xs btn-score" id="scoreSaveButtonJavascript"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Score opslaan</button>
 </div>
 
 <script type="text/javascript">
@@ -27,6 +33,7 @@
 
                     if(!initial) {
                         $('#scoreSaveButtonJavascript').addClass('btn-success');
+                        $('#scoreSaveButtonJavascript').removeClass('btn-score');
                     }
 
                     initial = false;

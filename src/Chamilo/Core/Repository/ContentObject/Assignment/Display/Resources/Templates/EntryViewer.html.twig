@@ -5,6 +5,14 @@
         width: 100%;
     }
 
+    .assignment-properties {
+        margin-bottom: 15px;
+    }
+
+    .assignment-properties tbody tr td {
+        padding: 2px 8px;
+    }
+
     .tab-pane {
         border: 1px solid #dddddd;
         border-top: none;
@@ -26,16 +34,50 @@
     #entity-name {
         margin-bottom: 20px;
     }
+
+    .score-progress {
+        margin-bottom: 0;
+    }
+
+    .panel-feedback h3 {
+        margin-top: 0;
+    }
+
+    .submitted-details {
+        color: #AAAAAA;
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
+
+    .entry-title {
+        margin-bottom: 3px;
+        margin-top: 5px;
+    }
+
+    .content-object-rendition {
+        border-right: 1px dotted #dddddd;
+    }
+
+    .score-badge {
+        margin-top: -4px;
+    }
+
+    .score-success {
+        color: white;
+        background-color: #28a745;
+        font-size: 14px;
+    }
+
+    .no-score {
+        background-color: #dddddd;
+        color: white;
+    }
 </style>
 
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
 
 <div class="button-toolbar">{{ BUTTON_TOOLBAR|raw }}</div>
 <div class="button-toolbar">{{ NAVIGATOR_BUTTON_TOOLBAR|raw }}</div>
-
-{% if HAS_ENTRY %}
-    <h2 id="entity-name">{{ ENTITY_NAME }}</h2>
-{% endif %}
 
 {% if HAS_ENTRY %}
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
@@ -54,55 +96,66 @@
     {% if HAS_ENTRY %}
     <div role="tabpanel" class="tab-pane active" id="entry">
         <div class="row" id="properties-row">
-            <div class="col-xs-12">
-                <div class="assignment-properties">
+            <div class="col-sm-8 content-object-rendition">
+                {% if CAN_EDIT_ASSIGNMENT %}
+                    <div class="assignment-properties">
                     <table class="table table-striped table-bordered table-hover table-responsive table-properties">
-                        <tbody>
-                        <tr>
-                            <td class="header" style="vertical-align: middle;">
-                                {{ 'SubmittedBy'|trans([], appContext) }}
-                            </td>
-                            <td>{{ SUBMITTED_BY }} op {{ SUBMITTED_DATE }}</td>
-                        </tr>
-                        <tr>
-                            <td class="header" style="vertical-align: middle;">
-                                {{ 'Score'|trans([], appContext) }}
-                            </td>
-                            <td>
-                            {% if CAN_EDIT_ASSIGNMENT %}
-                                {{ SCORE_FORM|raw }}
-                            {% else %}
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ SCORE }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ SCORE }}%;">
-                                        {{ SCORE }}%
-                                    </div>
-                                </div>
-                            {% endif %}
-                            </td>
-                        </tr>
-                        </tbody>
+                    <tbody>
+                    <tr>
+                    <td>
+                    {{ SCORE_FORM|raw }}
+                    </td>
+                    </tr>
+                    </tbody>
                     </table>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-8">
-                {{ CONTENT_OBJECT_RENDITION|raw }}
+                    </div>
+                {% endif %}
+                <h3 class="entry-title">{{ CONTENT_OBJECT_TITLE }} <span class="badge score-badge {% if SCORE > 0 %}score-success{% else %}no-score{% endif %}">{% if SCORE > 0 %}{{ SCORE }}%{% else %}Geen score{% endif %}</span></h3>
+                <div class="submitted-details">{{ SUBMITTED_BY }} op {{ SUBMITTED_DATE }}</div>
+                {#<div class="assignment-properties">#}
+                    {#<table class="table table-striped table-bordered table-hover table-responsive table-properties">#}
+                        {#<tbody>#}
+                        {#<tr>#}
+                            {#<td class="header" style="vertical-align: middle;">#}
+                                {#{{ 'SubmittedBy'|trans([], appContext) }}#}
+                            {#</td>#}
+                            {#<td>{{ SUBMITTED_BY }} op {{ SUBMITTED_DATE }}</td>#}
+                        {#</tr>#}
+                        {#<tr>#}
+                            {#<td class="header" style="vertical-align: middle;">#}
+                                {#{{ 'Score'|trans([], appContext) }}#}
+                            {#</td>#}
+                            {#<td>#}
+                            {#{% if CAN_EDIT_ASSIGNMENT %}#}
+                                {#{{ SCORE_FORM|raw }}#}
+                            {#{% else %}#}
+                                {#<div class="progress score-progress">#}
+                                    {#<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ SCORE }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ SCORE }}%;">#}
+                                        {#{{ SCORE }}%#}
+                                    {#</div>#}
+                                {#</div>#}
+                            {#{% endif %}#}
+                            {#</td>#}
+                        {#</tr>#}
+                        {#</tbody>#}
+                    {#</table>#}
+                {#</div>#}
+            {{ CONTENT_OBJECT_RENDITION|raw }}
             </div>
             <div class="col-sm-4">
 
-                <div class="panel panel-default">
+                {#<div class="panel panel-default panel-feedback">#}
 
-                    <div class="panel-heading">
-                        <h3 class="panel-title">{{ 'Feedback'|trans([], appContext) }}</h3>
-                    </div>
+                    {#<div class="panel-heading">#}
+                        {#<h3 class="panel-title">{{ 'Feedback'|trans([], appContext) }}</h3>#}
+                    {#</div>#}
 
-                    <div class="panel-body">
+                    {#<div class="panel-body">#}
 
                         {{ FEEDBACK_MANAGER|raw }}
 
-                    </div>
-                </div>
+                    {#</div>#}
+                {#</div>#}
             </div>
         </div>
 

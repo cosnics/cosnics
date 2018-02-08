@@ -18,6 +18,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -163,6 +165,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $extendParameters = [
             'HAS_ENTRY' => true,
+            'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject()->get_title(),
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
             'SUBMITTED_DATE' => $submittedDate, 'SUBMITTED_BY' => $entityRenderer->getEntityName(),
@@ -237,7 +240,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $display = ContentObjectRenditionImplementation::factory(
             $contentObject,
             ContentObjectRendition::FORMAT_HTML,
-            ContentObjectRendition::VIEW_FULL,
+            ContentObjectRendition::VIEW_DESCRIPTION,
             $this
         );
 
@@ -395,14 +398,33 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                             self::PARAM_ENTITY_TYPE => $this->getEntityType(),
                             self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
                         ]
-                    )
+                    ),
+                    Button::DISPLAY_ICON_AND_LABEL,
+                    false,
+                    'btn-success'
                 )
             );
 
+            $buttonToolBar->addButtonGroup($buttonGroup);
+
+            $buttonGroup = new ButtonGroup();
+
             if ($this->getEntry() instanceof Entry)
             {
-                $buttonGroup->addButton(
-                    new Button(
+                $splitDropdownButton = new SplitDropdownButton(Translation::get('DownloadAll'),
+                    new FontAwesomeGlyph('download'),
+                    $this->get_url(
+                        [
+                            self::PARAM_ACTION => self::ACTION_DOWNLOAD,
+                            self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                            self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
+                        ],
+                        [self::PARAM_ENTRY_ID]
+                    ));
+
+
+                $splitDropdownButton->addSubButton(
+                    new SubButton(
                         Translation::get('DownloadCurrent'),
                         new FontAwesomeGlyph('download'),
                         $this->get_url(
@@ -417,20 +439,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                     )
                 );
 
-                $buttonGroup->addButton(
-                    new Button(
-                        Translation::get('DownloadAll'),
-                        new FontAwesomeGlyph('download'),
-                        $this->get_url(
-                            [
-                                self::PARAM_ACTION => self::ACTION_DOWNLOAD,
-                                self::PARAM_ENTITY_TYPE => $this->getEntityType(),
-                                self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
-                            ],
-                            [self::PARAM_ENTRY_ID]
-                        )
-                    )
-                );
+                $buttonGroup->addButton($splitDropdownButton);
             }
 
             $buttonToolBar->addButtonGroup($buttonGroup);
@@ -473,6 +482,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getNavigatorButtonToolbarRenderer()
     {
+        $buttonToolBar = new ButtonToolBar();
+
+        if(!$this->getDataProvider()->canEditAssignment() || empty($this->getEntry()))
+        {
+            return new ButtonToolBarRenderer($buttonToolBar);
+        }
+
         $currentEntityPosition = $this->getEntryNavigator()->getCurrentEntityPosition(
             $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
@@ -488,8 +504,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $entriesCount = $this->getDataProvider()->countEntriesForEntityTypeAndId(
             $this->getEntityType(), $this->getEntityIdentifier()
         );
-
-        $buttonToolBar = new ButtonToolBar();
 
         $submittersNavigatorActions = new ButtonGroup();
         $submissionsNavigatorActions = new ButtonGroup();
