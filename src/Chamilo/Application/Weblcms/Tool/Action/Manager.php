@@ -176,4 +176,12 @@ abstract class Manager extends Application implements NoContextComponent
     {
         return $this->get_parent()->get_content_object_display_attachment_url($attachment);
     }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator
+     */
+    public function getCategoryBreadcrumbsGenerator()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.service.category_breadcrumbs_generator');
+    }
 }

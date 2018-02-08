@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Wiki\Manager;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -38,6 +39,10 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
         }
+
+        $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
+            BreadcrumbTrail::getInstance(), $this, $this->publication
+        );
 
         $context = $this->publication->get_content_object()->package() . '\Display';
 

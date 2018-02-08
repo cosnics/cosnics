@@ -734,8 +734,9 @@ class Filesystem
      *
      * @param string $filePath
      * @param string $chmodValue
+     * @param bool $recursive
      */
-    public static function chmod($filePath, $chmodValue)
+    public static function chmod($filePath, $chmodValue, $recursive = false)
     {
         $newChmodValue = null;
 
@@ -752,7 +753,19 @@ class Filesystem
         {
             $newChmodValue = octdec($newChmodValue);
 
-            chmod($filePath, $newChmodValue);
+            if(is_dir($filePath) && $recursive)
+            {
+                $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($filePath));
+
+                foreach($iterator as $item)
+                {
+                    chmod($item, $newChmodValue);
+                }
+            }
+            else
+            {
+                chmod($filePath, $newChmodValue);
+            }
         }
     }
 }

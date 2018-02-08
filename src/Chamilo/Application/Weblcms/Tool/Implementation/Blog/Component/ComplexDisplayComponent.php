@@ -45,6 +45,11 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
         }
+
+        $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
+            BreadcrumbTrail::getInstance(), $this, $this->publication
+        );
+
         BreadcrumbTrail::getInstance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
         $context = $this->publication->get_content_object()->package() . '\Display';

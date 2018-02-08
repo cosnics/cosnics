@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
@@ -51,24 +52,31 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         // check if the content object has indeed been published for the user
         $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
-            $this->get_publication_id());
+            $this->get_publication_id()
+        );
 
-        if (! $this->publication)
+        if (!$this->publication)
         {
             throw new ObjectNotExistException(Translation::get('Publication'), $this->get_publication_id());
         }
 
-        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
+        if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
             throw new NotAllowedException();
         }
+
+        $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
+            BreadcrumbTrail::getInstance(), $this, $this->publication
+        );
 
         $object = $this->publication->get_content_object();
 
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 $this->get_url(),
-                Translation::get('ToolViewerComponent', array('TITLE' => $object->get_title()))));
+                Translation::get('ToolViewerComponent', array('TITLE' => $object->get_title()))
+            )
+        );
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $renderer = new ContentObjectPublicationDetailsRenderer($this);
@@ -77,13 +85,15 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         $course_settings_controller = CourseSettingsController::getInstance();
         $this->feedback_allowed = $course_settings_controller->get_course_setting(
             $this->get_course(),
-            CourseSettingsConnector::ALLOW_FEEDBACK);
+            CourseSettingsConnector::ALLOW_FEEDBACK
+        );
 
         if ($this->feedback_allowed)
         {
             $result = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Feedback\Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            )->run();
         }
         else
         {
@@ -142,7 +152,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
@@ -181,11 +191,16 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
                 new OrderBy(
                     new PropertyConditionVariable(
                         \Chamilo\Application\Weblcms\Storage\DataClass\Feedback::class_name(),
-                        \Chamilo\Application\Weblcms\Storage\DataClass\Feedback::PROPERTY_MODIFICATION_DATE))));
+                        \Chamilo\Application\Weblcms\Storage\DataClass\Feedback::PROPERTY_MODIFICATION_DATE
+                    )
+                )
+            )
+        );
 
         return \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
             \Chamilo\Application\Weblcms\Storage\DataClass\Feedback::class_name(),
-            $parameters);
+            $parameters
+        );
     }
 
     /*
@@ -194,9 +209,11 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
     public function count_feedbacks()
     {
         $parameters = new DataClassCountParameters($this->get_feedback_conditions());
+
         return \Chamilo\Application\Weblcms\Storage\DataManager::count(
             \Chamilo\Application\Weblcms\Storage\DataClass\Feedback::class_name(),
-            $parameters);
+            $parameters
+        );
     }
 
     /*
@@ -206,7 +223,8 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
     {
         return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             \Chamilo\Application\Weblcms\Storage\DataClass\Feedback::class_name(),
-            $feedback_id);
+            $feedback_id
+        );
     }
 
     /*
@@ -216,6 +234,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
     {
         $feedback = new \Chamilo\Application\Weblcms\Storage\DataClass\Feedback();
         $feedback->set_publication_id($this->publication->get_id());
+
         return $feedback;
     }
 
@@ -258,8 +277,10 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 \Chamilo\Application\Weblcms\Storage\DataClass\Feedback::class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\Feedback::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($this->publication->get_id()));
+                \Chamilo\Application\Weblcms\Storage\DataClass\Feedback::PROPERTY_PUBLICATION_ID
+            ),
+            new StaticConditionVariable($this->publication->get_id())
+        );
 
         return new AndCondition($conditions);
     }
