@@ -290,7 +290,7 @@ class Diagnoser
         $setting = ini_get('default_charset');
         if ($setting == '')
             $setting = null;
-        $req_setting = null;
+        $req_setting = 'UTF-8';
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
             $status,
@@ -393,7 +393,7 @@ class Diagnoser
         // Extensions
         $extensions = array(
             'gd' => 'http://www.php.net/gd',
-            'mysql' => 'http://www.php.net/mysql',
+            'mysqli' => 'http://www.php.net/mysqli',
             'pcre' => 'http://www.php.net/pcre',
             'session' => 'http://www.php.net/session',
             'standard' => 'http://www.php.net/spl',
