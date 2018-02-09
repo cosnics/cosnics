@@ -137,7 +137,7 @@ abstract class CacheCommand extends ChamiloCommand
             'cache_path'
         );
 
-        Filesystem::chmod($cachePath, '1770', true);
+        Filesystem::chmod($cachePath, '2770', true);
     }
 
     /**
