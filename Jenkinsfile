@@ -54,6 +54,17 @@
                     }
                 }
             }
+        post {
+        always {
+            notifySlack(currentBuild.result)
+        }
+        unstable {
+            currentBuild.result = 'FAILURE'
+        }
+        failure {
+            currentBuild.result = 'FAILURE'
+        }
+    }
         }
 def notifySlack(String buildStatus = 'STARTED') {
         // Build status of null means success.
