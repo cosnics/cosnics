@@ -81,7 +81,8 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
         $assignment = $this->get_table()->get_component()->get_root_content_object();
         $hasEntries = $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0;
 
-        if ($this->getRightsService()->canUserViewEntity($this->get_component()->getUser(), $this->get_component()->getAssignment(), $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]))
+        if ($this->getRightsService()->canUserViewEntity($this->get_component()->getUser(), $this->get_component()->getAssignment(), $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]) &
+            $hasEntries)
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -100,7 +101,7 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
         }
 
         if ($this->getRightsService()->canUserDownloadEntriesFromEntity($this->get_component()->getUser(), $this->get_component()->getAssignment(), $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]) &&
-            $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0)
+            $hasEntries)
         {
             $toolbar->add_item(
                 new ToolbarItem(

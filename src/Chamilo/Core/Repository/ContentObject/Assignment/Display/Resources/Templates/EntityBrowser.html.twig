@@ -1,43 +1,15 @@
 {{ HEADER|raw }}
 
-<style>
-    .assignment-properties table {
-        width: 100%;
-    }
-
-    .value-true {
-        color: green;
-        font-size: 18px;
-    }
-
-    .value-false {
-        color: red;
-        font-size: 18px;
-    }
-
-    .badge-success {
-        background-color: #28a745;
-    }
-
-    .badge-failed {
-        background-color: #dc3545;
-    }
-
-    .tab-pane {
-        border: 1px solid #dddddd;
-        border-top: none;
-        padding: 10px 15px;
-    }
-
-    #assignment h3 {
-        margin: 5px 0 20px;
-    }
-</style>
-
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
 
 {% set valueTrue = '<i class="fa fa-check value-true" aria-hidden="true"></i>' %}
 {% set valueFalse = '<i class="fa fa-remove value-false" aria-hidden="true"></i>' %}
+
+{% if CAN_EDIT_ASSIGNMENT %}
+    <div class="alert alert-info">
+        {{ 'BETANotification'|trans({'{ADMINISTRATOR_EMAIL}': ADMINISTRATOR_EMAIL}, appContext) }}
+    </div>
+{% endif %}
 
 <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
 

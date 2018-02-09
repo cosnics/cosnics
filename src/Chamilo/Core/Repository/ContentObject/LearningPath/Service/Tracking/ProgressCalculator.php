@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AttemptService;
@@ -219,6 +220,16 @@ class ProgressCalculator
 
             if (!$completed)
             {
+                $contentObject = $treeNode->getContentObject();
+                if(
+                    $contentObject instanceof Assignment &&
+                    $contentObject->hasEndTimePassed() &&
+                    !$contentObject->get_allow_late_submissions()
+                )
+                {
+                    return true;
+                }
+
                 return false;
             }
         }

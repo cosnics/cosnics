@@ -2,6 +2,12 @@
 
 {{ HEADER|raw }}
 
+<style>
+    img {
+        max-width: 100%;
+    }
+</style>
+
 <ul class="nav nav-wizard publication-wizard entry-wizard">
     <li class=""><a href="#">1. {{ 'SelectContentObject'|trans({}, appContext) }}</a></li>
     <li class="active"><a href="#">2. {{ 'CreatorConfirmation'|trans({}, appContext) }}</a></li>
@@ -19,9 +25,9 @@
             <h3 class="panel-title">{{ 'AutomaticFeedback'|trans([], appContext) }}</h3>
         </div>
 
-        <div class="panel-body">
+        <div class="panel-body automatic-feedback">
 
-            {{ AUTOMATIC_FEEDBACK_TEXT|nl2br }}
+            {{ AUTOMATIC_FEEDBACK_TEXT|raw }}
 
             <ul class="list-group" style="margin-top: 30px;">
 

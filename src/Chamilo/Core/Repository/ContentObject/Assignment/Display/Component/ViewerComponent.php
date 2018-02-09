@@ -101,7 +101,9 @@ class ViewerComponent extends Manager implements TableSupport
             'ALLOW_LATE_SUBMISSIONS' => $assignment->get_allow_late_submissions(),
             'ALLOW_GROUP_SUBMISSIONS' => $assignment->get_allow_group_submissions(),
             'VISIBILITY_SUBMISSIONS' => $assignment->get_visibility_submissions(),
-            'ENTITY_TABLE' => $this->renderEntityTable()
+            'ENTITY_TABLE' => $this->renderEntityTable(),
+            'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
+            'ADMINISTRATOR_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email'])
         ];
     }
 

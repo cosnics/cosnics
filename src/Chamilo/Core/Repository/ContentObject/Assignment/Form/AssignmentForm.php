@@ -261,12 +261,14 @@ class AssignmentForm extends ContentObjectForm
             array()
         );
 
-        $this->addElement(
-            'textarea',
-            Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT,
-            Translation::get('Text'),
-            array('cols' => '60', 'rows' => '3')
-        );
+//        $this->addElement(
+//            'textarea',
+//            Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT,
+//            Translation::get('Text'),
+//            array('cols' => '60', 'rows' => '3')
+//        );
+
+        $this->add_html_editor(Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT, Translation::get('Text'), false);
 
         $choices = array();
         $choices[] = $this->createElement(

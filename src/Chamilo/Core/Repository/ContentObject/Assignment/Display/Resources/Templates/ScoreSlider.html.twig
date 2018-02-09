@@ -1,14 +1,10 @@
-<style>
-    .btn-score {
-        background-color: white;
-    }
-</style>
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
 
 <div class="row form-row">
     <div id="slider" style="display:inline-block; vertical-align: middle; margin-left: 7px; margin-right: 20px; width: 60%;">
         <div id="custom-handle" class="ui-slider-handle"></div>
     </div>
-    <button class="pull-right btn btn-default btn-xs btn-score" id="scoreSaveButtonJavascript"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Score opslaan</button>
+    <button class="pull-right btn btn-default btn-xs btn-score" id="scoreSaveButtonJavascript"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> {{ 'SaveScore'|trans({}, appContext) }}</button>
 </div>
 
 <script type="text/javascript">
