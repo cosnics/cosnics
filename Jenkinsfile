@@ -1,3 +1,5 @@
+import jenkins.model.*
+
 try {
     pipeline {
             agent any
