@@ -28,9 +28,10 @@
 
         <service
             id="twig.environment"
-            class="Twig_Environment"
-            factory-method="createEnvironment"
-            factory-service="chamilo.libraries.format.twig.twig_factory">
+            class="Twig_Environment">
+            <factory
+                method="createEnvironment"
+                service="chamilo.libraries.format.twig.twig_factory" />
             <argument
                 type="service"
                 id="symfony.component.translation.translator" />
@@ -41,9 +42,10 @@
 
         <service
             id="symfony.component.forms.form"
-            class="Symfony\Component\Form\FormFactory"
-            factory-method="buildFormFactory"
-            factory-service="chamilo.libraries.format.form.form_factory_builder">
+            class="Symfony\Component\Form\FormFactory">
+            <factory
+                method="buildFormFactory"
+                service="chamilo.libraries.format.form.form_factory_builder" />
             <argument
                 type="service"
                 id="twig.environment" />
@@ -58,9 +60,11 @@
 
         <service
             id="symfony.component.validator.validator"
-            class="Symfony\Component\Validator\Validator"
-            factory-method="createValidator"
-            factory-service="chamilo.libraries.format.validator.validator_factory" />
+            class="Symfony\Component\Validator\Validator">
+            <factory
+                method="createValidator"
+                service="chamilo.libraries.format.validator.validator_factory" />
+        </service>
 
         <service
             id="chamilo.libraries.format.validator.validator_factory"
@@ -68,9 +72,11 @@
 
         <service
             id="jms.serializer"
-            class="JMS\Serializer\Serializer"
-            factory-method="createSerializer"
-            factory-service="jms.serializer.serializer_factory" />
+            class="JMS\Serializer\Serializer">
+            <factory
+                method="createSerializer"
+                service="jms.serializer.serializer_factory" />
+        </service>
 
         <service
             id="jms.serializer.serializer_builder"
