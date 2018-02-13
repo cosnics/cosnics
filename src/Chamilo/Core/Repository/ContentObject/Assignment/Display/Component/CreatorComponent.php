@@ -4,8 +4,10 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -102,8 +104,13 @@ class CreatorComponent extends Manager
         );
     }
 
+    /**
+     * @return bool
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
     protected function verifyStartEndTime()
     {
+        /** @var Assignment $assignment */
         $assignment = $this->get_root_content_object();
 
         if ($assignment->get_start_time() > time())
@@ -114,9 +121,9 @@ class CreatorComponent extends Manager
                 $assignment->get_start_time()
             );
 
-            $message = Translation::get('AssignmentNotStarted') . Translation::get('StartTime') . ': ' . $date;
+            $message = Translation::get('AssignmentNotStarted') . ' - ' . Translation::get('StartTime') . ': ' . $date;
 
-            throw new \Exception($message);
+            throw new UserException($message);
         }
 
         if ($assignment->get_end_time() < time() && $assignment->get_allow_late_submissions() == 0)
@@ -127,9 +134,9 @@ class CreatorComponent extends Manager
                 $assignment->get_end_time()
             );
 
-            $message = Translation::get('AssignmentEnded') . Translation::get('EndTime') . ': ' . $date;
+            $message = Translation::get('AssignmentEnded') . ' - ' . Translation::get('EndTime') . ': ' . $date;
 
-            throw new \Exception($message);
+            throw new UserException($message);
         }
 
         return true;

@@ -392,9 +392,11 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $buttonGroup = new ButtonGroup();
 
-            if ($this->getRightsService()->canUserCreateEntry(
-                $this->getUser(), $this->getAssignment(), $this->getEntityType(), $this->getEntityIdentifier()
-            ))
+            if (
+                $this->getRightsService()->canUserCreateEntry(
+                    $this->getUser(), $this->getAssignment(), $this->getEntityType(), $this->getEntityIdentifier()
+                ) && $this->getAssignment()->canSubmit()
+            )
             {
                 $buttonGroup->addButton(
                     new Button(

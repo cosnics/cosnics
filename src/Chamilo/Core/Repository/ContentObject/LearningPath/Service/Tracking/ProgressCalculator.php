@@ -218,18 +218,8 @@ class ProgressCalculator
                 );
             }
 
-            if (!$completed)
+            if(!$completed)
             {
-                $contentObject = $treeNode->getContentObject();
-                if(
-                    $contentObject instanceof Assignment &&
-                    $contentObject->hasEndTimePassed() &&
-                    !$contentObject->get_allow_late_submissions()
-                )
-                {
-                    return true;
-                }
-
                 return false;
             }
         }
@@ -243,6 +233,13 @@ class ProgressCalculator
             {
                 return true;
             }
+        }
+
+        // TODO: move this to a hooked system where this isn't anymore depending on fixed content object definitions
+        $contentObject = $treeNode->getContentObject();
+        if($contentObject instanceof Assignment && $contentObject->hasEndTimePassed() && !$contentObject->canSubmit())
+        {
+            return true;
         }
 
         return false;

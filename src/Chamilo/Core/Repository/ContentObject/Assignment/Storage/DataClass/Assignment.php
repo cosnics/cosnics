@@ -159,9 +159,36 @@ class Assignment extends ContentObject implements AttachmentSupport
         return $this->get_visibility_feedback() == self::VISIBILITY_FEEDBACK_AFTER_END_TIME;
     }
 
+    /**
+     * @return bool
+     */
     public function hasEndTimePassed()
     {
         return $this->get_end_time() <= time();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStarted()
+    {
+        return $this->get_start_time() <= time();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInProgress()
+    {
+        return $this->isStarted() && !$this->hasEndTimePassed();
+    }
+
+    /**
+     * @return bool
+     */
+    public function canSubmit()
+    {
+        return $this->isInProgress() || ($this->hasEndTimePassed() && $this->get_allow_late_submissions());
     }
 
     protected function isAutomaticFeedbackCurrentlyVisible()
