@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySuppor
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -45,6 +46,10 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
         }
+
+        $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
+            BreadcrumbTrail::getInstance(), $this, $this->publication
+        );
 
         $context = $this->publication->get_content_object()->package() . '\Display';
 
