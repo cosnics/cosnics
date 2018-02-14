@@ -20,6 +20,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -94,6 +95,14 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         {
             $this->entry =
                 $this->getDataProvider()->findLastEntryForEntity($this->getEntityType(), $this->getEntityIdentifier());
+        }
+
+        if (!$this->entry instanceof Entry)
+        {
+            $breadcrumbTrail = BreadcrumbTrail::getInstance();
+            $breadcrumbTrail->get_last()->set_name(
+                Translation::getInstance()->getTranslation('ViewerComponent', null, Manager::context())
+            );
         }
     }
 
@@ -209,10 +218,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 $scoreForm->exportValues()
             );
 
-            if (!$detailsProcessor->run())
-            {
-                return false;
-            }
+            $this->score = $detailsProcessor->run();
         }
 
         return true;
@@ -400,7 +406,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             {
                 $buttonGroup->addButton(
                     new Button(
-                        Translation::get('SubmissionSubmit'),
+                        Translation::get('AddNewEntry'),
                         new FontAwesomeGlyph('plus'),
                         $this->get_url(
                             [
@@ -512,7 +518,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $translator = Translation::getInstance();
         $entityName = $this->getDataProvider()->getEntityNameByType($this->getEntityType());
 
-        $entitiesCount = $this->getDataProvider()->countEntitiesWithSubmissionsByEntityType($this->getEntityType());
+        $entitiesCount = $this->getDataProvider()->countEntitiesWithEntriesByEntityType($this->getEntityType());
         $entriesCount = $this->getDataProvider()->countEntriesForEntityTypeAndId(
             $this->getEntityType(), $this->getEntityIdentifier()
         );
@@ -523,7 +529,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $submittersNavigatorActions->addButton(
                 new Button(
-                    $translator->getTranslation('PreviousSubmitter', ['ENTITY_NAME' => strtolower($entityName)]),
+                    $translator->getTranslation('PreviousEntity', ['ENTITY_NAME' => strtolower($entityName)]),
                     new FontAwesomeGlyph('backward'),
                     $this->getPreviousEntityUrl(),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -542,7 +548,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $submittersNavigatorActions->addButton(
                 new Button(
-                    $translator->getTranslation('NextSubmitter', ['ENTITY_NAME' => strtolower($entityName)]),
+                    $translator->getTranslation('NextEntity', ['ENTITY_NAME' => strtolower($entityName)]),
                     new FontAwesomeGlyph('forward'),
                     $this->getNextEntityUrl(),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -558,7 +564,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $submissionsNavigatorActions->addButton(
                 new Button(
-                    $translator->getTranslation('EarlierSubmission'),
+                    $translator->getTranslation('EarlierEntry'),
                     new FontAwesomeGlyph('backward'),
                     $this->getPreviousEntryUrl(),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -577,7 +583,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $submissionsNavigatorActions->addButton(
                 new Button(
-                    $translator->getTranslation('LaterSubmission'),
+                    $translator->getTranslation('LaterEntry'),
                     new FontAwesomeGlyph('forward'),
                     $this->getNextEntryUrl(),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL

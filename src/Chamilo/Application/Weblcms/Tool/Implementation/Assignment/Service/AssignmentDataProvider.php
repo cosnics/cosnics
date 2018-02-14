@@ -156,7 +156,7 @@ class AssignmentDataProvider
      *
      * @return int
      */
-    public function countEntitiesWithSubmissionsByEntityType($entityType)
+    public function countEntitiesWithEntriesByEntityType($entityType)
     {
         return 0;
     }
@@ -166,7 +166,7 @@ class AssignmentDataProvider
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
-    public function findEntitiesWithSubmissionsByEntityType($entityType)
+    public function findEntitiesWithEntriesByEntityType($entityType)
     {
         return [];
     }
@@ -267,7 +267,7 @@ class AssignmentDataProvider
      */
     public function isUserPartOfEntity(User $user, $entityType, $entityId)
     {
-        switch($entityType)
+        switch ($entityType)
         {
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_USER:
                 return $entityId == $user->getId();
@@ -432,42 +432,22 @@ class AssignmentDataProvider
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $submittedScore
      *
-     * @return boolean
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
      */
     public function createScore(Entry $entry, User $user, $submittedScore)
     {
-        try
-        {
-            $this->assignmentService->createScore(
-                $entry, $user, $submittedScore
-            );
-        }
-        catch (\Exception $ex)
-        {
-            return false;
-        }
-
-        return true;
+        return $this->assignmentService->createScore(
+            $entry, $user, $submittedScore
+        );
     }
 
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score
-     *
-     * @return boolean
      */
     public function updateScore(Score $score)
     {
-        try
-        {
-            $this->assignmentService->updateScore($score);
-        }
-        catch (\Exception $ex)
-        {
-            return false;
-        }
-
-        return true;
+        $this->assignmentService->updateScore($score);
     }
 
     /**

@@ -196,9 +196,9 @@ class AssignmentDataProvider
      *
      * @return int
      */
-    public function countEntitiesWithSubmissionsByEntityType($entityType)
+    public function countEntitiesWithEntriesByEntityType($entityType)
     {
-        return $this->learningPathAssignmentService->countTargetUsersWithSubmissionsForTreeNodeData(
+        return $this->learningPathAssignmentService->countTargetUsersWithEntriesForTreeNodeData(
             $this->treeNode->getTreeNodeData(), $this->targetUserIds
         );
     }
@@ -208,9 +208,9 @@ class AssignmentDataProvider
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function findEntitiesWithSubmissionsByEntityType($entityType)
+    public function findEntitiesWithEntriesByEntityType($entityType)
     {
-        return $this->learningPathAssignmentService->findTargetUsersWithSubmissionsByEntityTypeForTreeNodeData(
+        return $this->learningPathAssignmentService->findTargetUsersWithEntriesByEntityTypeForTreeNodeData(
             $this->treeNode->getTreeNodeData(), $this->targetUserIds
         );
     }
@@ -476,20 +476,13 @@ class AssignmentDataProvider
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $submittedScore
      *
-     * @return bool
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
      */
     public function createScore(Entry $entry, User $user, $submittedScore)
     {
-        try
-        {
-            $this->learningPathAssignmentService->createScore(
-                $entry, $user, $submittedScore
-            );
-        }
-        catch (\Exception $ex)
-        {
-            return false;
-        }
+        $score = $this->learningPathAssignmentService->createScore(
+            $entry, $user, $submittedScore
+        );
 
         $entryUser = new User();
         $entryUser->setId($entry->getEntityId());
@@ -498,31 +491,23 @@ class AssignmentDataProvider
             $this->learningPath, $entryUser, $this->treeNode, $entry->getTreeNodeAttemptId(), $submittedScore
         );
 
-        return true;
+        return $score;
     }
 
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score
-     *
-     * @return boolean
+     * @throws \Exception
      */
     public function updateScore(Score $score)
     {
-        try
-        {
-            $this->learningPathAssignmentService->updateScore($score);
-        }
-        catch (\Exception $ex)
-        {
-            return false;
-        }
+        $this->learningPathAssignmentService->updateScore($score);
 
         /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry $entry */
         $entry = $this->findEntryByIdentifier($score->getEntryId());
         if (!$entry instanceof Entry)
         {
-            return false;
+            throw new \Exception('Could not find the entry for the given score');
         }
 
         $entryUser = new User();
@@ -531,8 +516,6 @@ class AssignmentDataProvider
         $this->learningPathTrackingService->changeAssessmentScore(
             $this->learningPath, $entryUser, $this->treeNode, $entry->getTreeNodeAttemptId(), $score->getScore()
         );
-
-        return true;
     }
 
     /**

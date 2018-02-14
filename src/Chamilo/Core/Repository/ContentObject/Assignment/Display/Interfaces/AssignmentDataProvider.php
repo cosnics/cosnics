@@ -57,14 +57,14 @@ interface AssignmentDataProvider
      *
      * @return int
      */
-    public function countEntitiesWithSubmissionsByEntityType($entityType);
+    public function countEntitiesWithEntriesByEntityType($entityType);
 
     /**
      * @param int $entityType
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
-    public function findEntitiesWithSubmissionsByEntityType($entityType);
+    public function findEntitiesWithEntriesByEntityType($entityType);
 
     /**
      *
@@ -235,7 +235,7 @@ interface AssignmentDataProvider
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $submittedScore
      *
-     * @return boolean
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
      */
     public function createScore(Entry $entry, User $user, $submittedScore);
 

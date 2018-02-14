@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\E
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Dropbox\Exception;
 
 /**
  *
@@ -115,21 +116,19 @@ class ScoreFormProcessor
 
     /**
      *
-     * @return boolean
+     * @return Score
+     * @throws \Exception
      */
     public function run()
     {
-        if (!$this->processScore())
-        {
-            return false;
-        }
-
-        return true;
+        return $this->processScore();
     }
 
     /**
      *
-     * @return boolean
+     * @return Score
+     *
+     * @throws \Exception
      */
     protected function processScore()
     {
@@ -146,16 +145,14 @@ class ScoreFormProcessor
                 $score->setModified(time());
                 $score->setUserId($this->getUser()->getId());
 
-                return $this->getAssignmentDataProvider()->updateScore($score);
+                $this->getAssignmentDataProvider()->updateScore($score);
             }
-        }
-        else
-        {
-            return $this->getAssignmentDataProvider()->createScore(
-                $this->getEntry(), $this->getUser(), $submittedScore
-            );
+
+            return $score;
         }
 
-        return true;
+        return $this->getAssignmentDataProvider()->createScore(
+            $this->getEntry(), $this->getUser(), $submittedScore
+        );
     }
 }

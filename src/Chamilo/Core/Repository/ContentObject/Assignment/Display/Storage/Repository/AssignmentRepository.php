@@ -465,7 +465,7 @@ abstract class AssignmentRepository
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    protected function findTargetsForEntityTypeWithSubmissions(
+    protected function findTargetsForEntityTypeWithEntries(
         $entityType, Condition $condition = null, Condition $joinCondition = null, $offset, $count, $orderBy,
         DataClassProperties $properties, $baseClass, $baseVariable
     )

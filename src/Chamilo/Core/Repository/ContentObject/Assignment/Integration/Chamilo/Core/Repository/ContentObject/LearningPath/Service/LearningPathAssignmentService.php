@@ -138,11 +138,11 @@ abstract class LearningPathAssignmentService extends AssignmentService
      *
      * @return int
      */
-    public function countTargetUsersWithSubmissionsForTreeNodeData(
+    public function countTargetUsersWithEntriesForTreeNodeData(
         TreeNodeData $treeNodeData, $userIds = []
     )
     {
-        return $this->findTargetUsersWithSubmissionsByEntityTypeForTreeNodeData($treeNodeData, $userIds)->count();
+        return $this->findTargetUsersWithEntriesByEntityTypeForTreeNodeData($treeNodeData, $userIds)->count();
     }
 
     /**
@@ -155,7 +155,7 @@ abstract class LearningPathAssignmentService extends AssignmentService
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function findTargetUsersWithSubmissionsByEntityTypeForTreeNodeData(
+    public function findTargetUsersWithEntriesByEntityTypeForTreeNodeData(
         TreeNodeData $treeNodeData, $userIds = [], $condition = null, $offset = null, $count = null, $orderProperty = []
     )
     {

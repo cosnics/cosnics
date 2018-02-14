@@ -86,7 +86,7 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewSubmissions'),
+                    Translation::get('ViewLastEntry'),
                     Theme::getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_component()->get_url(
                         array(
@@ -123,7 +123,7 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('SubmissionSubmit'),
+                    Translation::get('AddNewEntry'),
                     Theme::getInstance()->getCommonImagePath('Action/Add'),
                     $this->get_component()->get_url(
                         array(

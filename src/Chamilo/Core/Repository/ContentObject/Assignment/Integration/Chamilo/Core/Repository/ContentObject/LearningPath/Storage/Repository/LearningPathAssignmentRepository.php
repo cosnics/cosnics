@@ -80,7 +80,7 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
         $orderBy = []
     )
     {
-        return $this->findTargetsForEntityTypeWithSubmissions(
+        return $this->findTargetsForEntityTypeWithEntries(
             \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER,
             $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
             $this->getTreeNodeDataCondition($treeNodeData),

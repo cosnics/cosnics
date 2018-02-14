@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Feedback\Component;
 
+use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\Form\FeedbackForm;
 use Chamilo\Core\Repository\Feedback\Generator\ActionsGenerator;
@@ -148,7 +149,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     }
 
                     $html[] = '</div>';
-                    $html[] = '<div class="list-group-item-text feedback-content">' . $feedback->get_comment() . '</div>';
+                    $html[] = '<div class="list-group-item-text feedback-content">' . $this->renderFeedbackContent($feedback) . '</div>';
 
                     $html[] = '</div>';
                 }
@@ -182,6 +183,14 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    protected function renderFeedbackContent(Feedback $feedback)
+    {
+        $content = $feedback->get_comment();
+
+        $descriptionRenderer = new ContentObjectResourceRenderer($this, $content);
+        return $descriptionRenderer->run();
     }
 
     /**

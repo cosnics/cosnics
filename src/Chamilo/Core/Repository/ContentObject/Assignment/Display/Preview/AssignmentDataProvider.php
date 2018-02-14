@@ -60,7 +60,7 @@ class AssignmentDataProvider implements
      *
      * @return int
      */
-    public function countEntitiesWithSubmissionsByEntityType($entityType)
+    public function countEntitiesWithEntriesByEntityType($entityType)
     {
         return 0;
     }
@@ -70,7 +70,7 @@ class AssignmentDataProvider implements
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
-    public function findEntitiesWithSubmissionsByEntityType($entityType)
+    public function findEntitiesWithEntriesByEntityType($entityType)
     {
         return [];
     }

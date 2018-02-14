@@ -109,7 +109,7 @@ class EntryNavigator
             }
         }
 
-        $entities = $assignmentDataProvider->findEntitiesWithSubmissionsByEntityType($currentEntityType);
+        $entities = $assignmentDataProvider->findEntitiesWithEntriesByEntityType($currentEntityType);
         $this->currentEntityPosition = 1;
 
         foreach ($entities as $entity)
