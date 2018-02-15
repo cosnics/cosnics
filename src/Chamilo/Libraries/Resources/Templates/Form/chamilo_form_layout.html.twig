@@ -1,10 +1,10 @@
 {% block form_row %}
     {% spaceless %}
-        <div class="row">
-            <div class="label">
+        <div class="row form-row">
+            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
                 {{ form_label(form) }}
             </div>
-            <div class="formw">
+            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
                 <div class="element">
                     {{ form_widget(form) }}
                 </div>
@@ -36,8 +36,10 @@
 
 {% block button_row %}
     {% spaceless %}
-        <div class="row">
-            <div class="formw">
+        <div class="row form-row">
+            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
                 <div class="element">
                     {{ form_widget(form) }}
                 </div>
@@ -49,15 +51,13 @@
 
 {% block inline_row %}
     {% spaceless %}
-        <div class="row">
+        <div class="row form-row">
 
-            {% if label %}
-                <div class="label">
-                    {{ label }}
-                </div>
-            {% endif %}
+            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                {{ label }}
+            </div>
 
-            <div class="formw">
+            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
                 <div class="element">
                     {% for child in children %}
                         {{ child|raw }}

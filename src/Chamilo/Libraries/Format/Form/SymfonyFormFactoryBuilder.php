@@ -7,6 +7,7 @@ use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRenderer;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
+use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Forms;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
@@ -74,9 +75,14 @@ class SymfonyFormFactoryBuilder
         $chamilo_files = Filesystem::get_directory_content($chamiloFormTemplatesPath, Filesystem::LIST_FILES, false);
         $twig_rendering_files = array_merge(array('form_div_layout.html.twig'), $chamilo_files);
 
-        $formEngine = new TwigRendererEngine($twig_rendering_files);
-        $formEngine->setEnvironment($twig);
+        $formEngine = new TwigRendererEngine($twig_rendering_files, $twig);
 
-        $twig->addExtension(new FormExtension(new TwigRenderer($formEngine)));
+        $twig->addRuntimeLoader(new \Twig_FactoryRuntimeLoader(array(
+            FormRenderer::class => function () use ($formEngine) {
+                return new FormRenderer($formEngine);
+            },
+        )));
+
+        $twig->addExtension(new FormExtension());
     }
 }
