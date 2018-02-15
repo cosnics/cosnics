@@ -28,6 +28,11 @@
             </call>
         </service>
 
+        <service id="chamilo.application.weblcms.tool.service.category_breadcrumbs_generator"
+                 class="Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator">
+            <argument type="service" id="chamilo.application.weblcms.service.publication" />
+        </service>
+
         <service id="chamilo.application.weblcms.service.rights"
                  class="Chamilo\Application\Weblcms\Service\RightsService">
             <argument type="service" id="chamilo.application.weblcms.service.weblcms_rights" />

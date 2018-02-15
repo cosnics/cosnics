@@ -765,4 +765,12 @@ abstract class Manager extends Application
 
         return implode(PHP_EOL, $html);
     }
+
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface
+     */
+    public function getContentObjectPublicationManager()
+    {
+       return $this->getService('chamilo.core.repository.publication.service.content_object_publication_manager');
+    }
 }

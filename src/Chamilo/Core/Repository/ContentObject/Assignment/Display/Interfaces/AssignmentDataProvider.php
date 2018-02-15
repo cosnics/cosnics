@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
@@ -22,6 +23,7 @@ interface AssignmentDataProvider
     /**
      *
      * @param integer $entityType
+     *
      * @return integer
      */
     public function countDistinctEntriesByEntityType($entityType);
@@ -29,6 +31,7 @@ interface AssignmentDataProvider
     /**
      *
      * @param integer $entityType
+     *
      * @return integer
      */
     public function countDistinctFeedbackByEntityType($entityType);
@@ -36,6 +39,7 @@ interface AssignmentDataProvider
     /**
      *
      * @param integer $entityType
+     *
      * @return integer
      */
     public function countDistinctLateEntriesByEntityType($entityType);
@@ -43,14 +47,37 @@ interface AssignmentDataProvider
     /**
      *
      * @param integer $entityType
+     *
      * @return integer
      */
     public function countEntitiesByEntityType($entityType);
 
     /**
+     * @param int $entityType
+     *
+     * @return int
+     */
+    public function countEntitiesWithEntriesByEntityType($entityType);
+
+    /**
+     * @param int $entityType
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    public function findEntitiesWithEntriesByEntityType($entityType);
+
+    /**
      *
      * @param integer $entityType
+     *
      * @return string
+     */
+    public function getPluralEntityNameByType($entityType);
+
+    /**
+     * @param $entityType
+     *
+     * @return mixed
      */
     public function getEntityNameByType($entityType);
 
@@ -58,6 +85,7 @@ interface AssignmentDataProvider
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param integer $entityType
+     *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
      */
     public function getEntityTableForType(Application $application, $entityType);
@@ -67,6 +95,7 @@ interface AssignmentDataProvider
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param integer $entityType
      * @param integer $entityId
+     *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
      */
     public function getEntryTableForEntityTypeAndId(Application $application, $entityType, $entityId);
@@ -78,8 +107,16 @@ interface AssignmentDataProvider
     public function getCurrentEntityType();
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int
+     */
+    public function getCurrentEntityIdentifier(User $currentUser);
+
+    /**
      *
      * @param integer $date
+     *
      * @return boolean
      */
     public function isDateAfterAssignmentEndTime($date);
@@ -90,6 +127,15 @@ interface AssignmentDataProvider
      * @param integer $entityId
      */
     public function countFeedbackByEntityTypeAndEntityId($entityType, $entityId);
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return bool
+     */
+    public function isUserPartOfEntity(User $user, $entityType, $entityId);
 
     /**
      *
@@ -104,14 +150,21 @@ interface AssignmentDataProvider
      * @param integer $userId
      * @param integer $contentObjectId
      * @param string $ipAdress
+     *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
      */
     public function createEntry($entityType, $entityId, $userId, $contentObjectId, $ipAdress);
 
     /**
+     * @param Entry $entry
+     */
+    public function deleteEntry(Entry $entry);
+
+    /**
      *
      * @param integer $entityType
      * @param integer $entityId
+     *
      * @return integer
      */
     public function countEntriesForEntityTypeAndId($entityType, $entityId);
@@ -120,6 +173,7 @@ interface AssignmentDataProvider
      *
      * @param integer $entityType
      * @param integer $entityId
+     *
      * @return integer
      */
     public function countDistinctFeedbackForEntityTypeAndId($entityType, $entityId);
@@ -128,6 +182,7 @@ interface AssignmentDataProvider
      *
      * @param integer $entityType
      * @param integer $entityId
+     *
      * @return integer
      */
     public function countDistinctScoreForEntityTypeAndId($entityType, $entityId);
@@ -136,6 +191,7 @@ interface AssignmentDataProvider
      *
      * @param integer $entityType
      * @param integer $entityId
+     *
      * @return integer
      */
     public function getAverageScoreForEntityTypeAndId($entityType, $entityId);
@@ -143,6 +199,7 @@ interface AssignmentDataProvider
     /**
      *
      * @param integer $entryIdentifier
+     *
      * @return integer
      */
     public function countFeedbackByEntryIdentifier($entryIdentifier);
@@ -150,6 +207,7 @@ interface AssignmentDataProvider
     /**
      *
      * @param integer $entryIdentifier
+     *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
      */
     public function findEntryByIdentifier($entryIdentifier);
@@ -157,6 +215,7 @@ interface AssignmentDataProvider
     /**
      *
      * @param integer[] $entryIdentifiers
+     *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]
      */
     public function findEntriesByIdentifiers($entryIdentifiers);
@@ -165,6 +224,7 @@ interface AssignmentDataProvider
      *
      * @param integer $entityType
      * @param integer $entityId
+     *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer\EntityRenderer
      */
     public function getEntityRendererForEntityTypeAndId($entityType, $entityId);
@@ -174,13 +234,15 @@ interface AssignmentDataProvider
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $submittedScore
-     * @return boolean
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
      */
     public function createScore(Entry $entry, User $user, $submittedScore);
 
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score
+     *
      * @return boolean
      */
     public function updateScore(Score $score);
@@ -190,6 +252,7 @@ interface AssignmentDataProvider
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $submittedNote
+     *
      * @return boolean
      */
     public function createNote(Entry $entry, User $user, $submittedNote);
@@ -197,6 +260,7 @@ interface AssignmentDataProvider
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note $note
+     *
      * @return boolean
      */
     public function updateNote(Note $note);
@@ -204,6 +268,7 @@ interface AssignmentDataProvider
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
      */
     public function findScoreByEntry(Entry $entry);
@@ -211,6 +276,7 @@ interface AssignmentDataProvider
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note
      */
     public function findNoteByEntry(Entry $entry);
@@ -224,6 +290,7 @@ interface AssignmentDataProvider
     /**
      *
      * @param integer $feedbackIdentifier
+     *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
      */
     public function findFeedbackByIdentifier($feedbackIdentifier);
@@ -231,6 +298,7 @@ interface AssignmentDataProvider
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
      * @return integer
      */
     public function countFeedbackByEntry(Entry $entry);
@@ -238,6 +306,7 @@ interface AssignmentDataProvider
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
      * @return DataClassResultSet
      */
     public function findFeedbackByEntry(Entry $entry);
@@ -246,6 +315,7 @@ interface AssignmentDataProvider
      *
      * @param integer $entityType
      * @param integer[] $entityIdentifiers
+     *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]
      */
     public function findEntriesByEntityTypeAndIdentifiers($entityType, $entityIdentifiers);
@@ -255,4 +325,12 @@ interface AssignmentDataProvider
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]
      */
     public function findEntries();
+
+    /**
+     * @param int $entityType
+     * @param int $entityIdentifier
+     *
+     * @return Entry
+     */
+    public function findLastEntryForEntity($entityType, $entityIdentifier);
 }

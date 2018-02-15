@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -215,7 +216,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
                         $deleted_content_object->move(0);
                     }
 
-                    if (! DataManager::delete_category_recursive($category))
+                    if (! DataManager::delete_category_recursive($this->getContentObjectPublicationManager(), $category))
                     {
                         $category->add_error(Translation::get('CouldNotDeleteCategoryInDatabase'));
                         return false;
@@ -225,6 +226,17 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
                 return true;
             });
         return $success;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface | object
+     */
+    public function getContentObjectPublicationManager()
+    {
+        $containerBuilder = DependencyInjectionContainerBuilder::getInstance();
+        $container = $containerBuilder->createContainer();
+
+        return $container->get('chamilo.core.repository.publication.service.content_object_publication_manager');
     }
 
     /**

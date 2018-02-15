@@ -872,6 +872,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $queryBuilder = $this->processParameters($queryBuilder, $dataClassName, $parameters);
         $queryBuilder = $this->processOrderBy($queryBuilder, $parameters->get_order_by());
         $queryBuilder = $this->processLimit($queryBuilder, $parameters->get_count(), $parameters->get_offset());
+        $queryBuilder = $this->processHaving($queryBuilder, $parameters->getHavingCondition());
 
         return $queryBuilder->getSQL();
     }
@@ -1158,6 +1159,23 @@ class DataClassDatabase implements DataClassDatabaseInterface
         if ($condition instanceof Condition)
         {
             $queryBuilder->where($this->getConditionPartTranslatorService()->translateCondition($this, $condition));
+        }
+
+        return $queryBuilder;
+    }
+
+    /**
+     *
+     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    protected function processHaving($queryBuilder, $condition)
+    {
+        if ($condition instanceof Condition)
+        {
+            $queryBuilder->having($this->getConditionPartTranslatorService()->translateCondition($this, $condition));
         }
 
         return $queryBuilder;

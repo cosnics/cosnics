@@ -261,7 +261,10 @@ class ApplicationFactory
      *
      * @param string $actionParameter
      * @param string $context
+     *
      * @return string
+     *
+     * @throws \Exception
      */
     protected function getRequestedAction($actionParameter, $context)
     {
@@ -275,8 +278,7 @@ class ApplicationFactory
 
             if (! $postAction)
             {
-                $managerClass = $this->getManagerClass($context);
-                return $managerClass::DEFAULT_ACTION;
+                return $this->getDefaultAction($context);
             }
             else
             {
@@ -287,6 +289,19 @@ class ApplicationFactory
         {
             return $getAction;
         }
+    }
+
+    /**
+     * @param $context
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    protected function getDefaultAction($context)
+    {
+        $managerClass = $this->getManagerClass($context);
+        return $managerClass::DEFAULT_ACTION;
     }
 
     /**

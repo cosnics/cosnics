@@ -40,7 +40,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
     public function run()
     {
-        $learning_path = $this->get_parent()->get_root_content_object();
+        $learning_path = $this->learningPath;
 
         $trail = BreadcrumbTrail::getInstance();
 
@@ -215,7 +215,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             $trackingService = $this->getTrackingService();
             $progress =
                 $trackingService->getLearningPathProgress(
-                    $this->get_root_content_object(), $this->getUser(), $this->getTree()->getRoot()
+                    $this->learningPath, $this->getUser(), $this->getTree()->getRoot()
                 );
 
             $progressBarRenderer = new ProgressBarRenderer();

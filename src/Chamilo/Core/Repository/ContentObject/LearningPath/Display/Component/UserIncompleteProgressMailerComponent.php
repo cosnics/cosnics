@@ -32,11 +32,11 @@ class UserIncompleteProgressMailerComponent extends Manager
         $trackingService = $this->getTrackingService();
 
         $usersNotYetStarted = $trackingService->findTargetUsersWithoutLearningPathAttempts(
-            $this->get_root_content_object(), $currentTreeNode
+            $this->learningPath, $currentTreeNode
         );
 
         $usersPartiallyStarted = $trackingService->findTargetUsersWithPartialLearningPathAttempts(
-            $this->get_root_content_object(), $currentTreeNode
+            $this->learningPath, $currentTreeNode
         );
 
         $emailAddresses = array();
@@ -118,7 +118,7 @@ class UserIncompleteProgressMailerComponent extends Manager
         );
 
         $variables = array(
-            'LEARNING_PATH' => $this->get_root_content_object()->get_title(),
+            'LEARNING_PATH' => $this->learningPath->get_title(),
             'STEP_NAME' => $currentNodeTitle,
             'USER' => $this->getUser()->get_fullname(),
             'URL' => $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT))

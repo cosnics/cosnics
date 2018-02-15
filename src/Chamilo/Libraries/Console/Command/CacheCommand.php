@@ -1,7 +1,11 @@
 <?php
+
 namespace Chamilo\Libraries\Console\Command;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Cache\CacheManagement\CacheManager;
+use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\Path;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -49,10 +53,12 @@ abstract class CacheCommand extends ChamiloCommand
             self::OPT_LIST,
             self::OPT_LIST_SHORT,
             InputOption::VALUE_NONE,
-            $this->translator->trans('ListCacheServices', array(), 'Chamilo\Libraries'))->addArgument(
+            $this->translator->trans('ListCacheServices', array(), 'Chamilo\Libraries')
+        )->addArgument(
             self::ARG_CACHE_SERVICES,
             InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
-            $this->translator->trans('CacheServices', array(), 'Chamilo\Libraries'));
+            $this->translator->trans('CacheServices', array(), 'Chamilo\Libraries')
+        );
     }
 
     /**
@@ -77,6 +83,7 @@ abstract class CacheCommand extends ChamiloCommand
      * Returns the selected cache services from the interface
      *
      * @param \Symfony\Component\Console\Input\InputInterface $input
+     *
      * @return string[]
      */
     protected function getSelectedCacheServices(InputInterface $input)
@@ -97,7 +104,9 @@ abstract class CacheCommand extends ChamiloCommand
         if ($input->getOption(self::OPT_LIST))
         {
             $output->writeln(
-                '<comment>' . $this->translator->trans('AvailableCacheServices', array(), 'Chamilo\Libraries') . '</comment>');
+                '<comment>' . $this->translator->trans('AvailableCacheServices', array(), 'Chamilo\Libraries') .
+                '</comment>'
+            );
             $output->writeln('');
 
             foreach ($this->cacheManager->getCacheServiceAliases() as $serviceAlias)
@@ -121,6 +130,14 @@ abstract class CacheCommand extends ChamiloCommand
     {
         $this->cacheManager->clear($this->getSelectedCacheServices($input));
         $output->writeln($this->translator->trans('CacheCleared', array(), 'Chamilo\Libraries'));
+
+        $cachePath = Configuration::getInstance()->get(
+            'Chamilo\Configuration',
+            'storage',
+            'cache_path'
+        );
+
+        Filesystem::chmod($cachePath, '2770', true);
     }
 
     /**

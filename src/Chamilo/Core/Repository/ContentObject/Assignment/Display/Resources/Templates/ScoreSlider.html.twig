@@ -1,0 +1,49 @@
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
+
+<div class="row form-row">
+    <div id="slider" style="display:inline-block; vertical-align: middle; margin-left: 7px; margin-right: 20px; width: 60%;">
+        <div id="custom-handle" class="ui-slider-handle"></div>
+    </div>
+    <button class="pull-right btn btn-default btn-xs btn-score" id="scoreSaveButtonJavascript"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> {{ 'SaveScore'|trans({}, appContext) }}</button>
+</div>
+
+<script type="text/javascript">
+    (function() {
+        $(document).on('ready', function() {
+            var handle = $("#custom-handle");
+            var scoreSelector = $('select[name="score"]');
+            var sliderSelector = $('#slider');
+            var initial = true;
+
+            scoreSelector.parents('.form-row').hide();
+            $('#scoreSaveButton').hide();
+
+            sliderSelector.slider({
+                orientation: 'horizontal',
+                range: "min",
+                max: 100,
+                change: function () {
+                    var value = sliderSelector.slider('value');
+                    scoreSelector.val(value);
+                    handle.text(value);
+
+                    if(!initial) {
+                        $('#scoreSaveButtonJavascript').addClass('btn-success');
+                        $('#scoreSaveButtonJavascript').removeClass('btn-score');
+                    }
+
+                    initial = false;
+
+                },
+                create: function () {
+                    handle.text($(this).slider("value"));
+                },
+                slide: function (event, ui) {
+                    handle.text(ui.value);
+                }
+            });
+
+            sliderSelector.slider('value', scoreSelector.val());
+        });
+    })();
+</script>

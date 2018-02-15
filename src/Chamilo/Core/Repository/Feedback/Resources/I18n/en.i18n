@@ -5,7 +5,7 @@
 
 TypeName = "Feedback"
 BrowserComponent = "Feedback"
-AddFeedback = "Voeg feedback toe"
+AddFeedback = "Add feedback"
 Feedback = "Existing feedback"
 Comment = "Comment"
 NoFeedbackYet = "No feedback available yet"

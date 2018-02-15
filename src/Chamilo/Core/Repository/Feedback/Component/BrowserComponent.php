@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Feedback\Component;
 
+use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\Form\FeedbackForm;
 use Chamilo\Core\Repository\Feedback\Generator\ActionsGenerator;
@@ -16,6 +17,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -75,7 +77,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $this->getPager()->getNumberOfItemsPerPage(),
                 $this->getPager()->getCurrentRangeOffset());
 
-            if ($feedbacks->size() == 0 && ! $this->get_parent()->is_allowed_to_create_feedback())
+            $feedbackCount = $feedbacks instanceof ResultSet ? $feedbacks->size() : count($feedbacks);
+
+            if ($feedbackCount && ! $this->get_parent()->is_allowed_to_create_feedback())
             {
                 $html[] = $this->renderFeedbackButtonToolbar();
                 $html[] = '<div class="clearfix"></div>';
@@ -84,50 +88,68 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = '</div>';
             }
 
-            if ($feedbacks->size() > 0)
+            if ($feedbackCount > 0)
             {
                 if (! $this->get_parent()->is_allowed_to_create_feedback())
                 {
                     $html[] = $this->renderFeedbackButtonToolbar();
                 }
 
-                $html[] = '<h3>';
-                $html[] = Translation::get('Feedback');
-                $html[] = '<div class="clearfix"></div>';
-                $html[] = '</h3>';
+                if($this->showFeedbackHeader())
+                {
+                    $html[] = '<h3>';
+                    $html[] = Translation::get('Feedback');
+                    $html[] = '<div class="clearfix"></div>';
+                    $html[] = '</h3>';
+                }
 
                 $html[] = '<div class="panel panel-default panel-feedback">';
                 $html[] = '<div class="list-group">';
 
-                while ($feedback = $feedbacks->next_result())
+                if($feedbacks instanceof ResultSet)
+                {
+                    $feedbacks = $feedbacks->as_array();
+                }
+
+                foreach($feedbacks as $feedback)
                 {
                     $html[] = '<div class="list-group-item">';
 
+                    $html[] ='<div style="display:flex;">';
                     $profilePhotoUrl = new Redirect(
                         array(
                             Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
                             Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
                             \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedback->get_user()->get_id()));
 
-                    $html[] = '<img class="panel-feedback-profile pull-left" src="' . $profilePhotoUrl->getUrl() . '" />';
+                    $html[] = '<img class="panel-feedback-profile" src="' . $profilePhotoUrl->getUrl() . '" />';
 
-                    $html[] = '<div class="pull-right">';
+                    $html[] = '<h4 class="list-group-item-heading" style="flex-grow: 2;">' . $feedback->get_user()->get_fullname() .
+                        '<div class="feedback-date">' . $this->format_date($feedback->get_creation_date()) . '</div></h4>';
 
-                    if ($this->get_parent()->is_allowed_to_update_feedback($feedback))
+
+                    $allowedToUpdateFeedback = $this->get_parent()->is_allowed_to_update_feedback($feedback);
+                    $allowedToDeleteFeedback = $this->get_parent()->is_allowed_to_delete_feedback($feedback);
+
+                    if($allowedToUpdateFeedback || $allowedToDeleteFeedback)
                     {
-                        $html[] = $this->render_update_action($feedback);
-                    }
+                        $html[] = '<div class="text-right" style="min-width: 40px;">';
 
-                    if ($this->get_parent()->is_allowed_to_delete_feedback($feedback))
-                    {
-                        $html[] = $this->render_delete_action($feedback);
+                        if ($allowedToUpdateFeedback)
+                        {
+                            $html[] = $this->render_update_action($feedback);
+                        }
+
+                        if ($allowedToDeleteFeedback)
+                        {
+                            $html[] = $this->render_delete_action($feedback);
+                        }
+
+                        $html[] = '</div>';
                     }
 
                     $html[] = '</div>';
-
-                    $html[] = '<h4 class="list-group-item-heading">' . $feedback->get_user()->get_fullname() .
-                         ' <small>(' . $this->format_date($feedback->get_creation_date()) . ')</small></h4>';
-                    $html[] = '<p class="list-group-item-text">' . $feedback->get_comment() . '</p>';
+                    $html[] = '<div class="list-group-item-text feedback-content">' . $this->renderFeedbackContent($feedback) . '</div>';
 
                     $html[] = '</div>';
                 }
@@ -135,7 +157,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = '</div>';
                 $html[] = '</div>';
 
-                if ($this->get_parent()->count_feedbacks() > $feedbacks->size())
+                if ($this->get_parent()->count_feedbacks() > $feedbackCount)
                 {
                     $html[] = '<div class="row">';
                     $html[] = '<div class="col-xs-12 feedback-pagination">';
@@ -161,6 +183,14 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    protected function renderFeedbackContent(Feedback $feedback)
+    {
+        $content = $feedback->get_comment();
+
+        $descriptionRenderer = new ContentObjectResourceRenderer($this, $content);
+        return $descriptionRenderer->run();
     }
 
     /**

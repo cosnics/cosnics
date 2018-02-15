@@ -1,0 +1,83 @@
+{{ HEADER|raw }}
+
+<style>
+    img {
+        max-width: 100%;
+    }
+</style>
+
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
+
+<div class="button-toolbar">{{ BUTTON_TOOLBAR|raw }}</div>
+<div class="button-toolbar">{{ NAVIGATOR_BUTTON_TOOLBAR|raw }}</div>
+
+{% if HAS_ENTRY %}
+<ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#entry" aria-controls="entry" role="tab" data-toggle="tab">{{ 'SelectedEntry'|trans({}, appContext) }}</a></li>
+
+    {% if SHOW_AUTOMATIC_FEEDBACK %}
+    <li role="presentation"><a href="#automatic-feedback" aria-controls="entries" role="tab" data-toggle="tab">{{ 'AutomaticFeedback'|trans({}, appContext) }}</a></li>
+    {% endif %}
+
+    {% if ENTRY_COUNT > 1 %}
+    <li role="presentation"><a href="#entries" aria-controls="entries" role="tab" data-toggle="tab">{{ 'OtherEntries'|trans({}, appContext) }}</a></li>
+    {% endif %}
+
+    <li role="presentation" {% if not HAS_ENTRY %}class="active"{% endif %}><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
+</ul>
+{% endif %}
+
+<div class="dynamic-visual-tab-content tab-content">
+    {% if HAS_ENTRY %}
+    <div role="tabpanel" class="tab-pane active" id="entry">
+        <div class="row">
+            <div class="col-sm-8 content-object-rendition">
+                {% if CAN_EDIT_ASSIGNMENT %}
+                    <div class="score-form">
+                        {{ SCORE_FORM|raw }}
+                    </div>
+                {% endif %}
+                <h3 class="entry-title">{{ CONTENT_OBJECT_TITLE }} <span class="badge score-badge {% if SCORE > 0 %}score-success{% else %}no-score{% endif %}">{% if SCORE > 0 %}{{ SCORE }}%{% else %}{{ 'NoScore'|trans({}, appContext) }}{% endif %}</span></h3>
+                <div class="submitted-details">{{ SUBMITTED_BY }} {{ 'At'|trans({}, appContext) }} {{ SUBMITTED_DATE }}</div>
+                {{ CONTENT_OBJECT_RENDITION|raw }}
+            </div>
+            <div class="col-sm-4">
+                {{ FEEDBACK_MANAGER|raw }}
+            </div>
+        </div>
+
+    </div>
+
+    {% if SHOW_AUTOMATIC_FEEDBACK %}
+    <div role="tabpanel" class="tab-pane" id="automatic-feedback">
+            {{ AUTOMATIC_FEEDBACK_TEXT|raw }}
+
+            <ul class="list-group" style="margin-top: 30px;">
+
+                {% for CONTENT_OBJECT in AUTOMATIC_FEEDBACK_CONTENT_OBJECTS %}
+                    <li class="list-group-item">
+                        <a href="#" onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': CONTENT_OBJECT.id}) }}'); return false;">
+                            {{ CONTENT_OBJECT.get_icon_image()|raw }} {{ CONTENT_OBJECT.get_title() }}
+                        </a>
+                    </li>
+                {% endfor %}
+
+            </ul>
+    </div>
+    {% endif %}
+
+    {% if ENTRY_COUNT > 1 %}
+    <div role="tabpanel" class="tab-pane" id="entries">
+        {{ ENTRY_TABLE|raw }}
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <div role="tabpanel" class="{% if HAS_ENTRY -%}tab-pane{%- endif %}" id="assignment">
+        <h3>{{ ASSIGNMENT_TITLE }}</h3>
+
+        {{ ASSIGNMENT_RENDITION|raw }}
+    </div>
+</div>
+
+{{ FOOTER|raw }}

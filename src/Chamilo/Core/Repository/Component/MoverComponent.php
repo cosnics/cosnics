@@ -82,13 +82,12 @@ class MoverComponent extends Manager
                         
                         foreach ($versions as $version)
                         {
+                            /** @var ContentObject $object */
                             $object = DataManager::retrieve_by_id(ContentObject::class_name(), $version);
                             
                             if ($this->getWorkspace() instanceof PersonalWorkspace)
                             {
-                                $object->set_parent_id($destination);
-                                
-                                if (! $object->update())
+                                if (!$object->move($destination))
                                 {
                                     $failures ++;
                                 }

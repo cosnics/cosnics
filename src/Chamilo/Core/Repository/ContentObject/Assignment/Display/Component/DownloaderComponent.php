@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
@@ -14,9 +15,16 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryDownlo
 class DownloaderComponent extends Manager
 {
 
+    /**
+     * @return string|void
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function run()
     {
-        $entryCompressor = new EntryDownloader($this->getDataProvider(), $this->get_root_content_object());
+        $entryCompressor = new EntryDownloader(
+            $this->getDataProvider(), $this->getRightsService(), $this->getUser(), $this->getAssignment()
+        );
+
         $entryCompressor->downloadByRequest($this->getRequest());
     }
 }

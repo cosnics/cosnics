@@ -173,6 +173,15 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
             
             $html[] = $this->renderOption($option, $url);
         }
+
+        /**
+         * Add empty list group items as a css bugfix for the column layout
+         */
+        $restOptions = count($options) % 4;
+        for($i = 0; $i < $restOptions; $i++)
+        {
+            $html[] = '<li class="list-group-item"></li>';
+        }
         
         $html[] = '</ul>';
         $html[] = '</div>';

@@ -18,8 +18,18 @@ abstract class FileBasedCacheService implements CacheResetterInterface
      */
     public function clear()
     {
-        $cachePath = $this->getCachePath();
+        return $this->removeCachePath($this->getCachePath());
+    }
 
+    /**
+     * Removes the cachePath
+     *
+     * @param string $cachePath
+     *
+     * @return $this
+     */
+    protected function removeCachePath($cachePath)
+    {
         if (file_exists($cachePath))
         {
             if (! Filesystem::remove($cachePath))

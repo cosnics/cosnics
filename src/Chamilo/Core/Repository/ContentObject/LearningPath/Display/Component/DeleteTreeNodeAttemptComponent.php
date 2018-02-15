@@ -28,7 +28,7 @@ class DeleteTreeNodeAttemptComponent extends BaseReportingComponent
         $parameters = array();
 
         $trackingService = $this->getTrackingService();
-        $learningPath = $this->get_root_content_object();
+        $learningPath = $this->learningPath;
         $reportingUser = $this->getReportingUser();
         $treeNode = $this->getCurrentTreeNode();
 

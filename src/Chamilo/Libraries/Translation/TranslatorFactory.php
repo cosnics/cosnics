@@ -82,7 +82,6 @@ class TranslatorFactory
             Filesystem::create_dir($translationCachePath);
         }
 
-        // TODO: Improve caching?
         $internationalizationBundlesCacheService = new InternationalizationBundlesCacheService();
         $packageNamespaces = $internationalizationBundlesCacheService->getAllPackages();
 

@@ -124,8 +124,6 @@ class AssessmentTrackingService
         LearningPath $learningPath, User $user, TreeNode $treeNode, $assessmentScore = 0
     )
     {
-        $this->validateTreeNodeIsAssessment($treeNode);
-
         $activeAttempt = $this->attemptService->getOrCreateActiveTreeNodeAttempt($learningPath, $treeNode, $user);
 
         $activeAttempt->set_score($assessmentScore);
@@ -150,8 +148,6 @@ class AssessmentTrackingService
         TreeNode $treeNode, $treeNodeAttemptId, $newScore = 0
     )
     {
-        $this->validateTreeNodeIsAssessment($treeNode);
-
         $treeNodeAttempt = $this->attemptTrackingService->getTreeNodeAttemptById(
             $learningPath, $user, $treeNode, $treeNodeAttemptId
         );

@@ -74,7 +74,9 @@ class CourseGroupSubscriptionsForm extends FormValidator
                     'id' => 'user_' . $course_group_user->get_id(),
                     'title' => Utilities::htmlentities($course_group_user->get_fullname()),
                     'description' => Utilities::htmlentities($course_group_user->get_username()),
-                    'classes' => 'type type_user');
+                    'classes' => 'type type_user',
+                    'sort_name' => $course_group_user->get_lastname()
+                );
 
                 // $defaults[$course_group_user->get_id()] = array('title' =>
                 // htmlspecialchars($course_group_user->get_fullname()),
@@ -83,6 +85,10 @@ class CourseGroupSubscriptionsForm extends FormValidator
                 // 'user');
             }
         }
+
+        usort($current, function($courseGroupUser1, $courseGroupUser2) {
+           return strcmp($courseGroupUser1['sort_name'], $courseGroupUser2['sort_name']);
+        });
 
         $locale = array();
         $locale['Display'] = Translation::get('SelectGroupUsers');

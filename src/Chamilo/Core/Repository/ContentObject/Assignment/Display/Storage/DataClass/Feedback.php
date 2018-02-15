@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass;
 
 /**
@@ -15,6 +16,7 @@ abstract class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataCl
     /**
      *
      * @param string[] $extendedPropertyNames
+     *
      * @return string[]
      */
     public static function get_default_property_names($extendedPropertyNames = array())

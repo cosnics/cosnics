@@ -1,0 +1,53 @@
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
+
+{{ HEADER|raw }}
+
+<style>
+    img {
+        max-width: 100%;
+    }
+</style>
+
+<ul class="nav nav-wizard publication-wizard entry-wizard">
+    <li class=""><a href="#">1. {{ 'SelectContentObject'|trans({}, appContext) }}</a></li>
+    <li class="active"><a href="#">2. {{ 'CreatorConfirmation'|trans({}, appContext) }}</a></li>
+</ul>
+
+<div class="alert alert-success" style="font-size: 18px; text-align: center;">
+    <span class="inline-glyph fa fa-check assignment-success-check"></span>
+    {{ 'EntryReceived'|trans({'{ASSIGNMENT}': ASSIGNMENT_TITLE}, appContext)|raw }}
+</div>
+
+{% if SHOW_AUTOMATIC_FEEDBACK %}
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'AutomaticFeedback'|trans([], appContext) }}</h3>
+        </div>
+
+        <div class="panel-body automatic-feedback">
+
+            {{ AUTOMATIC_FEEDBACK_TEXT|raw }}
+
+            <ul class="list-group" style="margin-top: 30px;">
+
+                {% for CONTENT_OBJECT in AUTOMATIC_FEEDBACK_CONTENT_OBJECTS %}
+                    <li class="list-group-item">
+                        <a href="#" onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': CONTENT_OBJECT.id}) }}'); return false;">
+                            {{ CONTENT_OBJECT.get_icon_image()|raw }} {{ CONTENT_OBJECT.get_title() }}
+                        </a>
+                    </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+    </div>
+{% endif %}
+
+<div class="text-center">
+    <a class="btn btn-default btn-primary" title="{{ 'ReturnToEntries'|trans({}, appContext) }}" href="{{ RETURN_URL }}">
+        <span>{{ 'ReturnToEntries'|trans({}, appContext) }}</span>
+    </a>
+</div>
+
+{{ FOOTER|raw }}

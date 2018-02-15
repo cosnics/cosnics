@@ -1964,10 +1964,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $course_id
      * @param int $offset
      * @param int $count
-     * @param \libraries\ObjectTableOrder[] $order_by
-     * @param \libraries\storage\Condition $condition
+     * @param OrderBy $order_by
+     * @param Condition $condition
      *
-     * @return \libraries\ObjectTableOrder[] <\user\User>
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public static function retrieve_publication_target_users($publication_id, $course_id, $offset = null, $count = null,
         $order_by = null, $condition = null)
