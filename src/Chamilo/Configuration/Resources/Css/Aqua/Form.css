@@ -39,7 +39,7 @@ form div.form-row div.formw {
 }
 
 form div.formw input[type=text], form div.form-row div.formw input[type=password],
-	form div.form-row div.formw select { /*
+	form div.form-row div.formw select, form div.formw textarea { /*
 	background-image: url(../../Images/Aqua/Buttons/Link.png);
 	background-repeat: no-repeat;
 	background-position: 2px center;
