@@ -23,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * Doctrine implementation of the datamanager
@@ -86,7 +87,7 @@ class DoctrineExtension
                 'subscription_type'));
         
         $sql = $this->build_basic_sql_all_course_users($properties, $course_id, $condition);
-        
+
         $query_builder = $this->database->get_connection()->createQueryBuilder();
         
         $group_by = new GroupBy();
@@ -103,9 +104,9 @@ class DoctrineExtension
         $query_builder = $this->process_group_by($query_builder, $group_by);
         $query_builder = $this->process_order_by($query_builder, User::class_name(), $order_property);
         $query_builder = $this->process_limit($query_builder, $count, $offset);
-        
-        $sql .= substr($query_builder->getSQL(), 14);
-        
+
+        $sql .= substr($query_builder->getSQL(), 7);
+
         try
         {
             return new RecordResultSet($this->database->get_connection()->query($sql));
@@ -176,14 +177,14 @@ class DoctrineExtension
         $query_builder = $this->process_data_class_properties($query_builder, User::class_name(), $properties);
         
         $sql = $query_builder->getSQL();
-        
+
         $sql_subscribed_users = $this->build_sql_for_subscribed_users($course_id, $condition);
         $sql_subscribed_groups = $this->build_sql_for_subscribed_group_users($course_id, $condition);
-        
-        $sql .= '(' .
+
+        $sql .= ' FROM (' .
              ($sql_subscribed_groups ? $sql_subscribed_users . ' UNION ' . $sql_subscribed_groups : $sql_subscribed_users) .
              ') AS ' . \Chamilo\Core\User\Storage\DataManager::getInstance()->get_alias(User::get_table_name()) . ' ';
-        
+
         return $sql;
     }
 
