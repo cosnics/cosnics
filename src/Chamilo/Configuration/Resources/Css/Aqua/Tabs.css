@@ -134,3 +134,9 @@ div.dynamic_content_menu_item_content div.configuration_form, div.dynamic_conten
 	{
 	clear: none;
 }
+
+.tab-pane-with-border {
+	border: 1px solid #dddddd;
+	border-top: none;
+	padding: 10px 15px;
+}

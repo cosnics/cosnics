@@ -51,20 +51,8 @@ ul.tree-menu li div a.assignment.type_completed, ul.tree-menu li div a.type_assi
     background-color: #dc3545;
 }
 
-.tab-pane {
-    border: 1px solid #dddddd;
-    border-top: none;
-    padding: 10px 15px;
-}
-
 #assignment h3 {
     margin: 5px 0 20px;
-}
-
-.tab-pane {
-    border: 1px solid #dddddd;
-    border-top: none;
-    padding: 10px 15px;
 }
 
 #assignment h3 {

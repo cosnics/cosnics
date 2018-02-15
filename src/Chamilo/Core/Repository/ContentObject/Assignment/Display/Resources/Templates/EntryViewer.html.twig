@@ -29,7 +29,7 @@
 
 <div class="dynamic-visual-tab-content tab-content">
     {% if HAS_ENTRY %}
-    <div role="tabpanel" class="tab-pane active" id="entry">
+    <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entry">
         <div class="row">
             <div class="col-sm-8 content-object-rendition">
                 {% if CAN_EDIT_ASSIGNMENT %}
@@ -49,7 +49,7 @@
     </div>
 
     {% if SHOW_AUTOMATIC_FEEDBACK %}
-    <div role="tabpanel" class="tab-pane" id="automatic-feedback">
+    <div role="tabpanel" class="tab-pane tab-pane-with-border" id="automatic-feedback">
             {{ AUTOMATIC_FEEDBACK_TEXT|raw }}
 
             <ul class="list-group" style="margin-top: 30px;">
@@ -67,13 +67,13 @@
     {% endif %}
 
     {% if ENTRY_COUNT > 1 %}
-    <div role="tabpanel" class="tab-pane" id="entries">
+    <div role="tabpanel" class="tab-pane tab-pane-with-border" id="entries">
         {{ ENTRY_TABLE|raw }}
     </div>
     {% endif %}
     {% endif %}
 
-    <div role="tabpanel" class="{% if HAS_ENTRY -%}tab-pane{%- endif %}" id="assignment">
+    <div role="tabpanel" class="{% if HAS_ENTRY -%}tab-pane tab-pane-with-border{%- endif %}" id="assignment">
         <h3>{{ ASSIGNMENT_TITLE }}</h3>
 
         {{ ASSIGNMENT_RENDITION|raw }}
