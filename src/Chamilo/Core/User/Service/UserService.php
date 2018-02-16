@@ -1,7 +1,10 @@
 <?php
+
 namespace Chamilo\Core\User\Service;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
+use Chamilo\Libraries\Hashing\HashingUtilities;
 
 /**
  *
@@ -19,63 +22,128 @@ class UserService
     private $userRepository;
 
     /**
-     *
-     * @param \Chamilo\Core\User\Storage\Repository\UserRepository $userRepository
+     * @var HashingUtilities
      */
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\Repository\UserRepository
-     */
-    protected function getUserRepository()
-    {
-        return $this->userRepository;
-    }
+    protected $hashingUtilities;
 
     /**
      *
      * @param \Chamilo\Core\User\Storage\Repository\UserRepository $userRepository
+     * @param \Chamilo\Libraries\Hashing\HashingUtilities $hashingUtilities
      */
-    protected function setUserRepository(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, HashingUtilities $hashingUtilities)
     {
         $this->userRepository = $userRepository;
+        $this->hashingUtilities = $hashingUtilities;
     }
 
     /**
      *
      * @param integer $identifier
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function findUserByIdentifier($identifier)
     {
-        return $this->getUserRepository()->findUserById($identifier);
+        return $this->userRepository->findUserById($identifier);
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param integer $count
      * @param integer $offset
+     * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    public function findUsers($condition, $offset = 0, $count = -1, $orderProperty = null)
+    public function findUsers($condition, $offset = 0, $count = - 1, $orderProperty = null)
     {
-        return $this->getUserRepository()->findUsers($condition, $count, $offset, $orderProperty);
+        return $this->userRepository->findUsers($condition, $count, $offset, $orderProperty);
+    }
+
+    /**
+     * @param string $username
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function findUserByUsername($username)
+    {
+        return $this->userRepository->findUserByUsername($username);
+    }
+
+    /**
+     * @param string $username
+     *
+     * @return bool
+     */
+    public function isUsernameAvailable($username)
+    {
+        return !$this->findUserByUsername($username) instanceof User;
+    }
+
+    /**
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $username
+     * @param string $officialCode
+     * @param string $emailAddress
+     * @param string $password
+     * @param string $authSource
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function createUser(
+        $firstName, $lastName, $username, $officialCode, $emailAddress, $password, $authSource = 'Platform'
+    )
+    {
+        $requiredParameters = [
+            'firstName' => $firstName, 'lastName' => $lastName, 'username' => $username,
+            'officialCode' => $officialCode, 'emailAddress' => $emailAddress, 'password' => $password
+        ];
+
+        foreach($requiredParameters as $parameterName => $parameterValue)
+        {
+            if (empty($parameterValue))
+            {
+                throw new \InvalidArgumentException('The ' . $parameterName . ' can not be empty');
+            }
+        }
+
+        if (!$this->isUsernameAvailable($username))
+        {
+            throw new \RuntimeException('The given username is already taken');
+        }
+
+        $user = new User();
+
+        $user->set_firstname($firstName);
+        $user->set_lastname($lastName);
+        $user->set_username($username);
+        $user->set_official_code($officialCode);
+        $user->set_email($emailAddress);
+        $user->set_auth_source($authSource);
+
+        $user->set_password($this->hashingUtilities->hashString($password));
+
+        if (!$this->userRepository->create($user))
+        {
+            throw new \RuntimeException('Could not create the user');
+        }
+
+        return $user;
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
      * @return integer
      */
     public function countUsers($condition)
     {
-        return $this->getUserRepository()->countUsers($condition);
+        return $this->userRepository->countUsers($condition);
     }
+
 }
 

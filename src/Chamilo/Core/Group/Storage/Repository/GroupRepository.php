@@ -66,6 +66,33 @@ class GroupRepository extends CommonDataClassRepository
     }
 
     /**
+     * @param int $groupId
+     * @param int $userId
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|GroupRelUser
+     */
+    public function findGroupRelUserByGroupAndUserId($groupId, $userId)
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
+            new StaticConditionVariable($userId)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($groupId)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->retrieve(
+            GroupRelUser::class, new DataClassRetrieveParameters($condition, array(), $joins)
+        );
+    }
+
+    /**
      * Finds a group object by a given group code
      *
      * @param string $groupCode
