@@ -340,7 +340,12 @@ CREATE TABLE `tracking_weblcms_learning_path_assignment_entry` (
   `submitted` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `ip_address` varchar(15) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `twlpae_tree_node_attempt_id` (`tree_node_attempt_id`),
+  KEY `twlpae_tree_node_data_id` (`tree_node_data_id`),
+  KEY `twlpae_content_object_id` (`content_object_id`),
+  KEY `twlpae_entity` (`entity_id`, `entity_type`),
+  KEY `twlpae_user_id` (`user_id`)
 );
 
 CREATE TABLE `tracking_weblcms_learning_path_assignment_feedback` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `comment` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
@@ -356,10 +361,27 @@ CREATE TABLE `tracking_weblcms_assignment_entry` (
   `submitted` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `ip_address` varchar(15) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `twlpae_content_object_publication_id` (`content_object_publication_id`),
+  KEY `twlpae_content_object_id` (`content_object_id`),
+  KEY `twlpae_entity` (`entity_id`, `entity_type`),
+  KEY `twlpae_user_id` (`user_id`)
 );
 
 CREATE TABLE `tracking_weblcms_assignment_feedback` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `comment` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 CREATE TABLE `tracking_weblcms_assignment_note` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `note` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 CREATE TABLE `tracking_weblcms_assignment_score` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `score` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+/** Assignment tool refactoring **/
+
+CREATE TABLE `weblcms_assignment_publication` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `publication_id` int(10) UNSIGNED NOT NULL,
+  `entity_type` int(3) UNSIGNED NOT NULL,
+   PRIMARY KEY (`id`),
+   UNIQUE KEY `wap_publication_id` (`publication_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 

@@ -132,4 +132,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 false,
                 'btn-link'));
     }
+
+
 }

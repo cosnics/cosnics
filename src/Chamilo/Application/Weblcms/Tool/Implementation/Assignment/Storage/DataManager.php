@@ -4,10 +4,12 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -456,5 +458,26 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $group_by);
         
         return $data_manager::records($base_class, $parameters);
+    }
+
+    /**
+     * @param int $contentObjectPublicationId
+     *
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication|\Chamilo\Libraries\Storage\DataClass\DataClass
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public static function getAssignmentPublicationByPublicationId($contentObjectPublicationId)
+    {
+        $parameters = new DataClassRetrieveParameters(
+            new EqualityCondition(
+                new PropertyConditionVariable(
+                    Publication::class_name(),
+                    Publication::PROPERTY_PUBLICATION_ID),
+                new StaticConditionVariable($contentObjectPublicationId)
+            )
+        );
+
+        return self::retrieve(Publication::class_name(), $parameters);
     }
 }

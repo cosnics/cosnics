@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\SubmissionSubmit\SubmissionSubmitWizardComponent;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Forms\SubmissionSubmitForm;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Form\SubmissionSubmitForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
