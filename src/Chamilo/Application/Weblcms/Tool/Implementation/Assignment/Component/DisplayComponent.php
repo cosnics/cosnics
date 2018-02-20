@@ -12,15 +12,24 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class DisplayComponent extends Manager
+class DisplayComponent extends Manager implements DelegateComponent
 {
+    /**
+     * @return string
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
     public function run()
     {
         $assignmentDataProvider = new AssignmentDataProvider(
@@ -29,6 +38,10 @@ class DisplayComponent extends Manager
         );
 
         $publication = $this->getContentObjectPublication();
+        if(!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
+        {
+            throw new NotAllowedException();
+        }
 
         $assignmentDataProvider->setContentObjectPublication($publication);
 
@@ -65,6 +78,9 @@ class DisplayComponent extends Manager
 
     /**
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function get_root_content_object()
     {

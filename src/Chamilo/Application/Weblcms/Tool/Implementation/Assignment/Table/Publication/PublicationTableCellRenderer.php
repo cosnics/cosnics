@@ -69,18 +69,6 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                 return DataManager::count(
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
                     new DataClassCountParameters($condition));
-            case Assignment::PROPERTY_ALLOW_GROUP_SUBMISSIONS :
-                if ($content_object->get_allow_group_submissions())
-                {
-                    return '<img src="' . Theme::getInstance()->getImagePath(
-                        'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 
-                        'Type/Group') . '" alt="' . Translation::get('GroupAssignment') . '" title="' .
-                         Translation::get('GroupAssignment') . '"/>';
-                }
-                return '<img src="' . Theme::getInstance()->getImagePath(
-                    'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 
-                    'Type/Individual') . '" alt="' . Translation::get('IndividualAssignment') . '" title="' .
-                     Translation::get('IndividualAssignment') . '"/>';
         }
         
         return parent::render_cell($column, $publication);

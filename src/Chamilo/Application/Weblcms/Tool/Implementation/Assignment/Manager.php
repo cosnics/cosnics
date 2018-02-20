@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
@@ -10,6 +11,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
@@ -35,6 +37,8 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     const ACTION_SUBMIT_SUBMISSION = 'SubmissionSubmit';
     const ACTION_SUBMIT_SUBMISSON_CONFIRMATION = 'SubmissionSubmitConfirmation';
     const ACTION_VIEW_SUBMISSION = 'SubmissionViewer';
+    const ACTION_DISPLAY = 'Display';
+
     // Feedback actions
     const ACTION_DELETE_FEEDBACK = 'FeedbackDeleter';
     const ACTION_EDIT_FEEDBACK = 'FeedbackUpdater';
@@ -63,6 +67,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $browser_types = array();
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_TABLE;
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
+
         return $browser_types;
     }
 
@@ -76,20 +81,26 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      *
      * @param $toolbar Toolbar
      * @param $publication Publication
+     *
      * @return Toolbar
      */
     public function add_content_object_publication_actions($toolbar, $publication)
     {
-        $toolbar->add_item(
+        $toolbar->insert_item(
             new ToolbarItem(
                 Translation::get('BrowseSubmitters'),
                 Theme::getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE_SUBMITTERS,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID])),
-                ToolbarItem::DISPLAY_ICON));
-        $toolbar->add_item(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                    )
+                ),
+                ToolbarItem::DISPLAY_ICON
+            ), 0
+        );
+
+        $toolbar->insert_item(
             new ToolbarItem(
                 Translation::get('SubmissionSubmit'),
                 Theme::getInstance()->getCommonImagePath('Action/Add'),
@@ -98,13 +109,21 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         self::PARAM_TARGET_ID => $this->get_user_id(),
-                        self::PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER)),
-                ToolbarItem::DISPLAY_ICON));
+                        self::PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER
+                    )
+                ),
+                ToolbarItem::DISPLAY_ICON
+            ),
+            1
+        );
+
         return $toolbar;
     }
 
-    public function addContentObjectPublicationButtons($publication, ButtonGroup $buttonGroup,
-        DropdownButton $dropdownButton)
+    public function addContentObjectPublicationButtons(
+        $publication, ButtonGroup $buttonGroup,
+        DropdownButton $dropdownButton
+    )
     {
         $buttonGroup->prependButton(
             new Button(
@@ -112,11 +131,15 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 new FontAwesomeGlyph('folder-open'),
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE_SUBMITTERS,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID])),
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                    )
+                ),
                 Button::DISPLAY_ICON,
                 false,
-                'btn-link'));
+                'btn-link'
+            )
+        );
 
         $buttonGroup->prependButton(
             new Button(
@@ -127,11 +150,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         self::PARAM_TARGET_ID => $this->get_user_id(),
-                        self::PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER)),
+                        self::PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER
+                    )
+                ),
                 Button::DISPLAY_ICON,
                 false,
-                'btn-link'));
+                'btn-link'
+            )
+        );
     }
-
 
 }

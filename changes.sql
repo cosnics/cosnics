@@ -384,4 +384,14 @@ CREATE TABLE `weblcms_assignment_publication` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+INSERT IGNORE INTO weblcms_assignment_publication
+SELECT NULL, COP.id, 0 FROM weblcms_content_object_publication COP
+JOIN repository_content_object RCO on RCO.id = COP.content_object_id
+WHERE COP.tool = 'Assignment' AND RCO.type LIKE '%Assignment%';
 
+UPDATE weblcms_assignment_publication WAP
+JOIN weblcms_content_object_publication COP on WAP.publication_id = COP.id
+JOIN repository_assignment COA on COP.content_object_id = COA.id
+SET WAP.entity_type = 1 WHERE COA.allow_group_submissions = 1;
+
+ALTER TABLE `repository_assignment` DROP `allow_group_submissions`;

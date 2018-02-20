@@ -35,6 +35,7 @@ class PublicationForm extends ContentObjectPublicationForm
      * @param array $selectedContentObjects
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function __construct(
         User $user, $form_type, $publications, $course, $action, $is_course_admin,
@@ -53,10 +54,18 @@ class PublicationForm extends ContentObjectPublicationForm
             $is_course_admin,
             $selectedContentObjects
         );
+
+        if($form_type == self::TYPE_UPDATE)
+        {
+            $this->setDefaultsForPublication($publications[0]);
+        }
     }
 
     /**
      * Builds the basic create form (without buttons)
+     *
+     * @throws \HTML_QuickForm_Error
+     * @throws \PEAR_Error
      */
     public function build_basic_create_form()
     {
@@ -67,6 +76,9 @@ class PublicationForm extends ContentObjectPublicationForm
 
     /**
      * Builds the basic update form (without buttons)
+     *
+     * @throws \HTML_QuickForm_Error
+     * @throws \PEAR_Error
      */
     public function build_basic_update_form()
     {
@@ -75,6 +87,10 @@ class PublicationForm extends ContentObjectPublicationForm
         $this->addAssignmentProperties();
     }
 
+    /**
+     * @throws \HTML_QuickForm_Error
+     * @throws \PEAR_Error
+     */
     protected function addAssignmentProperties()
     {
         $this->addElement('category', $this->translator->trans('AssignmentProperties', [], Manager::context()));
@@ -83,7 +99,7 @@ class PublicationForm extends ContentObjectPublicationForm
             'radio',
             null,
             null,
-            $this->translator->trans('Users', [], Manager::context()),
+            $this->translator->trans('UsersEntity', [], Manager::context()),
             Entry::ENTITY_TYPE_USER
         );
 
@@ -91,7 +107,7 @@ class PublicationForm extends ContentObjectPublicationForm
             'radio',
             null,
             null,
-            $this->translator->trans('CourseGroups', [], Manager::context()),
+            $this->translator->trans('CourseGroupsEntity', [], Manager::context()),
             Entry::ENTITY_TYPE_COURSE_GROUP
         );
 
@@ -99,7 +115,7 @@ class PublicationForm extends ContentObjectPublicationForm
             'radio',
             null,
             null,
-            $this->translator->trans('PlatformGroups', [], Manager::context()),
+            $this->translator->trans('PlatformGroupsEntity', [], Manager::context()),
             Entry::ENTITY_TYPE_PLATFORM_GROUP
         );
 
@@ -183,5 +199,16 @@ class PublicationForm extends ContentObjectPublicationForm
         {
             return false;
         }
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    protected function setDefaultsForPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        $publication = DataManager::getAssignmentPublicationByPublicationId($contentObjectPublication->getId());
+        $this->setDefaults([Publication::PROPERTY_ENTITY_TYPE => $publication->getEntityType()]);
     }
 }

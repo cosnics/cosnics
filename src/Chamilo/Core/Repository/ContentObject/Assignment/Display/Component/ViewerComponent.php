@@ -99,7 +99,6 @@ class ViewerComponent extends Manager implements TableSupport
             'FEEDBACK_COUNT' => $feedbackCount, 'LATE_ENTRY_COUNT' => $lateEntryCount,
             'START_TIME' => $startTime, 'END_TIME' => $endTime,
             'ALLOW_LATE_SUBMISSIONS' => $assignment->get_allow_late_submissions(),
-            'ALLOW_GROUP_SUBMISSIONS' => $assignment->get_allow_group_submissions(),
             'VISIBILITY_SUBMISSIONS' => $assignment->get_visibility_submissions(),
             'ENTITY_TABLE' => $this->renderEntityTable(),
             'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),

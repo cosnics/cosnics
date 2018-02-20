@@ -37,7 +37,6 @@ class AssignmentForm extends ContentObjectForm
         if ($object->get_id() != null)
         {
             $defaults[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS] = $object->get_visibility_submissions();
-            $defaults[Assignment::PROPERTY_ALLOW_GROUP_SUBMISSIONS] = $object->get_ALLOW_GROUP_SUBMISSIONS();
             $defaults[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS] = $object->get_allow_late_submissions();
             $defaults[Assignment::PROPERTY_START_TIME] = $object->get_start_time();
             $defaults[Assignment::PROPERTY_END_TIME] = $object->get_end_time();
@@ -86,7 +85,6 @@ class AssignmentForm extends ContentObjectForm
         else
         {
             $defaults[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS] = 0;
-            $defaults[Assignment::PROPERTY_ALLOW_GROUP_SUBMISSIONS] = 0;
             $defaults[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS] = 1;
             $defaults[Assignment::PROPERTY_VISIBILTY_FEEDBACK] = Assignment::VISIBILITY_FEEDBACK_AFTER_SUBMISSION;
             $defaults[Assignment::PROPERTY_ALLOWED_TYPES] = array(File::class_name());
@@ -138,24 +136,6 @@ class AssignmentForm extends ContentObjectForm
             0
         );
         $this->addGroup($choices, null, Translation::get('VisibilitySubmissions'), '', false);
-
-        // Assignment type
-        $choices = array();
-        $choices[] = $this->createElement(
-            'radio',
-            Assignment::PROPERTY_ALLOW_GROUP_SUBMISSIONS,
-            null,
-            Translation::get('Individual'),
-            0
-        );
-        $choices[] = $this->createElement(
-            'radio',
-            Assignment::PROPERTY_ALLOW_GROUP_SUBMISSIONS,
-            null,
-            Translation::get('Group'),
-            1
-        );
-        $this->addGroup($choices, null, Translation::get('AssignmentType'), '', false);
 
         // Allow late submissions
         $choices = array();
@@ -298,7 +278,6 @@ class AssignmentForm extends ContentObjectForm
         $object->set_start_time(DatetimeUtilities::time_from_datepicker($values[Assignment::PROPERTY_START_TIME]));
         $object->set_end_time(DatetimeUtilities::time_from_datepicker($values[Assignment::PROPERTY_END_TIME]));
         $object->set_visibility_submissions($values[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS]);
-        $object->set_allow_group_submissions($values[Assignment::PROPERTY_ALLOW_GROUP_SUBMISSIONS]);
         $object->set_allow_late_submissions($values[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS]);
 
         $cos = null;
@@ -339,7 +318,6 @@ class AssignmentForm extends ContentObjectForm
         $object->set_start_time(DatetimeUtilities::time_from_datepicker($values[Assignment::PROPERTY_START_TIME]));
         $object->set_end_time(DatetimeUtilities::time_from_datepicker($values[Assignment::PROPERTY_END_TIME]));
         $object->set_visibility_submissions($values[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS]);
-        $object->set_allow_group_submissions($values[Assignment::PROPERTY_ALLOW_GROUP_SUBMISSIONS]);
         $object->set_allow_late_submissions($values[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS]);
 
         $cos = null;

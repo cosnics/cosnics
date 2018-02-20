@@ -19,7 +19,6 @@ class Assignment extends ContentObject implements AttachmentSupport
     const PROPERTY_START_TIME = 'start_time';
     const PROPERTY_END_TIME = 'end_time';
     const PROPERTY_VISIBILITY_SUBMISSIONS = 'visibility_submissions';
-    const PROPERTY_ALLOW_GROUP_SUBMISSIONS = 'allow_group_submissions';
     const PROPERTY_ALLOW_LATE_SUBMISSIONS = 'allow_late_submissions';
     const PROPERTY_VISIBILTY_FEEDBACK = 'visibility_feedback';
     const PROPERTY_AUTOMATIC_FEEDBACK_TEXT = 'automatic_feedback_text';
@@ -40,23 +39,12 @@ class Assignment extends ContentObject implements AttachmentSupport
             self::PROPERTY_START_TIME,
             self::PROPERTY_END_TIME,
             self::PROPERTY_VISIBILITY_SUBMISSIONS,
-            self::PROPERTY_ALLOW_GROUP_SUBMISSIONS,
             self::PROPERTY_ALLOW_LATE_SUBMISSIONS,
             self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT,
             self::PROPERTY_VISIBILTY_FEEDBACK,
             self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS,
             self::PROPERTY_ALLOWED_TYPES
         );
-    }
-
-    public function get_allow_group_submissions()
-    {
-        return $this->get_additional_property(self::PROPERTY_ALLOW_GROUP_SUBMISSIONS);
-    }
-
-    public function set_allow_group_submissions($allow_group_submissions)
-    {
-        $this->set_additional_property(self::PROPERTY_ALLOW_GROUP_SUBMISSIONS, $allow_group_submissions);
     }
 
     public function get_start_time()

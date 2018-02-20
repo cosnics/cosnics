@@ -21,10 +21,6 @@
                 type="boolean"
                 notnull="1"/>
         <property
-                name="allow_group_submissions"
-                type="boolean"
-                notnull="1"/>
-        <property
                 name="allow_late_submissions"
                 type="boolean"
                 notnull="1"/>

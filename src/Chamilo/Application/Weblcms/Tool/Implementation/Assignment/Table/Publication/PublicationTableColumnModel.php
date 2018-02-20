@@ -36,15 +36,7 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
             new StaticTableColumn(
                 Manager::PROPERTY_NUMBER_OF_SUBMISSIONS, 
                 Translation::getInstance()->getTranslation('NumberOfSubmissions', null, Manager::context())));
-        
-        $this->add_column(
-            new DataClassPropertyTableColumn(
-                Assignment::class_name(), 
-                Assignment::PROPERTY_ALLOW_GROUP_SUBMISSIONS, 
-                null, 
-                false), 
-            1);
-        
+
         $this->addActionsColumn();
     }
 }
