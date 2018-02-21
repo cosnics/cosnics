@@ -210,7 +210,7 @@ class AssignmentDataProvider
      */
     public function findEntitiesWithEntriesByEntityType($entityType)
     {
-        return $this->learningPathAssignmentService->findTargetUsersWithEntriesByEntityTypeForTreeNodeData(
+        return $this->learningPathAssignmentService->findTargetUsersWithEntriesForTreeNodeData(
             $this->treeNode->getTreeNodeData(), $this->targetUserIds
         );
     }

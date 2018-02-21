@@ -75,7 +75,7 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function findTargetUsersWithSubmissionsByEntityTypeForTreeNodeData(
+    public function findTargetUsersWithEntriesForTreeNodeData(
         TreeNodeData $treeNodeData, array $userIds, $condition = null, $offset = null, $count = null,
         $orderBy = []
     )

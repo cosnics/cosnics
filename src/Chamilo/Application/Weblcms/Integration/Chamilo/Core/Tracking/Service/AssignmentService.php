@@ -145,6 +145,41 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     }
 
     /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param array $userIds
+     *
+     * @return int
+     */
+    public function countTargetUsersWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $userIds = []
+    )
+    {
+        return $this->findTargetUsersWithEntriesForContentObjectPublication(
+            $contentObjectPublication, $userIds
+        )->count();
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int[] $userIds
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $userIds = [], $condition = null, $offset = null,
+        $count = null, $orderProperty = []
+    )
+    {
+        return $this->assignmentRepository->findTargetUsersWithEntriesByContentObjectPublication(
+            $contentObjectPublication, $userIds, $condition, $offset, $count, $orderProperty
+        );
+    }
+
+    /**
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $courseGroupIds

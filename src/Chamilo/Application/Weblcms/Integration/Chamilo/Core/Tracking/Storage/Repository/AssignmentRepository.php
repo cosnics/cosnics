@@ -56,12 +56,6 @@ class AssignmentRepository
         $orderBy = []
     )
     {
-        $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
-
-        $baseClass = User::class_name();
-
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_USER,
             $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
@@ -69,10 +63,52 @@ class AssignmentRepository
             $offset,
             $count,
             $orderBy,
-            $properties,
-            $baseClass,
-            $this->getTargetBaseVariable($baseClass)
+            $this->getDataClassPropertiesForUser(),
+            User::class_name(),
+            $this->getTargetBaseVariable(User::class_name())
         );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     *
+     * @param int[] $userIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param OrderBy[] $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, array $userIds, $condition = null, $offset = null, $count = null,
+        $orderBy = []
+    )
+    {
+        return $this->findTargetsForEntityTypeWithEntries(
+            Entry::ENTITY_TYPE_USER,
+            $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
+            $this->getContentObjectPublicationCondition($contentObjectPublication),
+            $offset,
+            $count,
+            $orderBy,
+            $this->getDataClassPropertiesForUser(),
+            User::class_name(),
+            $this->getTargetBaseVariable(User::class_name())
+        );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     */
+    protected function getDataClassPropertiesForUser()
+    {
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+
+        return $properties;
     }
 
     /**
@@ -95,7 +131,7 @@ class AssignmentRepository
         $properties = new DataClassProperties();
         $properties->add(new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
 
-        $baseClass = User::class_name();
+        $baseClass = CourseGroup::class_name();
 
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_COURSE_GROUP,
@@ -130,7 +166,7 @@ class AssignmentRepository
         $properties = new DataClassProperties();
         $properties->add(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME));
 
-        $baseClass = User::class_name();
+        $baseClass = Group::class_name();
 
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_PLATFORM_GROUP,
