@@ -77,6 +77,6 @@ ul.tree-menu li div a.file.type_completed, ul.tree-menu li div a.type_file.type_
 }
 
 .media-element-js-download {
-    margin-top: 20px;
+    margin-top: 20px !important;
 }
 
