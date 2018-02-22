@@ -35,7 +35,7 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(File::package(), true) . 'MediaElementJS.js');
         
-        $html[] = $this->getMediaElement();
+        $html[] = $this->getMediaElement($parameters);
         
         $html[] = '<div class="clearfix"></div>';
         
@@ -53,8 +53,8 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
         $html = array();
         
         $html[] = '<div class="media-element-js-container">';
-        
-        $html[] = '<' . $this->getMediaElementType() . ' class="media-element-js-element">';
+
+        $html[] = '<' . $this->getMediaElementType() . ' class="media-element-js-element" style="max-width: 100%;">';
         $html[] = $this->getSources($parameters);
         $html[] = '</' . $this->getMediaElementType() . '>';
         
