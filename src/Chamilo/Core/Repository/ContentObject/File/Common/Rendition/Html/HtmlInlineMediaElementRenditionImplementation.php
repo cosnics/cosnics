@@ -54,7 +54,7 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
         
         $html[] = '<div class="media-element-js-container">';
 
-        $html[] = '<' . $this->getMediaElementType() . ' class="media-element-js-element" style="max-width: 100%;">';
+        $html[] = '<' . $this->getMediaElementType() . ' class="media-element-js-element">';
         $html[] = $this->getSources($parameters);
         $html[] = '</' . $this->getMediaElementType() . '>';
         
