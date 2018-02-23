@@ -72,11 +72,10 @@ ul.tree-menu li div a.file.type_completed, ul.tree-menu li div a.type_file.type_
     }
 }
 
-.media-element-js-element {
-    max-width: 100% !important;
-}
-
 .media-element-js-download {
     margin-top: 20px !important;
 }
 
+.video-js {
+    max-width: 100%;
+}
