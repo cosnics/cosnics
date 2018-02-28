@@ -4,16 +4,14 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\User\EntityTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\User\EntryTable;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Symfony\Component\Translation\Translator;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntityRenderer\UserEntityRenderer;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service
@@ -39,14 +37,14 @@ class AssignmentDataProvider
     protected $contentObjectPublication;
 
     /**
-     * @var int[]
-     */
-    protected $targetUserIds;
-
-    /**
      * @var bool
      */
     protected $canEditAssignment;
+
+    /**
+     * @var EntityServiceInterface[]
+     */
+    protected $entityServices;
 
     /**
      * AssignmentDataProvider constructor.
@@ -76,19 +74,35 @@ class AssignmentDataProvider
     }
 
     /**
+     * @param int $entityType
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface $entityService
+     */
+    public function addEntityService($entityType, EntityServiceInterface $entityService)
+    {
+        $this->entityServices[$entityType] = $entityService;
+    }
+
+    /**
+     * @param int $entityType
+     *
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface
+     */
+    public function getEntityServiceByType($entityType)
+    {
+        if(!array_key_exists($entityType, $this->entityServices))
+        {
+            throw new \RuntimeException('Could not find the entity service for entity type ' . $entityType);
+        }
+
+        return $this->entityServices[$entityType];
+    }
+
+    /**
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject | Assignment
      */
     protected function getAssignment()
     {
         return $this->contentObjectPublication->getContentObject();
-    }
-
-    /**
-     * @param int[] $targetUserIds
-     */
-    public function setTargetUserIds($targetUserIds = [])
-    {
-        $this->targetUserIds = $targetUserIds;
     }
 
     /**
@@ -146,9 +160,8 @@ class AssignmentDataProvider
      */
     public function countEntitiesByEntityType($entityType)
     {
-        return $this->assignmentService->countTargetUsersForContentObjectPublication(
-            $this->contentObjectPublication, $this->targetUserIds
-        );
+        $entityService = $this->getEntityServiceByType($entityType);
+        return $entityService->countEntities($this->contentObjectPublication);
     }
 
     /**
@@ -158,7 +171,8 @@ class AssignmentDataProvider
      */
     public function countEntitiesWithEntriesByEntityType($entityType)
     {
-        return 0;
+        $entityService = $this->getEntityServiceByType($entityType);
+        return $entityService->countEntitiesWithEntries($this->contentObjectPublication);
     }
 
     /**
@@ -168,7 +182,8 @@ class AssignmentDataProvider
      */
     public function findEntitiesWithEntriesByEntityType($entityType)
     {
-        return [];
+        $entityService = $this->getEntityServiceByType($entityType);
+        return $entityService->retrieveEntitiesWithEntries($this->contentObjectPublication);
     }
 
     /**
@@ -179,23 +194,19 @@ class AssignmentDataProvider
      */
     public function getPluralEntityNameByType($entityType)
     {
-        return $this->translator->trans(
-            'Users', [],
-            'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
-        );
+        $entityService = $this->getEntityServiceByType($entityType);
+        return $entityService->getPluralEntityName();
     }
 
     /**
      * @param $entityType
      *
-     * @return mixed
+     * @return string
      */
     public function getEntityNameByType($entityType)
     {
-        return $this->translator->trans(
-            'User', [],
-            'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
-        );
+        $entityService = $this->getEntityServiceByType($entityType);
+        return $entityService->getEntityName();
     }
 
     /**
@@ -207,10 +218,8 @@ class AssignmentDataProvider
      */
     public function getEntityTableForType(Application $application, $entityType)
     {
-        return new EntityTable(
-            $application, $this, $this->assignmentService, $this->contentObjectPublication,
-            $this->targetUserIds
-        );
+        $entityService = $this->getEntityServiceByType($entityType);
+        return $entityService->getEntityTable($application, $this, $this->contentObjectPublication);
     }
 
     /**
@@ -223,9 +232,8 @@ class AssignmentDataProvider
      */
     public function getEntryTableForEntityTypeAndId(Application $application, $entityType, $entityId)
     {
-        return new EntryTable(
-            $application, $this, $entityId, $this->assignmentService, $this->contentObjectPublication
-        );
+        $entityService = $this->getEntityServiceByType($entityType);
+        return $entityService->getEntryTable($application, $this, $this->contentObjectPublication, $entityId);
     }
 
     /**
@@ -244,18 +252,8 @@ class AssignmentDataProvider
      */
     public function getCurrentEntityIdentifier(User $currentUser)
     {
-        return $currentUser->getId();
-    }
-
-    /**
-     *
-     * @param integer $date
-     *
-     * @return boolean
-     */
-    public function isDateAfterAssignmentEndTime($date)
-    {
-        return false;
+        $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+        return $entityService->getCurrentEntityIdentifier($currentUser);
     }
 
     /**
@@ -267,12 +265,18 @@ class AssignmentDataProvider
      */
     public function isUserPartOfEntity(User $user, $entityType, $entityId)
     {
-        switch ($entityType)
-        {
-            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_USER:
-                return $entityId == $user->getId();
-        }
+        $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+        return $entityService->isUserPartOfEntity($user, $entityId);
+    }
 
+    /**
+     *
+     * @param integer $date
+     *
+     * @return boolean
+     */
+    public function isDateAfterAssignmentEndTime($date)
+    {
         return false;
     }
 
@@ -423,7 +427,8 @@ class AssignmentDataProvider
      */
     public function getEntityRendererForEntityTypeAndId($entityType, $entityId)
     {
-        return new UserEntityRenderer($this, $entityId);
+        $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+        return $entityService->getEntityRendererForEntityId($this, $entityId);
     }
 
     /**

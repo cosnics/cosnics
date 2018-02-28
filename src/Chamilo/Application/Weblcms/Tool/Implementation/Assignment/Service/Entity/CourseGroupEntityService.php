@@ -5,13 +5,14 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Ent
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntityRenderer\UserEntityRenderer;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\User\EntityTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\User\EntryTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntityRenderer\CourseGroupEntityRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\CourseGroup\EntityTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\CourseGroup\EntryTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use PhpParser\Node\Expr\Assign;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -19,7 +20,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UserEntityService implements EntityServiceInterface
+class CourseGroupEntityService implements EntityServiceInterface
 {
     /**
      * @var AssignmentService
@@ -31,11 +32,10 @@ class UserEntityService implements EntityServiceInterface
      */
     protected $translator;
 
-
     /**
      * @var array
      */
-    protected $targetUsersCache = [];
+    protected $targetCourseGroupIds = [];
 
     /**
      * UserEntityService constructor.
@@ -56,7 +56,7 @@ class UserEntityService implements EntityServiceInterface
      */
     public function countEntities(ContentObjectPublication $contentObjectPublication)
     {
-        return $this->assignmentService->countTargetUsersForContentObjectPublication(
+        return $this->assignmentService->countTargetCourseGroupsForContentObjectPublication(
             $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
         );
     }
@@ -68,7 +68,7 @@ class UserEntityService implements EntityServiceInterface
      */
     public function countEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
     {
-        return $this->assignmentService->countTargetUsersWithEntriesForContentObjectPublication(
+        return $this->assignmentService->countTargetCourseGroupsWithEntriesForContentObjectPublication(
             $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
         );
     }
@@ -80,7 +80,7 @@ class UserEntityService implements EntityServiceInterface
      */
     public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
     {
-        return $this->assignmentService->findTargetUsersWithEntriesForContentObjectPublication(
+        return $this->assignmentService->findTargetCourseGroupsWithEntriesForContentObjectPublication(
             $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
         );
     }
@@ -94,20 +94,19 @@ class UserEntityService implements EntityServiceInterface
     {
         $id = $contentObjectPublication->getId();
 
-        if (!array_key_exists($id, $this->targetUsersCache))
+        if (!array_key_exists($id, $this->targetCourseGroupIds))
         {
-            $targetUsers = DataManager::get_publication_target_users_by_publication_id(
-                $contentObjectPublication->getId()
+            $courseGroups = DataManager::retrieve_publication_target_course_groups(
+                $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
             );
 
-            foreach ($targetUsers as $targetUser)
+            while($courseGroup = $courseGroups->next_result())
             {
-                $this->targetUsersCache[$id][] = $targetUser instanceof User ?
-                    $targetUser->getId() : $targetUser[User::PROPERTY_ID];
+                $this->targetCourseGroupIds[$id][] = $courseGroup->getId();
             }
         }
 
-        return $this->targetUsersCache[$id];
+        return $this->targetCourseGroupIds[$id];
     }
 
     /**
@@ -116,7 +115,7 @@ class UserEntityService implements EntityServiceInterface
     public function getPluralEntityName()
     {
         return $this->translator->trans(
-            'UsersEntity', [],
+            'CourseGroupsEntity', [],
             'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
         );
     }
@@ -127,7 +126,7 @@ class UserEntityService implements EntityServiceInterface
     public function getEntityName()
     {
         return $this->translator->trans(
-            'UserEntity', [],
+            'CourseGroupEntity', [],
             'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
         );
     }
@@ -176,7 +175,7 @@ class UserEntityService implements EntityServiceInterface
      */
     public function getCurrentEntityIdentifier(User $currentUser)
     {
-        return $currentUser->getId();
+        // TODO: Implement getCurrentEntityIdentifier() method.
     }
 
     /**
@@ -187,7 +186,15 @@ class UserEntityService implements EntityServiceInterface
      */
     public function isUserPartOfEntity(User $user, $entityId)
     {
-        return $user->getId() == $entityId;
+        /** @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup */
+        $courseGroup = DataManager::retrieve_by_id(CourseGroup::class_name(), $entityId);
+
+        if(!$courseGroup instanceof CourseGroup)
+        {
+            return false;
+        }
+
+        return $courseGroup->is_member($user);
     }
 
     /**
@@ -198,6 +205,6 @@ class UserEntityService implements EntityServiceInterface
      */
     public function getEntityRendererForEntityId(AssignmentDataProvider $assignmentDataProvider, $entityId)
     {
-        return new UserEntityRenderer($assignmentDataProvider, $entityId);
+        return new CourseGroupEntityRenderer($assignmentDataProvider, $entityId);
     }
 }

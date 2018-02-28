@@ -70,8 +70,7 @@ class AssignmentRepository
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     *
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param int[] $userIds
      * @param Condition $condition
      * @param integer $offset
@@ -81,7 +80,8 @@ class AssignmentRepository
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetUsersWithEntriesForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, array $userIds, $condition = null, $offset = null, $count = null,
+        ContentObjectPublication $contentObjectPublication, array $userIds, $condition = null, $offset = null,
+        $count = null,
         $orderBy = []
     )
     {
@@ -128,11 +128,6 @@ class AssignmentRepository
         $orderBy = []
     )
     {
-        $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
-
-        $baseClass = CourseGroup::class_name();
-
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_COURSE_GROUP,
             $this->getTargetEntitiesCondition(CourseGroup::class_name(), $groupIds, $condition),
@@ -140,10 +135,50 @@ class AssignmentRepository
             $offset,
             $count,
             $orderBy,
-            $properties,
-            $baseClass,
-            $this->getTargetBaseVariable($baseClass)
+            $this->getDataClassPropertiesForCourseGroup(),
+            CourseGroup::class_name(),
+            $this->getTargetBaseVariable(CourseGroup::class_name())
         );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int[] $courseGroupIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param OrderBy[] $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetCourseGroupsWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, array $courseGroupIds, $condition = null, $offset = null,
+        $count = null,
+        $orderBy = []
+    )
+    {
+        return $this->findTargetsForEntityTypeWithEntries(
+            Entry::ENTITY_TYPE_COURSE_GROUP,
+            $this->getTargetEntitiesCondition(CourseGroup::class_name(), $courseGroupIds, $condition),
+            $this->getContentObjectPublicationCondition($contentObjectPublication),
+            $offset,
+            $count,
+            $orderBy,
+            $this->getDataClassPropertiesForCourseGroup(),
+            CourseGroup::class_name(),
+            $this->getTargetBaseVariable(CourseGroup::class_name())
+        );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     */
+    protected function getDataClassPropertiesForCourseGroup()
+    {
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
+
+        return $properties;
     }
 
     /**
@@ -163,11 +198,6 @@ class AssignmentRepository
         $orderBy = []
     )
     {
-        $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME));
-
-        $baseClass = Group::class_name();
-
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_PLATFORM_GROUP,
             $this->getTargetEntitiesCondition(Group::class_name(), $groupIds, $condition),
@@ -175,10 +205,50 @@ class AssignmentRepository
             $offset,
             $count,
             $orderBy,
-            $properties,
-            $baseClass,
-            $this->getTargetBaseVariable($baseClass)
+            $this->getDataClassPropertiesForPlatformGroups(),
+            Group::class_name(),
+            $this->getTargetBaseVariable(Group::class_name())
         );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int[] $platformGroupIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param OrderBy[] $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetPlatformGroupsWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, array $platformGroupIds, $condition = null, $offset = null,
+        $count = null,
+        $orderBy = []
+    )
+    {
+        return $this->findTargetsForEntityTypeWithEntries(
+            Entry::ENTITY_TYPE_PLATFORM_GROUP,
+            $this->getTargetEntitiesCondition(Group::class_name(), $platformGroupIds, $condition),
+            $this->getContentObjectPublicationCondition($contentObjectPublication),
+            $offset,
+            $count,
+            $orderBy,
+            $this->getDataClassPropertiesForPlatformGroups(),
+            Group::class_name(),
+            $this->getTargetBaseVariable(Group::class_name())
+        );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     */
+    protected function getDataClassPropertiesForPlatformGroups()
+    {
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME));
+
+        return $properties;
     }
 
     /**

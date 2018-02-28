@@ -146,7 +146,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
 
     /**
      * @param ContentObjectPublication $contentObjectPublication
-     * @param array $userIds
+     * @param int[] $userIds
      *
      * @return int
      */
@@ -174,7 +174,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
         $count = null, $orderProperty = []
     )
     {
-        return $this->assignmentRepository->findTargetUsersWithEntriesByContentObjectPublication(
+        return $this->assignmentRepository->findTargetUsersWithEntriesForContentObjectPublication(
             $contentObjectPublication, $userIds, $condition, $offset, $count, $orderProperty
         );
     }
@@ -223,6 +223,41 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     }
 
     /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int[] $courseGroupIds
+     *
+     * @return int
+     */
+    public function countTargetCourseGroupsWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $courseGroupIds = []
+    )
+    {
+        return $this->findTargetCourseGroupsWithEntriesForContentObjectPublication(
+            $contentObjectPublication, $courseGroupIds
+        )->count();
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int[] $courseGroupIds
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetCourseGroupsWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $courseGroupIds = [], $condition = null, $offset = null,
+        $count = null, $orderProperty = []
+    )
+    {
+        return $this->assignmentRepository->findTargetCourseGroupsWithEntriesForContentObjectPublication(
+            $contentObjectPublication, $courseGroupIds, $condition, $offset, $count, $orderProperty
+        );
+    }
+
+    /**
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $platformGroupIds
@@ -263,6 +298,41 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
         return $this->findTargetPlatformGroupsForContentObjectPublication(
             $contentObjectPublication, $platformGroupIds, $condition
         )->count();
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int[] $platformGroupIds
+     *
+     * @return int
+     */
+    public function countTargetPlatformGroupsWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $platformGroupIds = []
+    )
+    {
+        return $this->findTargetPlatformGroupsWithEntriesForContentObjectPublication(
+            $contentObjectPublication, $platformGroupIds
+        )->count();
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int[] $platformGroupIds
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetPlatformGroupsWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $platformGroupIds = [], $condition = null, $offset = null,
+        $count = null, $orderProperty = []
+    )
+    {
+        return $this->assignmentRepository->findTargetPlatformGroupsWithEntriesForContentObjectPublication(
+            $contentObjectPublication, $platformGroupIds, $condition, $offset, $count, $orderProperty
+        );
     }
 
     /**

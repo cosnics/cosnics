@@ -77,7 +77,7 @@ interface AssignmentDataProvider
     /**
      * @param $entityType
      *
-     * @return mixed
+     * @return string
      */
     public function getEntityNameByType($entityType);
 
