@@ -56,10 +56,13 @@ class AssessmentMatchTextQuestionOption
 
     public function matches($answer, $ignore_case, $use_wildcards)
     {
+        $answer = trim($answer);
+        $optionValue = trim($this->get_value());
+
         if ($use_wildcards)
         {
             $star = '__star__';
-            $value = str_replace('*', $star, $this->get_value());
+            $value = str_replace('*', $star, $optionValue);
             $value = preg_quote($value);
             $value = str_replace($star, '.*', $value);
             $value = "/$value/" . ($ignore_case ? 'i' : '');
@@ -69,11 +72,11 @@ class AssessmentMatchTextQuestionOption
         {
             if ($ignore_case)
             {
-                return strtolower($answer) == strtolower($this->get_value());
+                return strtolower($answer) == strtolower($optionValue);
             }
             else
             {
-                return $answer == $this->get_value();
+                return $answer == $optionValue;
             }
         }
     }
