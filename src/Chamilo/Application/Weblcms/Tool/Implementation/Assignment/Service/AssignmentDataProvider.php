@@ -242,7 +242,7 @@ class AssignmentDataProvider
      */
     public function getCurrentEntityType()
     {
-        return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER;
+        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_PLATFORM_GROUP;
     }
 
     /**

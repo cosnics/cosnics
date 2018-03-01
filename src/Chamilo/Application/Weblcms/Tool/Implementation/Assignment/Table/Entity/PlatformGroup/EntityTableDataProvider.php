@@ -9,7 +9,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entit
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntityTableDataProvider
+class EntityTableDataProvider
     extends \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\Group\EntityTableDataProvider
 {
     /**
