@@ -106,7 +106,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $result = '';
             }
 
-            $html[] = '<td>' . $user_answer[0] . $result . '</td>';
+            $html[] = '<td>' . htmlentities($user_answer[0]) . $result . '</td>';
         }
         else
         {
@@ -188,7 +188,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 foreach ($bestOptions as $bestOption)
                 {
                     $html[] = '<tr>';
-                    $html[] = '<td>' . $bestOption->get_value() . '</td>';
+                    $html[] = '<td>' . htmlentities($bestOption->get_value()) . '</td>';
 
                     if ($answer_feedback_display)
                     {
