@@ -21,19 +21,6 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 abstract class EntryTableColumnModel
     extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableColumnModel
 {
-    const DEFAULT_ORDER_COLUMN_INDEX = 1;
-
-    const PROPERTY_GROUP_MEMBERS = 'group_members';
-
-    /**
-     * Initializes the columns for the table
-     */
-    public function initialize_columns()
-    {
-        parent::initialize_columns();
-        $this->add_column(new StaticTableColumn(self::PROPERTY_GROUP_MEMBERS), 1);
-    }
-
     /**
      * @return string
      */

@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
@@ -35,6 +36,11 @@ class AssignmentDataProvider
      * @var ContentObjectPublication
      */
     protected $contentObjectPublication;
+
+    /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication
+     */
+    protected $assignmentPublication;
 
     /**
      * @var bool
@@ -74,6 +80,20 @@ class AssignmentDataProvider
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication $assignmentPublication
+     */
+    public function setAssignmentPublication(Publication $assignmentPublication)
+    {
+        if (!isset($this->contentObjectPublication) ||
+            $this->contentObjectPublication->getId() != $assignmentPublication->getPublicationId())
+        {
+            throw new \RuntimeException(
+                'The given assignment publication does not belong to the given content object publication'
+            );
+        }
+    }
+
+    /**
      * @param int $entityType
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface $entityService
      */
@@ -89,7 +109,7 @@ class AssignmentDataProvider
      */
     public function getEntityServiceByType($entityType)
     {
-        if(!array_key_exists($entityType, $this->entityServices))
+        if (!array_key_exists($entityType, $this->entityServices))
         {
             throw new \RuntimeException('Could not find the entity service for entity type ' . $entityType);
         }
@@ -161,6 +181,7 @@ class AssignmentDataProvider
     public function countEntitiesByEntityType($entityType)
     {
         $entityService = $this->getEntityServiceByType($entityType);
+
         return $entityService->countEntities($this->contentObjectPublication);
     }
 
@@ -172,6 +193,7 @@ class AssignmentDataProvider
     public function countEntitiesWithEntriesByEntityType($entityType)
     {
         $entityService = $this->getEntityServiceByType($entityType);
+
         return $entityService->countEntitiesWithEntries($this->contentObjectPublication);
     }
 
@@ -183,6 +205,7 @@ class AssignmentDataProvider
     public function findEntitiesWithEntriesByEntityType($entityType)
     {
         $entityService = $this->getEntityServiceByType($entityType);
+
         return $entityService->retrieveEntitiesWithEntries($this->contentObjectPublication);
     }
 
@@ -195,6 +218,7 @@ class AssignmentDataProvider
     public function getPluralEntityNameByType($entityType)
     {
         $entityService = $this->getEntityServiceByType($entityType);
+
         return $entityService->getPluralEntityName();
     }
 
@@ -206,6 +230,7 @@ class AssignmentDataProvider
     public function getEntityNameByType($entityType)
     {
         $entityService = $this->getEntityServiceByType($entityType);
+
         return $entityService->getEntityName();
     }
 
@@ -219,6 +244,7 @@ class AssignmentDataProvider
     public function getEntityTableForType(Application $application, $entityType)
     {
         $entityService = $this->getEntityServiceByType($entityType);
+
         return $entityService->getEntityTable($application, $this, $this->contentObjectPublication);
     }
 
@@ -233,6 +259,7 @@ class AssignmentDataProvider
     public function getEntryTableForEntityTypeAndId(Application $application, $entityType, $entityId)
     {
         $entityService = $this->getEntityServiceByType($entityType);
+
         return $entityService->getEntryTable($application, $this, $this->contentObjectPublication, $entityId);
     }
 
@@ -242,7 +269,8 @@ class AssignmentDataProvider
      */
     public function getCurrentEntityType()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_PLATFORM_GROUP;
+        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_COURSE_GROUP;
+//        return $this->assignmentPublication->getEntityType();
     }
 
     /**
@@ -253,6 +281,7 @@ class AssignmentDataProvider
     public function getCurrentEntityIdentifier(User $currentUser)
     {
         $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+
         return $entityService->getCurrentEntityIdentifier($currentUser);
     }
 
@@ -266,6 +295,7 @@ class AssignmentDataProvider
     public function isUserPartOfEntity(User $user, $entityType, $entityId)
     {
         $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+
         return $entityService->isUserPartOfEntity($user, $entityId);
     }
 
@@ -428,6 +458,7 @@ class AssignmentDataProvider
     public function getEntityRendererForEntityTypeAndId($entityType, $entityId)
     {
         $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+
         return $entityService->getEntityRendererForEntityId($this, $entityId);
     }
 

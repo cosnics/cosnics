@@ -49,6 +49,22 @@ class UserService
     }
 
     /**
+     * @param int $identifier
+     *
+     * @return null|string
+     */
+    public function getUserFullNameById($identifier)
+    {
+        $user = $this->findUserByIdentifier($identifier);
+        if(!$user instanceof User)
+        {
+            return null;
+        }
+
+        return $user->get_fullname();
+    }
+
+    /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      * @param integer $offset

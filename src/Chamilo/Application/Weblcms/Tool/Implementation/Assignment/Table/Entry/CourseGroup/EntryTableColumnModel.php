@@ -15,15 +15,5 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
  */
 class EntryTableColumnModel extends \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\Group\EntryTableColumnModel
 {
-    /**
-     * Initializes the columns for the table
-     */
-    public function initialize_columns()
-    {
-        $this->add_column(new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
-
-        parent::initialize_columns();
-    }
-
 
 }

@@ -114,7 +114,7 @@ class EntryNavigator
 
         foreach ($entities as $entity)
         {
-            if ($entity[DataClass::PROPERTY_ID] == $currentEntityIdentifier)
+            if ($entity[Entry::PROPERTY_ENTITY_ID] == $currentEntityIdentifier)
             {
                 $this->currentEntity = $entity;
                 continue;

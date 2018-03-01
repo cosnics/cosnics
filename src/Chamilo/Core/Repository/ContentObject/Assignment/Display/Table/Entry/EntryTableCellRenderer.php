@@ -98,16 +98,12 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
     {
         $toolbar = new Toolbar();
 
-        if($this->get_component()->getEntry()->getId() == $entry[Entry::PROPERTY_ID])
-        {
-            return null;
-        }
-
+        $isCurrentEntry = $this->get_component()->getEntry()->getId() == $entry[Entry::PROPERTY_ID];
         $isUser = $entry[Entry::PROPERTY_USER_ID] == $this->get_component()->get_user_id();
         $assignment = $this->get_table()->get_component()->get_root_content_object();
 
-        if ($isUser || $assignment->get_visibility_submissions() == 1 ||
-            $this->get_table()->getAssignmentDataProvider()->canEditAssignment())
+        if (!$isCurrentEntry && ($isUser || $assignment->get_visibility_submissions() == 1 ||
+            $this->get_table()->getAssignmentDataProvider()->canEditAssignment()))
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -159,23 +155,6 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
             );
         }
 
-//        if ($this->get_table()->getAssignmentDataProvider()->canEditAssignment())
-//        {
-//            $toolbar->add_item(
-//                new ToolbarItem(
-//                    Translation::get('DeleteEntry'),
-//                    Theme::getInstance()->getCommonImagePath('Action/Delete'),
-//                    $this->get_component()->get_url(
-//                        array(
-//                            Manager::PARAM_ACTION => Manager::ACTION_DELETE,
-//                            Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
-//                        )
-//                    ),
-//                    ToolbarItem::DISPLAY_ICON,
-//                    true
-//                )
-//            );
-//        }
 
         return $toolbar->as_html();
     }

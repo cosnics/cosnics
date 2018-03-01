@@ -166,10 +166,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $contentObjects = $assignment->getAutomaticFeedbackObjects();
 
-        $entityRenderer = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
-            $this->getEntityType(), $this->getEntityIdentifier()
-        );
-
         $score = $this->getScore() instanceof Score ? $this->getScore()->getScore() : 0;
 
         $extendParameters = [
@@ -177,7 +173,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject()->get_title(),
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
-            'SUBMITTED_DATE' => $submittedDate, 'SUBMITTED_BY' => $entityRenderer->getEntityName(),
+            'SUBMITTED_DATE' => $submittedDate,
+            'SUBMITTED_BY' => $this->getUserService()->getUserFullNameById($this->getEntry()->getUserId()),
             'SCORE_FORM' => $this->getScoreForm()->render(),
             'SCORE' => $score,
             'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
@@ -639,13 +636,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
 
-        if (empty($previousEntity[DataClass::PROPERTY_ID]))
+        if (empty($previousEntity[Entry::PROPERTY_ENTITY_ID]))
         {
             return null;
         }
 
         return $this->get_url(
-            array(self::PARAM_ENTITY_ID => $previousEntity[DataClass::PROPERTY_ID]), array(self::PARAM_ENTRY_ID)
+            array(self::PARAM_ENTITY_ID => $previousEntity[Entry::PROPERTY_ENTITY_ID]), array(self::PARAM_ENTRY_ID)
         );
     }
 
@@ -658,13 +655,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
 
-        if (empty($nextEntity[DataClass::PROPERTY_ID]))
+        if (empty($nextEntity[Entry::PROPERTY_ENTITY_ID]))
         {
             return null;
         }
 
         return $this->get_url(
-            array(self::PARAM_ENTITY_ID => $nextEntity[DataClass::PROPERTY_ID]), array(self::PARAM_ENTRY_ID)
+            array(self::PARAM_ENTITY_ID => $nextEntity[Entry::PROPERTY_ENTITY_ID]), array(self::PARAM_ENTRY_ID)
         );
     }
 
@@ -696,5 +693,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         }
 
         return $this->entryNavigator;
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getService('chamilo.core.user.service.user_service');
     }
 }

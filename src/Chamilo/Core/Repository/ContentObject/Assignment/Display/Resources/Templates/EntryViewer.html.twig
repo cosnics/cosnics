@@ -23,7 +23,7 @@
     <li role="presentation"><a href="#entries" aria-controls="entries" role="tab" data-toggle="tab">{{ 'OtherEntries'|trans({}, appContext) }}</a></li>
     {% endif %}
 
-    <li role="presentation" {% if not HAS_ENTRY %}class="active"{% endif %}><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
+    <li role="presentation"><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
 </ul>
 {% endif %}
 
@@ -38,7 +38,7 @@
                     </div>
                 {% endif %}
                 <h3 class="entry-title">{{ CONTENT_OBJECT_TITLE }} <span class="badge score-badge {% if SCORE > 0 %}score-success{% else %}no-score{% endif %}">{% if SCORE > 0 %}{{ SCORE }}%{% else %}{{ 'NoScore'|trans({}, appContext) }}{% endif %}</span></h3>
-                <div class="submitted-details">{{ SUBMITTED_BY }} {{ 'At'|trans({}, appContext) }} {{ SUBMITTED_DATE }}</div>
+                <div class="submitted-details">{{ SUBMITTED_BY }} {% if SUBMITTED_BY != ENTITY_NAME %}({{ ENTITY_NAME }}) {% endif %}{{ 'At'|trans({}, appContext) }} {{ SUBMITTED_DATE }}</div>
                 {{ CONTENT_OBJECT_RENDITION|raw }}
             </div>
             <div class="col-sm-4">
