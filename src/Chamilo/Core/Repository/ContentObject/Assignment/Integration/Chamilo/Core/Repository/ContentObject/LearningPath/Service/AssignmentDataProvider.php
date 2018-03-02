@@ -292,6 +292,16 @@ class AssignmentDataProvider
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(User $currentUser)
+    {
+        return [$currentUser->getId()];
+    }
+
+    /**
      *
      * @param integer $date
      *

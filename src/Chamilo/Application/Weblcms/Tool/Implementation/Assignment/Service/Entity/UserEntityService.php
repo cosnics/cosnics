@@ -31,7 +31,6 @@ class UserEntityService implements EntityServiceInterface
      */
     protected $translator;
 
-
     /**
      * @var array
      */
@@ -170,13 +169,27 @@ class UserEntityService implements EntityServiceInterface
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
      *
      * @return int
      */
-    public function getCurrentEntityIdentifier(User $currentUser)
+    public function getCurrentEntityIdentifier(ContentObjectPublication $contentObjectPublication, User $currentUser)
     {
         return $currentUser->getId();
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(
+        ContentObjectPublication $contentObjectPublication, User $currentUser
+    )
+    {
+        return [$currentUser->getId()];
     }
 
     /**

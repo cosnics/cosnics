@@ -114,6 +114,13 @@ interface AssignmentDataProvider
     public function getCurrentEntityIdentifier(User $currentUser);
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(User $currentUser);
+
+    /**
      *
      * @param integer $date
      *

@@ -91,6 +91,8 @@ class AssignmentDataProvider
                 'The given assignment publication does not belong to the given content object publication'
             );
         }
+
+        $this->assignmentPublication = $assignmentPublication;
     }
 
     /**
@@ -269,8 +271,7 @@ class AssignmentDataProvider
      */
     public function getCurrentEntityType()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_COURSE_GROUP;
-//        return $this->assignmentPublication->getEntityType();
+        return $this->assignmentPublication->getEntityType();
     }
 
     /**
@@ -282,7 +283,18 @@ class AssignmentDataProvider
     {
         $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
 
-        return $entityService->getCurrentEntityIdentifier($currentUser);
+        return $entityService->getCurrentEntityIdentifier($this->contentObjectPublication, $currentUser);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(User $currentUser)
+    {
+        $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+        return $entityService->getAvailableEntityIdentifiersForUser($this->contentObjectPublication, $currentUser);
     }
 
     /**

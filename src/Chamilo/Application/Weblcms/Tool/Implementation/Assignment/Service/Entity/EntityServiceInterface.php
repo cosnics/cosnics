@@ -75,11 +75,20 @@ interface EntityServiceInterface
     );
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
      *
      * @return int
      */
-    public function getCurrentEntityIdentifier(User $currentUser);
+    public function getCurrentEntityIdentifier(ContentObjectPublication $contentObjectPublication, User $currentUser);
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(ContentObjectPublication $contentObjectPublication, User $currentUser);
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user

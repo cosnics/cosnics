@@ -52,6 +52,8 @@ class DisplayComponent extends Manager implements DelegateComponent
         }
 
         $assignmentDataProvider->setContentObjectPublication($publication);
+        $assignmentDataProvider->setAssignmentPublication($this->getAssignmentPublication($publication));
+
         $this->addEntityServices($assigmentService, $assignmentDataProvider);
 
         $assignmentDataProvider->setCanEditAssignment($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication));
@@ -113,6 +115,24 @@ class DisplayComponent extends Manager implements DelegateComponent
         }
 
         return $contentObjectPublication;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    protected function getAssignmentPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        return $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository
+     */
+    protected function getPublicationRepository()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository');
     }
 
     /**

@@ -58,7 +58,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
     public function countEntities(ContentObjectPublication $contentObjectPublication)
     {
         return $this->assignmentService->countTargetPlatformGroupsForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+            $contentObjectPublication, $this->getTargetPlatformGroupIds($contentObjectPublication)
         );
     }
 
@@ -70,7 +70,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
     public function countEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
     {
         return $this->assignmentService->countTargetPlatformGroupsWithEntriesForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+            $contentObjectPublication, $this->getTargetPlatformGroupIds($contentObjectPublication)
         );
     }
 
@@ -82,7 +82,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
     public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
     {
         return $this->assignmentService->findTargetPlatformGroupsWithEntriesForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+            $contentObjectPublication, $this->getTargetPlatformGroupIds($contentObjectPublication)
         );
     }
 
@@ -91,7 +91,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
      *
      * @return int[]
      */
-    protected function getTargetUserIdsForPublication(ContentObjectPublication $contentObjectPublication)
+    protected function getTargetPlatformGroupIds(ContentObjectPublication $contentObjectPublication)
     {
         $id = $contentObjectPublication->getId();
 
@@ -101,7 +101,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
                 $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
             );
 
-            while($platformGroup = $platformGroups->next_result())
+            while ($platformGroup = $platformGroups->next_result())
             {
                 $this->targetPlatformGroupIds[$id][] = $platformGroup->getId();
             }
@@ -146,7 +146,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
     {
         return new EntityTable(
             $application, $assignmentDataProvider, $this->assignmentService, $contentObjectPublication,
-            $this->getTargetUserIdsForPublication($contentObjectPublication)
+            $this->getTargetPlatformGroupIds($contentObjectPublication)
         );
     }
 
@@ -170,13 +170,36 @@ class PlatformGroupEntityService implements EntityServiceInterface
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
      *
      * @return int
      */
-    public function getCurrentEntityIdentifier(User $currentUser)
+    public function getCurrentEntityIdentifier(ContentObjectPublication $contentObjectPublication, User $currentUser)
     {
-        // TODO: Implement getCurrentEntityIdentifier() method.
+        $availableEntityIdentifiers =
+            $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $currentUser);
+
+        return $availableEntityIdentifiers[0];
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(
+        ContentObjectPublication $contentObjectPublication, User $currentUser
+    )
+    {
+        $subscribedGroupIds = \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
+            $currentUser->getId(), true
+        );
+
+        $targetGroupIds = $this->getTargetPlatformGroupIds($contentObjectPublication);
+
+        return array_values(array_intersect($subscribedGroupIds, $targetGroupIds));
     }
 
     /**

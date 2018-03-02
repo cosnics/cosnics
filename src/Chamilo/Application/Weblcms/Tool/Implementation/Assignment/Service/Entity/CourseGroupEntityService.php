@@ -57,7 +57,7 @@ class CourseGroupEntityService implements EntityServiceInterface
     public function countEntities(ContentObjectPublication $contentObjectPublication)
     {
         return $this->assignmentService->countTargetCourseGroupsForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+            $contentObjectPublication, $this->getTargetCourseGroupIds($contentObjectPublication)
         );
     }
 
@@ -69,7 +69,7 @@ class CourseGroupEntityService implements EntityServiceInterface
     public function countEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
     {
         return $this->assignmentService->countTargetCourseGroupsWithEntriesForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+            $contentObjectPublication, $this->getTargetCourseGroupIds($contentObjectPublication)
         );
     }
 
@@ -81,7 +81,7 @@ class CourseGroupEntityService implements EntityServiceInterface
     public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
     {
         return $this->assignmentService->findTargetCourseGroupsWithEntriesForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+            $contentObjectPublication, $this->getTargetCourseGroupIds($contentObjectPublication)
         );
     }
 
@@ -90,7 +90,7 @@ class CourseGroupEntityService implements EntityServiceInterface
      *
      * @return int[]
      */
-    protected function getTargetUserIdsForPublication(ContentObjectPublication $contentObjectPublication)
+    protected function getTargetCourseGroupIds(ContentObjectPublication $contentObjectPublication)
     {
         $id = $contentObjectPublication->getId();
 
@@ -100,7 +100,7 @@ class CourseGroupEntityService implements EntityServiceInterface
                 $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
             );
 
-            while($courseGroup = $courseGroups->next_result())
+            while ($courseGroup = $courseGroups->next_result())
             {
                 $this->targetCourseGroupIds[$id][] = $courseGroup->getId();
             }
@@ -145,7 +145,7 @@ class CourseGroupEntityService implements EntityServiceInterface
     {
         return new EntityTable(
             $application, $assignmentDataProvider, $this->assignmentService, $contentObjectPublication,
-            $this->getTargetUserIdsForPublication($contentObjectPublication)
+            $this->getTargetCourseGroupIds($contentObjectPublication)
         );
     }
 
@@ -169,13 +169,44 @@ class CourseGroupEntityService implements EntityServiceInterface
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
      *
      * @return int
      */
-    public function getCurrentEntityIdentifier(User $currentUser)
+    public function getCurrentEntityIdentifier(ContentObjectPublication $contentObjectPublication, User $currentUser)
     {
-        // TODO: Implement getCurrentEntityIdentifier() method.
+        $availableEntityIdentifiers =
+            $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $currentUser);
+
+        return $availableEntityIdentifiers[0];
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(
+        ContentObjectPublication $contentObjectPublication, User $currentUser
+    )
+    {
+        $courseGroups =
+            \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager::get_user_course_groups(
+                $currentUser->getId(), $contentObjectPublication->get_course_id()
+            );
+
+        $subscribedGroupIds = [];
+
+        foreach($courseGroups as $courseGroup)
+        {
+            $subscribedGroupIds[] = $courseGroup->getId();
+        }
+
+        $targetGroupIds = $this->getTargetCourseGroupIds($contentObjectPublication);
+
+        return array_intersect($subscribedGroupIds, $targetGroupIds);
     }
 
     /**
@@ -189,7 +220,7 @@ class CourseGroupEntityService implements EntityServiceInterface
         /** @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup */
         $courseGroup = DataManager::retrieve_by_id(CourseGroup::class_name(), $entityId);
 
-        if(!$courseGroup instanceof CourseGroup)
+        if (!$courseGroup instanceof CourseGroup)
         {
             return false;
         }
