@@ -135,7 +135,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         parent::__construct($form_name, $method, $action);
 
-        if (!\Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::is_content_object_editable(
+        if ($form_type == self::TYPE_EDIT && !\Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::is_content_object_editable(
             $content_object->getId()
         ))
         {
