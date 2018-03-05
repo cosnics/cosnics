@@ -308,7 +308,7 @@ class AssignmentDataProvider
     {
         $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
 
-        return $entityService->isUserPartOfEntity($user, $entityId);
+        return $entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
     }
 
     /**

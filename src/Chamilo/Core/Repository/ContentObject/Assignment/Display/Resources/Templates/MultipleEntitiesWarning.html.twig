@@ -1,0 +1,21 @@
+{% if HAS_MULTIPLE_ENTITIES %}
+    <div class="alert alert-info">
+        <div class="row">
+            <div class="col-md-9" style="padding-top: 5px;">
+                {{ 'MultipleEntitiesWarning'|trans({'{ENTITY_TYPE_PLURAL}': ENTITY_TYPE_PLURAL, '{ENTITY_TYPE}': ENTITY_TYPE, '{ENTITY_NAME}': ENTITY_NAME }, appContext)|raw }}
+            </div>
+            <div class="col-md-3 text-right">
+                <div class="btn-group">
+                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm btn-default dropdown-toggle" title="{{ 'SelectOtherEntity'|trans({'{ENTITY_TYPE}': ENTITY_TYPE}, appContext) }}">{{ 'SelectOtherEntity'|trans({'{ENTITY_TYPE}': ENTITY_TYPE}, appContext) }} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        {% for ENTITY_ID, ENTITY_NAME in AVAILABLE_ENTITIES %}
+                            <li>
+                                <a title="{{ ENTITY_NAME }}" href="{{ CHANGE_ENTITY_URL|replace({'__ENTITY_ID__': ENTITY_ID}) }}">{{ ENTITY_NAME }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

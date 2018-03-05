@@ -92,11 +92,12 @@ interface EntityServiceInterface
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param int $entityId
      *
      * @return bool
      */
-    public function isUserPartOfEntity(User $user, $entityId);
+    public function isUserPartOfEntity(User $user, ContentObjectPublication $contentObjectPublication, $entityId);
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider

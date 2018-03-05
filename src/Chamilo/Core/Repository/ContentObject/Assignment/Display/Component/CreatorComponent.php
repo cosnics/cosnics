@@ -99,8 +99,15 @@ class CreatorComponent extends Manager
      */
     public function render_header()
     {
+        $parameters = [
+            'HEADER' => parent::render_header(),
+            'CHANGE_ENTITY_URL' => $this->get_url([self::PARAM_ENTITY_ID => '__ENTITY_ID__'])
+        ];
+
+        $parameters = $this->getAvailableEntitiesParameters($parameters);
+
         return $this->getTwig()->render(
-            Manager::context() . ':CreatorWizardHeader.html.twig', ['HEADER' => parent::render_header()]
+            Manager::context() . ':CreatorWizardHeader.html.twig', $parameters
         );
     }
 

@@ -204,13 +204,15 @@ class PlatformGroupEntityService implements EntityServiceInterface
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param int $entityId
      *
      * @return bool
      */
-    public function isUserPartOfEntity(User $user, $entityId)
+    public function isUserPartOfEntity(User $user, ContentObjectPublication $contentObjectPublication, $entityId)
     {
-        return \Chamilo\Core\Group\Storage\DataManager::is_group_member($entityId, $user->getId());
+        $availableEntityIdentifiers = $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $user);
+        return in_array($entityId, $availableEntityIdentifiers);
     }
 
     /**

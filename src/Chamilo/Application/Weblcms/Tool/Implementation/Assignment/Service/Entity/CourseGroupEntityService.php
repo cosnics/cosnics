@@ -211,21 +211,15 @@ class CourseGroupEntityService implements EntityServiceInterface
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param int $entityId
      *
      * @return bool
      */
-    public function isUserPartOfEntity(User $user, $entityId)
+    public function isUserPartOfEntity(User $user, ContentObjectPublication $contentObjectPublication, $entityId)
     {
-        /** @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup */
-        $courseGroup = DataManager::retrieve_by_id(CourseGroup::class_name(), $entityId);
-
-        if (!$courseGroup instanceof CourseGroup)
-        {
-            return false;
-        }
-
-        return $courseGroup->is_member($user);
+        $availableEntityIdentifiers = $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $user);
+        return in_array($entityId, $availableEntityIdentifiers);
     }
 
     /**

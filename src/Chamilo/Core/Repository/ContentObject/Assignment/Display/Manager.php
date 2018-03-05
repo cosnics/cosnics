@@ -99,7 +99,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         {
             $this->entityIdentifier = $this->getRequest()->query->get(self::PARAM_ENTITY_ID);
 
-            if(empty($this->entityIdentifier))
+            if (empty($this->entityIdentifier))
             {
                 $this->entityIdentifier = $this->getDataProvider()->getCurrentEntityIdentifier($this->getUser());
             }
@@ -113,7 +113,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function getRightsService()
     {
-        if(!isset($this->rightsService))
+        if (!isset($this->rightsService))
         {
             $this->rightsService = new RightsService();
             $this->rightsService->setAssignmentDataProvider($this->getDataProvider());
@@ -124,13 +124,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     public function getEntry()
     {
-        if(!isset($this->entry))
+        if (!isset($this->entry))
         {
             try
             {
                 $this->initializeEntry();
             }
-            catch(\Exception $ex)
+            catch (\Exception $ex)
             {
             }
         }
@@ -155,5 +155,42 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
 
         $this->entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
+    }
+
+    /**
+     * @param string[] $parameters
+     *
+     * @return string[]
+     */
+    protected function getAvailableEntitiesParameters($parameters)
+    {
+        $availableEntities = [];
+
+        $availableEntityIds = $this->getDataProvider()->getAvailableEntityIdentifiersForUser($this->getUser());
+        foreach ($availableEntityIds as $availableEntityId)
+        {
+            if ($availableEntityId == $this->getEntityIdentifier())
+            {
+                continue;
+            }
+
+            $availableEntities[$availableEntityId] = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
+                $this->getEntityType(), $availableEntityId
+            )->getEntityName();
+        }
+
+        $parameters['HAS_MULTIPLE_ENTITIES'] = count($availableEntityIds) > 1;
+        $parameters['AVAILABLE_ENTITIES'] = $availableEntities;
+
+        $parameters['ENTITY_NAME'] = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
+            $this->getEntityType(), $this->getEntityIdentifier()
+        )->getEntityName();
+
+        $parameters['ENTITY_TYPE_PLURAL'] =
+            strtolower($this->getDataProvider()->getPluralEntityNameByType($this->getEntityType()));
+
+        $parameters['ENTITY_TYPE'] = strtolower($this->getDataProvider()->getEntityNameByType($this->getEntityType()));
+
+        return $parameters;
     }
 }

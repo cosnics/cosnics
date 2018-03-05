@@ -136,28 +136,21 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
         $assignment = $this->get_root_content_object();
 
-        $availableEntities = $this->getAvailableEntities();
-
         $baseParameters = [
             'HAS_ENTRY' => false,
-            'HAS_MULTIPLE_ENTITIES' => count($availableEntities) > 1,
             'IS_USER_PART_OF_ENTITY' => $this->getDataProvider()->isUserPartOfEntity(
                 $this->getUser(), $this->getEntityType(), $this->getEntityIdentifier()
             ),
-            'AVAILABLE_ENTITIES' => $availableEntities,
-            'ENTRY_VIEWER_URL' => $this->get_url([self::PARAM_ENTITY_ID => '__ENTITY_ID__']),
+            'CHANGE_ENTITY_URL' => $this->get_url([self::PARAM_ENTITY_ID => '__ENTITY_ID__']),
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
             'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
             'NAVIGATOR_BUTTON_TOOLBAR' => $this->getNavigatorButtonToolbarRenderer()->render(),
-            'ENTITY_NAME' => $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
-                $this->getEntityType(), $this->getEntityIdentifier()
-            )->getEntityName(),
-            'ENTITY_TYPE_PLURAL' => strtolower($this->getDataProvider()->getPluralEntityNameByType($this->getEntityType())),
-            'ENTITY_TYPE' => strtolower($this->getDataProvider()->getEntityNameByType($this->getEntityType())),
             'ASSIGNMENT_TITLE' => $this->get_root_content_object()->get_title(),
             'ASSIGNMENT_RENDITION' => $this->renderAssignment(),
         ];
+
+        $baseParameters = $this->getAvailableEntitiesParameters($baseParameters);
 
         if (!$this->getEntry() instanceof Entry)
         {
@@ -207,23 +200,11 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     }
 
     /**
-     * string[]
+     * @return bool|void
+     * @throws \Exception
+     *
+     * @throws \HTML_QuickForm_Error
      */
-    protected function getAvailableEntities()
-    {
-        $availableEntities = [];
-
-        $availableEntityIds = $this->getDataProvider()->getAvailableEntityIdentifiersForUser($this->getUser());
-        foreach ($availableEntityIds as $availableEntityId)
-        {
-            $availableEntities[$availableEntityId] = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
-                $this->getEntityType(), $availableEntityId
-            )->getEntityName();
-        }
-
-        return $availableEntities;
-    }
-
     protected function processSubmittedData()
     {
         if (!$this->getDataProvider()->canEditAssignment() || !$this->getEntry() instanceof Entry)

@@ -11,26 +11,8 @@
 <div class="button-toolbar">{{ BUTTON_TOOLBAR|raw }}</div>
 <div class="button-toolbar">{{ NAVIGATOR_BUTTON_TOOLBAR|raw }}</div>
 
-{% if IS_USER_PART_OF_ENTITY and HAS_MULTIPLE_ENTITIES %}
-    <div class="alert alert-info">
-        <div class="row">
-            <div class="col-md-8" style="padding-top: 5px;">
-                Je maakt momenteel deel uit van meerdere {{ ENTITY_TYPE_PLURAL }}. Je werkt momenteel in de {{ ENTITY_TYPE }} <b>{{ ENTITY_NAME }}</b>. Klik op de knop hiernaast om een andere {{ ENTITY_TYPE }} te selecteren.
-            </div>
-            <div class="col-md-4 text-right">
-                <div class="btn-group">
-                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm btn-default dropdown-toggle" title="Selecteer een andere {{ ENTITY_TYPE }}">Selecteer een {{ ENTITY_TYPE }} <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        {% for ENTITY_ID, ENTITY_NAME in AVAILABLE_ENTITIES %}
-                            <li>
-                                <a title="{{ ENTITY_NAME }}" href="{{ ENTRY_VIEWER_URL|replace({'__ENTITY_ID__': ENTITY_ID}) }}">{{ ENTITY_NAME }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+{% if IS_USER_PART_OF_ENTITY %}
+    {% include 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display:MultipleEntitiesWarning.html.twig' %}
 {% endif %}
 
 {% if HAS_ENTRY %}
