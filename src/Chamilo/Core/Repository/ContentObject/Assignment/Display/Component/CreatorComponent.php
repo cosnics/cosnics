@@ -37,11 +37,17 @@ class CreatorComponent extends Manager
 
         if (\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
+            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            if(is_array($objects))
+            {
+                $objects = $objects[0];
+            }
+
             $entry = $this->getDataProvider()->createEntry(
                 $this->getEntityType(),
                 $this->getEntityIdentifier(),
                 $this->getUser()->getId(),
-                \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects(),
+                $objects,
                 $this->getRequest()->server->get('REMOTE_ADDR')
             );
 
