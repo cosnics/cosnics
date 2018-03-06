@@ -34,13 +34,19 @@ class LinkItem extends Bar
 		$itemType      = ClassnameUtilities::getInstance()->getClassnameFromNamespace( $this->getItem()->get_type() );
 		$imagePath     = Theme::getInstance()->getImagePath( $itemNamespace, $itemType );
 
-		$html[] = '<img class="chamilo-menu-item-icon' .
-		          ( $this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '' ) . '
-                  " src="' . $imagePath . '" alt="' . $title . '" />';
+        if ($this->getItem()->show_icon())
+        {
+            $html[] = '<img class="chamilo-menu-item-icon' .
+                ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '
+                    " src="' . $imagePath . '" alt="' . $title . '" />';
+        }
 
-		$html[] = '<div class="chamilo-menu-item-label' .
-		          ( $this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '' ) . '">' .
-		          $title . '</div>';
+        if($this->getItem()->show_title())
+        {
+            $html[] = '<div class="chamilo-menu-item-label' .
+                ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' .
+                $title . '</div>';
+        }
 
 		$html[] = '<div class="clearfix"></div>';
 
