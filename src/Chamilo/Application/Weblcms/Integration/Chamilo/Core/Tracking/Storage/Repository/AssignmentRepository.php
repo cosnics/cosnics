@@ -286,6 +286,21 @@ class AssignmentRepository
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $entityType
+     *
+     * @return int
+     */
+    public function countEntriesByContentObjectPublicationAndEntityType(
+        ContentObjectPublication $contentObjectPublication, $entityType
+    )
+    {
+        return $this->countEntriesByEntityType(
+            $entityType, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        );
+    }
+
+    /**
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param integer $entityType

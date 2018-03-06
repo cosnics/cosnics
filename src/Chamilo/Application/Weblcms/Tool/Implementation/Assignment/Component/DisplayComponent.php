@@ -2,24 +2,18 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\CourseGroupEntityService;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\PlatformGroupEntityService;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\UserEntityService;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -39,11 +33,7 @@ class DisplayComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $assigmentService = new AssignmentService(new AssignmentRepository($this->getDataClassRepository()));
-
-        $assignmentDataProvider = new AssignmentDataProvider(
-            $this->get_application()->getTranslator(), $assigmentService
-        );
+        $assignmentDataProvider = $this->getAssignmentDataProvider();
 
         $publication = $this->getContentObjectPublication();
         if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
@@ -51,11 +41,11 @@ class DisplayComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
+        $breadcrumbTrail = BreadcrumbTrail::getInstance();
+        $breadcrumbTrail->add(new Breadcrumb($this->get_url(), $publication->getContentObject()->get_title()));
+
         $assignmentDataProvider->setContentObjectPublication($publication);
         $assignmentDataProvider->setAssignmentPublication($this->getAssignmentPublication($publication));
-
-        $this->addEntityServices($assigmentService, $assignmentDataProvider);
-
         $assignmentDataProvider->setCanEditAssignment($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication));
 
         $configuration = new ApplicationConfiguration(
@@ -115,57 +105,6 @@ class DisplayComponent extends Manager implements DelegateComponent
         }
 
         return $contentObjectPublication;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     *
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    protected function getAssignmentPublication(ContentObjectPublication $contentObjectPublication)
-    {
-        return $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
-    }
-
-    /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository
-     */
-    protected function getPublicationRepository()
-    {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository');
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider $assignmentDataProvider
-     */
-    protected function addEntityServices(
-        AssignmentService $assignmentService, AssignmentDataProvider $assignmentDataProvider
-    )
-    {
-        $assignmentDataProvider->addEntityService(
-            Entry::ENTITY_TYPE_USER, new UserEntityService($assignmentService, $this->getTranslator())
-        );
-
-        $assignmentDataProvider->addEntityService(
-            Entry::ENTITY_TYPE_PLATFORM_GROUP,
-            new PlatformGroupEntityService($assignmentService, $this->getTranslator())
-        );
-
-        $assignmentDataProvider->addEntityService(
-            Entry::ENTITY_TYPE_COURSE_GROUP,
-            new CourseGroupEntityService($assignmentService, $this->getTranslator())
-        );
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    protected function getDataClassRepository()
-    {
-        return $this->get_application()->getService(
-            'chamilo.libraries.storage.data_manager.doctrine.data_class_repository'
-        );
     }
 
     /**

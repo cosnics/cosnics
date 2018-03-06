@@ -107,6 +107,14 @@ class AssignmentForm extends ContentObjectForm
         $this->build_form();
     }
 
+    /**
+     * Override the default attachments form to not show it on the default location
+     */
+    protected function add_attachments_form()
+    {
+
+    }
+
     private function build_form()
     {
         $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
@@ -179,6 +187,8 @@ class AssignmentForm extends ContentObjectForm
         );
 
         $this->addElement('category');
+
+        parent::add_attachments_form();
 
         // Automatic feedback
         $this->addElement('category', Translation::get('AutomaticFeedback'));

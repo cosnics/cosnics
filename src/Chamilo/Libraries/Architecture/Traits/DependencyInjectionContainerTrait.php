@@ -200,6 +200,16 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     */
+    protected function getDataClassRepository()
+    {
+        return $this->getService(
+            'chamilo.libraries.storage.data_manager.doctrine.data_class_repository'
+        );
+    }
+
+    /**
      *
      * @return \Chamilo\Libraries\Architecture\Factory\ApplicationFactory
      */

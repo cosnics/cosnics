@@ -2,8 +2,12 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
@@ -15,6 +19,9 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\CourseGroupEntityService;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\PlatformGroupEntityService;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\UserEntityService;
 
 /**
  *
@@ -106,10 +113,9 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 Theme::getInstance()->getCommonImagePath('Action/Add'),
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                        self::PARAM_TARGET_ID => $this->get_user_id(),
-                        self::PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER
+                        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
                     )
                 ),
                 ToolbarItem::DISPLAY_ICON
@@ -147,10 +153,9 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 new FontAwesomeGlyph('plus'),
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                        self::PARAM_TARGET_ID => $this->get_user_id(),
-                        self::PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER
+                        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
                     )
                 ),
                 Button::DISPLAY_ICON,
@@ -158,6 +163,60 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 'btn-link'
             )
         );
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
+     */
+    public function getAssignmentService()
+    {
+        return new AssignmentService(new AssignmentRepository($this->getDataClassRepository()));
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider
+     */
+    public function getAssignmentDataProvider()
+    {
+        $assignmentService = $this->getAssignmentService();
+
+        $dataProvider = new AssignmentDataProvider(
+            $this->get_application()->getTranslator(), $assignmentService
+        );
+
+        $dataProvider->addEntityService(
+            Entry::ENTITY_TYPE_USER, new UserEntityService($assignmentService, $this->getTranslator())
+        );
+
+        $dataProvider->addEntityService(
+            Entry::ENTITY_TYPE_PLATFORM_GROUP,
+            new PlatformGroupEntityService($assignmentService, $this->getTranslator())
+        );
+
+        $dataProvider->addEntityService(
+            Entry::ENTITY_TYPE_COURSE_GROUP,
+            new CourseGroupEntityService($assignmentService, $this->getTranslator())
+        );
+
+        return $dataProvider;
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository
+     */
+    public function getPublicationRepository()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository');
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function getAssignmentPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        return $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
     }
 
 }

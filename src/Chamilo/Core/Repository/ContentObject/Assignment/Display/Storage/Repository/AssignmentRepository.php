@@ -663,6 +663,20 @@ abstract class AssignmentRepository
     /**
      *
      * @param integer $entityType
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return int
+     */
+    protected function countEntriesByEntityType($entityType, Condition $condition = null)
+    {
+        $condition = $this->getEntityTypeCondition($entityType, $condition);
+
+        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters($condition));
+    }
+
+    /**
+     *
+     * @param integer $entityType
      * @param integer $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *

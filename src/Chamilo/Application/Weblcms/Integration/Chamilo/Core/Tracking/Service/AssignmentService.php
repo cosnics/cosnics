@@ -68,6 +68,21 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $entityType
+     *
+     * @return int
+     */
+    public function countEntriesByContentObjectPublicationAndEntityType(
+        ContentObjectPublication $contentObjectPublication, $entityType
+    )
+    {
+        return $this->assignmentRepository->countEntriesByContentObjectPublicationAndEntityType(
+            $contentObjectPublication, $entityType
+        );
+    }
+
+    /**
      *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param integer $entityType

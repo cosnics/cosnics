@@ -478,7 +478,7 @@ abstract class ContentObjectForm extends FormValidator
     /**
      * Builds a form to compare learning object versions.
      */
-    private function build_version_compare_form()
+    protected function build_version_compare_form()
     {
         $renderer = $this->defaultRenderer();
         $form_template = <<<EOT
