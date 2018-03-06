@@ -59,16 +59,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                 }
                 return $time;
             case Manager::PROPERTY_NUMBER_OF_SUBMISSIONS :
-                $tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission();
-                $condition = new EqualityCondition(
-                    new PropertyConditionVariable(
-                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
-                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_PUBLICATION_ID), 
-                    new StaticConditionVariable($publication[ContentObjectPublication::PROPERTY_ID]));
-                
-                return DataManager::count(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
-                    new DataClassCountParameters($condition));
+                return '';
         }
         
         return parent::render_cell($column, $publication);
@@ -82,42 +73,12 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
      */
     private function generate_title_link($publication)
     {
-        if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
-        {
-            return $this->generate_teacher_title_link($publication);
-        }
-        return $this->generate_student_title_link($publication);
-    }
-
-    /**
-     * Generates the link applicable for the current browsing user being a teacher or admin.
-     * 
-     * @param $publication type The publication for which the link is being generated.
-     * @return string The HTML anchor elemnt that represents the link.
-     */
-    private function generate_teacher_title_link($publication)
-    {
         $url = $this->get_component()->get_url(
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID], 
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_BROWSE_SUBMITTERS));
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_DISPLAY));
         return '<a href="' . $url . '">' .
-             StringUtilities::getInstance()->truncate($publication[ContentObject::PROPERTY_TITLE], 50) . '</a>';
+            StringUtilities::getInstance()->truncate($publication[ContentObject::PROPERTY_TITLE], 50) . '</a>';
     }
 
-    /**
-     * Generates the link applicable for the current browsing user being a student.
-     * 
-     * @param $publication type The publication for which the link is being generated.
-     * @return string The HTML anchor element that represents the link.
-     */
-    private function generate_student_title_link($publication)
-    {
-        $url = $this->get_component()->get_url(
-            array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_STUDENT_BROWSE_SUBMISSIONS, 
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]));
-        return '<a href="' . $url . '">' .
-             StringUtilities::getInstance()->truncate($publication[ContentObject::PROPERTY_TITLE], 50) . '</a>';
-    }
 }
