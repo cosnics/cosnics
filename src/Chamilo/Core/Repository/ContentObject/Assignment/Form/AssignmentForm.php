@@ -13,6 +13,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -166,19 +168,32 @@ class AssignmentForm extends ContentObjectForm
         // Allowed content types for submissions
         $types = $this->get_allowed_content_object_types();
 
-        $advanced_select = $this->createElement(
-            'select',
-            Assignment::PROPERTY_ALLOWED_TYPES,
-            Translation::get('AllowedContentTypes'),
-            $types,
-            array(
-                'multiple' => 'true',
-                'class' => 'advanced_select_question',
-                'size' => (count($types) > 10 ? 10 : count($types))
+//        $advanced_select = $this->createElement(
+//            'select',
+//            Assignment::PROPERTY_ALLOWED_TYPES,
+//            Translation::get('AllowedContentTypes'),
+//            $types,
+//            array(
+//                'multiple' => 'true',
+//                'class' => 'advanced_select_question',
+//                'size' => (count($types) > 10 ? 10 : count($types))
+//            )
+//        );
+
+        $types = new AdvancedElementFinderElementTypes();
+        $types->add_element_type(
+            new AdvancedElementFinderElementType(
+                'assignment', Translation::get('AllowedContentTypes'),
+                'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Ajax', 'AllowedTypesXmlFeed'
             )
         );
 
-        $this->addElement($advanced_select);
+        $this->addElement(
+            'advanced_element_finder', Assignment::PROPERTY_ALLOWED_TYPES, Translation::get('AllowedContentTypes'),
+            $types
+        );
+
+//        $this->addElement($advanced_select);
 
         $this->addRule(
             Assignment::PROPERTY_ALLOWED_TYPES,
@@ -242,7 +257,7 @@ class AssignmentForm extends ContentObjectForm
             )
         );
 
-        $elem = $this->addElement(
+        $this->addElement(
             'element_finder',
             Assignment::PROPERTY_SELECT_ATTACHMENT,
             Translation::get('SelectFeedbackAttachment'),
@@ -250,13 +265,6 @@ class AssignmentForm extends ContentObjectForm
             $locale,
             array()
         );
-
-//        $this->addElement(
-//            'textarea',
-//            Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT,
-//            Translation::get('Text'),
-//            array('cols' => '60', 'rows' => '3')
-//        );
 
         $this->add_html_editor(Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT, Translation::get('Text'), false);
 

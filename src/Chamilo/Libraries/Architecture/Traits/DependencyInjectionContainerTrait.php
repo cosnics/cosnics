@@ -111,6 +111,14 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     */
+    public function getRegistrationConsulter()
+    {
+        return $this->getService('chamilo.configuration.service.registration_consulter');
+    }
+
+    /**
      *
      * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
@@ -216,5 +224,21 @@ trait DependencyInjectionContainerTrait
     public function getApplicationFactory()
     {
         return $this->getService('chamilo.libraries.architecture.factory.application_factory');
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    public function getClassnameUtilities()
+    {
+        return $this->getService('chamilo.libraries.architecture.classname_utilities');
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Utilities\StringUtilities
+     */
+    public function getStringUtilities()
+    {
+        return $this->getService('chamilo.libraries.utilities.string_utilities');
     }
 }
