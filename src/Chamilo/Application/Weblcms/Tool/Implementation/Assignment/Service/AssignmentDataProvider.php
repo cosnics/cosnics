@@ -429,6 +429,20 @@ class AssignmentDataProvider
 
     /**
      *
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @return integer
+     */
+    public function getLastScoreForEntityTypeAndId($entityType, $entityId)
+    {
+        return $this->assignmentService->getLastScoreForContentObjectPublicationEntityTypeAndId(
+            $this->contentObjectPublication, $entityType, $entityId
+        );
+    }
+
+    /**
+     *
      * @param integer $entryIdentifier
      *
      * @return integer

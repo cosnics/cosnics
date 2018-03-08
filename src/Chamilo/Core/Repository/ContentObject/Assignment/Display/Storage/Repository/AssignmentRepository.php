@@ -32,6 +32,7 @@ use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use PhpParser\Builder\Property;
 
 /**
  * Abstract class to provide common functionality to handle assignment entries, feedback, scores and notes
@@ -788,6 +789,48 @@ abstract class AssignmentRepository
         $record = $this->dataClassRepository->record($this->getEntryClassName(), $parameters);
 
         return $record[AssignmentDataProvider::AVERAGE_SCORE];
+    }
+
+    /**
+     *
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
+     */
+    protected function retrieveLastScoreForEntityTypeAndId($entityType, $entityId, Condition $condition)
+    {
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                $this->getScoreClassName(),
+                new EqualityCondition(
+                    new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID),
+                    new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_ENTRY_ID)
+                )
+            )
+        );
+
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_SCORE));
+
+        $parameters = new RecordRetrieveParameters(
+            $properties,
+            $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition),
+            array(
+                new OrderBy(
+                    new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED), SORT_DESC
+                )
+            ),
+            $joins
+        );
+
+        $record = $this->dataClassRepository->record($this->getEntryClassName(), $parameters);
+
+        return $record[Score::PROPERTY_SCORE];
     }
 
     /**

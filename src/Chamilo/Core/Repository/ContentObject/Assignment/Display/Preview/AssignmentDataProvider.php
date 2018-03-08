@@ -200,7 +200,16 @@ class AssignmentDataProvider implements
      */
     public function getAverageScoreForEntityTypeAndId($entityType, $entityId)
     {
-        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getAverageScoreForEntityTypeAndId()
+     */
+    public function getLastScoreForEntityTypeAndId($entityType, $entityId)
+    {
+        return null;
     }
 
     /**

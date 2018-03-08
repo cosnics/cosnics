@@ -204,6 +204,14 @@ interface AssignmentDataProvider
     public function getAverageScoreForEntityTypeAndId($entityType, $entityId);
 
     /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return int
+     */
+    public function getLastScoreForEntityTypeAndId($entityType, $entityId);
+
+    /**
      *
      * @param integer $entryIdentifier
      *

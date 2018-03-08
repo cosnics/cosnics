@@ -21,6 +21,7 @@ abstract class EntityTableColumnModel extends RecordTableColumnModel implements 
     const PROPERTY_LAST_ENTRY_DATE = 'last_entry_date';
     const PROPERTY_ENTRY_COUNT = 'entry_count';
     const PROPERTY_FEEDBACK_COUNT = 'feedback_count';
+    const PROPERTY_LAST_SCORE = 'last_score';
 
     const DEFAULT_ORDER_COLUMN_INDEX = 4;
     const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_DESC;
@@ -34,5 +35,6 @@ abstract class EntityTableColumnModel extends RecordTableColumnModel implements 
         $this->add_column(new SortableStaticTableColumn(self::PROPERTY_LAST_ENTRY_DATE));
         $this->add_column(new SortableStaticTableColumn(self::PROPERTY_ENTRY_COUNT));
         $this->add_column(new StaticTableColumn(self::PROPERTY_FEEDBACK_COUNT));
+        $this->add_column(new StaticTableColumn(self::PROPERTY_LAST_SCORE));
     }
 }

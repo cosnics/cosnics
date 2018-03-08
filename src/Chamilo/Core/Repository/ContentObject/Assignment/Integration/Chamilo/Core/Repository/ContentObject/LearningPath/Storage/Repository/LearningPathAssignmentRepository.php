@@ -227,7 +227,24 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
         TreeNodeData $treeNodeData, $entityType, $entityId
     )
     {
-        return parent::retrieveAverageScoreForEntityTypeAndId(
+        return $this->retrieveAverageScoreForEntityTypeAndId(
+            $entityType, $entityId, $this->getTreeNodeDataCondition($treeNodeData)
+        );
+    }
+
+    /**
+     *
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @return int
+     */
+    public function retrieveLastScoreForTreeNodeDataEntityTypeAndId(
+        TreeNodeData $treeNodeData, $entityType, $entityId
+    )
+    {
+        return $this->retrieveLastScoreForEntityTypeAndId(
             $entityType, $entityId, $this->getTreeNodeDataCondition($treeNodeData)
         );
     }

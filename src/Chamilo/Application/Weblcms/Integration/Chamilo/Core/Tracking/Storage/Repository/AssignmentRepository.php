@@ -397,7 +397,24 @@ class AssignmentRepository
         ContentObjectPublication $contentObjectPublication, $entityType, $entityId
     )
     {
-        return parent::retrieveAverageScoreForEntityTypeAndId(
+        return $this->retrieveAverageScoreForEntityTypeAndId(
+            $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        );
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @return int
+     */
+    public function retrieveLastScoreForContentObjectPublicationEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityId
+    )
+    {
+        return $this->retrieveLastScoreForEntityTypeAndId(
             $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication)
         );
     }

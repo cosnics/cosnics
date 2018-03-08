@@ -27,18 +27,24 @@ class AllowedTypesXmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
         $elements = new AdvancedElementFinderElements();
 
-        foreach ($allowedTypes as $allowedType => $allowedTypeTranslation)
+        foreach ($allowedTypes as $allowedType)
         {
-            if(!empty($search) && strpos(strtolower($allowedTypeTranslation), strtolower($search)) === false)
+            $allowedTypeTranslation = $allowedType['translation'];
+
+            if (!empty($search) && strpos(strtolower($allowedTypeTranslation), strtolower($search)) === false)
             {
                 continue;
             }
 
-            $typeClass = strtolower($this->getClassnameUtilities()->getPackageNameFromNamespace($allowedType));
+            $typeClass = strtolower(
+                $this->getClassnameUtilities()->getPackageNameFromNamespace(
+                    $this->getClassnameUtilities()->getNamespaceParent($allowedType['type'])
+                )
+            );
 
             $elements->add_element(
                 new AdvancedElementFinderElement(
-                    $allowedType,
+                    $allowedType['id'],
                     'type type_' . $typeClass,
                     $allowedTypeTranslation,
                     $allowedTypeTranslation
@@ -54,18 +60,19 @@ class AllowedTypesXmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
     }
 
     /**
-     * @return string[]
+     * @return string[][]
      */
     protected function getAllowedContentObjectTypes()
     {
         $registrationConsulter = $this->getRegistrationConsulter();
         $translator = $this->getTranslator();
 
-        $types = array();
-
         $integrationPackages = $registrationConsulter->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Assignment'
         );
+
+        $types = array();
+
         foreach ($integrationPackages as $basePackage => $integrationPackageData)
         {
             if ($integrationPackageData['status'] != Registration::STATUS_ACTIVE)
@@ -73,27 +80,17 @@ class AllowedTypesXmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
                 continue;
             }
 
-            $types[] = $basePackage;
+            $integrationPackageData['translation'] = $translator->trans('TypeName', array(), $basePackage);
+            $types[] = $integrationPackageData;
         }
 
-        $return_types = array();
-        foreach ($types as $index => $type)
-        {
-            $typeName = $this->getClassNameUtilities()->getPackageNameFromNamespace($type);
-            $typeClass = $type . '\Storage\DataClass\\' . $typeName;
-
-            if (!$registrationConsulter->isContextRegisteredAndActive($type))
-            {
-                unset($types[$index]);
-                continue;
-            }
-
-            $return_types[$typeClass] = $translator->trans('TypeName', array(), $type);
+        usort(
+            $types, function ($typeA, $typeB) {
+            return strcmp($typeA['translation'], $typeB['translation']);
         }
+        );
 
-        asort($return_types);
-
-        return $return_types;
+        return $types;
     }
 
 }

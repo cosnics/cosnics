@@ -265,6 +265,23 @@ abstract class LearningPathAssignmentService extends AssignmentService
      * @param TreeNodeData $treeNodeData
      * @param integer $entityType
      * @param integer $entityId
+     *
+     * @return int
+     */
+    public function getLastScoreForTreeNodeDataEntityTypeAndId(TreeNodeData $treeNodeData, $entityType, $entityId)
+    {
+        return $this->assignmentRepository->retrieveLastScoreForTreeNodeDataEntityTypeAndId(
+            $treeNodeData,
+            $entityType,
+            $entityId
+        );
+    }
+
+    /**
+     *
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count

@@ -55,6 +55,17 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
                     $this->getAssignmentDataProvider()->getCurrentEntityType(),
                     $entity[Entry::PROPERTY_ENTITY_ID]
                 );
+            case EntityTableColumnModel::PROPERTY_LAST_SCORE:
+                $lastScore = $this->getAssignmentDataProvider()->getLastScoreForEntityTypeAndId(
+                    $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]
+                );
+
+                if(empty($lastScore))
+                {
+                    return null;
+                }
+
+                return '<div class="text-right">' . $lastScore . '%</div>';
                 break;
         }
 

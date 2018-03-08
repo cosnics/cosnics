@@ -13,6 +13,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -34,6 +36,7 @@ class AssignmentForm extends ContentObjectForm
 
     public function setDefaults($defaults = array())
     {
+        /** @var Assignment $object */
         $object = $this->get_content_object();
 
         if ($object->get_id() != null)
@@ -81,8 +84,6 @@ class AssignmentForm extends ContentObjectForm
                     $active->_elements[0]->setValue(serialize($defaults[Assignment::PROPERTY_SELECT_ATTACHMENT]));
                 }
             }
-
-            $defaults[Assignment::PROPERTY_ALLOWED_TYPES] = explode(',', $object->get_allowed_types());
         }
         else
         {
@@ -93,6 +94,8 @@ class AssignmentForm extends ContentObjectForm
             $defaults[Assignment::PROPERTY_START_TIME] = time();
             $defaults[Assignment::PROPERTY_END_TIME] = strtotime('+1 day', time());
         }
+
+        $this->setDefaultAllowedContentObjects($object);
 
         parent::setDefaults($defaults);
     }
@@ -165,21 +168,6 @@ class AssignmentForm extends ContentObjectForm
         );
         $this->addGroup($choices, null, Translation::get('AllowLateSubmissions'), '', false);
 
-        // Allowed content types for submissions
-        $types = $this->get_allowed_content_object_types();
-
-//        $advanced_select = $this->createElement(
-//            'select',
-//            Assignment::PROPERTY_ALLOWED_TYPES,
-//            Translation::get('AllowedContentTypes'),
-//            $types,
-//            array(
-//                'multiple' => 'true',
-//                'class' => 'advanced_select_question',
-//                'size' => (count($types) > 10 ? 10 : count($types))
-//            )
-//        );
-
         $types = new AdvancedElementFinderElementTypes();
         $types->add_element_type(
             new AdvancedElementFinderElementType(
@@ -191,14 +179,6 @@ class AssignmentForm extends ContentObjectForm
         $this->addElement(
             'advanced_element_finder', Assignment::PROPERTY_ALLOWED_TYPES, Translation::get('AllowedContentTypes'),
             $types
-        );
-
-//        $this->addElement($advanced_select);
-
-        $this->addRule(
-            Assignment::PROPERTY_ALLOWED_TYPES,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required'
         );
 
         $this->addElement('category');
@@ -313,7 +293,7 @@ class AssignmentForm extends ContentObjectForm
         }
         $object->set_automatic_feedback_co_ids($cos);
         $object->set_automatic_feedback_text($values[Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT]);
-        $object->set_allowed_types(implode(',', $values[Assignment::PROPERTY_ALLOWED_TYPES]));
+        $this->setAllowedTypes($object, $values[Assignment::PROPERTY_ALLOWED_TYPES]['']);
         // Check if automatic feedback given
         if ($cos != null || $values[Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT] != '')
         {
@@ -331,6 +311,8 @@ class AssignmentForm extends ContentObjectForm
 
     public function update_content_object()
     {
+        /** @var Assignment $object */
+
         $object = $this->get_content_object();
         $values = $this->exportValues();
         $object->set_start_time(DatetimeUtilities::time_from_datepicker($values[Assignment::PROPERTY_START_TIME]));
@@ -353,7 +335,7 @@ class AssignmentForm extends ContentObjectForm
         }
         $object->set_automatic_feedback_co_ids($cos);
         $object->set_automatic_feedback_text($values[Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT]);
-        $object->set_allowed_types(implode(',', $values[Assignment::PROPERTY_ALLOWED_TYPES]));
+        $this->setAllowedTypes($object, $values[Assignment::PROPERTY_ALLOWED_TYPES]['']);
         // Check if automatic feedback given
         if ($cos != null || $values[Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT] != '')
         {
@@ -369,42 +351,80 @@ class AssignmentForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    public function get_allowed_content_object_types()
+    /**
+     * Sets the allowed types based on the given identifiers
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @param $allowedTypeIdentifiers
+     */
+    protected function setAllowedTypes(Assignment $assignment, $allowedTypeIdentifiers)
     {
         $configuration = Configuration::getInstance();
-
-        $types = array();
 
         $integrationPackages = $configuration->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Assignment'
         );
+
+        $allowedTypes = [];
+
         foreach ($integrationPackages as $basePackage => $integrationPackageData)
         {
-            if ($integrationPackageData['status'] != Registration::STATUS_ACTIVE)
-            {
-                continue;
-            }
+            $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage);
+            $typeClass = $basePackage . '\Storage\DataClass\\' . $typeName;
 
-            $types[] = $basePackage;
+            if(in_array($integrationPackageData[Registration::PROPERTY_ID], $allowedTypeIdentifiers))
+            {
+                $allowedTypes[] = $typeClass;
+            }
         }
 
-        $return_types = array();
-        foreach ($types as $index => $type)
+        $assignment->set_allowed_types(implode(',', $allowedTypes));
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     *
+     * @throws \HTML_QuickForm_Error
+     */
+    protected function setDefaultAllowedContentObjects(Assignment $assignment)
+    {
+        $allowedTypeClasses = explode(',', $assignment->get_allowed_types());
+        if(empty($allowedTypeClasses))
         {
-            $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($type);
-            $typeClass = $type . '\Storage\DataClass\\' . $typeName;
-
-            if (!\Chamilo\Configuration\Configuration::getInstance()->isRegisteredAndActive($type))
-            {
-                unset($types[$index]);
-                continue;
-            }
-
-            $return_types[$typeClass] = Translation::get('TypeName', array(), $type);
+            $allowedTypeClasses = ['Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File'];
         }
 
-        asort($return_types);
+        $configuration = Configuration::getInstance();
 
-        return $return_types;
+        $integrationPackages = $configuration->getIntegrationRegistrations(
+            'Chamilo\Core\Repository\ContentObject\Assignment'
+        );
+
+        $defaultElements = new AdvancedElementFinderElements();
+
+        foreach ($integrationPackages as $basePackage => $integrationPackageData)
+        {
+            $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage);
+            $typeClass = $basePackage . '\Storage\DataClass\\' . $typeName;
+
+            if(in_array($typeClass, $allowedTypeClasses))
+            {
+                $allowedTypeTranslation = Translation::getInstance()->getTranslation('TypeName', array(), $basePackage);
+
+                $typeCssClass = strtolower(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage));
+
+                $defaultElements->add_element(
+                    new AdvancedElementFinderElement(
+                        $integrationPackageData['id'],
+                        'type type_' . $typeCssClass,
+                        $allowedTypeTranslation,
+                        $allowedTypeTranslation
+                    )
+                );
+            }
+        }
+
+        $element = $this->getElement(Assignment::PROPERTY_ALLOWED_TYPES);
+        $element->setDefaultValues($defaultElements);
     }
 }
