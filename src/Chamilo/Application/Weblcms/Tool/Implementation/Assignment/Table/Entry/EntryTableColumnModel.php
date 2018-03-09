@@ -1,14 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\User;
-
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
-use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
-use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry;
 
 /**
  *

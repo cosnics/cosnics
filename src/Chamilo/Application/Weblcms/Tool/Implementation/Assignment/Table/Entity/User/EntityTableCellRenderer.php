@@ -10,17 +10,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entit
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EntityTableCellRenderer
-    extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableCellRenderer
+    extends \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\EntityTableCellRenderer
 {
 
-    /**
-     *
-     * {@inheritdoc}
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entity\EntityTableCellRenderer::isEntity()
-     */
-    protected function isEntity($entityId, $userId)
-    {
-        return $entityId == $userId;
-    }
 }

@@ -1,9 +1,8 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\User;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 
 /**
  *
@@ -33,7 +32,7 @@ class EntryTableDataProvider
 
         return $learningPathAssignmentService->findEntriesForContentObjectPublicationEntityTypeAndId(
             $this->getTable()->getContentObjectPublication(),
-            Entry::ENTITY_TYPE_USER,
+            $this->getTable()->getEntityType(),
             $this->getTable()->getEntityId(),
             $condition,
             $offset,
@@ -52,14 +51,14 @@ class EntryTableDataProvider
 
         return $learningPathAssignmentService->countEntriesForContentObjectPublicationEntityTypeAndId(
             $this->getTable()->getContentObjectPublication(),
-            Entry::ENTITY_TYPE_USER,
+            $this->getTable()->getEntityType(),
             $this->getTable()->getEntityId(),
             $condition
         );
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\User\EntryTable | \Chamilo\Libraries\Format\Table\Table
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\EntryTable | \Chamilo\Libraries\Format\Table\Table
      */
     public function getTable()
     {

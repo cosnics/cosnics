@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\Group;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity;
 
 /**
  *
@@ -9,7 +9,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entit
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntityTableDataProvider
-    extends \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\EntityTableDataProvider
+class EntityTableColumnModel
+    extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableColumnModel
 {
 }

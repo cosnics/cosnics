@@ -4,9 +4,11 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Ent
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Interface EntityServiceInterface
@@ -20,9 +22,25 @@ interface EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    public function retrieveEntities(
+        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
+        $orderProperty = []
+    );
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
      * @return int
      */
-    public function countEntities(ContentObjectPublication $contentObjectPublication);
+    public function countEntities(ContentObjectPublication $contentObjectPublication, Condition $condition = null);
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
@@ -58,20 +76,6 @@ interface EntityServiceInterface
     public function getEntityTable(
         Application $application, AssignmentDataProvider $assignmentDataProvider,
         ContentObjectPublication $contentObjectPublication
-    );
-
-    /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param int $entityId
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
-     */
-    public function getEntryTable(
-        Application $application, AssignmentDataProvider $assignmentDataProvider,
-        ContentObjectPublication $contentObjectPublication, $entityId
     );
 
     /**

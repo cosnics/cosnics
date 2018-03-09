@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entit
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
-use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 /**
  *
@@ -14,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EntityTableColumnModel
-    extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableColumnModel
+    extends \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\EntityTableColumnModel
 {
     /**
      * Initializes the columns for the table

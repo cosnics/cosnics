@@ -18,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class EntityTableCellRenderer
-    extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableCellRenderer
+    extends \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\EntityTable
 {
 
     public function render_cell($column, $entity)

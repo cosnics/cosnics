@@ -8,11 +8,10 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntityRenderer\CourseGroupEntityRenderer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\CourseGroup\EntityTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\CourseGroup\EntryTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -52,12 +51,34 @@ class CourseGroupEntityService implements EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    public function retrieveEntities(
+        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
+        $orderProperty = []
+    )
+    {
+        return $this->assignmentService->findTargetCourseGroupsForContentObjectPublication(
+            $contentObjectPublication, $this->getTargetCourseGroupIds($contentObjectPublication),
+            $condition, $offset, $count, $orderProperty
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
      * @return int
      */
-    public function countEntities(ContentObjectPublication $contentObjectPublication)
+    public function countEntities(ContentObjectPublication $contentObjectPublication, Condition $condition = null)
     {
         return $this->assignmentService->countTargetCourseGroupsForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetCourseGroupIds($contentObjectPublication)
+            $contentObjectPublication, $this->getTargetCourseGroupIds($contentObjectPublication), $condition
         );
     }
 
@@ -144,27 +165,7 @@ class CourseGroupEntityService implements EntityServiceInterface
     )
     {
         return new EntityTable(
-            $application, $assignmentDataProvider, $this->assignmentService, $contentObjectPublication,
-            $this->getTargetCourseGroupIds($contentObjectPublication)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param int $entityId
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
-     */
-    public function getEntryTable(
-        Application $application, AssignmentDataProvider $assignmentDataProvider,
-        ContentObjectPublication $contentObjectPublication, $entityId
-    )
-    {
-        return new EntryTable(
-            $application, $assignmentDataProvider, $entityId, $this->assignmentService, $contentObjectPublication
+            $application, $assignmentDataProvider, $contentObjectPublication, $this
         );
     }
 
@@ -199,7 +200,7 @@ class CourseGroupEntityService implements EntityServiceInterface
 
         $subscribedGroupIds = [];
 
-        foreach($courseGroups as $courseGroup)
+        foreach ($courseGroups as $courseGroup)
         {
             $subscribedGroupIds[] = $courseGroup->getId();
         }
@@ -219,6 +220,7 @@ class CourseGroupEntityService implements EntityServiceInterface
     public function isUserPartOfEntity(User $user, ContentObjectPublication $contentObjectPublication, $entityId)
     {
         $availableEntityIdentifiers = $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $user);
+
         return in_array($entityId, $availableEntityIdentifiers);
     }
 

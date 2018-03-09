@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\Assign
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\EntryTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
@@ -260,9 +261,9 @@ class AssignmentDataProvider
      */
     public function getEntryTableForEntityTypeAndId(Application $application, $entityType, $entityId)
     {
-        $entityService = $this->getEntityServiceByType($entityType);
-
-        return $entityService->getEntryTable($application, $this, $this->contentObjectPublication, $entityId);
+        return new EntryTable(
+            $application, $this, $entityId, $entityType, $this->assignmentService, $this->contentObjectPublication
+        );
     }
 
     /**
@@ -294,6 +295,7 @@ class AssignmentDataProvider
     public function getAvailableEntityIdentifiersForUser(User $currentUser)
     {
         $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+
         return $entityService->getAvailableEntityIdentifiersForUser($this->contentObjectPublication, $currentUser);
     }
 

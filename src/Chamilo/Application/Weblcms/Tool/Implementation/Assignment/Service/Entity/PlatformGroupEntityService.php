@@ -8,12 +8,10 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntityRenderer\PlatformGroupEntityRenderer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\PlatformGroup\EntityTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\PlatformGroup\EntryTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -53,9 +51,31 @@ class PlatformGroupEntityService implements EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    public function retrieveEntities(
+        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
+        $orderProperty = []
+    )
+    {
+        return $this->assignmentService->findTargetPlatformGroupsForContentObjectPublication(
+            $contentObjectPublication, $this->getTargetPlatformGroupIds($contentObjectPublication),
+            $condition, $offset, $count, $orderProperty
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
      * @return int
      */
-    public function countEntities(ContentObjectPublication $contentObjectPublication)
+    public function countEntities(ContentObjectPublication $contentObjectPublication, Condition $condition = null)
     {
         return $this->assignmentService->countTargetPlatformGroupsForContentObjectPublication(
             $contentObjectPublication, $this->getTargetPlatformGroupIds($contentObjectPublication)
@@ -145,27 +165,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
     )
     {
         return new EntityTable(
-            $application, $assignmentDataProvider, $this->assignmentService, $contentObjectPublication,
-            $this->getTargetPlatformGroupIds($contentObjectPublication)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param int $entityId
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
-     */
-    public function getEntryTable(
-        Application $application, AssignmentDataProvider $assignmentDataProvider,
-        ContentObjectPublication $contentObjectPublication, $entityId
-    )
-    {
-        return new EntryTable(
-            $application, $assignmentDataProvider, $entityId, $this->assignmentService, $contentObjectPublication
+            $application, $assignmentDataProvider, $contentObjectPublication, $this
         );
     }
 

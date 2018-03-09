@@ -11,7 +11,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\User\
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use PhpParser\Node\Expr\Assign;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -51,9 +51,31 @@ class UserEntityService implements EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    public function retrieveEntities(
+        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
+        $orderProperty = []
+    )
+    {
+        return $this->assignmentService->findTargetUsersForContentObjectPublication(
+            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication),
+            $condition, $offset, $count, $orderProperty
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
      * @return int
      */
-    public function countEntities(ContentObjectPublication $contentObjectPublication)
+    public function countEntities(ContentObjectPublication $contentObjectPublication, Condition $condition = null)
     {
         return $this->assignmentService->countTargetUsersForContentObjectPublication(
             $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
@@ -143,29 +165,7 @@ class UserEntityService implements EntityServiceInterface
         ContentObjectPublication $contentObjectPublication
     )
     {
-        return new EntityTable(
-            $application, $assignmentDataProvider, $this->assignmentService, $contentObjectPublication,
-            $this->getTargetUserIdsForPublication($contentObjectPublication)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param int $entityId
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
-     */
-    public function getEntryTable(
-        Application $application, AssignmentDataProvider $assignmentDataProvider,
-        ContentObjectPublication $contentObjectPublication, $entityId
-    )
-    {
-        return new EntryTable(
-            $application, $assignmentDataProvider, $entityId, $this->assignmentService, $contentObjectPublication
-        );
+        return new EntityTable($application, $assignmentDataProvider,  $contentObjectPublication, $this);
     }
 
     /**

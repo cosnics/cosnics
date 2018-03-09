@@ -2,8 +2,6 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\Group;
 
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 /**
@@ -14,7 +12,7 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EntityTableColumnModel
-    extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableColumnModel
+    extends \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\EntityTableColumnModel
 {
     const PROPERTY_GROUP_MEMBERS = 'group_members';
 
