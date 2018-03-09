@@ -23,7 +23,7 @@ class ComplexAssessmentOpenQuestion extends ComplexContentObjectItem implements 
      */
     public static function get_additional_property_names()
     {
-        return array(self::PROPERTY_WEIGHT);
+        return array(self::PROPERTY_WEIGHT, self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
 
     /**
