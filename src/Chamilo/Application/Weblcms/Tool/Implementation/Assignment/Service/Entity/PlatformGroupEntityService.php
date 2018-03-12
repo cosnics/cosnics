@@ -8,7 +8,9 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntityRenderer\PlatformGroupEntityRenderer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\PlatformGroup\EntityTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\PlatformGroup\EntryTable;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -32,9 +34,15 @@ class PlatformGroupEntityService implements EntityServiceInterface
     protected $translator;
 
     /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    protected $userService;
+
+    /**
      * @var array
      */
     protected $targetPlatformGroupIds = [];
+
 
     /**
      * UserEntityService constructor.
@@ -42,10 +50,11 @@ class PlatformGroupEntityService implements EntityServiceInterface
      * @param AssignmentService $assignmentService
      * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function __construct(AssignmentService $assignmentService, Translator $translator)
+    public function __construct(AssignmentService $assignmentService, Translator $translator, UserService $userService)
     {
         $this->assignmentService = $assignmentService;
         $this->translator = $translator;
+        $this->userService = $userService;
     }
 
     /**
@@ -213,6 +222,20 @@ class PlatformGroupEntityService implements EntityServiceInterface
     {
         $availableEntityIdentifiers = $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $user);
         return in_array($entityId, $availableEntityIdentifiers);
+    }
+
+    /**
+     * @param int $entityId
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function getUsersForEntity($entityId)
+    {
+        /** @var Group $entity */
+        $entity = DataManager::retrieve_by_id(Group::class_name(), $entityId);
+        $groupUserIds = $entity->get_users(true, true);
+
+        return $this->userService->findUsersByIdentifiersOrderdByName($groupUserIds);
     }
 
     /**

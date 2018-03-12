@@ -281,7 +281,7 @@ class CourseGroup extends NestedTreeNode
      * @param $recursive_subgroups boolean - Include the direct subgroups or include all the subgroups
      * @param $include_users boolean - Includes the users as real user objects
      *
-     * @return User[]
+     * @return User[] | int[]
      */
     public function get_members($include_subgroups = false, $recursive_subgroups = false, $include_users = false)
     {

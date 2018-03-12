@@ -2,12 +2,15 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Publication;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTableCellRenderer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
@@ -81,6 +84,25 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                     );
 
                 return $entitiesWithEntriesCount . ' / ' . $entitiesCount;
+            case Publication::PROPERTY_ENTITY_TYPE:
+
+                $contentObjectPublication = new ContentObjectPublication();
+                $contentObjectPublication->setId($publication[DataClass::PROPERTY_ID]);
+
+                $contentObjectPublication->set_content_object_id(
+                    $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+                );
+
+                $entityType = $this->getAssignmentPublication($contentObjectPublication)->getEntityType();
+
+                $entityTypeName =
+                    $this->getAssignmentDataProvider($contentObjectPublication)->getPluralEntityNameByType($entityType);
+
+                $iconName = ($entityType == Entry::ENTITY_TYPE_USER) ? 'user' : 'users';
+
+                $glyph = new FontAwesomeGlyph($iconName, [], $entityTypeName);
+
+                return $glyph->render();
         }
 
         return parent::render_cell($column, $publication);

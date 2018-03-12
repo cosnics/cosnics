@@ -79,6 +79,16 @@ class UserService
     }
 
     /**
+     * @param int[] $userIdentifiers
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function findUsersByIdentifiersOrderdByName($userIdentifiers)
+    {
+        return $this->userRepository->findUsersByIdentifiersOrderedByName($userIdentifiers);
+    }
+
+    /**
      * @param string $username
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User

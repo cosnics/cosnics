@@ -104,6 +104,13 @@ interface EntityServiceInterface
     public function isUserPartOfEntity(User $user, ContentObjectPublication $contentObjectPublication, $entityId);
 
     /**
+     * @param int $entityId
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function getUsersForEntity($entityId);
+
+    /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
      * @param integer $entityId
      *

@@ -8,7 +8,9 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntityRenderer\CourseGroupEntityRenderer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\CourseGroup\EntityTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\CourseGroup\EntryTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -37,15 +39,22 @@ class CourseGroupEntityService implements EntityServiceInterface
     protected $targetCourseGroupIds = [];
 
     /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    protected $userService;
+
+    /**
      * UserEntityService constructor.
      *
      * @param AssignmentService $assignmentService
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\User\Service\UserService $userService
      */
-    public function __construct(AssignmentService $assignmentService, Translator $translator)
+    public function __construct(AssignmentService $assignmentService, Translator $translator, UserService $userService)
     {
         $this->assignmentService = $assignmentService;
         $this->translator = $translator;
+        $this->userService = $userService;
     }
 
     /**
@@ -222,6 +231,20 @@ class CourseGroupEntityService implements EntityServiceInterface
         $availableEntityIdentifiers = $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $user);
 
         return in_array($entityId, $availableEntityIdentifiers);
+    }
+
+    /**
+     * @param int $entityId
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function getUsersForEntity($entityId)
+    {
+        /** @var CourseGroup $courseGroup */
+        $courseGroup = DataManager::retrieve_by_id(CourseGroup::class_name(), $entityId);
+        $courseGroupMemberIds = $courseGroup->get_members(true, true);
+
+        return $this->userService->findUsersByIdentifiersOrderdByName($courseGroupMemberIds);
     }
 
     /**

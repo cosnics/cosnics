@@ -190,12 +190,12 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
         $dataProvider->addEntityService(
             Entry::ENTITY_TYPE_PLATFORM_GROUP,
-            new PlatformGroupEntityService($assignmentService, $this->getTranslator())
+            new PlatformGroupEntityService($assignmentService, $this->getTranslator(), $this->getUserService())
         );
 
         $dataProvider->addEntityService(
             Entry::ENTITY_TYPE_COURSE_GROUP,
-            new CourseGroupEntityService($assignmentService, $this->getTranslator())
+            new CourseGroupEntityService($assignmentService, $this->getTranslator(), $this->getUserService())
         );
 
         return $dataProvider;
@@ -217,6 +217,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public function getAssignmentPublication(ContentObjectPublication $contentObjectPublication)
     {
         return $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    public function getUserService()
+    {
+        return $this->getService('chamilo.core.user.service.user_service');
     }
 
 }

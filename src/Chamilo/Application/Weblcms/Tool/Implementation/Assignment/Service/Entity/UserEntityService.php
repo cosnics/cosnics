@@ -205,6 +205,16 @@ class UserEntityService implements EntityServiceInterface
     }
 
     /**
+     * @param int $entityId
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function getUsersForEntity($entityId)
+    {
+        return [$entityId];
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
      * @param integer $entityId
      *
