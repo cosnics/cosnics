@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entit
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -367,12 +368,25 @@ class AssignmentDataProvider implements
     }
 
     /**
+     * @param int $entityType
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getEntityRendererForEntityTypeAndId()
+     * @return String
      */
-    public function getEntityRendererForEntityTypeAndId($entityType, $entityId)
+    public function renderEntityNameByEntityTypeAndEntity($entityType, DataClass $entity)
     {
-        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        return null;
     }
 
     /**

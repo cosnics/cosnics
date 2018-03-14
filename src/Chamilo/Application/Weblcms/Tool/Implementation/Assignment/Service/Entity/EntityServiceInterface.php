@@ -111,10 +111,16 @@ interface EntityServiceInterface
     public function getUsersForEntity($entityId);
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     * @param integer $entityId
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer\EntityRenderer
+     * @return String
      */
-    public function getEntityRendererForEntityId(AssignmentDataProvider $assignmentDataProvider, $entityId);
+    public function renderEntityName(DataClass $entity);
+
+    /**
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameById($entityId);
 }

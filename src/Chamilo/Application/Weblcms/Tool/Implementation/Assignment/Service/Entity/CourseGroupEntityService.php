@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\Assignme
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
@@ -126,6 +127,7 @@ class CourseGroupEntityService implements EntityServiceInterface
 
         if (!array_key_exists($id, $this->targetCourseGroupIds))
         {
+            /** @var \Chamilo\Libraries\Storage\ResultSet\ResultSet $courseGroups */
             $courseGroups = DataManager::retrieve_publication_target_course_groups(
                 $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
             );
@@ -248,13 +250,28 @@ class CourseGroupEntityService implements EntityServiceInterface
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     * @param integer $entityId
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer\EntityRenderer
+     * @return String
      */
-    public function getEntityRendererForEntityId(AssignmentDataProvider $assignmentDataProvider, $entityId)
+    public function renderEntityName(DataClass $entity)
     {
-        return new CourseGroupEntityRenderer($assignmentDataProvider, $entityId);
+        if(!$entity instanceof CourseGroup)
+        {
+            throw new \InvalidArgumentException('The given entity must be of the type ' . CourseGroup::class);
+        }
+
+        return $entity->get_name();
+    }
+
+    /**
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameById($entityId)
+    {
+        $entity = DataManager::retrieve_by_id(CourseGroup::class, $entityId);
+        return $this->renderEntityName($entity);
     }
 }

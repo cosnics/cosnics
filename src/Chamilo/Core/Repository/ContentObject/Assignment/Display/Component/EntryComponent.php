@@ -17,6 +17,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
@@ -531,9 +532,9 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         if ($entitiesCount > 1)
         {
-            $submittersNavigatorActions = new ButtonGroup();
+            $entityNavigatorActions = new ButtonGroup();
 
-            $submittersNavigatorActions->addButton(
+            $entityNavigatorActions->addButton(
                 new Button(
                     $translator->getTranslation('PreviousEntity', ['ENTITY_NAME' => strtolower($entityName)]),
                     new FontAwesomeGlyph('backward'),
@@ -542,7 +543,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 )
             );
 
-            $submittersNavigatorActions->addButton(
+            $entityNavigatorActions->addButton(
                 new Button(
                     '<span class="badge" style="color: white; background-color: #5bc0de;">'
                     . $currentEntityPosition . ' / ' . $entitiesCount . '</span>',
@@ -552,7 +553,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 )
             );
 
-            $submittersNavigatorActions->addButton(
+            $entityNavigatorActions->addButton(
                 new Button(
                     $translator->getTranslation('NextEntity', ['ENTITY_NAME' => strtolower($entityName)]),
                     new FontAwesomeGlyph('forward'),
@@ -561,14 +562,42 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 )
             );
 
-            $buttonToolBar->addButtonGroup($submittersNavigatorActions);
+            $buttonToolBar->addButtonGroup($entityNavigatorActions);
+
+            $selectEntityButton = new DropdownButton(
+                $translator->getTranslation('SelectOtherEntity', ['ENTITY_TYPE' => strtolower($entityName)]),
+                new FontAwesomeGlyph('user')
+            );
+
+            $buttonToolBar->addItem($selectEntityButton);
+
+            $entities = $this->getEntryNavigator()->getEntities();
+            foreach ($entities as $entity)
+            {
+                if ($entity->getId() == $this->getEntityIdentifier())
+                {
+                    continue;
+                }
+
+                $url = $this->get_url(
+                    array(self::PARAM_ENTITY_ID => $entity->getId()), array(self::PARAM_ENTRY_ID)
+                );
+
+                $selectEntityButton->addSubButton(
+                    new SubButton(
+                        $this->getDataProvider()->renderEntityNameByEntityTypeAndEntity(
+                            $this->getEntityType(), $entity
+                        ), null, $url
+                    )
+                );
+            }
         }
 
         if ($entriesCount > 1)
         {
-            $submissionsNavigatorActions = new ButtonGroup();
+            $entriesNavigatorActions = new ButtonGroup();
 
-            $submissionsNavigatorActions->addButton(
+            $entriesNavigatorActions->addButton(
                 new Button(
                     $translator->getTranslation('EarlierEntry'),
                     new FontAwesomeGlyph('backward'),
@@ -577,7 +606,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 )
             );
 
-            $submissionsNavigatorActions->addButton(
+            $entriesNavigatorActions->addButton(
                 new Button(
                     '<span class="badge" style="color: white; background-color: #28a745;">'
                     . $currentEntryPosition . ' / ' . $entriesCount . '</span>',
@@ -587,7 +616,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 )
             );
 
-            $submissionsNavigatorActions->addButton(
+            $entriesNavigatorActions->addButton(
                 new Button(
                     $translator->getTranslation('LaterEntry'),
                     new FontAwesomeGlyph('forward'),
@@ -596,7 +625,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 )
             );
 
-            $buttonToolBar->addButtonGroup($submissionsNavigatorActions);
+            $buttonToolBar->addButtonGroup($entriesNavigatorActions);
         }
 
         return new ButtonToolBarRenderer($buttonToolBar);
@@ -645,13 +674,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
 
-        if (empty($previousEntity[Entry::PROPERTY_ENTITY_ID]))
+        if (!$previousEntity instanceof DataClass)
         {
             return null;
         }
 
         return $this->get_url(
-            array(self::PARAM_ENTITY_ID => $previousEntity[Entry::PROPERTY_ENTITY_ID]), array(self::PARAM_ENTRY_ID)
+            array(self::PARAM_ENTITY_ID => $previousEntity->getId()), array(self::PARAM_ENTRY_ID)
         );
     }
 
@@ -664,13 +693,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
 
-        if (empty($nextEntity[Entry::PROPERTY_ENTITY_ID]))
+        if (!$nextEntity instanceof DataClass)
         {
             return null;
         }
 
         return $this->get_url(
-            array(self::PARAM_ENTITY_ID => $nextEntity[Entry::PROPERTY_ENTITY_ID]), array(self::PARAM_ENTRY_ID)
+            array(self::PARAM_ENTITY_ID => $nextEntity->getId()), array(self::PARAM_ENTRY_ID)
         );
     }
 

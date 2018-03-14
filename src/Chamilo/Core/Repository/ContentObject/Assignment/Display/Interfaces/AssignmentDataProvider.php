@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\N
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\ResultSet\DataClassResultSet;
 
 /**
@@ -19,6 +20,7 @@ use Chamilo\Libraries\Storage\ResultSet\DataClassResultSet;
 interface AssignmentDataProvider
 {
     const AVERAGE_SCORE = 'average_score';
+    const ENTITY_NAME = 'entity_name';
 
     /**
      *
@@ -236,13 +238,20 @@ interface AssignmentDataProvider
     public function findEntriesByIdentifiers($entryIdentifiers);
 
     /**
+     * @param int $entityType
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      *
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer\EntityRenderer
+     * @return String
      */
-    public function getEntityRendererForEntityTypeAndId($entityType, $entityId);
+    public function renderEntityNameByEntityTypeAndEntity($entityType, DataClass $entity);
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId);
 
     /**
      *

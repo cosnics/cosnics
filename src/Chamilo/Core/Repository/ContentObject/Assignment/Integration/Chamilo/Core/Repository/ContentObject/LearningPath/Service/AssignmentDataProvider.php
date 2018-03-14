@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\Tracking
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -483,15 +484,31 @@ class AssignmentDataProvider
     }
 
     /**
+     * @param int $entityType
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      *
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer\EntityRenderer
+     * @return String
      */
-    public function getEntityRendererForEntityTypeAndId($entityType, $entityId)
+    public function renderEntityNameByEntityTypeAndEntity($entityType, DataClass $entity)
     {
-        return new EntityRenderer($this, $entityId);
+        if(!$entity instanceof User)
+        {
+            throw new \InvalidArgumentException('The given entity must be of the type ' . User::class);
+        }
+
+        return $entity->get_fullname();
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $entityId);
+        return $this->renderEntityNameByEntityTypeAndEntity($entityType, $user);
     }
 
     /**

@@ -482,10 +482,40 @@ abstract class AssignmentRepository
             new StaticConditionVariable(1)
         );
 
-        return $this->findTargetsForEntityType(
-            $entityType, $condition, $joinCondition, $offset, $count, $orderBy, $properties, $baseClass,
-            $baseVariable, $havingCondition
+        $joinConditions = array();
+
+        $joinConditions[] = new EqualityCondition(
+            $baseVariable,
+            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_ID)
         );
+
+        ($joinCondition instanceof Condition) ? $joinConditions[] = $joinCondition : null;
+
+        $joinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable($entityType)
+        );
+
+        $joinCondition = new AndCondition($joinConditions);
+
+        $joins = new Joins();
+        $joins->add(new Join($this->getEntryClassName(), $joinCondition, Join::TYPE_LEFT));
+
+        $group_by = new GroupBy();
+        $group_by->add($baseVariable);
+
+        $parameters = new DataClassRetrievesParameters(
+            $condition,
+            $count,
+            $offset,
+            $orderBy,
+            $joins,
+            false,
+            $group_by,
+            $havingCondition
+        );
+
+        return $this->dataClassRepository->retrieves($baseClass, $parameters);
     }
 
     /**

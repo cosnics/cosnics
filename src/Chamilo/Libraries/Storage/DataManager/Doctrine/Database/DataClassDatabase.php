@@ -852,7 +852,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $queryBuilder,
             $dataClassName,
             $parameters->getDataClassProperties());
-        $queryBuilder = $this->processGroupBy($queryBuilder, $parameters->getGroupBy());
 
         return $this->buildBasicRecordsSql($queryBuilder, $dataClassName, $parameters);
     }
@@ -873,6 +872,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $queryBuilder = $this->processOrderBy($queryBuilder, $parameters->get_order_by());
         $queryBuilder = $this->processLimit($queryBuilder, $parameters->get_count(), $parameters->get_offset());
         $queryBuilder = $this->processHaving($queryBuilder, $parameters->getHavingCondition());
+        $queryBuilder = $this->processGroupBy($queryBuilder, $parameters->getGroupBy());
 
         return $queryBuilder->getSQL();
     }

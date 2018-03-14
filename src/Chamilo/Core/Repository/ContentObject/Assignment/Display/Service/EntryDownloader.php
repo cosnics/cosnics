@@ -106,12 +106,10 @@ class EntryDownloader
 
     protected function getEntityArchiveFileName($entityType, $entityIdentifier)
     {
-        $entityRenderer = $this->getAssignmentDataProvider()->getEntityRendererForEntityTypeAndId(
+        $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
             $entityType,
             $entityIdentifier
         );
-
-        $entityName = $entityRenderer->getEntityName();
 
         $archiveFileNameParts = array();
         $archiveFileNameParts[] = $this->getAssignmentName();
@@ -326,12 +324,11 @@ class EntryDownloader
 
         foreach ($entries as $entry)
         {
-            $entityRenderer = $this->getAssignmentDataProvider()->getEntityRendererForEntityTypeAndId(
+            $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
                 $entry->getEntityType(),
                 $entry->getEntityId()
             );
 
-            $entityName = $entityRenderer->getEntityName();
             $contentObject = $entry->getContentObject();
             if (!$contentObject instanceof File)
             {

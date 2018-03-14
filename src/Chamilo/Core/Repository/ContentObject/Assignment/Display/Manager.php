@@ -174,17 +174,17 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 continue;
             }
 
-            $availableEntities[$availableEntityId] = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
+            $availableEntities[$availableEntityId] = $this->getDataProvider()->renderEntityNameByEntityTypeAndEntityId(
                 $this->getEntityType(), $availableEntityId
-            )->getEntityName();
+            );
         }
 
         $parameters['HAS_MULTIPLE_ENTITIES'] = count($availableEntityIds) > 1;
         $parameters['AVAILABLE_ENTITIES'] = $availableEntities;
 
-        $parameters['ENTITY_NAME'] = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
+        $parameters['ENTITY_NAME'] = $this->getDataProvider()->renderEntityNameByEntityTypeAndEntityId(
             $this->getEntityType(), $this->getEntityIdentifier()
-        )->getEntityName();
+        );
 
         $parameters['ENTITY_TYPE_PLURAL'] =
             strtolower($this->getDataProvider()->getPluralEntityNameByType($this->getEntityType()));

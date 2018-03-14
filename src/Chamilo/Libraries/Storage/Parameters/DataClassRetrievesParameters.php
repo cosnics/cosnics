@@ -1,6 +1,8 @@
 <?php
+
 namespace Chamilo\Libraries\Storage\Parameters;
 
+use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -23,11 +25,17 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      * @param boolean $distinct
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $havingCondition
+     * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
      */
-    public function __construct(Condition $condition = null, $count = null, $offset = null, $orderBy = array(), Joins $joins = null,
-        $distinct = false)
+    public function __construct(
+        Condition $condition = null, $count = null, $offset = null, $orderBy = array(), Joins $joins = null,
+        $distinct = false, GroupBy $groupBy = null, Condition $havingCondition = null
+    )
     {
-        DataClassParameters::__construct($condition, $joins, null, $orderBy, null, null, $count, $offset, $distinct);
+        DataClassParameters::__construct(
+            $condition, $joins, null, $orderBy, $groupBy, $havingCondition, $count, $offset, $distinct
+        );
     }
 
     /**
@@ -43,6 +51,7 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
     /**
      *
      * @param integer $count
+     *
      * @deprecated Use getCount() now
      */
     public function set_count($count)
@@ -63,6 +72,7 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
     /**
      *
      * @param integer $offset
+     *
      * @deprecated Use setOffset() now
      */
     public function set_offset($offset)
@@ -83,6 +93,7 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
     /**
      *
      * @param boolean $distinct
+     *
      * @deprecated Use setDistinct() now
      */
     public function set_distinct($distinct)
@@ -94,6 +105,7 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
      * Generate an instance based on the input or throw an exception if no compatible input was found
      *
      * @param mixed $parameter
+     *
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
      * @throws Exception
      */

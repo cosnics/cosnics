@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\S
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -477,17 +478,29 @@ class AssignmentDataProvider
     }
 
     /**
+     * @param int $entityType
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      *
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer\EntityRenderer
+     * @return String
      */
-    public function getEntityRendererForEntityTypeAndId($entityType, $entityId)
+    public function renderEntityNameByEntityTypeAndEntity($entityType, DataClass $entity)
     {
         $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
 
-        return $entityService->getEntityRendererForEntityId($this, $entityId);
+        return $entityService->renderEntityName($entity);
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+
+        return $entityService->renderEntityNameById($entityId);
     }
 
     /**

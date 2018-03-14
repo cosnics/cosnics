@@ -41,12 +41,12 @@ class EntryNavigator
     protected $nextEntry;
 
     /**
-     * @var string[]
+     * @var DataClass
      */
     protected $previousEntity;
 
     /**
-     * @var string[]
+     * @var DataClass
      */
     protected $currentEntity;
 
@@ -56,12 +56,12 @@ class EntryNavigator
     protected $currentEntityPosition;
 
     /**
-     * @var string[]
+     * @var DataClass
      */
     protected $nextEntity;
 
     /**
-     * @var string[][]
+     * @var DataClass[]
      */
     protected $entities;
 
@@ -119,7 +119,7 @@ class EntryNavigator
 
         foreach ($this->entities as $entity)
         {
-            if ($entity[Entry::PROPERTY_ENTITY_ID] == $currentEntityIdentifier)
+            if ($entity->getId() == $currentEntityIdentifier)
             {
                 $this->currentEntity = $entity;
                 continue;
@@ -214,7 +214,7 @@ class EntryNavigator
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
      *
-     * @return string[]
+     * @return DataClass
      */
     public function getNextEntity(
         AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
@@ -231,7 +231,7 @@ class EntryNavigator
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
      *
-     * @return string[]
+     * @return DataClass
      */
     public function getPreviousEntity(
         AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
@@ -248,7 +248,7 @@ class EntryNavigator
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
      *
-     * @return string[]
+     * @return DataClass
      */
     public function getCurrentEntity(
         AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
@@ -277,7 +277,7 @@ class EntryNavigator
     }
 
     /**
-     * @return \string[][]
+     * @return DataClass[]
      */
     public function getEntities()
     {
