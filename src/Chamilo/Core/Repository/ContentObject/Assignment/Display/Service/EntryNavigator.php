@@ -41,12 +41,12 @@ class EntryNavigator
     protected $nextEntry;
 
     /**
-     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @var string[]
      */
     protected $previousEntity;
 
     /**
-     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @var string[]
      */
     protected $currentEntity;
 
@@ -56,9 +56,14 @@ class EntryNavigator
     protected $currentEntityPosition;
 
     /**
-     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @var string[]
      */
     protected $nextEntity;
+
+    /**
+     * @var string[][]
+     */
+    protected $entities;
 
     /**
      * Calculates the position of the current entry and the current entity
@@ -109,10 +114,10 @@ class EntryNavigator
             }
         }
 
-        $entities = $assignmentDataProvider->findEntitiesWithEntriesByEntityType($currentEntityType);
+        $this->entities = $assignmentDataProvider->findEntitiesWithEntriesByEntityType($currentEntityType);
         $this->currentEntityPosition = 1;
 
-        foreach ($entities as $entity)
+        foreach ($this->entities as $entity)
         {
             if ($entity[Entry::PROPERTY_ENTITY_ID] == $currentEntityIdentifier)
             {
@@ -209,7 +214,7 @@ class EntryNavigator
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
      *
-     * @return DataClass
+     * @return string[]
      */
     public function getNextEntity(
         AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
@@ -226,7 +231,7 @@ class EntryNavigator
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
      *
-     * @return DataClass
+     * @return string[]
      */
     public function getPreviousEntity(
         AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
@@ -243,7 +248,7 @@ class EntryNavigator
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
      *
-     * @return DataClass
+     * @return string[]
      */
     public function getCurrentEntity(
         AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
@@ -269,6 +274,14 @@ class EntryNavigator
     {
         $this->calculateNavigatorOptions($assignmentDataProvider, $currentEntry, $currentEntityType, $currentEntityIdentifier);
         return $this->currentEntityPosition;
+    }
+
+    /**
+     * @return \string[][]
+     */
+    public function getEntities()
+    {
+        return $this->entities;
     }
 
 }

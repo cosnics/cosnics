@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\Translation\Translator;
@@ -25,6 +26,11 @@ class PublicationForm extends ContentObjectPublicationForm
     protected $translator;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository
+     */
+    private $publicationRepository;
+
+    /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $form_type
@@ -34,12 +40,15 @@ class PublicationForm extends ContentObjectPublicationForm
      * @param boolean $is_course_admin
      * @param array $selectedContentObjects
      *
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository $publicationRepository
+     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function __construct(
         User $user, $form_type, $publications, $course, $action, $is_course_admin,
-        $selectedContentObjects = array(), Translator $translator
+        $selectedContentObjects = array(), Translator $translator, PublicationRepository $publicationRepository
     )
     {
         $this->translator = $translator;
@@ -55,10 +64,12 @@ class PublicationForm extends ContentObjectPublicationForm
             $selectedContentObjects
         );
 
-        if($form_type == self::TYPE_UPDATE)
+        if ($form_type == self::TYPE_UPDATE)
         {
             $this->setDefaultsForPublication($publications[0]);
         }
+
+        $this->publicationRepository = $publicationRepository;
     }
 
     /**
@@ -136,7 +147,7 @@ class PublicationForm extends ContentObjectPublicationForm
      */
     public function handle_form_submit()
     {
-        if(!parent::handle_form_submit())
+        if (!parent::handle_form_submit())
         {
             return false;
         }
@@ -146,7 +157,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         foreach ($publications as $publication)
         {
-            if($this->get_form_type() == self::TYPE_CREATE)
+            if ($this->get_form_type() == self::TYPE_CREATE)
             {
                 $success &= $this->handleCreateAction($publication);
             }
@@ -190,12 +201,14 @@ class PublicationForm extends ContentObjectPublicationForm
 
         try
         {
-            $publication = DataManager::getAssignmentPublicationByPublicationId($contentObjectPublication->getId());
+            $publication =
+                $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
+
             $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE]);
 
             return $publication->update();
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             return false;
         }
@@ -203,12 +216,12 @@ class PublicationForm extends ContentObjectPublicationForm
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function setDefaultsForPublication(ContentObjectPublication $contentObjectPublication)
     {
-        $publication = DataManager::getAssignmentPublicationByPublicationId($contentObjectPublication->getId());
+        $publication =
+            $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
+
         $this->setDefaults([Publication::PROPERTY_ENTITY_TYPE => $publication->getEntityType()]);
     }
 }

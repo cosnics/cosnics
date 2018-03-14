@@ -71,7 +71,8 @@ class PublicationUpdaterComponent extends Manager
             $this->get_url(),
             $is_course_admin,
             [],
-            $this->getTranslator()
+            $this->getTranslator(),
+            $this->getPublicationRepository()
         );
 
         if ($publication_form->validate() || $content_object->get_type() == 'introduction')
