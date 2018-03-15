@@ -270,6 +270,25 @@ class AssignmentRepository
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $entityType
+     *
+     * @param int $createdDate
+     *
+     * @return mixed
+     */
+    public function countEntriesByContentObjectPublicationWithCreatedDateLargerThan(
+        ContentObjectPublication $contentObjectPublication, $entityType, $createdDate
+    )
+    {
+        return $this->countEntriesByEntityTypeWithCreatedDateLargerThan(
+            $entityType,
+            $createdDate,
+            $this->getContentObjectPublicationCondition($contentObjectPublication)
+        );
+    }
+
+    /**
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param integer $entityType

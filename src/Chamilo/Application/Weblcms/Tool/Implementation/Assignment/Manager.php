@@ -34,40 +34,15 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\Us
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable,
     IntroductionTextSupportInterface
 {
-    // Browse actions
-    const ACTION_BROWSE_SUBMISSIONS = 'SubmissionsBrowser';
-    const ACTION_BROWSE_SUBMITTERS = 'SubmittersBrowser';
-    const ACTION_STUDENT_BROWSE_SUBMISSIONS = 'StudentSubmissionsBrowser';
-    // Submission actions
-    const ACTION_DELETE_SUBMISSION = 'SubmissionDeleter';
-    const ACTION_DOWNLOAD_SUBMISSIONS = 'SubmissionsDownloader';
-    const ACTION_SUBMIT_SUBMISSION = 'SubmissionSubmit';
-    const ACTION_SUBMIT_SUBMISSON_CONFIRMATION = 'SubmissionSubmitConfirmation';
-    const ACTION_VIEW_SUBMISSION = 'SubmissionViewer';
     const ACTION_DISPLAY = 'Display';
 
-    // Feedback actions
-    const ACTION_DELETE_FEEDBACK = 'FeedbackDeleter';
-    const ACTION_EDIT_FEEDBACK = 'FeedbackUpdater';
-    const ACTION_GIVE_FEEDBACK = 'SubmissionFeedback';
     // Parameters
-    const PARAM_ATTACHMENT_TYPE = 'attachment_type';
-    const PARAM_FEEDBACK_ID = 'feedback_id';
     const PARAM_SUBMISSION = 'submission';
     const PARAM_SUBMITTER_TYPE = 'submitter_type';
     const PARAM_TARGET_ID = 'target_id';
-    const PARAM_TYPE = 'type';
+
     // Properties
-    const PROPERTY_DATE_SUBMITTED = 'DateSubmitted';
-    const PROPERTY_DESCRIPTION = 'Description';
-    const PROPERTY_FIRST_SUBMISSION = 'FirstSubmissionDate';
-    const PROPERTY_GROUP_MEMBERS = 'GroupMembers';
-    const PROPERTY_LAST_SUBMISSION = 'LastSubmissionDate';
-    const PROPERTY_NAME = 'Name';
     const PROPERTY_NUMBER_OF_SUBMISSIONS = 'NumberOfSubmissions';
-    const PROPERTY_NUMBER_OF_FEEDBACKS = 'NumberOfFeedbacks';
-    const PROPERTY_SCORE = 'Score';
-    const PROPERTY_TITLE = 'Title';
 
     public function get_available_browser_types()
     {
@@ -180,9 +155,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $assignmentService = $this->getAssignmentService();
 
-        $dataProvider = new AssignmentDataProvider(
-            $this->get_application()->getTranslator(), $assignmentService
-        );
+        $dataProvider = new AssignmentDataProvider($assignmentService);
 
         $dataProvider->addEntityService(
             Entry::ENTITY_TYPE_USER, new UserEntityService($assignmentService, $this->getTranslator())

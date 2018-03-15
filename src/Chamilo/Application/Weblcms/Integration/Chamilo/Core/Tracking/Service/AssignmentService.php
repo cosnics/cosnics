@@ -51,6 +51,25 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $entityType
+     *
+     * @param int $createdDate
+     *
+     * @return mixed
+     */
+    public function countEntriesByContentObjectPublicationWithCreatedDateLargerThan(
+        ContentObjectPublication $contentObjectPublication, $entityType, $createdDate
+    )
+    {
+        return $this->assignmentRepository->countEntriesByContentObjectPublicationWithCreatedDateLargerThan(
+            $contentObjectPublication,
+            $entityType,
+            $createdDate
+        );
+    }
+
+    /**
      *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param integer $entityType

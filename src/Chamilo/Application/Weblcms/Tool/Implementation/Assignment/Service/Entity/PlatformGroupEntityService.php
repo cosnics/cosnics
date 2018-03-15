@@ -44,12 +44,12 @@ class PlatformGroupEntityService implements EntityServiceInterface
      */
     protected $targetPlatformGroupIds = [];
 
-
     /**
      * UserEntityService constructor.
      *
      * @param AssignmentService $assignmentService
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\User\Service\UserService $userService
      */
     public function __construct(AssignmentService $assignmentService, Translator $translator, UserService $userService)
     {

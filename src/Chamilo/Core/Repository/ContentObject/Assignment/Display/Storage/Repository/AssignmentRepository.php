@@ -464,7 +464,9 @@ abstract class AssignmentRepository
      * @param string $baseClass
      * @param PropertyConditionVariable $baseVariable
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     *
+     * TODO: changed from records to dataclass so remove properties in calls
      */
     protected function findTargetsForEntityTypeWithEntries(
         $entityType, Condition $condition = null, Condition $joinCondition = null, $offset, $count, $orderBy,
@@ -516,6 +518,31 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->retrieves($baseClass, $parameters);
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $createdDate
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return int
+     */
+    public function countEntriesByEntityTypeWithCreatedDateLargerThan(
+        $entityType, $createdDate, Condition $condition = null
+    )
+    {
+        $conditions = [];
+
+        $conditions[] = $this->getEntityTypeCondition($entityType, $condition);
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED),
+            ComparisonCondition::GREATER_THAN, $createdDate
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters($condition));
     }
 
     /**

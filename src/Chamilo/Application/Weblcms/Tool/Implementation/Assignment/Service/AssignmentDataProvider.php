@@ -25,11 +25,6 @@ class AssignmentDataProvider
     implements \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
 {
     /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    protected $translator;
-
-    /**
      * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
      */
     protected $assignmentService;
@@ -57,12 +52,10 @@ class AssignmentDataProvider
     /**
      * AssignmentDataProvider constructor.
      *
-     * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService
      */
-    public function __construct(Translator $translator, AssignmentService $assignmentService)
+    public function __construct(AssignmentService $assignmentService)
     {
-        $this->translator = $translator;
         $this->assignmentService = $assignmentService;
     }
 
