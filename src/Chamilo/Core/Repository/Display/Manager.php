@@ -240,7 +240,7 @@ abstract class Manager extends Application
         
         return $this->get_url(
             array(
-                self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT, 
+                static::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
                 self::PARAM_ATTACHMENT_ID => $attachment->get_id(), 
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item_id));
     }

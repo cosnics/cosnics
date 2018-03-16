@@ -8,40 +8,39 @@
         <service
                 id="chamilo.application.weblcms.tool.implementation.assignment.service.assignment_data_provider"
                 class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider">
-            <!--<argument type="service" id="symfony.component.translation.translator" />-->
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
             <call method="addEntityService">
                 <argument type="constant">\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_USER</argument>
-                <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.user_entity_service" />
+                <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.user_entity_service" />
             </call>
             <call method="addEntityService">
                 <argument type="constant">\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_COURSE_GROUP</argument>
-                <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.course_group_entity_service" />
+                <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.course_group_entity_service" />
             </call>
             <call method="addEntityService">
                 <argument type="constant">\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_PLATFORM_GROUP</argument>
-                <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.platform_group_entity_service" />
+                <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.platform_group_entity_service" />
             </call>
         </service>
 
         <service
-                id="chamilo.application.weblcms.tool.implementation.assignment.service.user_entity_service"
-                class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\UserEntityService">
+                id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.user_entity_service"
+                class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\UserEntityService">
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
             <argument type="service" id="symfony.component.translation.translator" />
         </service>
 
         <service
-                id="chamilo.application.weblcms.tool.implementation.assignment.service.course_group_entity_service"
-                class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\CourseGroupEntityService">
+                id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.course_group_entity_service"
+                class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\CourseGroupEntityService">
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
             <argument type="service" id="symfony.component.translation.translator" />
             <argument type="service" id="chamilo.core.user.service.user_service" />
         </service>
 
         <service
-                id="chamilo.application.weblcms.tool.implementation.assignment.service.platform_group_entity_service"
-                class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\PlatformGroupEntityService">
+                id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.platform_group_entity_service"
+                class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\PlatformGroupEntityService">
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
             <argument type="service" id="symfony.component.translation.translator" />
             <argument type="service" id="chamilo.core.user.service.user_service" />

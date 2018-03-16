@@ -537,7 +537,7 @@ abstract class AssignmentRepository
         $conditions[] = $this->getEntityTypeCondition($entityType, $condition);
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED),
-            ComparisonCondition::GREATER_THAN, $createdDate
+            ComparisonCondition::GREATER_THAN, new StaticConditionVariable($createdDate)
         );
 
         $condition = new AndCondition($conditions);

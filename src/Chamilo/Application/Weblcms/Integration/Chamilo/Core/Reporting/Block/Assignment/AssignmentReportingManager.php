@@ -92,7 +92,7 @@ abstract class AssignmentReportingManager extends ToolBlock
     /**
      * Retrieves the course id from the url.
      *
-     * @return type the course id.
+     * @return int the course id.
      */
     public function get_course_id()
     {
@@ -102,7 +102,7 @@ abstract class AssignmentReportingManager extends ToolBlock
     /**
      * Retrieves the publication id from the url.
      *
-     * @return type the publication id.
+     * @return int the publication id.
      */
     public function get_publication_id()
     {
@@ -477,5 +477,25 @@ abstract class AssignmentReportingManager extends ToolBlock
 
                 return null;
         }
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
+     */
+    protected function getAssignmentService()
+    {
+        return $this->getService(
+            'chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service'
+        );
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository
+     */
+    protected function getPublicationRepository()
+    {
+        return $this->getService(
+            'chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository'
+        );
     }
 }

@@ -145,7 +145,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function getAssignmentService()
     {
-        return new AssignmentService(new AssignmentRepository($this->getDataClassRepository()));
+        return $this->getService('chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service');
     }
 
     /**
@@ -153,25 +153,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function getAssignmentDataProvider()
     {
-        $assignmentService = $this->getAssignmentService();
-
-        $dataProvider = new AssignmentDataProvider($assignmentService);
-
-        $dataProvider->addEntityService(
-            Entry::ENTITY_TYPE_USER, new UserEntityService($assignmentService, $this->getTranslator())
-        );
-
-        $dataProvider->addEntityService(
-            Entry::ENTITY_TYPE_PLATFORM_GROUP,
-            new PlatformGroupEntityService($assignmentService, $this->getTranslator(), $this->getUserService())
-        );
-
-        $dataProvider->addEntityService(
-            Entry::ENTITY_TYPE_COURSE_GROUP,
-            new CourseGroupEntityService($assignmentService, $this->getTranslator(), $this->getUserService())
-        );
-
-        return $dataProvider;
+        return $this->getService('chamilo.application.weblcms.tool.implementation.assignment.service.assignment_data_provider');
     }
 
     /**
@@ -191,13 +173,4 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         return $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
     }
-
-    /**
-     * @return \Chamilo\Core\User\Service\UserService
-     */
-    public function getUserService()
-    {
-        return $this->getService('chamilo.core.user.service.user_service');
-    }
-
 }

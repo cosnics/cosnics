@@ -21,6 +21,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -149,6 +150,12 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'NAVIGATOR_BUTTON_TOOLBAR' => $this->getNavigatorButtonToolbarRenderer()->render(),
             'ASSIGNMENT_TITLE' => $this->get_root_content_object()->get_title(),
             'ASSIGNMENT_RENDITION' => $this->renderAssignment(),
+            'ATTACHMENT_VIEWER_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
+                    self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__'
+                ]
+            )
         ];
 
         $baseParameters = $this->getAvailableEntitiesParameters($baseParameters);
@@ -189,12 +196,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'SHOW_AUTOMATIC_FEEDBACK' => $assignment->isAutomaticFeedbackVisible(),
             'AUTOMATIC_FEEDBACK_TEXT' => $assignment->get_automatic_feedback_text(),
             'AUTOMATIC_FEEDBACK_CONTENT_OBJECTS' => $contentObjects,
-            'ATTACHMENT_VIEWER_URL' => $this->get_url(
-                [
-                    self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
-                    self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__'
-                ]
-            )
         ];
 
         return array_merge($baseParameters, $extendParameters);
@@ -565,8 +566,16 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $buttonToolBar->addButtonGroup($entityNavigatorActions);
 
             $selectEntityButton = new DropdownButton(
-                $translator->getTranslation('SelectOtherEntity', ['ENTITY_TYPE' => strtolower($entityName)]),
+                $this->getDataProvider()->renderEntityNameByEntityTypeAndEntityId(
+                    $this->getEntityType(), $this->getEntityIdentifier()
+                ),
                 new FontAwesomeGlyph('user')
+            );
+
+            $selectEntityButton->addSubButton(
+                new SubButtonHeader(
+                    $translator->getTranslation('SelectOtherEntity', ['ENTITY_TYPE' => strtolower($entityName)])
+                )
             );
 
             $buttonToolBar->addItem($selectEntityButton);
@@ -576,18 +585,23 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             {
                 if ($entity->getId() == $this->getEntityIdentifier())
                 {
-                    continue;
+                    $classes = 'selected';
+                    $url = '';
                 }
+                else
+                {
+                    $url = $this->get_url(
+                        array(self::PARAM_ENTITY_ID => $entity->getId()), array(self::PARAM_ENTRY_ID)
+                    );
 
-                $url = $this->get_url(
-                    array(self::PARAM_ENTITY_ID => $entity->getId()), array(self::PARAM_ENTRY_ID)
-                );
+                    $classes = 'not-selected';
+                }
 
                 $selectEntityButton->addSubButton(
                     new SubButton(
                         $this->getDataProvider()->renderEntityNameByEntityTypeAndEntity(
                             $this->getEntityType(), $entity
-                        ), null, $url
+                        ), null, $url, SubButton::DISPLAY_LABEL, false, $classes
                     )
                 );
             }

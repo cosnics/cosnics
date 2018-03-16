@@ -2,11 +2,13 @@
 namespace Chamilo\Core\Reporting;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class ReportingBlock
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use DependencyInjectionContainerTrait;
     
     // Constants
     const PARAM_DISPLAY_MODE = "display_mode";
@@ -25,6 +27,7 @@ abstract class ReportingBlock
     {
         $this->parent = $parent;
         $this->vertical = $vertical;
+        $this->initializeContainer();
     }
 
     public function get_parent()

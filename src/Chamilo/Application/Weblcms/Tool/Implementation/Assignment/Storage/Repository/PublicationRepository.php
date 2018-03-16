@@ -5,7 +5,9 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -29,5 +31,20 @@ class PublicationRepository extends CommonDataClassRepository
         );
 
         return $this->dataClassRepository->retrieve(Publication::class, new DataClassRetrieveParameters($condition));
+    }
+
+    /**
+     * @param int[] $contentObjectPublicationIdentifiers
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication[]
+     */
+    public function findPublicationsByContentObjectPublicationIdentifiers($contentObjectPublicationIdentifiers)
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
+            $contentObjectPublicationIdentifiers
+        );
+
+        return $this->dataClassRepository->retrieves(Publication::class, new DataClassRetrievesParameters($condition));
     }
 }

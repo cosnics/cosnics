@@ -37,38 +37,6 @@ class AssignmentScoresTemplate extends ReportingTemplate
         $custom_breadcrumbs[] = new Breadcrumb($this->get_url(), Translation::get('AssignmentScores'));
         $this->set_custom_breadcrumb_trail($custom_breadcrumbs);
         
-        // Calculate number of assignments
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
-                ContentObjectPublication::PROPERTY_COURSE_ID), 
-            new StaticConditionVariable($this->course_id));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
-                ContentObjectPublication::PROPERTY_TOOL), 
-            new StaticConditionVariable(Assignment::class_name()));
-        $condition = new AndCondition($conditions);
-        
-        $order_by = new OrderBy(
-            new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
-                ContentObjectPublication::PROPERTY_MODIFIED_DATE));
-        
-        $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
-            $condition, 
-            $order_by);
-        
-        $this->size = $publications->size();
-        
-        $publications_array = $publications->as_array();
-        
-        foreach ($publications_array as $publication)
-        {
-            $this->th_titles[] = $publication->get_content_object()->get_title();
-        }
-        
         $this->add_reporting_block(new AssignmentUserScoresBlock($this, true));
         $this->add_reporting_block(new AssignmentCourseGroupScoresBlock($this, true));
         $this->add_reporting_block(new AssignmentPlatformGroupScoresBlock($this, true));

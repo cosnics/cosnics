@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
@@ -27,6 +28,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class BlockRenderer
 {
+    use DependencyInjectionContainerTrait;
+
     const PARAM_ACTION = 'block_action';
     const BLOCK_PROPERTY_ID = 'id';
     const BLOCK_PROPERTY_NAME = 'name';
@@ -82,6 +85,8 @@ class BlockRenderer
         $this->homeService = $homeService;
         $this->block = $block;
         $this->source = $source;
+
+        $this->initializeContainer();
     }
 
     /**

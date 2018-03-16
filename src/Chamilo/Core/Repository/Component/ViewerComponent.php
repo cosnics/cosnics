@@ -83,8 +83,6 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
             $this->object = $object;
 
-            $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($this->object);
-
             if (!RightsService::getInstance()->canViewContentObject(
                 $this->get_user(),
                 $this->object,
@@ -101,6 +99,8 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 ) && \Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::is_content_object_editable(
                     $this->object->getId()
                 );
+
+            $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($this->object);
 
             $display = ContentObjectRenditionImplementation::factory(
                 $object,
