@@ -1,9 +1,11 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
 use Chamilo\Configuration\Configuration;
@@ -16,6 +18,13 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -58,7 +67,7 @@ abstract class AssignmentReportingManager extends ToolBlock
                 $colour = 'green';
             }
 
-            return '<span style="color:' . $colour . '">' . $score . '%</span>';
+            return '<span style="color:' . $colour . '">' . round($score, 2) . '%</span>';
         }
         else
         {
@@ -477,6 +486,174 @@ abstract class AssignmentReportingManager extends ToolBlock
 
                 return null;
         }
+    }
+
+    /**
+     * @param int $courseId
+     * @param int $publicationId
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return string
+     */
+    protected function getEntityUrl($courseId, $publicationId, $entityType, $entityId)
+    {
+        $params = array();
+
+        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $courseId;
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_ACTION] =
+            \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
+            ClassnameUtilities::getInstance()->getClassNameFromNamespace(
+                Assignment::class_name(),
+                true
+            );
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
+            \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY;
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publicationId;
+
+        $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION] =
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_ENTRY;
+
+        $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE] = $entityType;
+        $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID] = $entityId;
+
+        $redirect = new Redirect($params);
+        $link = $redirect->getUrl();
+
+        return $link;
+    }
+
+    /**
+     * @param int $course_id
+     * @param int $publicationId
+     *
+     * @return string
+     */
+    protected function getAssignmentUrl($course_id, $publicationId)
+    {
+        $params = array();
+
+        $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
+        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
+
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
+            ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class_name(), true);
+
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publicationId;
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
+            \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY;
+
+        $redirect = new Redirect($params);
+
+        return $redirect->getUrl();
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @return string
+     */
+    protected function getAssignmentUrlForContentObjectPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        return $this->getAssignmentUrl($contentObjectPublication->get_course_id(), $contentObjectPublication->getId());
+    }
+
+    /**
+     * @param int $course_id
+     * @param int $entityType
+     *
+     * @return array
+     */
+    protected function retrieveAssignmentPublicationsForCourse($course_id, $entityType = null)
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublication::class_name(),
+                ContentObjectPublication::PROPERTY_COURSE_ID
+            ),
+            new StaticConditionVariable($course_id)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublication::class_name(),
+                ContentObjectPublication::PROPERTY_TOOL
+            ),
+            new StaticConditionVariable(
+                ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class_name())
+            )
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
+            new StaticConditionVariable(Assignment::class)
+        );
+
+        $condition = new AndCondition($conditions);
+        $order_by = new OrderBy(
+            new PropertyConditionVariable(
+                ContentObjectPublication::class_name(),
+                ContentObjectPublication::PROPERTY_MODIFIED_DATE
+            )
+        );
+
+        $publication_resultset =
+            \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+                $condition,
+                $order_by
+            );
+
+        $publications = !empty($entityType) ?
+            $this->filterPublicationsForEntityType($publication_resultset, $entityType) :
+            $publication_resultset->as_array();
+
+        return $publications;
+    }
+
+    /**
+     * @param ResultSet $publication_resultset
+     * @param int $entityType
+     *
+     * @return array
+     */
+    protected function filterPublicationsForEntityType($publication_resultset, $entityType)
+    {
+        $publicationsById = [];
+        $assignmentPublicationsById = [];
+
+        while ($publication = $publication_resultset->next_result())
+        {
+            $publicationsById[$publication[DataClass::PROPERTY_ID]] = $publication;
+        }
+
+        /** @var Publication[] $assignmentPublications */
+        $assignmentPublications =
+            $this->getPublicationRepository()->findPublicationsByContentObjectPublicationIdentifiers(
+                array_keys($publicationsById)
+            );
+
+        foreach ($assignmentPublications as $assignmentPublication)
+        {
+            $assignmentPublicationsById[$assignmentPublication->getPublicationId()] = $assignmentPublication;
+        }
+
+        $publications = [];
+
+        foreach ($publicationsById as $publicationId => $publication)
+        {
+            $assignmentPublication = $assignmentPublicationsById[$publicationId];
+            if ($assignmentPublication instanceof Publication &&
+                $assignmentPublication->getEntityType() == $entityType)
+            {
+                $publications[] = $publication;
+            }
+        }
+
+        return $publications;
     }
 
     /**

@@ -43,6 +43,12 @@ use PhpParser\Builder\Property;
  */
 abstract class AssignmentRepository
 {
+    const ENTRIES_COUNT = 'entries_count';
+    const LAST_ENTRY_SUBMITTED_DATE = 'last_entry_submitted_date';
+    const AVERAGE_SCORE = 'average_score';
+    const MINIMUM_SCORE = 'minimum_score';
+    const MAXIMUM_SCORE = 'maximum_score';
+
     /**
      * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
@@ -1012,6 +1018,80 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->retrieve($this->getEntryClassName(), $retrieveParameters);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassProperties
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Joins|null $joins
+     * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findEntryStatistics(
+        DataClassProperties $dataClassProperties, Condition $condition, Joins $joins = null, GroupBy $groupBy = null
+    )
+    {
+        $dataClassProperties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::COUNT,
+                new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID),
+                self::ENTRIES_COUNT
+            )
+        );
+
+        $dataClassProperties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::MAX,
+                new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED),
+                self::LAST_ENTRY_SUBMITTED_DATE
+            )
+        );
+
+        $dataClassProperties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::AVERAGE,
+                new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_SCORE),
+                self::AVERAGE_SCORE
+            )
+        );
+
+        $dataClassProperties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::MIN,
+                new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_SCORE),
+                self::MINIMUM_SCORE
+            )
+        );
+
+        $dataClassProperties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::MAX,
+                new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_SCORE),
+                self::MAXIMUM_SCORE
+            )
+        );
+
+        if(!$joins instanceof Joins)
+        {
+            $joins = new Joins();
+        }
+
+        $joins->add(
+            new Join(
+                $this->getScoreClassName(),
+                new EqualityCondition(
+                    new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_ENTRY_ID),
+                    new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID)
+                ),
+                Join::TYPE_LEFT
+            )
+        );
+
+        return $this->dataClassRepository->records(
+            $this->getEntryClassName(),
+            new RecordRetrievesParameters($dataClassProperties, $condition, null, null, [], $joins, $groupBy)
+        );
     }
 
     /**

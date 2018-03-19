@@ -28,21 +28,21 @@ class CourseAssignmentSubmittersTemplate extends ReportingTemplate
         $this->publication_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
         
         $assignment = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class_name(),
             $this->publication_id)->get_content_object();
         
         $this->init_parameters();
         $this->add_reporting_block(new AssignmentInformationBlock($this));
         
-        if (! $assignment->get_allow_group_submissions())
-        {
-            $this->add_reporting_block(new AssignmentUsersBlock($this));
-        }
-        else
-        {
-            $this->add_reporting_block(new AssignmentCourseGroupsBlock($this));
-            $this->add_reporting_block(new AssignmentPlatformGroupsBlock($this));
-        }
+//        if (! $assignment->get_allow_group_submissions())
+//        {
+//            $this->add_reporting_block(new AssignmentUsersBlock($this));
+//        }
+//        else
+//        {
+//            $this->add_reporting_block(new AssignmentCourseGroupsBlock($this));
+//            $this->add_reporting_block(new AssignmentPlatformGroupsBlock($this));
+//        }
         
         $custom_breadcrumbs = array();
         $custom_breadcrumbs[] = new Breadcrumb($this->get_url(), $assignment->get_title());

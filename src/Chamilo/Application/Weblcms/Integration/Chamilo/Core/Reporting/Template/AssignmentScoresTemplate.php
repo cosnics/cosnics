@@ -31,8 +31,6 @@ class AssignmentScoresTemplate extends ReportingTemplate
     {
         parent::__construct($parent);
         
-        $this->init_parameters();
-        
         $custom_breadcrumbs = array();
         $custom_breadcrumbs[] = new Breadcrumb($this->get_url(), Translation::get('AssignmentScores'));
         $this->set_custom_breadcrumb_trail($custom_breadcrumbs);
@@ -40,19 +38,5 @@ class AssignmentScoresTemplate extends ReportingTemplate
         $this->add_reporting_block(new AssignmentUserScoresBlock($this, true));
         $this->add_reporting_block(new AssignmentCourseGroupScoresBlock($this, true));
         $this->add_reporting_block(new AssignmentPlatformGroupScoresBlock($this, true));
-    }
-
-    private function init_parameters()
-    {
-        $this->course_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
-        if ($this->course_id)
-        {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE, $this->course_id);
-        }
-        $sel = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
-        if ($sel)
-        {
-            $this->set_parameter('sel', $sel);
-        }
     }
 }

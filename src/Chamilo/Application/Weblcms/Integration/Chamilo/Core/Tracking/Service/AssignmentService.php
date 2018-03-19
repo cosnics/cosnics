@@ -540,11 +540,23 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | Entry[]
      */
     public function findEntriesByContentObjectPublication(ContentObjectPublication $contentObjectPublication)
     {
         return $this->assignmentRepository->findEntriesByContentObjectPublication($contentObjectPublication);
+    }
+
+    /**
+     * @param int[] $contentObjectPublicationIdentifiers
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findEntryStatisticsByContentObjectPublicationIdentifiers($contentObjectPublicationIdentifiers = [])
+    {
+        return $this->assignmentRepository->findEntryStatisticsByContentObjectPublicationIdentifiers(
+            $contentObjectPublicationIdentifiers
+        );
     }
 
     /**

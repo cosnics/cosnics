@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
@@ -12,6 +13,10 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\GroupBy;
+use Chamilo\Libraries\Storage\Query\Join;
+use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -508,6 +513,48 @@ class AssignmentRepository
     }
 
     /**
+     * @param int[] $contentObjectPublicationIdentifiers
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findEntryStatisticsByContentObjectPublicationIdentifiers($contentObjectPublicationIdentifiers = [])
+    {
+        $contentObjectPublicationIdProperty =
+            new PropertyConditionVariable(Entry::class, Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID);
+
+        $properties = new DataClassProperties();
+        $properties->add($contentObjectPublicationIdProperty);
+        $properties->add(new PropertyConditionVariable(Entry::class, Entry::PROPERTY_ENTITY_TYPE));
+
+        $groupBy = new GroupBy();
+        $groupBy->add($contentObjectPublicationIdProperty);
+
+        $joins = new Joins();
+        $joins->add(
+            new Join(
+                Publication::class,
+                new AndCondition(
+                    [
+                        new EqualityCondition(
+                            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
+                            $contentObjectPublicationIdProperty
+                        ),
+                        new EqualityCondition(
+                            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ENTITY_TYPE),
+                            new PropertyConditionVariable(Entry::class, Entry::PROPERTY_ENTITY_TYPE)
+                        )
+                    ]
+                )
+            )
+        );
+
+        return $this->findEntryStatistics(
+            $properties, $this->getContentObjectPublicationConditionByIdentifiers($contentObjectPublicationIdentifiers),
+            $joins, $groupBy
+        );
+    }
+
+    /**
      * @param ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
@@ -536,6 +583,33 @@ class AssignmentRepository
                 Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
             ),
             new StaticConditionVariable($contentObjectPublicationIdentifier)
+        );
+
+        $conditions = array();
+
+        ($condition instanceof Condition) ? $conditions[] = $condition : null;
+
+        $conditions[] = $contentObjectPublicationCondition;
+
+        return new AndCondition($conditions);
+    }
+
+    /**
+     * @param int[] $contentObjectPublicationIdentifiers
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     */
+    protected function getContentObjectPublicationConditionByIdentifiers(
+        $contentObjectPublicationIdentifiers = [], Condition $condition = null
+    )
+    {
+        $contentObjectPublicationCondition = new InCondition(
+            new PropertyConditionVariable(
+                $this->getEntryClassName(),
+                Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
+            ),
+            $contentObjectPublicationIdentifiers
         );
 
         $conditions = array();
