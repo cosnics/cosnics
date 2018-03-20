@@ -555,6 +555,22 @@ class AssignmentRepository
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param $entityType
+     * @param $entityId
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findEntryStatisticsForEntityByContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityId
+    )
+    {
+        return $this->findEntryStatisticsForEntity(
+            $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        );
+    }
+
+    /**
      * @param ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *

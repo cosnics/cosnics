@@ -265,6 +265,16 @@ class CourseGroupEntityService implements EntityServiceInterface
     }
 
     /**
+     * @param string[] $entityArray
+     *
+     * @return string
+     */
+    public function renderEntityNameByArray($entityArray = [])
+    {
+        return $entityArray[CourseGroup::PROPERTY_NAME];
+    }
+
+    /**
      * @param int $entityId
      *
      * @return String

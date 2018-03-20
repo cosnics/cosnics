@@ -561,6 +561,22 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param $entityType
+     * @param $entityId
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findEntryStatisticsForEntityByContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityId
+    )
+    {
+        return $this->assignmentRepository->findEntryStatisticsForEntityByContentObjectPublication(
+            $contentObjectPublication, $entityType, $entityId
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param int $entityType
      * @param int $entityIdentifier
      *

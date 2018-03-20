@@ -1,10 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentCourseGroupsBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentInformationBlock;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentPlatformGroupsBlock;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentUsersBlock;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentEntitiesBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -33,17 +31,8 @@ class CourseAssignmentSubmittersTemplate extends ReportingTemplate
         
         $this->init_parameters();
         $this->add_reporting_block(new AssignmentInformationBlock($this));
-        
-//        if (! $assignment->get_allow_group_submissions())
-//        {
-//            $this->add_reporting_block(new AssignmentUsersBlock($this));
-//        }
-//        else
-//        {
-//            $this->add_reporting_block(new AssignmentCourseGroupsBlock($this));
-//            $this->add_reporting_block(new AssignmentPlatformGroupsBlock($this));
-//        }
-        
+        $this->add_reporting_block(new AssignmentEntitiesBlock($this));
+
         $custom_breadcrumbs = array();
         $custom_breadcrumbs[] = new Breadcrumb($this->get_url(), $assignment->get_title());
         $this->set_custom_breadcrumb_trail($custom_breadcrumbs);

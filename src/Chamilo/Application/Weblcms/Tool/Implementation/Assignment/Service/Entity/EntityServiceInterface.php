@@ -27,7 +27,7 @@ interface EntityServiceInterface
      * @param int $count
      * @param array $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function retrieveEntities(
         ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
@@ -116,6 +116,13 @@ interface EntityServiceInterface
      * @return String
      */
     public function renderEntityName(DataClass $entity);
+
+    /**
+     * @param string[] $entityArray
+     *
+     * @return string
+     */
+    public function renderEntityNameByArray($entityArray = []);
 
     /**
      * @param int $entityId

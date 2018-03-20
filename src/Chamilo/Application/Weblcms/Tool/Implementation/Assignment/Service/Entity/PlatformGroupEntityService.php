@@ -255,6 +255,16 @@ class PlatformGroupEntityService implements EntityServiceInterface
     }
 
     /**
+     * @param string[] $entityArray
+     *
+     * @return string
+     */
+    public function renderEntityNameByArray($entityArray = [])
+    {
+        return $entityArray[Group::PROPERTY_NAME];
+    }
+
+    /**
      * @param int $entityId
      *
      * @return String

@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
@@ -139,39 +140,6 @@ abstract class AssignmentReportingManager extends ToolBlock
     }
 
     /**
-     * Returns the given type of score from the given score trackers.
-     * This will return the average score by default.
-     *
-     * @param $score_trackers \application\weblcms\integration\core\tracking\tracker\SubmissionScore The score trackers
-     * @param $score_type int The type of score you want
-     *
-     * @return int The score from the given type
-     */
-    protected function get_score_by_type($score_trackers, $score_type)
-    {
-        switch ($score_type)
-        {
-            case self::SCORE_TYPE_AVG :
-                return $this->get_avg_score($score_trackers);
-
-            case self::SCORE_TYPE_MIN :
-                return $this->get_min_score($score_trackers);
-
-            case self::SCORE_TYPE_MAX :
-                return $this->get_max_score($score_trackers);
-
-            case self::SCORE_TYPE_FIRST :
-                return $this->get_first_score($score_trackers);
-
-            case self::SCORE_TYPE_LAST :
-                return $this->get_last_score($score_trackers);
-
-            default :
-                return $this->get_avg_score($score_trackers);
-        }
-    }
-
-    /**
      * Returns the average score from the given score trackers.
      *
      * @param $score_trackers \application\weblcms\integration\core\tracking\tracker\SubmissionScore The score trackers
@@ -250,98 +218,6 @@ abstract class AssignmentReportingManager extends ToolBlock
         }
 
         return round($score, 2);
-    }
-
-    /**
-     * Returns the first score from the given score trackers.
-     *
-     * @param $score_trackers \application\weblcms\integration\core\tracking\tracker\SubmissionScore The score trackers
-     *        used to
-     *        determine the first score.
-     *
-     * @return int The first score
-     */
-    protected function get_first_score($score_trackers)
-    {
-        if (!$score_trackers || count($score_trackers) < 1)
-        {
-            return null;
-        }
-        $score = null;
-        $score_modified = null;
-
-        foreach ($score_trackers as $score_tracker)
-        {
-            if (is_null($score) || $score_tracker->get_modified() < $score_modified)
-            {
-                $score_modified = $score_tracker->get_modified();
-                $score = $score_tracker->get_score();
-            }
-        }
-
-        return round($score, 2);
-    }
-
-    /**
-     * Returns the last score from the given score trackers.
-     *
-     * @param $score_trackers \application\weblcms\integration\core\tracking\tracker\SubmissionScore The score trackers
-     *        used to
-     *        determine the last score.
-     *
-     * @return int The last score.
-     */
-    protected function get_last_score($score_trackers)
-    {
-        if (!$score_trackers || count($score_trackers) < 1)
-        {
-            return null;
-        }
-        $score = null;
-        $score_modified = null;
-
-        foreach ($score_trackers as $score_tracker)
-        {
-            if (is_null($score) || $score_tracker->get_modified() > $score_modified)
-            {
-                $score_modified = $score_tracker->get_modified();
-                $score = $score_tracker->get_score();
-            }
-        }
-
-        return round($score, 2);
-    }
-
-    /**
-     * Generates an HTML link to the assignment tool using the name of the publication passed.
-     *
-     * @param $publication_id int The id of the publication.
-     *
-     * @return string The HTML representation of the link.
-     */
-    protected function generate_assignment_name_link($publication_id)
-    {
-        $assignment = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
-            $publication_id
-        )->get_content_object();
-        $params = array();
-        $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->get_course_id();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
-            ClassnameUtilities::getInstance()->getClassNameFromNamespace(
-                Assignment::class_name(),
-                true
-            );
-        $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
-            \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_BROWSE_SUBMITTERS;
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publication_id;
-
-        $redirect = new Redirect($params);
-        $url_title = $redirect->getUrl();
-
-        return '<a href="' . $url_title . '">' . $assignment->get_title() . '</a>';
     }
 
     /**
@@ -657,12 +533,62 @@ abstract class AssignmentReportingManager extends ToolBlock
     }
 
     /**
+     * @param int $entityType
+     *
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface
+     */
+    protected function getEntityServiceForEntityType($entityType)
+    {
+        switch($entityType)
+        {
+            case Entry::ENTITY_TYPE_COURSE_GROUP:
+                return $this->getCourseGroupEntityService();
+            case Entry::ENTITY_TYPE_PLATFORM_GROUP:
+                return $this->getPlatformGroupEntityService();
+            case Entry::ENTITY_TYPE_USER:
+            default:
+                return $this->getUserEntityService();
+
+        }
+    }
+
+    /**
      * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
      */
     protected function getAssignmentService()
     {
         return $this->getService(
             'chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service'
+        );
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\UserEntityService
+     */
+    protected function getUserEntityService()
+    {
+        return $this->getService(
+            'chamilo.application.weblcms.tool.implementation.assignment.service.entity.user_entity_service'
+        );
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\PlatformGroupEntityService
+     */
+    protected function getPlatformGroupEntityService()
+    {
+        return $this->getService(
+            'chamilo.application.weblcms.tool.implementation.assignment.service.entity.platform_group_entity_service'
+        );
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\CourseGroupEntityService
+     */
+    protected function getCourseGroupEntityService()
+    {
+        return $this->getService(
+            'chamilo.application.weblcms.tool.implementation.assignment.service.entity.course_group_entity_service'
         );
     }
 

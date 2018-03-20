@@ -57,7 +57,7 @@ class UserEntityService implements EntityServiceInterface
      * @param int $count
      * @param array $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function retrieveEntities(
         ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
@@ -228,6 +228,16 @@ class UserEntityService implements EntityServiceInterface
         }
 
         return $entity->get_fullname();
+    }
+
+    /**
+     * @param string[] $entityArray
+     *
+     * @return string
+     */
+    public function renderEntityNameByArray($entityArray = [])
+    {
+        return User::fullname($entityArray[User::PROPERTY_FIRSTNAME], $entityArray[User::PROPERTY_LASTNAME]);
     }
 
     /**

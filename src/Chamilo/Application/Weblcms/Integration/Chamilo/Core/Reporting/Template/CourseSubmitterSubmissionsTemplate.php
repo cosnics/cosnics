@@ -29,7 +29,7 @@ class CourseSubmitterSubmissionsTemplate extends ReportingTemplate
         
         $this->init_parameters();
         $this->add_reporting_block($this->get_submitter_submissions_information());
-        $this->add_reporting_block(new AssignmentSubmitterSubmissionsBlock($this));
+//        $this->add_reporting_block(new AssignmentSubmitterSubmissionsBlock($this));
         
         $assignment = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 

@@ -1029,9 +1029,15 @@ abstract class AssignmentRepository
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findEntryStatistics(
-        DataClassProperties $dataClassProperties, Condition $condition, Joins $joins = null, GroupBy $groupBy = null
+        DataClassProperties $dataClassProperties = null, Condition $condition = null, Joins $joins = null,
+        GroupBy $groupBy = null
     )
     {
+        if (!$dataClassProperties instanceof DataClassProperties)
+        {
+            $dataClassProperties = new DataClassProperties();
+        }
+
         $dataClassProperties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::COUNT,
@@ -1072,7 +1078,7 @@ abstract class AssignmentRepository
             )
         );
 
-        if(!$joins instanceof Joins)
+        if (!$joins instanceof Joins)
         {
             $joins = new Joins();
         }
@@ -1092,6 +1098,24 @@ abstract class AssignmentRepository
             $this->getEntryClassName(),
             new RecordRetrievesParameters($dataClassProperties, $condition, null, null, [], $joins, $groupBy)
         );
+    }
+
+    /**
+     * Returns the statistics for a single entity
+     *
+     * @param int $entityType
+     * @param int $entityId
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findEntryStatisticsForEntity($entityType, $entityId, Condition $condition = null)
+    {
+        $entryStatistics = $this->findEntryStatistics(
+            new DataClassProperties(), $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition)
+        );
+
+        return $entryStatistics[0];
     }
 
     /**
