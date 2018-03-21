@@ -25,7 +25,7 @@ class ToolPublicationsBlock extends ToolBlock
     {
         $reporting_data = new ReportingData();
         
-        $course_id = $this->get_course_id();
+        $course_id = $this->getCourseId();
         $user_id = $this->get_user_id();
         $tool = Request::get(\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_REPORTING_TOOL);
         
@@ -90,8 +90,8 @@ class ToolPublicationsBlock extends ToolBlock
                 $content_object_publication->get_content_object_id());
             
             $des = $content_object->get_description();
-            $this->get_parent()->set_parameter($content_object_publication->get_id());
-            $this->set_params($course_id, $user_id, $tool, $this->get_publication_id());
+//            $this->get_parent()->set_parameter($content_object_publication->get_id());
+            $this->set_params($course_id, $user_id, $tool, $this->getPublicationId());
             
             $reporting_data->add_category($index);
             

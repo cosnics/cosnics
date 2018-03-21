@@ -26,12 +26,12 @@ class AssessmentAttemptsUserBlock extends AssessmentBlock
         
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
-            $this->get_publication_id());
+            $this->getPublicationId());
         
         $assessment = $publication->get_content_object();
         $isHotpotatoes = $assessment->get_type() == Hotpotatoes::class_name();
         
-        $assessment_attempts = $this->get_assessment_attempts($this->get_publication_id(), $this->get_user_id());
+        $assessment_attempts = $this->get_assessment_attempts($this->getPublicationId(), $this->get_user_id());
         while ($assessment_attempt = $assessment_attempts->next_result())
         {
             $start_time = DatetimeUtilities::format_locale_date(null, $assessment_attempt->get_start_time());

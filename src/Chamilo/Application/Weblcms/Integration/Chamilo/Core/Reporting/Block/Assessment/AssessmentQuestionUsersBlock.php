@@ -26,8 +26,8 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
         $reporting_data->set_rows($this->get_question_user_reporting_info_headers());
         $reporting_data->add_row(Translation::get('Details'));
         
-        $publication_id = $this->get_publication_id();
-        $course_id = $this->get_course_id();
+        $publication_id = $this->getPublicationId();
+        $course_id = $this->getCourseId();
         
         $question_id = Request::get(
             \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_QUESTION);

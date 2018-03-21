@@ -3,13 +3,16 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Templat
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentCourseGroupInformationBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentPlatformGroupInformationBlock;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentSubmitterSubmissionsBlock;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentSubmitterInformationBlock;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentEntriesBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentUserInformationBlock;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Reporting\ReportingTemplate;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Platform\Session\Request;
 
@@ -22,14 +25,13 @@ use Chamilo\Libraries\Platform\Session\Request;
  */
 class CourseSubmitterSubmissionsTemplate extends ReportingTemplate
 {
-
     public function __construct($parent)
     {
         parent::__construct($parent);
-        
+
         $this->init_parameters();
-        $this->add_reporting_block($this->get_submitter_submissions_information());
-//        $this->add_reporting_block(new AssignmentSubmitterSubmissionsBlock($this));
+        $this->add_reporting_block(new AssignmentSubmitterInformationBlock($this));
+        $this->add_reporting_block(new AssignmentEntriesBlock($this));
         
         $assignment = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
@@ -41,26 +43,7 @@ class CourseSubmitterSubmissionsTemplate extends ReportingTemplate
         $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_TARGET_ID] = null;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = CourseAssignmentSubmittersTemplate::class_name();
         $custom_breadcrumbs[] = new Breadcrumb($this->get_url($params), $assignment->get_title());
-        if ($this->submitter_type ==
-             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER)
-        {
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
-                (int) $this->target_id);
-            $custom_breadcrumbs[] = new Breadcrumb($this->get_url(), $user->get_fullname());
-        }
-        if ($this->submitter_type ==
-             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP)
-        {
-            $course_group = CourseGroupDataManager::retrieve_by_id(CourseGroup::class_name(), $this->target_id);
-            $custom_breadcrumbs[] = new Breadcrumb($this->get_url(), $course_group->get_name());
-        }
-        if ($this->submitter_type ==
-             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP)
-        {
-            $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $this->target_id);
-            $custom_breadcrumbs[] = new Breadcrumb($this->get_url(), $group->get_name());
-        }
+        $custom_breadcrumbs[] = new Breadcrumb($this->get_url(), $this->getEntityServiceForEntityType($this->submitter_type)->renderEntityNameById($this->target_id));
         $this->set_custom_breadcrumb_trail($custom_breadcrumbs);
     }
 
@@ -91,16 +74,53 @@ class CourseSubmitterSubmissionsTemplate extends ReportingTemplate
         }
     }
 
-    public function get_submitter_submissions_information()
+    /**
+     * @param int $entityType
+     *
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface
+     */
+    protected function getEntityServiceForEntityType($entityType)
     {
-        switch ($this->submitter_type)
+        switch($entityType)
         {
-            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP :
-                return new AssignmentCourseGroupInformationBlock($this);
-            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP :
-                return new AssignmentPlatformGroupInformationBlock($this);
-            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER :
-                return new AssignmentUserInformationBlock($this);
+            case Entry::ENTITY_TYPE_COURSE_GROUP:
+                return $this->getCourseGroupEntityService();
+            case Entry::ENTITY_TYPE_PLATFORM_GROUP:
+                return $this->getPlatformGroupEntityService();
+            case Entry::ENTITY_TYPE_USER:
+            default:
+                return $this->getUserEntityService();
+
         }
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\UserEntityService
+     */
+    protected function getUserEntityService()
+    {
+        return $this->getService(
+            'chamilo.application.weblcms.tool.implementation.assignment.service.entity.user_entity_service'
+        );
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\PlatformGroupEntityService
+     */
+    protected function getPlatformGroupEntityService()
+    {
+        return $this->getService(
+            'chamilo.application.weblcms.tool.implementation.assignment.service.entity.platform_group_entity_service'
+        );
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\CourseGroupEntityService
+     */
+    protected function getCourseGroupEntityService()
+    {
+        return $this->getService(
+            'chamilo.application.weblcms.tool.implementation.assignment.service.entity.course_group_entity_service'
+        );
     }
 }

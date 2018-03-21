@@ -2,28 +2,14 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseAssignmentSubmittersTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Score;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
-use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -51,7 +37,7 @@ class AssignmentBlock extends AssignmentReportingManager
             )
         );
 
-        $course_id = $this->get_course_id();
+        $course_id = $this->getCourseId();
 
         $img = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Statistics') . '" title="' .
             Translation::get('Details') . '" />';
@@ -97,7 +83,7 @@ class AssignmentBlock extends AssignmentReportingManager
             $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
                 CourseAssignmentSubmittersTemplate::class_name();
             $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publicationId;
-            $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $img . '</a>';
+            $link = $this->createLink($this->get_parent()->get_url($params), $img);
 
             $url = $this->getAssignmentUrl($course_id, $publicationId);
 
@@ -105,7 +91,7 @@ class AssignmentBlock extends AssignmentReportingManager
             $reporting_data->add_data_category_row(
                 $count,
                 Translation::get('Title'),
-                '<a href="' . $url . '" target="_blank">' . $publication[ContentObject::PROPERTY_TITLE] . '</a>'
+                $this->createLink($url, $publication[ContentObject::PROPERTY_TITLE], '_blank')
             );
 
             $reporting_data->add_data_category_row(

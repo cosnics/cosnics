@@ -36,7 +36,7 @@ class LearningPathBlock extends CourseBlock
             )
         );
 
-        $course_id = $this->get_course_id();
+        $course_id = $this->getCourseId();
         $tool = ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
             \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager::package()
         );

@@ -36,7 +36,7 @@ abstract class ToolAccessBlock extends ToolBlock
                 Translation::get('TotalTime'), 
                 Translation::get('TotalPublications')));
         
-        $course_id = $this->get_course_id();
+        $course_id = $this->getCourseId();
         
         $course_tools_summary_data = $this->retrieve_course_summary_data();
         
@@ -53,7 +53,7 @@ abstract class ToolAccessBlock extends ToolBlock
             
             $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
             $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-            $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->get_course_id();
+            $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->getCourseId();
             $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $tool_name;
             
             $redirect = new Redirect($params);

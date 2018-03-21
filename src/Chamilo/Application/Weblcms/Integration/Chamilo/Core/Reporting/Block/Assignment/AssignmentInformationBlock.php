@@ -5,18 +5,9 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataManager as AssignmentDataManager;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *
@@ -69,10 +60,7 @@ class AssignmentInformationBlock extends AssignmentReportingManager
     {
         parent::__construct($parent, $vertical);
 
-        $this->contentObjectPublication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
-            $this->get_publication_id()
-        );
+        $this->contentObjectPublication = $this->getContentObjectPublication();
 
         $this->assignment = $this->contentObjectPublication->get_content_object();
 
@@ -136,7 +124,7 @@ class AssignmentInformationBlock extends AssignmentReportingManager
         $reporting_data->add_data_category_row(
             self::$row_title,
             self::$column_details,
-            '<a href="' . $url . '">' . $this->assignment->get_title() . '</a>'
+            $this->createLink($url, $this->assignment->get_title(), '_blank')
         );
         $reporting_data->add_data_category_row(
             self::$row_description,
@@ -181,30 +169,8 @@ class AssignmentInformationBlock extends AssignmentReportingManager
      */
     private function count_submitters()
     {
-        switch ($this->assignmentPublication->getEntityType())
-        {
-            case Entry::ENTITY_TYPE_USER:
-                return count(
-                    \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_users(
-                        Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID),
-                        null
-                    )->as_array()
-                );
-            case Entry::ENTITY_TYPE_COURSE_GROUP:
-                return count(
-                    \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_course_groups(
-                        Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID),
-                        null
-                    )->as_array()
-                );
-            case Entry::ENTITY_TYPE_PLATFORM_GROUP:
-                return count(
-                    \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_platform_groups(
-                        Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID),
-                        null
-                    )->as_array()
-                );
-        }
+        $entityService = $this->getEntityServiceForEntityType($this->assignmentPublication->getEntityType());
+        return $entityService->countEntities($this->contentObjectPublication);
     }
 
     public function retrieve_data()

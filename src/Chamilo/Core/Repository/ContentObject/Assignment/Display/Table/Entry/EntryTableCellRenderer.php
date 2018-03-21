@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -75,6 +76,14 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
 
                 return $this->formatDate($entry[Entry::PROPERTY_SUBMITTED]);
                 break;
+            case Score::PROPERTY_SCORE:
+                $score = $entry[Score::PROPERTY_SCORE];
+                if($score > 0)
+                {
+                    return $score . '%';
+                }
+
+                return null;
             case EntryTableColumnModel::PROPERTY_FEEDBACK_COUNT :
                 return $this->get_table()->getAssignmentDataProvider()->countFeedbackByEntryIdentifier(
                     $entry[Entry::PROPERTY_ID]

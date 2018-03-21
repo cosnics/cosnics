@@ -136,6 +136,23 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return int
+     */
+    public function countLateEntriesByContentObjectPublicationEntityTypeAndId(
+        Assignment $assignment, ContentObjectPublication $contentObjectPublication, $entityType, $entityId
+    )
+    {
+        return $this->assignmentRepository->countLateEntriesByContentObjectPublicationEntityTypeAndId(
+            $assignment, $contentObjectPublication, $entityType, $entityId
+        );
+    }
+
+    /**
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $userIds
@@ -498,11 +515,11 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findEntriesForContentObjectPublicationEntityTypeAndId(
         ContentObjectPublication $contentObjectPublication, $entityType,
-        $entityId, $condition, $offset, $count, $orderProperty
+        $entityId, $condition = null, $offset = null, $count = null, $orderProperty = []
     )
     {
         return $this->assignmentRepository->retrieveEntriesForContentObjectPublicationEntityTypeAndId(

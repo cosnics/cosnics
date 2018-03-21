@@ -4,21 +4,14 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
-use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
 use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -79,13 +72,18 @@ abstract class AssignmentReportingManager extends ToolBlock
     /**
      * Formats a date and colours it red when it is later than the critical date.
      *
-     * @param $date type The date to be formatted.
-     * @param $critical_date type The date that is used to decide whether $date is later.
+     * @param $date int The date to be formatted.
+     * @param $critical_date int The date that is used to decide whether $date is later.
      *
      * @return string The date in coloured HTML format.
      */
-    protected function format_date_html($date, $critical_date)
+    protected function format_date_html($date, $critical_date = null)
     {
+        if ($date <= 0)
+        {
+            return null;
+        }
+
         $formatted_date = DatetimeUtilities::format_locale_date(
             Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
             $date
@@ -104,9 +102,9 @@ abstract class AssignmentReportingManager extends ToolBlock
      *
      * @return int the course id.
      */
-    public function get_course_id()
+    public function getCourseId()
     {
-        return Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        return $this->getRequest()->getFromUrl(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
     }
 
     /**
@@ -114,9 +112,20 @@ abstract class AssignmentReportingManager extends ToolBlock
      *
      * @return int the publication id.
      */
-    public function get_publication_id()
+    public function getPublicationId()
     {
-        return Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        return $this->getRequest()->getFromUrl(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass | ContentObjectPublication
+     */
+    public function getContentObjectPublication()
+    {
+        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(),
+            $this->getPublicationId()
+        );
     }
 
     /**
@@ -124,9 +133,11 @@ abstract class AssignmentReportingManager extends ToolBlock
      *
      * @return int the submitter type.
      */
-    public function get_submitter_type()
+    public function getEntityType()
     {
-        return Request::get(\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_SUBMITTER_TYPE);
+        return $this->getRequest()->getFromUrl(
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE
+        );
     }
 
     /**
@@ -134,234 +145,11 @@ abstract class AssignmentReportingManager extends ToolBlock
      *
      * @return int the target id.
      */
-    public function get_target_id()
+    public function getEntityId()
     {
-        return Request::get(\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_TARGET_ID);
-    }
-
-    /**
-     * Returns the average score from the given score trackers.
-     *
-     * @param $score_trackers \application\weblcms\integration\core\tracking\tracker\SubmissionScore The score trackers
-     *        used to
-     *        the average score
-     *
-     * @return int The average score
-     */
-    protected function get_avg_score($score_trackers)
-    {
-        if (!$score_trackers || count($score_trackers) < 1)
-        {
-            return null;
-        }
-        $score = null;
-
-        foreach ($score_trackers as $score_tracker)
-        {
-            $score += $score_tracker->get_score();
-        }
-
-        return round($score / count($score_trackers), 2);
-    }
-
-    /**
-     * Returns the minimum score from the given score trackers.
-     *
-     * @param $score_trackers \application\weblcms\integration\core\tracking\tracker\SubmissionScore The score trackers
-     *        used to
-     *        determine the minimum score
-     *
-     * @return int The minimum score
-     */
-    protected function get_min_score($score_trackers)
-    {
-        if (!$score_trackers || count($score_trackers) < 1)
-        {
-            return null;
-        }
-        $score = null;
-
-        foreach ($score_trackers as $score_tracker)
-        {
-            if (is_null($score) || $score_tracker->get_score() < $score)
-            {
-                $score = $score_tracker->get_score();
-            }
-        }
-
-        return round($score, 2);
-    }
-
-    /**
-     * Returns the maximum score from the given score trackers.
-     *
-     * @param $score_trackers \application\weblcms\integration\core\tracking\tracker\SubmissionScore The score trackers
-     *        used to
-     *        determine the maximum score
-     *
-     * @return int The maximum score
-     */
-    protected function get_max_score($score_trackers)
-    {
-        if (!$score_trackers || count($score_trackers) < 1)
-        {
-            return null;
-        }
-        $score = null;
-
-        foreach ($score_trackers as $score_tracker)
-        {
-            if (is_null($score) || $score_tracker->get_score() > $score)
-            {
-                $score = $score_tracker->get_score();
-            }
-        }
-
-        return round($score, 2);
-    }
-
-    /**
-     * Generates an HTML link to the assignment tool using the name of the submitter passed.
-     *
-     * @param $submitter_type int The type of the submitter
-     *        (\application\weblcms\integration\core\tracking\tracker\AssignmentSubmission::SUBMITTER_TYPE_...).
-     * @param $submitter_id int The id of the submitter.
-     *
-     * @return string The HTML representation of the link.
-     */
-    protected function generate_submitter_name_link($submitter_type, $submitter_id)
-    {
-        $submitter_name = $this->get_submitter_name_by_id($submitter_type, $submitter_id);
-
-        $params = array();
-        $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->get_course_id();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
-            ClassnameUtilities::getInstance()->getClassNameFromNamespace(
-                Assignment::class_name(),
-                true
-            );
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->get_publication_id();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
-            \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_BROWSE_SUBMISSIONS;
-        $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE] = ContentObjectRenderer::TYPE_TABLE;
-        $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $this->get_publication_id();
-        $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_TARGET_ID] = $submitter_id;
-        $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_SUBMITTER_TYPE] =
-            $submitter_type;
-
-        $redirect = new Redirect($params);
-        $link = $redirect->getUrl();
-
-        return ' <a href="' . $link . '">' . $submitter_name . '</a>';
-    }
-
-    /**
-     * Generates an HTML link to the assignment tool using the title of the submission in the submissions tracker
-     * passed.
-     *
-     * @param $submission_tracker \application\weblcms\integration\core\tracking\tracker\AssignmentSubmission The
-     *        submission
-     *        tracker.
-     *
-     * @return string The HTML representation of the link.
-     */
-    protected function generate_submission_title_link($submission_tracker)
-    {
-        $submission_title = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(),
-            $submission_tracker->get_content_object_id()
-        )->get_title();
-
-        $params = array();
-        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->get_course_id();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_ACTION] =
-            \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
-            ClassnameUtilities::getInstance()->getClassNameFromNamespace(
-                Assignment::class_name(),
-                true
-            );
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
-            \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_VIEW_SUBMISSION;
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->get_publication_id();
-        $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_TARGET_ID] =
-            $submission_tracker->get_submitter_id();
-        $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_SUBMITTER_TYPE] =
-            $submission_tracker->get_submitter_type();
-        $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_SUBMISSION] =
-            $submission_tracker->get_id();
-
-        $redirect = new Redirect($params);
-        $link = $redirect->getUrl();
-
-        return '<a href="' . $link . '">' . $submission_title . '</a>';
-    }
-
-    /**
-     * Generates an HTML link to the user tool using tha name of the user passed.
-     *
-     * @param $user_id int The id of the user.
-     *
-     * @return string The HTML representation of the link.
-     */
-    protected function generate_user_name_link($user_id)
-    {
-        $user_name = $this->get_submitter_name_by_id(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER,
-            $user_id
+        return $this->getRequest()->getFromUrl(
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID
         );
-
-        $params = array();
-        $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->get_course_id();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = \Chamilo\Core\User\Manager::context();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
-            \Chamilo\Application\Weblcms\Tool\Implementation\User\Manager::ACTION_USER_DETAILS;
-        $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE] =
-            ContentObjectPublicationListRenderer::TYPE_LIST;
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $user_id;
-
-        $redirect = new Redirect($params);
-        $url_user_name = $redirect->getUrl();
-
-        return '<a href="' . $url_user_name . '">' . $user_name . '</a>';
-    }
-
-    /**
-     * Obtains the name of the submitter passed.
-     *
-     * @param $submitter_type int The type of the submitter
-     *        (\application\weblcms\integration\core\tracking\tracker\AssignmentSubmission::SUBMITTER_TYPE_...).
-     * @param $submitter_id int The id of the submitter.
-     *
-     * @return string The name of the submitter.
-     */
-    protected function get_submitter_name_by_id($submitter_type, $submitter_id)
-    {
-        switch ($submitter_type)
-        {
-            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP :
-                return CourseGroupDataManager::retrieve_by_id(CourseGroup::class_name(), $submitter_id)->get_name();
-            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP :
-                return \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $submitter_id)
-                    ->get_name();
-            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER :
-                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                    (int) $submitter_id
-                );
-
-                if ($user instanceof User)
-                {
-                    return $user->get_fullname();
-                }
-
-                return null;
-        }
     }
 
     /**
@@ -394,6 +182,45 @@ abstract class AssignmentReportingManager extends ToolBlock
 
         $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE] = $entityType;
         $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID] = $entityId;
+
+        $redirect = new Redirect($params);
+        $link = $redirect->getUrl();
+
+        return $link;
+    }
+
+    /**
+     * @param int $courseId
+     * @param int $publicationId
+     * @param int $entityType
+     * @param int $entityId
+     * @param int $entryId
+     *
+     * @return string
+     */
+    protected function getEntryUrl($courseId, $publicationId, $entityType, $entityId, $entryId)
+    {
+        $params = array();
+
+        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $courseId;
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_ACTION] =
+            \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
+            ClassnameUtilities::getInstance()->getClassNameFromNamespace(
+                Assignment::class_name(),
+                true
+            );
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
+            \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY;
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publicationId;
+
+        $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION] =
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_ENTRY;
+
+        $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE] = $entityType;
+        $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID] = $entityId;
+        $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTRY_ID] = $entryId;
 
         $redirect = new Redirect($params);
         $link = $redirect->getUrl();
@@ -483,7 +310,7 @@ abstract class AssignmentReportingManager extends ToolBlock
                 $order_by
             );
 
-        $publications = !empty($entityType) ?
+        $publications = !is_null($entityType) ?
             $this->filterPublicationsForEntityType($publication_resultset, $entityType) :
             $publication_resultset->as_array();
 
@@ -539,7 +366,7 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     protected function getEntityServiceForEntityType($entityType)
     {
-        switch($entityType)
+        switch ($entityType)
         {
             case Entry::ENTITY_TYPE_COURSE_GROUP:
                 return $this->getCourseGroupEntityService();
@@ -548,8 +375,19 @@ abstract class AssignmentReportingManager extends ToolBlock
             case Entry::ENTITY_TYPE_USER:
             default:
                 return $this->getUserEntityService();
-
         }
+    }
+
+    /**
+     * @param string $url
+     * @param string $title
+     * @param string $target
+     *
+     * @return string
+     */
+    protected function createLink($url, $title, $target = null)
+    {
+        return '<a href="' . $url . '"' . (!empty($target) ? ' target="' . $target . '" ' : '') . '>' . $title . '</a>';
     }
 
     /**

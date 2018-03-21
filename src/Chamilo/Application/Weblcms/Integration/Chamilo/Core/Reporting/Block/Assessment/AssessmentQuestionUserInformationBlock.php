@@ -34,7 +34,7 @@ class AssessmentQuestionUserInformationBlock extends AssessmentQuestionUsersBloc
         
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
-            $this->get_publication_id());
+            $this->getPublicationId());
         
         $this->add_category_from_array(
             Translation::get('Details'), 
@@ -48,7 +48,7 @@ class AssessmentQuestionUserInformationBlock extends AssessmentQuestionUsersBloc
         
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), $this->get_user_id());
         $user_attempts = $this->get_question_attempts_from_publication_and_question(
-            $this->get_publication_id(), 
+            $this->getPublicationId(),
             $question_cid, 
             $this->get_user_id());
         

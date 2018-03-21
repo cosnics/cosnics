@@ -2,15 +2,9 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *
@@ -20,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Alexander Van Paemel
  * @author Anthony Hurst (Hogeschool Gent)
  */
-abstract class AssignmentSubmitterInformationBlock extends AssignmentReportingManager
+class AssignmentSubmitterInformationBlock extends AssignmentReportingManager
 {
 
     private static $COLUMN_DETAILS;
@@ -47,25 +41,19 @@ abstract class AssignmentSubmitterInformationBlock extends AssignmentReportingMa
      */
     public function __construct($parent)
     {
+        parent::__construct($parent);
+
         self::$COLUMN_DETAILS = Translation::get('Details');
 
-        $this->ROW_SUBMITTER = $this->define_row_submitter_title();
+        $entityService = $this->getEntityServiceForEntityType($this->getEntityType());
+        $this->ROW_SUBMITTER = $entityService->getEntityName();
         self::$ROW_ASSIGNMENT = Translation::get('AssignmentTitle');
         self::$ROW_NUMBER_SUBMISSIONS_LATE = Translation::get('NumberOfSubmissionsLate');
         self::$ROW_NUMBER_FEEDBACK = Translation::get('NumberOfSubmissionsFeedbacks');
         self::$ROW_SCORE_AVERAGE = Translation::get('AverageScore');
         self::$ROW_SCORE_MINIMUM = Translation::get('MinimumScore');
         self::$ROW_SCORE_MAXIMUM = Translation::get('MaximumScore');
-
-        parent::__construct($parent);
     }
-
-    /**
-     * Defines the title of the submitter row.
-     *
-     * @return string The title of the row.
-     */
-    abstract protected function define_row_submitter_title();
 
     public function count_data()
     {
@@ -84,23 +72,30 @@ abstract class AssignmentSubmitterInformationBlock extends AssignmentReportingMa
         );
         $reporting_data->set_rows(array(self::$COLUMN_DETAILS));
 
-        /** @var ContentObjectPublication $contentObjectPublication */
-        $contentObjectPublication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
-            $this->get_publication_id()
-        );
+        $contentObjectPublication = $this->getContentObjectPublication();
 
+        /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
         $assignment = $contentObjectPublication->getContentObject();
         $assignmentUrl = $this->getAssignmentUrlForContentObjectPublication($contentObjectPublication);
-        $title = '<a href="' . $assignmentUrl . '" target="_blank">' . $assignment->get_title() . '</a>';
 
-        $submitter = $this->getEntityUrl(
-            $contentObjectPublication->get_course_id(), $contentObjectPublication->getId(), $this->get_submitter_type(),
-            $this->get_target_id()
+        $title = $this->createLink($assignmentUrl, $assignment->get_title(), '_blank');
+
+        $submitterUrl = $this->getEntityUrl(
+            $contentObjectPublication->get_course_id(), $contentObjectPublication->getId(), $this->getEntityType(),
+            $this->getEntityId()
+        );
+
+        $entityService = $this->getEntityServiceForEntityType($this->getEntityType());
+
+        $submitter = $this->createLink(
+            $submitterUrl,
+            $entityService->renderEntityNameById(
+                $this->getEntityId()
+            ), '_blank'
         );
 
         $entryStatistics = $this->getAssignmentService()->findEntryStatisticsForEntityByContentObjectPublication(
-            $contentObjectPublication, $this->get_submitter_type(), $this->get_target_id()
+            $contentObjectPublication, $this->getEntityType(), $this->getEntityId()
         );
 
         $minimum_score = $this->format_score_html($entryStatistics[AssignmentRepository::MINIMUM_SCORE]);
@@ -110,13 +105,13 @@ abstract class AssignmentSubmitterInformationBlock extends AssignmentReportingMa
         $reporting_data->add_data_category_row($this->ROW_SUBMITTER, self::$COLUMN_DETAILS, $submitter);
         $reporting_data->add_data_category_row(self::$ROW_ASSIGNMENT, self::$COLUMN_DETAILS, $title);
 
-//        $lateSubmissions = $this->getAssignmentService()->countLateEntriesByContentObjectPublicationAndEntity(
-//            $contentObjectPublication, $assignment, $this->get_submitter_type(), $this->get_target_id()
-//        );
+        $lateSubmissions = $this->getAssignmentService()->countLateEntriesByContentObjectPublicationEntityTypeAndId(
+            $assignment, $contentObjectPublication, $this->getEntityType(), $this->getEntityId()
+        );
 
         $entriesWithFeedback =
             $this->getAssignmentService()->countDistinctFeedbackForContentObjectPublicationEntityTypeAndId(
-                $contentObjectPublication, $this->get_submitter_type(), $this->get_target_id()
+                $contentObjectPublication, $this->getEntityType(), $this->getEntityId()
             );
 
         $reporting_data->add_data_category_row(

@@ -3,21 +3,8 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Core\Reporting\ReportingData;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -42,7 +29,7 @@ abstract class AssignmentScoresBlock extends AssignmentReportingManager
         {
             $this->reporting_data = new ReportingData();
 
-            $course_id = $this->get_course_id();
+            $course_id = $this->getCourseId();
 
             $publications = $this->retrieveAssignmentPublicationsForCourse(
                 $course_id, $this->getEntityType()
@@ -97,8 +84,7 @@ abstract class AssignmentScoresBlock extends AssignmentReportingManager
                         $this->reporting_data->add_data_category_row(
                             $key,
                             $title,
-                            '<span style="text-decoration: blink;"><b><a href="' . $link .
-                            '" target="_blank">?</a></b></span>'
+                            $this->createLink($link,'?', '_blank')
                         );
                     }
                 }
@@ -159,7 +145,7 @@ abstract class AssignmentScoresBlock extends AssignmentReportingManager
     /**
      * @return int
      */
-    abstract protected function getEntityType();
+    abstract protected function getAssignmentScoresEntityType();
 
 
     /**
@@ -174,7 +160,7 @@ abstract class AssignmentScoresBlock extends AssignmentReportingManager
      *
      * @return int
      */
-    abstract protected function getEntityId($entity);
+    abstract protected function getAssignmentScoresEntityId($entity);
 
     /**
      * @param int $course_id

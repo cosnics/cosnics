@@ -358,6 +358,23 @@ class AssignmentRepository
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return int
+     */
+    public function countLateEntriesByContentObjectPublicationEntityTypeAndId(
+        Assignment $assignment, ContentObjectPublication $contentObjectPublication, $entityType, $entityId
+    )
+    {
+        return $this->countLateEntriesByEntityTypeAndId(
+            $assignment, $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        );
+    }
+
+    /**
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param integer $entityType

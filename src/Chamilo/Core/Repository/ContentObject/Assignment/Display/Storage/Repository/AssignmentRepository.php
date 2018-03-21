@@ -690,6 +690,35 @@ abstract class AssignmentRepository
 
     /**
      *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return int
+     */
+    protected function countLateEntriesByEntityTypeAndId(
+        Assignment $assignment, $entityType, $entityId, Condition $condition = null
+    )
+    {
+        $conditions = array();
+        $conditions[] = $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition);
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED),
+            ComparisonCondition::GREATER_THAN,
+            new StaticConditionVariable($assignment->get_end_time())
+        );
+
+        $condition = new AndCondition($conditions);
+        $parameters = new DataClassCountParameters($condition);
+
+        return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
+    }
+
+    /**
+     *
      * @param integer $entityType
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
@@ -961,6 +990,7 @@ abstract class AssignmentRepository
         $properties->add(new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_SCORE));
         $properties->add(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_CONTENT_OBJECT_ID));
         $properties->add(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_USER_ID));
+        $properties->add(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_IP_ADDRESS));
         $properties->add(new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE));
 
         $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $orderProperty, $joins);

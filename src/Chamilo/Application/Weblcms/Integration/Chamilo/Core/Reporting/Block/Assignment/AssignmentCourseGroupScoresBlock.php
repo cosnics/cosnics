@@ -20,7 +20,7 @@ class AssignmentCourseGroupScoresBlock extends AssignmentScoresBlock
     /**
      * @return int
      */
-    protected function getEntityType()
+    protected function getAssignmentScoresEntityType()
     {
         return Entry::ENTITY_TYPE_COURSE_GROUP;
     }
@@ -40,7 +40,7 @@ class AssignmentCourseGroupScoresBlock extends AssignmentScoresBlock
      *
      * @return int
      */
-    protected function getEntityId($entity)
+    protected function getAssignmentScoresEntityId($entity)
     {
         return $entity->getId();
     }

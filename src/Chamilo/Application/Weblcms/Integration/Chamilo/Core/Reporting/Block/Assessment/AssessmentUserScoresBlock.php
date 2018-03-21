@@ -31,7 +31,7 @@ class AssessmentUserScoresBlock extends ToolBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $course_id = $this->get_course_id();
+        $course_id = $this->getCourseId();
         
         $users = CourseDataManager::retrieve_all_course_users($course_id)->as_array();
         

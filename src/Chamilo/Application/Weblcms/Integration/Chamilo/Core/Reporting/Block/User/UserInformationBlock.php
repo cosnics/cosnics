@@ -15,7 +15,7 @@ class UserInformationBlock extends ToolBlock
     {
         $reporting_data = new ReportingData();
 
-        $course_id = $this->get_course_id();
+        $course_id = $this->getCourseId();
         $user_id = $this->get_user_id();
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
             \Chamilo\Core\User\Storage\DataClass\User::class_name(),

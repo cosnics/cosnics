@@ -4,19 +4,12 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseSubmitterSubmissionsTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableColumnModel;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Umbrella class for WeblcmsAssignmentCourseGroupsReportingBlock and WeblcmsAssignmentPlatformGroupsReportingBlock
@@ -98,13 +91,9 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
             )
         );
 
-        /**
-         * @var ContentObjectPublication $contentObjectPublication
-         */
-        $contentObjectPublication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
-            $this->get_publication_id()
-        );
+        $contentObjectPublication = $this->getContentObjectPublication();
+        /** @var Assignment $assignment */
+        $assignment = $contentObjectPublication->getContentObject();
 
         $assignmentPublication = $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
         $entityType = ($assignmentPublication instanceof Publication) ?
@@ -121,9 +110,9 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
         $detailParams = $this->get_parent()->get_parameters();
         $detailParams[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
             CourseSubmitterSubmissionsTemplate::class_name();
-        $detailParams[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_SUBMITTER_TYPE] =
+        $detailParams[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE] =
             $entityType;
-        $detailParams[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->get_publication_id();
+        $detailParams[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->getPublicationId();
 
         foreach ($entities as $entity)
         {
@@ -134,8 +123,7 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
                 $entityId
             );
 
-            $name =
-                '<a href="' . $url . '" target="_blank">' . $entityService->renderEntityNameByArray($entity) . '</a>';
+            $name = $this->createLink($url, $entityService->renderEntityNameByArray($entity));
 
             $this->reportingData->add_category($count);
 
@@ -143,12 +131,12 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
             $this->reportingData->add_data_category_row(
                 $count,
                 self::$COLUMN_FIRST_SUBMISSION,
-                $entity[EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE]
+                $this->format_date_html($entity[EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE], $assignment->get_end_time())
             );
             $this->reportingData->add_data_category_row(
                 $count,
                 self::$COLUMN_LAST_SUBMISSION,
-                $entity[EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE]
+                $this->format_date_html($entity[EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE], $assignment->get_end_time())
             );
             $this->reportingData->add_data_category_row(
                 $count,
@@ -170,10 +158,10 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
                 ))
         );
 
-            $detailParams[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_TARGET_ID] =
+            $detailParams[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID] =
                 $entityId;
 
-            $link = '<a href="' . $this->get_parent()->get_url($detailParams) . '">' . $img . '</a>';
+            $link = $this->createLink($this->get_parent()->get_url($detailParams), $img);
             $this->reportingData->add_data_category_row($count, self::$COLUMN_ACTIONS, $link);
 
             $count ++;
