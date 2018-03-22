@@ -67,6 +67,16 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
         parent::__construct($parent);
     }
 
+    public function get_title()
+    {
+        $contentObjectPublication = $this->getContentObjectPublication();
+        $assignmentPublication = $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
+        $entityType = ($assignmentPublication instanceof Publication) ?
+            $assignmentPublication->getEntityType() : Entry::ENTITY_TYPE_USER;
+
+        return $this->getEntityServiceManager()->getEntityServiceByType($entityType)->getPluralEntityName();
+    }
+
     /**
      * @return \Chamilo\Core\Reporting\ReportingData
      */

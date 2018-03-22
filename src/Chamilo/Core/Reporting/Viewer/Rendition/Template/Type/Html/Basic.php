@@ -55,10 +55,8 @@ class Basic extends Html
             
             foreach ($this->get_template()->get_blocks() as $key => $block)
             {
-                $title = Translation::get(
-                    ClassnameUtilities::getInstance()->getClassnameFromObject($block), 
-                    null, 
-                    ClassnameUtilities::getInstance()->getNamespaceFromObject($block));
+                $title = $block->get_title();
+
                 $html[] = '<h2>';
                 $html[] = '<img style="vertical-align: middle;" src="' . Theme::getInstance()->getImagePath(
                     $this->getBlockNamespace($block), 
@@ -101,11 +99,8 @@ class Basic extends Html
                     
                     $is_current_block = $key == $this->determine_current_block_id() ? true : false;
                     
-                    $title = Translation::get(
-                        ClassnameUtilities::getInstance()->getClassnameFromObject($block), 
-                        null, 
-                        ClassnameUtilities::getInstance()->getNamespaceFromObject($block));
-                    
+                    $title = $block->get_title();
+
                     if ($is_current_block)
                     {
                         $trail->add(new Breadcrumb($this->get_context()->get_url($block_parameters), $title));

@@ -50,7 +50,10 @@ abstract class ReportingBlock
 
     public function get_title()
     {
-        return Translation::get(static::get_name(), null, static::context());
+        return Translation::get(
+            ClassnameUtilities::getInstance()->getClassnameFromObject($this),
+            null,
+            ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
     }
 
     public function get_id()

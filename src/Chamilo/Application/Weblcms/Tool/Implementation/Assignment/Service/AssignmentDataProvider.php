@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\EntryTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
@@ -30,6 +31,11 @@ class AssignmentDataProvider
     protected $assignmentService;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager
+     */
+    protected $entityServiceManager;
+
+    /**
      * @var ContentObjectPublication
      */
     protected $contentObjectPublication;
@@ -45,18 +51,15 @@ class AssignmentDataProvider
     protected $canEditAssignment;
 
     /**
-     * @var EntityServiceInterface[]
-     */
-    protected $entityServices;
-
-    /**
      * AssignmentDataProvider constructor.
      *
      * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager $entityServiceManager
      */
-    public function __construct(AssignmentService $assignmentService)
+    public function __construct(AssignmentService $assignmentService, EntityServiceManager $entityServiceManager)
     {
         $this->assignmentService = $assignmentService;
+        $this->entityServiceManager = $entityServiceManager;
     }
 
     /**
@@ -88,30 +91,6 @@ class AssignmentDataProvider
         }
 
         $this->assignmentPublication = $assignmentPublication;
-    }
-
-    /**
-     * @param int $entityType
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface $entityService
-     */
-    public function addEntityService($entityType, EntityServiceInterface $entityService)
-    {
-        $this->entityServices[$entityType] = $entityService;
-    }
-
-    /**
-     * @param int $entityType
-     *
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface
-     */
-    public function getEntityServiceByType($entityType)
-    {
-        if (!array_key_exists($entityType, $this->entityServices))
-        {
-            throw new \RuntimeException('Could not find the entity service for entity type ' . $entityType);
-        }
-
-        return $this->entityServices[$entityType];
     }
 
     /**
@@ -177,8 +156,7 @@ class AssignmentDataProvider
      */
     public function countEntitiesByEntityType($entityType)
     {
-        $entityService = $this->getEntityServiceByType($entityType);
-
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
         return $entityService->countEntities($this->contentObjectPublication);
     }
 
@@ -189,8 +167,7 @@ class AssignmentDataProvider
      */
     public function countEntitiesWithEntriesByEntityType($entityType)
     {
-        $entityService = $this->getEntityServiceByType($entityType);
-
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
         return $entityService->countEntitiesWithEntries($this->contentObjectPublication);
     }
 
@@ -201,8 +178,7 @@ class AssignmentDataProvider
      */
     public function findEntitiesWithEntriesByEntityType($entityType)
     {
-        $entityService = $this->getEntityServiceByType($entityType);
-
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
         return $entityService->retrieveEntitiesWithEntries($this->contentObjectPublication);
     }
 
@@ -214,8 +190,7 @@ class AssignmentDataProvider
      */
     public function getPluralEntityNameByType($entityType)
     {
-        $entityService = $this->getEntityServiceByType($entityType);
-
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
         return $entityService->getPluralEntityName();
     }
 
@@ -226,8 +201,7 @@ class AssignmentDataProvider
      */
     public function getEntityNameByType($entityType)
     {
-        $entityService = $this->getEntityServiceByType($entityType);
-
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
         return $entityService->getEntityName();
     }
 
@@ -240,7 +214,7 @@ class AssignmentDataProvider
      */
     public function getEntityTableForType(Application $application, $entityType)
     {
-        $entityService = $this->getEntityServiceByType($entityType);
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
 
         return $entityService->getEntityTable($application, $this, $this->contentObjectPublication);
     }
@@ -276,7 +250,7 @@ class AssignmentDataProvider
      */
     public function getCurrentEntityIdentifier(User $currentUser)
     {
-        $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
 
         return $entityService->getCurrentEntityIdentifier($this->contentObjectPublication, $currentUser);
     }
@@ -288,7 +262,7 @@ class AssignmentDataProvider
      */
     public function getAvailableEntityIdentifiersForUser(User $currentUser)
     {
-        $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
 
         return $entityService->getAvailableEntityIdentifiersForUser($this->contentObjectPublication, $currentUser);
     }
@@ -302,7 +276,7 @@ class AssignmentDataProvider
      */
     public function isUserPartOfEntity(User $user, $entityType, $entityId)
     {
-        $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
 
         return $entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
     }
@@ -478,7 +452,7 @@ class AssignmentDataProvider
      */
     public function renderEntityNameByEntityTypeAndEntity($entityType, DataClass $entity)
     {
-        $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
 
         return $entityService->renderEntityName($entity);
     }
@@ -491,7 +465,7 @@ class AssignmentDataProvider
      */
     public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
     {
-        $entityService = $this->getEntityServiceByType($this->getCurrentEntityType());
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
 
         return $entityService->renderEntityNameById($entityId);
     }

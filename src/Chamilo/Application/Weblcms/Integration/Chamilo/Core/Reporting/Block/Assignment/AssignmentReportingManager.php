@@ -136,7 +136,8 @@ abstract class AssignmentReportingManager extends ToolBlock
     public function getEntityType()
     {
         return $this->getRequest()->getFromUrl(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE,
+            Entry::ENTITY_TYPE_USER
         );
     }
 
@@ -366,16 +367,7 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     protected function getEntityServiceForEntityType($entityType)
     {
-        switch ($entityType)
-        {
-            case Entry::ENTITY_TYPE_COURSE_GROUP:
-                return $this->getCourseGroupEntityService();
-            case Entry::ENTITY_TYPE_PLATFORM_GROUP:
-                return $this->getPlatformGroupEntityService();
-            case Entry::ENTITY_TYPE_USER:
-            default:
-                return $this->getUserEntityService();
-        }
+        return $this->getEntityServiceManager()->getEntityServiceByType($entityType);
     }
 
     /**
@@ -401,32 +393,12 @@ abstract class AssignmentReportingManager extends ToolBlock
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\UserEntityService
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager
      */
-    protected function getUserEntityService()
+    protected function getEntityServiceManager()
     {
         return $this->getService(
-            'chamilo.application.weblcms.tool.implementation.assignment.service.entity.user_entity_service'
-        );
-    }
-
-    /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\PlatformGroupEntityService
-     */
-    protected function getPlatformGroupEntityService()
-    {
-        return $this->getService(
-            'chamilo.application.weblcms.tool.implementation.assignment.service.entity.platform_group_entity_service'
-        );
-    }
-
-    /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\CourseGroupEntityService
-     */
-    protected function getCourseGroupEntityService()
-    {
-        return $this->getService(
-            'chamilo.application.weblcms.tool.implementation.assignment.service.entity.course_group_entity_service'
+            'chamilo.application.weblcms.tool.implementation.assignment.service.entity.entity_service_manager'
         );
     }
 
