@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Alexander Van Paemel
  * @author Anthony Hurst (Hogeschool Gent)
  */
-class AssignmentSubmitterInformationBlock extends AssignmentReportingManager
+class AssignmentEntityInformationBlock extends AssignmentReportingManager
 {
 
     private static $COLUMN_DETAILS;

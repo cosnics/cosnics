@@ -40,7 +40,7 @@ class AssignmentCourseGroupScoresBlock extends AssignmentScoresBlock
      *
      * @return int
      */
-    protected function getAssignmentScoresEntityId($entity)
+    protected function getEntityIdFromEntity($entity)
     {
         return $entity->getId();
     }

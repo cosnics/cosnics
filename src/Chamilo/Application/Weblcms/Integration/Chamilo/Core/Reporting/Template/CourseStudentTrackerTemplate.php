@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment\AssessmentsBlock;
@@ -7,12 +8,15 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Learnin
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Tool\LastAccessToToolsBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\User\UsersTrackingBlock;
 use Chamilo\Core\Reporting\ReportingTemplate;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  *
  * @package application.lib.weblcms.reporting.templates
  */
+
 /**
  *
  * @author Michael Kyndt
@@ -30,6 +34,8 @@ class CourseStudentTrackerTemplate extends ReportingTemplate
         $this->add_reporting_block(new AssessmentsBlock($this));
         $this->add_reporting_block(new LearningPathBlock($this));
         $this->add_reporting_block(new LastAccessToToolsBlock($this));
+
+        $this->addCurrentBlockBreadcrumb();
     }
 
     private function init_parameters()

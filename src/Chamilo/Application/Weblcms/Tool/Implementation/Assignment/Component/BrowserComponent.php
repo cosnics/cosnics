@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -33,9 +34,13 @@ class BrowserComponent extends Manager
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => \Chamilo\Application\Weblcms\Manager::ACTION_REPORTING,
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentScoresTemplate::class_name(),
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::ACTION_VIEW)),
-                Button::DISPLAY_ICON_AND_LABEL);
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentScoresTemplate::class_name(
+                        ),
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::ACTION_VIEW
+                    )
+                ),
+                Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
+            );
         }
 
         return $tool_actions;
@@ -45,7 +50,8 @@ class BrowserComponent extends Manager
     {
         $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             Assignment::class_name(),
-            $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+            $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+        );
 
         $calendar_event = ContentObject::factory(CalendarEvent::class_name());
 

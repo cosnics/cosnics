@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseSubmitterSubmissionsTemplate;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\EntityAssignmentEntriesTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Core\Reporting\ReportingData;
@@ -119,7 +119,7 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
 
         $detailParams = $this->get_parent()->get_parameters();
         $detailParams[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-            CourseSubmitterSubmissionsTemplate::class_name();
+            EntityAssignmentEntriesTemplate::class_name();
         $detailParams[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE] =
             $entityType;
         $detailParams[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->getPublicationId();

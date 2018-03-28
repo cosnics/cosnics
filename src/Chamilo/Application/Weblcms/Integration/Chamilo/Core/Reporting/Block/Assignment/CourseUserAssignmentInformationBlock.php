@@ -2,7 +2,8 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseSubmitterSubmissionsTemplate;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentStudentEntriesTemplate;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\EntityAssignmentEntriesTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingData;
@@ -49,7 +50,7 @@ class CourseUserAssignmentInformationBlock extends AssignmentReportingManager
 
         $params_detail = $this->get_parent()->get_parameters();
         $params_detail[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-            CourseSubmitterSubmissionsTemplate::class_name();
+            AssignmentStudentEntriesTemplate::class_name();
         $params_detail[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID] = $userId;
         $params_detail[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE] =
             Entry::ENTITY_TYPE_USER;

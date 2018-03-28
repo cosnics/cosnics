@@ -30,9 +30,10 @@ abstract class AssignmentScoresBlock extends AssignmentReportingManager
             $this->reporting_data = new ReportingData();
 
             $course_id = $this->getCourseId();
+            $entityType = $this->getAssignmentScoresEntityType();
 
             $publications = $this->retrieveAssignmentPublicationsForCourse(
-                $course_id, $this->getEntityType()
+                $course_id, $entityType
             );
 
             $publicationTitlesById = $this->determineReportingHeaders($publications);
@@ -48,7 +49,7 @@ abstract class AssignmentScoresBlock extends AssignmentReportingManager
                     $this->renderEntityName($entity)
                 );
 
-                $entityId = $this->getEntityId($entity);
+                $entityId = $this->getEntityIdFromEntity($entity);
 
                 foreach ($publications as $publication)
                 {
@@ -60,7 +61,7 @@ abstract class AssignmentScoresBlock extends AssignmentReportingManager
                     $title = $publicationTitlesById[$publicationId];
 
                     if (!$this->getAssignmentService()->countEntriesForContentObjectPublicationEntityTypeAndId(
-                        $publicationObject, $this->getEntityType(), $entityId
+                        $publicationObject, $entityType, $entityId
                     ))
                     {
                         $this->reporting_data->add_data_category_row($key, $title, null);
@@ -68,7 +69,7 @@ abstract class AssignmentScoresBlock extends AssignmentReportingManager
                     }
 
                     $lastScore = $this->getAssignmentService()->getLastScoreForContentObjectPublicationEntityTypeAndId(
-                        $publicationObject, $this->getEntityType(), $entityId
+                        $publicationObject, $entityType, $entityId
                     );
 
                     if ($lastScore)
@@ -79,7 +80,7 @@ abstract class AssignmentScoresBlock extends AssignmentReportingManager
                     }
                     else
                     {
-                        $link = $this->getEntityUrl($course_id, $publicationId, $this->getEntityType(), $entityId);
+                        $link = $this->getEntityUrl($course_id, $publicationId, $entityType, $entityId);
 
                         $this->reporting_data->add_data_category_row(
                             $key,
@@ -160,7 +161,7 @@ abstract class AssignmentScoresBlock extends AssignmentReportingManager
      *
      * @return int
      */
-    abstract protected function getAssignmentScoresEntityId($entity);
+    abstract protected function getEntityIdFromEntity($entity);
 
     /**
      * @param int $course_id

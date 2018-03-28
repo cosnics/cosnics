@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Reporting;
 
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
@@ -35,6 +36,42 @@ abstract class ReportingTemplate
         return count($this->get_blocks());
     }
 
+    public function addCurrentBlockBreadcrumb()
+    {
+        if($this->getRequest()->getFromUrl(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_SHOW_ALL))
+        {
+            return;
+        }
+
+        BreadcrumbTrail::getInstance()->add(
+            new Breadcrumb(
+                $this->get_url(),
+                $this->getCurrentBlock()->get_title()
+            )
+        );
+    }
+
+    /**
+     * @return \Chamilo\Core\Reporting\ReportingBlock
+     */
+    public function getCurrentBlock()
+    {
+        $blockId = $this->getRequest()->getFromUrl(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID);
+        $block = null;
+
+        if($blockId >= 0)
+        {
+            $block = $this->get_block($blockId);
+        }
+
+        if(!$block instanceof ReportingBlock)
+        {
+            $block = $this->get_block(0);
+        }
+
+        return $block;
+    }
+
     public function get_parent()
     {
         return $this->parent;
@@ -65,8 +102,9 @@ abstract class ReportingTemplate
 
     /**
      *
-     * @param int $reporting_block_id
-     * @return \core\reporting\ReportingBlock
+     * @param int $block_id
+     *
+     * @return \Chamilo\Core\Reporting\ReportingBlock
      */
     public function get_block($block_id)
     {

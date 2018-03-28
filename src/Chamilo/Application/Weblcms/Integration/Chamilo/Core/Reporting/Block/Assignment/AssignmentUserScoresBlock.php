@@ -50,7 +50,7 @@ class AssignmentUserScoresBlock extends AssignmentScoresBlock
      *
      * @return int
      */
-    protected function getEntityId($entity)
+    protected function getEntityIdFromEntity($entity)
     {
         return $entity[DataClass::PROPERTY_ID];
     }
