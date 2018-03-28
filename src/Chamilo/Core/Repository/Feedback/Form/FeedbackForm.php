@@ -2,8 +2,12 @@
 namespace Chamilo\Core\Repository\Feedback\Form;
 
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
+use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -13,6 +17,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class FeedbackForm extends FormValidator
 {
     const PROPERTY_NOTIFICATIONS = 'notifications';
+    const PROPERTY_ATTACHMENTS = 'attachments';
 
     private $application;
 
@@ -48,7 +53,41 @@ class FeedbackForm extends FormValidator
             array('width' => '100%', 'collapse_toolbar' => true, 'height' => 100));
         
         $renderer->setElementTemplate('<div class="form-group">{element}</div>', Feedback::PROPERTY_COMMENT);
-        
+
+        $calculator = new Calculator(
+            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                (int) $this->application->getUser()->getId()
+            )
+        );
+
+        $uploadUrl = new Redirect(
+            array(
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
+                \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
+            )
+        );
+
+        $dropZoneParameters = array(
+            'name' => self::PROPERTY_ATTACHMENTS,
+            'maxFilesize' => $calculator->getMaximumUploadSize(),
+            'uploadUrl' => $uploadUrl->getUrl(),
+            'successCallbackFunction' => 'chamilo.core.repository.import.processUploadedFile',
+            'sendingCallbackFunction' => 'chamilo.core.repository.import.prepareRequest',
+            'removedfileCallbackFunction' => 'chamilo.core.repository.import.deleteUploadedFile'
+        );
+
+        $this->addFileDropzone(self::PROPERTY_ATTACHMENTS, $dropZoneParameters, false);
+
+        $this->addElement(
+            'html',
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath(\Chamilo\Core\Repository\Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
+            )
+        );
+
+        $renderer->setElementTemplate('<div class="form-group">{element}</div>', self::PROPERTY_ATTACHMENTS . '_static_data');
+
         $buttons[] = $this->createElement(
             'style_submit_button', 
             'submit', 

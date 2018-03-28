@@ -1480,7 +1480,7 @@ EOT;
                  Theme::getInstance()->getCommonImagePath('Action/Required') . '" alt="*" title ="*"/></span>';
         }
 
-        $this->addElement('static', null, $label, implode(PHP_EOL, $dropzoneHtml));
+        $this->addElement('static', $elementName . '_static_data', $label, implode(PHP_EOL, $dropzoneHtml));
         $this->addElement('hidden', $elementName . '_upload_data');
 
         $dropzoneOptionsString = array();

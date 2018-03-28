@@ -75,6 +75,35 @@ dropzoneCallbacks.chamilo = {
                         }, 500
                     );
                 }
+            },
+            importWithHiddenField: {
+                contentObjectIdentifiers: [],
+                processUploadedFile: function (hiddenFieldId, environment, file, serverResponse) {
+                    dropzoneCallbacks.chamilo.core.repository.import.processUploadedFile(
+                        environment, file, serverResponse
+                    );
+
+                    var contentObjectId = serverResponse.properties.contentObjectId;
+
+                    this.contentObjectIdentifiers.push(contentObjectId);
+                    $('#' + hiddenFieldId).val(JSON.stringify(this.contentObjectIdentifiers));
+                },
+                prepareRequest: function (environment, file, xhrObject, formData) {
+                    formData.append('parentId', 0);
+                },
+                deleteUploadedFile: function (hiddenFieldId, environment, file, serverResponse) {
+                    dropzoneCallbacks.chamilo.core.repository.import.deleteUploadedFile(
+                        environment, file, serverResponse
+                    );
+
+                    var contentObjectId = $(file.previewElement).data('content-object-id');
+
+                    var index = this.contentObjectIdentifiers.indexOf(contentObjectId);
+                    if(index > -1) {
+                        this.contentObjectIdentifiers.splice(index, 1);
+                        $('#' + hiddenFieldId).val(JSON.stringify(this.contentObjectIdentifiers));
+                    }
+                }
             }
         }
     }
