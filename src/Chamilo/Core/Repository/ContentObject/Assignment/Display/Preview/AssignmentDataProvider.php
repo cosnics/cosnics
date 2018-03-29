@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -426,5 +428,55 @@ class AssignmentDataProvider implements
     public function findLastEntryForEntity($entityType, $entityIdentifier)
     {
         return null;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     */
+    public function attachContentObjectToEntry(Entry $entry, ContentObject $contentObject)
+    {
+        return null;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment $entryAttachment
+     */
+    public function deleteEntryAttachment(EntryAttachment $entryAttachment)
+    {
+
+    }
+
+    /**
+     * @param int $entryAttachmentId
+     *
+     * @return EntryAttachment
+     */
+    public function findEntryAttachmentById($entryAttachmentId)
+    {
+        return null;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
+     * @return EntryAttachment[]
+     */
+    public function findAttachmentsByEntry(Entry $entry)
+    {
+        return [];
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function isContentObjectAttachedToEntry(Entry $entry, ContentObject $contentObject)
+    {
+        return false;
     }
 }

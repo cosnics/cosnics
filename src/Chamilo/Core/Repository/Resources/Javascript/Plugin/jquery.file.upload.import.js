@@ -86,7 +86,7 @@ dropzoneCallbacks.chamilo = {
                     var contentObjectId = serverResponse.properties.contentObjectId;
 
                     this.contentObjectIdentifiers.push(contentObjectId);
-                    $('#' + hiddenFieldId).val(JSON.stringify(this.contentObjectIdentifiers));
+                    $('input[name="' + hiddenFieldId + '"]').val(JSON.stringify(this.contentObjectIdentifiers));
                 },
                 prepareRequest: function (environment, file, xhrObject, formData) {
                     formData.append('parentId', 0);
@@ -101,7 +101,7 @@ dropzoneCallbacks.chamilo = {
                     var index = this.contentObjectIdentifiers.indexOf(contentObjectId);
                     if(index > -1) {
                         this.contentObjectIdentifiers.splice(index, 1);
-                        $('#' + hiddenFieldId).val(JSON.stringify(this.contentObjectIdentifiers));
+                        $('input[name="' + hiddenFieldId + '"]').val(JSON.stringify(this.contentObjectIdentifiers));
                     }
                 }
             }

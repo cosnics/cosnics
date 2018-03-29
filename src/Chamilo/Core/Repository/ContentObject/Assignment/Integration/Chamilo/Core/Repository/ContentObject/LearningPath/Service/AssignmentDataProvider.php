@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entity\EntityTable;
@@ -12,6 +13,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeA
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -701,5 +703,55 @@ class AssignmentDataProvider
         return $this->learningPathAssignmentService->findLastEntryForEntity(
             $this->treeNode->getTreeNodeData(), $entityType, $entityIdentifier
         );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     */
+    public function attachContentObjectToEntry(Entry $entry, ContentObject $contentObject)
+    {
+        return $this->learningPathAssignmentService->attachContentObjectToEntry($entry, $contentObject);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment $entryAttachment
+     */
+    public function deleteEntryAttachment(EntryAttachment $entryAttachment)
+    {
+        $this->learningPathAssignmentService->deleteEntryAttachment($entryAttachment);
+    }
+
+    /**
+     * @param int $entryAttachmentId
+     *
+     * @return EntryAttachment
+     */
+    public function findEntryAttachmentById($entryAttachmentId)
+    {
+        return $this->learningPathAssignmentService->findEntryAttachmentById($entryAttachmentId);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
+     * @return EntryAttachment[]
+     */
+    public function findAttachmentsByEntry(Entry $entry)
+    {
+        return $this->learningPathAssignmentService->findAttachmentsByEntry($entry);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function isContentObjectAttachedToEntry(Entry $entry, ContentObject $contentObject)
+    {
+        return $this->learningPathAssignmentService->isContentObjectAttachedToEntry($entry, $contentObject);
     }
 }

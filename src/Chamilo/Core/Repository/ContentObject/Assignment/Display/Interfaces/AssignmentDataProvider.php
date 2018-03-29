@@ -3,8 +3,10 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -357,4 +359,39 @@ interface AssignmentDataProvider
      * @return Entry
      */
     public function findLastEntryForEntity($entityType, $entityIdentifier);
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     */
+    public function attachContentObjectToEntry(Entry $entry, ContentObject $contentObject);
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment $entryAttachment
+     */
+    public function deleteEntryAttachment(EntryAttachment $entryAttachment);
+
+    /**
+     * @param int $entryAttachmentId
+     *
+     * @return EntryAttachment
+     */
+    public function findEntryAttachmentById($entryAttachmentId);
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
+     * @return EntryAttachment[]
+     */
+    public function findAttachmentsByEntry(Entry $entry);
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function isContentObjectAttachedToEntry(Entry $entry, ContentObject $contentObject);
 }

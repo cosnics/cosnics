@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
@@ -45,6 +46,7 @@ abstract class AssignmentService
 
         $this->assignmentRepository->deleteScoreForEntry($entry);
         $this->assignmentRepository->deleteFeedbackForEntry($entry);
+        $this->assignmentRepository->deleteAttachmentsForEntry($entry);
     }
 
     /**
@@ -266,11 +268,112 @@ abstract class AssignmentService
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     */
+    public function attachContentObjectToEntry(Entry $entry, ContentObject $contentObject)
+    {
+        $entryAttachment = $this->createEntryAttachmentInstance();
+
+        $entryAttachment->setEntryId($entry->getId());
+        $entryAttachment->setAttachmentId($contentObject->getId());
+
+        if (!$this->assignmentRepository->createEntryAttachment($entryAttachment))
+        {
+            throw new \RuntimeException('Could not attach a content object to entry ' . $entryAttachment->getId());
+        }
+
+        return $entryAttachment;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     */
+    public function detachContentObjectFromEntry(Entry $entry, ContentObject $contentObject)
+    {
+        $entryAttachment =
+            $this->assignmentRepository->findEntryAttachmentByEntryAndAttachmentId($entry, $contentObject->getId());
+
+        if (!$entryAttachment instanceof EntryAttachment)
+        {
+            return;
+        }
+
+        $this->deleteEntryAttachment($entryAttachment);
+
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment $entryAttachment
+     */
+    public function deleteEntryAttachment(EntryAttachment $entryAttachment)
+    {
+        if (!$this->assignmentRepository->deleteEntryAttachment($entryAttachment))
+        {
+            throw new \RuntimeException('Could not detach a content object to entry ' . $entryAttachment->getId());
+        }
+    }
+
+    /**
+     * @param int $entryAttachmentId
+     *
+     * @return EntryAttachment
+     */
+    public function findEntryAttachmentById($entryAttachmentId)
+    {
+        return $this->assignmentRepository->findEntryAttachmentById($entryAttachmentId);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
+     * @return EntryAttachment[]
+     */
+    public function findAttachmentsByEntry(Entry $entry)
+    {
+        return $this->assignmentRepository->findAttachmentsByEntry($entry);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function isContentObjectAttachedToEntry(Entry $entry, ContentObject $contentObject)
+    {
+        $entryAttachment =
+            $this->assignmentRepository->findEntryAttachmentByEntryAndAttachmentId($entry, $contentObject->getId());
+
+        return $entryAttachment instanceof EntryAttachment;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function isContentObjectAttachedToAnyEntry(ContentObject $contentObject)
+    {
+        return $this->assignmentRepository->countEntryAttachmentsByAttachmentId($contentObject->getId()) > 0;
+    }
+
+    /**
      * Creates a new instance for an entry
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
      */
     abstract protected function createEntryInstance();
+
+    /**
+     * Creates a new instance for an entry attachment
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     */
+    abstract protected function createEntryAttachmentInstance();
 
     /**
      * Creates a new instance for a score

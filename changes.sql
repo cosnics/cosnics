@@ -348,9 +348,9 @@ CREATE TABLE `tracking_weblcms_learning_path_assignment_entry` (
   KEY `twlpae_user_id` (`user_id`)
 );
 
-CREATE TABLE `tracking_weblcms_learning_path_assignment_feedback` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `comment` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
-CREATE TABLE `tracking_weblcms_learning_path_assignment_note` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `note` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
-CREATE TABLE `tracking_weblcms_learning_path_assignment_score` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `score` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_learning_path_assignment_feedback` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `comment` TEXT NULL , PRIMARY KEY (`id`), KEY `twlpaf_entry_id` (`entry_id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_learning_path_assignment_note` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `note` TEXT NULL , PRIMARY KEY (`id`), KEY `twlpan_entry_id` (`entry_id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_learning_path_assignment_score` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `score` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`), KEY `twlpas_entry_id` (`entry_id`)) ENGINE = InnoDB;
 
 CREATE TABLE `tracking_weblcms_assignment_entry` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -362,15 +362,15 @@ CREATE TABLE `tracking_weblcms_assignment_entry` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `ip_address` varchar(15) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `twlpae_content_object_publication_id` (`content_object_publication_id`),
-  KEY `twlpae_content_object_id` (`content_object_id`),
-  KEY `twlpae_entity` (`entity_id`, `entity_type`),
-  KEY `twlpae_user_id` (`user_id`)
+  KEY `twae_content_object_publication_id` (`content_object_publication_id`),
+  KEY `twae_content_object_id` (`content_object_id`),
+  KEY `twae_entity` (`entity_id`, `entity_type`),
+  KEY `twae_user_id` (`user_id`)
 );
 
-CREATE TABLE `tracking_weblcms_assignment_feedback` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `comment` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
-CREATE TABLE `tracking_weblcms_assignment_note` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `note` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
-CREATE TABLE `tracking_weblcms_assignment_score` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `score` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_assignment_feedback` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `creation_date` INT(10) UNSIGNED NOT NULL , `modification_date` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `comment` TEXT NULL , PRIMARY KEY (`id`), KEY `twaf_entry_id` (`entry_id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_assignment_note` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `note` TEXT NULL , PRIMARY KEY (`id`), KEY `twan_entry_id` (`entry_id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_assignment_score` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `created` INT(10) UNSIGNED NOT NULL , `modified` INT(10) UNSIGNED NOT NULL , `user_id` INT(10) UNSIGNED NOT NULL , `score` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`), KEY `twas_entry_id` (`entry_id`)) ENGINE = InnoDB;
 
 
 /** Assignment tool refactoring **/
@@ -395,3 +395,21 @@ JOIN repository_assignment COA on COP.content_object_id = COA.id
 SET WAP.entity_type = 1 WHERE COA.allow_group_submissions = 1;
 
 ALTER TABLE `repository_assignment` DROP `allow_group_submissions`;
+
+CREATE TABLE `tracking_weblcms_assignment_entry_attachment` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `attachment_id` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`), KEY `twaea_attachment_id` (`attachment_id`), KEY `twaea_entry_id` (`entry_id`)) ENGINE = InnoDB;
+CREATE TABLE `tracking_weblcms_learning_path_assignment_entry_attachment` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `attachment_id` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`), KEY `twlpaea_attachment_id` (`attachment_id`), KEY `twlpaea_entry_id` (`entry_id`)) ENGINE = InnoDB;
+
+/** EXECUTE WHEN THE INDEXES OF ASSIGNMENT HAS NOT BEEN SET **/
+
+/**ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `entity_id`, `entity_type`);
+ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `content_object_publication_id`);
+ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `content_object_id`);
+ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `user_id`);
+
+ALTER TABLE `tracking_weblcms_assignment_feedback` ADD INDEX( `user_id`);
+ALTER TABLE `tracking_weblcms_assignment_note` ADD INDEX( `user_id`);
+ALTER TABLE `tracking_weblcms_assignment_score` ADD INDEX( `user_id`);
+
+ALTER TABLE `tracking_weblcms_assignment_feedback` ADD INDEX( `entry_id`);
+ALTER TABLE `tracking_weblcms_assignment_note` ADD INDEX( `entry_id`);
+ALTER TABLE `tracking_weblcms_assignment_score` ADD INDEX( `entry_id`);**/

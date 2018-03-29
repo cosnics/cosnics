@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repos
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
@@ -125,6 +126,21 @@ abstract class AssignmentRepository
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
+     * @return bool
+     */
+    public function deleteAttachmentsForEntry(Entry $entry)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getEntryAttachmentClassName(), EntryAttachment::PROPERTY_ENTRY_ID),
+            new StaticConditionVariable($entry->getId())
+        );
+
+        return $this->dataClassRepository->deletes($this->getEntryAttachmentClassName(), $condition);
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score
      *
      * @return bool
@@ -182,6 +198,26 @@ abstract class AssignmentRepository
     public function updateFeedback(Feedback $feedback)
     {
         return $this->dataClassRepository->update($feedback);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment $entryAttachment
+     *
+     * @return bool
+     */
+    public function createEntryAttachment(EntryAttachment $entryAttachment)
+    {
+        return $this->dataClassRepository->create($entryAttachment);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment $entryAttachment
+     *
+     * @return bool
+     */
+    public function deleteEntryAttachment(EntryAttachment $entryAttachment)
+    {
+        return $this->dataClassRepository->delete($entryAttachment);
     }
 
     /**
@@ -1203,6 +1239,78 @@ abstract class AssignmentRepository
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param int $attachmentId
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass | EntryAttachment
+     */
+    public function findEntryAttachmentByEntryAndAttachmentId(Entry $entry, $attachmentId)
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($this->getEntryAttachmentClassName(), EntryAttachment::PROPERTY_ENTRY_ID),
+            new StaticConditionVariable($entry->getId())
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                $this->getEntryAttachmentClassName(), EntryAttachment::PROPERTY_ATTACHMENT_ID
+            ),
+            new StaticConditionVariable($attachmentId)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->retrieve(
+            $this->getEntryAttachmentClassName(), new DataClassRetrieveParameters($condition)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | EntryAttachment[]
+     */
+    public function findAttachmentsByEntry(Entry $entry)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getEntryAttachmentClassName(), EntryAttachment::PROPERTY_ENTRY_ID),
+            new StaticConditionVariable($entry->getId())
+        );
+
+        return $this->dataClassRepository->retrieves(
+            $this->getEntryAttachmentClassName(), new DataClassRetrieveParameters($condition)
+        );
+    }
+
+    /**
+     * @param $entryAttachmentId
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass | EntryAttachment
+     */
+    public function findEntryAttachmentById($entryAttachmentId)
+    {
+        return $this->dataClassRepository->retrieveById($this->getEntryAttachmentClassName(), $entryAttachmentId);
+    }
+
+    /**
+     * @param int $attachmentId
+     *
+     * @return int
+     */
+    public function countEntryAttachmentsByAttachmentId($attachmentId)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getEntryAttachmentClassName(), EntryAttachment::PROPERTY_ATTACHMENT_ID),
+            new StaticConditionVariable($attachmentId)
+        );
+
+        return $this->dataClassRepository->count(
+            $this->getEntryAttachmentClassName(), new DataClassCountParameters($condition)
+        );
+    }
+
+    /**
      * @return string
      */
     abstract protected function getEntryClassName();
@@ -1221,4 +1329,9 @@ abstract class AssignmentRepository
      * @return string
      */
     abstract protected function getScoreClassName();
+
+    /**
+     * @return string
+     */
+    abstract protected function getEntryAttachmentClassName();
 }
