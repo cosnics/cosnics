@@ -665,6 +665,14 @@ class AssignmentRepository
     /**
      * @return string
      */
+    protected function getEntryAttachmentClassName()
+    {
+        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\EntryAttachment::class;
+    }
+
+    /**
+     * @return string
+     */
     protected function getFeedbackClassName()
     {
         return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Feedback::class;

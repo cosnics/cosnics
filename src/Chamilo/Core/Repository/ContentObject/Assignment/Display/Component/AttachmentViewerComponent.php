@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
@@ -32,14 +33,20 @@ class AttachmentViewerComponent extends Manager
             throw new ParameterNotDefinedException(\Chamilo\Core\Repository\Display\Manager::PARAM_ATTACHMENT_ID);
         }
 
+        /** @var ContentObject $attachment */
         $attachment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $attachment_id
         );
 
+        $entry = $this->getEntry();
+
         if (!$this->get_root_content_object()->is_attached_to_or_included_in($attachment_id))
         {
-            throw new NotAllowedException();
+            if(!$entry instanceof Entry || !$this->getDataProvider()->isContentObjectAttachedToEntry($entry, $attachment))
+            {
+                throw new NotAllowedException();
+            }
         }
 
         /*

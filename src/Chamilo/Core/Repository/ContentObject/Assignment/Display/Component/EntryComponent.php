@@ -196,6 +196,27 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'SHOW_AUTOMATIC_FEEDBACK' => $assignment->isAutomaticFeedbackVisible(),
             'AUTOMATIC_FEEDBACK_TEXT' => $assignment->get_automatic_feedback_text(),
             'AUTOMATIC_FEEDBACK_CONTENT_OBJECTS' => $contentObjects,
+            'UPLOAD_ENTRY_ATTACHMENT_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::ACTION_UPLOAD_ENTRY_ATTACHMENT,
+                    self::PARAM_ENTRY_ID => $this->getEntry()->getId()
+                ]
+            ),
+            'DELETE_ENTRY_ATTACHMENT_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::ACTION_DELETE_ENTRY_ATTACHMENT,
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ENTRY_ATTACHMENT_ID => '__ENTRY_ATTACHMENT_ID__'
+                ]
+            ),
+            'ATTACHMENT_VIEWER_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
+                    self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__',
+                    self::PARAM_ENTRY_ID => $this->getEntry()->getId()
+                ]
+            )
         ];
 
         return array_merge($baseParameters, $extendParameters);

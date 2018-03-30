@@ -25,6 +25,14 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
     }
 
     /**
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     */
+    protected function createEntryAttachmentInstance()
+    {
+        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment();
+    }
+
+    /**
      * Creates a new instance for a score
      *
      * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score

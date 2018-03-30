@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\EntryAttachment;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Score;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Feedback;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Note;
@@ -639,6 +640,14 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     protected function createEntryInstance()
     {
         return new Entry();
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\EntryAttachment|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     */
+    protected function createEntryAttachmentInstance()
+    {
+        return new EntryAttachment();
     }
 
     /**

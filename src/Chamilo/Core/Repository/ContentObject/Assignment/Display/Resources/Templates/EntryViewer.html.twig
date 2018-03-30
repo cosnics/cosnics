@@ -46,6 +46,128 @@
                 {{ CONTENT_OBJECT_RENDITION|raw }}
             </div>
             <div class="col-sm-4">
+                <h3>Verbeterde versies</h3>
+                <div class="attachment-viewer">
+                    <div id="attachments-upload-container">
+                        <div id="attachments-upload-input">
+                            <input type="file" name="attachments" />
+                        </div>
+
+                        <div id="attachments-upload" class="file-upload">
+
+                            <div class="file-previews files" id="attachments-previews">
+                                <div id="attachments-template" class="thumbnail pull-left" style="display: flex; align-items: center; width: 100%;">
+                                    <div class="preview" style="display: flex; align-items: center;">
+                                        <div class="file-upload-no-preview" style="width: auto; height: auto;">
+                                            <span class="glyphicon glyphicon-file" style="font-size: 50px; width: auto; line-height: normal;"></span>
+                                            </div>
+                                        <img data-dz-thumbnail style="max-height: 75px;"/>
+                                        </div>
+                                    <div class="caption">
+                                        <h3 data-dz-name></h3>
+                                        <strong class="error text-danger" data-dz-errormessage></strong>
+                                        <p class="size" data-dz-size></p>
+                                        <div>
+                                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="margin-bottom: 0;">
+                                                <div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <span class="actions"><span class="glyphicon glyphicon-upload"></span>&nbsp;<span class="glyphicon glyphicon-plus-sign fileinput-button dz-clickable"></span></span>
+
+                                    </div>
+                                <div class="panel-footer">
+                                    {{ 'DropFileHereMessage'|trans({}, 'Chamilo\\Libraries') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table table-bordered table-striped table-data" id="entry-attachments-list">
+                    <thead>
+                        <tr>
+                            <td>Titel</td>
+                            <td>Verbeterd door</td>
+                            <td>Datum</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="no-results">
+                            <td colspan="4" style="text-align: center;">Geen verbeterde versies opgeladen</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {{ getJavascript('Plugin\\Jquery\\jquery.file.upload.js', 'Chamilo\\Libraries') }}
+
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        dropzoneCallbacks.chamilo = {
+                            core: {
+                                repository: {
+                                    assignment: {
+                                        entry: {
+                                            attachment: {
+                                                processUploadedFile: function (environment, file, serverResponse) {
+                                                    var properties = serverResponse.properties;
+
+                                                    var element = $('<tr></tr>');
+
+                                                    var attachmentUrl = '{{ ATTACHMENT_VIEWER_URL|raw }}';
+                                                    attachmentUrl = attachmentUrl.replace("__ATTACHMENT_ID__", properties.id);
+
+                                                    var title = properties.filename;
+                                                    title = $('<a></a>').attr('onclick', 'javascript:openPopup("' + attachmentUrl + '"); return false;').text(title).attr('href', '#');
+
+                                                    var titleElement = $('<td></td>').html(title);
+                                                    var nameElement = $('<td></td>').text(properties.user);
+                                                    var dateElement = $('<td></td>').text(properties.date);
+
+
+                                                    var deleteButton = $('<button></button>').attr('type', 'button').attr('class', 'btn btn-default btn-xs');
+                                                    var deleteIcon = $('<span></span>').attr('class', 'fa fa-remove');
+
+                                                    deleteButton.append(deleteIcon);
+                                                    var deleteElement = $('<td></td>').append(deleteButton).attr('align', 'center');
+
+                                                    element.append(titleElement);
+                                                    element.append(nameElement);
+                                                    element.append(dateElement);
+                                                    element.append(deleteElement);
+
+                                                    var body = $('#entry-attachments-list').find('tbody');
+                                                    body.append(element);
+
+                                                    body.find('tr.no-results').hide();
+                                                    $(file.previewElement).hide();
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        };
+
+                        $("#attachments-upload-container").fileUpload(
+                            {
+                                'name': 'attachments',
+                                'successCallbackFunction': 'chamilo.core.repository.assignment.entry.attachment.processUploadedFile',
+                                'uploadUrl': '{{ UPLOAD_ENTRY_ATTACHMENT_URL|raw }}'
+                            }
+                        );
+                    });
+                </script>
+
                 {{ FEEDBACK_MANAGER|raw }}
             </div>
         </div>

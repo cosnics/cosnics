@@ -42,4 +42,12 @@ class LearningPathAssignmentRepository extends \Chamilo\Core\Repository\ContentO
     {
         return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score::class;
     }
+
+    /**
+     * @return string
+     */
+    protected function getEntryAttachmentClassName()
+    {
+        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment::class;
+    }
 }
