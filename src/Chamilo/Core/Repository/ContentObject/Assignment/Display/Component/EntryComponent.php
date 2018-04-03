@@ -28,6 +28,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -206,8 +207,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'DELETE_ENTRY_ATTACHMENT_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
-                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::ACTION_DELETE_ENTRY_ATTACHMENT,
-                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ENTRY_ATTACHMENT_ID => '__ENTRY_ATTACHMENT_ID__'
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::ACTION_DELETE_ENTRY_ATTACHMENT
                 ]
             ),
             'ATTACHMENT_VIEWER_URL' => $this->get_url(
@@ -216,7 +216,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                     self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__',
                     self::PARAM_ENTRY_ID => $this->getEntry()->getId()
                 ]
-            )
+            ),
+            'ATTACHED_CONTENT_OBJECTS' => $this->getAttachedContentObjects()
         ];
 
         return array_merge($baseParameters, $extendParameters);
@@ -766,6 +767,49 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         }
 
         return $this->entryNavigator;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getAttachedContentObjects()
+    {
+        if (!$this->getEntry() instanceof Entry)
+        {
+            return [];
+        }
+
+        $entryAttachments = $this->getDataProvider()->findAttachmentsByEntry($this->getEntry());
+
+        if (empty($entryAttachments))
+        {
+            return [];
+        }
+
+        $contentObjectAttachments = [];
+
+        foreach ($entryAttachments as $entryAttachment)
+        {
+            /** @var ContentObject $contentObject */
+            $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class, $entryAttachment->getAttachmentId()
+            );
+
+            $owner = $this->getUserService()->getUserFullNameById($contentObject->get_owner_id());
+
+            $contentObjectAttachments[] =
+                [
+                    'attachment_id' => $entryAttachment->getId(),
+                    'content_object' => [
+                        'id' => $contentObject->getId(),
+                        'title' => $contentObject->get_title(),
+                        'user' => $owner,
+                        'date' => DatetimeUtilities::format_locale_date(null, $contentObject->get_creation_date())
+                    ]
+                ];
+        }
+
+        return $contentObjectAttachments;
     }
 
     /**

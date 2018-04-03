@@ -101,7 +101,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="no-results">
+                        {% for ATTACHED_CONTENT_OBJECT in ATTACHED_CONTENT_OBJECTS %}
+                            <tr id="attachment{{ ATTACHED_CONTENT_OBJECT.attachment_id  }}">
+                                <td><a href="#" onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': ATTACHED_CONTENT_OBJECT.content_object.id}) }}'); return false;">{{ ATTACHED_CONTENT_OBJECT.content_object.title }}</td>
+                                <td>{{ ATTACHED_CONTENT_OBJECT.content_object.user }}</td>
+                                <td>{{ ATTACHED_CONTENT_OBJECT.content_object.date }}</td>
+                                <td align="center"><a href="#" onclick="javascript:removeAssignmentEntryAttachment({{ ATTACHED_CONTENT_OBJECT.attachment_id  }}); return false;" class="btn btn-default btn-xs"><span class="fa fa-remove"></span></a></td>
+                            </tr>
+                        {% endfor %}
+                        <tr class="no-results" {% if ATTACHED_CONTENT_OBJECTS|length > 0 %} style="display: none;" {% endif %}>
                             <td colspan="4" style="text-align: center;">Geen verbeterde versies opgeladen</td>
                         </tr>
                     </tbody>
@@ -119,8 +127,9 @@
                                             attachment: {
                                                 processUploadedFile: function (environment, file, serverResponse) {
                                                     var properties = serverResponse.properties;
+                                                    var attachmentId = properties.attachment_id;
 
-                                                    var element = $('<tr></tr>');
+                                                    var element = $('<tr></tr>').attr('id', 'attachment' + attachmentId);
 
                                                     var attachmentUrl = '{{ ATTACHMENT_VIEWER_URL|raw }}';
                                                     attachmentUrl = attachmentUrl.replace("__ATTACHMENT_ID__", properties.id);
@@ -133,7 +142,12 @@
                                                     var dateElement = $('<td></td>').text(properties.date);
 
 
-                                                    var deleteButton = $('<button></button>').attr('type', 'button').attr('class', 'btn btn-default btn-xs');
+                                                    var deleteButton = $('<a></a>')
+                                                        .attr('type', 'button')
+                                                        .attr('class', 'btn btn-default btn-xs')
+                                                        .attr('href', '#')
+                                                        .on('click', function() { removeAssignmentEntryAttachment(attachmentId); });
+
                                                     var deleteIcon = $('<span></span>').attr('class', 'fa fa-remove');
 
                                                     deleteButton.append(deleteIcon);
@@ -156,6 +170,27 @@
                                     }
                                 }
                             }
+                        };
+
+                        window.removeAssignmentEntryAttachment = function(assignmentEntryAttachmentId) {
+                            if(!confirm('{{ 'ConfirmDelete'|trans({}, 'Chamilo\\Libraries') }}'))
+                            {
+                                return;
+                            }
+
+                            var deleteUrl = '{{ DELETE_ENTRY_ATTACHMENT_URL|raw }}';
+                            $.post(deleteUrl, {'entry_attachment_id': assignmentEntryAttachmentId})
+                                .done(function(data) {
+                                    $('#attachment' + assignmentEntryAttachmentId).remove();
+                                    var body = $('#entry-attachments-list').find('tbody');
+                                    var attachmentListCount = body.find('tr').length;
+
+                                    if(attachmentListCount === 1) {
+                                        body.find('tr.no-results').show();
+                                    }
+
+                                });
+
                         };
 
                         $("#attachments-upload-container").fileUpload(

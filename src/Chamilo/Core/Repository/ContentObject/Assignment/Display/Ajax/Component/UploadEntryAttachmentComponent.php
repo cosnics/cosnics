@@ -59,10 +59,11 @@ class UploadEntryAttachmentComponent extends Manager
             throw new ObjectNotExistException(Translation::get('Entry'));
         }
 
-        $this->getDataProvider()->attachContentObjectToEntry($entry, $file);
+        $entryAttachment = $this->getDataProvider()->attachContentObjectToEntry($entry, $file);
 
         $properties = [
             'id' => $file->getId(),
+            'attachment_id' => $entryAttachment->getId(),
             'filename' => $file->get_filename(),
             'user' => $this->getUser()->get_fullname(),
             'date' => DatetimeUtilities::format_locale_date(null, $file->get_creation_date())

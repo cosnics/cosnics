@@ -1279,7 +1279,7 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->getEntryAttachmentClassName(), new DataClassRetrieveParameters($condition)
+            $this->getEntryAttachmentClassName(), new DataClassRetrievesParameters($condition)
         );
     }
 
