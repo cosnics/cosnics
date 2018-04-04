@@ -221,6 +221,16 @@ abstract class AssignmentRepository
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment $entryAttachment
+     *
+     * @return bool
+     */
+    public function updateEntryAttachment(EntryAttachment $entryAttachment)
+    {
+        return $this->dataClassRepository->update($entryAttachment);
+    }
+
+    /**
      *
      * @param integer $entryIdentifier
      *
@@ -1294,19 +1304,100 @@ abstract class AssignmentRepository
     }
 
     /**
-     * @param int $attachmentId
+     * @param int[] $attachmentIds
      *
      * @return int
      */
-    public function countEntryAttachmentsByAttachmentId($attachmentId)
+    public function countEntryAttachmentsByAttachmentIds($attachmentIds = [])
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable($this->getEntryAttachmentClassName(), EntryAttachment::PROPERTY_ATTACHMENT_ID),
-            new StaticConditionVariable($attachmentId)
+        $condition = new InCondition(
+            new PropertyConditionVariable(
+                $this->getEntryAttachmentClassName(), EntryAttachment::PROPERTY_ATTACHMENT_ID
+            ),
+            $attachmentIds
         );
 
         return $this->dataClassRepository->count(
             $this->getEntryAttachmentClassName(), new DataClassCountParameters($condition)
+        );
+    }
+
+    /**
+     * @param int $attachmentId
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | EntryAttachment[]
+     */
+    public function findEntryAttachmentsByAttachmentId($attachmentId)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                $this->getEntryAttachmentClassName(), EntryAttachment::PROPERTY_ATTACHMENT_ID
+            ),
+            new StaticConditionVariable($attachmentId)
+        );
+
+        return $this->dataClassRepository->retrieves(
+            $this->getEntryAttachmentClassName(), new DataClassRetrievesParameters($condition)
+        );
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | EntryAttachment[]
+     */
+    public function findEntryAttachmentsByUserId($userId)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
+            new StaticConditionVariable($userId)
+        );
+
+        $joins = new Joins();
+        $joins->add(
+            new Join(
+                ContentObject::class,
+                new EqualityCondition(
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(
+                        $this->getEntryAttachmentClassName(), EntryAttachment::PROPERTY_ATTACHMENT_ID
+                    )
+                )
+            )
+        );
+
+        return $this->dataClassRepository->retrieves(
+            $this->getEntryAttachmentClassName(), new DataClassRetrievesParameters($condition, null, null, [], $joins)
+        );
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return int
+     */
+    public function countEntryAttachmentsByUserId($userId)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
+            new StaticConditionVariable($userId)
+        );
+
+        $joins = new Joins();
+        $joins->add(
+            new Join(
+                ContentObject::class,
+                new EqualityCondition(
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(
+                        $this->getEntryAttachmentClassName(), EntryAttachment::PROPERTY_ATTACHMENT_ID
+                    )
+                )
+            )
+        );
+
+        return $this->dataClassRepository->count(
+            $this->getEntryAttachmentClassName(), new DataClassCountParameters($condition, $joins)
         );
     }
 

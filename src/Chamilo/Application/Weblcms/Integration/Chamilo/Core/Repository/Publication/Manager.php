@@ -1,9 +1,11 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationService;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Service\ContentObjectPublicationMailer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -18,6 +20,7 @@ use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introdu
 use Chamilo\Core\Repository\Publication\Location\Locations;
 use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
+use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
@@ -34,7 +37,6 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class Manager implements PublicationInterface
 {
-
     /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::is_content_object_editable()
      */
@@ -44,20 +46,23 @@ class Manager implements PublicationInterface
         $container = $containerBuilder->createContainer();
 
         /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService */
-        $assignmentService = $container->get('chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service');
+        $assignmentService =
+            $container->get('chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service');
 
         /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService $learningPathAssignmentService */
-        $learningPathAssignmentService = $container->get('chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service');
+        $learningPathAssignmentService = $container->get(
+            'chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service'
+        );
 
         $contentObject = new ContentObject();
         $contentObject->setId($object_id);
 
-        if($assignmentService->isContentObjectUsedAsEntry($contentObject))
+        if ($assignmentService->isContentObjectUsedAsEntry($contentObject))
         {
             return false;
         }
 
-        if($learningPathAssignmentService->isContentObjectUsedAsEntry($contentObject))
+        if ($learningPathAssignmentService->isContentObjectUsedAsEntry($contentObject))
         {
             return false;
         }
@@ -70,7 +75,21 @@ class Manager implements PublicationInterface
      */
     public static function content_object_is_published($object_id)
     {
-        return DataManager::content_object_is_published($object_id);
+        if (DataManager::content_object_is_published($object_id))
+        {
+            return true;
+        }
+
+        $assignmentPublicationServices = self::getAssignmentPublicationServices();
+        foreach ($assignmentPublicationServices as $assignmentPublicationService)
+        {
+            if ($assignmentPublicationService->areContentObjectsPublished([$object_id]))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /*
@@ -78,7 +97,21 @@ class Manager implements PublicationInterface
      */
     public static function any_content_object_is_published($object_ids)
     {
-        return DataManager::any_content_object_is_published($object_ids);
+        if (DataManager::any_content_object_is_published($object_ids))
+        {
+            return true;
+        }
+
+        $assignmentPublicationServices = self::getAssignmentPublicationServices();
+        foreach ($assignmentPublicationServices as $assignmentPublicationService)
+        {
+            if ($assignmentPublicationService->areContentObjectsPublished($object_ids))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /*
@@ -89,7 +122,7 @@ class Manager implements PublicationInterface
         $offset = null, $order_properties = null
     )
     {
-        return DataManager::get_content_object_publication_attributes(
+        $publicationAttributes = DataManager::get_content_object_publication_attributes(
             $object_id,
             $type,
             $condition,
@@ -97,14 +130,49 @@ class Manager implements PublicationInterface
             $offset,
             $order_properties
         );
+
+        $assignmentPublicationServices = self::getAssignmentPublicationServices();
+        foreach ($assignmentPublicationServices as $assignmentPublicationService)
+        {
+            switch ($type)
+            {
+                case self::ATTRIBUTES_TYPE_OBJECT:
+                default:
+                    $publicationAttributes = array_merge(
+                        $publicationAttributes,
+                        $assignmentPublicationService->getContentObjectPublicationAttributesForContentObject($object_id)
+                    );
+                case self::ATTRIBUTES_TYPE_USER:
+                    $publicationAttributes = array_merge(
+                        $publicationAttributes,
+                        $assignmentPublicationService->getContentObjectPublicationAttributesForUser($object_id)
+                    );
+            }
+        }
+
+        return $publicationAttributes;
     }
 
     /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_attribute()
      */
-    public static function get_content_object_publication_attribute($publication_id)
+    public static function get_content_object_publication_attribute($publication_id, $context = null)
     {
-        return DataManager::get_content_object_publication_attribute($publication_id);
+        if (!empty($context) || $context == ContentObjectPublication::class)
+        {
+            return DataManager::get_content_object_publication_attribute($publication_id);
+        }
+
+        $assignmentPublicationServices = self::getAssignmentPublicationServices();
+        foreach ($assignmentPublicationServices as $assignmentPublicationService)
+        {
+            if ($assignmentPublicationService->getPublicationContext() == $context)
+            {
+                return $assignmentPublicationService->getContentObjectPublicationAttributes($publication_id);
+            }
+        }
+
+        return null;
     }
 
     /*
@@ -112,7 +180,26 @@ class Manager implements PublicationInterface
      */
     public static function count_publication_attributes($attributes_type = null, $identifier = null, $condition = null)
     {
-        return DataManager::count_publication_attributes($attributes_type, $identifier, $condition);
+        $count = DataManager::count_publication_attributes($attributes_type, $identifier, $condition);
+
+        $assignmentPublicationServices = self::getAssignmentPublicationServices();
+        foreach ($assignmentPublicationServices as $assignmentPublicationService)
+        {
+            switch ($attributes_type)
+            {
+                case self::ATTRIBUTES_TYPE_OBJECT:
+                default:
+                    $count += $assignmentPublicationService->countContentObjectPublicationAttributesForContentObject(
+                        $identifier
+                    );
+                case self::ATTRIBUTES_TYPE_USER:
+                    $count += $assignmentPublicationService->countContentObjectPublicationAttributesForContentObject(
+                        $identifier
+                    );
+            }
+        }
+
+        return $count;
     }
 
     /*
@@ -120,21 +207,62 @@ class Manager implements PublicationInterface
      */
     public static function delete_content_object_publications($object_id)
     {
-        return DataManager::delete_content_object_publications($object_id);
+        if (!DataManager::delete_content_object_publications($object_id))
+        {
+            return false;
+        }
+
+        try
+        {
+            $assignmentPublicationServices = self::getAssignmentPublicationServices();
+            foreach ($assignmentPublicationServices as $assignmentPublicationService)
+            {
+                $assignmentPublicationService->deleteContentObjectPublicationsByObjectId($object_id);
+            }
+        }
+        catch (\Exception $ex)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::delete_content_object_publication()
      */
-    public static function delete_content_object_publication($publication_id)
+    public static function delete_content_object_publication($publication_id, $context = null)
     {
-        $publication = DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $publication_id);
-        if (!$publication)
+        if (empty($context) || $context == ContentObjectPublication::class)
+        {
+            $publication = DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $publication_id);
+            if (!$publication)
+            {
+                return false;
+            }
+
+            return $publication->delete();
+        }
+
+        try
+        {
+            $assignmentPublicationServices = self::getAssignmentPublicationServices();
+            foreach ($assignmentPublicationServices as $assignmentPublicationService)
+            {
+                if ($assignmentPublicationService->getPublicationContext() == $context)
+                {
+                    $assignmentPublicationService->deleteContentObjectPublicationsByPublicationId($publication_id);
+
+                    break;
+                }
+            }
+
+            return true;
+        }
+        catch (\Exception $ex)
         {
             return false;
         }
-
-        return $publication->delete();
     }
 
     /*
@@ -223,7 +351,8 @@ class Manager implements PublicationInterface
                             \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_introduction_publication_by_course_and_tool(
                                 $course->getId(),
                                 $tool_names[$tool_id]
-                            )))
+                            )
+                            ))
                     )
                     {
                         continue;
@@ -384,11 +513,57 @@ class Manager implements PublicationInterface
         $form->setDefaults($defaults);
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::update_content_object_publication_id()
+    /**
+     * @param Attributes $publication_attributes
+     *
+     * @return bool
      */
     public static function update_content_object_publication_id($publication_attributes)
     {
-        return DataManager::update_content_object_publication_id($publication_attributes);
+        $context = $publication_attributes->getPublicationContext();
+        if (empty($context) || $context == ContentObjectPublication::class)
+        {
+            return DataManager::update_content_object_publication_id($publication_attributes);
+        }
+
+        try
+        {
+            $assignmentPublicationServices = self::getAssignmentPublicationServices();
+            foreach ($assignmentPublicationServices as $assignmentPublicationService)
+            {
+                if ($assignmentPublicationService->getPublicationContext() == $context)
+                {
+                    $assignmentPublicationService->updateContentObjectId(
+                        $publication_attributes->getId(), $publication_attributes->get_content_object_id()
+                    );
+
+                    break;
+                }
+            }
+
+            return true;
+        }
+        catch (\Exception $ex)
+        {
+            return false;
+        }
+    }
+
+    /**
+     * @return AssignmentPublicationService[]
+     */
+    protected static function getAssignmentPublicationServices()
+    {
+        $containerBuilder = DependencyInjectionContainerBuilder::getInstance();
+        $container = $containerBuilder->createContainer();
+
+        return [
+            $container->get(
+                'chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.content_object_publication_manager.assignment_publication_service'
+            ),
+            $container->get(
+                'chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.content_object_publication_manager.learning_path_assignment_publication_service'
+            ),
+        ];
     }
 }

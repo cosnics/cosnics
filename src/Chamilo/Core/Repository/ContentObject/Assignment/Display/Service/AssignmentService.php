@@ -318,6 +318,17 @@ abstract class AssignmentService
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment $entryAttachment
+     */
+    public function updateEntryAttachment(EntryAttachment $entryAttachment)
+    {
+        if (!$this->assignmentRepository->updateEntryAttachment($entryAttachment))
+        {
+            throw new \RuntimeException('Could not update an entry attachment with id ' . $entryAttachment->getId());
+        }
+    }
+
+    /**
      * @param int $entryAttachmentId
      *
      * @return EntryAttachment
@@ -352,13 +363,56 @@ abstract class AssignmentService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param int[] $attachmentIds
      *
      * @return bool
      */
-    public function isContentObjectAttachedToAnyEntry(ContentObject $contentObject)
+    public function countEntryAttachmentsByAttachmentIds($attachmentIds = [])
     {
-        return $this->assignmentRepository->countEntryAttachmentsByAttachmentId($contentObject->getId()) > 0;
+        return $this->assignmentRepository->countEntryAttachmentsByAttachmentIds($attachmentIds);
+    }
+
+    /**
+     * @param int $attachmentId
+     *
+     * @return EntryAttachment[]
+     */
+    public function findEntryAttachmentsByAttachmentId($attachmentId)
+    {
+        return $this->assignmentRepository->findEntryAttachmentsByAttachmentId($attachmentId);
+    }
+
+    /**
+     * @param int $attachmentId
+     */
+    public function deleteEntryAttachmentsByAttachmentId($attachmentId)
+    {
+        $entryAttachments = $this->findEntryAttachmentsByAttachmentId($attachmentId);
+        foreach($entryAttachments as $entryAttachment)
+        {
+            $this->deleteEntryAttachment($entryAttachment);
+        }
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return EntryAttachment[]
+     */
+    public function findEntryAttachmentsByUserId($userId)
+    {
+        return $this->assignmentRepository->findEntryAttachmentsByUserId($userId);
+    }
+
+
+    /**
+     * @param int $userId
+     *
+     * @return int
+     */
+    public function countEntryAttachmentsByUserId($userId)
+    {
+        return $this->assignmentRepository->countEntryAttachmentsByUserId($userId);
     }
 
     /**

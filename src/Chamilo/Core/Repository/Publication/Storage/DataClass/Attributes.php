@@ -26,6 +26,7 @@ class Attributes extends DataClass
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     const PROPERTY_PUBLISHER_ID = 'publisher_id';
     const PROPERTY_URL = 'url';
+    const PROPERTY_PUBLICATION_CONTEXT = 'publication_context';
 
     public static function get_default_property_names($extended_property_names = array())
     {
@@ -36,6 +37,7 @@ class Attributes extends DataClass
         $extended_property_names[] = self::PROPERTY_CONTENT_OBJECT_ID;
         $extended_property_names[] = self::PROPERTY_PUBLISHER_ID;
         $extended_property_names[] = self::PROPERTY_URL;
+        $extended_property_names[] = self::PROPERTY_PUBLICATION_CONTEXT;
 
         return parent::get_default_property_names($extended_property_names);
     }
@@ -115,6 +117,22 @@ class Attributes extends DataClass
         return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $this->get_content_object_id());
+    }
+
+    /**
+     * @param string $publicationContext
+     */
+    public function setPublicationContext($publicationContext)
+    {
+        $this->set_default_property(self::PROPERTY_PUBLICATION_CONTEXT, $publicationContext);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPublicationContext()
+    {
+        return $this->get_default_property(self::PROPERTY_PUBLICATION_CONTEXT);
     }
 
     public function update()

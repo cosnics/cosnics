@@ -16,6 +16,7 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'publication_action';
     const PARAM_PUBLICATION_APPLICATION = 'publication_application';
     const PARAM_PUBLICATION_ID = 'publication';
+    const PARAM_PUBLICATION_CONTEXT = 'publication_context';
     
     // Actions
     const ACTION_BROWSE = 'Browser';

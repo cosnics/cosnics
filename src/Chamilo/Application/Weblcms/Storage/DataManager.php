@@ -304,7 +304,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $identifier
      * @param Condition $condition
      *
-     * @return multitype:\core\repository\publication\Attributes
+     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
      */
     public static function get_content_object_publication_attributes($identifier,
         $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, $offset = null, $order_properties = null)

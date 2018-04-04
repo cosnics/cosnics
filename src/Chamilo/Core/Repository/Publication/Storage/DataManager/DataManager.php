@@ -100,10 +100,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return new ArrayResultSet($publication_attributes);
     }
 
-    public static function get_content_object_publication_attribute($id, $application, $user)
+    /**
+     * @param int $id
+     * @param string $application
+     * @param string $publicationContext
+     *
+     * @return mixed
+     */
+    public static function get_content_object_publication_attribute($id, $application, $publicationContext = null)
     {
         $manager_class = $application . '\Integration\Chamilo\Core\Repository\Publication\Manager';
-        return $manager_class::get_content_object_publication_attribute($id);
+        return $manager_class::get_content_object_publication_attribute($id, $publicationContext);
     }
 
     /**
@@ -153,10 +160,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return true;
     }
 
-    public static function delete_content_object_publication($application, $publication_id)
+    public static function delete_content_object_publication($application, $publication_id, $publicationContext = null)
     {
         $manager_class = $application . '\Integration\Chamilo\Core\Repository\Publication\Manager';
-        return $manager_class::delete_content_object_publication($publication_id);
+        return $manager_class::delete_content_object_publication($publication_id, $publicationContext);
     }
 
     public static function content_object_is_published($id)
