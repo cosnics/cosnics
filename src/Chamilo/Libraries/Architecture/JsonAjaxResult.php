@@ -95,6 +95,12 @@ class JsonAjaxResult
     public $properties = array();
 
     /**
+     *
+     * @var bool
+     */
+    protected $returnActualStatusCode = false;
+
+    /**
      * JsonAjaxResult Constructor
      *
      * @param integer $resultCode
@@ -104,6 +110,13 @@ class JsonAjaxResult
     {
         $this->set_result_code($resultCode);
         $this->set_properties($properties);
+    }
+
+    /**
+     *  For backwards compatibility. Every response returns a 200 status code unless this function is called
+     */
+    public function returnActualStatusCode() {
+        $this->returnActualStatusCode = true;
     }
 
     /**
@@ -141,7 +154,7 @@ class JsonAjaxResult
      */
     public function get_result_code()
     {
-        return $this->result;
+        return $this->result_code;
     }
 
     /**
@@ -209,7 +222,11 @@ class JsonAjaxResult
 
     public function display()
     {
+        if($this->returnActualStatusCode) {
+            http_response_code($this->get_result_code());
+        }
         header('Content-type: application/json');
+
         echo $this->encode();
         exit();
     }

@@ -31,7 +31,7 @@ class UploadEntryAttachmentComponent extends Manager
            throw new NotAllowedException();
         }
 
-        $uploadedFile = $this->getUploadedFile();
+        $uploadedFile = $this->getRequest()->files->get('attachments');
 
         $file = new File();
         $file->set_parent_id(0);
@@ -47,6 +47,7 @@ class UploadEntryAttachmentComponent extends Manager
         if (!$file->create())
         {
             $jsonAjaxResult = new JsonAjaxResult();
+            $jsonAjaxResult->returnActualStatusCode();
             $jsonAjaxResult->set_result_code(500);
             $jsonAjaxResult->set_result_message(Translation::get('EntryAttachmentNotCreated'));
             $jsonAjaxResult->set_properties(array('object' => serialize($file)));
@@ -72,16 +73,5 @@ class UploadEntryAttachmentComponent extends Manager
         $jsonAjaxResult = new JsonAjaxResult();
         $jsonAjaxResult->set_properties($properties);
         $jsonAjaxResult->display();
-    }
-
-    /**
-     *
-     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
-     */
-    public function getUploadedFile()
-    {
-        $filePropertyName = $this->getRequest()->request->get('filePropertyName');
-
-        return $this->getRequest()->files->get($filePropertyName);
     }
 }
