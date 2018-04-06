@@ -105,5 +105,7 @@
             id="symfony.yaml.parser"
             class="Symfony\Component\Yaml\Parser" />
 
+        <service id="symfony.component.filesystem.filesystem" class="Symfony\Component\Filesystem\Filesystem" />
+
     </services>
 </container>

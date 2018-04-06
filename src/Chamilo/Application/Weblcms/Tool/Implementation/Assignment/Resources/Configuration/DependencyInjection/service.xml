@@ -51,5 +51,17 @@
                 <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.platform_group_entity_service" />
             </call>
         </service>
+
+        <service
+                id="chamilo.application.weblcms.tool.implementation.assignment.service.entries_downloader.entries_downloader_factory"
+                class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntriesDownloader\EntriesDownloaderFactory">
+            <argument type="service" id="symfony.component.translation.translator" />
+            <argument type="service" id="chamilo.application.weblcms.storage.repository.publication_repository" />
+            <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository" />
+            <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.entity_service_manager" />
+            <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
+            <argument type="service" id="chamilo.libraries.file.compression.archive_creator.archive_creator" />
+        </service>
+
     </services>
 </container>

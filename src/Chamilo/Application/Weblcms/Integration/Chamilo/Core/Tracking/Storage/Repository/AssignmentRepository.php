@@ -505,12 +505,15 @@ class AssignmentRepository
     /**
      *
      * @param ContentObjectPublication $contentObjectPublication
+     * @param int $entityType
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findEntriesByContentObjectPublication(ContentObjectPublication $contentObjectPublication)
+    public function findEntriesByContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $entityType = null
+    )
     {
-        return $this->findEntries($this->getContentObjectPublicationCondition($contentObjectPublication));
+        return $this->findEntries($this->getContentObjectPublicationCondition($contentObjectPublication), $entityType);
     }
 
     /**
