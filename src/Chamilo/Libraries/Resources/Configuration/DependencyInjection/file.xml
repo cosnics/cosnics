@@ -25,5 +25,16 @@
             class="Chamilo\Libraries\File\ConfigurablePathBuilder">
             <argument>%chamilo.configuration.storage%</argument>
         </service>
+
+        <service id="chamilo.libraries.file.compression.file_compression" class="Chamilo\Libraries\File\Compression\Filecompression">
+            <factory class="Chamilo\Libraries\File\Compression\Filecompression" method="factory" />
+        </service>
+
+        <service id="chamilo.libraries.file.compression.archive_creator.archive_creator"
+                 class="Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator">
+            <argument type="service" id="symfony.component.filesystem.filesystem" />
+            <argument type="service" id="chamilo.libraries.file.compression.file_compression" />
+            <argument type="service" id="chamilo.libraries.file.configurable_path_builder" />
+        </service>
     </services>
 </container>

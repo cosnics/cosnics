@@ -40,42 +40,6 @@ class ArchiveController
 
     /**
      *
-     * @return string
-     */
-    public function getTemporaryPath()
-    {
-        return $this->temporaryPath;
-    }
-
-    /**
-     *
-     * @param string $temporaryPath
-     */
-    public function setTemporaryPath($temporaryPath)
-    {
-        $this->temporaryPath = $temporaryPath;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getFileName()
-    {
-        return $this->fileName;
-    }
-
-    /**
-     *
-     * @param string $fileName
-     */
-    public function setFileName($fileName)
-    {
-        $this->fileName = $fileName;
-    }
-
-    /**
-     *
      * @param string $temporaryPath
      */
     protected function prepareFileSystem($temporaryPath)
@@ -98,10 +62,14 @@ class ArchiveController
         return Filesystem::recurse_copy($sourcePath, $this->temporaryPath . $targetPath, true);
     }
 
+    /**
+     * @deprecated
+     * @return string
+     */
     public function getArchivePath()
     {
         $fileCompressor = Filecompression::factory();
-        $fileCompressor->set_filename($this->getFileName(), 'zip');
+        $fileCompressor->set_filename($this->fileName, 'zip');
         $archivePath = $fileCompressor->create_archive($this->temporaryPath);
         Filesystem::remove($this->temporaryPath);
 

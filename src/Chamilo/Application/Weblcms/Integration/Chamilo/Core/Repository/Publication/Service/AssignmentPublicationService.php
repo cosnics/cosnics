@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\AssignmentS
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service
@@ -210,7 +211,7 @@ class AssignmentPublicationService
         $attributes->setPublicationContext($this->publicationContext);
         $attributes->set_publisher_id($contentObject->get_owner_id());
         $attributes->set_date($contentObject->get_creation_date());
-        $attributes->set_location($entry->getContentObject()->get_title());
+        $attributes->set_location(Translation::getInstance()->getTranslation('EntryAttachment') . ': ' . $entry->getContentObject()->get_title());
         $attributes->set_url(null);
         $attributes->set_title($contentObject->get_title());
         $attributes->set_content_object_id($entryAttachment->getAttachmentId());

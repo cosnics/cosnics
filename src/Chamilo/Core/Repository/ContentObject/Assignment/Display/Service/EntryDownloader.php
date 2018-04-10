@@ -8,6 +8,10 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\File\Compression\ArchiveCreator\Archive;
+use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator;
+use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFile;
+use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFolder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -25,15 +29,25 @@ class EntryDownloader
 {
 
     /**
+     * @var ArchiveFolder[]
+     */
+    protected $entityFoldersCache;
+
+    /**
      *
      * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
      */
-    private $assignmentDataProvider;
+    protected $assignmentDataProvider;
 
     /**
      * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService
      */
     protected $rightsService;
+
+    /**
+     * @var \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator
+     */
+    protected $archiveCreator;
 
     /**
      *
@@ -50,15 +64,18 @@ class EntryDownloader
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService $rightsService
+     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator $archiveCreator
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
      */
     public function __construct(
-        AssignmentDataProvider $assignmentDataProvider, RightsService $rightsService, User $user, Assignment $assignment
+        AssignmentDataProvider $assignmentDataProvider, RightsService $rightsService,
+        ArchiveCreator $archiveCreator, User $user, Assignment $assignment
     )
     {
         $this->assignmentDataProvider = $assignmentDataProvider;
         $this->rightsService = $rightsService;
+        $this->archiveCreator = $archiveCreator;
         $this->assignment = $assignment;
         $this->user = $user;
     }
@@ -319,57 +336,68 @@ class EntryDownloader
      */
     protected function compressEntries($fileName, $entries)
     {
-        $temporaryPath = Path::getInstance()->getTemporaryPath(__NAMESPACE__) . uniqid() . DIRECTORY_SEPARATOR;
-        $archiveController = new ArchiveController($temporaryPath, $fileName);
+        $archive = new Archive();
+        $archive->setName($fileName);
 
         foreach ($entries as $entry)
         {
-            $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
-                $entry->getEntityType(),
-                $entry->getEntityId()
-            );
-
             $contentObject = $entry->getContentObject();
             if (!$contentObject instanceof File)
             {
                 continue;
             }
 
-            $virtualTargetFolder = $entityName;
-            $systemTargetFolder = $temporaryPath . DIRECTORY_SEPARATOR . $virtualTargetFolder;
+            $entityFolder = $this->getOrCreateFolderByEntity(
+                $entry->getEntityType(), $entry->getEntityId(), $archive
+            );
 
-            $entryName = $contentObject->get_filename();
+            $archiveFile = new ArchiveFile();
+            $archiveFile->setName($contentObject->get_filename());
+            $archiveFile->setOriginalPath($contentObject->get_full_path());
 
-            if (strpos($contentObject->get_filename(), $contentObject->get_title()) === false)
-            {
-                $entryName = $contentObject->get_title() . ' - ' . $entryName;
-            }
-
-            $entryFileName = basename(Filesystem::create_unique_name($systemTargetFolder, $entryName));
-            $virtualTargetPath = $virtualTargetFolder . DIRECTORY_SEPARATOR . $entryFileName;
-
-            $archiveController->addPath($contentObject->get_full_path(), $virtualTargetPath);
+            $entityFolder->addItem($archiveFile);
         }
 
-        return $archiveController->getArchivePath();
+        return $this->archiveCreator->createArchiveWithDownloadResponse($archive);
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFolder $parentFolder
+     *
+     * @return ArchiveFolder
+     */
+    protected function getOrCreateFolderByEntity($entityType, $entityId, ArchiveFolder $parentFolder)
+    {
+        $cacheKey = md5($entityType . '-' . $entityId);
+        if (!array_key_exists($cacheKey, $this->entityFoldersCache))
+        {
+            $folder = new ArchiveFolder();
+
+            $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
+                $entityType, $entityId
+            );
+
+            $folder->setName($entityName);
+            $parentFolder->addItem($folder);
+
+            $this->entityFoldersCache[$cacheKey] = $folder;
+        }
+
+        return $this->entityFoldersCache[$cacheKey];
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param string $fileName
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[] $entries
+     * @param \Symfony\Component\HttpFoundation\BinaryFileResponse $downloadResponse
      */
-    protected function downloadEntries(ChamiloRequest $request, $archivePath)
+    protected function downloadEntries(ChamiloRequest $request, BinaryFileResponse $downloadResponse)
     {
-        $archiveName = basename($archivePath);
-        $archiveSafeName = Filesystem::create_safe_name($archiveName);
+        $downloadResponse->prepare($request);
+        $downloadResponse->send();
 
-        $response = new BinaryFileResponse($archivePath, 200, array('Content-Type' => 'application/zip'));
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $archiveName, $archiveSafeName);
-        $response->prepare($request);
-        $response->send();
-
-        Filesystem::remove($archivePath);
+        $this->archiveCreator->removeArchiveAfterDownload($downloadResponse);
     }
 }

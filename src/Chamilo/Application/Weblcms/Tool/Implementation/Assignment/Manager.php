@@ -41,6 +41,8 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     const PARAM_SUBMITTER_TYPE = 'submitter_type';
     const PARAM_TARGET_ID = 'target_id';
 
+    const ACTION_DOWNLOAD_ENTRIES = 'EntriesDownloader';
+
     // Properties
     const PROPERTY_NUMBER_OF_SUBMISSIONS = 'NumberOfSubmissions';
 

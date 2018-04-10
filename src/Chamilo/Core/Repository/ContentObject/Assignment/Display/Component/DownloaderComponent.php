@@ -22,9 +22,18 @@ class DownloaderComponent extends Manager
     public function run()
     {
         $entryCompressor = new EntryDownloader(
-            $this->getDataProvider(), $this->getRightsService(), $this->getUser(), $this->getAssignment()
+            $this->getDataProvider(), $this->getRightsService(), $this->getArchiveCreator(),
+            $this->getUser(), $this->getAssignment()
         );
 
         $entryCompressor->downloadByRequest($this->getRequest());
+    }
+
+    /**
+     * @return \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator
+     */
+    protected function getArchiveCreator()
+    {
+        return $this->getService('chamilo.libraries.file.compression.archive_creator.archive_creator');
     }
 }

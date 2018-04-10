@@ -1223,11 +1223,17 @@ abstract class AssignmentRepository
 
     /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param int $entityType
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findEntries(Condition $condition)
+    public function findEntries(Condition $condition, $entityType = null)
     {
+        if(!empty($entityType))
+        {
+            $condition = $this->getEntityTypeCondition($entityType, $condition);
+        }
+
         return $this->dataClassRepository->retrieves(
             $this->getEntryClassName(), new DataClassRetrievesParameters($condition)
         );
