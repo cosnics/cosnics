@@ -10,6 +10,8 @@
         border-radius: 5px;
         background: white;
         cursor: pointer;
+        margin-bottom: 15px;
+        padding: 5px;
     }
     .dz-drag-hover {
         border: 2px solid #D4D4D4 !important;
@@ -19,10 +21,21 @@
         opacity: 0.5;
     }
     .droppy-message{
-        font-size: 20px;
+        font-size: 16px;
         text-align: center;
-        margin: 2em 0;
+        margin: 1em 0;
+        font-weight: lighter;
     }
+
+    .table-borderless > tbody > tr > td,
+    .table-borderless > tbody > tr > th,
+    .table-borderless > tfoot > tr > td,
+    .table-borderless > tfoot > tr > th,
+    .table-borderless > thead > tr > td,
+    .table-borderless > thead > tr > th {
+        border: none;
+    }
+
 </style>
 
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
@@ -59,11 +72,6 @@
         <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entry">
             <div class="row">
                 <div class="col-sm-8 content-object-rendition">
-                    {% if CAN_EDIT_ASSIGNMENT %}
-                        <div class="score-form">
-                            {{ SCORE_FORM|raw }}
-                        </div>
-                    {% endif %}
                     <h3 class="entry-title">{{ CONTENT_OBJECT_TITLE }} <span
                                 class="badge score-badge {% if SCORE > 0 %}score-success{% else %}no-score{% endif %}">{% if SCORE > 0 %}{{ SCORE }}%{% else %}{{ 'NoScore'|trans({}, appContext) }}{% endif %}</span>
                     </h3>
@@ -71,6 +79,17 @@
                     {{ CONTENT_OBJECT_RENDITION|raw }}
                 </div>
                 <div class="col-sm-4">
+                    {% if CAN_EDIT_ASSIGNMENT %}
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="score-form">
+                                {{ SCORE_FORM|raw }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-xs-12">
                     <div style="display:none">
                         <div id="template-container">
                             <div id="attachments-upload" class="file-upload">
@@ -107,19 +126,15 @@
 
                     </div>
 
-                    <div class="panel panel-default">
+                    <!--div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><i class="fa fa-upload" aria-hidden="true"></i> Verbeterde versies
                             </h3>
                         </div>
-                        <div class="panel-body">
+                        <div class="panel-body"!-->
                             <div id="droppy" >
 
-                                <div class="droppy-message dz-message">Versleep verbeterde versies naar hier of klik om
-                                    op te laden.
-                                </div>
-
-                                <table class="table table-striped table-data" id="entry-attachments-list">
+                                <table class="table table-striped table-data table-borderless" id="entry-attachments-list">
                                     <tbody>
                                     {% for ATTACHED_CONTENT_OBJECT in ATTACHED_CONTENT_OBJECTS %}
                                         <tr id="attachment{{ ATTACHED_CONTENT_OBJECT.attachment_id }}">
@@ -132,13 +147,24 @@
                                     </tbody>
                                 </table>
 
+                                <div class="droppy-message dz-message">Versleep verbeterde versies naar hier of klik om
+                                    op te laden.
+                                </div>
+
+
+
                             </div>
-                        </div>
+                        <!--/div>
+                    </div!-->
                     </div>
-
-
+                    </div>
                     {{ getJavascript('Plugin\\Jquery\\jquery.file.upload.js', 'Chamilo\\Libraries') }}
 
+                    <div class="row">
+                        <div class="col-xs-12">
+                        {{ FEEDBACK_MANAGER|raw }}
+                        </div>
+                    </div>
                     <script type="text/javascript">
                         $(document).ready(function () {
 
@@ -231,7 +257,7 @@
                                 paramName: "attachments",
                                 //maxFiles: 1,
                                 previewTemplate: document.querySelector('#template-container').innerHTML,
-                                //previewsContainer: "#entry-attachments-list"
+                                //previewsContainer: "#droppy"
                             });
 
                             myDropzone.on(
@@ -251,7 +277,7 @@
                         });
                     </script>
 
-                    {{ FEEDBACK_MANAGER|raw }}
+
                 </div>
             </div>
 
