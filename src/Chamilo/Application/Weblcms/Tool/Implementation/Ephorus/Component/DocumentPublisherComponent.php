@@ -55,7 +55,7 @@ class DocumentPublisherComponent extends Manager implements \Chamilo\Core\Reposi
      */
     public function get_allowed_content_object_types()
     {
-        return array(File::class_name());
+        return array(File::class);
     }
 
     public function render_header()

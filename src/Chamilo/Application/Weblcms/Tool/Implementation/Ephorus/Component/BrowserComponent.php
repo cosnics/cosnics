@@ -79,13 +79,13 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
         {
             $search_conditions = $this->buttonToolbarRenderer->getConditions(
                 array(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION)
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
                 )
             );
 
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_COURSE_ID),
+                new PropertyConditionVariable(Request::class, Request::PROPERTY_COURSE_ID),
                 new StaticConditionVariable($this->get_course_id())
             );
             if ($search_conditions != null)
@@ -161,7 +161,7 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
                     Translation::get(
                         'AddDocument',
                         array(),
-                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class_name())
+                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
                     ),
                     Theme::getInstance()->getCommonImagePath('Action/Add'),
                     $this->get_url(

@@ -1,6 +1,8 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager\Implementation\DoctrineExtension;
@@ -11,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * Data provider for ephorus requests browser table.
- * 
+ *
  * @author Tom Goethals - Hogeschool Gent
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -24,7 +26,7 @@ class AssignmentRequestTableDataProvider extends DataClassTableDataProvider
      * Gets the objects to display in the table.
      * For now, objects are composed in the code itself from several source
      * objects.
-     * 
+     *
      * @param $offset
      * @param $count
      * @param null $order_property
@@ -36,30 +38,32 @@ class AssignmentRequestTableDataProvider extends DataClassTableDataProvider
         if ($order_property == null)
         {
             $order_property = new OrderBy(
-                new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_REQUEST_TIME));
+                new PropertyConditionVariable(Request::class, Request::PROPERTY_REQUEST_TIME)
+            );
         }
-        
+
         return $this->getExtension()->retrieve_results_by_assignment(
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
+            new DataClassRetrievesParameters($condition, $count, $offset, $order_property), Entry::class
+        );
     }
 
     /**
      * Returns the count of the objects
-     * 
+     *
      * @return int
      */
     public function count_data($condition)
     {
-        return $this->getExtension()->count_results_content_objects_by_assignment($condition);
+        return $this->getExtension()->count_results_content_objects_by_assignment($condition, Entry::class);
     }
 
     public function getExtension()
     {
-        if (! isset($this->extension))
+        if (!isset($this->extension))
         {
             $this->extension = new DoctrineExtension(DataManager::getInstance());
         }
-        
+
         return $this->extension;
     }
 }

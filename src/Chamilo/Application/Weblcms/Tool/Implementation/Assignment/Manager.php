@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\Assign
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
@@ -100,6 +101,28 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             1
         );
 
+        if($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
+        {
+            $toolbar->insert_item(
+                new ToolbarItem(
+                    Translation::get('EphorusOverview'),
+                    Theme::getInstance()->getImagePath(
+                        \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::context(), 'Logo/16'
+                    ),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Ephorus',
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::ACTION_ASSIGNMENT_BROWSER,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
+                        )
+                    ),
+                    ToolbarItem::DISPLAY_ICON, false, null, '_blank'
+                ),
+                2
+            );
+        }
+
         return $toolbar;
     }
 
@@ -140,6 +163,27 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 'btn-link'
             )
         );
+
+        if($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
+        {
+            $buttonGroup->prependButton(
+                new Button(
+                    Translation::get('EphorusOverview'),
+                    Theme::getInstance()->getImagePath(
+                        \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::context(), 'Logo/16'
+                    ),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Ephorus',
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::ACTION_ASSIGNMENT_BROWSER,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
+                        )
+                    ),
+                    Button::DISPLAY_ICON, false, null, '_blank'
+                )
+            );
+        }
     }
 
     /**

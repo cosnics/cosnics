@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
@@ -81,15 +81,15 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
         {
             $search_conditions = $this->buttonToolbarRenderer->getConditions(
                 array(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION)
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
                 )
             );
 
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    AssignmentSubmission::class_name(),
-                    AssignmentSubmission::PROPERTY_PUBLICATION_ID
+                    Entry::class,
+                    Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
                 ),
                 new StaticConditionVariable($this->get_publication_id())
             );
@@ -145,7 +145,7 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
         $html[] = $this->buttonToolbarRenderer->render();
 
         $pub = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->get_publication_id()
         );
 
@@ -154,7 +154,7 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
         $html[] = '<h3>' . Translation::get(
                 'EphorusSubmissionsForAssignment',
                 array(),
-                ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class_name())
+                ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
             ) . ': ' .
             $assignment->get_title() . '</h3>';
         $table = new AssignmentRequestTable($this);

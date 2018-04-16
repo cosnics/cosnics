@@ -36,7 +36,7 @@ class RequestTableDataProvider extends DataClassTableDataProvider
         if ($order_property == null)
         {
             $order_property = new OrderBy(
-                new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_REQUEST_TIME));
+                new PropertyConditionVariable(Request::class, Request::PROPERTY_REQUEST_TIME));
         }
         return $this->getExtension()->retrieve_results_content_objects_by_params(
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));

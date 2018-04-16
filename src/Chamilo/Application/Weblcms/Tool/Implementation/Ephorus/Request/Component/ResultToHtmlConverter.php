@@ -43,7 +43,7 @@ class ResultToHtmlConverter
 
     private function get_html($request_id)
     {
-        $request = DataManager::retrieve_by_id(Request::class_name(), $request_id);
+        $request = DataManager::retrieve_by_id(Request::class, $request_id);
         
         $html = array();
         $html[] = ResourceManager::getInstance()->get_resource_html(
@@ -58,12 +58,12 @@ class ResultToHtmlConverter
         $html[] = '<div class="ephorus-report-result" id="printable">';
         
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Result::class_name(), Result::PROPERTY_REQUEST_ID), 
+            new PropertyConditionVariable(Result::class, Result::PROPERTY_REQUEST_ID),
             new StaticConditionVariable($request_id));
         $order_bys = array();
-        $order_bys[] = new OrderBy(new PropertyConditionVariable(Result::class_name(), Result::PROPERTY_PERCENTAGE));
+        $order_bys[] = new OrderBy(new PropertyConditionVariable(Result::class, Result::PROPERTY_PERCENTAGE));
         $parameters = new DataClassRetrievesParameters($condition, null, null, $order_bys);
-        $results_rs = DataManager::retrieves(Result::class_name(), $parameters);
+        $results_rs = DataManager::retrieves(Result::class, $parameters);
         
         $results = $results_rs ? $results_rs->as_array() : array();
         
@@ -305,10 +305,10 @@ class ResultToHtmlConverter
     private function show_results($request)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Result::class_name(), Result::PROPERTY_REQUEST_ID), 
+            new PropertyConditionVariable(Result::class, Result::PROPERTY_REQUEST_ID),
             new StaticConditionVariable($request->get_id()));
         $parameters = new DataClassRetrievesParameters($condition);
-        $results = DataManager::retrieves(Result::class_name(), $parameters);
+        $results = DataManager::retrieves(Result::class, $parameters);
         
         $html = array();
         while ($results && $result = $results->next_result())

@@ -80,7 +80,7 @@ class RequestProcessor
     {
         $index_document_service_wsdl = Configuration::getInstance()->get_setting(
             array('Chamilo\Application\Weblcms\Tool\Implementation\Ephorus', 'index_document_service_wsdl'));
-        
+
         if (! $index_document_service_wsdl)
         {
             /**
@@ -88,33 +88,33 @@ class RequestProcessor
              */
             throw new \Exception(Translation::get('IndexDocumentWsdlNotConfigured'));
         }
-        
+
         $client = $this->get_soap_client($index_document_service_wsdl);
-        
+
         $parameters = array();
         $parameters['documentGuid'] = $document_guid;
         $parameters['indexType'] = $index_type;
         $result = $client->call('IndexDocument', $parameters);
-        
+
         $show_debug = Configuration::getInstance()->get_setting(
             array('Chamilo\Application\Weblcms\Tool\Implementation\Ephorus', 'debugging_enabled'));
-        
+
         if ($show_debug)
         {
             $page = Page::getInstance();
             $page->setViewMode(Page::VIEW_MODE_HEADERLESS);
-            
+
             $html = array();
-            
+
             $html[] = $page->getHeader()->toHtml();
             $html[] = '<h2>Request</h2><pre>' . htmlspecialchars($client->request, ENT_QUOTES) . '</pre>';
             $html[] = '<h2>Response</h2><pre>' . htmlspecialchars($client->response, ENT_QUOTES) . '</pre>';
             $html[] = '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
             $html[] = $page->getFooter()->toHtml();
-            
+
             return implode(PHP_EOL, $html);
         }
-        
+
         if ($result['IndexDocumentResult'])
         {
             $request_object = \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager::retrieve_request_by_guid(
@@ -152,7 +152,7 @@ class RequestProcessor
             $parameters = $this->get_hand_in_request_parameters($base_request);
             
             $document_guid = $this->send_hand_in_request($parameters);
-            
+
             $base_request->set_guid($document_guid);
             $base_request->set_process_type($parameters['processType']);
             
@@ -241,7 +241,7 @@ class RequestProcessor
     private function get_hand_in_request_parameters(Request $request)
     {
         $document = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
+            ContentObject::class,
             $request->get_content_object_id());
         
         if (! $document)
@@ -252,7 +252,7 @@ class RequestProcessor
         }
         
         $author = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+            \Chamilo\Core\User\Storage\DataClass\User::class,
             $request->get_author_id());
         
         if (! $author)
