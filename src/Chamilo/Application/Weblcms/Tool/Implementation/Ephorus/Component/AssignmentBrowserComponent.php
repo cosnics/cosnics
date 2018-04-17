@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
@@ -7,6 +8,8 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\AssignmentRequestTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTableInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -86,13 +89,29 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
                 )
             );
 
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(
-                    Entry::class,
-                    Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
-                ),
-                new StaticConditionVariable($this->get_publication_id())
-            );
+            if ($this->getSource() == self::SOURCE_LEARNING_PATH_ASSIGNMENT)
+            {
+                $treeNodeId = $this->getRequest()->getFromUrl(self::PARAM_TREE_NODE_ID);
+
+                $condition = new EqualityCondition(
+                    new PropertyConditionVariable(
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class,
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::PROPERTY_TREE_NODE_DATA_ID
+                    ),
+                    new StaticConditionVariable($treeNodeId)
+                );
+            }
+            else
+            {
+                $condition = new EqualityCondition(
+                    new PropertyConditionVariable(
+                        Entry::class,
+                        Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
+                    ),
+                    new StaticConditionVariable($this->get_publication_id())
+                );
+            }
+
             if ($search_conditions != null)
             {
                 $condition = new AndCondition(array($condition, $search_conditions));
@@ -149,7 +168,15 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
             $this->get_publication_id()
         );
 
+        $treeNodeId = $this->getRequest()->getFromUrl(self::PARAM_TREE_NODE_ID);
         $assignment = $pub->get_content_object();
+        if ($this->getSource() == self::SOURCE_LEARNING_PATH_ASSIGNMENT && $assignment instanceof LearningPath)
+        {
+            $treeNode = $this->getTreeNodeDataService()->getTreeNodeDataById($treeNodeId);
+            $assignment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class, $treeNode->getContentObjectId()
+            );
+        }
 
         $html[] = '<h3>' . Translation::get(
                 'EphorusSubmissionsForAssignment',
@@ -181,6 +208,17 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
 
     public function get_additional_parameters()
     {
-        return array(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        return array(
+            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION, self::PARAM_TREE_NODE_ID,
+            self::PARAM_SOURCE
+        );
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
+     */
+    protected function getTreeNodeDataService()
+    {
+        return $this->getService('chamilo.core.repository.content_object.learning_path.service.tree_node_data_service');
     }
 }

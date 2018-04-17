@@ -263,7 +263,7 @@ class Request extends EphorusDataClass
      * @return boolean
      */
     public function is_content_object_valid()
-    {
+    { return true;
         $string_utilities_class = $this->get_string_utilities_class();
         
         $content_object_id = $this->get_content_object_id();

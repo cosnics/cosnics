@@ -73,4 +73,9 @@ class AssignmentLatestDocumentsPublisherComponent extends Manager
 
         $this->redirect('', false, $parameters);
     }
+
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_ASSIGNMENT_SOURCE);
+    }
 }

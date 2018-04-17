@@ -2,7 +2,6 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Core\DependencyContainer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
@@ -31,11 +30,6 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
     private $dependency_container;
     const DEPENDENCY_DATA_MANAGER_CLASS = 'repository_datamanager';
     const DEPENDENCY_REQUEST_CLASS = 'request';
-
-    const PARAM_SOURCE = 'source';
-
-    const SOURCE_ASSIGNMENT = 'assignment';
-    const SOURCE_DEFAULT = 'default';
 
     /**
      * Initializes this component
@@ -106,9 +100,9 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
     {
         $request_translation = Translation::get('Request', null, \Chamilo\Core\Repository\Manager::context());
 
-        $source = $this->getRequest()->getFromUrl(self::PARAM_SOURCE, self::SOURCE_DEFAULT);
+        $source = $this->getSource();
 
-        if($source == self::SOURCE_ASSIGNMENT)
+        if($source == self::SOURCE_ASSIGNMENT || $source == self::SOURCE_LEARNING_PATH_ASSIGNMENT)
         {
             $assignmentTableIds = $this->getRequest()->get(AssignmentRequestTable::TABLE_IDENTIFIER);
             if (isset($assignmentTableIds))
@@ -153,8 +147,12 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
         $data_manager_class = $this->get_data_manager_class();
         $doctrineExtension = new DoctrineExtension($data_manager_class::getInstance());
 
+        $class = $this->getSource() == self::SOURCE_ASSIGNMENT ?
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::class :
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class;
+
         $requests = $doctrineExtension->retrieve_results_by_assignment(
-            new DataClassRetrievesParameters($condition), Entry::class
+            new DataClassRetrievesParameters($condition), $class
         );
 
         $request_guids = array();
@@ -197,8 +195,7 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
         else
         {
             $parameters = array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_ASSIGNMENT_BROWSER,
-                \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $this->get_publication_id()
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_ASSIGNMENT_BROWSER
             );
         }
         $this->redirect($message, $is_error, $parameters);
@@ -213,6 +210,11 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
 
     public function get_base_requests()
     {
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_SOURCE, self::PARAM_PUBLICATION_ID, self::PARAM_TREE_NODE_ID);
     }
 
     /**

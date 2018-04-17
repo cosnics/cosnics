@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -43,19 +42,33 @@ class AssignmentEphorusRequestComponent extends EphorusRequestComponent
         $requests = array();
         foreach ($ids as $id)
         {
-            /** @var Entry $tracker */
-            $tracker = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::retrieve_by_id(
-                Entry::class,
-                $id);
-            
+            if($this->getSource() == self::SOURCE_ASSIGNMENT)
+            {
+                /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry $tracker */
+                $tracker =
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::retrieve_by_id(
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::class,
+                        $id
+                    );
+
+                if (! $this->publication_id)
+                {
+                    $this->publication_id = $tracker->getContentObjectPublicationId();
+                }
+            }
+            else
+            {
+                /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry $tracker */
+                $tracker =
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::retrieve_by_id(
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class,
+                        $id
+                    );
+            }
+
             if (! $tracker)
             {
                 throw new ObjectNotExistException($translation, $id);
-            }
-            
-            if (! $this->publication_id)
-            {
-                $this->publication_id = $tracker->getContentObjectPublicationId();
             }
             
             $request = new Request();
@@ -86,5 +99,10 @@ class AssignmentEphorusRequestComponent extends EphorusRequestComponent
     public function get_publication_id()
     {
         return $this->publication_id;
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_SOURCE, self::PARAM_PUBLICATION_ID, self::PARAM_TREE_NODE_ID);
     }
 }

@@ -114,7 +114,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                             \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Ephorus',
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::ACTION_ASSIGNMENT_BROWSER,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
+                            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_SOURCE => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::SOURCE_ASSIGNMENT
                         )
                     ),
                     ToolbarItem::DISPLAY_ICON, false, null, '_blank'
@@ -177,7 +177,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                             \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Ephorus',
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::ACTION_ASSIGNMENT_BROWSER,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
+                            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_SOURCE => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::SOURCE_ASSIGNMENT
                         )
                     ),
                     Button::DISPLAY_ICON, false, null, '_blank'

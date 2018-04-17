@@ -2,11 +2,11 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component\IndexVisibilityChangerComponent;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTableColumnModel;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -66,11 +66,11 @@ class AssignmentRequestTableCellRenderer extends DataClassTableCellRenderer impl
             case Entry::PROPERTY_ENTITY_TYPE :
                 switch ($object->get_optional_property(Entry::PROPERTY_ENTITY_TYPE))
                 {
-                    case Entry::ENTITY_TYPE_COURSE_GROUP :
+                    case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_COURSE_GROUP :
                         return Translation::get('CourseGroup');
-                    case Entry::ENTITY_TYPE_PLATFORM_GROUP :
+                    case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_PLATFORM_GROUP :
                         return Translation::get('PlatformGroup');
-                    case Entry::ENTITY_TYPE_USER :
+                    case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_USER :
                         return Translation::get('User');
                 }
             case Entry::PROPERTY_SUBMITTED :

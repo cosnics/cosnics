@@ -149,10 +149,11 @@ class RequestProcessor
     {
         if ($base_request->is_content_object_valid())
         {
-            $parameters = $this->get_hand_in_request_parameters($base_request);
-            
-            $document_guid = $this->send_hand_in_request($parameters);
-
+//            $parameters = $this->get_hand_in_request_parameters($base_request);
+//
+//            $document_guid = $this->send_hand_in_request($parameters);
+$document_guid = 'test';
+$parameters['processType'] = 1;
             $base_request->set_guid($document_guid);
             $base_request->set_process_type($parameters['processType']);
             

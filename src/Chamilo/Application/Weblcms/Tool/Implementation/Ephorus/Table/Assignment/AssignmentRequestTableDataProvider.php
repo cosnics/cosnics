@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager\Implementation\DoctrineExtension;
@@ -43,7 +43,7 @@ class AssignmentRequestTableDataProvider extends DataClassTableDataProvider
         }
 
         return $this->getExtension()->retrieve_results_by_assignment(
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property), Entry::class
+            new DataClassRetrievesParameters($condition, $count, $offset, $order_property), $this->determineEntryClass()
         );
     }
 
@@ -54,7 +54,9 @@ class AssignmentRequestTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return $this->getExtension()->count_results_content_objects_by_assignment($condition, Entry::class);
+        return $this->getExtension()->count_results_content_objects_by_assignment(
+            $condition, $this->determineEntryClass()
+        );
     }
 
     public function getExtension()
@@ -65,5 +67,12 @@ class AssignmentRequestTableDataProvider extends DataClassTableDataProvider
         }
 
         return $this->extension;
+    }
+
+    public function determineEntryClass()
+    {
+        return $this->get_component()->getSource() == Manager::SOURCE_LEARNING_PATH_ASSIGNMENT ?
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class :
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::class;
     }
 }
