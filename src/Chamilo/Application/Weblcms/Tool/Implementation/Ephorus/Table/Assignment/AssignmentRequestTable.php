@@ -29,8 +29,7 @@ class AssignmentRequestTable extends DataClassTable implements TableFormActionsS
                 new TableFormAction(
                     $this->get_component()->get_url(
                         array(
-                            Manager::PARAM_ACTION => Manager::ACTION_INDEX_VISIBILITY_CHANGER,
-                            IndexVisibilityChangerComponent::PARAM_SOURCE => IndexVisibilityChangerComponent::SOURCE_ASSIGNMENT,
+                            Manager::PARAM_ACTION => Manager::ACTION_INDEX_VISIBILITY_CHANGER
                         )
                     ),
                     Translation:: get('ToggleIndexVisibility'),

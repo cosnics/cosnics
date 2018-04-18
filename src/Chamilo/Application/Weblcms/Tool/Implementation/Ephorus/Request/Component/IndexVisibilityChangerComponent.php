@@ -7,7 +7,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Processor\RequestProcessor;
 
 class IndexVisibilityChangerComponent extends Manager
 {
@@ -18,10 +17,10 @@ class IndexVisibilityChangerComponent extends Manager
     public function run()
     {
         $document_guids = $this->get_parent()->get_request_guids();
-        
-        $request_processor = new RequestProcessor();
-        $failures = $request_processor->change_documents_visibility_on_index($document_guids);
-        
+
+        $requestManager = $this->getRequestManager();
+        $failures = $requestManager->changeVisibilityOfDocumentsOnIndex($document_guids);
+
         $message = $this->get_result(
             $failures, 
             count($document_guids), 

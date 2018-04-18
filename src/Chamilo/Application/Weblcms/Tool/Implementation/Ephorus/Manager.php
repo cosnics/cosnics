@@ -25,7 +25,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     const DEFAULT_ACTION = self::ACTION_BROWSE;
 
-    const PARAM_SOURCE = 'Source';
+    const PARAM_SOURCE = 'source';
     const SOURCE_ASSIGNMENT = 'Assignment';
     const SOURCE_LEARNING_PATH_ASSIGNMENT = 'LearningPathAssignment';
     const SOURCE_DEFAULT = 'default';

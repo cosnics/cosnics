@@ -50,11 +50,6 @@ class AssignmentEphorusRequestComponent extends EphorusRequestComponent
                         \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::class,
                         $id
                     );
-
-                if (! $this->publication_id)
-                {
-                    $this->publication_id = $tracker->getContentObjectPublicationId();
-                }
             }
             else
             {
@@ -91,15 +86,12 @@ class AssignmentEphorusRequestComponent extends EphorusRequestComponent
     public function redirect_after_create($message, $is_error)
     {
         $parameters = array(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_ASSIGNMENT_BROWSER, 
-            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $this->get_publication_id());
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_ASSIGNMENT_BROWSER
+        );
+
         $this->redirect($message, $is_error, $parameters);
     }
 
-    public function get_publication_id()
-    {
-        return $this->publication_id;
-    }
 
     public function get_additional_parameters()
     {

@@ -129,6 +129,14 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
     }
 
     /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\AssignmentRequestRepository
+     */
+    public function getAssignmentRequestRepository()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.storage.repository.assignment_request_repository');
+    }
+
+    /**
      * Returns the url to the ephorus request component
      *
      * @param int $object_id

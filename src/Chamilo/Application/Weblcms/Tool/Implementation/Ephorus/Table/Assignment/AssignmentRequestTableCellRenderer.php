@@ -160,7 +160,6 @@ class AssignmentRequestTableCellRenderer extends DataClassTableCellRenderer impl
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_INDEX_VISIBILITY_CHANGER,
                                 \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CHANGE_INDEX_VISIBILITY,
                                 Manager::PARAM_REQUEST_IDS => $request_id,
-                                IndexVisibilityChangerComponent::PARAM_SOURCE => IndexVisibilityChangerComponent::SOURCE_ASSIGNMENT,
                                 \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $this->get_component()
                                     ->get_publication_id()
                             )

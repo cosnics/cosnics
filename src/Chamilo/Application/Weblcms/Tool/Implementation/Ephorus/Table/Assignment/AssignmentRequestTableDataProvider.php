@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager\Implementation\DoctrineExtension;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -42,8 +43,9 @@ class AssignmentRequestTableDataProvider extends DataClassTableDataProvider
             );
         }
 
-        return $this->getExtension()->retrieve_results_by_assignment(
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property), $this->determineEntryClass()
+        return $this->getAssignmentRequestRepository()->retrieveAssignmentEntriesWithRequests(
+            new RecordRetrievesParameters(null, $condition, $count, $offset, $order_property),
+            $this->determineEntryClass()
         );
     }
 
@@ -54,19 +56,9 @@ class AssignmentRequestTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return $this->getExtension()->count_results_content_objects_by_assignment(
+        return $this->getAssignmentRequestRepository()->countAssignmentEntriesWithRequests(
             $condition, $this->determineEntryClass()
         );
-    }
-
-    public function getExtension()
-    {
-        if (!isset($this->extension))
-        {
-            $this->extension = new DoctrineExtension(DataManager::getInstance());
-        }
-
-        return $this->extension;
     }
 
     public function determineEntryClass()
@@ -74,5 +66,13 @@ class AssignmentRequestTableDataProvider extends DataClassTableDataProvider
         return $this->get_component()->getSource() == Manager::SOURCE_LEARNING_PATH_ASSIGNMENT ?
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class :
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::class;
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\AssignmentRequestRepository
+     */
+    public function getAssignmentRequestRepository()
+    {
+        return $this->get_component()->getAssignmentRequestRepository();
     }
 }
