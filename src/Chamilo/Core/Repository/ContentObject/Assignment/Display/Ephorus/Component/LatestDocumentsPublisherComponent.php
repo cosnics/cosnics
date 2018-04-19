@@ -1,10 +1,10 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Component;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @author Tom Goethals - Hogeschool Gent
  */
-class AssignmentLatestDocumentsPublisherComponent extends Manager
+class LatestDocumentsPublisherComponent extends Manager
 {
 
     public function get_publication_id()

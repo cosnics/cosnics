@@ -37,4 +37,20 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         return $this->getRequest()->getFromUrl(self::PARAM_SOURCE, self::SOURCE_DEFAULT);
     }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\AssignmentRequestRepository
+     */
+    public function getAssignmentRequestRepository()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.storage.repository.assignment_request_repository');
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager
+     */
+    public function getRequestManager()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.service.request_manager');
+    }
 }

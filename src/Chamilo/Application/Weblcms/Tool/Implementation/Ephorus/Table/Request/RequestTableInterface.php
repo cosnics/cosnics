@@ -9,5 +9,5 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request;
 interface RequestTableInterface
 {
 
-    public function get_ephorus_request_url($object_id);
+    public function get_ephorus_request_url($entryId);
 }

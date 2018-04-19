@@ -36,6 +36,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_ENTRY = 'Entry';
     const ACTION_DELETE = self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM;
     const ACTION_AJAX = 'Ajax';
+    const ACTION_EPHORUS = 'Ephorus';
 
     /**
      *

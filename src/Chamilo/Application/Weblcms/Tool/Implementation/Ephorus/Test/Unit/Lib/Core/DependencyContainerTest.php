@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Test\Unit\Lib\
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\DependencyContainer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Result;
-use Chamilo\Libraries\Architecture\Test;
 
 /**
  * This test case test the dependency container class

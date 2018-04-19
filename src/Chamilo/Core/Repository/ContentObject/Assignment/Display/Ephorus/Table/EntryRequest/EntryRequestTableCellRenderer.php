@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
@@ -23,7 +23,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @author Tom Goethals - Hogeschool Gent
  */
-class AssignmentRequestTableCellRenderer extends DataClassTableCellRenderer implements
+class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implements
     TableCellRendererActionsColumnSupport
 {
 

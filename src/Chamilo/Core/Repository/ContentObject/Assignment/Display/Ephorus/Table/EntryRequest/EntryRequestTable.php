@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  * 
  * @author Tom Goethals - Hogeschool Gent
  */
-class AssignmentRequestTable extends DataClassTable implements TableFormActionsSupport
+class EntryRequestTable extends DataClassTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_REQUEST_IDS;
 

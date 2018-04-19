@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
@@ -15,10 +15,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  * @author Tom Goethals - Hogeschool Gent
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AssignmentRequestTableDataProvider extends DataClassTableDataProvider
+class EntryRequestTableDataProvider extends DataClassTableDataProvider
 {
-
-    private $extension;
 
     /**
      * Gets the objects to display in the table.

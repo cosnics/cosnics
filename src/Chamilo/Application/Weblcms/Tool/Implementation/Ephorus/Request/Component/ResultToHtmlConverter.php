@@ -4,16 +4,16 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Compon
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Result;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager\Implementation\DoctrineExtension;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -24,6 +24,8 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ResultToHtmlConverter
 {
+    use DependencyInjectionContainerTrait;
+
     const PERCENTAGE_GREEN = 10;
     const PERCENTAGE_ORANGE = 50;
 
@@ -32,6 +34,16 @@ class ResultToHtmlConverter
      * @var String
      */
     private $xslt_path;
+
+    /**
+     * ResultToHtmlConverter constructor.
+     *
+     * @param String $xslt_path
+     */
+    public function __construct()
+    {
+        $this->initializeContainer();
+    }
 
     public function convert_to_html($request_id)
     {
@@ -237,21 +249,15 @@ class ResultToHtmlConverter
 
     /**
      *
-     * @param string[] $guids
+     * @param int[] $guids
      *
-     * @return ContentObject with extra Request :: PROPERTY_GUID.
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     private function get_chamilo_hits($guids)
     {
-        $doctrineExtension = new DoctrineExtension(DataManager::getInstance());
-        $hits_rs = $doctrineExtension->retrieve_results_content_objects($guids);
-        
-        /**
-         *
-         * @var \core\repository\ContentObject $hit
-         */
-        $hits = array();
-        while ($hits_rs && $hit = $hits_rs->next_result())
+        $hits_rs = $this->getRequestManager()->findRequestsWithContentObjectsByGuids($guids);
+
+        foreach($hits_rs as $hit)
         {
             $hits[$hit->get_optional_property(Request::PROPERTY_GUID)] = $hit;
         }
@@ -375,6 +381,12 @@ class ResultToHtmlConverter
         
         return implode(PHP_EOL, $html);
     }
-}
 
-?>
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager
+     */
+    public function getRequestManager()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.service.request_manager');
+    }
+}

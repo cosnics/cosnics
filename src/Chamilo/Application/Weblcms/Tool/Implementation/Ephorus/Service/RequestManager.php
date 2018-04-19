@@ -7,6 +7,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\E
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\RequestRepository;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service
@@ -204,6 +206,41 @@ class RequestManager
         }
 
         return $this->requestRepository->findRequestById($id);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
+     */
+    public function countRequestsWithContentObjects(Condition $condition)
+    {
+        return $this->requestRepository->countRequestsWithContentObjects($condition);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findRequestsWithContentObjects(RecordRetrievesParameters $recordRetrievesParameters)
+    {
+        return $this->requestRepository->findRequestsWithContentObjects($recordRetrievesParameters);
+    }
+
+    /**
+     * @param int|int[] $guids
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findRequestsWithContentObjectsByGuids($guids)
+    {
+        if(!is_array($guids))
+        {
+            $guids = [$guids];
+        }
+
+        return $this->requestRepository->findRequestsWithContentObjectsByGuids($guids);
     }
 
     /**

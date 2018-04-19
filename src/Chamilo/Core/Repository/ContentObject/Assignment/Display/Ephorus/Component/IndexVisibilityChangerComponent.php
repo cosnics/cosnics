@@ -1,10 +1,10 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Core\DependencyContainer;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Interfaces\RequestSupport;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\EntryRequestTable;

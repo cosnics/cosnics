@@ -6,9 +6,8 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\AssignmentRequestTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\EntryRequestTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTableInterface;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -16,11 +15,11 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Assignment browser component for ephorus tool.
@@ -79,7 +78,7 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
     public function get_table_condition($object_table_class_name)
     {
         if ($object_table_class_name ==
-            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\AssignmentRequestTable'
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\EntryRequestTable'
         )
         {
             $search_conditions = $this->buttonToolbarRenderer->getConditions(
@@ -129,24 +128,16 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\AssignmentRequestRepository
-     */
-    public function getAssignmentRequestRepository()
-    {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.storage.repository.assignment_request_repository');
-    }
-
-    /**
      * Returns the url to the ephorus request component
      *
-     * @param int $object_id
+     * @param int $entryId
      *
      * @return string
      */
-    public function get_ephorus_request_url($object_id)
+    public function get_ephorus_request_url($entryId)
     {
         $parameters[self::PARAM_ACTION] = self::ACTION_EPHORUS_REQUEST;
-        $parameters[self::PARAM_CONTENT_OBJECT_IDS] = $object_id;
+        $parameters[self::PARAM_CONTENT_OBJECT_IDS] = $entryId;
         $parameters[\Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_VIEW_RESULT;
 
@@ -192,7 +183,7 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
                 ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
             ) . ': ' .
             $assignment->get_title() . '</h3>';
-        $table = new AssignmentRequestTable($this);
+        $table = new EntryRequestTable($this);
         $html[] = $table->as_html();
 
         return implode(PHP_EOL, $html);

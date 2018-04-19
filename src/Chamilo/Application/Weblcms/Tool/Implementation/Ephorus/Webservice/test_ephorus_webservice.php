@@ -1,6 +1,8 @@
 <?php
-use GuzzleHttp\Exception\ServerException;
+
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use GuzzleHttp\Exception\ServerException;
+
 require_once realpath(__DIR__ . '/../../../../../../../') . '/vendor/autoload.php';
 
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();

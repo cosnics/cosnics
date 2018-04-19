@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Common
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -29,16 +30,18 @@ class AssignmentRequestRepository extends CommonDataClassRepository
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
      * @param string $entryClassName
      *
-     * @return ContentObject[]
+     * @return ContentObject[] | DataClassIterator
      */
     public function retrieveAssignmentEntriesWithRequests(
         RecordRetrievesParameters $recordRetrievesParameters, string $entryClassName
     )
     {
         $properties = new DataClassProperties();
+
         $properties->add(
             new FixedPropertyConditionVariable(Request::class, Request::PROPERTY_ID, Request::PROPERTY_REQUEST_ID)
         );
+
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_AUTHOR_ID));
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_CONTENT_OBJECT_ID));
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_COURSE_ID));
@@ -49,18 +52,18 @@ class AssignmentRequestRepository extends CommonDataClassRepository
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_STATUS));
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_STATUS_DESCRIPTION));
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_VISIBLE_IN_INDEX));
-        $properties->add(new PropertyConditionVariable(Entry::class, Entry::PROPERTY_ID));
-        $properties->add(new PropertyConditionVariable(Entry::class, Entry::PROPERTY_ENTITY_TYPE));
-        $properties->add(new PropertyConditionVariable(Entry::class, Entry::PROPERTY_SUBMITTED));
-        $properties->add(new PropertyConditionVariable(Entry::class, Entry::PROPERTY_ID));
-        $properties->add(new PropertyConditionVariable(Entry::class, Entry::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable($entryClassName, Entry::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable($entryClassName, Entry::PROPERTY_ENTITY_TYPE));
+        $properties->add(new PropertyConditionVariable($entryClassName, Entry::PROPERTY_SUBMITTED));
+        $properties->add(new PropertyConditionVariable($entryClassName, Entry::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable($entryClassName, Entry::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE));
         $properties->add(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION));
         $properties->add(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
 
-        $joins = $this->getAssignmentRequestJoins();
+        $joins = $this->getAssignmentRequestJoins($entryClassName);
 
         $recordRetrievesParameters->setJoins($joins);
         $recordRetrievesParameters->setDataClassProperties($properties);
@@ -68,13 +71,13 @@ class AssignmentRequestRepository extends CommonDataClassRepository
         $records = $this->dataClassRepository->records($entryClassName, $recordRetrievesParameters);
 
         $dataClasses = [];
-        foreach($records as $record)
+        foreach ($records as $record)
         {
             $dataClasses[] =
                 $this->dataClassRepository->getDataClassFactory()->getDataClass(ContentObject::class, $record);
         }
 
-        return $dataClasses;
+        return new DataClassIterator(ContentObject::class, $dataClasses);
     }
 
     /**
@@ -85,14 +88,17 @@ class AssignmentRequestRepository extends CommonDataClassRepository
      */
     public function countAssignmentEntriesWithRequests(Condition $condition, string $entryClassName)
     {
-        $dataClassCountParameters = new DataClassCountParameters($condition, $this->getAssignmentRequestJoins());
-        return $this->dataClassRepository->count($entryClassName, $dataClassCountParameters);
+        return $this->dataClassRepository->count(
+            $entryClassName, new DataClassCountParameters($condition, $this->getAssignmentRequestJoins($entryClassName))
+        );
     }
 
     /**
+     * @param string $entryClassName
+     *
      * @return \Chamilo\Libraries\Storage\Query\Joins
      */
-    protected function getAssignmentRequestJoins()
+    protected function getAssignmentRequestJoins(string $entryClassName)
     {
         $joins = new Joins();
 
@@ -101,7 +107,7 @@ class AssignmentRequestRepository extends CommonDataClassRepository
                 ContentObject::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                    new PropertyConditionVariable(Entry::class, Entry::PROPERTY_CONTENT_OBJECT_ID)
+                    new PropertyConditionVariable($entryClassName, Entry::PROPERTY_CONTENT_OBJECT_ID)
                 )
             )
         );
@@ -111,7 +117,7 @@ class AssignmentRequestRepository extends CommonDataClassRepository
                 User::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(User::class, User::PROPERTY_ID),
-                    new PropertyConditionVariable(Entry::class, Entry::PROPERTY_USER_ID)
+                    new PropertyConditionVariable($entryClassName, Entry::PROPERTY_USER_ID)
                 )
             )
         );
@@ -123,11 +129,11 @@ class AssignmentRequestRepository extends CommonDataClassRepository
                     [
                         new EqualityCondition(
                             new PropertyConditionVariable(Request::class, Request::PROPERTY_CONTENT_OBJECT_ID),
-                            new PropertyConditionVariable(Entry::class, Entry::PROPERTY_CONTENT_OBJECT_ID)
+                            new PropertyConditionVariable($entryClassName, Entry::PROPERTY_CONTENT_OBJECT_ID)
                         ),
                         new EqualityCondition(
                             new PropertyConditionVariable(Request::class, Request::PROPERTY_AUTHOR_ID),
-                            new PropertyConditionVariable(Entry::class, Entry::PROPERTY_USER_ID)
+                            new PropertyConditionVariable($entryClassName, Entry::PROPERTY_USER_ID)
                         )
                     ]
                 ),
