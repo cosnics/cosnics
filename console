@@ -6,7 +6,9 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
-require_once __DIR__ . '/vendor/autoload.php';
+
+$autoloader = require __DIR__ . '/vendor/autoload.php';
+\Doctrine\Common\Annotations\AnnotationRegistry::registerLoader([$autoloader, 'loadClass']);
 
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 $container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
