@@ -71,6 +71,10 @@
             <argument
                     type="service"
                     id="symfony.component.validator.validator_builder" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.file.configurable_path_builder" />
+            <argument>%chamilo.configuration.debug.show_errors%</argument>
         </service>
 
         <service

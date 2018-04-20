@@ -1,9 +1,12 @@
 <?php
+
 namespace Chamilo\Libraries\Format\Validator;
 
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\PhpFileCache;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ValidatorBuilder;
 use Symfony\CS\DocBlock\Annotation;
@@ -29,15 +32,32 @@ class ValidatorFactory
     protected $validatorBuilder;
 
     /**
+     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
+     */
+    protected $configurablePathBuilder;
+
+    /**
+     * @var bool
+     */
+    protected $devMode;
+
+    /**
      * ValidatorFactory constructor.
      *
      * @param \Symfony\Component\Translation\TranslatorInterface $translator
      * @param \Symfony\Component\Validator\ValidatorBuilder $validatorBuilder
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+     * @param bool $devMode
      */
-    public function __construct(TranslatorInterface $translator, ValidatorBuilder $validatorBuilder)
+    public function __construct(
+        TranslatorInterface $translator, ValidatorBuilder $validatorBuilder,
+        ConfigurablePathBuilder $configurablePathBuilder, $devMode = false
+    )
     {
         $this->translator = $translator;
         $this->validatorBuilder = $validatorBuilder;
+        $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->devMode = $devMode;
     }
 
     /**
@@ -47,7 +67,10 @@ class ValidatorFactory
      */
     public function createValidator()
     {
-        $annotationReader = new CachedReader(new AnnotationReader(), new ArrayCache());
+        $cachePath = $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
+        $cache = $this->devMode ? new ArrayCache() : new PhpFileCache($cachePath);
+
+        $annotationReader = new CachedReader(new AnnotationReader(), $cache);
         $this->validatorBuilder->enableAnnotationMapping($annotationReader);
         $symfonyValidator = $this->validatorBuilder->getValidator();
 
