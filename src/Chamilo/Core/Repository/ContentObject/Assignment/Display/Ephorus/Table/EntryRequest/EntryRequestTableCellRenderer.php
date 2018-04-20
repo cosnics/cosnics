@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table\EntryRequest;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;

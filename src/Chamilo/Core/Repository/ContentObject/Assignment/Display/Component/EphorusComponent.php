@@ -2,8 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Component
@@ -16,12 +18,18 @@ class EphorusComponent extends Manager
     /**
      *
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     function run()
     {
+        if(!$this->getDataProvider()->canEditAssignment() || !$this->getDataProvider() instanceof AssignmentEphorusSupportInterface)
+        {
+            throw new NotAllowedException();
+        }
+
         $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
 
-        $this->getApplicationFactory()->getApplication(
+        return $this->getApplicationFactory()->getApplication(
             'Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus', $applicationConfiguration
         )->run();
     }

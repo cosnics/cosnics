@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Compo
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTableInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table\EntryRequestTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table\EntryRequest\EntryRequestTable;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -62,31 +62,16 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
      *
      * @param $object_table_class_name string
      *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition|\Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_table_condition($object_table_class_name)
     {
-        $search_conditions = $this->buttonToolbarRenderer->getConditions(
+        return $this->buttonToolbarRenderer->getConditions(
             array(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
             )
         );
-
-        $condition = new EqualityCondition(
-                new PropertyConditionVariable(
-                    Entry::class,
-                    Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
-                ),
-                new StaticConditionVariable($this->get_publication_id())
-            );
-
-        if ($search_conditions != null)
-        {
-            $condition = new AndCondition(array($condition, $search_conditions));
-        }
-
-        return $condition;
     }
 
     public function get_publication_id()

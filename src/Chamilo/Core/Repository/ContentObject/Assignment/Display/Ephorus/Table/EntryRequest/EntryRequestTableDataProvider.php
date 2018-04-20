@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table\EntryRequest;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
@@ -38,9 +38,8 @@ class EntryRequestTableDataProvider extends DataClassTableDataProvider
             );
         }
 
-        return $this->getAssignmentRequestRepository()->retrieveAssignmentEntriesWithRequests(
-            new RecordRetrievesParameters(null, $condition, $count, $offset, $order_property),
-            $this->determineEntryClass()
+        return $this->getDataProvider()->findAssignmentEntriesWithRequests(
+            new RecordRetrievesParameters(null, $condition, $count, $offset, $order_property)
         );
     }
 
@@ -51,23 +50,14 @@ class EntryRequestTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return $this->getAssignmentRequestRepository()->countAssignmentEntriesWithRequests(
-            $condition, $this->determineEntryClass()
-        );
-    }
-
-    public function determineEntryClass()
-    {
-        return $this->get_component()->getSource() == Manager::SOURCE_LEARNING_PATH_ASSIGNMENT ?
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class :
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::class;
+        return $this->getDataProvider()->countAssignmentEntriesWithRequests($condition);
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\AssignmentRequestRepository
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface
      */
-    public function getAssignmentRequestRepository()
+    public function getDataProvider()
     {
-        return $this->get_component()->getAssignmentRequestRepository();
+        return $this->get_component()->getDataProvider();
     }
 }

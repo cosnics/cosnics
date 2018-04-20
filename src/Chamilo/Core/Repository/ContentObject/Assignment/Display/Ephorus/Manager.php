@@ -15,6 +15,7 @@ abstract class Manager extends Application
 {
     const PARAM_ACTION = 'assignment_ephorus_action';
     const PARAM_ENTRY_ID = 'entry_id';
+    const PARAM_SOURCE = 'source';
 
     const ACTION_BROWSE = 'Browser';
     const ACTION_CREATE = 'Creator';
@@ -40,7 +41,7 @@ abstract class Manager extends Application
     }
 
     /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider | \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface
      */
     public function getDataProvider()
     {
@@ -62,4 +63,21 @@ abstract class Manager extends Application
     {
         return $this->get_application();
     }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\AssignmentRequestRepository
+     */
+    public function getAssignmentRequestRepository()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.storage.repository.assignment_request_repository');
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager
+     */
+    public function getRequestManager()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.service.request_manager');
+    }
+
 }

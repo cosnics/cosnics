@@ -9,7 +9,6 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\PhpFileCache;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ValidatorBuilder;
-use Symfony\CS\DocBlock\Annotation;
 
 /**
  * Builds the Symfony Validator for use with annotaded data-classes

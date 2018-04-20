@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
@@ -17,6 +18,10 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\RecordIterator;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -25,7 +30,7 @@ use Symfony\Component\Translation\Translator;
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class AssignmentDataProvider
-    implements \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+    implements \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider, AssignmentEphorusSupportInterface
 {
     /**
      * @var \Symfony\Component\Translation\Translator
@@ -753,5 +758,25 @@ class AssignmentDataProvider
     public function isContentObjectAttachedToEntry(Entry $entry, ContentObject $contentObject)
     {
         return $this->learningPathAssignmentService->isContentObjectAttachedToEntry($entry, $contentObject);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
+     */
+    public function countAssignmentEntriesWithRequests(Condition $condition = null)
+    {
+        return null;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findAssignmentEntriesWithRequests(RecordRetrievesParameters $recordRetrievesParameters = null)
+    {
+        return new RecordIterator(ContentObject::class_name(), []);
     }
 }
