@@ -22,7 +22,7 @@ class LatestDocumentsPublisherComponent extends Manager
 {
     public function run()
     {
-        $trackers = $this->getDataProvider()->findAssignmentEntriesWithRequests();
+        $trackers = $this->getDataProvider()->findAssignmentEntriesWithEphorusRequests();
 
         $ids = array();
         foreach($trackers as $tracker)

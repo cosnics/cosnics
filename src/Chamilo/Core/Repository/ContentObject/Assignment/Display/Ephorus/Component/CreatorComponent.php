@@ -8,14 +8,28 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- * This class executes the ephorus submanager
- * 
- * @author Tom Goethals - Hogeschool Gent
+ * Creates new requests for ephorus
  */
 class CreatorComponent extends Manager
 {
 
-    private $publication_id;
+    public function run()
+    {
+        $requests = $this->prepareRequests();
+
+        $requestManager = $this->getRequestManager();
+        $failures = $requestManager->handInDocuments($requests);
+
+        $message = $this->get_result(
+            $failures,
+            count($requests),
+            'SelectedRequestNotCreated',
+            'SelectedRequestsNotCreated',
+            'SelectedRequestCreated',
+            'SelectedRequestsCreated');
+
+        $this->redirect($message, $failures > 0, [self::PARAM_ACTION => self::ACTION_BROWSE]);
+    }
 
     /**
      * Returns base requests containing the author ids
@@ -23,9 +37,9 @@ class CreatorComponent extends Manager
      * @return array
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      */
-    public function get_base_requests()
+    public function prepareRequests()
     {
-        $translation = Translation::get('AssignmentSubmission', array(), 'Chamilo\Core\Tracking');
+        $translation = Translation::get('Entry');
         
         $ids = $this->getRequest()->getFromPostOrUrl(self::PARAM_ENTRY_ID);
         
@@ -46,31 +60,10 @@ class CreatorComponent extends Manager
             $request->set_content_object_id($entry->getContentObjectId());
             $request->set_author_id($entry->getUserId());
             $request->set_request_user_id($this->get_user_id());
+            $request->set_course_id(0);
             $requests[] = $request;
         }
         
         return $requests;
-    }
-
-    /**
-     * Redirects after create
-     * 
-     * @param string $message @codeCoverageIgnore
-     */
-    public function redirect_after_create($message, $is_error)
-    {
-        $parameters = array(self::PARAM_ACTION => self::ACTION_BROWSE);
-
-        $this->redirect($message, $is_error, $parameters);
-    }
-
-
-    /**
-     *
-     * @return string
-     */
-    function run()
-    {
-        // TODO: Implement run() method.
     }
 }

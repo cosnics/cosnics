@@ -10,10 +10,12 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
@@ -31,9 +33,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
      *
      * @return ContentObject[] | DataClassIterator
      */
-    public function findAssignmentEntriesWithRequests(
-        RecordRetrievesParameters $recordRetrievesParameters
-    )
+    public function findAssignmentEntriesWithRequests(RecordRetrievesParameters $recordRetrievesParameters = null)
     {
         $entryClassName = $this->getEntryClassName();
 
@@ -86,12 +86,60 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
      *
      * @return int
      */
-    public function countAssignmentEntriesWithRequests(Condition $condition)
+    public function countAssignmentEntriesWithRequests(Condition $condition = null)
     {
         $entryClassName = $this->getEntryClassName();
 
         return $this->dataClassRepository->count(
             $entryClassName, new DataClassCountParameters($condition, $this->getAssignmentRequestJoins())
+        );
+    }
+
+    /**
+     * @param int[] $entryIds
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|Request[]
+     */
+    public function findEphorusRequestsForAssignmentEntries(array $entryIds = [], Condition $condition = null)
+    {
+        $entryClassName = $this->getEntryClassName();
+
+        $conditions = [];
+
+        if ($condition instanceof Condition)
+        {
+            $conditions[] = $condition;
+        }
+
+        $conditions[] =
+            new InCondition(new PropertyConditionVariable($entryClassName, Entry::PROPERTY_ID), $entryIds);
+
+        $condition = new AndCondition($conditions);
+
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                $this->getEntryClassName(),
+                new AndCondition(
+                    [
+                        new EqualityCondition(
+                            new PropertyConditionVariable(Request::class, Request::PROPERTY_CONTENT_OBJECT_ID),
+                            new PropertyConditionVariable($entryClassName, Entry::PROPERTY_CONTENT_OBJECT_ID)
+                        ),
+                        new EqualityCondition(
+                            new PropertyConditionVariable(Request::class, Request::PROPERTY_AUTHOR_ID),
+                            new PropertyConditionVariable($entryClassName, Entry::PROPERTY_USER_ID)
+                        )
+                    ]
+                )
+            )
+        );
+
+        return $this->dataClassRepository->retrieves(
+            Request::class, new DataClassRetrievesParameters($condition, null, null, [], $joins)
         );
     }
 

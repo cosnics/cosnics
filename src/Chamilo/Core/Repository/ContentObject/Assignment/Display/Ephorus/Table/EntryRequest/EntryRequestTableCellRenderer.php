@@ -2,9 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table\EntryRequest;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTableColumnModel;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -13,6 +11,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -46,7 +45,7 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
                         50
                     )
                 );
-            case RequestTableColumnModel::COLUMN_NAME_AUTHOR :
+            case EntryRequestTableColumnModel::COLUMN_NAME_AUTHOR :
                 return $object->get_optional_property(User::PROPERTY_FIRSTNAME) . ' ' .
                     $object->get_optional_property(User::PROPERTY_LASTNAME);
             // return $object->get_author()->get_fullname();
@@ -58,20 +57,8 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
                         $object->get_optional_property(Request::PROPERTY_REQUEST_TIME)
                     );
                 }
-                else
-                {
-                    return '-';
-                }
-            case Entry::PROPERTY_ENTITY_TYPE :
-                switch ($object->get_optional_property(Entry::PROPERTY_ENTITY_TYPE))
-                {
-                    case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_COURSE_GROUP :
-                        return Translation::get('CourseGroup');
-                    case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_PLATFORM_GROUP :
-                        return Translation::get('PlatformGroup');
-                    case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_USER :
-                        return Translation::get('User');
-                }
+
+                return '-';
             case Entry::PROPERTY_SUBMITTED :
                 return DatetimeUtilities::format_locale_date(
                     null,
@@ -129,7 +116,12 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
                 new ToolbarItem(
                     Translation::get('ViewResult'),
                     Theme::getInstance()->getCommonImagePath('Action/Reporting'),
-                    $this->get_component()->get_ephorus_request_url($request_id),
+                    $this->get_component()->get_url(
+                        array(
+                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::ACTION_VIEW_RESULT,
+                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ENTRY_ID => $object->getId()
+                        )
+                    ),
                     ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -156,11 +148,8 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
                         Theme::getInstance()->getCommonImagePath($icon),
                         $this->get_component()->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_INDEX_VISIBILITY_CHANGER,
-                                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CHANGE_INDEX_VISIBILITY,
-                                Manager::PARAM_REQUEST_IDS => $request_id,
-                                \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $this->get_component()
-                                    ->get_publication_id()
+                                \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::ACTION_CHANGE_INDEX_VISIBILITY,
+                                \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ENTRY_ID => $object->getId()
                             )
                         ),
                         ToolbarItem::DISPLAY_ICON
@@ -176,9 +165,8 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
                     Theme::getInstance()->getCommonImagePath('Action/Up'),
                     $this->get_component()->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_ASSIGNMENT_EPHORUS_REQUEST,
-                            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CREATE,
-                            Manager::PARAM_CONTENT_OBJECT_IDS => $object->get_id()
+                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::ACTION_CREATE,
+                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ENTRY_ID => $object->getId()
                         )
                     )
                 )

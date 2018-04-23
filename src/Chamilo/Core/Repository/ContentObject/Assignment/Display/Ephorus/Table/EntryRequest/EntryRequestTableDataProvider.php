@@ -38,7 +38,7 @@ class EntryRequestTableDataProvider extends DataClassTableDataProvider
             );
         }
 
-        return $this->getDataProvider()->findAssignmentEntriesWithRequests(
+        return $this->getDataProvider()->findAssignmentEntriesWithEphorusRequests(
             new RecordRetrievesParameters(null, $condition, $count, $offset, $order_property)
         );
     }
@@ -50,7 +50,7 @@ class EntryRequestTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return $this->getDataProvider()->countAssignmentEntriesWithRequests($condition);
+        return $this->getDataProvider()->countAssignmentEntriesWithEphorusRequests($condition);
     }
 
     /**

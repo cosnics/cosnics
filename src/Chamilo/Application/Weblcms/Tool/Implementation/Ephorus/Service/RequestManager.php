@@ -101,14 +101,16 @@ class RequestManager
             );
         }
 
-        $file = $this->retrieveFileFromRequest($baseRequest);
-        $author = $this->retrieveAuthorFromRequest($baseRequest);
+//        $file = $this->retrieveFileFromRequest($baseRequest);
+//        $author = $this->retrieveAuthorFromRequest($baseRequest);
+//
+//        $documentGUID = $this->ephorusWebserviceRepository->handInDocument($file, $author);
+//        if (!$documentGUID)
+//        {
+//            throw new \RuntimeException('Could not create the document in the ephorus webservice');
+//        }
 
-        $documentGUID = $this->ephorusWebserviceRepository->handInDocument($file, $author);
-        if (!$documentGUID)
-        {
-            throw new \RuntimeException('Could not create the document in the ephorus webservice');
-        }
+        $documentGUID = 'bla';
 
         $baseRequest->set_guid($documentGUID);
         $baseRequest->set_process_type(Request::PROCESS_TYPE_CHECK_AND_INVISIBLE);
@@ -155,10 +157,10 @@ class RequestManager
      */
     public function changeDocumentVisibilityOnIndex(string $documentGuid, bool $showOnIndex)
     {
-        if (!$this->ephorusWebserviceRepository->changeDocumentVisiblity($documentGuid, $showOnIndex))
-        {
-            throw new \RuntimeException('The given document visibility could not be changed');
-        }
+//        if (!$this->ephorusWebserviceRepository->changeDocumentVisiblity($documentGuid, $showOnIndex))
+//        {
+//            throw new \RuntimeException('The given document visibility could not be changed');
+//        }
 
         $request = $this->requestRepository->findRequestByGuid($documentGuid);
 

@@ -21,6 +21,8 @@ abstract class Manager extends Application
     const ACTION_CREATE = 'Creator';
     const ACTION_CHANGE_INDEX_VISIBILITY = 'IndexVisibilityChanger';
     const ACTION_PUBLISH_LATEST_DOCUMENTS = 'LatestDocumentsPublisher';
+    const ACTION_VIEW_RESULT = 'ResultViewer';
+    const ACTION_EXPORT_RESULT = 'ResultExporter';
 
     const DEFAULT_ACTION = self::ACTION_BROWSE;
 

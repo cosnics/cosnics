@@ -22,7 +22,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @author Tom Goethals - Hogeschool Gent
  */
-class BrowserComponent extends Manager implements TableSupport, RequestTableInterface
+class BrowserComponent extends Manager implements TableSupport
 {
 
     /**
@@ -74,30 +74,6 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
         );
     }
 
-    public function get_publication_id()
-    {
-        return \Chamilo\Libraries\Platform\Session\Request::get(
-            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION
-        );
-    }
-
-    /**
-     * Returns the url to the ephorus request component
-     *
-     * @param int $entryId
-     *
-     * @return string
-     */
-    public function get_ephorus_request_url($entryId)
-    {
-        $parameters[self::PARAM_ACTION] = self::ACTION_CREATE;
-        $parameters[self::PARAM_ENTRY_ID] = $entryId;
-        $parameters[\Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION] =
-            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_VIEW_RESULT;
-
-        return $this->get_url($parameters);
-    }
-
     /**
      * **************************************************************************************************************
      * Helper functionality *
@@ -116,15 +92,6 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $html[] = $this->buttonToolbarRenderer->render();
 
-
-        $assignment = $this->getAssignment();
-
-        $html[] = '<h3>' . Translation::get(
-                'EphorusSubmissionsForAssignment',
-                array(),
-                ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
-            ) . ': ' .
-            $assignment->get_title() . '</h3>';
         $table = new EntryRequestTable($this);
         $html[] = $table->as_html();
 

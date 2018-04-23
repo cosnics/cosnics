@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\EntryRequestTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\AssignmentRequestTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTableInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -78,7 +78,7 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
     public function get_table_condition($object_table_class_name)
     {
         if ($object_table_class_name ==
-            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\EntryRequestTable'
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\AssignmentRequestTable'
         )
         {
             $search_conditions = $this->buttonToolbarRenderer->getConditions(
@@ -183,7 +183,7 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
                 ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
             ) . ': ' .
             $assignment->get_title() . '</h3>';
-        $table = new EntryRequestTable($this);
+        $table = new AssignmentRequestTable($this);
         $html[] = $table->as_html();
 
         return implode(PHP_EOL, $html);

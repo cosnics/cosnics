@@ -7,9 +7,11 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Score;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Feedback;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Note;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentEphorusRepository;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -30,12 +32,21 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     protected $assignmentRepository;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentEphorusRepository
+     */
+    protected $assignmentEphorusRepository;
+
+    /**
      *
      * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository $assignmentRepository
+     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentEphorusRepository $assignmentEphorusRepository
      */
-    public function __construct(AssignmentRepository $assignmentRepository)
+    public function __construct(
+        AssignmentRepository $assignmentRepository, AssignmentEphorusRepository $assignmentEphorusRepository
+    )
     {
         parent::__construct($assignmentRepository);
+        $this->assignmentEphorusRepository = $assignmentEphorusRepository;
     }
 
     /**
@@ -635,6 +646,36 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
         $entry->setContentObjectPublicationId($contentObjectPublication->getId());
 
         return $this->createEntryByInstance($entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
+     */
+    public function countAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, Condition $condition = null
+    )
+    {
+        return $this->assignmentEphorusRepository->countAssignmentEntriesWithRequestsByContentObjectPublication(
+            $contentObjectPublication, $condition
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
+     */
+    public function findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, RecordRetrievesParameters $recordRetrievesParameters = null
+    )
+    {
+        return $this->assignmentEphorusRepository->findAssignmentEntriesWithRequestsByContentObjectPublication(
+            $contentObjectPublication, $recordRetrievesParameters
+        );
     }
 
     /**

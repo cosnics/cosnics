@@ -32,12 +32,6 @@ class EntryRequestTableColumnModel extends DataClassTableColumnModel implements
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
         $this->add_column(new StaticTableColumn(self::COLUMN_NAME_AUTHOR));
-        $this->add_column(
-            new DataClassPropertyTableColumn(
-                Entry::class,
-                Entry::PROPERTY_ENTITY_TYPE
-            )
-        );
 
         $this->add_column(
             new DataClassPropertyTableColumn(

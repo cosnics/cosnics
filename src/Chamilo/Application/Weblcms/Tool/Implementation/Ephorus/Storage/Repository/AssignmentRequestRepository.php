@@ -86,7 +86,7 @@ class AssignmentRequestRepository extends CommonDataClassRepository
      *
      * @return int
      */
-    public function countAssignmentEntriesWithRequests(Condition $condition, string $entryClassName)
+    public function countAssignmentEntriesWithRequests(Condition $condition = null, string $entryClassName)
     {
         return $this->dataClassRepository->count(
             $entryClassName, new DataClassCountParameters($condition, $this->getAssignmentRequestJoins($entryClassName))
