@@ -523,24 +523,22 @@ class AssignmentDataProvider
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry $entry
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $submittedScore
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
+     * @param Score $score
+     * @return Score
      */
-    public function createScore(Entry $entry, User $user, $submittedScore)
+    public function createScore(Score $score)
     {
         $score = $this->learningPathAssignmentService->createScore(
-            $entry, $user, $submittedScore
+            $score
         );
 
+        $entry = $this->findEntryByIdentifier($score->getEntryId());
+
         $entryUser = new User();
-        $entryUser->setId($entry->getEntityId());
+        $entryUser->setId($entry->getUserId());
 
         $this->learningPathTrackingService->changeAssessmentScore(
-            $this->learningPath, $entryUser, $this->treeNode, $entry->getTreeNodeAttemptId(), $submittedScore
+            $this->learningPath, $entryUser, $this->treeNode, $entry->getTreeNodeAttemptId(), $score->getScore()
         );
 
         return $score;

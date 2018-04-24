@@ -256,14 +256,10 @@ interface AssignmentDataProvider
     public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId);
 
     /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $submittedScore
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
+     * @param Score $score
+     * @return Score
      */
-    public function createScore(Entry $entry, User $user, $submittedScore);
+    public function createScore(Score $score);
 
     /**
      *

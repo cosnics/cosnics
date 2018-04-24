@@ -295,12 +295,10 @@ class AssignmentDataProvider implements
     }
 
     /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::createScore()
+     * @inheritdoc
      */
     public function createScore(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry,
-        \Chamilo\Core\User\Storage\DataClass\User $user, $submittedScore
+        Score $score
     )
     {
         // TODO Auto-generated method stub

@@ -50,23 +50,11 @@ abstract class AssignmentService
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $submittedScore
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
+     * @param Score $score
+     * @return Score
      */
-    public function createScore(Entry $entry, User $user, $submittedScore)
+    public function createScore(Score $score)
     {
-        $score = $this->createScoreInstance();
-
-        $score->setScore($submittedScore);
-        $score->setEntryId($entry->getId());
-        $score->setCreated(time());
-        $score->setModified(time());
-        $score->setUserId($user->getId());
-
         if (!$this->assignmentRepository->createScore($score))
         {
             throw new \RuntimeException('Could not create a new score for entry ' . $entry->getId());
