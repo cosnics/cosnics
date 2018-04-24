@@ -1,23 +1,25 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\AssignmentRequestTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTableInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Assignment browser component for ephorus tool.
@@ -81,18 +83,34 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
         {
             $search_conditions = $this->buttonToolbarRenderer->getConditions(
                 array(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION)
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
                 )
             );
 
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(
-                    AssignmentSubmission::class_name(),
-                    AssignmentSubmission::PROPERTY_PUBLICATION_ID
-                ),
-                new StaticConditionVariable($this->get_publication_id())
-            );
+            if ($this->getSource() == self::SOURCE_LEARNING_PATH_ASSIGNMENT)
+            {
+                $treeNodeId = $this->getRequest()->getFromUrl(self::PARAM_TREE_NODE_ID);
+
+                $condition = new EqualityCondition(
+                    new PropertyConditionVariable(
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class,
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::PROPERTY_TREE_NODE_DATA_ID
+                    ),
+                    new StaticConditionVariable($treeNodeId)
+                );
+            }
+            else
+            {
+                $condition = new EqualityCondition(
+                    new PropertyConditionVariable(
+                        Entry::class,
+                        Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
+                    ),
+                    new StaticConditionVariable($this->get_publication_id())
+                );
+            }
+
             if ($search_conditions != null)
             {
                 $condition = new AndCondition(array($condition, $search_conditions));
@@ -112,14 +130,14 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
     /**
      * Returns the url to the ephorus request component
      *
-     * @param int $object_id
+     * @param int $entryId
      *
      * @return string
      */
-    public function get_ephorus_request_url($object_id)
+    public function get_ephorus_request_url($entryId)
     {
         $parameters[self::PARAM_ACTION] = self::ACTION_EPHORUS_REQUEST;
-        $parameters[self::PARAM_CONTENT_OBJECT_IDS] = $object_id;
+        $parameters[self::PARAM_CONTENT_OBJECT_IDS] = $entryId;
         $parameters[\Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_VIEW_RESULT;
 
@@ -145,16 +163,24 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
         $html[] = $this->buttonToolbarRenderer->render();
 
         $pub = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->get_publication_id()
         );
 
+        $treeNodeId = $this->getRequest()->getFromUrl(self::PARAM_TREE_NODE_ID);
         $assignment = $pub->get_content_object();
+        if ($this->getSource() == self::SOURCE_LEARNING_PATH_ASSIGNMENT && $assignment instanceof LearningPath)
+        {
+            $treeNode = $this->getTreeNodeDataService()->getTreeNodeDataById($treeNodeId);
+            $assignment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class, $treeNode->getContentObjectId()
+            );
+        }
 
         $html[] = '<h3>' . Translation::get(
                 'EphorusSubmissionsForAssignment',
                 array(),
-                ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class_name())
+                ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
             ) . ': ' .
             $assignment->get_title() . '</h3>';
         $table = new AssignmentRequestTable($this);
@@ -181,6 +207,17 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
 
     public function get_additional_parameters()
     {
-        return array(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        return array(
+            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION, self::PARAM_TREE_NODE_ID,
+            self::PARAM_SOURCE
+        );
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
+     */
+    protected function getTreeNodeDataService()
+    {
+        return $this->getService('chamilo.core.repository.content_object.learning_path.service.tree_node_data_service');
     }
 }

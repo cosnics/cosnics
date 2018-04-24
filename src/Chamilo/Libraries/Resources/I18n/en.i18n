@@ -675,3 +675,5 @@ ProcessResourcesContextDescription = "The context of the packages that you want 
 ClearCacheDescription = "Clears the cache folder"
 NotBlank = "This field should not be blank"
 LessThanOrEqual = "This value should be less than or equal to {VALUE}"
+ValidatorMinimumRangeMessage = "The given value of {value} is less than the minimum allowed value of {limit}"
+ValidatorMaximumRangeMessage = "The given value of {value} is more than the maximum allowed value of {limit}"

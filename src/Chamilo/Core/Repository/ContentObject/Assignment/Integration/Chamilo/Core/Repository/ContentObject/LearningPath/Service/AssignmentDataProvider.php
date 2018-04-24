@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
@@ -17,6 +19,10 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\RecordIterator;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -25,7 +31,8 @@ use Symfony\Component\Translation\Translator;
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class AssignmentDataProvider
-    implements \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+    implements \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider,
+    AssignmentEphorusSupportInterface
 {
     /**
      * @var \Symfony\Component\Translation\Translator
@@ -338,7 +345,8 @@ class AssignmentDataProvider
      */
     public function isUserPartOfEntity(User $user, $entityType, $entityId)
     {
-        return $entityType == \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER &&
+        return $entityType ==
+            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER &&
             $entityId == $user->getId();
     }
 
@@ -493,7 +501,7 @@ class AssignmentDataProvider
      */
     public function renderEntityNameByEntityTypeAndEntity($entityType, DataClass $entity)
     {
-        if(!$entity instanceof User)
+        if (!$entity instanceof User)
         {
             throw new \InvalidArgumentException('The given entity must be of the type ' . User::class);
         }
@@ -510,6 +518,7 @@ class AssignmentDataProvider
     public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
     {
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $entityId);
+
         return $this->renderEntityNameByEntityTypeAndEntity($entityType, $user);
     }
 
@@ -540,6 +549,7 @@ class AssignmentDataProvider
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score
+     *
      * @throws \Exception
      */
     public function updateScore(Score $score)
@@ -761,5 +771,42 @@ class AssignmentDataProvider
     public function isContentObjectAttachedToEntry(Entry $entry, ContentObject $contentObject)
     {
         return $this->learningPathAssignmentService->isContentObjectAttachedToEntry($entry, $contentObject);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
+     */
+    public function countAssignmentEntriesWithEphorusRequests(Condition $condition = null)
+    {
+        return $this->learningPathAssignmentService->countAssignmentEntriesWithEphorusRequestsByTreeNodeData(
+            $this->treeNode->getTreeNodeData(), $condition
+        );
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
+     */
+    public function findAssignmentEntriesWithEphorusRequests(RecordRetrievesParameters $recordRetrievesParameters = null
+    )
+    {
+        return $this->learningPathAssignmentService->findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
+            $this->treeNode->getTreeNodeData(), $recordRetrievesParameters
+        );
+    }
+
+    /**
+     * @param int[] $entryIds
+     *
+     * @return Request[]
+     */
+    public function findEphorusRequestsForAssignmentEntries(array $entryIds = [])
+    {
+        return $this->learningPathAssignmentService->findEphorusRequestsForAssignmentEntriesByTreeNodeData(
+            $this->treeNode->getTreeNodeData(), $entryIds
+        );
     }
 }

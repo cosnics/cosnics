@@ -31,7 +31,7 @@ class ResultExporterComponent extends Manager
                 $request_id
             );
 
-            $request = DataManager::retrieve_by_id(Request::class_name(), $request_id);
+            $request = DataManager::retrieve_by_id(Request::class, $request_id);
 
             if (!$request instanceof Request)
             {
@@ -41,7 +41,7 @@ class ResultExporterComponent extends Manager
             }
 
             $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $request->get_content_object_id()
             );
 

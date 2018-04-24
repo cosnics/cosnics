@@ -118,7 +118,7 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
         $requests = array();
         foreach ($ids as $id)
         {
-            $content_object = $data_manager_class::retrieve_by_id(ContentObject::class_name(), $id);
+            $content_object = $data_manager_class::retrieve_by_id(ContentObject::class, $id);
 
             if (! $content_object)
             {

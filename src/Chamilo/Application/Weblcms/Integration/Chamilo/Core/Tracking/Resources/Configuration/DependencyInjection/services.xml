@@ -5,11 +5,13 @@
         <service id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service"
                  class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService">
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.storage.repository.assignment_repository" />
+            <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.storage.repository.assignment_ephorus_repository" />
         </service>
 
         <service id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service"
                  class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService">
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.storage.repository.learning_path_assignment_repository" />
+            <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.storage.repository.learning_path_assignment_ephorus_repository" />
         </service>
 
         <service id="chamilo.application.weblcms.integration.chamilo.core.tracking.storage.repository.assignment_repository"
@@ -17,8 +19,18 @@
             <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
         </service>
 
+        <service id="chamilo.application.weblcms.integration.chamilo.core.tracking.storage.repository.assignment_ephorus_repository"
+                 class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentEphorusRepository">
+            <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+        </service>
+
         <service id="chamilo.application.weblcms.integration.chamilo.core.tracking.storage.repository.learning_path_assignment_repository"
                  class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository">
+            <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+        </service>
+
+        <service id="chamilo.application.weblcms.integration.chamilo.core.tracking.storage.repository.learning_path_assignment_ephorus_repository"
+                 class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentEphorusRepository">
             <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
         </service>
     </services>

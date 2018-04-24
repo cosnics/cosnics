@@ -5,10 +5,10 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This class defines a request for the ephorus tool
@@ -191,7 +191,7 @@ class Request extends EphorusDataClass
             $this->add_error(
                 Translation::get('RequestUserIdIsRequired'), 
                 array(), 
-                ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class_name()));
+                ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class));
         }
         
         if ($string_utilities_class::getInstance()->isNullOrEmpty($this->get_guid()))
@@ -199,7 +199,7 @@ class Request extends EphorusDataClass
             $this->add_error(
                 Translation::get('GuidIsRequired'), 
                 array(), 
-                ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class_name()));
+                ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class));
         }
         
         return parent::check_before_save();
@@ -225,10 +225,10 @@ class Request extends EphorusDataClass
         
         $data_manager_class = $this->get_data_manager_class();
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Result::class_name(), Result::PROPERTY_REQUEST_ID), 
+            new PropertyConditionVariable(Result::class, Result::PROPERTY_REQUEST_ID),
             new StaticConditionVariable($this->get_id()));
         
-        return $data_manager_class::deletes(Result::class_name(), $condition);
+        return $data_manager_class::deletes(Result::class, $condition);
     }
 
     /**
@@ -264,6 +264,8 @@ class Request extends EphorusDataClass
      */
     public function is_content_object_valid()
     {
+        return true;
+
         $string_utilities_class = $this->get_string_utilities_class();
         
         $content_object_id = $this->get_content_object_id();
@@ -283,14 +285,14 @@ class Request extends EphorusDataClass
             return false;
         }
         
-        if ($content_object->get_type() != File::class_name())
+        if ($content_object->get_type() != File::class)
         {
             $this->add_error(Translation::get('ContentObjectMustBeDocument'));
             
             return false;
         }
         
-        $extension = $content_object->get_extension();
+        $extension = $content_object->get_extension(); $extension = 'txt';
         if (! in_array($extension, $this->supported_extensions))
         {
             $this->add_error(Translation::get('DocumentExtensionNotValid'));
@@ -739,7 +741,7 @@ class Request extends EphorusDataClass
      */
     public function get_content_object()
     {
-        return $this->get_foreign_property(self::FOREIGN_PROPERTY_CONTENT_OBJECT, ContentObject::class_name());
+        return $this->get_foreign_property(self::FOREIGN_PROPERTY_CONTENT_OBJECT, ContentObject::class);
     }
 
     /**
@@ -750,7 +752,7 @@ class Request extends EphorusDataClass
     public function get_author()
     {
         return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+            \Chamilo\Core\User\Storage\DataClass\User::class,
             (int) $this->get_author_id());
     }
     // @codeCoverageIgnoreStop

@@ -64,7 +64,22 @@
 
         <service
             id="chamilo.libraries.format.validator.validator_factory"
-            class="Chamilo\Libraries\Format\Validator\SymfonyDataClassValidatorFactory" />
+            class="Chamilo\Libraries\Format\Validator\ValidatorFactory">
+            <argument
+                    type="service"
+                    id="symfony.component.translation.translator" />
+            <argument
+                    type="service"
+                    id="symfony.component.validator.validator_builder" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.file.configurable_path_builder" />
+            <argument>%chamilo.configuration.debug.show_errors%</argument>
+        </service>
+
+        <service
+                id="symfony.component.validator.validator_builder"
+                class="Symfony\Component\Validator\ValidatorBuilder" />
 
         <service
             id="jms.serializer"

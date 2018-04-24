@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -40,31 +39,38 @@ class AssignmentEphorusRequestComponent extends EphorusRequestComponent
         }
         $ids = (array) $ids;
         
-        $tracker_table = AssignmentSubmission::get_table_name();
-        $tracker_class = AssignmentSubmission::class_name();
-        
         $requests = array();
         foreach ($ids as $id)
         {
-            $tracker = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::retrieve_by_id(
-                AssignmentSubmission::class_name(), 
-                $id);
-            
+            if($this->getSource() == self::SOURCE_ASSIGNMENT)
+            {
+                /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry $tracker */
+                $tracker =
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::retrieve_by_id(
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::class,
+                        $id
+                    );
+            }
+            else
+            {
+                /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry $tracker */
+                $tracker =
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::retrieve_by_id(
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class,
+                        $id
+                    );
+            }
+
             if (! $tracker)
             {
                 throw new ObjectNotExistException($translation, $id);
             }
             
-            if (! $this->publication_id)
-            {
-                $this->publication_id = $tracker->get_publication_id();
-            }
-            
             $request = new Request();
             $request->set_process_type(Request::PROCESS_TYPE_CHECK_AND_INVISIBLE);
             $request->set_course_id($this->get_course_id());
-            $request->set_content_object_id($tracker->get_content_object_id());
-            $request->set_author_id($tracker->get_user_id());
+            $request->set_content_object_id($tracker->getContentObjectId());
+            $request->set_author_id($tracker->getUserId());
             $request->set_request_user_id($this->get_user_id());
             $requests[] = $request;
         }
@@ -80,13 +86,15 @@ class AssignmentEphorusRequestComponent extends EphorusRequestComponent
     public function redirect_after_create($message, $is_error)
     {
         $parameters = array(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_ASSIGNMENT_BROWSER, 
-            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $this->get_publication_id());
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_ASSIGNMENT_BROWSER
+        );
+
         $this->redirect($message, $is_error, $parameters);
     }
 
-    public function get_publication_id()
+
+    public function get_additional_parameters()
     {
-        return $this->publication_id;
+        return array(self::PARAM_SOURCE, self::PARAM_PUBLICATION_ID, self::PARAM_TREE_NODE_ID);
     }
 }

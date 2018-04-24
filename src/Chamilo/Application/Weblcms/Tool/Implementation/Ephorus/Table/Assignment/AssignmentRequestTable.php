@@ -28,7 +28,7 @@ class AssignmentRequestTable extends DataClassTable implements TableFormActionsS
                 new TableFormAction(
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_INDEX_VISIBILITY_CHANGER
+                            Manager::PARAM_ACTION => Manager::ACTION_INDEX_VISIBILITY_CHANGER
                         )
                     ),
                     Translation:: get('ToggleIndexVisibility'),
@@ -40,7 +40,7 @@ class AssignmentRequestTable extends DataClassTable implements TableFormActionsS
                 new TableFormAction(
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_ASSIGNMENT_EPHORUS_REQUEST
+                            Manager::PARAM_ACTION => Manager::ACTION_ASSIGNMENT_EPHORUS_REQUEST
                         )
                     ),
                     Translation:: get('AddDocuments'),

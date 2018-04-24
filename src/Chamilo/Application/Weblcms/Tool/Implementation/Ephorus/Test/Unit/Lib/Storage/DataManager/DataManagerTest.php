@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Test\Unit\Lib\Storage\DataManager;
 
-use Chamilo\Libraries\Architecture\Test;
-
 /**
  * Tests the data_manager class
  * 

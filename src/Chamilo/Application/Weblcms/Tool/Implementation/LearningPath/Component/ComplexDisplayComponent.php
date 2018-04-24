@@ -12,11 +12,13 @@ use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Interfaces\EphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -44,7 +46,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupport, AssessmentDisplaySupport,
-    ForumDisplaySupport, GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport, DelegateComponent
+    ForumDisplaySupport, GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport, DelegateComponent, EphorusSupportInterface
 {
 
     /**
@@ -587,5 +589,16 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     protected function getSelectedLearningPath()
     {
         return $this->publication->getContentObject();
+    }
+
+    public function getAssignmentEphorusURL(TreeNode $treeNode)
+    {
+        return $this->get_url([
+            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Ephorus',
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::ACTION_ASSIGNMENT_BROWSER,
+            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $this->publication->getId(),
+            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_TREE_NODE_ID => $treeNode->getId(),
+            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_SOURCE => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::SOURCE_LEARNING_PATH_ASSIGNMENT
+        ]);
     }
 }

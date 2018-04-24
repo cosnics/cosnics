@@ -42,7 +42,7 @@ abstract class DependencyInjectionBasedTestCase extends ChamiloTestCase
      *
      * @param string $serviceId
      *
-     * @return object
+     * @return object | mixed
      */
     protected function getService($serviceId)
     {

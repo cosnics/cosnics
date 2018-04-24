@@ -1,23 +1,22 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Core\DependencyContainer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Interfaces\RequestSupport;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager\Implementation\DoctrineExtension;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\AssignmentRequestTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\EntryRequestTable;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This class executes the ephorus submanager
@@ -53,18 +52,21 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
             $request = $this->getRequest();
 
             $requestAction = $request->get(
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION);
+                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION
+            );
 
-            if (! isset($requestAction))
+            if (!isset($requestAction))
             {
                 $request->query->set(
                     \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CHANGE_INDEX_VISIBILITY);
+                    \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CHANGE_INDEX_VISIBILITY
+                );
             }
 
             return $this->getApplicationFactory()->getApplication(
                 \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::context(),
-                new ApplicationConfiguration($request, $this->get_user(), $this))->run();
+                new ApplicationConfiguration($request, $this->get_user(), $this)
+            )->run();
         }
         else
         {
@@ -81,7 +83,8 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
     {
         $dependency_container->add(
             self::DEPENDENCY_DATA_MANAGER_CLASS,
-            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager');
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager'
+        );
         $dependency_container->add(self::DEPENDENCY_REQUEST_CLASS, 'Chamilo\Libraries\Platform\Session\Request');
     }
 
@@ -96,15 +99,20 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
     {
         $request_translation = Translation::get('Request', null, \Chamilo\Core\Repository\Manager::context());
 
-        $assignmentTableIds = $this->getRequest()->get(AssignmentRequestTable::TABLE_IDENTIFIER);
-        if (isset($assignmentTableIds))
+        $source = $this->getSource();
+
+        if ($source == self::SOURCE_ASSIGNMENT || $source == self::SOURCE_LEARNING_PATH_ASSIGNMENT)
         {
-            return $this->get_request_guids_from_assignment_submissions($assignmentTableIds);
+            $assignmentTableIds = $this->getRequest()->get(EntryRequestTable::TABLE_IDENTIFIER);
+            if (isset($assignmentTableIds))
+            {
+                return $this->get_request_guids_from_assignment_submissions($assignmentTableIds);
+            }
         }
 
         $ids = $this->get_ids();
 
-        if (! $ids)
+        if (!$ids)
         {
             throw new NoObjectSelectedException($request_translation);
         }
@@ -117,12 +125,12 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
         {
             $request = $data_manager_class::retrieve_request_by_id($id);
 
-            if (! $request)
+            if (!$request)
             {
                 throw new ObjectNotExistException($request_translation, $id);
             }
 
-            $request_guids[$request->get_guid()] = ! $request->is_visible_in_index();
+            $request_guids[$request->get_guid()] = !$request->is_visible_in_index();
         }
 
         return $request_guids;
@@ -131,22 +139,28 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
     public function get_request_guids_from_assignment_submissions($assignmentTableIds)
     {
         $condition = new InCondition(
-            new PropertyConditionVariable(AssignmentSubmission::class_name(), AssignmentSubmission::PROPERTY_ID),
-            $assignmentTableIds);
+            new PropertyConditionVariable(Request::class, Request::PROPERTY_ID),
+            $assignmentTableIds
+        );
 
-        $data_manager_class = $this->get_data_manager_class();
-        $doctrineExtension = new DoctrineExtension($data_manager_class::getInstance());
+        $class = $this->getSource() == self::SOURCE_ASSIGNMENT ?
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::class :
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class;
 
-        $requests = $doctrineExtension->retrieve_results_by_assignment(new DataClassRetrievesParameters($condition));
+        $requests = $this->getAssignmentRequestRepository()->retrieveAssignmentEntriesWithRequests(
+            new RecordRetrievesParameters(null, $condition), $class
+        );
 
         $request_guids = array();
 
-        while ($request = $requests->next_result())
+        foreach ($requests as $request)
         {
             if ($request->get_optional_property(Request::PROPERTY_GUID))
             {
-                $request_guids[$request->get_optional_property(Request::PROPERTY_GUID)] = ! $request->get_optional_property(
-                    Request::PROPERTY_VISIBLE_IN_INDEX);
+                $request_guids[$request->get_optional_property(Request::PROPERTY_GUID)] =
+                    !$request->get_optional_property(
+                        Request::PROPERTY_VISIBLE_IN_INDEX
+                    );
             }
         }
 
@@ -168,7 +182,7 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
      *
      * @param string $message @codeCoverageIgnore
      */
-    public function redirect_after_create($message, $is_error)
+    public function redirect_after_create($message, $is_error = false)
     {
         if ($this->get_publication_id() == null)
         {
@@ -177,19 +191,26 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
         else
         {
             $parameters = array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_ASSIGNMENT_BROWSER,
-                \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $this->get_publication_id());
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_ASSIGNMENT_BROWSER
+            );
         }
         $this->redirect($message, $is_error, $parameters);
     }
 
     private function get_publication_id()
     {
-        return \Chamilo\Libraries\Platform\Session\Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        return \Chamilo\Libraries\Platform\Session\Request::get(
+            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION
+        );
     }
 
     public function get_base_requests()
     {
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_SOURCE, self::PARAM_PUBLICATION_ID, self::PARAM_TREE_NODE_ID);
     }
 
     /**

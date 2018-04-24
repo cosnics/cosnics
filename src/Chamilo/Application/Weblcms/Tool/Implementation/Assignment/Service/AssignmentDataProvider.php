@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\En
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\EntryTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
@@ -17,6 +18,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -25,7 +28,8 @@ use Symfony\Component\Translation\Translator;
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class AssignmentDataProvider
-    implements \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+    implements \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider,
+    AssignmentEphorusSupportInterface
 {
     /**
      * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
@@ -159,6 +163,7 @@ class AssignmentDataProvider
     public function countEntitiesByEntityType($entityType)
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+
         return $entityService->countEntities($this->contentObjectPublication);
     }
 
@@ -170,6 +175,7 @@ class AssignmentDataProvider
     public function countEntitiesWithEntriesByEntityType($entityType)
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+
         return $entityService->countEntitiesWithEntries($this->contentObjectPublication);
     }
 
@@ -181,6 +187,7 @@ class AssignmentDataProvider
     public function findEntitiesWithEntriesByEntityType($entityType)
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+
         return $entityService->retrieveEntitiesWithEntries($this->contentObjectPublication);
     }
 
@@ -193,6 +200,7 @@ class AssignmentDataProvider
     public function getPluralEntityNameByType($entityType)
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+
         return $entityService->getPluralEntityName();
     }
 
@@ -204,6 +212,7 @@ class AssignmentDataProvider
     public function getEntityNameByType($entityType)
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+
         return $entityService->getEntityName();
     }
 
@@ -696,5 +705,30 @@ class AssignmentDataProvider
     public function isContentObjectAttachedToEntry(Entry $entry, ContentObject $contentObject)
     {
         return $this->assignmentService->isContentObjectAttachedToEntry($entry, $contentObject);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
+     */
+    public function countAssignmentEntriesWithEphorusRequests(Condition $condition = null)
+    {
+        return $this->assignmentService->countAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
+            $this->contentObjectPublication, $condition
+        );
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findAssignmentEntriesWithEphorusRequests(RecordRetrievesParameters $recordRetrievesParameters = null
+    )
+    {
+        return $this->assignmentService->findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
+            $this->contentObjectPublication, $recordRetrievesParameters
+        );
     }
 }

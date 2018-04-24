@@ -1,19 +1,18 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager\Implementation\DoctrineExtension;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -25,45 +24,53 @@ class AssignmentLatestDocumentsPublisherComponent extends Manager
     public function get_publication_id()
     {
         return \Chamilo\Libraries\Platform\Session\Request::get(
-            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION
+        );
     }
 
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
-        
-        if (! $this->get_publication_id())
+
+        if (!$this->get_publication_id())
         {
             throw new NoObjectSelectedException(Translation::get('AssignmentSubmission', null, 'weblcms'));
         }
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                AssignmentSubmission::class_name(), 
-                AssignmentSubmission::PROPERTY_PUBLICATION_ID), 
-            new StaticConditionVariable($this->get_publication_id()));
-        
-        $doctrineExtension = new DoctrineExtension(DataManager::getInstance());
-        $trackers = $doctrineExtension->retrieve_results_by_assignment(new DataClassRetrievesParameters($condition));
-        
+                Entry::class,
+                Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
+            ),
+            new StaticConditionVariable($this->get_publication_id())
+        );
+
+        $trackers = $this->getAssignmentRequestRepository()->retrieveAssignmentEntriesWithRequests(new RecordRetrievesParameters(null, $condition), Entry::class);
+
         $ids = array();
-        while (($tracker = $trackers->next_result()) != null)
+        foreach($trackers as $tracker)
         {
-            if (! $tracker->get_optional_property(Request::PROPERTY_REQUEST_TIME))
+            if (!$tracker->get_optional_property(Request::PROPERTY_REQUEST_TIME))
             {
-                $ids[] = $tracker->get_default_property(AssignmentSubmission::PROPERTY_ID);
+                $ids[] = $tracker->get_default_property(Entry::PROPERTY_ID);
             }
         }
-        
+
         // redirect
         $parameters = array(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_ASSIGNMENT_EPHORUS_REQUEST, 
-            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CREATE, 
-            self::PARAM_CONTENT_OBJECT_IDS => $ids);
-        
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_ASSIGNMENT_EPHORUS_REQUEST,
+            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CREATE,
+            self::PARAM_CONTENT_OBJECT_IDS => $ids
+        );
+
         $this->redirect('', false, $parameters);
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_SOURCE, self::PARAM_PUBLICATION_ID, self::PARAM_TREE_NODE_ID);
     }
 }

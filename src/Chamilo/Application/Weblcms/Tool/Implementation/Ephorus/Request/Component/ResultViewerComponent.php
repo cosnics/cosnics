@@ -80,7 +80,7 @@ class ResultViewerComponent extends Manager
                     Translation::get(
                         'PrintReport', 
                         array(), 
-                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class_name())), 
+                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)),
                     Theme::getInstance()->getCommonImagePath('Action/Item'), 
                     '#', 
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, 
@@ -92,7 +92,7 @@ class ResultViewerComponent extends Manager
                     Translation::get(
                         'ExportReport', 
                         array(), 
-                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class_name())), 
+                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)),
                     Theme::getInstance()->getCommonImagePath('Action/Export'), 
                     $this->get_url(array(Manager::PARAM_ACTION => self::ACTION_EXPORT_RESULT)), 
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, 

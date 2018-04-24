@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Test\Unit\Lib\
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\DependencyContainer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\EphorusDataClass;
-use Chamilo\Libraries\Architecture\Test;
 
 /**
  * Tests the functionality in the abstract ephorus data class

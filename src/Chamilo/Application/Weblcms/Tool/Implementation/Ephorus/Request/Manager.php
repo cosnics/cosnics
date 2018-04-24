@@ -65,4 +65,12 @@ abstract class Manager extends Application
     {
         return parent::get_parent();
     }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager
+     */
+    public function getRequestManager()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.service.request_manager');
+    }
 }

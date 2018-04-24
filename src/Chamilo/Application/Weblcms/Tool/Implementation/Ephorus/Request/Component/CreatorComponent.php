@@ -7,7 +7,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Processor\RequestProcessor;
 
 class CreatorComponent extends Manager
 {
@@ -18,10 +17,10 @@ class CreatorComponent extends Manager
     public function run()
     {
         $base_requests = $this->get_parent()->get_base_requests();
-        
-        $request_processor = new RequestProcessor();
-        $failures = $request_processor->hand_in_documents($base_requests);
-        
+
+        $requestManager = $this->getRequestManager();
+        $failures = $requestManager->handInDocuments($base_requests);
+
         if ($failures > 0)
         {
             $is_error_message = true;

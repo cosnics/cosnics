@@ -17,11 +17,11 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Browser component for ephorus tool.
@@ -79,13 +79,13 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
         {
             $search_conditions = $this->buttonToolbarRenderer->getConditions(
                 array(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION)
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
                 )
             );
 
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_COURSE_ID),
+                new PropertyConditionVariable(Request::class, Request::PROPERTY_COURSE_ID),
                 new StaticConditionVariable($this->get_course_id())
             );
             if ($search_conditions != null)
@@ -100,14 +100,14 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
     /**
      * Returns the url to the ephorus request component
      *
-     * @param int $object_id
+     * @param int $entryId
      *
      * @return string
      */
-    public function get_ephorus_request_url($object_id)
+    public function get_ephorus_request_url($entryId)
     {
         $parameters[self::PARAM_ACTION] = self::ACTION_EPHORUS_REQUEST;
-        $parameters[self::PARAM_CONTENT_OBJECT_IDS] = $object_id;
+        $parameters[self::PARAM_CONTENT_OBJECT_IDS] = $entryId;
         $parameters[\Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_VIEW_RESULT;
 
@@ -161,7 +161,7 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
                     Translation::get(
                         'AddDocument',
                         array(),
-                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class_name())
+                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
                     ),
                     Theme::getInstance()->getCommonImagePath('Action/Add'),
                     $this->get_url(
