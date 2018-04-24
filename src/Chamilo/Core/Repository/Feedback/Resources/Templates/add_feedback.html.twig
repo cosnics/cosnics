@@ -1,0 +1,32 @@
+{% set appContext = 'Chamilo\\Core\\Repository\\Feedback' %}
+{% set commonContext = 'Chamilo\\Libraries' %}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% if not createRight %}
+    {% if feedbackCount == 0 %}
+        <div class="clearfix"></div>
+        <div class="alert alert-info">
+            {{ 'NoFeedbackYet'|trans([], appContext) }}
+        </div>
+    {% else %}
+        {{ feedbackToolbar|raw }}
+        {% if showFeedbackHeader %}
+            <h3>
+                {{ 'Feedback'|trans([], appContext) }}
+                <div class="clearfix"></div>
+            </h3>
+        {% endif %}
+
+        {% include appContext ~ ':feedback_list.html.twig' %}    {% endif %}
+
+{% else %}
+    {{ feedbackToolbar|raw }}
+    {% include appContext ~ ':feedback_list.html.twig' %}
+
+    {{ form_start(form) }}
+    {% use 'chamilo_form_layout.html.twig' %}
+        {{ form_row(form.comment) }}
+        <button type="submit" class="btn btn-default">Verstuur feedback</button>
+    {{ form_end(form) }}
+
+{% endif %}
