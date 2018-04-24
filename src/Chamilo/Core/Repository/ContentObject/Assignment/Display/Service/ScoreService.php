@@ -11,6 +11,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -45,30 +46,21 @@ class ScoreService
     }
 
     /**
-     * @param int $score
-     * @param User $user
-     * @param Entry $entry
+     * @param Score $score
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
      */
-    public function createOrUpdateScore(int $score, User $user, Entry $entry)
+    public function createOrUpdateScore(Score $score)
     {
-        
-        $scoreDataClass = $this->getScoreDataClass($entry);
+        if(empty($score->getId())){
+            $score->setModified(time());
 
-        if (empty($scoreDataClass)) {
             return $this->assignmentDataProvider->createScore(
-                $entry, $user, $score
+                $score
             );
         }
 
-        if ($scoreDataClass->getScore() != $score) {
-            $scoreDataClass->setScore($score);
-            $scoreDataClass->setModified(time());
-            $scoreDataClass->setUserId($user->getId());
+        $this->assignmentDataProvider->updateScore($score);
 
-            $this->assignmentDataProvider->updateScore($scoreDataClass);
-        }
-
-        return $scoreDataClass;
+        return $score;
     }
 }

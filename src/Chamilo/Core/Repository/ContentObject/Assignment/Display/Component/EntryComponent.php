@@ -319,16 +319,22 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getScoreForm()
     {
+        $score = $this->getScoreDataClass();
+
+        if(empty($score)) {
             $score = $this->getDataProvider()->initializeScore();
             $score->setEntryId($this->getEntry()->getId());
-            $score->setUserId($this->getUser()->getId());
+        }
 
-            $formFactory = $this->getForm();
+        //a new user could be setting the score
+        $score->setUserId($this->getUser()->getId());
 
-            return $formFactory->create(
-                new ScoreFormType($this->getTranslator()),
-                $score
-            );
+        $formFactory = $this->getForm();
+
+        return $formFactory->create(
+            new ScoreFormType($this->getTranslator()),
+            $score
+        );
 
     }
 

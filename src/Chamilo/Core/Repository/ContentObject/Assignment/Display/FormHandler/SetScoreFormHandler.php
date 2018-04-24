@@ -8,9 +8,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\FormHandler;
 
-
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreFormType;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreFormProcessor;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
@@ -21,10 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 class SetScoreFormHandler
 {
     /**
-     * @var AssignmentDataProvider
-     */
-    protected $assignmentDataProvider;
-    /**
      * @var ScoreService
      */
     protected $scoreService;
@@ -32,12 +25,10 @@ class SetScoreFormHandler
     /**
      * SetScoreFormHandler constructor.
      * @param ScoreService $scoreService
-     * @param AssignmentDataProvider $assignmentDataProvider
      */
-    public function __construct(ScoreService $scoreService, AssignmentDataProvider $assignmentDataProvider)
+    public function __construct(ScoreService $scoreService)
     {
         $this->scoreService = $scoreService;
-        $this->assignmentDataProvider = $assignmentDataProvider;
     }
 
     /**
@@ -62,9 +53,7 @@ class SetScoreFormHandler
 
         $score = $form->getData();
 
-        $this->assignmentDataProvider->updateScore($score);
-
-        $this->scoreService->createOrUpdateScore($scoreData[ScoreFormType::FIELD_SCORE], $user, $entry);
+        $this->scoreService->createOrUpdateScore($score);
 
         return true;
     }

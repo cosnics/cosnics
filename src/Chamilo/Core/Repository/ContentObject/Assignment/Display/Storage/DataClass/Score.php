@@ -41,7 +41,7 @@ abstract class Score extends DataClass
 
     /**
      *
-     * @Assert\LessThanOrEqual(value=100, message="LessThanOrEqual")
+     * @Assert\LessThanOrEqual(value=100, message="LessThanOrEqual", payload = {"context": "Chamilo\Libraries"})
      * @return integer
      */
     public function getScore()

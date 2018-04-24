@@ -38,17 +38,7 @@ class ScoreFormType extends AbstractType
     {
         $builder->add(
             Score::PROPERTY_SCORE,
-            PercentInputFormType::class/*,
-            [
-                'constraints' => new LessThanOrEqual(
-                    [
-                        "value" => 100,
-                        'message' => $this->translator->trans('LessThanOrEqual', ['{VALUE}' => 100 ], 'Chamilo\Libraries')
-                    ]
-                ),
-            ]
-   */
-
+            PercentInputFormType::class
         );
     }
 
