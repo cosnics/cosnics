@@ -275,6 +275,12 @@ interface AssignmentDataProvider
 
     /**
      *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
+     */
+    public function initializeScore();
+
+    /**
+     *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $submittedNote

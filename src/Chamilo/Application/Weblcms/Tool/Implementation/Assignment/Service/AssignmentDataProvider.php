@@ -563,6 +563,14 @@ class AssignmentDataProvider
     }
 
     /**
+     * @inheritdoc
+     */
+    public function initializeScore()
+    {
+        return $this->assignmentService->initializeScore();
+    }
+
+    /**
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
      */

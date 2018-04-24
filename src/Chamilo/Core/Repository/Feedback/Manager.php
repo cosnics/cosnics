@@ -13,6 +13,7 @@ abstract class Manager extends Application
     const PARAM_FEEDBACK_ID = 'feedback_id';
     
     // Actions
+    const ACTION_BROWSE_V2 = 'BrowserV2';
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
     const ACTION_UPDATE = 'Updater';

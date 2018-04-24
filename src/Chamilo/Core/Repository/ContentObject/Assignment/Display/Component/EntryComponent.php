@@ -5,13 +5,17 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreFormType;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\FormHandler\SetScoreFormHandler;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryNavigator;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreFormProcessor;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -34,6 +38,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 
 /**
  *
@@ -49,13 +55,12 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      *
      * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
      */
-    private $score;
+    private $scoreDataClass;
 
     /**
-     *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm
+     * @var ScoreService
      */
-    private $scoreForm;
+    protected $scoreService;
 
     /**
      *
@@ -68,21 +73,34 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected $entryNavigator;
 
+
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent::__construct($applicationConfiguration);
+
+        $this->scoreService = new ScoreService($this->getDataProvider());
+    }
+
     /**
      * @return string
-     *
+     * @throws NotAllowedException
+     * @throws \Exception
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
         $this->initializeEntry();
         $this->checkAccessRights();
-        $this->processSubmittedData();
 
-        return $this->getTwig()->render(Manager::context() . ':EntryViewer.html.twig', $this->getTemplateProperties());
+        $scoreForm = $this->getScoreForm();
+        $this->processSubmittedData($scoreForm);
+
+        return $this->getTwig()->render(
+            Manager::context() . ':EntryViewer.html.twig',
+            $this->getTemplateProperties($scoreForm)
+        );
     }
 
     /**
@@ -131,10 +149,10 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     }
 
     /**
-     *
-     * @return string[]
+     * @param FormInterface $scoreForm
+     * @return array|string[]
      */
-    protected function getTemplateProperties()
+    protected function getTemplateProperties(FormInterface $scoreForm)
     {
         /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
         $assignment = $this->get_root_content_object();
@@ -172,13 +190,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
         $configuration->set(\Chamilo\Core\Repository\Feedback\Manager::CONFIGURATION_SHOW_FEEDBACK_HEADER, false);
 
-        $feedbackManagerHtml = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\Feedback\Manager::context(), $configuration
-        )->run();
+        $feedbackManager = $this->getApplicationFactory()->getApplication(
+            "Chamilo\Core\Repository\Feedback", $configuration, \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE_V2
+        );
+
+        $feedbackManagerHtml = $feedbackManager->run();
 
         $contentObjects = $assignment->getAutomaticFeedbackObjects();
-
-        $score = $this->getScore() instanceof Score ? $this->getScore()->getScore() : 0;
 
         $extendParameters = [
             'HAS_ENTRY' => true,
@@ -187,8 +205,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
             'SUBMITTED_DATE' => $submittedDate,
             'SUBMITTED_BY' => $this->getUserService()->getUserFullNameById($this->getEntry()->getUserId()),
-            'SCORE_FORM' => $this->getScoreForm()->render(),
-            'SCORE' => $score,
+            'SCORE_FORM' => $scoreForm->createView(),
+            'SCORE' => $this->getScore(),
             'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
             'ENTRY_TABLE' => $this->renderEntryTable(),
             'ENTRY_COUNT' => $this->getDataProvider()->countEntriesForEntityTypeAndId(
@@ -224,48 +242,40 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     }
 
     /**
-     * @return bool|void
+     * @param FormInterface $scoreForm
+     * @return bool
      * @throws \Exception
-     *
-     * @throws \HTML_QuickForm_Error
      */
-    protected function processSubmittedData()
+    protected function processSubmittedData(FormInterface $scoreForm)
     {
         if (!$this->getDataProvider()->canEditAssignment() || !$this->getEntry() instanceof Entry)
         {
-            return;
+            return false;
         }
 
-        $scoreForm = $this->getScoreForm();
+        $scoreFormHandler = new SetScoreFormHandler($this->scoreService);
 
-        if ($scoreForm->validate())
-        {
-            $detailsProcessor = new ScoreFormProcessor(
-                $this->getDataProvider(),
-                $this->getUser(),
-                $this->getEntry(),
-                $this->getScore(),
-                $scoreForm->exportValues()
-            );
-
-            $this->score = $detailsProcessor->run();
-        }
-
-        return true;
+        return $scoreFormHandler->handle($scoreForm, $this->getRequest(), $this->getUser(), $this->getEntry());
     }
 
+    /**
+     * @return int
+     */
+    protected function getScore() : int {
+        return $this->getScoreDataClass() instanceof Score ? $this->getScoreDataClass()->getScore() : 0;
+    }
     /**
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
      */
-    protected function getScore()
+    protected function getScoreDataClass()
     {
-        if (!isset($this->score))
+        if (!isset($this->scoreDataClass))
         {
-            $this->score = $this->getDataProvider()->findScoreByEntry($this->getEntry());
+            $this->scoreDataClass = $this->scoreService->getScoreDataClass($this->getEntry());
         }
 
-        return $this->score;
+        return $this->scoreDataClass;
     }
 
     /**
@@ -305,22 +315,21 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     }
 
     /**
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm
+     * @return Form|\Symfony\Component\Form\FormInterface
      */
     protected function getScoreForm()
     {
-        if (!isset($this->scoreForm))
-        {
-            $this->scoreForm = new ScoreForm(
-                $this->getScore(),
-                $this->getDataProvider(),
-                $this->get_url(array(self::PARAM_ENTRY_ID => $this->getEntry()->getId())),
-                $this->getTwig()
-            );
-        }
+            $score = $this->getDataProvider()->initializeScore();
+            $score->setEntryId($this->getEntry()->getId());
+            $score->setUserId($this->getUser()->getId());
 
-        return $this->scoreForm;
+            $formFactory = $this->getForm();
+
+            return $formFactory->create(
+                new ScoreFormType($this->getTranslator()),
+                $score
+            );
+
     }
 
     /**

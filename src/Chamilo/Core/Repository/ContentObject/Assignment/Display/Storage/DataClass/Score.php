@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  *
@@ -40,6 +41,7 @@ abstract class Score extends DataClass
 
     /**
      *
+     * @Assert\LessThanOrEqual(value=100, message="LessThanOrEqual")
      * @return integer
      */
     public function getScore()

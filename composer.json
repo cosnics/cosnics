@@ -37,7 +37,8 @@
 		"symfony/twig-bridge": "2.*",
 		"symfony/validator": "2.*",
 		"symfony/yaml": "2.*",
-		"twig/twig": "1.*"
+		"twig/twig": "1.*",
+		"symfony/var-dumper": "2.*"
 	},
 	"require-dev": {
 		"behat/behat": "*",

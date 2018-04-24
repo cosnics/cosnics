@@ -637,6 +637,14 @@ class AssignmentDataProvider
     }
 
     /**
+     * @return Score
+     */
+    public function initializeScore()
+    {
+        return $this->learningPathAssignmentService->initializeScore();
+    }
+
+    /**
      *
      * @param integer $feedbackIdentifier
      *

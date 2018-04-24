@@ -42,14 +42,14 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
      *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Libraries\Architecture\Application\Application $parentApplication
      * @param string[] $configurationParameters
      */
-    public function __construct(ChamiloRequest $request, $user = null, $application = null, $configurationParameters = array())
+    public function __construct(ChamiloRequest $request, $user = null, $parentApplication = null, $configurationParameters = array())
     {
         $this->request = $request;
         $this->user = $user;
-        $this->application = $application;
+        $this->application = $parentApplication;
         $this->configurationParameters = $configurationParameters;
     }
 

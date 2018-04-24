@@ -123,7 +123,7 @@ class HtmlEditorFileUploadComponent extends Manager
      *
      * @return RegistrationConsulter
      */
-    protected function getRegistrationConsulter()
+    public function getRegistrationConsulter()
     {
         return $this->getContainer()->get("chamilo.configuration.service.registration_consulter");
     }

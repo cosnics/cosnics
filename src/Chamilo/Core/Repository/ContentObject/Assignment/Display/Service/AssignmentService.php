@@ -247,6 +247,14 @@ abstract class AssignmentService
     }
 
     /**
+     * @return Score
+     */
+    public function initializeScore()
+    {
+        return $this->createScoreInstance();
+    }
+
+    /**
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
      */
