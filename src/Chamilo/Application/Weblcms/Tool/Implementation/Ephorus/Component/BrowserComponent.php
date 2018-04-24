@@ -106,10 +106,8 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
      */
     public function get_ephorus_request_url($entryId)
     {
-        $parameters[self::PARAM_ACTION] = self::ACTION_EPHORUS_REQUEST;
+        $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_RESULT;
         $parameters[self::PARAM_CONTENT_OBJECT_IDS] = $entryId;
-        $parameters[\Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION] =
-            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_VIEW_RESULT;
 
         return $this->get_url($parameters);
     }

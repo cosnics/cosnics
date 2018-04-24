@@ -61,6 +61,8 @@ class Embedder extends ContentObjectEmbedder
             $trackingParameters->getLearningPathTargetUserIds($this->learningPath)
         );
 
+        $assignmentDataProvider->setEphorusEnabled($this->get_application()->get_application()->isEphorusEnabled());
+
         $configuration->set(
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::CONFIGURATION_DATA_PROVIDER,
             $assignmentDataProvider

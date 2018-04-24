@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Core\DependencyContainer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Interfaces\RequestSupport;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -21,7 +20,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Tom Goethals - Hogeschool Gent
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class EphorusRequestComponent extends Manager implements RequestSupport, DelegateComponent
+abstract class EphorusRequestComponent extends Manager implements DelegateComponent
 {
 
     private $dependency_container;
@@ -38,35 +37,6 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
         parent::__construct($applicationConfiguration);
 
         $this->initialize_dependencies($this->get_dependency_container());
-    }
-
-    /**
-     * Runs this component @codeCoverageIgnore
-     */
-    public function run()
-    {
-        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
-        {
-            $request = $this->getRequest();
-
-            $requestAction = $request->get(
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION);
-
-            if (! isset($requestAction))
-            {
-                $request->query->set(
-                    \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CREATE);
-            }
-
-            return $this->getApplicationFactory()->getApplication(
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::context(),
-                new ApplicationConfiguration($request, $this->get_user(), $this))->run();
-        }
-        else
-        {
-            throw new NotAllowedException(false);
-        }
     }
 
     /**

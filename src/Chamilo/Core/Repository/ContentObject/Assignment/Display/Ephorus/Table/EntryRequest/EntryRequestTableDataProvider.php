@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table\EntryRequest;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;

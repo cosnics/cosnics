@@ -55,3 +55,4 @@ BETANotification = "De opdrachten in leerpaden zijn momenteel beschikbaar als BE
 MultipleEntitiesWarning = "Je maakt momenteel deel uit van meerdere {ENTITY_TYPE_PLURAL}. Je werkt momenteel in de {ENTITY_TYPE} <b>{ENTITY_NAME}</b>. Klik op de knop hiernaast om een andere {ENTITY_TYPE} te selecteren."
 SelectOtherEntity = "Selecteer een andere {ENTITY_TYPE}"
 LastScore = "Laatste score"
+EphorusComponent = "Plagiaatdetectie (Ephorus)"

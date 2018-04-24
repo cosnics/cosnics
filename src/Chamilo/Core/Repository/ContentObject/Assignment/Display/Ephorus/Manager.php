@@ -13,6 +13,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 abstract class Manager extends Application
 {
+    const EPHORUS_TRANSLATION_CONTEXT = 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus';
+
     const PARAM_ACTION = 'assignment_ephorus_action';
     const PARAM_ENTRY_ID = 'entry_id';
     const PARAM_SOURCE = 'source';
@@ -64,14 +66,6 @@ abstract class Manager extends Application
     public function getEphorusComponent()
     {
         return $this->get_application();
-    }
-
-    /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\AssignmentRequestRepository
-     */
-    public function getAssignmentRequestRepository()
-    {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.storage.repository.assignment_request_repository');
     }
 
     /**

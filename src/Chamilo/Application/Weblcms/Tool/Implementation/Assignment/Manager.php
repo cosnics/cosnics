@@ -2,12 +2,14 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment;
 
+use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
@@ -101,7 +103,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             1
         );
 
-        if($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
+        if($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication) && $this->isEphorusEnabled())
         {
             $toolbar->insert_item(
                 new ToolbarItem(
@@ -111,10 +113,9 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                     ),
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Ephorus',
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::ACTION_ASSIGNMENT_BROWSER,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_SOURCE => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::SOURCE_ASSIGNMENT
+                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EPHORUS
                         )
                     ),
                     ToolbarItem::DISPLAY_ICON, false, null, '_blank'
@@ -164,7 +165,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             )
         );
 
-        if($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
+        if($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication) && $this->isEphorusEnabled())
         {
             $buttonGroup->prependButton(
                 new Button(
@@ -174,16 +175,29 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                     ),
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Ephorus',
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::ACTION_ASSIGNMENT_BROWSER,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_SOURCE => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::SOURCE_ASSIGNMENT
+                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EPHORUS
                         )
                     ),
                     Button::DISPLAY_ICON, false, null, '_blank'
                 )
             );
         }
+    }
+
+    /**
+     * @return null|string
+     */
+    public function isEphorusEnabled()
+    {
+        $toolActive = CourseSettingsController::getInstance()->get_course_setting(
+            $this->get_course(),
+            CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
+            $this->get_tool_registration()->get_id()
+        );
+
+        return $toolActive;
     }
 
     /**

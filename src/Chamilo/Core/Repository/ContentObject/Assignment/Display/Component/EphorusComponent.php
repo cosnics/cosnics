@@ -22,7 +22,7 @@ class EphorusComponent extends Manager
      */
     function run()
     {
-        if(!$this->getDataProvider()->canEditAssignment() || !$this->getDataProvider() instanceof AssignmentEphorusSupportInterface)
+        if( !$this->isEphorusEnabled() ||!$this->getDataProvider()->canEditAssignment())
         {
             throw new NotAllowedException();
         }

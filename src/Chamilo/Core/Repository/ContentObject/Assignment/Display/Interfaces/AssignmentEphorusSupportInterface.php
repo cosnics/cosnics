@@ -33,4 +33,9 @@ interface AssignmentEphorusSupportInterface
      * @return Request[]
      */
     public function findEphorusRequestsForAssignmentEntries(array $entryIds = []);
+
+    /**
+     * @return bool
+     */
+    public function isEphorusEnabled();
 }

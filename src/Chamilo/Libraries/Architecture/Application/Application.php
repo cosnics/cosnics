@@ -620,10 +620,12 @@ abstract class Application
      * @param string $failMessageMultiple
      * @param string $succesMessageSingle
      * @param string $succesMessageMultiple
+     * @param null $context
+     *
      * @return string
      */
     public function get_result($failures, $count, $failMessageSingle, $failMessageMultiple, $succesMessageSingle,
-        $succesMessageMultiple)
+        $succesMessageMultiple, $context = null)
     {
         if ($failures)
         {
@@ -648,7 +650,7 @@ abstract class Application
             }
         }
 
-        return Translation::get($message);
+        return Translation::get($message, [], $context);
     }
 
     /**

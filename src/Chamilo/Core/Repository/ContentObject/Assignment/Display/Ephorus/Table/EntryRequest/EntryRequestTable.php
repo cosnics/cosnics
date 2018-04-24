@@ -17,6 +17,7 @@ use Chamilo\Libraries\Translation\Translation;
 class EntryRequestTable extends DataClassTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_ENTRY_ID;
+    const EPHORUS_TRANSLATION_CONTEXT = 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus';
 
     public function get_implemented_form_actions()
     {
@@ -27,7 +28,7 @@ class EntryRequestTable extends DataClassTable implements TableFormActionsSuppor
                 $this->get_component()->get_url(
                     array(Manager::PARAM_ACTION => Manager::ACTION_CHANGE_INDEX_VISIBILITY)
                 ),
-                Translation:: get('ToggleIndexVisibility'),
+                Translation:: get('ToggleIndexVisibility', null, self::EPHORUS_TRANSLATION_CONTEXT),
                 false
             )
         );
@@ -35,7 +36,7 @@ class EntryRequestTable extends DataClassTable implements TableFormActionsSuppor
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_CREATE)),
-                Translation:: get('AddDocuments'),
+                Translation:: get('AddDocuments', null, self::EPHORUS_TRANSLATION_CONTEXT),
                 false
             )
         );

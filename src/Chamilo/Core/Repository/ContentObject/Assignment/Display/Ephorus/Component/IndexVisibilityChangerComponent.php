@@ -28,7 +28,8 @@ class IndexVisibilityChangerComponent extends Manager
             'VisibilityNotChanged',
             'VisibilityNotChanged',
             'VisibilityChanged',
-            'VisibilityChanged'
+            'VisibilityChanged',
+            self::EPHORUS_TRANSLATION_CONTEXT
         );
 
         $this->redirect($message, $failures > 0, [self::PARAM_ACTION => self::ACTION_BROWSE]);
@@ -47,7 +48,7 @@ class IndexVisibilityChangerComponent extends Manager
             throw new NoObjectSelectedException($this->getTranslator()->trans('Entry', [], Manager::context()));
         }
 
-        if(!is_array($entryIds))
+        if (!is_array($entryIds))
         {
             $entryIds = [$entryIds];
         }

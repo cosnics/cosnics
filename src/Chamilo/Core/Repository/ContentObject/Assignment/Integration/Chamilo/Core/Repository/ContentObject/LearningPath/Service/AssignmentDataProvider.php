@@ -75,6 +75,11 @@ class AssignmentDataProvider
     protected $canEditAssignment;
 
     /**
+     * @var bool
+     */
+    protected $ephorusEnabled;
+
+    /**
      * AssignmentDataProvider constructor.
      *
      * @param \Symfony\Component\Translation\Translator $translator
@@ -131,6 +136,14 @@ class AssignmentDataProvider
     public function setCanEditAssignment($canEditAssignment = true)
     {
         $this->canEditAssignment = $canEditAssignment;
+    }
+
+    /**
+     * @param bool $ephorusEnabled
+     */
+    public function setEphorusEnabled($ephorusEnabled = true)
+    {
+        $this->ephorusEnabled = $ephorusEnabled;
     }
 
     /**
@@ -806,5 +819,13 @@ class AssignmentDataProvider
         return $this->learningPathAssignmentService->findEphorusRequestsForAssignmentEntriesByTreeNodeData(
             $this->treeNode->getTreeNodeData(), $entryIds
         );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEphorusEnabled()
+    {
+        return $this->ephorusEnabled;
     }
 }

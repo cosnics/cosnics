@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Component;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Result;
@@ -22,7 +22,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * 
  * @author Anthony Hurst (Hogeschool Gent) Pieterjan Broekaert Hogent
  */
-class ResultToHtmlConverter
+class ResultRenderer
 {
     use DependencyInjectionContainerTrait;
 
@@ -60,12 +60,12 @@ class ResultToHtmlConverter
         $html = array();
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getResourcesPath(
-                'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request', 
+                'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus',
                 true) . 'Css/' . Theme::getInstance()->getTheme() . '/Report.css');
         
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(
-                'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request', 
+                'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus',
                 true) . 'Report.js');
         $html[] = '<div class="ephorus-report-result" id="printable">';
         

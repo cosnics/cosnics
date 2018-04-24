@@ -153,35 +153,24 @@ class ViewerComponent extends Manager implements TableSupport
                             new FontAwesomeGlyph('download'),
                             $this->get_url([self::PARAM_ACTION => self::ACTION_DOWNLOAD])
                         ),
-//                        new Button(
-//                            Translation::get('SubmissionSubmit'),
-//                            Theme::getInstance()->getCommonImagePath('Action/Add'),
-//                            $this->get_url(
-//                                [
-//                                    self::PARAM_ACTION => self::ACTION_CREATE,
-//                                    self::PARAM_ENTITY_TYPE => $this->getEntityType(),
-//                                    self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
-//                                ]
-//                            )
-//                        )
                     )
                 )
             );
 
-//            $buttonToolBar->addButtonGroup(
-//                new ButtonGroup(
-//                    array(
-//                        new Button(
-//                            Translation::get('ScoreOverview'),
-//                            Theme::getInstance()->getCommonImagePath('Action/Statistics')
-//                        ),
-//                        new Button(
-//                            Translation::get('EntriesOverview'),
-//                            Theme::getInstance()->getCommonImagePath('Action/Statistics')
-//                        )
-//                    )
-//                )
-//            );
+            if($this->isEphorusEnabled() && $this->getDataProvider()->canEditAssignment())
+            {
+                $buttonToolBar->addButtonGroup(
+                    new ButtonGroup(
+                        array(
+                            new Button(
+                                Translation::get('EphorusComponent'),
+                                Theme::getInstance()->getImagePath('Chamilo\Application\Weblcms\Tool\Implementation\Ephorus', 'Logo/16'),
+                                $this->get_url([self::PARAM_ACTION => self::ACTION_EPHORUS])
+                            )
+                        )
+                    )
+                );
+            }
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
         }

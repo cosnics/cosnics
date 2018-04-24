@@ -25,6 +25,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implements
     TableCellRendererActionsColumnSupport
 {
+    const EPHORUS_TRANSLATION_CONTEXT = 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus';
 
     /**
      * Renders the cell for a given column and row (object)
@@ -86,8 +87,8 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
                 if ($object->get_optional_property(Request::PROPERTY_VISIBLE_IN_INDEX) != null)
                 {
                     return $object->get_optional_property(Request::PROPERTY_VISIBLE_IN_INDEX) ? Translation::get(
-                        'YesVisible'
-                    ) : Translation::get('NoVisible');
+                        'YesVisible', null, self::EPHORUS_TRANSLATION_CONTEXT
+                    ) : Translation::get('NoVisible', null, self::EPHORUS_TRANSLATION_CONTEXT);
                 }
                 else
                 {
@@ -114,7 +115,7 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewResult'),
+                    Translation::get('ViewResult', null, self::EPHORUS_TRANSLATION_CONTEXT),
                     Theme::getInstance()->getCommonImagePath('Action/Reporting'),
                     $this->get_component()->get_url(
                         array(
@@ -134,12 +135,12 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
                 if (!$object->get_optional_property(Request::PROPERTY_VISIBLE_IN_INDEX))
                 {
                     $icon = 'Action/Invisible';
-                    $translation = Translation::get('AddDocumentToIndex');
+                    $translation = Translation::get('AddDocumentToIndex', null, self::EPHORUS_TRANSLATION_CONTEXT);
                 }
                 else
                 {
                     $icon = 'Action/Visible';
-                    $translation = Translation::get('RemoveDocumentFromIndex');
+                    $translation = Translation::get('RemoveDocumentFromIndex', null, self::EPHORUS_TRANSLATION_CONTEXT);
                 }
 
                 $toolbar->add_item(
@@ -161,7 +162,7 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('AddDocument'),
+                    Translation::get('AddDocument', null, self::EPHORUS_TRANSLATION_CONTEXT),
                     Theme::getInstance()->getCommonImagePath('Action/Up'),
                     $this->get_component()->get_url(
                         array(

@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
@@ -26,7 +27,9 @@ class CreatorComponent extends Manager
             'SelectedRequestNotCreated',
             'SelectedRequestsNotCreated',
             'SelectedRequestCreated',
-            'SelectedRequestsCreated');
+            'SelectedRequestsCreated',
+            self::EPHORUS_TRANSLATION_CONTEXT
+        );
 
         $this->redirect($message, $failures > 0, [self::PARAM_ACTION => self::ACTION_BROWSE]);
     }
@@ -40,16 +43,16 @@ class CreatorComponent extends Manager
     public function prepareRequests()
     {
         $translation = Translation::get('Entry');
-        
+
         $ids = $this->getRequest()->getFromPostOrUrl(self::PARAM_ENTRY_ID);
-        
-        if (! $ids)
+
+        if (!$ids)
         {
             throw new NoObjectSelectedException($translation);
         }
 
         $ids = (array) $ids;
-        
+
         $requests = array();
         foreach ($ids as $id)
         {
@@ -63,7 +66,7 @@ class CreatorComponent extends Manager
             $request->set_course_id(0);
             $requests[] = $request;
         }
-        
+
         return $requests;
     }
 }

@@ -4,19 +4,23 @@
  * Date: 30/07/12
  * Time: 12:41
  */
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Component;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 
-class CreatorComponent extends Manager
+/**
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
+class CreatorComponent extends EphorusRequestComponent
 {
-
     /**
      * Runs the component
      */
     public function run()
     {
-        $base_requests = $this->get_parent()->get_base_requests();
+        $base_requests = $this->get_base_requests();
 
         $requestManager = $this->getRequestManager();
         $failures = $requestManager->handInDocuments($base_requests);
@@ -38,6 +42,8 @@ class CreatorComponent extends Manager
             'SelectedRequestCreated', 
             'SelectedRequestsCreated');
         
-        $this->get_parent()->redirect_after_create($message, $is_error_message);
+        $this->redirect_after_create($message, $is_error_message);
     }
+
+
 }

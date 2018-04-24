@@ -2,8 +2,10 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
+use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory;
@@ -47,6 +49,8 @@ class DisplayComponent extends Manager implements DelegateComponent
         $assignmentDataProvider->setContentObjectPublication($publication);
         $assignmentDataProvider->setAssignmentPublication($this->getAssignmentPublication($publication));
         $assignmentDataProvider->setCanEditAssignment($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication));
+
+        $assignmentDataProvider->setEphorusEnabled($this->isEphorusEnabled());
 
         $configuration = new ApplicationConfiguration(
             $this->get_application()->getRequest(), $this->get_application()->getUser(), $this
