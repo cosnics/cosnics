@@ -1,8 +1,9 @@
 <?php
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Component;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ResultRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -23,13 +24,7 @@ class ResultExporterComponent extends Manager
     {
         if ($this->can_execute_component())
         {
-            $request_id = \Chamilo\Libraries\Platform\Session\Request::get(
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_CONTENT_OBJECT_IDS
-            );
-            $this->set_parameter(
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_CONTENT_OBJECT_IDS,
-                $request_id
-            );
+            $request_id =$this->getRequest()->getFromPostOrUrl(self::PARAM_CONTENT_OBJECT_IDS);
 
             $request = DataManager::retrieve_by_id(Request::class, $request_id);
 
@@ -53,7 +48,7 @@ class ResultExporterComponent extends Manager
                 ) . '</style>';
             $html[] = '</head><body>';
 
-            $result_to_html_converter = new ResultToHtmlConverter();
+            $result_to_html_converter = new ResultRenderer();
             $html[] = $result_to_html_converter->convert_to_html($request_id);
 
             $html[] = '</body></html>';

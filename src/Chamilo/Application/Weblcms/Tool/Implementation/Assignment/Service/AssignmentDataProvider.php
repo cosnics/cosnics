@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\En
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\EntryTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
@@ -55,6 +56,11 @@ class AssignmentDataProvider
      * @var bool
      */
     protected $canEditAssignment;
+
+    /**
+     * @var bool
+     */
+    protected $ephorusEnabled;
 
     /**
      * AssignmentDataProvider constructor.
@@ -113,6 +119,14 @@ class AssignmentDataProvider
     public function setCanEditAssignment($canEditAssignment = true)
     {
         $this->canEditAssignment = $canEditAssignment;
+    }
+
+    /**
+     * @param bool $ephorusEnabled
+     */
+    public function setEphorusEnabled($ephorusEnabled = true)
+    {
+        $this->ephorusEnabled = $ephorusEnabled;
     }
 
     /**
@@ -722,5 +736,25 @@ class AssignmentDataProvider
         return $this->assignmentService->findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
             $this->contentObjectPublication, $recordRetrievesParameters
         );
+    }
+
+    /**
+     * @param int[] $entryIds
+     *
+     * @return Request[]
+     */
+    public function findEphorusRequestsForAssignmentEntries(array $entryIds = [])
+    {
+        return $this->assignmentService->findEphorusRequestsForAssignmentEntriesByContentObjectPublication(
+            $this->contentObjectPublication, $entryIds
+        );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEphorusEnabled()
+    {
+        return $this->ephorusEnabled;
     }
 }

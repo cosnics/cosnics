@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -194,5 +195,22 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $parameters['ENTITY_TYPE'] = strtolower($this->getDataProvider()->getEntityNameByType($this->getEntityType()));
 
         return $parameters;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isEphorusEnabled()
+    {
+        $dataProvider = $this->getDataProvider();
+
+        if(!$dataProvider instanceof AssignmentEphorusSupportInterface)
+        {
+            return false;
+        }
+
+        return $dataProvider->isEphorusEnabled();
+
+
     }
 }

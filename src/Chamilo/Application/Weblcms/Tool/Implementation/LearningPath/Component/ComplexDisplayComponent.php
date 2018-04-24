@@ -2,12 +2,15 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
+use Chamilo\Application\Weblcms\CourseSettingsConnector;
+use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
@@ -46,7 +49,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupport, AssessmentDisplaySupport,
-    ForumDisplaySupport, GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport, DelegateComponent, EphorusSupportInterface
+    ForumDisplaySupport, GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport, DelegateComponent
 {
 
     /**
@@ -591,14 +594,17 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         return $this->publication->getContentObject();
     }
 
-    public function getAssignmentEphorusURL(TreeNode $treeNode)
+    /**
+     * @return null|string
+     */
+    public function isEphorusEnabled()
     {
-        return $this->get_url([
-            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Ephorus',
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::ACTION_ASSIGNMENT_BROWSER,
-            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $this->publication->getId(),
-            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_TREE_NODE_ID => $treeNode->getId(),
-            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_SOURCE => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::SOURCE_LEARNING_PATH_ASSIGNMENT
-        ]);
+        $toolActive = CourseSettingsController::getInstance()->get_course_setting(
+            $this->get_course(),
+            CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
+            $this->get_tool_registration()->get_id()
+        );
+
+        return $toolActive;
     }
 }

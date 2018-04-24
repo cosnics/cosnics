@@ -26,7 +26,7 @@ class AssignmentEphorusRepository extends
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findAssignmentEntriesWithRequestsByContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, RecordRetrievesParameters $recordRetrievesParameters
+        ContentObjectPublication $contentObjectPublication, RecordRetrievesParameters $recordRetrievesParameters = null
     )
     {
         $entryConditions = $this->getConditionsByContentObjectPublication(
@@ -44,11 +44,26 @@ class AssignmentEphorusRepository extends
      * @return int
      */
     public function countAssignmentEntriesWithRequestsByContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, Condition $condition
+        ContentObjectPublication $contentObjectPublication, Condition $condition = null
     )
     {
         return $this->countAssignmentEntriesWithRequests(
             $this->getConditionsByContentObjectPublication($contentObjectPublication, $condition)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param array $entryIds
+     *
+     * @return mixed
+     */
+    public function findEphorusRequestsForAssignmentEntriesByContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, array $entryIds = []
+    )
+    {
+        return $this->findEphorusRequestsForAssignmentEntries(
+            $entryIds, $this->getConditionsByContentObjectPublication($contentObjectPublication)
         );
     }
 
@@ -66,8 +81,8 @@ class AssignmentEphorusRepository extends
      *
      * @return Condition
      */
-    private function getConditionsByContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, Condition $condition
+    protected function getConditionsByContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, Condition $condition = null
     )
     {
         $conditions = [];

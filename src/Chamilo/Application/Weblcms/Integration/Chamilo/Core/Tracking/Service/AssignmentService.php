@@ -679,6 +679,21 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param array $entryIds
+     *
+     * @return mixed
+     */
+    public function findEphorusRequestsForAssignmentEntriesByContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, array $entryIds = []
+    )
+    {
+        return $this->assignmentEphorusRepository->findEphorusRequestsForAssignmentEntriesByContentObjectPublication(
+            $contentObjectPublication, $entryIds
+        );
+    }
+
+    /**
      * Creates a new instance for an entry
      *
      * @return Entry

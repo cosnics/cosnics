@@ -2,21 +2,14 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
-use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Component
  *
- * @author Tom Goethals - Hogeschool Gent
+ * @author Sven Vanpoucke - Hogeschool Gent
  */
 class LatestDocumentsPublisherComponent extends Manager
 {
