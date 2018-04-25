@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Result;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
@@ -24,8 +25,6 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ResultRenderer
 {
-    use DependencyInjectionContainerTrait;
-
     const PERCENTAGE_GREEN = 10;
     const PERCENTAGE_ORANGE = 50;
 
@@ -36,13 +35,16 @@ class ResultRenderer
     private $xslt_path;
 
     /**
-     * ResultToHtmlConverter constructor.
-     *
-     * @param String $xslt_path
+     * @var RequestManager
      */
-    public function __construct()
+    protected $requestManager;
+
+    /**
+     * ResultToHtmlConverter constructor.
+     */
+    public function __construct(RequestManager $requestManager)
     {
-        $this->initializeContainer();
+        $this->requestManager;
     }
 
     public function convert_to_html($request_id)
@@ -255,7 +257,7 @@ class ResultRenderer
      */
     private function get_chamilo_hits($guids)
     {
-        $hits_rs = $this->getRequestManager()->findRequestsWithContentObjectsByGuids($guids);
+        $hits_rs = $this->requestManager->findRequestsWithContentObjectsByGuids($guids);
 
         foreach($hits_rs as $hit)
         {

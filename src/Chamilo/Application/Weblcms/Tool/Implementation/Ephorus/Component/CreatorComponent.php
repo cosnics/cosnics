@@ -1,29 +1,29 @@
 <?php
-/**
- * User: Pieterjan Broekaert
- * Date: 30/07/12
- * Time: 12:41
- */
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CreatorComponent extends EphorusRequestComponent
+class CreatorComponent extends Manager
 {
     /**
      * Runs the component
      */
     public function run()
     {
-        $base_requests = $this->get_base_requests();
+        $this->validateAccess();
 
         $requestManager = $this->getRequestManager();
-        $failures = $requestManager->handInDocuments($base_requests);
+        $contentObjectIds = $this->getContentObjectIds();
+        $failures = $requestManager->handInDocumentsByIds($contentObjectIds, $this->getUser(), $this->get_course_id());
 
         if ($failures > 0)
         {
@@ -33,17 +33,48 @@ class CreatorComponent extends EphorusRequestComponent
         {
             $is_error_message = false;
         }
-        
+
         $message = $this->get_result(
-            $failures, 
-            count($base_requests), 
-            'SelectedRequestNotCreated', 
-            'SelectedRequestsNotCreated', 
-            'SelectedRequestCreated', 
-            'SelectedRequestsCreated');
-        
-        $this->redirect_after_create($message, $is_error_message);
+            $failures,
+            count($contentObjectIds),
+            'SelectedRequestNotCreated',
+            'SelectedRequestsNotCreated',
+            'SelectedRequestCreated',
+            'SelectedRequestsCreated'
+        );
+
+        $parameters = array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE);
+        $this->redirect($message, $is_error_message, $parameters);
     }
 
+    /**
+     * Returns base requests containing the author ids
+     *
+     * @return array
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     */
+    public function getContentObjectIds()
+    {
+        $content_object_translation = Translation::get(
+            'ContentObject',
+            null,
+            \Chamilo\Core\Repository\Manager::context()
+        );
+
+        $ids = $this->getRequest()->getFromPostOrUrl(self::PARAM_CONTENT_OBJECT_IDS);
+
+        if (empty($ids))
+        {
+            throw new NoObjectSelectedException($content_object_translation);
+        }
+
+        if(!is_array($ids))
+        {
+            $ids = (array) $ids;
+        }
+
+        return $ids;
+    }
 
 }

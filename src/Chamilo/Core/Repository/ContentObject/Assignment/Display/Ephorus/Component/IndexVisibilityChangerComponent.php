@@ -17,14 +17,14 @@ class IndexVisibilityChangerComponent extends Manager
      */
     public function run()
     {
-        $ephorusRequestGuids = $this->getRequestGuidsFromSelectedEntries();
+        $requests = $this->getRequestsFromSelectedEntries();
 
         $requestManager = $this->getRequestManager();
-        $failures = $requestManager->changeVisibilityOfDocumentsOnIndex($ephorusRequestGuids);
+        $failures = $requestManager->changeDocumentsVisibility($requests);
 
         $message = $this->get_result(
             $failures,
-            count($ephorusRequestGuids),
+            count($requests),
             'VisibilityNotChanged',
             'VisibilityNotChanged',
             'VisibilityChanged',
@@ -40,7 +40,7 @@ class IndexVisibilityChangerComponent extends Manager
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      */
-    protected function getRequestGuidsFromSelectedEntries()
+    protected function getRequestsFromSelectedEntries()
     {
         $entryIds = $this->getRequest()->getFromPostOrUrl(self::PARAM_ENTRY_ID);
         if (empty($entryIds))
@@ -53,15 +53,6 @@ class IndexVisibilityChangerComponent extends Manager
             $entryIds = [$entryIds];
         }
 
-        $requests = $this->getDataProvider()->findEphorusRequestsForAssignmentEntries($entryIds);
-
-        $request_guids = array();
-
-        foreach ($requests as $request)
-        {
-            $request_guids[$request->get_guid()] = !$request->is_visible_in_index();
-        }
-
-        return $request_guids;
+        return $this->getDataProvider()->findEphorusRequestsForAssignmentEntries($entryIds);
     }
 }
