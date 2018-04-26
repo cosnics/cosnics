@@ -97,7 +97,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_INDEX_VISIBILITY_CHANGER, 
-                            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CHANGE_INDEX_VISIBILITY, 
+                            \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::ACTION_INDEX_VISIBILITY_CHANGER,
                             Manager::PARAM_REQUEST_IDS => $object->get_id())), 
                     ToolbarItem::DISPLAY_ICON));
         }

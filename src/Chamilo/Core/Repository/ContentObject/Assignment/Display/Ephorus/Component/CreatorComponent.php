@@ -16,14 +16,14 @@ class CreatorComponent extends Manager
 
     public function run()
     {
-        $requests = $this->prepareRequests();
+        $contentObjectIds = $this->getContentObjectIdsFromSelectedEntries();
 
         $requestManager = $this->getRequestManager();
-        $failures = $requestManager->handInDocuments($requests);
+        $failures = $requestManager->handInDocumentsByIds($contentObjectIds, $this->getUser());
 
         $message = $this->get_result(
             $failures,
-            count($requests),
+            count($contentObjectIds),
             'SelectedRequestNotCreated',
             'SelectedRequestsNotCreated',
             'SelectedRequestCreated',
@@ -40,7 +40,7 @@ class CreatorComponent extends Manager
      * @return array
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      */
-    public function prepareRequests()
+    public function getContentObjectIdsFromSelectedEntries()
     {
         $translation = Translation::get('Entry');
 
@@ -51,22 +51,18 @@ class CreatorComponent extends Manager
             throw new NoObjectSelectedException($translation);
         }
 
-        $ids = (array) $ids;
+        if(!is_array($ids))
+        {
+            $ids = (array) $ids;
+        }
 
-        $requests = array();
+        $contentObjectIds = [];
         foreach ($ids as $id)
         {
             $entry = $this->getDataProvider()->findEntryByIdentifier($id);
-
-            $request = new Request();
-            $request->set_process_type(Request::PROCESS_TYPE_CHECK_AND_INVISIBLE);
-            $request->set_content_object_id($entry->getContentObjectId());
-            $request->set_author_id($entry->getUserId());
-            $request->set_request_user_id($this->get_user_id());
-            $request->set_course_id(0);
-            $requests[] = $request;
+            $contentObjectIds[] = $entry->getContentObjectId();
         }
 
-        return $requests;
+        return $contentObjectIds;
     }
 }

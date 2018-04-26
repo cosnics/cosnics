@@ -44,7 +44,7 @@ class ResultExporterComponent extends Manager
             ) . '</style>';
         $html[] = '</head><body>';
 
-        $result_to_html_converter = new ResultRenderer();
+        $result_to_html_converter = new ResultRenderer($this->getRequestManager());
         $html[] = $result_to_html_converter->convert_to_html($request->getId());
 
         $html[] = '</body></html>';

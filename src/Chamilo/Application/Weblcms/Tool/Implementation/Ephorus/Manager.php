@@ -1,7 +1,12 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus;
 
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 
 /**
  * This class represents the manager for the ephorus tool
@@ -26,10 +31,83 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**
+     * @return bool
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function canUseEphorus()
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function validateAccess()
+    {
+        if(!$this->canUseEphorus())
+        {
+            throw new NotAllowedException();
+        }
+    }
+
+    /**
+     * Returns the request guids whose visibilities should be changed
+     *
+     * @return Request[]
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function getEphorusRequestsFromRequest()
+    {
+        $requestTranslation = $this->getTranslator()->trans('Request', [], \Chamilo\Core\Repository\Manager::context());
+
+        $ids = $this->getRequest()->getFromPostOrUrl(self::PARAM_REQUEST_IDS);
+
+        if (!$ids)
+        {
+            throw new NoObjectSelectedException($requestTranslation);
+        }
+
+        if(!is_array($ids))
+        {
+            $ids = array($ids);
+        }
+
+        $ids = (array) $ids;
+
+        $requests = [];
+        foreach ($ids as $id)
+        {
+            $request = $this->getRequestManager()->findRequestById($id);
+
+            if (!$request)
+            {
+                throw new ObjectNotExistException($requestTranslation, $id);
+            }
+
+            $requests[] = $request;
+        }
+
+        return $requests;
+    }
+
+    /**
      * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager
      */
     public function getRequestManager()
     {
         return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.service.request_manager');
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository
+     */
+    public function getContentObjectRepository()
+    {
+        return $this->getService('chamilo.core.repository.workspace.repository.content_object_repository');
     }
 }

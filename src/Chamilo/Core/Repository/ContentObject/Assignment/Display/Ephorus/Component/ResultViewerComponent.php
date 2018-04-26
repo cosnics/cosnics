@@ -51,7 +51,7 @@ class ResultViewerComponent extends Manager
 
         $request = $requests[0];
 
-        $result_to_html_converter = new ResultRenderer();
+        $result_to_html_converter = new ResultRenderer($this->getRequestManager());
 
         $html[] = $result_to_html_converter->convert_to_html($request->getId());
         $html[] = $this->render_footer();

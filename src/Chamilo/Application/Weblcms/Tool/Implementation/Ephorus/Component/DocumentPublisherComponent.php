@@ -2,11 +2,9 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -23,10 +21,7 @@ class DocumentPublisherComponent extends Manager implements \Chamilo\Core\Reposi
      */
     public function run()
     {
-        if (!$this->is_allowed(WeblcmsRights::ADD_RIGHT))
-        {
-            throw new NotAllowedException();
-        }
+        $this->validateAccess();
 
         if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
@@ -61,6 +56,9 @@ class DocumentPublisherComponent extends Manager implements \Chamilo\Core\Reposi
         return array(File::class);
     }
 
+    /**
+     * @return string
+     */
     public function render_header()
     {
         $html = array();

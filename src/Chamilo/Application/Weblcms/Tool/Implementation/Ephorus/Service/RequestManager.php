@@ -5,8 +5,11 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\EphorusWebserviceRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\RequestRepository;
+use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
@@ -57,26 +60,28 @@ class RequestManager
     }
 
     /**
-     * Hand in documents based on a base_request
-     *
-     * @param Request[] $base_requests
+     * @param int[] $contentObjectIds
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int $courseId
      *
      * @return int
      */
-    public function handInDocuments($base_requests)
+    public function handInDocumentsByIds(array $contentObjectIds = [], User $user, $courseId = 0)
     {
-        if (!is_array($base_requests))
-        {
-            $base_requests = array($base_requests);
-        }
-
         $failures = 0;
 
-        foreach ($base_requests as $base_request)
+        foreach ($contentObjectIds as $contentObjectId)
         {
+            $contentObject = $this->contentObjectRepository->findById($contentObjectId);
+            if (!$contentObject instanceof File)
+            {
+                $failures ++;
+                continue;
+            }
+
             try
             {
-                $this->handInDocument($base_request);
+                $this->handInDocumentObject($contentObject, $user, $courseId);
             }
             catch (\Exception $ex)
             {
@@ -88,61 +93,67 @@ class RequestManager
     }
 
     /**
-     * Sends a request to ephorus and saves the reference in the chamilo database
+     * @param \Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File $document
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int $courseId
      *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $baseRequest
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request
      */
-    public function handInDocument(Request $baseRequest)
+    public function handInDocumentObject(File $document, User $user, $courseId = 0)
     {
-        if (!$baseRequest->is_content_object_valid())
+        $request = new Request();
+        $request->set_process_type(Request::PROCESS_TYPE_CHECK_AND_INVISIBLE);
+        $request->set_course_id($courseId);
+        $request->set_content_object_id($document->getId());
+        $request->set_author_id($document->get_owner_id());
+        $request->set_request_user_id($user->getId());
+
+        if (!$request->is_content_object_valid())
         {
             throw new \InvalidArgumentException(
-                'The given base request is not valid: ' . implode(PHP_EOL, $baseRequest->get_errors())
+                'The given base request is not valid: ' . implode(PHP_EOL, $request->get_errors())
             );
         }
 
-//        $file = $this->retrieveFileFromRequest($baseRequest);
-//        $author = $this->retrieveAuthorFromRequest($baseRequest);
-//
-//        $documentGUID = $this->ephorusWebserviceRepository->handInDocument($file, $author);
-//        if (!$documentGUID)
-//        {
-//            throw new \RuntimeException('Could not create the document in the ephorus webservice');
-//        }
+        $author = $this->retrieveAuthorFromRequest($request);
 
-        $documentGUID = 'bla';
+        $documentGUID = $this->ephorusWebserviceRepository->handInDocument($document, $author);
+        if (!$documentGUID)
+        {
+            throw new \RuntimeException('Could not create the document in the ephorus webservice');
+        }
 
-        $baseRequest->set_guid($documentGUID);
-        $baseRequest->set_process_type(Request::PROCESS_TYPE_CHECK_AND_INVISIBLE);
+        $request->set_guid($documentGUID);
+        $request->set_process_type(Request::PROCESS_TYPE_CHECK_AND_INVISIBLE);
 
-        if (!$this->requestRepository->create($baseRequest))
+        if (!$this->requestRepository->create($request))
         {
             throw new \RuntimeException(
-                'Could not create the base request in the database for guid: ' . $baseRequest->get_guid()
+                'Could not create the request in the database for guid: ' . $request->get_guid()
             );
         }
+
+        return $request;
     }
 
     /**
-     * Changes the visibility based on index_type index_type = 1 => show index_type = 2 => hide
+     * @param Request[] $requests
      *
-     * @param string[] $documentGuids
-     *
-     * @return boolean
+     * @return int
      */
-    public function changeVisibilityOfDocumentsOnIndex(array $documentGuids)
+    public function changeDocumentsVisibility(array $requests)
     {
         $failures = 0;
 
-        foreach ($documentGuids as $documentGuid => $showOnIndex)
+        foreach ($requests as $request)
         {
             try
             {
-                $this->changeDocumentVisibilityOnIndex($documentGuid, $showOnIndex);
+                $this->changeDocumentVisibility($request);
             }
-            catch(\Exception $ex)
+            catch (\Exception $ex)
             {
-                $failures++;
+                $failures ++;
             }
         }
 
@@ -150,21 +161,18 @@ class RequestManager
     }
 
     /**
-     * @param string $documentGuid
-     * @param bool $showOnIndex
-     *
-     * @throws \Exception
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $request
      */
-    public function changeDocumentVisibilityOnIndex(string $documentGuid, bool $showOnIndex)
+    public function changeDocumentVisibility(Request $request)
     {
-//        if (!$this->ephorusWebserviceRepository->changeDocumentVisiblity($documentGuid, $showOnIndex))
-//        {
-//            throw new \RuntimeException('The given document visibility could not be changed');
-//        }
+        if (!$this->ephorusWebserviceRepository->changeDocumentVisiblity(
+            $request->get_guid(), !$request->is_visible_in_index()
+        ))
+        {
+            throw new \RuntimeException('The given document visibility could not be changed');
+        }
 
-        $request = $this->requestRepository->findRequestByGuid($documentGuid);
-
-        $request->set_visible_on_index($showOnIndex);
+        $request->set_visible_on_index(!$request->is_visible_in_index());
         if (!$this->requestRepository->update($request))
         {
             throw new \RuntimeException(
@@ -185,7 +193,7 @@ class RequestManager
      */
     public function findRequestByGuid(string $documentGuid)
     {
-        if (! $documentGuid)
+        if (!$documentGuid)
         {
             throw new \InvalidArgumentException('A valid guid is required to retrieve a request by guid');
         }
@@ -202,7 +210,7 @@ class RequestManager
      */
     public function findRequestById(int $id)
     {
-        if (! $id)
+        if (!$id)
         {
             throw new \InvalidArgumentException('A valid id is required to retrieve a request by id');
         }
@@ -237,7 +245,7 @@ class RequestManager
      */
     public function findRequestsWithContentObjectsByGuids($guids)
     {
-        if(!is_array($guids))
+        if (!is_array($guids))
         {
             $guids = [$guids];
         }
@@ -248,28 +256,9 @@ class RequestManager
     /**
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $baseRequest
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass | \Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File
-     */
-    private function retrieveFileFromRequest(Request $baseRequest)
-    {
-        $file = $this->contentObjectRepository->findById($baseRequest->get_content_object_id());
-
-        if (!$file)
-        {
-            throw new \RuntimeException(
-                sprintf('The given document with id %s can not be retrieved', $baseRequest->get_content_object_id())
-            );
-        }
-
-        return $file;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $baseRequest
-     *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass | \Chamilo\Core\User\Storage\DataClass\User
      */
-    private function retrieveAuthorFromRequest(Request $baseRequest)
+    protected function retrieveAuthorFromRequest(Request $baseRequest)
     {
         $author = $this->userService->findUserByIdentifier($baseRequest->get_author_id());
 
