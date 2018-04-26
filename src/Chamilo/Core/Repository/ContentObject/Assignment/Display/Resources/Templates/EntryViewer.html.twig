@@ -77,7 +77,7 @@
             <div class="row">
                 <div class="col-sm-8 content-object-rendition">
                     <h3 class="entry-title">{{ CONTENT_OBJECT_TITLE }} <span
-                                class="badge score-badge {% if SCORE > 0 %}score-success{% else %}no-score{% endif %}">{% if SCORE > 0 %}{{ SCORE }}%{% else %}{{ 'NoScore'|trans({}, appContext) }}{% endif %}</span>
+                                class="badge score-badge {% if SCORE > 0 %}score-success{% else %}no-score{% endif %}">{% if SCORE %}{{ SCORE }}%{% else %}{{ 'NoScore'|trans({}, appContext) }}{% endif %}</span>
                     </h3>
                     <div class="submitted-details">{{ SUBMITTED_BY }} {% if SUBMITTED_BY != ENTITY_NAME %}({{ ENTITY_NAME }}) {% endif %}{{ 'At'|trans({}, appContext) }} {{ SUBMITTED_DATE }}</div>
                     {{ CONTENT_OBJECT_RENDITION|raw }}

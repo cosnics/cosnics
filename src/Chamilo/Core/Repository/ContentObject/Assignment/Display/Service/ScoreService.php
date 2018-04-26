@@ -37,20 +37,16 @@ class ScoreService
     }
 
     /**
-     * @param Entry $entry
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
-     */
-    public function getScoreDataClass(Entry $entry)
-    {
-        return $this->assignmentDataProvider->findScoreByEntry($entry);
-    }
-
-    /**
      * @param Score $score
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
+     * @param User $user
+     * @return Score
      */
-    public function createOrUpdateScore(Score $score)
+    public function createOrUpdateScoreByUser(Score $score, User $user)
     {
+        if($score->getUserId() !== $user->getId()) {
+            $score->setUserId($user->getId());
+        }
+
         if(empty($score->getId())){
             $score->setModified(time());
 

@@ -10,17 +10,24 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\FormHandler;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreFormProcessor;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreService;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Form\FormHandler;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class SetScoreFormHandler
+class SetScoreFormHandler extends FormHandler
 {
+
     /**
      * @var ScoreService
      */
     protected $scoreService;
+
+    /**
+     * @var User $user
+     */
+    protected $user;
 
     /**
      * SetScoreFormHandler constructor.
@@ -32,30 +39,43 @@ class SetScoreFormHandler
     }
 
     /**
+     * @param User $user
+     */
+    public function setScoringUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
      * @param FormInterface $form
      * @param Request $request
-     * @param User $user
-     * @param Entry $entry
      * @return bool
      * @throws \Exception
      */
-    public function handle(FormInterface $form, Request $request, User $user, Entry $entry) : bool
+    public function handle(FormInterface $form, Request $request) : bool
     {
-        if (!$request->isMethod('POST')) {
-            return false;
+        if(empty($this->user)) {
+            throw new \Exception('User must be defined. Use setter');
         }
 
-        $form->handleRequest($request);
+        if(parent::handle($form, $request)) {
+            $this->scoreService->createOrUpdateScoreByUser($form->getData(), $this->user);
 
-        if (!$form->isValid()) {
-            return false;
+            return true;
         }
 
-        $score = $form->getData();
-
-        $this->scoreService->createOrUpdateScore($score);
-
-        return true;
+        return false;
     }
 
+    /**
+     * @param FormInterface $form
+     */
+    protected function rollBackModel(FormInterface $form)
+    {
+        /**
+         * @var Score $score
+         */
+        $score = $form->getData();
+        $score->setScore($this->originalModel->getScore());
+    }
 }
