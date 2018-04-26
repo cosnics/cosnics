@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Result;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -10,12 +11,14 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -166,5 +169,24 @@ class RequestRepository extends CommonDataClassRepository
         }
 
         return new DataClassIterator(ContentObject::class, $dataClasses);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $request
+     *
+     * @return Result[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findResultsForRequest(Request $request)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Result::class, Result::PROPERTY_REQUEST_ID),
+            new StaticConditionVariable($request->getId())
+        );
+
+        $orderBy = [new OrderBy(new PropertyConditionVariable(Result::class, Result::PROPERTY_PERCENTAGE))];
+
+        return $this->dataClassRepository->retrieves(
+            Result::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
+        );
     }
 }

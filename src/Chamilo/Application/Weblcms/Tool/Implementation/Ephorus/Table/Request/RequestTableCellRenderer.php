@@ -73,8 +73,13 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('ViewResult'), 
-                Theme::getInstance()->getCommonImagePath('Action/Reporting'), 
-                $this->get_component()->get_ephorus_request_url($object->get_id()), 
+                Theme::getInstance()->getCommonImagePath('Action/Reporting'),
+                $this->get_component()->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::ACTION_VIEW_RESULT,
+                        Manager::PARAM_REQUEST_IDS => $object->get_id()
+                    )
+                ),
                 ToolbarItem::DISPLAY_ICON));
         
         if ($object->get_optional_property(Request::PROPERTY_STATUS) != Request::STATUS_DUPLICATE)
@@ -96,9 +101,10 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     Theme::getInstance()->getCommonImagePath($icon), 
                     $this->get_component()->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_INDEX_VISIBILITY_CHANGER, 
                             \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::ACTION_INDEX_VISIBILITY_CHANGER,
-                            Manager::PARAM_REQUEST_IDS => $object->get_id())), 
+                            Manager::PARAM_REQUEST_IDS => $object->get_id()
+                        )
+                    ),
                     ToolbarItem::DISPLAY_ICON));
         }
         

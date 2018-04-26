@@ -1,0 +1,80 @@
+{% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Ephorus' %}
+
+{{ getJavascript('Report.js', appContext) }}
+{{ getCss('Report.css', appContext) }}
+
+{% import _self as ephorusReport %}
+
+<div class="ephorus-report-result" id="printable">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title">{{ 'Summary'|trans({}, appContext) }}</h5>
+        </div>
+        <div class="panel-body">
+            <p>
+                {{ REQUEST_DETAILS|raw }}
+            </p>
+            {% if CHAMILO_LIST %}
+                {{ 'ItemsChamilo'|trans({}, appContext) }}
+                <ol>
+                    {% for ITEM in CHAMILO_LIST %}
+                        <li>
+                            {{ ephorusReport.colorPercentage(ITEM.PERCENTAGE) }}
+                            {{ ITEM.DESCRIPTION|raw }}
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% endif %}
+            {% if LOCAL_LIST %}
+                {{ 'ItemsLocal'|trans({}, appContext) }}
+                <ol>
+                    {% for ITEM in LOCAL_LIST %}
+                        <li>
+                            {{ ephorusReport.colorPercentage(ITEM.PERCENTAGE) }}
+                            {{ ITEM.GUID }}
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% endif %}
+            {% if INTERNET_LIST %}
+                {{ 'ItemsInternet'|trans({}, appContext) }}
+                <ol>
+                {% for ITEM in INTERNET_LIST %}
+                    <li>
+                        {{ ephorusReport.colorPercentage(ITEM.PERCENTAGE) }}
+                        <a href="{{ ITEM.URL }}">{{ ITEM.URL }}</a>
+                    </li>
+                {% endfor %}
+                </ol>
+            {% endif %}
+        </div>
+    </div>
+
+    {% for RESULT in RESULTS %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h5 class="panel-title">{{ RESULT.RESULT_TITLE|raw }}</h5>
+            </div>
+            <div class="panel-body">
+                {{ RESULT.DIFF|raw }}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% macro colorPercentage(percentage) %}
+    {% set percentageGreen = 10 %}
+    {% set percentageOrange = 50 %}
+    {% set color = 'red' %}
+
+    {% if percentage < percentageOrange %}
+        {% set color = 'orange' %}
+    {% endif %}
+
+    {% if percentage < percentageGreen %}
+        {% set color = 'green' %}
+    {% endif %}
+
+    <span style="color: {{ color }}">{{ percentage }}%</span>
+{% endmacro %}

@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ResultRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer;
 use Chamilo\Libraries\File\Path;
 
 /**
@@ -30,9 +30,9 @@ class ResultExporterComponent extends Manager
             ) . '</style>';
         $html[] = '</head><body>';
 
-        $result_to_html_converter = new ResultRenderer($this->getRequestManager());
-        $html[] = $result_to_html_converter->convert_to_html($request->getId());
+        $request = $requests[0];
 
+        $html[] = $this->getReportRenderer()->renderRequestReport($request);
         $html[] = '</body></html>';
 
         $unique_file_name = \Chamilo\Libraries\File\Filesystem::create_unique_name(

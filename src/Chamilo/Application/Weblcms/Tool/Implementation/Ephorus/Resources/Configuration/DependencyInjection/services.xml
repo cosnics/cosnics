@@ -27,5 +27,20 @@
             <argument type="service" id="chamilo.core.user.service.user_service" />
             <argument type="service" id="chamilo.core.repository.workspace.repository.content_object_repository" />
         </service>
+
+        <service id="chamilo.application.weblcms.tool.implementation.ephorus.service.request_manager"
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager">
+            <argument type="service" id="chamilo.application.weblcms.tool.implementation.ephorus.storage.repository.ephorus_webservice_repository" />
+            <argument type="service" id="chamilo.application.weblcms.tool.implementation.ephorus.storage.repository.request_repository" />
+            <argument type="service" id="chamilo.core.user.service.user_service" />
+            <argument type="service" id="chamilo.core.repository.workspace.repository.content_object_repository" />
+        </service>
+
+        <service id="chamilo.application.weblcms.tool.implementation.ephorus.renderer.report_renderer"
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer">
+            <argument type="service" id="chamilo.application.weblcms.tool.implementation.ephorus.service.request_manager" />
+            <argument type="service" id="chamilo.core.user.service.user_service" />
+            <argument type="service" id="twig.environment" />
+        </service>
     </services>
 </container>

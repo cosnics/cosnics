@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ResultRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -44,8 +44,7 @@ class ResultExporterComponent extends Manager
             ) . '</style>';
         $html[] = '</head><body>';
 
-        $result_to_html_converter = new ResultRenderer($this->getRequestManager());
-        $html[] = $result_to_html_converter->convert_to_html($request->getId());
+        $html[] = $this->getReportRenderer()->renderRequestReport($request);
 
         $html[] = '</body></html>';
 

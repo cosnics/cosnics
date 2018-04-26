@@ -3,7 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ResultRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -30,8 +30,6 @@ class ResultViewerComponent extends Manager
     {
         $this->validateAccess();
 
-        $this->xslt_path = realpath(__DIR__ . '/../Resources/Xslt');
-
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $html = array();
 
@@ -41,9 +39,7 @@ class ResultViewerComponent extends Manager
         $requests = $this->getEphorusRequestsFromRequest();
         $request = $requests[0];
 
-        $result_to_html_converter = new ResultRenderer($this->getRequestManager());
-
-        $html[] = $result_to_html_converter->convert_to_html($request->getId());
+        $html[] = $this->getReportRenderer()->renderRequestReport($request);
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
