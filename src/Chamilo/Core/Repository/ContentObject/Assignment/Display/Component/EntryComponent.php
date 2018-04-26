@@ -31,6 +31,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
+use Chamilo\Libraries\Storage\Cache\DataClassResultCache;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -50,12 +52,6 @@ use Symfony\Component\Form\FormInterface;
  */
 class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedback\FeedbackSupport, TableSupport
 {
-
-    /**
-     *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
-     */
-    private $scoreDataClass;
 
     /**
      * @var ScoreService
@@ -254,28 +250,24 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         }
 
         $scoreFormHandler = new SetScoreFormHandler($this->scoreService);
+        $scoreFormHandler->setScoringUser($this->getUser());
 
-        return $scoreFormHandler->handle($scoreForm, $this->getRequest(), $this->getUser(), $this->getEntry());
+        return $scoreFormHandler->handle($scoreForm, $this->getRequest());
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    protected function getScore() : int {
-        return $this->getScoreDataClass() instanceof Score ? $this->getScoreDataClass()->getScore() : 0;
+    protected function getScore() {
+        return $this->getScoreDataClass() instanceof Score ? $this->getScoreDataClass()->getScore() : null;
     }
+
     /**
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
+     * @return Score
      */
     protected function getScoreDataClass()
     {
-        if (!isset($this->scoreDataClass))
-        {
-            $this->scoreDataClass = $this->scoreService->getScoreDataClass($this->getEntry());
-        }
-
-        return $this->scoreDataClass;
+        return $this->getDataProvider()->findScoreByEntry($this->getEntry());
     }
 
     /**
@@ -325,9 +317,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $score = $this->getDataProvider()->initializeScore();
             $score->setEntryId($this->getEntry()->getId());
         }
-
-        //a new user could be setting the score
-        $score->setUserId($this->getUser()->getId());
 
         $formFactory = $this->getForm();
 
