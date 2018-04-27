@@ -28,11 +28,12 @@ class ResultViewerComponent extends Manager
     /**
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function run()
     {
-        $this->xslt_path = realpath(__DIR__ . '/../Resources/Xslt');
-
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $html = array();
 

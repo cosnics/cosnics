@@ -7,8 +7,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Result;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Class that converts the database result to html
@@ -68,81 +66,54 @@ class ReportRenderer
      */
     public function renderRequestReport(Request $request)
     {
-        $results = $this->requestManager->findResultsForRequest($request);
-
-        $resultParameters = [];
-        foreach ($results as $result)
-        {
-            $resultParameters[] = $this->getResultParameters($result);
-        }
-
-        $parameters = $this->getSummaryParameters($request, $results);
-        $parameters['RESULTS'] = $resultParameters;
-
         return $this->twigRenderer->render(
             'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus:EphorusReport.html.twig',
-            $parameters
-        );
-    }
-
-    protected function format_date($date)
-    {
-        return DatetimeUtilities::format_locale_date(
-            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
-            $date
+            $this->getRequestParameters($request)
         );
     }
 
     /**
-     *
      * @param Request $request
-     * @param Result[] $results
      *
-     * @return array
+     * @return string[]
      */
-    protected function getSummaryParameters($request, $results)
+    protected function getRequestParameters($request)
     {
-        $chamilo = array();
-        $local = array();
-        $internet = array();
+        $results = $this->requestManager->findResultsForRequest($request);
+        $chamiloResults = $localResults = $internetResults = $resultParameters = [];
 
         foreach ($results as $result)
         {
+            $resultParameters[] = $this->getResultParameters($result);
+
             if ($result->get_original_guid() === null)
             {
-                $internet[$result->get_url()] = $result;
+                $internetResults[$result->get_url()] = $result;
                 continue;
             }
 
             if (strlen($result->get_student_number()) == 0)
             {
-                $local[$result->get_original_guid()] = $result;
+                $localResults[$result->get_original_guid()] = $result;
                 continue;
             }
 
-            $chamilo[$result->get_original_guid()] = $result;
+            $chamiloResults[$result->get_original_guid()] = $result;
         }
 
-        $details_parameters = array();
-        $details_parameters['REQUESTDATE'] = $this->format_date($request->get_request_time());
-        $details_parameters['REQUESTERNAME'] = $this->userService->getUserFullNameById(
-            $request->get_request_user_id()
-        );
-
-        // $request->get_request_user_id(); // Transform into Foreign property.
-        $details_parameters['AUTHOR'] = $request->get_author()->get_fullname();
-        $details_parameters['GUID'] = $request->get_guid();
-        $details_parameters['PERCENTAGE'] = $request->get_percentage();
-        $details_parameters['NUMBERSOURCES'] = count($chamilo) + count($local) + count($internet);
-
-        $summaryParameters = [
-            'REQUEST_DETAILS' => Translation::get('RequestDetails', $details_parameters),
-            'CHAMILO_LIST' => $this->getChamiloResultsParameters($chamilo),
-            'LOCAL_LIST' => $this->getLocalResultsParameters($local),
-            'INTERNET_LIST' => $this->getInternetResultsParameters($internet)
+        return [
+            'CHAMILO_RESULTS' => $this->getChamiloResultsParameters($chamiloResults),
+            'LOCAL_RESULTS' => $localResults,
+            'INTERNET_RESULTS' => $internetResults,
+            'RESULTS' => $resultParameters,
+            'REQUEST' => $request,
+            'REQUEST_USER_NAME' => $this->userService->getUserFullNameById(
+                $request->get_request_user_id()
+            ),
+            'AUTHOR' => $this->userService->getUserFullNameById(
+                $request->get_author_id()
+            )
         ];
-
-        return $summaryParameters;
     }
 
     /**
@@ -157,35 +128,9 @@ class ReportRenderer
         $hits = $this->getRequestsFromChamiloByGuids(array_keys($chamiloResults));
         foreach ($chamiloResults as $result)
         {
-            $hit = $hits[$result->get_original_guid()];
-            $detals_parameters = array();
-
-            if ($hit)
-            {
-
-                $detals_parameters['TITLE'] = $hit->get_title();
-
-                $detals_parameters['AUTHOR'] = $result->get_student_name();
-                $detals_parameters['STUDENTCODE'] = $result->get_student_number();
-                $detals_parameters['CREATEDATE'] = $this->format_date($hit->get_creation_date());
-                $detals_parameters['MODIFIEDDATE'] = $this->format_date($hit->get_modification_date());
-
-                $translation = Translation::get('ResultDetails', $detals_parameters);
-            }
-            else
-            {
-                $translation = Translation::get(
-                    "LocalHitNotFoundOnServer",
-                    array(
-                        'LOCAL_GUID' => $result->get_original_guid(),
-                        'SOURCE' => $result->get_student_name()
-                    )
-                );
-            }
-
             $resultListParameters[] = [
-                'PERCENTAGE' => $result->get_percentage(),
-                'DESCRIPTION' => $translation
+                'RESULT_OBJECT' => $result,
+                'ORIGINAL_OBJECT' => $hits[$result->get_original_guid()]
             ];
         }
 
@@ -208,46 +153,6 @@ class ReportRenderer
         }
 
         return $hits;
-    }
-
-    /**
-     * @param Result[] $localResults
-     *
-     * @return array|string
-     */
-    protected function getLocalResultsParameters($localResults)
-    {
-        $resultListParameters = [];
-
-        foreach ($localResults as $result)
-        {
-            $resultListParameters[] = [
-                'PERCENTAGE' => $result->get_percentage(),
-                'GUID' => $result->get_original_guid()
-            ];
-        }
-
-        return $resultListParameters;
-    }
-
-    /**
-     * @param Result[] $internetResults
-     *
-     * @return array
-     */
-    protected function getInternetResultsParameters($internetResults)
-    {
-        $resultListParameters = [];
-
-        foreach ($internetResults as $result)
-        {
-            $resultListParameters[] = [
-                'PERCENTAGE' => $result->get_percentage(),
-                'URL' => $result->get_url()
-            ];
-        }
-
-        return $resultListParameters;
     }
 
     /**
@@ -274,23 +179,8 @@ class ReportRenderer
         $xslt->registerPHPFunctions();
         $xslt->importStylesheet($stylesheet);
 
-        if ($result->get_original_guid() == null)
-        {
-            $reportTitle = "<span class='report_table_header'>" . Translation::get(
-                    'UrlReport',
-                    array("URL" => $result->get_url())
-                ) . "</span>";
-        }
-        else
-        {
-            $reportTitle = "<span class='report_table_header'>" . Translation::get(
-                    'LocalReport',
-                    array("LOCAL_GUID" => $result->get_original_guid(), "SOURCE" => $result->get_student_name())
-                ) . "</span>";
-        }
-
         $resultParameters = [
-            'RESULT_TITLE' => $reportTitle,
+            'RESULT_OBJECT' => $result,
             'DIFF' => $xslt->transformToXml($diff)
         ];
 

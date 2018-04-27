@@ -42,5 +42,14 @@
             <argument type="service" id="chamilo.core.user.service.user_service" />
             <argument type="service" id="twig.environment" />
         </service>
+
+        <service id="chamilo.application.weblcms.tool.implementation.ephorus.service.report_exporter"
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\ReportExporter">
+            <argument type="service" id="chamilo.application.weblcms.tool.implementation.ephorus.renderer.report_renderer" />
+            <argument type="service" id="chamilo.core.repository.workspace.repository.content_object_repository" />
+            <argument type="service" id="chamilo.libraries.file.configurable_path_builder" />
+            <argument type="service" id="chamilo.libraries.format.theme" />
+            <argument type="service" id="twig.environment" />
+        </service>
     </services>
 </container>
