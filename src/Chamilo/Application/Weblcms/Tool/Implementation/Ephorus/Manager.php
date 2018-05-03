@@ -104,6 +104,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer
+     */
+    public function getReportRenderer()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.renderer.report_renderer');
+    }
+
+    /**
      * @return \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository
      */
     public function getContentObjectRepository()

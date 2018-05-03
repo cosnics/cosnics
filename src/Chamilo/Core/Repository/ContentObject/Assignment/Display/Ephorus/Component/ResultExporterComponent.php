@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ResultRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -30,34 +30,14 @@ class ResultExporterComponent extends Manager
         }
 
         $request = $requests[0];
+        $this->getReportExporter()->exportRequestReport($request);
+    }
 
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class,
-            $request->get_content_object_id()
-        );
-
-        $html = array();
-        $html[] = '<html><head>';
-        $html[] = '<style type="text/css">' . file_get_contents(
-                Path::getInstance()->getBasePath(true) .
-                'application/weblcms/tool/ephorus/ephorus_request/resources/css/report.css'
-            ) . '</style>';
-        $html[] = '</head><body>';
-
-        $result_to_html_converter = new ResultRenderer($this->getRequestManager());
-        $html[] = $result_to_html_converter->convert_to_html($request->getId());
-
-        $html[] = '</body></html>';
-
-        $unique_file_name = \Chamilo\Libraries\File\Filesystem::create_unique_name(
-            Path::getInstance()->getTemporaryPath(),
-            $content_object->get_title() . '.html'
-        );
-
-        $full_file_name = Path::getInstance()->getTemporaryPath() . $unique_file_name;
-        \Chamilo\Libraries\File\Filesystem::create_dir(dirname($full_file_name));
-        \Chamilo\Libraries\File\Filesystem::write_to_file($full_file_name, implode(PHP_EOL, $html));
-        \Chamilo\Libraries\File\Filesystem::file_send_for_download($full_file_name, true);
-        \Chamilo\Libraries\File\Filesystem::remove($full_file_name);
+        /**
+         * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\ReportExporter
+         */
+        protected function getReportExporter()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.service.report_exporter');
     }
 }

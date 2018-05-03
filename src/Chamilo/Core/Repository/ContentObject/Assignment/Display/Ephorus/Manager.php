@@ -76,4 +76,11 @@ abstract class Manager extends Application
         return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.service.request_manager');
     }
 
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer
+     */
+    public function getReportRenderer()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.renderer.report_renderer');
+    }
 }

@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Result;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\EphorusWebserviceRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\RequestRepository;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
@@ -251,6 +252,16 @@ class RequestManager
         }
 
         return $this->requestRepository->findRequestsWithContentObjectsByGuids($guids);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $request
+     *
+     * @return Result[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findResultsForRequest(Request $request)
+    {
+        return $this->requestRepository->findResultsForRequest($request);
     }
 
     /**

@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Format\Twig;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Twig\Extension\DateExtension;
 use Chamilo\Libraries\Format\Twig\Extension\ResourceManagementExtension;
 use Chamilo\Libraries\Format\Twig\Extension\UrlGenerationExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
@@ -52,6 +53,7 @@ class TwigEnvironmentFactory
         $twig->addExtension(new TranslationExtension($translator));
         $twig->addExtension(new ResourceManagementExtension());
         $twig->addExtension(new UrlGenerationExtension($generator));
+        $twig->addExtension(new DateExtension());
 
         $twig->addExtension(new \Twig_Extension_Debug());
     }

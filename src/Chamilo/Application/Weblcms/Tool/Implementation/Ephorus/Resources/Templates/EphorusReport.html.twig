@@ -1,0 +1,161 @@
+{% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Ephorus' %}
+
+{{ getJavascript('Report.js', appContext) }}
+{{ getCss('Report.css', appContext) }}
+
+{% import _self as ephorusReport %}
+
+<div class="ephorus-report-result" id="printable">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'Summary'|trans({}, appContext) }}</h3>
+                </div>
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <th>{{ 'RequestedOn'|trans({}, appContext) }}</th>
+                        <td>{{ REQUEST.get_request_time()|formatLongDate }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'RequestedBy'|trans({}, appContext) }}</th>
+                        <td>{{ REQUEST_USER_NAME }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'WrittenBy'|trans({}, appContext) }}</th>
+                        <td>{{ AUTHOR }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'Guid'|trans({}, appContext) }}</th>
+                        <td>{{ REQUEST.get_guid() }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'Percentage'|trans({}, appContext) }}</th>
+                        <td>{{ ephorusReport.colorPercentage(REQUEST.get_percentage()) }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <span id="results"></span>
+
+    {% if CHAMILO_RESULTS %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'ItemsChamilo'|trans({}, appContext) }}</h3>
+                </div>
+                <table class="table table-bordered">
+                    <tbody>
+                    {% for RESULT in CHAMILO_RESULTS %}
+                        <tr>
+                            <td>{{ ephorusReport.colorPercentage(RESULT.RESULT_OBJECT.get_percentage()) }}</td>
+                            <td>{{ RESULT.RESULT_OBJECT.get_student_name() }}</td>
+                            <td>{{ RESULT.RESULT_OBJECT.get_original_guid() }}</td>
+
+                            {% if(RESULT.ORIGINAL_OBJECT) %}
+                                <td>{{ RESULT.ORIGINAL_OBJECT.get_title() }}</a></td>
+                                <td>{{ RESULT.ORIGINAL_OBJECT_get_creation_date()|formatLongDate }}</td>
+                                <td>{{ RESULT.ORIGINAL_OBJECT_get_modified_date()|formatLongDate }}</td>
+                            {% else %}
+                            <td>{{ 'LocalHitNotFoundOnServer'|trans({}, appContext) }}</td>
+                            {% endif %}
+                            <td class="text-center"><a class="btn btn-default" href="#result{{ RESULT.RESULT_OBJECT.getId() }}"><span class="fa fa-bars"></span></a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if LOCAL_RESULTS %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'ItemsLocal'|trans({}, appContext) }}</h3>
+                </div>
+                <table class="table table-bordered">
+                    <tbody>
+                    {% for RESULT in LOCAL_RESULTS %}
+                        <tr>
+                            <td>{{ ephorusReport.colorPercentage(RESULT.get_percentage()) }}</td>
+                            <td>{{ RESULT.get_original_guid() }}</a></td>
+                            <td class="text-center"><a class="btn btn-default" href="#result{{ RESULT.getId() }}"><span class="fa fa-bars"></span></a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if INTERNET_RESULTS %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'ItemsInternet'|trans({}, appContext) }}</h3>
+                </div>
+                <table class="table table-bordered">
+                    <tbody>
+                    {% for RESULT in INTERNET_RESULTS %}
+                        <tr>
+                            <td>{{ ephorusReport.colorPercentage(RESULT.get_percentage()) }}</td>
+                            <td><a href="{{ RESULT.get_url() }}">{{ RESULT.get_url() }}</a></td>
+                            <td class="text-center"><a class="btn btn-default" href="#result{{ RESULT.getId() }}"><span class="fa fa-bars"></span></a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% for RESULT in RESULTS %}
+        <div class="row">
+            <div class="col-md-12">
+            <div class="panel panel-default" id="result{{ RESULT.RESULT_OBJECT.getId() }}">
+                <div class="panel-heading">
+                    <h3 class="panel-title pull-left">
+                        {% if RESULT.RESULT_OBJECT.get_url() and RESULT.RESULT_OBJECT.get_url() != "-" %}
+                            {{ 'UrlReport'|trans({'{URL}': RESULT.RESULT_OBJECT.get_url()}, appContext) }}
+                        {% else %}
+                            {{ 'LocalReport'|trans({'{LOCAL_GUID}': RESULT.RESULT_OBJECT.get_original_guid(), '{SOURCE}': RESULT.RESULT_OBJECT.get_student_name()}, appContext) }}
+                        {% endif %}
+                    </h3>
+                    <span class="pull-right"><a class="btn btn-xs btn-default" href="#results"><span class="fa fa-chevron-up"></span></a></span>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="panel-body">
+                    {{ RESULT.DIFF|raw }}
+                </div>
+            </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% macro colorPercentage(percentage) %}
+    {% set percentageGreen = 10 %}
+    {% set percentageOrange = 50 %}
+    {% set color = 'red' %}
+
+    {% if percentage < percentageOrange %}
+        {% set color = 'orange' %}
+    {% endif %}
+
+    {% if percentage < percentageGreen %}
+        {% set color = 'green' %}
+    {% endif %}
+
+    <span style="color: {{ color }}">{{ percentage }}%</span>
+{% endmacro %}

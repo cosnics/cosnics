@@ -5,7 +5,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTableInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -28,7 +27,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Tom Goethals - Hogeschool Gent
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class BrowserComponent extends Manager implements TableSupport, RequestTableInterface
+class BrowserComponent extends Manager implements TableSupport
 {
 
     /**
@@ -92,21 +91,6 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
         }
 
         return $condition;
-    }
-
-    /**
-     * Returns the url to the ephorus request component
-     *
-     * @param int $requestId
-     *
-     * @return string
-     */
-    public function get_ephorus_request_url($requestId)
-    {
-        $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_RESULT;
-        $parameters[self::PARAM_REQUEST_IDS] = $requestId;
-
-        return $this->get_url($parameters);
     }
 
     /**
