@@ -310,31 +310,24 @@
             <td>
                 <xsl:choose>
                     <xsl:when test="@authenticity &gt;= $check_authenticity and @words &gt;= $check_words and @match &gt;= $check_match">
-                        <table
-                            border="0"
-                            cellpadding="0"
-                            cellspacing="0"
-                            width="100%">
+                        <table class="table table-bordered" style="margin: 20px 0;">
+                            <thead>
                             <tr>
-                                <td height="4"></td>
-                                <td height="4"></td>
-                            </tr>
-                            <tr>
-                                <td
-                                    class="result_header_origineel"
+                                <th class="ephorus-diff-header"
                                     style="word-wrap:break-word; width: 50%;">
                                     <xsl:value-of
                                         select="$original"
                                         disable-output-escaping="yes" />
-                                </td>
-                                <td
-                                    class="result_header_vergelijk"
+                                </th>
+                                <th class="ephorus-diff-header"
                                     style="word-wrap:break-word; width: 50%;">
                                     <xsl:value-of
                                         select="$found"
                                         disable-output-escaping="yes" />
-                                </td>
+                                </th>
                             </tr>
+                            </thead>
+                            <tbody>
                             <tr>
                                 <td
                                     valign="top"
@@ -349,12 +342,7 @@
                                     <xsl:apply-templates select="vergelijk | removedword" />
                                 </td>
                             </tr>
-                            <tr>
-                                <td height="4"></td>
-                                <td height="4"></td>
-                            </tr>
-                            <tr>
-                            </tr>
+                            </tbody>
                         </table>
                     </xsl:when>
                     <xsl:otherwise>
