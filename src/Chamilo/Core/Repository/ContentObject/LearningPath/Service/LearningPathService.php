@@ -350,4 +350,41 @@ class LearningPathService
     {
         return $this->treeNodeDataService->countTreeNodesDataForLearningPath($learningPath) == 0;
     }
+
+    /**
+     * Returns all the tree nodes from a given learning path that have a content object of a specific type
+     * (or one of the given specific types)
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath
+     * @param string | string[] $contentObjectClasses
+     *
+     * @return TreeNode[]
+     */
+    public function getTreeNodesBySpecificTypes(LearningPath $learningPath, $contentObjectClasses)
+    {
+        if(empty($contentObjectClasses))
+        {
+            return [];
+        }
+
+        if(!is_array($contentObjectClasses))
+        {
+            $contentObjectClasses = [$contentObjectClasses];
+        }
+
+        $treeNodes = [];
+
+        $tree = $this->buildTree($learningPath);
+        foreach($tree->getTreeNodes() as $treeNode)
+        {
+            $contentObjectClass = get_class($treeNode->getContentObject());
+
+            if(in_array($contentObjectClass, $contentObjectClasses))
+            {
+                $treeNodes[] = $treeNode;
+            }
+        }
+
+        return $treeNodes;
+    }
 }
