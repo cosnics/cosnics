@@ -2,8 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -332,10 +334,28 @@ class EntryDownloader
      * @param string $fileName
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[] $entries
      *
-     * @return string
+     * @return BinaryFileResponse
      */
     protected function compressEntries($fileName, $entries)
     {
+        if (empty($entries))
+        {
+            return null;
+        }
+
+        if (count($entries) == 1)
+        {
+            $file = $entries[0]->getContentObject();
+            if (!$file instanceof File)
+            {
+                return null;
+            }
+
+            return $this->createEntryDownloadResponse(
+                $file->get_full_path(), $file->get_filename(), $file->get_mime_type(), false
+            );
+        }
+
         $archive = new Archive();
         $archive->setName($fileName);
 
@@ -358,7 +378,33 @@ class EntryDownloader
             $entityFolder->addItem($archiveFile);
         }
 
-        return $this->archiveCreator->createArchiveWithDownloadResponse($archive);
+        $archivePath = $this->archiveCreator->createArchive($archive);
+
+        return $this->createEntryDownloadResponse($archivePath, $archive->getName() . '.zip');
+    }
+
+    /**
+     * @param string $downloadPath
+     * @param string $filename
+     * @param string $contentType
+     * @param bool $removeAfterDownload
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse
+     */
+    protected function createEntryDownloadResponse(
+        $downloadPath, $filename, $contentType = 'application/zip', $removeAfterDownload = true
+    )
+    {
+        $response = new EntryDownloadResponse($downloadPath, 200, array('Content-Type' => $contentType));
+
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename,
+            \Chamilo\Libraries\File\Filesystem::create_safe_name($filename)
+        );
+
+        $response->setRemoveFileAfterDownload($removeAfterDownload);
+
+        return $response;
     }
 
     /**
@@ -391,13 +437,21 @@ class EntryDownloader
     /**
      *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Symfony\Component\HttpFoundation\BinaryFileResponse $downloadResponse
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse $downloadResponse
      */
-    protected function downloadEntries(ChamiloRequest $request, BinaryFileResponse $downloadResponse)
+    protected function downloadEntries(ChamiloRequest $request, EntryDownloadResponse $downloadResponse = null)
     {
+        if (empty($downloadResponse))
+        {
+            throw new \RuntimeException('No downloadable entries found');
+        }
+
         $downloadResponse->prepare($request);
         $downloadResponse->send();
 
-        $this->archiveCreator->removeArchiveAfterDownload($downloadResponse);
+        if ($downloadResponse->removeFileAfterDownload())
+        {
+            $this->archiveCreator->removeArchiveAfterDownload($downloadResponse);
+        }
     }
 }

@@ -101,6 +101,11 @@ class RightsService
      */
     public function canUserDownloadEntriesFromEntity(User $user, Assignment $assignment, $entityType, $entityId)
     {
+        if($this->assignmentDataProvider->canEditAssignment())
+        {
+            return true;
+        }
+
         return $this->assignmentDataProvider->isUserPartOfEntity($user, $entityType, $entityId);
     }
 
