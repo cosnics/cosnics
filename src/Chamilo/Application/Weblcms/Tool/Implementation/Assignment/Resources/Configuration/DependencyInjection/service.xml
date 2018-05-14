@@ -63,5 +63,12 @@
             <argument type="service" id="chamilo.libraries.file.compression.archive_creator.archive_creator" />
         </service>
 
+        <service
+                id="chamilo.application.weblcms.tool.implementation.assignment.service.assignment_publication_service"
+                class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentPublicationService">
+            <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository" />
+            <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
+        </service>
+
     </services>
 </container>

@@ -694,6 +694,18 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     */
+    public function deleteEntriesForContentObjectPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        $entries = $this->findEntriesByContentObjectPublication($contentObjectPublication);
+        foreach($entries as $entry)
+        {
+            $this->deleteEntry($entry);
+        }
+    }
+
+    /**
      * Creates a new instance for an entry
      *
      * @return Entry

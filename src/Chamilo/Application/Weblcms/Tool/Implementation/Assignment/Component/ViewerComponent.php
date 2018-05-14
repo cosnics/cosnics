@@ -39,7 +39,7 @@ class ViewerComponent extends Manager
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID =>$publication_id
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
                 )
             )
         );
@@ -49,10 +49,9 @@ class ViewerComponent extends Manager
             new FontAwesomeGlyph('plus'),
             $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
-                    self::PARAM_TARGET_ID => $this->get_user_id(),
-                    self::PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
                 )
             ),
             Button::DISPLAY_ICON_AND_LABEL

@@ -47,4 +47,19 @@ class PublicationRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(Publication::class, new DataClassRetrievesParameters($condition));
     }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @return bool
+     */
+    public function deletePublicationForContentObjectPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
+            new StaticConditionVariable($contentObjectPublication->getId())
+        );
+
+        return $this->dataClassRepository->deletes(Publication::class, $condition);
+    }
 }

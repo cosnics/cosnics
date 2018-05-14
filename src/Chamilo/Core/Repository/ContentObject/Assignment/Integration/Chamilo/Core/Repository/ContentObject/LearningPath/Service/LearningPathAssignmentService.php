@@ -425,6 +425,18 @@ abstract class LearningPathAssignmentService extends AssignmentService
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     */
+    public function deleteEntriesByTreeNodeData(TreeNodeData $treeNodeData)
+    {
+        $entries = $this->findEntriesByTreeNodeData($treeNodeData);
+        foreach($entries as $entry)
+        {
+            $this->deleteEntry($entry);
+        }
+    }
+
+    /**
      * @return string
      */
     abstract public function getEntryClassName();

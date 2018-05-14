@@ -55,9 +55,14 @@ abstract class AssignmentService
      */
     public function createScore(Score $score)
     {
+        if(empty($score->getCreated()))
+        {
+            $score->setCreated(time());
+        }
+
         if (!$this->assignmentRepository->createScore($score))
         {
-            throw new \RuntimeException('Could not create a new score for entry ' . $entry->getId());
+            throw new \RuntimeException('Could not create a new score for entry ' . $score->getEntryId());
         }
 
         return $score;

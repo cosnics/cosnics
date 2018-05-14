@@ -388,11 +388,11 @@ class AssignmentForm extends ContentObjectForm
      */
     protected function setDefaultAllowedContentObjects(Assignment $assignment)
     {
-        $allowedTypeClasses = explode(',', $assignment->get_allowed_types());
-        if(empty($allowedTypeClasses))
-        {
-            $allowedTypeClasses = ['Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File'];
-        }
+        $allowedTypes = $assignment->get_allowed_types();
+
+        $allowedTypeClasses = empty($allowedTypes) ?
+            ['Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File'] :
+            explode(',', $allowedTypes);
 
         $configuration = Configuration::getInstance();
 
