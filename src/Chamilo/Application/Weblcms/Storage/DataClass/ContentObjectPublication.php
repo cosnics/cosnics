@@ -647,7 +647,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         $site_name = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
 
         $doc = new DOMDocument();
-        $doc->loadHTML($body);
+        $doc->loadHTML('<?xml encoding="utf-8" ?>' . $body);
         $elements = $doc->getElementsByTagname('resource');
 
         $mailFiles = array();

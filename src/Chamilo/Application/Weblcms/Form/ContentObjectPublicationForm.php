@@ -978,7 +978,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $unique_email = array_unique($target_email);
         
         $doc = new DOMDocument();
-        $doc->loadHTML($body);
+        $doc->loadHTML('<?xml encoding="utf-8" ?>' . $body);
         $elements = $doc->getElementsByTagname('resource');
         
         $mailFiles = array();
