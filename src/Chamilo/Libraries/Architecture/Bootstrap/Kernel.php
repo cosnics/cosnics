@@ -402,6 +402,15 @@ class Kernel
             $response = new \Chamilo\Libraries\Format\Response\Response($this->getVersion(), $response);
         }
 
+        $this->sendResponse($response);
+
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     */
+    protected function sendResponse(Response $response)
+    {
         $response->send();
     }
 
