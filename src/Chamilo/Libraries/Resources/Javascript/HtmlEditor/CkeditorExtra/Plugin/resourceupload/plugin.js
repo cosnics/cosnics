@@ -67,30 +67,12 @@
                     }
                     else {
 
-                        var ajaxUri = getPath('WEB_PATH') + 'index.php';
-
-                        var parameters = {
-                            'application' : 'Chamilo\\Core\\Repository\\ContentObject\\File\\Ajax',
-                            'go' : 'show_inline',
-                            'file_id' : response['co-id'],
-                            'show_inline': 0
-                        };
-
-                        $.ajax({
-                            type : "POST",
-                            url : ajaxUri,
-                            data : parameters
-                        }).success(function(json)
-                        {   console.log(json);
-                        }).error(function(error) {
-                            console.log(error);
-                        });
-
                         this.replaceWith( '<div ' +
                             'data-co-id="' + response['co-id'] + '"' +
                             'data-security-code="' + response['security-code'] + '"' +
                             'data-type="'+response['type']+'"' +
                             'class="align-center"' +
+                            'data-render-inline="' + (editor.config['render_resource_inline'] ? 1 : 0) + '"' +
                             '"></div><br>' );
                     }
 

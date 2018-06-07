@@ -4,7 +4,10 @@ namespace Chamilo\Core\Repository\Feedback;
 use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationService;
 use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationServiceInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 abstract class Manager extends Application
 {
@@ -24,6 +27,15 @@ abstract class Manager extends Application
     const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     const CONFIGURATION_SHOW_FEEDBACK_HEADER = 'showFeedbackHeader';
+
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent::__construct($applicationConfiguration);
+
+        if(!$this->get_application() instanceof \Chamilo\Core\Repository\Feedback\FeedbackSupport) {
+            throw new NotAllowedException();
+        }
+    }
 
     /**
      * Returns the notification service

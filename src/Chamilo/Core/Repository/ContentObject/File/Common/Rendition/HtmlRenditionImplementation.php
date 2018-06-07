@@ -3,8 +3,10 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition;
 
 use Chamilo\Core\Repository\ContentObject\File\Common\RenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
@@ -29,9 +31,13 @@ class HtmlRenditionImplementation extends RenditionImplementation
         if (! $object->getShowInline())
         {
             $this->initializeContainer();
+
             return $this->getTwig()->render(
-                'Chamilo\Core\Repository\ContentObject\File:file_thumbnail.html.twig', [
-                    "icon_path" => $object->get_icon_path(Theme::ICON_BIG)
+                'Chamilo\Core\Repository\ContentObject\File:full_thumbnail.html.twig', [
+                    "icon_path" => $object->get_icon_path(Theme::ICON_BIG),
+                    "title" => $object->get_title(),
+                    "download_url" => $this->getDownloadUrl(),
+                    "popup_url" => $this->get_context()->get_content_object_display_attachment_url($object)
                 ]
             );
         }
@@ -116,8 +122,8 @@ class HtmlRenditionImplementation extends RenditionImplementation
     }
 
     /**
-     *
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function getDownloadUrl()
     {
@@ -131,4 +137,16 @@ class HtmlRenditionImplementation extends RenditionImplementation
             $object->get_id(),
             $object->calculate_security_code()) . '&time=' . $timestamp;
     }
+
+    /**
+     * @param ContentObject $contentObject
+     * @return string
+     */
+    protected function getPopupUrl(ContentObject $contentObject)
+    {
+        $redirect = new Redirect();
+
+        return $redirect->getUrl();
+    }
+
 }

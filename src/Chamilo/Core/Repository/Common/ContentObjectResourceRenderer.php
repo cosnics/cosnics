@@ -33,36 +33,26 @@ class ContentObjectResourceRenderer
      */
     private $dom_document;
 
+    /**
+     * @var ContentObjectResourceParser
+     */
+    protected $contentObjectResourceParser;
+
     public function __construct($context, $description, $full_html = false)
     {
         $this->context = $context;
         $this->description = $description;
         $this->full_html = $full_html;
+
+        $this->contentObjectResourceParser = new ContentObjectResourceParser(); //todo: injection
     }
 
     public function run()
     {
         $description = $this->description;
 
-        $this->dom_document = new DOMDocument();
-        $this->dom_document->loadHTML('<?xml encoding="UTF-8">' . $description);
-        $this->dom_document->removeChild($this->dom_document->firstChild);
-        $this->dom_xpath = new DOMXPath($this->dom_document);
-
-        if (! $this->full_html)
-        {
-            $body_nodes = $this->dom_xpath->query('body/*');
-            $fragment = $this->dom_document->createDocumentFragment();
-            foreach ($body_nodes as $child)
-            {
-                $fragment->appendChild($child);
-            }
-            $this->dom_document->replaceChild($fragment, $this->dom_document->firstChild);
-        }
-        else
-        {
-            $this->dom_document->removeChild($this->dom_document->firstChild);
-        }
+        $this->dom_document = $this->contentObjectResourceParser->getDomDocument($description, $this->full_html);
+        $this->dom_xpath = $this->contentObjectResourceParser->getDomXPath($this->dom_document);
 
         $this->processResources();
 
@@ -87,53 +77,21 @@ class ContentObjectResourceRenderer
 
     protected function processContentObjectPlaceholders()
     {
-        $placeholders = $this->dom_xpath->query('//*[@data-co-id]'); // select all elements with the data-co-id
-                                                                     // attribute
+        $placeholders = $this->contentObjectResourceParser->getContentObjectDomElements($this->dom_xpath);
         foreach ($placeholders as $placeholder)
         {
             /**
-             *
-             * @var \DOMNode $placeholder
+             * @var \DOMElement $placeholder
              */
-            $contentObjectId = $placeholder->getAttribute('data-co-id');
+            $object = $this->contentObjectResourceParser->getContentObjectFromDomElement($placeholder);
 
-            $type = ContentObjectRendition::VIEW_INLINE;
-
-            $parameters_list = $this->dom_xpath->query('@*', $placeholder);
-            $parameters = array();
-
-            foreach ($parameters_list as $parameter)
-            {
-                $parameters[$parameter->name] = $parameter->value;
-            }
-
-            try
-            {
-                $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
-                    $contentObjectId);
-
-                if (! $object instanceof ContentObject)
-                {
-                    continue;
-                }
-
-                $securityCode = $placeholder->getAttribute('data-security-code');
-                if (empty($securityCode) || $securityCode != $object->calculate_security_code())
-                {
-                    continue;
-                }
-            }
-            catch (\Exception $exception)
-            {
+            if(empty($object)) {
                 continue;
             }
 
-            list($rendition_xpath, $fragment) = $this->getFragment($object, $type, $parameters);
+            $parameters = $this->contentObjectResourceParser->getContentObjectParametersFromDomElement($placeholder, $this->dom_xpath);
 
-            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//script'));
-            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//link'));
-            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('body/*'));
+            $fragment = $this->getFragment($object, $parameters);
 
             $fragment = $this->dom_document->importNode($fragment, true);
 
@@ -160,11 +118,6 @@ class ContentObjectResourceRenderer
         foreach ($resources as $resource)
         {
             $source = $resource->getAttribute('source');
-            // $type = $resource->getAttribute('type');
-            // if (! $type)
-            // {
-            $type = ContentObjectRendition::VIEW_INLINE;
-            // }
 
             $parameters_list = $this->dom_xpath->query('@*', $resource);
             $parameters = array();
@@ -189,11 +142,7 @@ class ContentObjectResourceRenderer
                 continue;
             }
 
-            list($rendition_xpath, $fragment) = $this->getFragment($object, $type, $parameters);
-
-            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//script'));
-            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//link'));
-            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('body/*'));
+            $fragment = $this->getFragment($object, $parameters);
 
             $fragment = $this->dom_document->importNode($fragment, true);
 
@@ -203,19 +152,30 @@ class ContentObjectResourceRenderer
     }
 
     /**
-     *
      * @param $object
-     * @param $type
      * @param $parameters
-     * @return array
+     * @return \DOMDocumentFragment
      */
-    protected function getFragment($object, $type, $parameters): array
+    protected function getFragment($object, $parameters)
     {
+        $renderResourceInline = $parameters['data-render-inline'];
+        if(isset($renderResourceInline) && $renderResourceInline != '') {
+            $renderResourceInline = filter_var(    $renderResourceInline, FILTER_VALIDATE_BOOLEAN);
+        } else {
+            $renderResourceInline = true;
+        }
+
+        if(!$renderResourceInline) {
+            $type = ContentObjectRendition::VIEW_SHORT;
+        } else {
+            $type = ContentObjectRendition::VIEW_INLINE;
+        }
+
         $descriptionRendition = ContentObjectRenditionImplementation::factory(
             $object,
             ContentObjectRendition::FORMAT_HTML,
             $type,
-            $this)->render($parameters);
+            $this->context)->render($parameters);
 
         $rendition = new DOMDocument();
         $rendition->loadHTML($descriptionRendition);
@@ -223,6 +183,11 @@ class ContentObjectResourceRenderer
         $rendition_xpath = new DOMXPath($rendition);
 
         $fragment = $rendition->createDocumentFragment();
-        return array($rendition_xpath, $fragment);
+
+        $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//script'));
+        $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//link'));
+        $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('body/*'));
+
+        return $fragment;
     }
 }

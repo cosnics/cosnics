@@ -56,6 +56,8 @@ abstract class FormValidatorHtmlEditorOptions
      */
     const OPTION_TEMPLATES = 'templates';
 
+    const OPTION_RENDER_RESOURCE_INLINE = 'render_resource_inline';
+
     /**
      *
      * @var string[]
@@ -88,7 +90,9 @@ abstract class FormValidatorHtmlEditorOptions
             self::OPTION_TOOLBAR,
             self::OPTION_SKIN,
             self::OPTION_HEIGHT,
-            self::OPTION_WIDTH);
+            self::OPTION_WIDTH,
+            self::OPTION_RENDER_RESOURCE_INLINE
+        );
     }
 
     /**
@@ -215,6 +219,9 @@ abstract class FormValidatorHtmlEditorOptions
                     case self::OPTION_FULL_PAGE :
                         $this->set_option($available_option, false);
                         break;
+
+                    case self::OPTION_RENDER_RESOURCE_INLINE :
+                        $this->set_option($available_option, true);
                 }
             }
         }
