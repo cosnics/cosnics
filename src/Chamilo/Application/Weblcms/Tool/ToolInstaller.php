@@ -13,6 +13,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingDefaultValue;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
@@ -277,16 +278,14 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
     /**
      * Installs the static tool setting relation and values for a given object
      *
-     * @param \libraries\storage\DataClass $object
+     * @param DataClass $object
      * @param string $course_setting_relation_class_name
-     * @param string $course_setting_relation_value_class_name
      * @param string $set_object_function
-     * @param string $set_object_relation_function
      *
      * @return bool
      */
     protected function install_static_tool_setting_relations_for_object($object, $course_setting_relation_class_name,
-        $course_setting_relation_value_class_name, $set_object_function, $set_object_relation_function)
+        $set_object_function = null)
     {
         foreach ($this->static_tool_settings as $static_tool_setting)
         {

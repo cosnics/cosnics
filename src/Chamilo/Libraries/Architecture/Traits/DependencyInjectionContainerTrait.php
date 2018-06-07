@@ -241,4 +241,12 @@ trait DependencyInjectionContainerTrait
     {
         return $this->getService('chamilo.libraries.utilities.string_utilities');
     }
+
+    /**
+     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    public function getSessionUtilities()
+    {
+        return $this->getService('chamilo.libraries.platform.session.session_utilities');
+    }
 }
