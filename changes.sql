@@ -375,6 +375,21 @@ CREATE TABLE `tracking_weblcms_assignment_score` ( `id` INT(10) UNSIGNED NOT NUL
 
 /** Assignment tool refactoring **/
 
+/** EXECUTE WHEN THE INDEXES OF ASSIGNMENT HAS NOT BEEN SET **/
+
+/**ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `entity_id`, `entity_type`);
+ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `content_object_publication_id`);
+ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `content_object_id`);
+ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `user_id`);
+
+ALTER TABLE `tracking_weblcms_assignment_feedback` ADD INDEX( `user_id`);
+ALTER TABLE `tracking_weblcms_assignment_note` ADD INDEX( `user_id`);
+ALTER TABLE `tracking_weblcms_assignment_score` ADD INDEX( `user_id`);
+
+ALTER TABLE `tracking_weblcms_assignment_feedback` ADD INDEX( `entry_id`);
+ALTER TABLE `tracking_weblcms_assignment_note` ADD INDEX( `entry_id`);
+ALTER TABLE `tracking_weblcms_assignment_score` ADD INDEX( `entry_id`);**/
+
 CREATE TABLE `weblcms_assignment_publication` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `publication_id` int(10) UNSIGNED NOT NULL,
@@ -399,17 +414,38 @@ ALTER TABLE `repository_assignment` DROP `allow_group_submissions`;
 CREATE TABLE `tracking_weblcms_assignment_entry_attachment` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `attachment_id` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`), KEY `twaea_attachment_id` (`attachment_id`), KEY `twaea_entry_id` (`entry_id`)) ENGINE = InnoDB;
 CREATE TABLE `tracking_weblcms_learning_path_assignment_entry_attachment` ( `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT , `entry_id` INT(10) UNSIGNED NOT NULL , `attachment_id` INT(10) UNSIGNED NOT NULL , PRIMARY KEY (`id`), KEY `twlpaea_attachment_id` (`attachment_id`), KEY `twlpaea_entry_id` (`entry_id`)) ENGINE = InnoDB;
 
-/** EXECUTE WHEN THE INDEXES OF ASSIGNMENT HAS NOT BEEN SET **/
+INSERT INTO tracking_weblcms_assignment_entry
+    SELECT id, publication_id, content_object_id, submitter_id, submitter_type, date_submitted, user_id, ip_address
+    FROM tracking_weblcms_assignment_submission;
 
-/**ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `entity_id`, `entity_type`);
-ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `content_object_publication_id`);
-ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `content_object_id`);
-ALTER TABLE `tracking_weblcms_assignment_entry` ADD INDEX( `user_id`);
+INSERT INTO tracking_weblcms_assignment_feedback
+    SELECT NULL, SF.submission_id, SF.created, SF.modified, SF.user_id, CO.description
+    FROM tracking_weblcms_submission_feedback SF
+    JOIN repository_content_object CO on CO.id = SF.content_object_id
+    WHERE CO.type NOT IN (
+      'Chamilo\\Core\\Repository\\ContentObject\\File\\Storage\\DataClass\\File'
+    );
 
-ALTER TABLE `tracking_weblcms_assignment_feedback` ADD INDEX( `user_id`);
-ALTER TABLE `tracking_weblcms_assignment_note` ADD INDEX( `user_id`);
-ALTER TABLE `tracking_weblcms_assignment_score` ADD INDEX( `user_id`);
+INSERT INTO tracking_weblcms_assignment_entry_attachment
+    SELECT NULL, SF.submission_id, SF.content_object_id
+    FROM tracking_weblcms_submission_feedback SF
+      JOIN repository_content_object CO on CO.id = SF.content_object_id
+    WHERE CO.type IN (
+      'Chamilo\\Core\\Repository\\ContentObject\\File\\Storage\\DataClass\\File'
+    );
 
-ALTER TABLE `tracking_weblcms_assignment_feedback` ADD INDEX( `entry_id`);
-ALTER TABLE `tracking_weblcms_assignment_note` ADD INDEX( `entry_id`);
-ALTER TABLE `tracking_weblcms_assignment_score` ADD INDEX( `entry_id`);**/
+INSERT INTO tracking_weblcms_assignment_score
+    SELECT NULL, submission_id, created, modified, user_id, score
+    FROM tracking_weblcms_submission_score;
+
+INSERT INTO tracking_weblcms_assignment_feedback
+    SELECT NULL, submission_id, created, modified, user_id, note
+    FROM tracking_weblcms_submission_note;
+
+DROP TABLE tracking_weblcms_assignment_note;
+DROP TABLE tracking_weblcms_learning_path_assignment_note;
+
+DROP TABLE tracking_weblcms_assignment_entry;
+DROP TABLE tracking_weblcms_assignment_feedback;
+DROP TABLE tracking_weblcms_assignment_score;
+DROP TABLE tracking_weblcms_assignment_entry;
