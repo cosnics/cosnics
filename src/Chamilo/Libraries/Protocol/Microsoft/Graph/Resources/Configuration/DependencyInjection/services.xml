@@ -30,21 +30,23 @@
         </service>
 
         <service
-                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.group_repository_factory"
-                class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepositoryFactory">
+            id="chamilo.libraries.protocol.microsoft.graph.storage.repository.group_repository_factory"
+            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepositoryFactory">
             <argument
-                    type="service"
-                    id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository" />
+                type="service"
+                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository" />
             <argument
-                    type="service"
-                    id="chamilo.configuration.service.configuration_consulter" />
+                type="service"
+                id="chamilo.configuration.service.configuration_consulter" />
         </service>
 
         <service
             id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository"
-            factory-service="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository_factory"
-            factory-method="buildGraphRepository" />
+            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository">
+            <factory
+                service="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository_factory"
+                method="buildGraphRepository" />
+        </service>
 
         <service
             id="chamilo.libraries.protocol.microsoft.graph.storage.repository.user_repository"
@@ -56,9 +58,11 @@
 
         <service
             id="chamilo.libraries.protocol.microsoft.graph.storage.repository.group_repository"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository"
-            factory-service="chamilo.libraries.protocol.microsoft.graph.storage.repository.group_repository_factory"
-            factory-method="buildGroupRepository" />
+            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository">
+            <factory
+                service="chamilo.libraries.protocol.microsoft.graph.storage.repository.group_repository_factory"
+                method="buildGroupRepository" />
+        </service>
 
         <service
             id="chamilo.libraries.protocol.microsoft.graph.storage.repository.calendar_repository"

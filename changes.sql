@@ -438,14 +438,14 @@ INSERT INTO tracking_weblcms_assignment_score
     SELECT NULL, submission_id, created, modified, user_id, score
     FROM tracking_weblcms_submission_score;
 
-INSERT INTO tracking_weblcms_assignment_feedback
-    SELECT NULL, submission_id, created, modified, user_id, note
-    FROM tracking_weblcms_submission_note;
+# INSERT INTO tracking_weblcms_assignment_feedback
+#     SELECT NULL, submission_id, created, modified, user_id, note
+#     FROM tracking_weblcms_submission_note;
 
 DROP TABLE tracking_weblcms_assignment_note;
 DROP TABLE tracking_weblcms_learning_path_assignment_note;
 
-DROP TABLE tracking_weblcms_assignment_entry;
-DROP TABLE tracking_weblcms_assignment_feedback;
-DROP TABLE tracking_weblcms_assignment_score;
-DROP TABLE tracking_weblcms_assignment_entry;
+# DROP TABLE tracking_weblcms_assignment_submission;
+# DROP TABLE tracking_weblcms_submission_feedback;
+# DROP TABLE tracking_weblcms_submission_score;
+# DROP TABLE tracking_weblcms_submission_note;

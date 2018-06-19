@@ -1,51 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="doctrine.orm.entity_manager" class="Doctrine\ORM\EntityManager"
-                 factory-method="createEntityManager" factory-service="doctrine.orm.entity_manager_factory"/>
+        <service
+            id="doctrine.orm.entity_manager"
+            class="Doctrine\ORM\EntityManager">
+            <factory
+                method="createEntityManager"
+                service="doctrine.orm.entity_manager_factory" />
+        </service>
 
-        <service id="doctrine.orm.listeners.resolve_target_entity" class="Doctrine\ORM\Tools\ResolveTargetEntityListener"/>
+        <service
+            id="doctrine.orm.listeners.resolve_target_entity"
+            class="Doctrine\ORM\Tools\ResolveTargetEntityListener" />
 
-        <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" />
-        <service id="doctrine.orm.mappings_configuration" class="Chamilo\Libraries\DependencyInjection\Configuration\DoctrineORMMappingsConfiguration" />
-        <service id="doctrine.orm.mapping_driver" class="Doctrine\Common\Persistence\Mapping\Driver\MappingDriver"
-                 factory-service="doctrine.orm.mapping_driver_factory" factory-method="createMappingDriver" />
+        <service
+            id="doctrine.orm.configuration"
+            class="Doctrine\ORM\Configuration" />
+        <service
+            id="doctrine.orm.mappings_configuration"
+            class="Chamilo\Libraries\DependencyInjection\Configuration\DoctrineORMMappingsConfiguration" />
+        <service
+            id="doctrine.orm.mapping_driver"
+            class="Doctrine\Common\Persistence\Mapping\Driver\MappingDriver">
+            <factory
+                service="doctrine.orm.mapping_driver_factory"
+                method="createMappingDriver" />
+        </service>
 
         <!-- Factory Services -->
-        <service id="doctrine.orm.entity_manager_factory" class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineEntityManagerFactory">
-            <argument type="service" id="doctrine.orm.mapping_driver" />
-            <argument type="service" id="doctrine.dbal.connection" />
+        <service
+            id="doctrine.orm.entity_manager_factory"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineEntityManagerFactory">
+            <argument
+                type="service"
+                id="doctrine.orm.mapping_driver" />
+            <argument
+                type="service"
+                id="doctrine.dbal.connection" />
         </service>
 
-        <service id="doctrine.orm.mapping_driver_factory" class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\MappingDriverFactory">
-            <argument type="service" id="doctrine.orm.configuration" />
+        <service
+            id="doctrine.orm.mapping_driver_factory"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\MappingDriverFactory">
+            <argument
+                type="service"
+                id="doctrine.orm.configuration" />
         </service>
 
-        <service id="doctrine.orm.packages_mapping_driver_factory"
-                 class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\PackagesMappingDriverFactory">
-            <argument type="service" id="doctrine.orm.mapping_driver_factory" />
-            <argument type="service" id="symfony.config.processor" />
-            <argument type="service" id="symfony.yaml.parser" />
+        <service
+            id="doctrine.orm.packages_mapping_driver_factory"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\PackagesMappingDriverFactory">
+            <argument
+                type="service"
+                id="doctrine.orm.mapping_driver_factory" />
+            <argument
+                type="service"
+                id="symfony.config.processor" />
+            <argument
+                type="service"
+                id="symfony.yaml.parser" />
         </service>
 
-        <service id="doctrine.connection" factory-service="doctrine.orm.entity_manager" factory-method="getConnection"
-                class="Doctrine\DBAL\Connection" />
+        <service
+            id="doctrine.connection"
+            class="Doctrine\DBAL\Connection">
+            <factory
+                service="doctrine.orm.entity_manager"
+                method="getConnection" />
+        </service>
 
-        <service id="doctrine.orm.schema_tool" class="Doctrine\ORM\Tools\SchemaTool">
-            <argument type="service" id="doctrine.orm.entity_manager" />
+        <service
+            id="doctrine.orm.schema_tool"
+            class="Doctrine\ORM\Tools\SchemaTool">
+            <argument
+                type="service"
+                id="doctrine.orm.entity_manager" />
         </service>
 
         <!-- Doctrine ORM Test -->
-        <service id="doctrine.orm.test.entity_manager" class="Doctrine\ORM\EntityManager"
-                 factory-method="createEntityManager" factory-service="doctrine.orm.test.entity_manager_factory"/>
-
-        <service id="doctrine.orm.test.entity_manager_factory" class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineEntityManagerFactory">
-            <argument type="service" id="doctrine.orm.mapping_driver" />
-            <argument type="service" id="doctrine.test.dbal.connection" />
+        <service
+            id="doctrine.orm.test.entity_manager"
+            class="Doctrine\ORM\EntityManager">
+            <factory
+                method="createEntityManager"
+                service="doctrine.orm.test.entity_manager_factory" />
         </service>
 
-        <service id="doctrine.orm.test.schema_tool" class="Doctrine\ORM\Tools\SchemaTool">
-            <argument type="service" id="doctrine.orm.test.entity_manager" />
+        <service
+            id="doctrine.orm.test.entity_manager_factory"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineEntityManagerFactory">
+            <argument
+                type="service"
+                id="doctrine.orm.mapping_driver" />
+            <argument
+                type="service"
+                id="doctrine.test.dbal.connection" />
+        </service>
+
+        <service
+            id="doctrine.orm.test.schema_tool"
+            class="Doctrine\ORM\Tools\SchemaTool">
+            <argument
+                type="service"
+                id="doctrine.orm.test.entity_manager" />
         </service>
 
 
