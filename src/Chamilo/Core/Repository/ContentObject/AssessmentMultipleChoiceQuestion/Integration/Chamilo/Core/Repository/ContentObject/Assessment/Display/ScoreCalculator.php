@@ -35,7 +35,7 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
                         break;
                     }
                 }
-                if ($selected && $selected->get_score() < 0)
+                if ($selected)
                 {
                     $score = $selected->get_score();
                 }
@@ -53,7 +53,7 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
 
             foreach ($answers as $i => $answer)
             {
-                if (array_key_exists($i + 1, $user_answers) && ($answer->is_correct() || $answer->get_score() <= 0))
+                if (array_key_exists($i + 1, $user_answers))
                 {
                     $score += $answer->get_score();
                 }

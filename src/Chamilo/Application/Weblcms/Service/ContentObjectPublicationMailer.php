@@ -210,7 +210,7 @@ class ContentObjectPublicationMailer
     protected function parseResources($body, &$mailFiles)
     {
         $doc = new \DOMDocument();
-        $doc->loadHTML($body);
+        $doc->loadHTML('<?xml encoding="utf-8" ?>' . $body);
         $elements = $doc->getElementsByTagName('resource');
         
         $index = 0;
