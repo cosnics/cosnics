@@ -158,7 +158,7 @@ abstract class Manager extends Application
                 ContentObjectRendition::VIEW_PREVIEW,
                 ContentObjectRendition::VIEW_THUMBNAIL,
                 ContentObjectRendition::VIEW_DESCRIPTION,
-                ContentObjectRendition::VIEW_SHORT,
+                ContentObjectRendition::VIEW_FULL_THUMBNAIL,
                 ContentObjectRendition::VIEW_INLINE,
                 ContentObjectRendition::VIEW_FORM);
 

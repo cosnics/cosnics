@@ -5,18 +5,20 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Common\Rendition\Html\HtmlContentObjectRendition;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Format\Theme;
 
-class HtmlShortContentObjectRendition extends HtmlContentObjectRendition
+class HtmlFullThumbnailContentObjectRendition extends HtmlContentObjectRendition
 {
     use DependencyInjectionContainerTrait;
 
+    /*
+     * @return string
+     */
     public function render($parameters = null)
     {
+        $this->initializeContainer();
+
         $object = $this->get_content_object();
-
-        $this->initializeContainer();
-
-        $this->initializeContainer();
 
         $fullViewHtml = ContentObjectRenditionImplementation::factory(
             $object,
@@ -28,7 +30,8 @@ class HtmlShortContentObjectRendition extends HtmlContentObjectRendition
             'Chamilo\Core\Repository:full_thumbnail.html.twig', [
                 "icon_path" => $object->get_icon_path(Theme::ICON_BIG),
                 "title" => $object->get_title(),
-                "full_view_html" => $fullViewHtml
+                "full_view" => $fullViewHtml,
+                "id" => $object->getId()
             ]
         );
     }

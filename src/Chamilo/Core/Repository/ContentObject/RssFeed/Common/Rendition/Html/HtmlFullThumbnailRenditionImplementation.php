@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Common\Rendition\Html;
 
 use Chamilo\Core\Repository\ContentObject\RssFeed\Common\Rendition\HtmlRenditionImplementation;
 
-class HtmlShortRenditionImplementation extends HtmlRenditionImplementation
+class HtmlFullThumbnailRenditionImplementation extends HtmlRenditionImplementation
 {
 
     public function render()

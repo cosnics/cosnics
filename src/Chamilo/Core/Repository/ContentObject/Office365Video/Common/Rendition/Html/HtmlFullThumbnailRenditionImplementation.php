@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Office365Video\Common\Rendition\
 
 use Chamilo\Core\Repository\ContentObject\Office365Video\Common\Rendition\HtmlRenditionImplementation;
 
-class HtmlShortRenditionImplementation extends HtmlRenditionImplementation
+class HtmlFullThumbnailRenditionImplementation extends HtmlRenditionImplementation
 {
 
     public function render()

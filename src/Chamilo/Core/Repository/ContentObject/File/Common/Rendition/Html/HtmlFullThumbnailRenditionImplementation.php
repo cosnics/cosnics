@@ -13,25 +13,19 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class HtmlShortRenditionImplementation extends HtmlRenditionImplementation
+class HtmlFullThumbnailRenditionImplementation extends HtmlRenditionImplementation
 {
 
     /**
      *
      * @return string
      */
-    public function render($parameters)
+    public function render($parameters = null)
     {
         $this->initializeContainer();
 
         $object = $this->get_content_object();
 
-/*        $inlineHtml = ContentObjectRenditionImplementation::launch(
-            $object,
-            ContentObjectRendition::FORMAT_HTML,
-            ContentObjectRendition::VIEW_INLINE,
-            $this->get_context());
-*/
         $fullViewHtml = ContentObjectRenditionImplementation::factory(
             $object,
             ContentObjectRendition::FORMAT_HTML,
@@ -43,11 +37,12 @@ class HtmlShortRenditionImplementation extends HtmlRenditionImplementation
             $object->calculate_security_code());
 
         return $this->getTwig()->render(
-            'Chamilo\Core\Repository\ContentObject\File:full_thumbnail.html.twig', [
+            'Chamilo\Core\Repository:full_thumbnail.html.twig', [
                 "icon_path" => $object->get_icon_path(Theme::ICON_BIG),
                 "title" => $object->get_title(),
                 "download_url" => $downloadUrl,
-                "full_view" => $fullViewHtml
+                "full_view" => $fullViewHtml,
+                "id" => $object->getId()
             ]
         );
     }

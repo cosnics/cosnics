@@ -166,7 +166,7 @@ class ContentObjectResourceRenderer
         }
 
         if(!$renderResourceInline) {
-            $type = ContentObjectRendition::VIEW_SHORT;
+            $type = ContentObjectRendition::VIEW_FULL_THUMBNAIL;
         } else {
             $type = ContentObjectRendition::VIEW_INLINE;
         }

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Webpage\Common\Rendition\Html;
 use Chamilo\Core\Repository\ContentObject\Webpage\Common\Rendition\HtmlRenditionImplementation;
 use Chamilo\Libraries\Utilities\Utilities;
 
-class HtmlShortRenditionImplementation extends HtmlRenditionImplementation
+class HtmlFullThumbnailRenditionImplementation extends HtmlRenditionImplementation
 {
 
     public function render()

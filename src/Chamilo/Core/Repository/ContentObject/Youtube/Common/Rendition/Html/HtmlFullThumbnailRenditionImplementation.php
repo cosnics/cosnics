@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Vimeo\Common\Rendition\Html;
+namespace Chamilo\Core\Repository\ContentObject\Youtube\Common\Rendition\Html;
 
-use Chamilo\Core\Repository\ContentObject\Vimeo\Common\Rendition\HtmlRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\Youtube\Common\Rendition\HtmlRenditionImplementation;
 
-class HtmlShortRenditionImplementation extends HtmlRenditionImplementation
+class HtmlFullThumbnailRenditionImplementation extends HtmlRenditionImplementation
 {
 
     public function render()

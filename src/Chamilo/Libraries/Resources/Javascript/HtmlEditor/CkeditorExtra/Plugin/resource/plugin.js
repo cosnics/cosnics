@@ -166,7 +166,7 @@
 
     function setObject(href, coId, securityCode, type)
     {
-
+console.log(this);
         if(type === 'image') {
             var html =  '<img src="' + href + '" ';
         }
@@ -176,7 +176,8 @@
         html +=
             'data-co-id="' + coId + '" ' +
             'data-security-code="' + securityCode + '" ' +
-            'data-type="'+type+'" ';
+            'data-type="'+type+'" ' +
+            'data-render-inline="' + (this.config['render_resource_inline'] ? 1 : 0) + '"';
 
         if(type !== 'image') {
             html += '></div>';
