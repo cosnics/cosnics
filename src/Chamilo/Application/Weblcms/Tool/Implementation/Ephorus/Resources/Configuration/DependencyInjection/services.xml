@@ -16,9 +16,9 @@
         </service>
 
         <service id="chamilo.application.weblcms.tool.implementation.ephorus.storage.repository.ephorus_webservice_repository"
-                 class="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\EphorusWebserviceRepository"
-                 factory-service="chamilo.application.weblcms.tool.implementation.ephorus.storage.repository.ephorus_webservice_repository_factory"
-                 factory-method="createEphorusWebserviceRepository" />
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\EphorusWebserviceRepository">
+            <factory service="chamilo.application.weblcms.tool.implementation.ephorus.storage.repository.ephorus_webservice_repository_factory" method="createEphorusWebserviceRepository" />
+        </service>
 
         <service id="chamilo.application.weblcms.tool.implementation.ephorus.service.request_manager"
                  class="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager">

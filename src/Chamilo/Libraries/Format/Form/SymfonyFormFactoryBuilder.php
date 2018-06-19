@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Format\Form;
 
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
+use Hogent\Application\Weblcms\Tool\Implementation\Survey\Form\CustomCourseSurveyDates\FormType;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRenderer;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
@@ -27,7 +28,6 @@ class SymfonyFormFactoryBuilder
      * Builds the FormFactory
      *
      * @param \Twig_Environment $twig
-     * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
      *
      * @return \Symfony\Component\Form\FormFactoryInterface
      */
@@ -38,7 +38,10 @@ class SymfonyFormFactoryBuilder
         $this->addTwigLoader($twig, $chamilo_form_templates_path);
         $this->addTwigExtension($twig, $chamilo_form_templates_path);
 
-        return Forms::createFormFactoryBuilder()->addExtension(new HttpFoundationExtension())->getFormFactory();
+        return Forms::createFormFactoryBuilder()
+            ->addExtension(new HttpFoundationExtension())
+            ->getFormFactory();
+
     }
 
     /**
