@@ -3,13 +3,13 @@ namespace Chamilo\Libraries\Format\Form;
 
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
+use Hogent\Application\Weblcms\Tool\Implementation\Survey\Form\CustomCourseSurveyDates\FormType;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRenderer;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
-use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Forms;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 
@@ -25,11 +25,13 @@ class SymfonyFormFactoryBuilder
 {
 
     /**
-     * @param Twig_Environment $twig
-     * @param Validation $validator
+     * Builds the FormFactory
+     *
+     * @param \Twig_Environment $twig
+     *
      * @return \Symfony\Component\Form\FormFactoryInterface
      */
-    public function buildFormFactory(\Twig_Environment $twig, ValidatorInterface $validator)
+    public function buildFormFactory(\Twig_Environment $twig)
     {
         $chamilo_form_templates_path = __DIR__ . '/../../Resources/Templates/Form';
 
@@ -38,8 +40,8 @@ class SymfonyFormFactoryBuilder
 
         return Forms::createFormFactoryBuilder()
             ->addExtension(new HttpFoundationExtension())
-            ->addExtension(new ValidatorExtension($validator))
             ->getFormFactory();
+
     }
 
     /**
@@ -76,9 +78,14 @@ class SymfonyFormFactoryBuilder
         $chamilo_files = Filesystem::get_directory_content($chamiloFormTemplatesPath, Filesystem::LIST_FILES, false);
         $twig_rendering_files = array_merge(array('form_div_layout.html.twig'), $chamilo_files);
 
-        $formEngine = new TwigRendererEngine($twig_rendering_files);
-        $formEngine->setEnvironment($twig);
+        $formEngine = new TwigRendererEngine($twig_rendering_files, $twig);
 
-        $twig->addExtension(new FormExtension(new TwigRenderer($formEngine)));
+        $twig->addRuntimeLoader(new \Twig_FactoryRuntimeLoader(array(
+            FormRenderer::class => function () use ($formEngine) {
+                return new FormRenderer($formEngine);
+            },
+        )));
+
+        $twig->addExtension(new FormExtension());
     }
 }

@@ -35,7 +35,8 @@ abstract class FormHandler
             return false;
         }
 
-        $this->originalModel = clone $form->getData();
+        $formData = $form->getData();
+        $this->originalModel = is_object($formData) ? clone $formData : $formData;
 
         $form->handleRequest($request);
 
