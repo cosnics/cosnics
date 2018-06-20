@@ -320,10 +320,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $formFactory = $this->getForm();
 
-        return $formFactory->create(
-            new ScoreFormType($this->getTranslator()),
-            $score
-        );
+        return $formFactory->create(ScoreFormType::class, $score);
 
     }
 

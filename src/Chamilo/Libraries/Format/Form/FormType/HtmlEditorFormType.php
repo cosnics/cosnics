@@ -21,25 +21,38 @@ class HtmlEditorFormType extends AbstractType
     /**
      *
      * @see \Symfony\Component\Form\AbstractType::setDefaultOptions()
+     *
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array('html_editor_options' => array(), 'html_editor_attributes' => array()));
+        $resolver->setDefaults(
+            [
+                'html_editor_options' => array(),
+                'html_editor_attributes' => array(),
+                'compound' => false
+            ]
+        );
 
-        $resolver->setAllowedTypes(
-            array('html_editor_options' => array('array'), 'html_editor_attributes' => array('array')));
+        $resolver->setAllowedTypes('html_editor_options', array('array'));
+        $resolver->setAllowedTypes('html_editor_attributes', array('array'));
     }
 
     /**
      *
      * @see \Symfony\Component\Form\AbstractType::buildView()
+     *
+     * @param \Symfony\Component\Form\FormView $view
+     * @param \Symfony\Component\Form\FormInterface $form
+     *
+     * @param array $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $label = ! empty($view->vars['label']) ? $view->vars['label'] : Translation::get($view->vars['name']);
 
         $html_editor = FormValidatorHtmlEditor::factory(
-            LocalSetting::get('html_editor'),
+            LocalSetting::getInstance()->get('html_editor'),
             $view->vars['full_name'],
             $label,
             false,
@@ -63,10 +76,9 @@ class HtmlEditorFormType extends AbstractType
     }
 
     /**
-     *
-     * @see \Symfony\Component\Form\AbstractType::getName()
+     * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'html_editor';
     }

@@ -45,7 +45,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
 
         $formFactory = $this->getForm();
 
-        $form = $formFactory->create(new AddFeedbackFormType($this->getTranslator()));
+        $form = $formFactory->create(AddFeedbackFormType::class);
 
 
         $form->handleRequest($this->getRequest());

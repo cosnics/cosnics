@@ -216,12 +216,18 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
     public function get_content_object_display_attachment_url($attachment,
                                                               $selected_complex_content_object_item_id = null)
     {
-        return $this->get_url(
-            array(
+        $parameters = [
                 static::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
                 self::PARAM_ATTACHMENT_ID => $attachment->get_id(),
-                self::PARAM_ENTRY_ID => $this->getEntry()->getId(),
-                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item_id));
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item_id
+        ];
+
+        if($this->getEntry() instanceof Entry)
+        {
+            $parameters[self::PARAM_ENTRY_ID] = $this->getEntry()->getId();
+        }
+
+        return $this->get_url($parameters);
     }
 
     /**
