@@ -15,7 +15,11 @@ abstract class ContentObjectRendition
     const FORMAT_JSON = 'json';
     const VIEW_FULL = 'full';
     const VIEW_DESCRIPTION = 'description';
-    const VIEW_SHORT = 'short';
+    /*
+     * @deprecated
+     */
+    const VIEW_SHORT = 'full_thumbnail';
+    const VIEW_FULL_THUMBNAIL = 'full_thumbnail';
     const VIEW_PREVIEW = 'preview';
     const VIEW_THUMBNAIL = 'thumbnail';
     const VIEW_MAIL = 'mail';

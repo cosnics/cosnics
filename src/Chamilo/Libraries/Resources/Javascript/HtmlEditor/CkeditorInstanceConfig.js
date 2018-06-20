@@ -88,4 +88,6 @@ CKEDITOR.editorConfig = function(config)
         // Delay
         delay : 15 //@todo: check performance with large pages
     };
+
+    config.meh = "lol";
 };

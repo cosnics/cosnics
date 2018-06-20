@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\PhysicalLocation\Common\Renditio
 
 use Chamilo\Core\Repository\ContentObject\PhysicalLocation\Common\Rendition\HtmlRenditionImplementation;
 
-class HtmlShortRenditionImplementation extends HtmlRenditionImplementation
+class HtmlFullThumbnailRenditionImplementation extends HtmlRenditionImplementation
 {
 
     public function render()

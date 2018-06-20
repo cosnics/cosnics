@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Link\Common\Rendition\Html;
+namespace Chamilo\Core\Repository\ContentObject\Bookmark\Common\Rendition\Html;
 
-use Chamilo\Core\Repository\ContentObject\Link\Common\Rendition\HtmlRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\Bookmark\Common\Rendition\HtmlRenditionImplementation;
 
-class HtmlShortRenditionImplementation extends HtmlRenditionImplementation
+class HtmlFullThumbnailRenditionImplementation extends HtmlRenditionImplementation
 {
 
     public function render()

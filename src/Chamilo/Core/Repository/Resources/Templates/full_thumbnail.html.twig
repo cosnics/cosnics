@@ -1,0 +1,66 @@
+{% set commonContext = 'Chamilo\\Libraries' %}
+
+{{ getJavascript('Plugin/VueJS/vue.js', commonContext) }}
+{{ getJavascript('Plugin/VueJS/polyfill.min.js', commonContext) }}
+{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', commonContext) }}
+
+<div>
+    <style>
+        .modal.show {
+            opacity: 1;
+        }
+        .modal-backdrop.show {
+            opacity: 0.5;
+        }
+        .thumbnailModal .modal-dialog {
+            width: auto;
+            transform: none;
+        }
+        @media (min-width: 768px) {
+            .thumbnailModal .modal-dialog {
+                margin: 50px 100px;
+            }
+        }
+        .modal-backdrop {
+            background-color: #5cb3fd;
+            opacity: 0.5;
+        }
+    </style>
+    <div id="fullThumbnail{{ id }}" class="fullThumbnail">
+
+        <div class="thumbnail" style="padding-top: 12px; padding-bottom: 12px; width: 100px; margin-bottom: 10px; ">
+            {%if download_url%}
+                <a href="{{ download_url }}" class="pull-right" data-toggle="tooltip" title="Download">
+                    <i class="fa fa-download" aria-hidden="true"></i>
+                </a>
+            {% endif %}
+            <a href="#" v-on:click="showModal" data-toggle="tooltip" title="{{ title }}">
+                <img src="{{ icon_path }}" alt="" class="align-center" style="margin-bottom: 5px;">
+                {{ title|length > 10 ? title|slice(0, 10) ~ '...' : title }}
+            </a>
+        </div>
+        <b-modal class="thumbnailModal" no-fade ok-only ref="thumbnailModal{{ id }}" title="{{ title }}">
+            <div class="modalContent" style="display: none">
+                {{ full_view | raw }}
+            </div>
+        </b-modal>
+
+    </div>
+    <script>
+        $("document").ready(function () {
+            new Vue({
+                el: '#fullThumbnail{{ id }}',
+                methods: {
+                    showModal: function (event) {
+                        this.$refs.thumbnailModal{{ id }}.show();
+                    },
+                    hideModal: function () {
+                        this.$refs.thumbnailModal{{ id }}.hide();
+                    }
+                }
+            });
+
+            $(".modalContent").show();
+        });
+    </script>
+</div>

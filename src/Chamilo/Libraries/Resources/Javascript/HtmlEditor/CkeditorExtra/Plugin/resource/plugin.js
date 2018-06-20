@@ -28,7 +28,6 @@
                         var securityCode = ev.data.dataTransfer.getData("data-security-code");
 
                         var html = '';
-
                         if(type === 'image') {
                             var url = ''; //todo make html generation uniform
                             html += '<img src="' + url + '" ' +
@@ -42,6 +41,7 @@
                                 'data-co-id="' + coId + '" ' +
                                 'data-security-code="' + securityCode + '" ' +
                                 'data-type="'+type+'"' +
+                                'data-render-inline"' + (ev.editor.config["render_resource_inline"] ? 1 : 0) +'"' +
                                 '></div><br>';
                         }
                         ev.data.dataValue = html;
@@ -110,6 +110,7 @@
                         data.coId = el.attributes[ 'data-co-id' ];
                         data.type = el.attributes['data-type'];
                         data.securityCode = el.attributes['data-security-code'];
+                        data.renderInline = el.attributes['data-render-inline'];
 
                         if(!el.hasClass('cke_chamilo_' + el.attributes['data-type'])) {
                             el.addClass('cke_chamilo_' + el.attributes['data-type']);
@@ -123,13 +124,23 @@
 
                         var coProperties = JSON.parse(getResourceRendition(data.coId, data.securityCode, data.type));
 
-                        var renditionFragment = CKEDITOR.htmlParser.fragment.fromHtml(
-                            '<h3> ' + coProperties.title
-                            + '</h3><p>(wordt volledig weergegeven na opslaan)</p>' //@todo translations
-                        );
-                        el.add(renditionFragment); //add the newly fetched rendition*/
+                        if(data.renderInline === "1") {
+                            var renditionFragment = CKEDITOR.htmlParser.fragment.fromHtml(
+                                '<h3 style="margin-top: 75px"> ' + coProperties.title
+                                + '</h3><p>(wordt volledig weergegeven na opslaan)</p>' //@todo translations
+                            );
+                            el.add(renditionFragment); //add the newly fetched rendition*/
 
-                        el.attributes['style'] = 'height: 350px;width:100%;';
+                            el.attributes['style'] = 'height: 350px;width:100%;';
+                        } else {
+                            var renditionFragment = CKEDITOR.htmlParser.fragment.fromHtml(
+                                '<h6 style="margin-top: 50px"> ' + coProperties.title
+                                + '</h6>' //@todo translations
+                            );
+                            el.add(renditionFragment); //add the newly fetched rendition*/
+
+                            el.attributes['style'] = 'height: 80px;width:100px;';
+                        }
 
                         return true;
                     }
@@ -140,7 +151,7 @@
                     attributes[ 'data-co-id' ] = this.data.coId;
                     attributes[ 'data-type' ] = this.data.type;
                     attributes[ 'data-security-code' ] = this.data.securityCode;
-
+                    attributes['data-render-inline'] = this.data.renderInline;
                     attributes[ 'class'] = el.attributes['class'];
 
                     return new CKEDITOR.htmlParser.element( 'div', attributes );
@@ -155,7 +166,7 @@
 
     function setObject(href, coId, securityCode, type)
     {
-
+console.log(this);
         if(type === 'image') {
             var html =  '<img src="' + href + '" ';
         }
@@ -165,7 +176,8 @@
         html +=
             'data-co-id="' + coId + '" ' +
             'data-security-code="' + securityCode + '" ' +
-            'data-type="'+type+'" ';
+            'data-type="'+type+'" ' +
+            'data-render-inline="' + (this.config['render_resource_inline'] ? 1 : 0) + '"';
 
         if(type !== 'image') {
             html += '></div>';

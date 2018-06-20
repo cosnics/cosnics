@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -15,7 +16,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
+abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implements \Chamilo\Core\Repository\Feedback\FeedbackSupport
 {
     const PARAM_ACTION = 'assignment_display_action';
 
@@ -210,7 +211,92 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
 
         return $dataProvider->isEphorusEnabled();
+    }
 
+    public function get_content_object_display_attachment_url($attachment,
+                                                              $selected_complex_content_object_item_id = null)
+    {
+        return $this->get_url(
+            array(
+                static::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
+                self::PARAM_ATTACHMENT_ID => $attachment->get_id(),
+                self::PARAM_ENTRY_ID => $this->getEntry()->getId(),
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item_id));
+    }
 
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
+     */
+    public function retrieve_feedbacks($count, $offset)
+    {
+        return $this->getDataProvider()->findFeedbackByEntry($this->getEntry());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::count_feedbacks()
+     */
+    public function count_feedbacks()
+    {
+        return $this->getDataProvider()->countFeedbackByEntry($this->getEntry());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedback()
+     */
+    public function retrieve_feedback($feedbackIdentifier)
+    {
+        return $this->getDataProvider()->findFeedbackByIdentifier($feedbackIdentifier);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::get_feedback()
+     */
+    public function get_feedback()
+    {
+        $feedback = $this->getDataProvider()->initializeFeedback();
+        $feedback->setEntryId($this->getEntry()->getId());
+
+        return $feedback;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_view_feedback()
+     */
+    public function is_allowed_to_view_feedback()
+    {
+        return true;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_create_feedback()
+     */
+    public function is_allowed_to_create_feedback()
+    {
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback
+     *
+     * @return bool
+     */
+    public function is_allowed_to_update_feedback($feedback)
+    {
+        return $feedback->get_user_id() == $this->getUser()->getId();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_delete_feedback()
+     */
+    public function is_allowed_to_delete_feedback($feedback)
+    {
+        return $feedback->get_user_id() == $this->getUser()->getId();
     }
 }

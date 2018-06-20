@@ -41,7 +41,8 @@ class AddFeedbackFormType extends AbstractType
                 'html_editor_options' => [
                     'collapse_toolbar' => true,
                     'height' => 120,
-                    'resize_enabled' => false
+                    'resize_enabled' => false,
+                    'render_resource_inline' => false
                 ],
                 'required' => true,
                 'label' => 'Voeg feedback toe: ',
