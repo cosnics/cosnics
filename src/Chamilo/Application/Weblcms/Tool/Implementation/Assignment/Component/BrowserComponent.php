@@ -100,6 +100,25 @@ class BrowserComponent extends Manager
         );
     }
 
+    public function render_header($pageTitle = '')
+    {
+        $html = [];
+
+        $html[] = parent::render_header($pageTitle);
+
+        if($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            $html[] = '<div class="alert alert-info" style="display: flex">';
+            $html[]= '<div class="fa fa-info" style="font-size: 20px;"></div>';
+            $html[]= '<div style="margin-left: 10px;">';
+            $html[] = $this->getTranslator()->trans('AssignmentChangesWarning', [], Manager::context());
+            $html[] = '</div>';
+            $html[] = '</div>';
+        }
+
+        return implode(PHP_EOL, $html);
+    }
+
     /**
      *
      * @param BreadcrumbTrail $breadcrumbtrail

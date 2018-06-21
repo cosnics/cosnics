@@ -269,6 +269,25 @@ abstract class AssignmentService
     }
 
     /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function isContentObjectOwnerSameAsSubmitter(ContentObject $contentObject)
+    {
+        $entries = $this->assignmentRepository->findEntriesByContentObjectId($contentObject);
+        foreach($entries as $entry)
+        {
+            if($entry->getUserId() == $contentObject->get_owner_id())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *

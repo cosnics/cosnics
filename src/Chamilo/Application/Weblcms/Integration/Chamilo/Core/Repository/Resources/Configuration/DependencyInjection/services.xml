@@ -9,6 +9,8 @@
                       id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service"/>
             <argument type="service"
                       id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service"/>
+            <argument type="service"
+                      id="chamilo.core.user.service.user_service"/>
             <tag name="chamilo.core.repository.publication.content_object_publication_manager"/>
         </service>
 
