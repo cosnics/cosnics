@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Format\Twig;
 
 use Chamilo\Libraries\File\Path;
+use Twig_Error_Loader;
+use Twig_Source;
 
 /**
  * This class loads twig templates by using a custom made format.
@@ -14,15 +16,6 @@ use Chamilo\Libraries\File\Path;
  */
 class TwigLoaderChamiloFilesystem implements \Twig_LoaderInterface
 {
-
-    /**
-     *
-     * @see Twig_LoaderInterface::getSource()
-     */
-    public function getSource($name)
-    {
-        return file_get_contents($this->findTemplate($name));
-    }
 
     /**
      *
@@ -99,5 +92,40 @@ class TwigLoaderChamiloFilesystem implements \Twig_LoaderInterface
         }
 
         return $fullPath;
+    }
+
+    /**
+     * Returns the source context for a given template logical name.
+     *
+     * @param string $name The template logical name
+     *
+     * @return Twig_Source
+     *
+     * @throws Twig_Error_Loader When $name is not found
+     */
+    public function getSourceContext($name)
+    {
+        $path = $this->findTemplate($name);
+        return new Twig_Source(file_get_contents($path), $name, $path);
+    }
+
+    /**
+     * Check if we have the source code of a template, given its name.
+     *
+     * @param string $name The name of the template to check if we can load
+     *
+     * @return bool If the template source code is handled by this loader or not
+     */
+    public function exists($name)
+    {
+        try
+        {
+            $this->findTemplate($name);
+            return true;
+        }
+        catch(\Exception $ex)
+        {
+            return false;
+        }
     }
 }
