@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\File\Export\Excel;
 
 use Chamilo\Libraries\File\Export\Export;
-use PHPExcel;
-use PHPExcel_IOFactory;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 /**
  * Exports data to Excel
@@ -20,7 +20,7 @@ class ExcelExport extends Export
      */
     public function render_data()
     {
-        $excel = new PHPExcel();
+        $excel = new Spreadsheet();
 
         $data = $this->get_data();
         $letters = array(
@@ -49,7 +49,8 @@ class ExcelExport extends Export
             22 => 'W',
             23 => 'X',
             24 => 'Y',
-            25 => 'Z');
+            25 => 'Z'
+        );
 
         $i = 0;
         $cell_letter = 0;
@@ -67,13 +68,15 @@ class ExcelExport extends Export
             $cell_number = $cell_number + 2;
             $excel->getActiveSheet()->setCellValue(
                 $letters[$cell_letter] . $cell_number,
-                strip_tags(html_entity_decode($block_title)));
+                strip_tags(html_entity_decode($block_title))
+            );
             $excel->getActiveSheet()->getColumnDimension($letters[$cell_letter])->setWidth(60);
             $this->wrap_text($excel, $letters[$cell_letter] . $cell_number);
             ++ $cell_number;
             $excel->getActiveSheet()->setCellValue(
                 $letters[$cell_letter] . $cell_number,
-                $this->transcode_string($block_description));
+                $this->transcode_string($block_description)
+            );
 
             if ($block_description != "")
             {
@@ -89,7 +92,8 @@ class ExcelExport extends Export
                 $excel->getActiveSheet()->getColumnDimension($letters[$cell_letter])->setWidth(15);
                 $excel->getActiveSheet()->setCellValue(
                     $letters[$cell_letter] . $cell_number,
-                    $this->transcode_string($row_name));
+                    $this->transcode_string($row_name)
+                );
             }
             foreach ($block_content_data->get_categories() as $category_id => $category_name)
             {
@@ -98,7 +102,8 @@ class ExcelExport extends Export
                 $excel->getActiveSheet()->getColumnDimension($letters[$cell_letter])->setWidth(50);
                 $excel->getActiveSheet()->setCellValue(
                     $letters[$cell_letter] . $cell_number,
-                    $this->transcode_string($category_name));
+                    $this->transcode_string($category_name)
+                );
 
                 $this->wrap_text($excel, $letters[$cell_letter] . $cell_number);
                 foreach ($block_content_data->get_rows() as $row_id => $row_name)
@@ -106,7 +111,8 @@ class ExcelExport extends Export
                     $cell_letter ++;
                     $excel->getActiveSheet()->setCellValue(
                         $letters[$cell_letter] . $cell_number,
-                        $this->transcode_string($block_content_data->get_data_category_row($category_id, $row_id)));
+                        $this->transcode_string($block_content_data->get_data_category_row($category_id, $row_id))
+                    );
                 }
                 $i ++;
             }
@@ -115,17 +121,17 @@ class ExcelExport extends Export
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . $this->get_filename() . '"');
         header('Cache-Control: max-age=0');
-        $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
-        return $objWriter->save('php://output');
+        $objWriter = IOFactory::createWriter($excel, 'Xlsx');
 
-        $excel->disconnectWorksheets();
-        unset($excel);
+        return $objWriter->save('php://output');
     }
 
     /**
      *
-     * @param PHPExcel $excel
+     * @param Spreadsheet $excel
      * @param string $cell
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function wrap_text($excel, $cell)
     {

@@ -3,6 +3,11 @@ namespace Chamilo\Application\Weblcms\UserExporter\Renderer;
 
 use Chamilo\Application\Weblcms\UserExporter\UserExportRenderer;
 use Chamilo\Libraries\File\Path;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Font;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * Renders the exported user array as an excel file
@@ -14,9 +19,9 @@ class ExcelUserExportRenderer implements UserExportRenderer
 {
 
     /**
-     * The reference to the PHPExcel writer
+     * The reference to the spreadsheet writer
      * 
-     * @var \PHPExcel
+     * @var \PhpOffice\PhpSpreadsheet\Spreadsheet
      */
     private $excel;
 
@@ -25,16 +30,18 @@ class ExcelUserExportRenderer implements UserExportRenderer
      */
     public function __construct()
     {
-        $this->excel = new \PHPExcel();
+        $this->excel = new Spreadsheet();
     }
 
     /**
      * Renders the exported users
-     * 
+     *
      * @param array $headers
      * @param array $users
      *
      * @return mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function render(array $headers, array $users)
     {
@@ -47,12 +54,12 @@ class ExcelUserExportRenderer implements UserExportRenderer
 
     /**
      * Renders the worksheet
-     * 
+     *
      * @param array $headers
      * @param array $users
-     * @param \PHPExcel_Worksheet $worksheet
+     * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $worksheet
      */
-    protected function render_worksheet(array $headers, array $users, \PHPExcel_Worksheet $worksheet)
+    protected function render_worksheet(array $headers, array $users, Worksheet $worksheet)
     {
         $this->render_headers($headers, $worksheet);
         
@@ -74,18 +81,18 @@ class ExcelUserExportRenderer implements UserExportRenderer
 
     /**
      * Renders the header for the user table
-     * 
+     *
      * @param array $headers
-     * @param \PHPExcel_Worksheet $worksheet
+     * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $worksheet
      */
     protected function render_headers($headers, $worksheet)
     {
         $row = 1;
         
-        $color = \PHPExcel_Style_Color::COLOR_BLUE;
+        $color = Color::COLOR_BLUE;
         
         $styleArray = array(
-            'font' => array('underline' => \PHPExcel_Style_Font::UNDERLINE_SINGLE, 'color' => array('argb' => $color)));
+            'font' => array('underline' => Font::UNDERLINE_SINGLE, 'color' => array('argb' => $color)));
         
         $column = 0;
         
@@ -101,8 +108,10 @@ class ExcelUserExportRenderer implements UserExportRenderer
 
     /**
      * Initializes the worksheet
-     * 
-     * @return \PHPExcel_Worksheet
+     *
+     * @return \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function initialize_worksheet()
     {
@@ -114,12 +123,13 @@ class ExcelUserExportRenderer implements UserExportRenderer
 
     /**
      * Saves the worksheet to a temporary path and returns the path
-     * 
+     *
      * @return string
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     protected function save_worksheet()
     {
-        $objWriter = \PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+        $objWriter = IOFactory::createWriter($this->excel, 'Xlsx');
         
         $temp_dir = Path::getInstance()->getTemporaryPath() . 'excel/';
         

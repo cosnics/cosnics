@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\File\Export\Pdf;
 use Cezpdf;
 use Chamilo\Libraries\File\Export\Export;
 use Chamilo\Libraries\File\Path;
-use HTML2PDF;
+use Spipu\Html2Pdf\Html2Pdf;
 
 /**
  * Exports data to Pdf
@@ -37,10 +37,38 @@ class PdfExport extends Export
         }
         else
         {
-            $pdf = new HTML2PDF('p', 'A4', 'en');
-            $pdf->WriteHTML($pdf->getHtmlFromPage($data));
-            return $pdf->Output('', 'S');
+            $pdf = new Html2Pdf('p', 'A4', 'en');
+            $pdf->writeHtml($this->getHtmlFromPage($data));
+            return $pdf->output('', 'S');
         }
+    }
+
+    /**
+     * convert the HTML of a real page, to a code adapted to HTML2PDF
+     *
+     * @access public
+     * @param  string HTML of a real page
+     * @return string HTML adapted to HTML2PDF
+     */
+    public function getHtmlFromPage($html)
+    {
+        $html = str_replace('<BODY', '<body', $html);
+        $html = str_replace('</BODY', '</body', $html);
+        // extract the content
+        $res = explode('<body', $html);
+        if (count($res)<2) return $html;
+        $content = '<page'.$res[1];
+        $content = explode('</body', $content);
+        $content = $content[0].'</page>';
+        // extract the link tags
+        preg_match_all('/<link([^>]*)>/isU', $html, $match);
+        foreach ($match[0] as $src)
+            $content = $src.'</link>'.$content;
+        // extract the css style tags
+        preg_match_all('/<style[^>]*>(.*)<\/style[^>]*>/isU', $html, $match);
+        foreach ($match[0] as $src)
+            $content = $src.$content;
+        return $content;
     }
 
     /**

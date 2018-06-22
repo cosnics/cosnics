@@ -8,8 +8,8 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
-use PHPExcel;
-use PHPExcel_IOFactory;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 /**
  *
@@ -61,7 +61,7 @@ class Basic extends Xlsx
     {
         $current_block_id = $this->get_context()->get_current_block();
         
-        $this->php_excel = new PHPExcel();
+        $this->php_excel = new Spreadsheet();
         
         if ($this->show_all())
         {
@@ -165,7 +165,7 @@ class Basic extends Xlsx
             Path::getInstance()->getArchivePath(), 
             $file_name);
         
-        $php_excel_writer = PHPExcel_IOFactory::createWriter($this->php_excel, 'Excel2007');
+        $php_excel_writer = IOFactory::createWriter($this->php_excel, 'Xlsx');
         $php_excel_writer->save($file);
         
         $this->php_excel->disconnectWorksheets();
@@ -185,7 +185,7 @@ class Basic extends Xlsx
 
     /**
      *
-     * @return \PHPExcel
+     * @return Spreadsheet
      */
     public function get_php_excel()
     {

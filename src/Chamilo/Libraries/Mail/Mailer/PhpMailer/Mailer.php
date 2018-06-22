@@ -5,6 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\MailLog;
 use Chamilo\Libraries\Mail\Mailer\AbstractMailer;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
+use PHPMailer\PHPMailer\PHPMailer;
 
 /**
  * PHPMailer mailer service
@@ -24,7 +25,7 @@ class Mailer extends AbstractMailer
 
     /**
      *
-     * @var \PHPMailer
+     * @var PHPMailer
      */
     protected $phpMailer;
 
@@ -32,9 +33,9 @@ class Mailer extends AbstractMailer
      * Mailer constructor.
      *
      * @param \Chamilo\Configuration\Configuration $configuration
-     * @param \PHPMailer $phpMailer
+     * @param PHPMailer $phpMailer
      */
-    public function __construct(Configuration $configuration = null, \PHPMailer $phpMailer = null)
+    public function __construct(Configuration $configuration = null, PHPMailer $phpMailer = null)
     {
         parent::__construct($configuration);
 
@@ -120,7 +121,7 @@ class Mailer extends AbstractMailer
      *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
-     * @throws \phpmailerException
+     * @throws \PHPMailer\PHPMailer\Exception
      */
     protected function addAttachments(Mail $mail)
     {
@@ -169,7 +170,7 @@ class Mailer extends AbstractMailer
      *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
-     * @throws \phpmailerException
+     * @throws \PHPMailer\PHPMailer\Exception
      */
     protected function send(Mail $mail)
     {
@@ -231,17 +232,17 @@ class Mailer extends AbstractMailer
     /**
      * Sets and optionally initializes the phpmailer
      *
-     * @param \PHPMailer $phpMailer
+     * @param PHPMailer $phpMailer
      */
-    protected function setPHPMailer(\PHPMailer $phpMailer = null)
+    protected function setPHPMailer(PHPMailer $phpMailer = null)
     {
-        if (! isset($phpMailer) || ! $phpMailer instanceof \PHPMailer)
+        if (! isset($phpMailer) || ! $phpMailer instanceof PHPMailer)
         {
             global $phpMailerConfiguration;
             require_once (\Chamilo\Libraries\File\Path::getInstance()->getStoragePath() .
                  'configuration/phpmailer.conf.php');
 
-            $phpMailer = new \PHPMailer();
+            $phpMailer = new PHPMailer();
 
             $phpMailer->isHTML(true);
             $phpMailer->CharSet = 'utf-8';

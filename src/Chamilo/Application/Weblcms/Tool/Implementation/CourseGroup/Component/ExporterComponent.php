@@ -25,11 +25,12 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use PHPExcel;
-use PHPExcel_IOFactory;
-use PHPExcel_Style_Alignment;
-use PHPExcel_Style_Color;
-use PHPExcel_Style_Font;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Font;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * Class To export users and course groups from a course
@@ -304,12 +305,12 @@ class ExporterComponent extends Manager
      */
     public function render()
     {
-        $excel = new PHPExcel();
+        $excel = new Spreadsheet();
         $worksheet = $excel->getSheet(0)->setTitle('Export');
         
         $this->get_data($worksheet);
         
-        $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $objWriter = IOFactory::createWriter($excel, 'Xlsx');
         
         $temp_dir = Path::getInstance()->getTemporaryPath() . 'excel/';
         
@@ -392,10 +393,10 @@ class ExporterComponent extends Manager
         $column = 0;
         $column1 = 1;
         $column2 = 2;
-        $color = PHPExcel_Style_Color::COLOR_BLUE;
+        $color = Color::COLOR_BLUE;
         
         $styleArray = array(
-            'font' => array('underline' => PHPExcel_Style_Font::UNDERLINE_SINGLE, 'color' => array('argb' => $color)));
+            'font' => array('underline' => Font::UNDERLINE_SINGLE, 'color' => array('argb' => $color)));
         
         $block_row ++;
         $block_row ++;
@@ -404,7 +405,7 @@ class ExporterComponent extends Manager
         // $this->wrap_text($worksheet, $column, $block_row);
         $worksheet->mergeCells('A' . $block_row . ':G' . $block_row);
         $worksheet->getStyleByColumnAndRow($column, $block_row)->getAlignment()->setHorizontal(
-            PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            Alignment::HORIZONTAL_CENTER);
         $worksheet->getStyleByColumnAndRow($column, $block_row)->getFont()->setBold(true);
         
         $block_row ++;
@@ -415,7 +416,7 @@ class ExporterComponent extends Manager
             
             $worksheet->mergeCells('A' . $block_row . ':G' . $block_row);
             $worksheet->getStyleByColumnAndRow($column, $block_row)->getAlignment()->setHorizontal(
-                PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                Alignment::HORIZONTAL_CENTER);
             
             $worksheet->setCellValueByColumnAndRow($column, $block_row, $description);
             
