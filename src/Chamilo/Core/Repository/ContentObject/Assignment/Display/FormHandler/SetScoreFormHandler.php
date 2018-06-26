@@ -8,7 +8,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\FormHandler;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreFormProcessor;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\User\Storage\DataClass\User;

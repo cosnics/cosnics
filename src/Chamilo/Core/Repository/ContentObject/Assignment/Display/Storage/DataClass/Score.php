@@ -40,7 +40,7 @@ abstract class Score extends DataClass
     }
 
     /**
-     *
+     * @Assert\Type(type="integer", message="NotANumber", payload = {"context": "Chamilo\Libraries"})
      * @Assert\LessThanOrEqual(value=100, message="LessThanOrEqual", payload = {"context": "Chamilo\Libraries"})
      * @return integer
      */
