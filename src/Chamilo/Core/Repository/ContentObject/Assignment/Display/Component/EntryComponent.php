@@ -59,6 +59,11 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected $scoreService;
 
     /**
+     * @var Score
+     */
+    protected $score;
+
+    /**
      *
      * @var ButtonToolBarRenderer
      */
@@ -262,7 +267,11 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      * @return int|null
      */
     protected function getScore() {
-        return $this->getScoreDataClass() instanceof Score ? $this->getScoreDataClass()->getScore() : null;
+        if(!is_null($this->score)) {
+            return $this->score->getScore();
+        } else {
+            return $this->getScoreDataClass() instanceof Score ? $this->getScoreDataClass()->getScore() : null;
+        }
     }
 
     /**
@@ -314,21 +323,16 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getScoreForm()
     {
-        if (!$this->getDataProvider()->canEditAssignment() || !$this->getEntry() instanceof Entry)
-        {
-            return null;
-        }
+        $this->score = $this->getScoreDataClass();
 
-        $score = $this->getScoreDataClass();
-
-        if(empty($score)) {
-            $score = $this->getDataProvider()->initializeScore();
-            $score->setEntryId($this->getEntry()->getId());
+        if(empty($this->score)) {
+            $this->score = $this->getDataProvider()->initializeScore();
+            $this->score->setEntryId($this->getEntry()->getId());
         }
 
         $formFactory = $this->getForm();
 
-        return $formFactory->create(ScoreFormType::class, $score);
+        return $formFactory->create(ScoreFormType::class, $this->score);
 
     }
 
