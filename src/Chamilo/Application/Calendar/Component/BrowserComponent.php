@@ -82,14 +82,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
     }
 
-    /**
-     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    protected function getSessionUtilities()
-    {
-        return $this->getService('chamilo.libraries.platform.session.session_utilities');
-    }
-
     protected function getCalendarDataProvider()
     {
         if (! isset($this->calendarDataProvider))

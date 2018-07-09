@@ -90,8 +90,11 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $this->initializeEntry();
         $this->checkAccessRights();
 
-        $scoreForm = $this->getScoreForm();
-        $this->processSubmittedData($scoreForm);
+        if ($this->getDataProvider()->canEditAssignment() && $this->getEntry() instanceof Entry)
+        {
+            $scoreForm = $this->getScoreForm();
+            $this->processSubmittedData($scoreForm);
+        }
 
         return $this->getTwig()->render(
             Manager::context() . ':EntryViewer.html.twig',
@@ -148,7 +151,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      * @param FormInterface $scoreForm
      * @return array|string[]
      */
-    protected function getTemplateProperties(FormInterface $scoreForm)
+    protected function getTemplateProperties(FormInterface $scoreForm = null)
     {
         /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
         $assignment = $this->get_root_content_object();
@@ -311,6 +314,11 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getScoreForm()
     {
+        if (!$this->getDataProvider()->canEditAssignment() || !$this->getEntry() instanceof Entry)
+        {
+            return null;
+        }
+
         $score = $this->getScoreDataClass();
 
         if(empty($score)) {
