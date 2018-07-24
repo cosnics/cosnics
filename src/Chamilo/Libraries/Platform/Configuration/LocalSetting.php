@@ -112,6 +112,9 @@ class LocalSetting
         {
             $localSettingCacheService = new LocalSettingCacheService();
             $userIdentifier = Session::get_user_id();
+            if(is_null($userIdentifier)) {
+                $userIdentifier = 0;
+            }
             self::$instance = new self($localSettingCacheService, $userIdentifier);
         }
 
