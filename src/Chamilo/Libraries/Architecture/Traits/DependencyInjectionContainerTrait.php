@@ -178,6 +178,14 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     * @return \Chamilo\Libraries\Format\Theme
+     */
+    public function getThemeUtilities()
+    {
+        return $this->getService('chamilo.libraries.format.theme');
+    }
+
+    /**
      * Returns the event dispatcher
      *
      * @return \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher

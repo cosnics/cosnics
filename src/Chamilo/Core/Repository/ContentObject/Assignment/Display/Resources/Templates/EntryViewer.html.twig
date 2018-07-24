@@ -92,12 +92,14 @@
                                     }
                                 </style>
                                 <div style="margin-bottom: 10px;">
-                                    {% form_theme SCORE_FORM 'bootstrap_3_layout.html.twig' %}
-                                    {{ form_start(SCORE_FORM, { 'attr': {'class': 'form-inline'} }) }}
-                                    {{ form_row(SCORE_FORM.score) }}
-                                    <button type="submit" class="btn btn-default btn-score"
-                                            style="margin-left: 20px;">{{ 'Save'|trans({}, commonContext) }}</button>
-                                    {{ form_end(SCORE_FORM) }}
+                                    {% if SCORE_FORM is defined %}
+                                        {% form_theme SCORE_FORM 'bootstrap_3_layout.html.twig' %}
+                                        {{ form_start(SCORE_FORM, { 'attr': {'class': 'form-inline'} }) }}
+                                        {{ form_row(SCORE_FORM.score) }}
+                                        <button type="submit" class="btn btn-default btn-score"
+                                                style="margin-left: 20px;">{{ 'Save'|trans({}, commonContext) }}</button>
+                                        {{ form_end(SCORE_FORM) }}
+                                    {% endif %}
                                 </div>
 
 

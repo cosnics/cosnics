@@ -21,13 +21,15 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Initializes the columns for the table
+     *
+     * @param bool $addActionsColumn
      */
-    public function initialize_columns()
+    public function initialize_columns($addActionsColumn = false)
     {
-        parent::initialize_columns(false);
+        parent::initialize_columns($addActionsColumn);
         
         $this->add_column(
             new DataClassPropertyTableColumn(Assignment::class_name(), Assignment::PROPERTY_END_TIME, null, false));

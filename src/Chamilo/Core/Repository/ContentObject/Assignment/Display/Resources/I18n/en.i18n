@@ -56,3 +56,5 @@ MultipleEntitiesWarning = "You are currently part of multiple {ENTITY_TYPE_PLURA
 SelectOtherEntity = "Select an other {ENTITY_TYPE}"
 LastScore = "Last score"
 EphorusComponent = "Plagiaatdetection (Ephorus)"
+EntryCreated = "We have received your entry successfully"
+EntryNotCreated = "We could not receive your entry"
