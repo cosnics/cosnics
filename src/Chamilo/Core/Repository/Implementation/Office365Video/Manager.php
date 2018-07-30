@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Implementation\Office365Video;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\External\Renderer\Renderer;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -20,11 +21,11 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     /**
      *
-     * @param $application \Chamilo\Libraries\Architecture\Application\Application
+     * @param $applicationConfiguration ApplicationConfigurationInterface
      */
-    public function __construct($external_repository, $application)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent::__construct($external_repository, $application);
+        parent::__construct($applicationConfiguration);
         $this->set_parameter(self::PARAM_CHANNEL_ID, $this->getSelectedChannelId());
     }
 

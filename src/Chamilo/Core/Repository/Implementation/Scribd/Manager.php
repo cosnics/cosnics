@@ -19,15 +19,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     const ACTION_DATA_OBJECT_VIEWER = 'DataObjectViewer';
     const PARAM_DOWNLOAD_FORMAT = 'download_format';
 
-    /**
-     *
-     * @param $application Application
-     */
-    public function __construct($external_repository, $application)
-    {
-        parent::__construct($external_repository, $application);
-    }
-
     /*
      * (non-PHPdoc) @see common/extensions/external_repository_manager/Manager#validate_settings()
      */

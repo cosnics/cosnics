@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Implementation\Bitbucket;
 
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -36,11 +37,11 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     /**
      *
-     * @param $application Application
+     * @param $applicationConfiguration ApplicationConfigurationInterface
      */
-    public function __construct($external_repository, $application)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent::__construct($external_repository, $application);
+        parent::__construct($applicationConfiguration);
         $this->set_parameter(self::PARAM_FOLDER, Request::get(self::PARAM_FOLDER));
     }
 

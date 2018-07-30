@@ -68,7 +68,7 @@ abstract class Manager extends Application implements NoContextComponent
 
     /**
      *
-     * @param $application Application
+     * @param $applicationConfiguration ApplicationConfigurationInterface
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
