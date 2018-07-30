@@ -47,7 +47,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
 
     private $platform_group_cache;
 
-    public static function getInstance($course_id)
+    public static function getInstance($course_id = 0)
     {
         if (! isset(self::$instance))
         {
@@ -56,7 +56,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
         return self::$instance;
     }
 
-    public function __construct($course_id, $subscribed_platform_group_ids = array(), $limited_groups = array(), 
+    public function __construct($course_id = 0, $subscribed_platform_group_ids = array(), $limited_groups = array(),
         $excluded_groups = array())
     {
         $this->course_id = $course_id;
@@ -94,7 +94,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
      * @param $condition Condition
      * @return Condition
      */
-    public function get_condition(Condition $condition)
+    public function get_condition($condition)
     {
         $conditions = array();
         
