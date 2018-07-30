@@ -21,8 +21,10 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
 
     /**
      * Initializes the columns for the table
+     *
+     * @param bool $addActionsColumn
      */
-    public function initialize_columns()
+    public function initialize_columns($addActionsColumn = true)
     {
         parent::initialize_columns(false);
         
