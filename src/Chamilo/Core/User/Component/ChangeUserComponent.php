@@ -70,11 +70,4 @@ class ChangeUserComponent extends Manager
         $breadcrumbtrail->add_help('user_changer');
     }
 
-    /**
-     * @return SessionUtilities
-     */
-    protected function getSessionUtilities()
-    {
-        return $this->getService('chamilo.libraries.platform.session.session_utilities');
-    }
 }
