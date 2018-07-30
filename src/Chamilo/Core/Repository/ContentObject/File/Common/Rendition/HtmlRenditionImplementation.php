@@ -33,10 +33,11 @@ class HtmlRenditionImplementation extends RenditionImplementation
             $this->initializeContainer();
 
             return $this->getTwig()->render(
-                'Chamilo\Core\Repository\ContentObject\File:full_thumbnail.html.twig', [
+                'Chamilo\Core\Repository\ContentObject:full_thumbnail.html.twig', [
                     "icon_path" => $object->get_icon_path(Theme::ICON_BIG),
                     "title" => $object->get_title(),
-                    "download_url" => $this->getDownloadUrl()
+                    "download_url" => $this->getDownloadUrl(),
+                    "id" => $object->getId()
                 ]
             );
         }
