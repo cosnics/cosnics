@@ -110,7 +110,7 @@ class PublicationForm extends ContentObjectPublicationForm
             'radio',
             null,
             null,
-            $this->translator->trans('UsersEntity', [], Manager::context()),
+            $this->translator->trans('TypeUsersEntity', [], Manager::context()),
             Entry::ENTITY_TYPE_USER
         );
 
@@ -118,7 +118,7 @@ class PublicationForm extends ContentObjectPublicationForm
             'radio',
             null,
             null,
-            $this->translator->trans('CourseGroupsEntity', [], Manager::context()),
+            $this->translator->trans('TypeCourseGroupsEntity', [], Manager::context()),
             Entry::ENTITY_TYPE_COURSE_GROUP
         );
 
@@ -126,7 +126,7 @@ class PublicationForm extends ContentObjectPublicationForm
             'radio',
             null,
             null,
-            $this->translator->trans('PlatformGroupsEntity', [], Manager::context()),
+            $this->translator->trans('TypePlatformGroupsEntity', [], Manager::context()),
             Entry::ENTITY_TYPE_PLATFORM_GROUP
         );
 
