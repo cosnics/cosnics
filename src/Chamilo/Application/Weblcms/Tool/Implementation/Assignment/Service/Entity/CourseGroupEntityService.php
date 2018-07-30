@@ -127,6 +127,8 @@ class CourseGroupEntityService implements EntityServiceInterface
 
         if (!array_key_exists($id, $this->targetCourseGroupIds))
         {
+            $this->targetCourseGroupIds[$id] = [];
+
             /** @var \Chamilo\Libraries\Storage\ResultSet\ResultSet $courseGroups */
             $courseGroups = DataManager::retrieve_publication_target_course_groups(
                 $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()

@@ -127,6 +127,8 @@ class PlatformGroupEntityService implements EntityServiceInterface
 
         if (!array_key_exists($id, $this->targetPlatformGroupIds))
         {
+            $this->targetPlatformGroupIds[$id] = [];
+
             $platformGroups = DataManager::retrieve_publication_target_platform_groups(
                 $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
             );
