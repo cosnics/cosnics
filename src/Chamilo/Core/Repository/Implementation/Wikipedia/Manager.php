@@ -12,15 +12,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 {
     const REPOSITORY_TYPE = 'wikipedia';
 
-    /**
-     *
-     * @param $application Application
-     */
-    public function __construct($external_repository, $application)
-    {
-        parent::__construct($external_repository, $application);
-    }
-
     /*
      * (non-PHPdoc) @see common/extensions/external_repository_manager/Manager#validate_settings()
      */

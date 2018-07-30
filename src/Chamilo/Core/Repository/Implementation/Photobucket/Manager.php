@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Implementation\Photobucket;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\External\Renderer\Renderer;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -25,11 +26,11 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     /**
      *
-     * @param $application Application
+     * @param $applicationConfiguration ApplicationConfigurationInterface
      */
-    public function __construct($external_repository, $application)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent::__construct($external_repository, $application);
+        parent::__construct($applicationConfiguration);
         $this->set_parameter(self::PARAM_FEED_TYPE, Request::get(self::PARAM_FEED_TYPE));
     }
 
