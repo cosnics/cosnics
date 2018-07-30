@@ -36,8 +36,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
                 'Chamilo\Core\Repository\ContentObject\File:full_thumbnail.html.twig', [
                     "icon_path" => $object->get_icon_path(Theme::ICON_BIG),
                     "title" => $object->get_title(),
-                    "download_url" => $this->getDownloadUrl(),
-                    "popup_url" => $this->get_context()->get_content_object_display_attachment_url($object)
+                    "download_url" => $this->getDownloadUrl()
                 ]
             );
         }
