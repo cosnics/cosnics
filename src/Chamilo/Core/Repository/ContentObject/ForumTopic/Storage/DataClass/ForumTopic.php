@@ -149,15 +149,19 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      * **************************************************************************************************************
      * CRUD *
      * **************************************************************************************************************
+     *
+     * @param bool $create_in_batch
+     *
+     * @return bool
      */
 
     /*
      * This function creates a forum topic object and if succesfull the first post in this topic aswell. @return boolean
      * $succes Returns whether the create was succesfull or not.
      */
-    public function create()
+    public function create($create_in_batch = false)
     {
-        $succes = parent::create();
+        $succes = parent::create($create_in_batch);
 
         if ($succes)
         {
@@ -184,9 +188,11 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     /**
      * Delete a Forum Topic and all its posts.
      *
+     * @param bool $only_version
+     *
      * @return boolean Returns whether the delete was succesfull.
      */
-    public function delete($only_version)
+    public function delete($only_version = false)
     {
         if ($only_version)
         {
@@ -448,9 +454,9 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      *
      * @param type $firstpostupdated
      *
-     * @return succes
+     * @return bool
      */
-    public function update($request_from_forum_postpost)
+    public function update($request_from_forum_postpost = false)
     {
         if (! $request_from_forum_postpost)
         {
