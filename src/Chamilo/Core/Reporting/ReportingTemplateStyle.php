@@ -104,7 +104,7 @@ class ReportingTemplateStyle
         $this->paperOrientation = $paperOrientation;
     }
 
-    public function getHeaderTextColor($color)
+    public function getHeaderTextColor($color = null)
     {
         return $this->headerTextColor;
     }
@@ -114,7 +114,7 @@ class ReportingTemplateStyle
         $this->headerTextColor = ReportingTemplateStyle::parseColor($color);
     }
 
-    public function getHeaderFont($font)
+    public function getHeaderFont($font = null)
     {
         return $this->headerFont;
     }
@@ -124,7 +124,7 @@ class ReportingTemplateStyle
         $this->headerFont = ReportingTemplateStyle::parseFont($font);
     }
 
-    public function getHeaderLineColor($color)
+    public function getHeaderLineColor($color = null)
     {
         return $this->headerLineColor;
     }
@@ -134,7 +134,7 @@ class ReportingTemplateStyle
         $this->headerLineColor = ReportingTemplateStyle::parseColor($color);
     }
 
-    public function getFooterTextColor($color)
+    public function getFooterTextColor($color = null)
     {
         return $this->footerTextColor;
     }
@@ -144,7 +144,7 @@ class ReportingTemplateStyle
         $this->footerTextColor = ReportingTemplateStyle::parseColor($color);
     }
 
-    public function getFooterFont($font)
+    public function getFooterFont($font = null)
     {
         return $this->footerFont;
     }
