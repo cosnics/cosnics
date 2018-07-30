@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Architecture\ErrorHandler;
 
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
@@ -41,8 +42,10 @@ class ErrorHandler
      * @param \Chamilo\Libraries\Platform\Translation $translator
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      */
-    public function __construct(ExceptionLoggerInterface $exceptionLogger, Translation $translator,
-        Theme $themeUtilities)
+    public function __construct(
+        ExceptionLoggerInterface $exceptionLogger, Translation $translator,
+        Theme $themeUtilities
+    )
     {
         $this->exceptionLogger = $exceptionLogger;
         $this->translator = $translator;
@@ -110,13 +113,17 @@ class ErrorHandler
     {
         $error = error_get_last();
 
-        if (! is_null($error) && $error['type'] == E_ERROR)
+        $allowedErrors = [E_ERROR, E_COMPILE_ERROR];
+
+        if (!is_null($error) && in_array($error['type'], $allowedErrors))
         {
             $this->getExceptionLogger()->logException(
                 new \Exception($error['message'] . '. File: ' . $error['file'] . '. Line: ' . $error['line'] . '.'),
                 ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR,
                 $error['file'],
-                $error['line']);
+                $error['line']
+            );
+
             $this->displayGeneralErrorPage();
         }
     }
@@ -137,9 +144,10 @@ class ErrorHandler
             E_USER_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR,
             E_USER_WARNING => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING,
             E_USER_NOTICE => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING,
-            E_RECOVERABLE_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR);
+            E_RECOVERABLE_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR
+        );
 
-        if (! array_key_exists($errorNumber, $exceptionTypes))
+        if (!array_key_exists($errorNumber, $exceptionTypes))
         {
             return true;
         }
@@ -186,7 +194,8 @@ class ErrorHandler
             'error_code' => 500,
             'error_title' => $this->getTranslation('FatalErrorTitle'),
             'error_content' => $this->getTranslation('FatalErrorContent'),
-            'return_button_content' => $this->getTranslation('ReturnToPreviousPage'));
+            'return_button_content' => $this->getTranslation('ReturnToPreviousPage')
+        );
 
         foreach ($variables as $variable => $value)
         {
