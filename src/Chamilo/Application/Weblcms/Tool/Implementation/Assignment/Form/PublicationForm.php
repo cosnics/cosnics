@@ -52,6 +52,7 @@ class PublicationForm extends ContentObjectPublicationForm
     )
     {
         $this->translator = $translator;
+        $this->publicationRepository = $publicationRepository;
 
         parent::__construct(
             'Chamilo\Application\Weblcms\Tool\Implementation\Assignment',
@@ -68,8 +69,6 @@ class PublicationForm extends ContentObjectPublicationForm
         {
             $this->setDefaultsForPublication($publications[0]);
         }
-
-        $this->publicationRepository = $publicationRepository;
     }
 
     /**
