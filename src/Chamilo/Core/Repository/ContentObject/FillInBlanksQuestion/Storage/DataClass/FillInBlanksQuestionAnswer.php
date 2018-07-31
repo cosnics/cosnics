@@ -112,7 +112,7 @@ class FillInBlanksQuestionAnswer
 
     private $position;
 
-    public function __construct($value, $weight, $comment, $size, $position, $hint)
+    public function __construct($value = null, $weight = null, $comment = null, $size = null, $position = null, $hint = null)
     {
         $this->value = $value;
         $this->weight = $weight;
