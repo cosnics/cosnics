@@ -600,10 +600,13 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     public function isEphorusEnabled()
     {
+        $ephorusToolRegistration =
+            \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_course_tool_by_name('Ephorus');
+
         $toolActive = CourseSettingsController::getInstance()->get_course_setting(
             $this->get_course(),
             CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
-            $this->get_tool_registration()->get_id()
+            $ephorusToolRegistration->get_id()
         );
 
         return $toolActive;

@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicatio
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
@@ -191,10 +192,12 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function isEphorusEnabled()
     {
+        $ephorusToolRegistration = DataManager::retrieve_course_tool_by_name('Ephorus');
+
         $toolActive = CourseSettingsController::getInstance()->get_course_setting(
             $this->get_course(),
             CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
-            $this->get_tool_registration()->get_id()
+            $ephorusToolRegistration->get_id()
         );
 
         return $toolActive;
