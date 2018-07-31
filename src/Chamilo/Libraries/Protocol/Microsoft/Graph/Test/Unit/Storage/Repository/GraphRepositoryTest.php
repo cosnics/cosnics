@@ -11,6 +11,7 @@ use League\OAuth2\Client\Token\AccessToken;
 use Microsoft\Graph\Graph;
 use Microsoft\Graph\Http\GraphRequest;
 use Microsoft\Graph\Http\GraphResponse;
+use PHPUnit\Framework\MockObject\Stub;
 
 /**
  * Tests the Office365Repository
@@ -522,12 +523,12 @@ class GraphRepositoryTest extends ChamiloTestCase
      * @param string $requestMethod
      * @param string $requestUrl
      * @param string $returnType
-     * @param \PHPUnit_Framework_MockObject_Stub|null $executeStub
+     * @param Stub|null $executeStub
      * @param mixed $body
      */
     protected function mockRequest(
         $requestMethod = null, $requestUrl = null, $returnType = null,
-        \PHPUnit_Framework_MockObject_Stub $executeStub = null, $body = null
+        Stub $executeStub = null, $body = null
     )
     {
         $graphRequest = $this->getMockBuilder(GraphRequest::class)
@@ -573,13 +574,13 @@ class GraphRepositoryTest extends ChamiloTestCase
      * @param string $requestMethod
      * @param string $requestUrl
      * @param string $returnType
-     * @param \PHPUnit_Framework_MockObject_Stub|null $executeStub
+     * @param Stub|null $executeStub
      * @param int $returnCount
      * @param bool $useDataCount
      */
     protected function mockCollectionRequest(
         $requestMethod = null, $requestUrl = null, $returnType = null,
-        \PHPUnit_Framework_MockObject_Stub $executeStub = null, $returnCount = 1, $useDataCount = true
+        Stub $executeStub = null, $returnCount = 1, $useDataCount = true
     )
     {
         $graphRequest = $this->getMockBuilder(GraphRequest::class)

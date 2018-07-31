@@ -99,7 +99,7 @@ class TwigLoaderChamiloFilesystemTest extends ChamiloTestCase
             file_get_contents(
                 Path::getInstance()->getBasePath() . 'Chamilo/Libraries/Resources/Templates/Test/test.html.twig'
             ),
-            $twig_loader_chamilo_filesystem->getSource('Chamilo\Libraries:Test/test.html.twig')
+            $twig_loader_chamilo_filesystem->getSourceContext('Chamilo\Libraries:Test/test.html.twig')->getCode()
         );
     }
 }

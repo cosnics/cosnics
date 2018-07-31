@@ -17,6 +17,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use PHPUnit\Framework\MockObject\Stub\ConsecutiveCalls;
 
 /**
  * Tests the MigrationService
@@ -210,11 +211,11 @@ class MigrationServiceTest extends ChamiloTestCase
         $this->contentObjectRepositoryMock->expects($this->exactly(5))
             ->method('findAll')
             ->with(ComplexContentObjectItem::class)
-            ->will(new \PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls($testData['resultSets']));
+            ->will(new ConsecutiveCalls($testData['resultSets']));
 
         $this->contentObjectRepositoryMock->expects($this->exactly(8))
             ->method('findById')
-            ->will(new \PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls($testData['contentObjects']));
+            ->will(new ConsecutiveCalls($testData['contentObjects']));
 
         $sectionId = 20;
         $this->contentObjectRepositoryMock->expects($this->exactly(4))
@@ -262,7 +263,7 @@ class MigrationServiceTest extends ChamiloTestCase
         $this->contentObjectRepositoryMock->expects($this->exactly(1))
             ->method('findAll')
             ->with(ComplexContentObjectItem::class)
-            ->will(new \PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls($testData['resultSets']));
+            ->will(new ConsecutiveCalls($testData['resultSets']));
 
         $this->contentObjectRepositoryMock->expects($this->at(1))
             ->method('findById')
@@ -285,7 +286,7 @@ class MigrationServiceTest extends ChamiloTestCase
         $this->contentObjectRepositoryMock->expects($this->exactly(1))
             ->method('findAll')
             ->with(ComplexContentObjectItem::class)
-            ->will(new \PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls($testData['resultSets']));
+            ->will(new ConsecutiveCalls($testData['resultSets']));
 
         $this->contentObjectRepositoryMock->expects($this->any())
             ->method('findById')
@@ -301,7 +302,7 @@ class MigrationServiceTest extends ChamiloTestCase
         $this->contentObjectRepositoryMock->expects($this->exactly(1))
             ->method('findAll')
             ->with(ComplexContentObjectItem::class)
-            ->will(new \PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls($testData['resultSets']));
+            ->will(new ConsecutiveCalls($testData['resultSets']));
 
         for ($i = 1; $i <= 3; $i ++)
         {
