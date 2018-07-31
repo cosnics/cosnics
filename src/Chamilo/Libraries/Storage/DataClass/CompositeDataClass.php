@@ -31,7 +31,7 @@ abstract class CompositeDataClass extends DataClass
      * @throws \Exception
      * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass
      */
-    public static function factory($class, &$record)
+    public static function factory($class, &$record = [])
     {
         $object = parent::factory($class, $record);
         foreach ($object->get_additional_property_names() as $property)
