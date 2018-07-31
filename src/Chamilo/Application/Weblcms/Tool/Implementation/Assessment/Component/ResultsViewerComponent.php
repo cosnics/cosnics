@@ -100,14 +100,12 @@ class ResultsViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * Returns the action bar
-     * 
-     * @param Assessment | Hotpotatoes $assessment
+     * @param null $assessment
      * @return ButtonToolBarRenderer
-     *
+     * @throws NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function getButtonToolbarRenderer($assessment)
+    public function getButtonToolbarRenderer($assessment = null)
     {
         if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
