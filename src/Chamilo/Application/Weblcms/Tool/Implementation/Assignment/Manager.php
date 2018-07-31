@@ -194,6 +194,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $ephorusToolRegistration = DataManager::retrieve_course_tool_by_name('Ephorus');
 
+        if(!$ephorusToolRegistration)
+        {
+            return false;
+        }
+
         $toolActive = CourseSettingsController::getInstance()->get_course_setting(
             $this->get_course(),
             CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
