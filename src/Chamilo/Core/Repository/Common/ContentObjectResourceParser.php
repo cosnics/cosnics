@@ -8,11 +8,11 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 class ContentObjectResourceParser
 {
     /**
-     * @param string $html
+     * @param string|null $html
      * @param bool $parseFullHtml
      * @return \DOMDocument
      */
-    public function getDomDocument(string $html, bool $parseFullHtml = false)
+    public function getDomDocument(string $html = null, bool $parseFullHtml = false)
     {
         $domDocument = new \DOMDocument();
         $domDocument->loadHTML('<?xml encoding="UTF-8">' . $html);
