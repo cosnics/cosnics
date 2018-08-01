@@ -87,7 +87,7 @@ class SlideshowRenderer
      * @param integer $slideshowIndex
      * @param integer $slideshowAutoplay
      */
-    public function __construct(ContentObject $contentObject, $contentObjectCount, $contentObjectRenditionImplementation,
+    public function __construct(ContentObject $contentObject = null, $contentObjectCount, $contentObjectRenditionImplementation,
         $slideActions, $actionParameters, $slideshowIndex, $slideshowAutoplay)
     {
         $this->contentObject = $contentObject;
