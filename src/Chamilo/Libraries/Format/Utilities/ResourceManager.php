@@ -41,13 +41,24 @@ class ResourceManager
 
     /**
      *
-     * @param strin $path
+     * @param string $path
      * @return boolean
      */
     public function resource_loaded($path)
     {
         // return false;
         return in_array($path, $this->resources);
+    }
+
+    /**
+     * Use this function if you load a resource through another function / class and want to make sure that
+     * the resource manager does not load it again
+     *
+     * @param string $path
+     */
+    public function addPathToLoadedResources($path)
+    {
+        $this->resources[] = $path;
     }
 
     /**
@@ -78,7 +89,7 @@ class ResourceManager
         $pathUtil = Path::getInstance();
 
         $webPath = $pathUtil->getBasePath(true);
-        $basePath = $pathUtil->getBasePath();
+        $basePath = $pathUtil->getBasePath() . '../web/';
 
         $systemPath = str_replace($webPath, $basePath, $path);
         $modificationTime = filemtime($systemPath);

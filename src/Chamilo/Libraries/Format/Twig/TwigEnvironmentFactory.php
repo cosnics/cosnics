@@ -6,6 +6,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Twig\Extension\DateExtension;
 use Chamilo\Libraries\Format\Twig\Extension\ResourceManagementExtension;
 use Chamilo\Libraries\Format\Twig\Extension\UrlGenerationExtension;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -51,7 +52,7 @@ class TwigEnvironmentFactory
     protected function addTwigExtensions(TranslatorInterface $translator, UrlGenerator $generator, $twig)
     {
         $twig->addExtension(new TranslationExtension($translator));
-        $twig->addExtension(new ResourceManagementExtension());
+        $twig->addExtension(new ResourceManagementExtension(ResourceManager::getInstance()));
         $twig->addExtension(new UrlGenerationExtension($generator));
         $twig->addExtension(new DateExtension());
 

@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Format\Twig\Extension;
 
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 /**
  * This class is an extension of twig to support resource management
@@ -15,11 +16,26 @@ class ResourceManagementExtension extends \Twig_Extension
     const DEFAULT_CONTEXT = 'Chamilo\Libraries';
 
     /**
+     * @var \Chamilo\Libraries\Format\Utilities\ResourceManager
+     */
+    protected $resourceManager;
+
+    /**
      * Helper variable for the getUniquePath function
      *
      * @var string[]
      */
-    private $usedPaths;
+    protected $usedPaths;
+
+    /**
+     * ResourceManagementExtension constructor.
+     *
+     * @param \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
+     */
+    public function __construct(ResourceManager $resourceManager)
+    {
+        $this->resourceManager = $resourceManager;
+    }
 
     /**
      *
@@ -152,6 +168,7 @@ class ResourceManagementExtension extends \Twig_Extension
             return '';
         }
 
+        $this->resourceManager->addPathToLoadedResources($cssPath);
         $cssPath = $this->addModificationTimeToResourcePath($cssPath);
 
         return '<link href="' . $cssPath . '" type="text/css" rel="stylesheet" />';
@@ -211,6 +228,7 @@ class ResourceManagementExtension extends \Twig_Extension
             return '';
         }
 
+        $this->resourceManager->addPathToLoadedResources($javascriptPath);
         $javascriptPath = $this->addModificationTimeToResourcePath($javascriptPath);
 
         return '<script src="' . $javascriptPath . '" type="text/javascript" ></script>';
@@ -248,7 +266,7 @@ class ResourceManagementExtension extends \Twig_Extension
             return true;
         }
 
-        return false;
+        return !$this->resourceManager->resource_loaded($path);
     }
 
     /**
