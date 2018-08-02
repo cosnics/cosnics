@@ -328,7 +328,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
      * @param type $last_changed_cloi
      * @param type $last_post_id
      */
-    public function add_post($posts, $email_notificator, $last_changed_cloi, $last_post_id)
+    public function add_post($posts, $email_notificator, $last_changed_cloi = null, $last_post_id = null)
     {
         $this->set_total_posts($this->get_total_posts() + $posts);
 

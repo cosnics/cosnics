@@ -175,7 +175,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
             new DataClassCountParameters($condition));
     }
 
-    public function retrieve_categories($condition, $offset, $count, $order_property)
+    public function retrieve_categories($condition, $offset = null, $count = null, $order_property = [])
     {
         if ($condition)
         {
