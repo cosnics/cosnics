@@ -1,0 +1,48 @@
+{
+    "name": "cosnics/core-repository-workspace-extension-office365",
+    "version": "1.0.0",
+    "description": "Core Repository Workspace Extension Office365",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Workspace",
+        "Extension",
+        "Office365"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Office 365",
+            "context": "Chamilo\\Core\\Repository\\Workspace\\Extension\\Office365",
+            "type": "Chamilo\\Core\\Repository\\Workspace\\Extension",
+            "install": {
+                "default": 0,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Libraries",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}
