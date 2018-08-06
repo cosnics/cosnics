@@ -80,6 +80,8 @@ class CourseGroupOffice365Connector
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
     public function createGroupFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
@@ -108,6 +110,8 @@ class CourseGroupOffice365Connector
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
     public function createOrUpdateGroupFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
@@ -278,6 +282,7 @@ class CourseGroupOffice365Connector
      * @return string
      *
      * @throws \RuntimeException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
     public function getPlannerUrlForVisit(CourseGroup $courseGroup, User $user)
     {
@@ -319,6 +324,7 @@ class CourseGroupOffice365Connector
      * @return string
      *
      * @throws \RuntimeException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
     public function getGroupUrlForVisit(CourseGroup $courseGroup, User $user)
     {

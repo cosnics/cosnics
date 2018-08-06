@@ -1,9 +1,12 @@
 <?php
+
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
+use Microsoft\Graph\Model\Group;
 
 /**
  *
@@ -27,15 +30,24 @@ class GroupService
     protected $groupRepository;
 
     /**
+     * @var ConfigurationConsulter
+     */
+    protected $configurationConsulter;
+
+    /**
      * GroupService constructor
      *
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $userService
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository $groupRepository
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
-    public function __construct(UserService $userService, GroupRepository $groupRepository)
+    public function __construct(
+        UserService $userService, GroupRepository $groupRepository, ConfigurationConsulter $configurationConsulter
+    )
     {
         $this->setUserService($userService);
         $this->setGroupRepository($groupRepository);
+        $this->setConfigurationConsulter($configurationConsulter);
     }
 
     /**
@@ -75,9 +87,18 @@ class GroupService
     }
 
     /**
+     * @param ConfigurationConsulter $configurationConsulter
+     */
+    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
+    {
+        $this->configurationConsulter = $configurationConsulter;
+    }
+
+    /**
      * Returns the identifier in azure active directory for a given user
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return string
      */
     protected function getAzureUserIdentifier(User $user)
@@ -90,6 +111,7 @@ class GroupService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $owner
      * @param string $groupName
+     *
      * @return string
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
@@ -125,11 +147,12 @@ class GroupService
      *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
     public function addMemberToGroup($groupId, User $user)
     {
-        if (! $this->isMemberOfGroup($groupId, $user))
+        if (!$this->isMemberOfGroup($groupId, $user))
         {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
 
@@ -148,7 +171,7 @@ class GroupService
      *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     *
      */
     public function removeMemberFromGroup($groupId, User $user)
     {
@@ -164,6 +187,7 @@ class GroupService
      *
      * @param integer $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return boolean
      */
     public function isMemberOfGroup($groupId, User $user)
@@ -183,6 +207,7 @@ class GroupService
      * Returns a list of external user identifiers that are subscribed as member in an Azure AD group
      *
      * @param string $groupId
+     *
      * @return string[]
      */
     public function getGroupMembers($groupId)
@@ -218,11 +243,12 @@ class GroupService
      *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
     public function addOwnerToGroup($groupId, User $user)
     {
-        if (! $this->isOwnerOfGroup($groupId, $user))
+        if (!$this->isOwnerOfGroup($groupId, $user))
         {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
 
@@ -241,7 +267,7 @@ class GroupService
      *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     *
      */
     public function removeOwnerFromGroup($groupId, User $user)
     {
@@ -257,6 +283,7 @@ class GroupService
      *
      * @param integer $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return boolean
      */
     public function isOwnerOfGroup($groupId, User $user)
@@ -277,6 +304,7 @@ class GroupService
      * Returns a list of external user identifiers that are subscribed as owner in an Azure AD group
      *
      * @param string $groupId
+     *
      * @return string[]
      */
     public function getGroupOwners($groupId)
@@ -311,6 +339,7 @@ class GroupService
      * Returns a list of all the plan identifiers of a given group
      *
      * @param string $groupId
+     *
      * @return string[]
      */
     public function getGroupPlanIds($groupId)
@@ -329,6 +358,7 @@ class GroupService
      * Returns the first plan identifier of a given group
      *
      * @param string $groupId
+     *
      * @return string
      */
     public function getDefaultGroupPlanId($groupId)
@@ -353,13 +383,14 @@ class GroupService
      */
     public function createPlanForGroup($groupId, $planName = null)
     {
-        if(empty($planName))
+        if (empty($planName))
         {
             $group = $this->groupRepository->getGroup($groupId);
             $planName = $group->getDisplayName();
         }
 
         $plan = $this->groupRepository->createPlanForGroup($groupId, $planName);
+
         return $plan->getId();
     }
 
@@ -380,5 +411,29 @@ class GroupService
         }
 
         return $planId;
+    }
+
+    /**
+     * Returns the URI for the given group
+     *
+     * @param string $groupId
+     *
+     * @return string
+     */
+    public function getGroupUrl($groupId)
+    {
+        $groupUrl = $this->configurationConsulter->getSetting(
+            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri']
+        );
+
+        $group = $this->groupRepository->getGroup($groupId);
+        if (!$group instanceof Group)
+        {
+            throw new \RuntimeException(
+                'The group with identifier ' . $groupId . ' could not be found'
+            );
+        }
+
+        return str_replace('{GROUP_ID}', $group->getMailNickname(), $groupUrl);
     }
 }
