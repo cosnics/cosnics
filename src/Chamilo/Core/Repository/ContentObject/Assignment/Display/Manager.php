@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsServi
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -107,6 +108,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
             {
                 $this->entityIdentifier = $this->getDataProvider()->getCurrentEntityIdentifier($this->getUser());
             }
+        }
+
+        if(empty($this->entityIdentifier))
+        {
+            throw new UserException($this->getTranslator()->trans('CanNotViewAssignment', [], Manager::context()));
         }
 
         return $this->entityIdentifier;
