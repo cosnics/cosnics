@@ -56,7 +56,7 @@ class EphorusWebserviceRepository
      * @return bool
      */
     public function changeDocumentVisiblity($documentGuid, $showDocument = true)
-    { return true;
+    {
         $indexType = $showDocument ? 1 : 2;
 
         $parameters = array();
@@ -77,8 +77,7 @@ class EphorusWebserviceRepository
      * @return string
      */
     public function handInDocument(File $file, User $author)
-    { return uniqid();
-
+    {
         $parameters = array();
 
         $parameters['code'] = $this->handInCode;
