@@ -109,6 +109,9 @@
             <argument
                 type="service"
                 id="chamilo.libraries.protocol.microsoft.graph.storage.repository.group_repository" />
+            <argument
+                    type="service"
+                    id="chamilo.configuration.service.configuration_consulter" />
         </service>
 
 
