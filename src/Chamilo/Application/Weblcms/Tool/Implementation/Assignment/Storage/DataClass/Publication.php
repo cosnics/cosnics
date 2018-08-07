@@ -46,6 +46,16 @@ class Publication extends DataClass
     }
 
     /**
+     * Old method for the course copier
+     *
+     * @param int $publicationId
+     */
+    public function set_publication_id($publicationId)
+    {
+        $this->setPublicationId($publicationId);
+    }
+
+    /**
      *
      * @return int
      */
