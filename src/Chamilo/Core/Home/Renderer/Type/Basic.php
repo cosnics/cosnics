@@ -249,6 +249,7 @@ class Basic extends Renderer
         $html[] = '<script type="text/javascript">';
         $html[] = '(function(){';
         $html[] = '    var homeApp = angular.module(\'homeApp\', [' . $moduleString . ']);';
+        $html[] = '    homeApp.filter(\'arrayToString\', function() { return function(x) { return x; }; });';
         $html[] = '})();';
         $html[] = '</script>';
 
