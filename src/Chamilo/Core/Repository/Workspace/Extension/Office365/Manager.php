@@ -14,6 +14,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 abstract class Manager extends Application implements WorkspaceExtensionSupport
 {
+    const PARAM_ACTION = 'workspace_extension_action';
+
     /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration

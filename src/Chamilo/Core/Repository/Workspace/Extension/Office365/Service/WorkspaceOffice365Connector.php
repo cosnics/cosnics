@@ -27,25 +27,28 @@ class WorkspaceOffice365Connector
     protected $graphGroupService;
 
     /**
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
-     */
-    protected $graphUserService;
-
-    /**
      * WorkspaceOffice365Connector constructor.
      *
      * @param \Chamilo\Core\Repository\Workspace\Extension\Office365\Service\WorkspaceOffice365ReferenceService $workspaceOffice365ReferenceService
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService $graphGroupService
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $graphUserService
      */
     public function __construct(
         WorkspaceOffice365ReferenceService $workspaceOffice365ReferenceService,
-        GroupService $graphGroupService, UserService $graphUserService
+        GroupService $graphGroupService
     )
     {
         $this->workspaceOffice365ReferenceService = $workspaceOffice365ReferenceService;
         $this->graphGroupService = $graphGroupService;
-        $this->graphUserService = $graphUserService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     *
+     * @return bool
+     */
+    public function isOffice365GroupActiveForWorkspace(Workspace $workspace)
+    {
+        return $this->workspaceOffice365ReferenceService->workspaceHasLinkedReference($workspace);
     }
 
     /**
@@ -71,38 +74,45 @@ class WorkspaceOffice365Connector
         $groupId = $this->graphGroupService->createGroupByName($user, $workspace->getName());
 
         $this->workspaceOffice365ReferenceService->createReferenceForWorkspace($workspace, $groupId);
-        $this->subscribeUserToGroupForWorkspaceByGroupId($user, $groupId);
+        $this->graphGroupService->addMemberToGroup($groupId, $user);
+    }
+
+    /**
+     * Returns the link for the group space and makes sure that the user has access to it
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return string
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     */
+    public function getGroupUrlForVisit(Workspace $workspace, User $user)
+    {
+        if (!$this->isOffice365GroupActiveForWorkspace($workspace))
+        {
+            throw new \RuntimeException();
+        }
+
+        $reference = $this->workspaceOffice365ReferenceService->getWorkspaceReference($workspace);
+
+        $this->graphGroupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+        return $this->graphGroupService->getGroupUrl($reference->getOffice365GroupId());
     }
 
     /**
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    public function subscribeUserToGroupForWorkspace(Workspace $workspace, User $user)
+    public function updateGroupNameForWorkspace(Workspace $workspace)
     {
-        if (!$this->workspaceOffice365ReferenceService->workspaceHasLinkedReference($workspace))
+        if (!$this->isOffice365GroupActiveForWorkspace($workspace))
         {
             return;
         }
 
         $reference = $this->workspaceOffice365ReferenceService->getWorkspaceReference($workspace);
-        $this->subscribeUserToGroupForWorkspaceByGroupId($user, $reference->getOffice365GroupId());
-    }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $groupId
-     */
-    protected function subscribeUserToGroupForWorkspaceByGroupId(User $user, $groupId)
-    {
-        try
-        {
-            $this->graphGroupService->addMemberToGroup($groupId, $user);
-        }
-        catch (AzureUserNotExistsException $ex)
-        {
-
-        }
+        $this->graphGroupService->updateGroupName($reference->getOffice365GroupId(), $workspace->getName());
     }
 
     /**
@@ -113,7 +123,7 @@ class WorkspaceOffice365Connector
      */
     public function unlinkOffice365GroupFromWorkspace(Workspace $workspace, User $user)
     {
-        if (!$this->workspaceOffice365ReferenceService->workspaceHasLinkedReference($workspace))
+        if (!$this->isOffice365GroupActiveForWorkspace($workspace))
         {
             return;
         }
@@ -132,43 +142,4 @@ class WorkspaceOffice365Connector
 
         $this->workspaceOffice365ReferenceService->unlinkWorkspaceReference($reference);
     }
-
-    /**
-     * Returns the link for the group space and makes sure that the user has access to it
-     *
-     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
-     */
-    public function getGroupUrlForVisit(Workspace $workspace, User $user)
-    {
-        if (!$this->workspaceOffice365ReferenceService->workspaceHasLinkedReference($workspace))
-        {
-            throw new \RuntimeException();
-        }
-
-        $reference = $this->workspaceOffice365ReferenceService->getWorkspaceReference($workspace);
-
-        $this->graphGroupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
-        return $this->graphGroupService->getGroupUrl($reference->getOffice365GroupId());
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
-     */
-    public function updateWorkspaceName(Workspace $workspace)
-    {
-        if (!$this->workspaceOffice365ReferenceService->workspaceHasLinkedReference($workspace))
-        {
-            return;
-        }
-
-        $reference = $this->workspaceOffice365ReferenceService->getWorkspaceReference($workspace);
-
-        $this->graphGroupService->updateGroupName($reference->getOffice365GroupId(), $workspace->getName());
-    }
-
 }

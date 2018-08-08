@@ -144,6 +144,7 @@ abstract class Manager extends Application
     const ACTION_LINK_SCHEMAS = 'SchemaLinker';
     const ACTION_LINK_PROVIDERS = 'ProviderLinker';
     const ACTION_IMPACT_VIEW_RECYCLE = 'ImpactViewRecycler';
+    const ACTION_EXTENSION_LAUNCHER = 'ExtensionLauncher';
 
     // Tabs
     const TABS_FILTER = 'advanced_filter';
@@ -772,5 +773,13 @@ abstract class Manager extends Application
     public function getContentObjectPublicationManager()
     {
        return $this->getService('chamilo.core.repository.publication.service.content_object_publication_manager');
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\WorkspaceExtensionManager
+     */
+    public function getWorkspaceExtensionManager()
+    {
+        return $this->getService('chamilo.core.repository.service.workspace_extension_manager');
     }
 }

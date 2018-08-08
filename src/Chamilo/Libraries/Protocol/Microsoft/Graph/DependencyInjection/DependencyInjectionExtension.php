@@ -50,6 +50,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function getAlias()
     {
-        return 'chamilo.application.weblcms.tool.implementation.course_group.extension.office365';
+        return 'chamilo.libraries.protocol.microsoft.graph';
     }
 }

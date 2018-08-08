@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\DependencyInjection;
 
 use Chamilo\Core\Repository\DependencyInjection\CompilerPass\ContentObjectPublicationManagerCompilerPass;
+use Chamilo\Core\Repository\DependencyInjection\CompilerPass\WorkspaceExtensionCompilerPass;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\File\PathBuilder;
@@ -43,6 +44,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader->load('instance.xml');
         $xmlFileLoader->load('console.xml');
         $xmlFileLoader->load('content_object.xml');
+        $xmlFileLoader->load('services.xml');
 
         $xmlFileLoader = new XmlFileLoader(
             $container,
@@ -70,5 +72,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function registerCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new ContentObjectPublicationManagerCompilerPass());
+        $container->addCompilerPass(new WorkspaceExtensionCompilerPass());
     }
 }

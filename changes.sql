@@ -449,3 +449,17 @@ DROP TABLE tracking_weblcms_learning_path_assignment_note;
 # DROP TABLE tracking_weblcms_submission_feedback;
 # DROP TABLE tracking_weblcms_submission_score;
 # DROP TABLE tracking_weblcms_submission_note;
+
+/** AUGUST 2018 **/
+
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Core\\Repository\\Workspace\\Extension\\Office365', 'Chamilo\\Core\\Repository\\Workspace\\Extension', 'Extension', 'Office365', '1', '1.0.0', '1');
+
+CREATE TABLE `repository_workspace_office365_reference` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `workspace_id` int(10) UNSIGNED NOT NULL,
+  `office365_group_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `office365_plan_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `linked` TINYINT(1) NOT NULL,
+  PRIMARY KEY (id),
+  KEY `rwor.workspace_id` (`workspace_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

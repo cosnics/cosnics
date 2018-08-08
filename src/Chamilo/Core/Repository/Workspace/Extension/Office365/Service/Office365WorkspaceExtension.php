@@ -1,0 +1,92 @@
+<?php
+
+namespace Chamilo\Core\Repository\Workspace\Extension\Office365\Service;
+
+use Chamilo\Core\Repository\Component\ExtensionLauncherComponent;
+use Chamilo\Core\Repository\Workspace\Extension\Office365\Manager;
+use Chamilo\Core\Repository\Workspace\Interfaces\WorkspaceExtensionInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Symfony\Component\Translation\Translator;
+
+/**
+ * Extension to support office365 groups in workspaces
+ *
+ * @package Chamilo\Core\Repository\Workspace\Extension\Office365\Service
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
+class Office365WorkspaceExtension implements WorkspaceExtensionInterface
+{
+    /**
+     * @var WorkspaceOffice365Connector
+     */
+    protected $workspaceOffice365Connector;
+
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    protected $translator;
+
+    /**
+     * Office365WorkspaceExtension constructor.
+     *
+     * @param WorkspaceOffice365Connector $workspaceOffice365Connector
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function __construct(WorkspaceOffice365Connector $workspaceOffice365Connector, Translator $translator)
+    {
+        $this->workspaceOffice365Connector = $workspaceOffice365Connector;
+        $this->translator = $translator;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $workspaceComponent
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $workspaceExtensionActions
+     */
+    public function getWorkspaceActions(
+        Application $workspaceComponent, Workspace $workspace, User $user, ButtonToolBar $workspaceExtensionActions
+    )
+    {
+        $translation = ($this->workspaceOffice365Connector->isOffice365GroupActiveForWorkspace($workspace)) ?
+            'VisitOffice365Group' : 'CreateOffice365Group';
+
+        $workspaceExtensionActions->addItem(
+            new Button(
+                $this->translator->trans($translation, null, Manager::context()), new FontAwesomeGlyph('users'),
+                $workspaceComponent->get_url(
+                    [
+                        Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_EXTENSION_LAUNCHER,
+                        ExtensionLauncherComponent::PARAM_EXTENSION_CONTEXT => Manager::context()
+                    ]
+                ),
+                Button::DISPLAY_ICON_AND_LABEL,
+                false, null, '_blank'
+            )
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function workspaceDeleted(Workspace $workspace, User $user)
+    {
+        $this->workspaceOffice365Connector->unlinkOffice365GroupFromWorkspace($workspace, $user);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function workspaceUpdated(Workspace $workspace, User $user)
+    {
+        $this->workspaceOffice365Connector->updateGroupNameForWorkspace($workspace);
+    }
+}
