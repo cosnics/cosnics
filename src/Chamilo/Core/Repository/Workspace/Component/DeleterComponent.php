@@ -54,6 +54,10 @@ class DeleterComponent extends Manager
                                 array('OBJECT' => Translation::get('Workspace')),
                                 Utilities::COMMON_LIBRARIES));
                     }
+                    else
+                    {
+                        $this->getWorkspaceExtensionManager()->workspaceDeleted($workspace, $this->getUser());
+                    }
                 }
             }
 

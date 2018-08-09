@@ -188,6 +188,15 @@ class RepositoryMenu
         }
 
         $buttonToolBar->addButtonGroup($buttonGroup);
+
+        $extensionsButtonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+        $buttonToolBar->addButtonGroup($extensionsButtonGroup);
+
+        $this->getRepositoryManager()->getWorkspaceExtensionManager()->getWorkspaceActions(
+            $this->getRepositoryManager(), $repositoryManager->getWorkspace(), $repositoryManager->getUser(),
+            $extensionsButtonGroup
+        );
+
         $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
         return $buttonToolBarRenderer->render();

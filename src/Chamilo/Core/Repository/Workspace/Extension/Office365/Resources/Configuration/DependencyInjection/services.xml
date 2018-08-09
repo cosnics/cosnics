@@ -5,27 +5,27 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
 
-        <service id="chamilo.application.repository.workspace.extension.office365.service.office365_workspace_extension"
+        <service id="chamilo.core.repository.workspace.extension.office365.service.office365_workspace_extension"
                  class="Chamilo\Core\Repository\Workspace\Extension\Office365\Service\Office365WorkspaceExtension">
-            <argument type="service" id="chamilo.application.repository.workspace.extension.office365.service.workspace_office365_connector" />
+            <argument type="service" id="chamilo.core.repository.workspace.extension.office365.service.workspace_office365_connector" />
             <argument type="service" id="symfony.component.translation.translator" />
             <tag name="chamilo.core.repository.workspace.extension" />
         </service>
 
-        <service id="chamilo.application.repository.workspace.extension.office365.service.workspace_office365_connector"
+        <service id="chamilo.core.repository.workspace.extension.office365.service.workspace_office365_connector"
                  class="Chamilo\Core\Repository\Workspace\Extension\Office365\Service\WorkspaceOffice365Connector">
-            <argument type="service" id="chamilo.application.repository.workspace.extension.office365.service.workspace_office365_reference_service" />
+            <argument type="service" id="chamilo.core.repository.workspace.extension.office365.service.workspace_office365_reference_service" />
             <argument type="service" id="chamilo.libraries.protocol.microsoft.graph.service.group_service" />
         </service>
 
-        <service id="chamilo.application.repository.workspace.extension.office365.storage.repository.workspace_office365_reference_repository"
-                 class="Chamilo\Application\Repository\Workspace\Extension\Office365\Storage\Repository\WorkspaceOffice365ReferenceRepository">
+        <service id="chamilo.core.repository.workspace.extension.office365.storage.repository.workspace_office365_reference_repository"
+                 class="Chamilo\Core\Repository\Workspace\Extension\Office365\Storage\Repository\WorkspaceOffice365ReferenceRepository">
             <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
         </service>
 
-        <service id="chamilo.application.repository.workspace.extension.office365.service.workspace_office365_reference_service"
-                 class="Chamilo\Application\Repository\Workspace\Extension\Office365\Storage\Repository\WorkspaceOffice365ReferenceRepository">
-            <argument type="service" id="chamilo.application.repository.workspace.extension.office365.storage.repository.workspace_office365_reference_repository" />
+        <service id="chamilo.core.repository.workspace.extension.office365.service.workspace_office365_reference_service"
+                 class="Chamilo\Core\Repository\Workspace\Extension\Office365\Service\WorkspaceOffice365ReferenceService">
+            <argument type="service" id="chamilo.core.repository.workspace.extension.office365.storage.repository.workspace_office365_reference_repository" />
         </service>
 
     </services>

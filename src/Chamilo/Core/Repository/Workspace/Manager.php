@@ -33,4 +33,12 @@ abstract class Manager extends Application
     
     // Default action
     const DEFAULT_ACTION = self::ACTION_BROWSE_PERSONAL;
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\WorkspaceExtensionManager
+     */
+    public function getWorkspaceExtensionManager()
+    {
+        return $this->getService('chamilo.core.repository.service.workspace_extension_manager');
+    }
 }

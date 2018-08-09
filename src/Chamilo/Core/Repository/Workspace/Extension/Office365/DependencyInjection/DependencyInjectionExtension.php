@@ -37,12 +37,12 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $loader = new XmlFileLoader(
             $container,
             new FileLocator(
-                $pathBuilder->getConfigurationPath('Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365') .
+                $pathBuilder->getConfigurationPath('Chamilo\Core\Repository\Workspace\Extension\Office365') .
                 'DependencyInjection'
             )
         );
 
-//        $loader->load('services.xml');
+        $loader->load('services.xml');
     }
 
     /**
@@ -54,7 +54,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function getAlias()
     {
-        return 'chamilo.application.weblcms.tool.implementation.course_group.extension.office365';
+        return 'chamilo.core.repository.workspace.extension.office365';
     }
 
 }
