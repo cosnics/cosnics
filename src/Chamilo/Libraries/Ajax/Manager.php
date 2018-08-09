@@ -12,4 +12,6 @@ use Chamilo\Libraries\Architecture\AjaxManager;
  */
 abstract class Manager extends AjaxManager
 {
+    const ACTION_RESOURCE = 'Resource';
+    const DEFAULT_ACTION = self::ACTION_RESOURCE;
 }

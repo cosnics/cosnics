@@ -49,7 +49,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);;
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     /**
@@ -301,9 +301,12 @@ class ForumPost extends DataClass implements AttachmentSupport
     /**
      * Update a post object and its content
      *
+     * @param bool $request_from_topic
+     *
      * @return boolean returns true when post is updated succesfull.
+     * @throws \Exception
      */
-    public function update($request_from_topic)
+    public function update($request_from_topic = false)
     {
         if (!$request_from_topic)
         {
@@ -360,7 +363,7 @@ class ForumPost extends DataClass implements AttachmentSupport
             $email_notificator->send_emails();
         }
 
-        return parent::update($this);
+        return parent::update();
     }
 
     /**
