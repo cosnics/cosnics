@@ -157,12 +157,17 @@ class CourseVisit extends Tracker
      * Public Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Retrieves an existing course visit record with the current data (by user_id, course_id, tool_id and
      * publication_id)
+     *
+     * @param bool $useNullValues
+     *
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    public function retrieve_course_visit_with_current_data()
+    public function retrieve_course_visit_with_current_data($useNullValues = true)
     {
         // Retrieves the full class because the class can be identified without having all the necessary parameters
         // If the class is already fully retrieved from the database the caching system will catch this.
@@ -176,7 +181,9 @@ class CourseVisit extends Tracker
             $this->get_course_id(), 
             $this->get_tool_id(), 
             $this->get_category_id(), 
-            $this->get_publication_id());
+            $this->get_publication_id(),
+            $useNullValues
+        );
     }
 
     /**

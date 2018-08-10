@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
@@ -44,17 +45,24 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $category_id
      * @param int $publication_id
      *
+     * @param bool $useNullValues
+     *
      * @return CourseVisit
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    public static function retrieve_course_visit_by_user_and_course_data($user_id, $course_id, $tool_id,
-        $category_id = null, $publication_id = null)
+    public static function retrieve_course_visit_by_user_and_course_data(
+        $user_id, $course_id, $tool_id,
+        $category_id = null, $publication_id = null, $useNullValues = true
+    )
     {
         $condition = self::get_course_visit_conditions_by_user_and_course_data(
             $user_id,
             $course_id,
             $tool_id,
             $category_id,
-            $publication_id);
+            $publication_id,
+            $useNullValues
+        );
 
         return self::retrieve(CourseVisit::class_name(), new DataClassRetrieveParameters($condition));
     }
@@ -75,7 +83,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             null,
             null,
             null,
-            false) : self::get_course_visit_conditions_by_course_data($course_id, null, null, null, false);
+            false
+        ) : self::get_course_visit_conditions_by_course_data($course_id, null, null, null, false);
 
         $parameters = new RecordRetrieveParameters(self::get_course_visit_summary_select_properties(), $condition);
 
@@ -87,6 +96,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param int $course_id
      * @param int $user_id = null
+     *
      * @return RecordResultSet
      */
     public static function retrieve_tools_access_summary_data($course_id = null, $user_id = null)
@@ -100,20 +110,23 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $join_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_TOOL_ID),
-            new PropertyConditionVariable(CourseTool::class_name(), CourseTool::PROPERTY_ID));
+            new PropertyConditionVariable(CourseTool::class_name(), CourseTool::PROPERTY_ID)
+        );
 
         if ($course_id)
         {
             $join_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_COURSE_ID),
-                new StaticConditionVariable($course_id));
+                new StaticConditionVariable($course_id)
+            );
         }
 
         if ($user_id)
         {
             $join_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_USER_ID),
-                new StaticConditionVariable($user_id));
+                new StaticConditionVariable($user_id)
+            );
         }
 
         $join_condition = new AndCondition($join_conditions);
@@ -137,10 +150,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $category_id
      * @param int $publication_id
      * @param int $user_id - [OPTIONAL]
+     *
      * @return RecordResultSet
      */
-    public static function retrieve_publication_access_summary_data($course_id, $tool_id, $category_id, $publication_id,
-        $user_id = null)
+    public static function retrieve_publication_access_summary_data(
+        $course_id, $tool_id, $category_id, $publication_id,
+        $user_id = null
+    )
     {
         $condition = $user_id ? self::get_course_visit_conditions_by_user_and_course_data(
             $user_id,
@@ -148,12 +164,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $tool_id,
             $category_id,
             $publication_id,
-            false) : self::get_course_visit_conditions_by_course_data(
+            false
+        ) : self::get_course_visit_conditions_by_course_data(
             $course_id,
             $tool_id,
             $category_id,
             $publication_id,
-            false);
+            false
+        );
 
         $parameters = new RecordRetrieveParameters(self::get_course_visit_summary_select_properties(), $condition);
 
@@ -169,7 +187,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function count_courses_with_last_access_after_time($timestamp)
     {
-        return self::count_courses_with_last_access_against_time($timestamp, InequalityCondition::GREATER_THAN_OR_EQUAL);
+        return self::count_courses_with_last_access_against_time(
+            $timestamp, InequalityCondition::GREATER_THAN_OR_EQUAL
+        );
     }
 
     /**
@@ -199,10 +219,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $category_id
      * @param int $publication_id
      * @param bool $use_null_values - use null values as actual select values or not - default true
+     *
      * @return \libraries\storage\AndCondition
      */
-    public static function get_course_visit_conditions_by_user_and_course_data($user_id, $course_id, $tool_id,
-        $category_id, $publication_id, $use_null_values = true)
+    public static function get_course_visit_conditions_by_user_and_course_data(
+        $user_id, $course_id, $tool_id,
+        $category_id, $publication_id, $use_null_values = true
+    )
     {
         $conditions = array();
 
@@ -212,7 +235,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $tool_id,
             $category_id,
             $publication_id,
-            $use_null_values);
+            $use_null_values
+        );
 
         return new AndCondition($conditions);
     }
@@ -228,7 +252,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         return new EqualityCondition(
             new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id));
+            new StaticConditionVariable($user_id)
+        );
     }
 
     /**
@@ -239,39 +264,46 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $category_id
      * @param int $publication_id
      * @param bool $use_null_values - use null values as actual select values or not - default true
+     *
      * @return AndCondition
      */
-    public static function get_course_visit_conditions_by_course_data($course_id, $tool_id, $category_id,
-        $publication_id, $use_null_values = true)
+    public static function get_course_visit_conditions_by_course_data(
+        $course_id, $tool_id, $category_id,
+        $publication_id, $use_null_values = true
+    )
     {
         $conditions = array();
 
-        if (! is_null($course_id) || $use_null_values)
+        if (!is_null($course_id) || $use_null_values)
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_COURSE_ID),
-                ! is_null($course_id) ? new StaticConditionVariable($course_id) : null);
+                !is_null($course_id) ? new StaticConditionVariable($course_id) : null
+            );
         }
 
-        if (! is_null($tool_id) || $use_null_values)
+        if (!is_null($tool_id) || $use_null_values)
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_TOOL_ID),
-                ! is_null($tool_id) ? new StaticConditionVariable($tool_id) : null);
+                !is_null($tool_id) ? new StaticConditionVariable($tool_id) : null
+            );
         }
 
-        if (! is_null($category_id) || $use_null_values)
+        if (!is_null($category_id) || $use_null_values)
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_CATEGORY_ID),
-                ! is_null($category_id) ? new StaticConditionVariable($category_id) : null);
+                !is_null($category_id) ? new StaticConditionVariable($category_id) : null
+            );
         }
 
-        if (! is_null($publication_id) || $use_null_values)
+        if (!is_null($publication_id) || $use_null_values)
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_PUBLICATION_ID),
-                ! is_null($publication_id) ? new StaticConditionVariable($publication_id) : null);
+                !is_null($publication_id) ? new StaticConditionVariable($publication_id) : null
+            );
         }
 
         return new AndCondition($conditions);
@@ -290,25 +322,33 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new FunctionConditionVariable(
                 FunctionConditionVariable::MIN,
                 new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_FIRST_ACCESS_DATE),
-                CourseVisit::PROPERTY_FIRST_ACCESS_DATE));
+                CourseVisit::PROPERTY_FIRST_ACCESS_DATE
+            )
+        );
 
         $properties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::MAX,
                 new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_LAST_ACCESS_DATE),
-                CourseVisit::PROPERTY_LAST_ACCESS_DATE));
+                CourseVisit::PROPERTY_LAST_ACCESS_DATE
+            )
+        );
 
         $properties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::SUM,
                 new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_TOTAL_NUMBER_OF_ACCESS),
-                CourseVisit::PROPERTY_TOTAL_NUMBER_OF_ACCESS));
+                CourseVisit::PROPERTY_TOTAL_NUMBER_OF_ACCESS
+            )
+        );
 
         $properties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::SUM,
                 new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_TOTAL_TIME),
-                CourseVisit::PROPERTY_TOTAL_TIME));
+                CourseVisit::PROPERTY_TOTAL_TIME
+            )
+        );
 
         return $properties;
     }
@@ -320,6 +360,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $timestamp
      *
      * @param $operator
+     *
      * @return int
      */
     public static function count_courses_with_last_access_against_time($timestamp, $operator)
@@ -327,17 +368,21 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $having = new InequalityCondition(
             new FunctionConditionVariable(
                 FunctionConditionVariable::MAX,
-                new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_LAST_ACCESS_DATE)),
+                new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_LAST_ACCESS_DATE)
+            ),
             $operator,
-            new StaticConditionVariable($timestamp));
+            new StaticConditionVariable($timestamp)
+        );
 
         $parameters = new DataClassCountGroupedParameters(
             null,
             new DataClassProperties(
-                array(new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_COURSE_ID))),
+                array(new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_COURSE_ID))
+            ),
             $having,
             null,
-            new GroupBy(new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_COURSE_ID)));
+            new GroupBy(new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_COURSE_ID))
+        );
 
         return self::count_grouped(CourseVisit::class_name(), $parameters);
     }
@@ -358,8 +403,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return RecordResultSet
      */
-    public static function retrieve_assessment_attempts_with_user($condition = null, $offset = null, $count = null,
-        $order_by = array())
+    public static function retrieve_assessment_attempts_with_user(
+        $condition = null, $offset = null, $count = null,
+        $order_by = array()
+    )
     {
         $properties = new DataClassProperties();
 
@@ -374,7 +421,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $count,
             $offset,
             $order_by,
-            self::get_assessment_attempts_user_joins());
+            self::get_assessment_attempts_user_joins()
+        );
 
         return self::records(AssessmentAttempt::class_name(), $parameters);
     }
@@ -389,6 +437,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function count_assessment_attempts_with_user($condition = null)
     {
         $parameters = new DataClassCountParameters($condition, self::get_assessment_attempts_user_joins());
+
         return self::count(AssessmentAttempt::class_name(), $parameters);
     }
 
@@ -409,7 +458,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $join_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID),
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID));
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID)
+        );
 
         $join_condition = new AndCondition($join_conditions);
 

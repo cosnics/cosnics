@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit;
 use Chamilo\Application\Weblcms\Manager;
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -26,6 +27,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
 
 /**
  *
@@ -107,6 +109,17 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             $this->set_parameter('course_group', null);
         }
 
+        $publicationId = $this->getRequest()->getFromUrl(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        if(!empty($publicationId))
+        {
+            $publication = DataManager::retrieve_by_id(ContentObjectPublication::class, $publicationId);
+            if($publication instanceof ContentObjectPublication)
+            {
+                $category = $publication->get_category_id();
+                $publicationId = $publication->getId();
+            }
+        }
+
         Event::trigger(
             'VisitCourse',
             Manager::context(),
@@ -115,8 +128,9 @@ class CourseViewerComponent extends Manager implements DelegateComponent
                 CourseVisit::PROPERTY_COURSE_ID => $this->get_course_id(),
                 CourseVisit::PROPERTY_TOOL_ID => $this->course_tool_registration->get_id(),
                 CourseVisit::PROPERTY_CATEGORY_ID => $category,
-                CourseVisit::PROPERTY_PUBLICATION_ID => Request::get(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID)));
+                CourseVisit::PROPERTY_PUBLICATION_ID => $publicationId
+            )
+        );
 
         $result = \Chamilo\Application\Weblcms\Tool\Manager::factory_and_launch(
             $this->course_tool_registration->getContext(),
