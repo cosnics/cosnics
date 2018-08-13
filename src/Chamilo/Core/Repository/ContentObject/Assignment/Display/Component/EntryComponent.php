@@ -193,7 +193,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $feedbackManager = $this->getApplicationFactory()->getApplication(
             "Chamilo\Core\Repository\Feedback", $configuration,
-            \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE_V2
+            \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE
         );
 
         $feedbackManagerHtml = $feedbackManager->run();
