@@ -120,7 +120,13 @@ class EntryDownloader
 
     protected function getAssignmentName()
     {
-        return $this->getAssignment()->get_title();
+        $safeTitle = stripslashes(//converts two backslashes to one
+            stripslashes(//removes single backslash
+                str_replace('/','',$this->getAssignment()->get_title()) //remove forward slash
+            )
+        );
+
+        return $safeTitle;
     }
 
     protected function getEntityArchiveFileName($entityType, $entityIdentifier)
