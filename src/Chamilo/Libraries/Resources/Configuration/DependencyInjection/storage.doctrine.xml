@@ -79,6 +79,8 @@
             <argument>%chamilo.configuration.debug.enable_query_cache%</argument>
         </service>
 
+        <service id="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository" alias="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+
         <service
             id="chamilo.libraries.storage.data_manager.doctrine.storage_unit_repository"
             class="Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository">

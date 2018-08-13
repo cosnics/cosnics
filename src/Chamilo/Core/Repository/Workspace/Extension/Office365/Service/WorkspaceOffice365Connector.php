@@ -72,7 +72,6 @@ class WorkspaceOffice365Connector
         }
 
         $groupId = $this->graphGroupService->createGroupByName($user, $workspace->getName());
-
         $this->workspaceOffice365ReferenceService->createReferenceForWorkspace($workspace, $groupId);
         $this->graphGroupService->addMemberToGroup($groupId, $user);
     }

@@ -3,13 +3,14 @@
 namespace Chamilo\Core\Repository\Workspace\Extension\Office365\Service;
 
 use Chamilo\Core\Repository\Component\ExtensionLauncherComponent;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Extension\Office365\Manager;
 use Chamilo\Core\Repository\Workspace\Interfaces\WorkspaceExtensionInterface;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
@@ -46,20 +47,26 @@ class Office365WorkspaceExtension implements WorkspaceExtensionInterface
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\Application $workspaceComponent
-     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $workspaceExtensionActions
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup $workspaceExtensionActions
      */
     public function getWorkspaceActions(
-        Application $workspaceComponent, Workspace $workspace, User $user, ButtonToolBar $workspaceExtensionActions
+        Application $workspaceComponent, WorkspaceInterface $workspace, User $user,
+        ButtonGroup $workspaceExtensionActions
     )
     {
+        if(!$workspace instanceof Workspace)
+        {
+            return;
+        }
+
         $translation = ($this->workspaceOffice365Connector->isOffice365GroupActiveForWorkspace($workspace)) ?
             'VisitOffice365Group' : 'CreateOffice365Group';
 
-        $workspaceExtensionActions->addItem(
+        $workspaceExtensionActions->addButton(
             new Button(
-                $this->translator->trans($translation, null, Manager::context()), new FontAwesomeGlyph('users'),
+                $this->translator->trans($translation, [], Manager::context()), new FontAwesomeGlyph('users'),
                 $workspaceComponent->get_url(
                     [
                         Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_EXTENSION_LAUNCHER,

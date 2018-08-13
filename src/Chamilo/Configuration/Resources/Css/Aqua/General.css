@@ -1326,3 +1326,7 @@ code.inline {
 	margin-left: auto;
 	margin-right: auto;
 }
+
+[v-cloak] {
+	display: none
+}

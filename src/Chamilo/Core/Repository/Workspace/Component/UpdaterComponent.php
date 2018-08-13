@@ -29,6 +29,8 @@ class UpdaterComponent extends TabComponent
     public function build()
     {
         $workspaceId = Request::get(self::PARAM_WORKSPACE_ID);
+
+        /** @var Workspace $workspace */
         $workspace = DataManager::retrieve_by_id(Workspace::class_name(), $workspaceId);
         
         $form = new WorkspaceForm($this->get_url(array(self::PARAM_WORKSPACE_ID => $workspace->getId())), $workspace);
@@ -43,7 +45,12 @@ class UpdaterComponent extends TabComponent
                 
                 $workspaceService = new WorkspaceService(new WorkspaceRepository());
                 $success = $workspaceService->updateWorkspace($workspace, $values);
-                
+
+                if($success)
+                {
+                    $this->getWorkspaceExtensionManager()->workspaceUpdated($workspace, $this->getUser());
+                }
+
                 $translation = $success ? 'ObjectUpdated' : 'ObjectNotUpdated';
                 
                 $message = Translation::get(

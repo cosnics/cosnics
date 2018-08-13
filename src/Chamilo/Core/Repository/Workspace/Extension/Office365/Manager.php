@@ -15,6 +15,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 abstract class Manager extends Application implements WorkspaceExtensionSupport
 {
     const PARAM_ACTION = 'workspace_extension_action';
+    const ACTION_VISIT_GROUP = 'VisitGroup';
+    const DEFAULT_ACTION = self::ACTION_VISIT_GROUP;
 
     /**
      *
