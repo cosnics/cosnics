@@ -110,7 +110,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         }
 
         $publicationId = $this->getRequest()->getFromUrl(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
-        if(!empty($publicationId))
+        if(!empty($publicationId) && !is_array($publicationId))
         {
             $publication = DataManager::retrieve_by_id(ContentObjectPublication::class, $publicationId);
             if($publication instanceof ContentObjectPublication)
