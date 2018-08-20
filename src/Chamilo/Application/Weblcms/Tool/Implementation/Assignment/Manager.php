@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment;
 
 use Chamilo\Application\Weblcms\CourseSettingsController;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentEntitiesTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository;
@@ -26,6 +27,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\CourseGroupEntityService;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\PlatformGroupEntityService;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\UserEntityService;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -104,6 +106,23 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             1
         );
 
+        $toolbar->insert_item(
+            new ToolbarItem(
+                Translation::get('Reporting', null, Utilities::COMMON_LIBRARIES),
+                Theme::getInstance()->getCommonImagePath('Action/Reporting'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Reporting',
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => AssignmentEntitiesTemplate::class
+                    )
+                ),
+                ToolbarItem::DISPLAY_ICON, false, null, '_blank'
+            ),
+            2
+        );
+
         if($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication) && $this->isEphorusEnabled())
         {
             $toolbar->insert_item(
@@ -121,7 +140,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                     ),
                     ToolbarItem::DISPLAY_ICON, false, null, '_blank'
                 ),
-                2
+                3
             );
         }
 
