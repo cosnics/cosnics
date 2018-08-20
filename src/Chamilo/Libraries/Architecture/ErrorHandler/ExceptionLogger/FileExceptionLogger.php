@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
+use Chamilo\Libraries\Format\Structure\BaseHeader;
+
 /**
  * Logs errors to a file
  *
@@ -89,5 +91,14 @@ class FileExceptionLogger implements ExceptionLoggerInterface
             default :
                 return '[ERROR]';
         }
+    }
+
+    /**
+     * Adds an exception logger for javascript to the header
+     *
+     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
+     */
+    public function addJavascriptExceptionLogger(BaseHeader $header)
+    {
     }
 }

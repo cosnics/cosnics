@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
+use Chamilo\Libraries\Format\Structure\BaseHeader;
+
 /**
  * Exception Logger that chains other exception loggers
  *
@@ -58,6 +60,19 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
         foreach ($this->exceptionLoggers as $exceptionLogger)
         {
             $exceptionLogger->logException($exception, $exceptionLevel, $file, $line);
+        }
+    }
+
+    /**
+     * Adds an exception logger for javascript to the header
+     *
+     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
+     */
+    public function addJavascriptExceptionLogger(BaseHeader $header)
+    {
+        foreach ($this->exceptionLoggers as $exceptionLogger)
+        {
+            $exceptionLogger->addJavascriptExceptionLogger($header);
         }
     }
 }

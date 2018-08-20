@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
+use Chamilo\Libraries\Format\Structure\BaseHeader;
 use Chamilo\Libraries\Platform\Session\Session;
 
 /**
@@ -60,5 +61,14 @@ class NewRelicExceptionLogger implements ExceptionLoggerInterface
         {
             newrelic_add_custom_parameter($prefix . 'user_id', Session::get_user_id());
         }
+    }
+
+    /**
+     * Adds an exception logger for javascript to the header
+     *
+     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
+     */
+    public function addJavascriptExceptionLogger(BaseHeader $header)
+    {
     }
 }

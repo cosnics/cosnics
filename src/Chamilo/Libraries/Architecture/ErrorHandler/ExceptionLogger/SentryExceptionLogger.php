@@ -1,6 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\BaseHeader;
+use Chamilo\Libraries\Platform\Session\Session;
+
 /**
  * Logs Exceptions to Sentry (sentry.io)
  *
@@ -11,10 +15,14 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
 {
 
     /**
-     *
      * @var \Raven_Client
      */
     protected $sentryClient;
+
+    /**
+     * @var string
+     */
+    protected $sentryConnectionString;
 
     /**
      * SentryExceptionLogger constructor.
@@ -33,6 +41,8 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         {
             throw new \Exception('The given connection string for sentry can not be empty');
         }
+
+        $this->sentryConnectionString = $sentryConnectionString;
 
         $this->sentryClient = new \Raven_Client(
             $sentryConnectionString,
@@ -55,5 +65,35 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         }
 
         $this->sentryClient->captureException($exception);
+    }
+
+    /**
+     * Adds an exception logger for javascript to the header
+     *
+     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
+     */
+    public function addJavascriptExceptionLogger(BaseHeader $header)
+    {
+        $html = [];
+
+        $html[] = '<script type="text/javascript">';
+
+        $html[] = 'Raven.config(\'' . $this->sentryConnectionString . '\',{';
+        $html[] = '}).install();';
+
+        $html[] = 'Raven.setUserContext({';
+        $html[] = 'id: ' . Session::getUserId();
+        $html[] = '})';
+
+        $html[] = 'Raven.setExtraContext({';
+        $html[] = 'profile: \'' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] .
+            $_SERVER['SCRIPT_NAME'] .
+            '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . Session::getUserId() . '\'';
+        $html[] = '})';
+
+        $html[]= '</script>';
+
+        $header->addJavascriptFile('https://cdn.ravenjs.com/3.26.1/raven.min.js');
+        $header->addHtmlHeader(implode(PHP_EOL, $html));
     }
 }

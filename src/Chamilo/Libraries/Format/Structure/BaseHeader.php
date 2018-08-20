@@ -6,6 +6,7 @@ use Chamilo\Configuration\Service\FileConfigurationLoader;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
 use Chamilo\Libraries\Cache\Assetic\JavascriptCacheService;
 use Chamilo\Libraries\Cache\Assetic\StylesheetCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
@@ -237,6 +238,7 @@ class BaseHeader implements HeaderInterface
         $this->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
 
+
         $stylesheetCacheService = new StylesheetCacheService(
             $pathBuilder,
             $configurablePathBuilder,
@@ -270,6 +272,7 @@ class BaseHeader implements HeaderInterface
         $this->addJavascriptFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
 
         $this->addJavascriptCDNFiles();
+        $this->addExceptionLogger($fileConfigurationConsulter);
 
         $this->addHtmlHeader('<title>' . $this->getTitle() . '</title>');
     }
@@ -307,6 +310,16 @@ class BaseHeader implements HeaderInterface
     {
         $this->addJavascriptFile(
             'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML');
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     */
+    public function addExceptionLogger(ConfigurationConsulter $configurationConsulter)
+    {
+        $exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter);
+        $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
+        $exceptionLogger->addJavascriptExceptionLogger($this);
     }
 
     /**
