@@ -193,7 +193,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $feedbackManager = $this->getApplicationFactory()->getApplication(
             "Chamilo\Core\Repository\Feedback", $configuration,
-            \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE_V2
+            \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE
         );
 
         $feedbackManagerHtml = $feedbackManager->run();
@@ -202,8 +202,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $extendParameters = [
             'HAS_ENTRY' => true,
-            'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject()->get_title(),
-            'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
+            'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject() ? $this->getEntry()->getContentObject()->get_title() : Translation::getInstance()->getTranslation('SubmissionRemoved', null, Manager::context()),
+            'CONTENT_OBJECT_RENDITION' => $this->getEntry()->getContentObject() ? $this->renderContentObject() : null,
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
             'SUBMITTED_DATE' => $submittedDate,
             'SUBMITTED_BY' => $this->getUserService()->getUserFullNameById($this->getEntry()->getUserId()),

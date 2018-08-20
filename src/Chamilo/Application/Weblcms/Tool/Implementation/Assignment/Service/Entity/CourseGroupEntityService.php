@@ -193,7 +193,8 @@ class CourseGroupEntityService implements EntityServiceInterface
         $availableEntityIdentifiers =
             $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $currentUser);
 
-        return $availableEntityIdentifiers[0];
+        return array_pop(array_reverse($availableEntityIdentifiers));
+       // return $availableEntityIdentifiers[0];
     }
 
     /**
