@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryDownloader;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Gedmo\Translator\Entity\Translation;
 
 /**
  *
@@ -26,7 +28,14 @@ class DownloaderComponent extends Manager
             $this->getUser(), $this->getAssignment()
         );
 
-        $entryCompressor->downloadByRequest($this->getRequest());
+        try
+        {
+            $entryCompressor->downloadByRequest($this->getRequest());
+        }
+        catch(\Exception $exception)
+        {
+            throw new UserException($this->getTranslator()->trans('EntriesNotDownloadable', null, Manager::context()));
+        }
     }
 
     /**
