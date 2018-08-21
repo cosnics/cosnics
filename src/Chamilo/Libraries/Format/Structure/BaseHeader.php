@@ -259,6 +259,8 @@ class BaseHeader implements HeaderInterface
             null,
             'image/x-icon');
 
+        $this->addExceptionLogger($fileConfigurationConsulter);
+
         $this->addHtmlHeader(
             '<script type="text/javascript">var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>');
 
@@ -272,7 +274,6 @@ class BaseHeader implements HeaderInterface
         $this->addJavascriptFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
 
         $this->addJavascriptCDNFiles();
-        $this->addExceptionLogger($fileConfigurationConsulter);
 
         $this->addHtmlHeader('<title>' . $this->getTitle() . '</title>');
     }
