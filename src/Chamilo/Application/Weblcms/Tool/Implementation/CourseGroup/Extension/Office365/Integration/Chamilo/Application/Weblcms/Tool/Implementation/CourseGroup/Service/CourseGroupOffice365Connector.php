@@ -100,7 +100,7 @@ class CourseGroupOffice365Connector
 
         $this->courseGroupOffice365ReferenceService->createReferenceForCourseGroup($courseGroup, $groupId);
 
-        $this->subscribeTeachers($courseGroup, $groupId);
+//        $this->subscribeTeachers($courseGroup, $groupId);
         $this->subscribeCourseGroupUsers($courseGroup, $groupId);
     }
 
@@ -137,7 +137,7 @@ class CourseGroupOffice365Connector
         $this->courseGroupOffice365ReferenceService->linkCourseGroupReference($reference);
         $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
         $this->subscribeCourseGroupUsers($courseGroup, $reference->getOffice365GroupId());
-        $this->subscribeTeachers($courseGroup, $reference->getOffice365GroupId());
+//        $this->subscribeTeachers($courseGroup, $reference->getOffice365GroupId());
 
         return;
     }
@@ -245,18 +245,18 @@ class CourseGroupOffice365Connector
             }
         }
 
-        $course = new Course();
-        $course->setId($courseGroup->get_course_code());
+//        $course = new Course();
+//        $course->setId($courseGroup->get_course_code());
 
-        $teachers = $this->courseService->getTeachersFromCourse($course);
-        foreach ($teachers as $user)
-        {
-            $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
-            if (!empty($azureUserIdentifier))
-            {
-                $currentCourseGroupMemberIdentifiers[] = $azureUserIdentifier;
-            }
-        }
+//        $teachers = $this->courseService->getTeachersFromCourse($course);
+//        foreach ($teachers as $user)
+//        {
+//            $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
+//            if (!empty($azureUserIdentifier))
+//            {
+//                $currentCourseGroupMemberIdentifiers[] = $azureUserIdentifier;
+//            }
+//        }
 
         $office365GroupMemberIdentifiers = $this->groupService->getGroupMembers($reference->getOffice365GroupId());
 

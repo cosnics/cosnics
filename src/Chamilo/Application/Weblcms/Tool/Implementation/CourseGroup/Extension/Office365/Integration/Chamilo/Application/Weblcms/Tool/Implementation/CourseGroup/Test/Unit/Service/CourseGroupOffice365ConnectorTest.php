@@ -142,16 +142,16 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->method('createReferenceForCourseGroup')
             ->with($courseGroup, 5);
 
-        $teacher = new User();
-        $courseTeachers = [$teacher];
+//        $teacher = new User();
+//        $courseTeachers = [$teacher];
 
-        $this->courseServiceMock->expects($this->once())
-            ->method('getTeachersFromCourse')
-            ->will($this->returnValue($courseTeachers));
-
-        $this->groupServiceMock->expects($this->at(1))
-            ->method('addMemberToGroup')
-            ->with(5, $teacher);
+//        $this->courseServiceMock->expects($this->once())
+//            ->method('getTeachersFromCourse')
+//            ->will($this->returnValue($courseTeachers));
+//
+//        $this->groupServiceMock->expects($this->at(1))
+//            ->method('addMemberToGroup')
+//            ->with(5, $teacher);
 
         $courseGroupMember = new User();
         $courseGroupMembers = [$courseGroupMember];
@@ -161,7 +161,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with(false, false, true)
             ->will($this->returnValue($courseGroupMembers));
 
-        $this->groupServiceMock->expects($this->at(2))
+        $this->groupServiceMock->expects($this->at(1))
             ->method('addMemberToGroup')
             ->with(5, $courseGroupMember);
 
@@ -184,27 +184,27 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
         $this->courseGroupOffice365Connector->createGroupFromCourseGroup($courseGroup, $user);
     }
 
-    public function testCreateGroupFromCourseGroupWithExceptionInAddTeacher()
-    {
-        /** @var CourseGroup | \PHPUnit_Framework_MockObject_MockObject $courseGroup */
-        $courseGroup = $this->getMockBuilder(CourseGroup::class)
-            ->disableOriginalConstructor()->getMock();
-
-        $user = new User();
-
-        $teacher = new User();
-        $courseTeachers = [$teacher];
-
-        $this->courseServiceMock->expects($this->once())
-            ->method('getTeachersFromCourse')
-            ->will($this->returnValue($courseTeachers));
-
-        $this->groupServiceMock->expects($this->at(1))
-            ->method('addMemberToGroup')
-            ->will($this->throwException(new AzureUserNotExistsException($teacher)));
-
-        $this->courseGroupOffice365Connector->createGroupFromCourseGroup($courseGroup, $user);
-    }
+//    public function testCreateGroupFromCourseGroupWithExceptionInAddTeacher()
+//    {
+//        /** @var CourseGroup | \PHPUnit_Framework_MockObject_MockObject $courseGroup */
+//        $courseGroup = $this->getMockBuilder(CourseGroup::class)
+//            ->disableOriginalConstructor()->getMock();
+//
+//        $user = new User();
+//
+//        $teacher = new User();
+//        $courseTeachers = [$teacher];
+//
+//        $this->courseServiceMock->expects($this->once())
+//            ->method('getTeachersFromCourse')
+//            ->will($this->returnValue($courseTeachers));
+//
+//        $this->groupServiceMock->expects($this->at(1))
+//            ->method('addMemberToGroup')
+//            ->will($this->throwException(new AzureUserNotExistsException($teacher)));
+//
+//        $this->courseGroupOffice365Connector->createGroupFromCourseGroup($courseGroup, $user);
+//    }
 
     public function testCreateGroupFromCourseGroupWithExceptionInAddMember()
     {
@@ -340,16 +340,16 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->method('addMemberToGroup')
             ->with(5, $user);
 
-        $teacher = new User();
-        $courseTeachers = [$teacher];
-
-        $this->courseServiceMock->expects($this->once())
-            ->method('getTeachersFromCourse')
-            ->will($this->returnValue($courseTeachers));
-
-        $this->groupServiceMock->expects($this->at(2))
-            ->method('addMemberToGroup')
-            ->with(5, $teacher);
+//        $teacher = new User();
+//        $courseTeachers = [$teacher];
+//
+//        $this->courseServiceMock->expects($this->once())
+//            ->method('getTeachersFromCourse')
+//            ->will($this->returnValue($courseTeachers));
+//
+//        $this->groupServiceMock->expects($this->at(2))
+//            ->method('addMemberToGroup')
+//            ->with(5, $teacher);
 
         $courseGroupMember = new User();
         $courseGroupMembers = [$courseGroupMember];
@@ -359,7 +359,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with(false, false, true)
             ->will($this->returnValue($courseGroupMembers));
 
-        $this->groupServiceMock->expects($this->at(3))
+        $this->groupServiceMock->expects($this->at(2))
             ->method('addMemberToGroup')
             ->with(5, $courseGroupMember);
 
@@ -622,17 +622,21 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue($reference));
 
-        $teacher1 = new User();
-        $teacher1->setId(1);
-        $courseTeachers = [$teacher1];
-
-        $this->courseServiceMock->expects($this->once())
-            ->method('getTeachersFromCourse')
-            ->will($this->returnValue($courseTeachers));
+//        $teacher1 = new User();
+//        $teacher1->setId(1);
+//        $courseTeachers = [$teacher1];
+//
+//        $this->courseServiceMock->expects($this->once())
+//            ->method('getTeachersFromCourse')
+//            ->will($this->returnValue($courseTeachers));
 
         $courseGroupMember = new User();
         $courseGroupMember->setId(3);
-        $courseGroupMembers = [$courseGroupMember];
+
+        $courseGroupMember2 = new User();
+        $courseGroupMember2->setId(1);
+
+        $courseGroupMembers = [$courseGroupMember, $courseGroupMember2];
 
         $courseGroup->expects($this->once())
             ->method('get_members')
