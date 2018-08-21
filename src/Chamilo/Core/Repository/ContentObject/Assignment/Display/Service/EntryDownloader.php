@@ -377,6 +377,11 @@ class EntryDownloader
                 $entry->getEntityType(), $entry->getEntityId(), $archive
             );
 
+            if(!$entityFolder)
+            {
+                continue;
+            }
+
             $archiveFile = new ArchiveFile();
             $archiveFile->setName($contentObject->get_filename());
             $archiveFile->setOriginalPath($contentObject->get_full_path());
@@ -427,14 +432,21 @@ class EntryDownloader
         {
             $folder = new ArchiveFolder();
 
-            $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
-                $entityType, $entityId
-            );
+            try
+            {
+                $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
+                    $entityType, $entityId
+                );
 
-            $folder->setName($entityName);
-            $parentFolder->addItem($folder);
+                $folder->setName($entityName);
+                $parentFolder->addItem($folder);
 
-            $this->entityFoldersCache[$cacheKey] = $folder;
+                $this->entityFoldersCache[$cacheKey] = $folder;
+            }
+            catch(\Exception $ex)
+            {
+                $this->entityFoldersCache[$cacheKey] = null;
+            }
         }
 
         return $this->entityFoldersCache[$cacheKey];

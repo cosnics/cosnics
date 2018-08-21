@@ -531,6 +531,10 @@ class AssignmentDataProvider
     public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
     {
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $entityId);
+        if(!$user instanceof User)
+        {
+            throw new \InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
+        }
 
         return $this->renderEntityNameByEntityTypeAndEntity($entityType, $user);
     }

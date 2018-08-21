@@ -274,6 +274,11 @@ class PlatformGroupEntityService implements EntityServiceInterface
     public function renderEntityNameById($entityId)
     {
         $entity = DataManager::retrieve_by_id(Group::class, $entityId);
+        if(!$entity instanceof Group)
+        {
+            throw new \InvalidArgumentException('The given platform group with id ' . $entityId . ' does not exist');
+        }
+
         return $this->renderEntityName($entity);
     }
 }

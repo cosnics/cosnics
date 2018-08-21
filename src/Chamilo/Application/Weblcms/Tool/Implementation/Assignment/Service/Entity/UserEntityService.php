@@ -248,6 +248,11 @@ class UserEntityService implements EntityServiceInterface
     public function renderEntityNameById($entityId)
     {
         $entity = DataManager::retrieve_by_id(User::class, $entityId);
+        if(!$entity instanceof User)
+        {
+            throw new \InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
+        }
+
         return $this->renderEntityName($entity);
     }
 }

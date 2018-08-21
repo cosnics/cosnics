@@ -285,6 +285,11 @@ class CourseGroupEntityService implements EntityServiceInterface
     public function renderEntityNameById($entityId)
     {
         $entity = DataManager::retrieve_by_id(CourseGroup::class, $entityId);
+        if(!$entity instanceof CourseGroup)
+        {
+            throw new \InvalidArgumentException('The given course group with id ' . $entityId . ' does not exist');
+        }
+
         return $this->renderEntityName($entity);
     }
 }
