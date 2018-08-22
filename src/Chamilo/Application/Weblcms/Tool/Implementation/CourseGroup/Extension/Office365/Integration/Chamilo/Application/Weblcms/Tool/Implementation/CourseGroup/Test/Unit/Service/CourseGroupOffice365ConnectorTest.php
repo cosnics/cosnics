@@ -665,6 +665,64 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
         $this->courseGroupOffice365Connector->syncCourseGroupSubscriptions($courseGroup);
     }
 
+    /**
+     * Test to make sure that teachers are not removed when they are subscribed to the group when using the sync button
+     */
+    public function testSyncCourseGroupSubscriptionsWithSubscribedTeachers()
+    {
+        /** @var CourseGroup | \PHPUnit_Framework_MockObject_MockObject $courseGroup */
+        $courseGroup = $this->getMockBuilder(CourseGroup::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('courseGroupHasLinkedReference')
+            ->with($courseGroup)
+            ->will($this->returnValue(true));
+
+        $reference = new CourseGroupOffice365Reference();
+        $reference->setOffice365GroupId(5);
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('getCourseGroupReference')
+            ->with($courseGroup)
+            ->will($this->returnValue($reference));
+
+        $teacher1 = new User();
+        $teacher1->setId(6);
+        $courseTeachers = [$teacher1];
+
+        $this->courseServiceMock->expects($this->once())
+            ->method('getTeachersFromCourse')
+            ->will($this->returnValue($courseTeachers));
+
+        $courseGroupMember = new User();
+        $courseGroupMember->setId(3);
+
+        $courseGroupMembers = [$courseGroupMember];
+
+        $courseGroup->expects($this->once())
+            ->method('get_members')
+            ->with(false, false, true)
+            ->will($this->returnValue($courseGroupMembers));
+
+        $this->userServiceMock->expects($this->exactly(2))
+            ->method('getAzureUserIdentifier')
+            ->will($this->returnCallback(function(User $user) { return $user->getId(); }));
+
+        $availableIds = [3, 6];
+
+        $this->groupServiceMock->expects($this->once())
+            ->method('getGroupMembers')
+            ->with(5)
+            ->will($this->returnValue($availableIds));
+
+        $this->groupRepositoryMock->expects($this->never())
+            ->method('removeMemberFromGroup')
+            ->with(5, 6);
+
+        $this->courseGroupOffice365Connector->syncCourseGroupSubscriptions($courseGroup);
+    }
+
     public function testSyncCourseGroupSubscriptionsWithUnlinkedCourseGroup()
     {
         /** @var CourseGroup | \PHPUnit_Framework_MockObject_MockObject $courseGroup */

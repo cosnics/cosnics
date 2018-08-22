@@ -245,18 +245,20 @@ class CourseGroupOffice365Connector
             }
         }
 
-//        $course = new Course();
-//        $course->setId($courseGroup->get_course_code());
+        $teacherUserIdentifiers = [];
 
-//        $teachers = $this->courseService->getTeachersFromCourse($course);
-//        foreach ($teachers as $user)
-//        {
-//            $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
-//            if (!empty($azureUserIdentifier))
-//            {
-//                $currentCourseGroupMemberIdentifiers[] = $azureUserIdentifier;
-//            }
-//        }
+        $course = new Course();
+        $course->setId($courseGroup->get_course_code());
+
+        $teachers = $this->courseService->getTeachersFromCourse($course);
+        foreach ($teachers as $user)
+        {
+            $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
+            if (!empty($azureUserIdentifier))
+            {
+                $teacherUserIdentifiers[] = $azureUserIdentifier;
+            }
+        }
 
         $office365GroupMemberIdentifiers = $this->groupService->getGroupMembers($reference->getOffice365GroupId());
 
@@ -267,6 +269,8 @@ class CourseGroupOffice365Connector
         }
 
         $usersToRemove = array_diff($office365GroupMemberIdentifiers, $currentCourseGroupMemberIdentifiers);
+        $usersToRemove = array_diff($usersToRemove, $teacherUserIdentifiers);
+
         foreach ($usersToRemove as $userToRemove)
         {
             $this->groupRepository->removeMemberFromGroup($reference->getOffice365GroupId(), $userToRemove);
