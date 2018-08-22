@@ -319,9 +319,9 @@ class BaseHeader implements HeaderInterface
     public function addExceptionLogger(ConfigurationConsulter $configurationConsulter)
     {
 // Disabled this due to a lot of javascript issues being logged due to browser issues
-//        $exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter);
-//        $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
-//        $exceptionLogger->addJavascriptExceptionLogger($this);
+        $exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter);
+        $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
+        $exceptionLogger->addJavascriptExceptionLogger($this);
     }
 
     /**

@@ -259,14 +259,19 @@ class ResourceManagementExtension extends \Twig_Extension
      */
     public function isUniquePath($path)
     {
-        if (! in_array($path, $this->usedPaths))
+        if (in_array($path, $this->usedPaths))
         {
-            $this->usedPaths[] = $path;
-
-            return true;
+            return false;
         }
 
-        return !$this->resourceManager->resource_loaded($path);
+        $this->usedPaths[] = $path;
+
+        if($this->resourceManager->resource_loaded($path))
+        {
+           return false;
+        }
+
+        return true;
     }
 
     /**
