@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\Workspace\Extension\Office365;
 
 use Chamilo\Core\Repository\Component\ExtensionLauncherComponent;
+use Chamilo\Core\Repository\Workspace\Extension\Office365\Service\WorkspaceOffice365Connector;
 use Chamilo\Core\Repository\Workspace\Interfaces\WorkspaceExtensionSupport;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -47,8 +48,6 @@ abstract class Manager extends Application implements WorkspaceExtensionSupport
      */
     public function getWorkspaceOffice365Connector()
     {
-        return $this->getService(
-            'chamilo.core.repository.workspace.extension.office365.service.workspace_office365_connector'
-        );
+        return $this->getService(WorkspaceOffice365Connector::class);
     }
 }
