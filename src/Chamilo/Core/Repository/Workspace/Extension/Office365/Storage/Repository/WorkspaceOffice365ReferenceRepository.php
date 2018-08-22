@@ -44,6 +44,7 @@ class WorkspaceOffice365ReferenceRepository extends CommonDataClassRepository
      */
     public function createReference(WorkspaceOffice365Reference $workspaceOffice365Reference)
     {
+        $this->dataClassRepository->getDataClassRepositoryCache()->truncate(WorkspaceOffice365Reference::class);
         return $this->dataClassRepository->create($workspaceOffice365Reference);
     }
 
