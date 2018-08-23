@@ -118,6 +118,8 @@ class UserEntityService implements EntityServiceInterface
 
         if (!array_key_exists($id, $this->targetUsersCache))
         {
+            $this->targetUsersCache[$id] = [];
+
             $targetUsers = DataManager::get_publication_target_users_by_publication_id(
                 $contentObjectPublication->getId()
             );

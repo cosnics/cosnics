@@ -20,6 +20,11 @@
     {
         var ajaxUri = getPath('WEB_PATH') + 'index.php';
         var categoryNameElement = $('input[name="new_category"]');
+
+        if(categoryNameElement.length === 0) {
+            return;
+        }
+
         var categoryName = categoryNameElement.val();
         var parentId = $("#parent_id").val();
         
