@@ -22,6 +22,9 @@ class ViewerComponent extends Manager
      */
     function run()
     {
-        return $this->getTwig()->render(Manager::context() . ':NotificationsWidget.html.twig');
+        return $this->getTwig()->render(
+            Manager::context() . ':NotificationsWidget.html.twig',
+            ['HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer()]
+        );
     }
 }

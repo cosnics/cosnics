@@ -1,0 +1,68 @@
+{{ HEADER|raw }}
+
+<style>
+    .notifications-list {
+        max-width: 400px;
+        box-shadow: 3px 3px 8px lightgrey;
+    }
+
+    .notifications-list .list-group-item {
+        border-radius: 0;
+        cursor: pointer;
+    }
+
+    .notifications-list .list-group-item {
+        color: #333333;
+        border-radius: 0;
+    }
+
+    .notifications-list .unread-notification {
+        background-color: #deeff5;
+    }
+
+    .notifications-list .unread-notification:hover {
+        background-color: #cce6ef;
+    }
+
+    .notifications-list .notifications-list-title {
+        background-color: #eeeeee;
+        padding: 5px 15px;
+    }
+
+    .notifications-list .notification-timestamp {
+        font-size: 12px;
+        color: #888888;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="list-group notifications-list">
+    <div class="list-group-item notifications-list-title">
+        Nieuwe meldingen
+    </div>
+    <a class="list-group-item unread-notification">
+        Sonia VANDERMEERSCH heeft een nieuwe inzending geplaatst in de opdracht <b>Programmeren 101</b> in de cursus <b>Web Development</b>
+        <div class="notification-timestamp"><span class="fa fa-clock-o"></span> 4 uur geleden</div>
+    </a>
+    <a class="list-group-item">
+        Tom DEMETS heeft de aankondiging <b>Examenrooster 2018</b> geplaatst in de cursus <b>Elektronica voor gevorderden</b>
+        <div class="notification-timestamp"><span class="fa fa-clock-o"></span> 20 uur geleden</div>
+    </a>
+    <div class="list-group-item notifications-list-title">
+        Eerdere meldingen
+    </div>
+    <a class="list-group-item unread-notification">
+        Lucas VANDEREECKEN heeft het leerpad <b>Kritisch denken</b> aangepast in de cursus <b>Kritisch denken voor beginners</b>
+        <div class="notification-timestamp"><span class="fa fa-clock-o"></span> gisteren - 20u20</div>
+    </a>
+    <a class="list-group-item">
+        Jonas DESMET heeft een het item <b>Stage attest</b> toegevoegd aan zijn portfolio
+        <div class="notification-timestamp"><span class="fa fa-clock-o"></span> 20 augustus 2018 - 18u35</div>
+    </a>
+    <a class="list-group-item">
+        Filip WATTEEUW heeft de publicatie <b>WEGWERKZAAMHEDEN GENT 2018 / 2019</b> toegevoegd aan de cursus <b>Burgers pesten voor beginners</b>
+        <div class="notification-timestamp"><span class="fa fa-clock-o"></span> 15 augustus 2018 - 10u13</div>
+    </a>
+</div>
+
+{{ FOOTER|raw }}
