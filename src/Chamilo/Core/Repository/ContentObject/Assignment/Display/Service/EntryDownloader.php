@@ -373,20 +373,35 @@ class EntryDownloader
                 continue;
             }
 
-            $entityFolder = $this->getOrCreateFolderByEntity(
-                $entry->getEntityType(), $entry->getEntityId(), $archive
-            );
-
-            if(!$entityFolder)
+            try
+            {
+                $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
+                    $entry->getEntityType(), $entry->getEntityId()
+                );
+            }
+            catch(\Exception $ex)
             {
                 continue;
             }
 
+//            $entityFolder = $this->getOrCreateFolderByEntity(
+//                $entry->getEntityType(), $entry->getEntityId(), $archive
+//            );
+//
+//            if(!$entityFolder)
+//            {
+//                continue;
+//            }
+
+            $fileName = \Chamilo\Libraries\File\Filesystem::create_safe_name(
+                $entityName . '_' . $contentObject->get_filename()
+            );
+
             $archiveFile = new ArchiveFile();
-            $archiveFile->setName($contentObject->get_filename());
+            $archiveFile->setName($fileName);
             $archiveFile->setOriginalPath($contentObject->get_full_path());
 
-            $entityFolder->addItem($archiveFile);
+            $archive->addItem($archiveFile);
         }
 
         $archivePath = $this->archiveCreator->createArchive($archive);
