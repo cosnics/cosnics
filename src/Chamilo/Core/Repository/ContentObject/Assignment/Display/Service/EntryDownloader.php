@@ -290,6 +290,8 @@ class EntryDownloader
             }
 
             $this->downloadByEntryIdentifiers($request, $entryIdentifiers);
+
+            return;
         }
 
         if (!is_null($entityType) && !is_null($entityIdentifiers))
@@ -304,6 +306,8 @@ class EntryDownloader
                 }
 
                 $this->downloadForEntityTypeAndIdentifier($request, $entityType, $entityIdentifiers);
+
+                return;
             }
             else
             {
@@ -313,6 +317,8 @@ class EntryDownloader
                 }
 
                 $this->downloadForEntityTypeAndIdentifiers($request, $entityType, $entityIdentifiers);
+
+                return;
             }
         }
 
