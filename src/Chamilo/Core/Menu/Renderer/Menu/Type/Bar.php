@@ -31,18 +31,35 @@ class Bar extends Renderer
         $html[] = '<nav class="' . $class . '">';
         $html[] = '<div class="' . $this->getContainerMode() . '">';
         $html[] = '<div class="navbar-header">';
-        
+
         $html[] = '<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-navbar-collapse" aria-expanded="false">';
         $html[] = '<span class="sr-only">Toggle navigation</span>';
         $html[] = '<span class="icon-bar"></span>';
         $html[] = '<span class="icon-bar"></span>';
         $html[] = '<span class="icon-bar"></span>';
         $html[] = '</button>';
+        $html[] = '<ul class="nav" style="float: right;">';
+
+        $html[] = '<li class="dropdown">';
+        $html[] = '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+        $html[] = '<span class="fa fa-bell-o" style="color: white; font-size: 25px; float: right; margin: 3px 10px 0 0;"></span>';
+        $html[] = '</a>';
+        $html[] = '<ul class="dropdown-menu dropdown-menu-right">';
+        $html[] = '<li>';
+        $html[] = 'TEST';
+        $html[] = '</li>';
+        $html[] = '</ul>';
+        $html[] = '</li>';
+
+        $html[] = '</ul>';
+
         $html[] = $this->renderBrand();
         
         $html[] = '</div>';
+
         $html[] = '<div class="collapse navbar-collapse" id="menu-navbar-collapse">';
         $html[] = '<ul class="nav navbar-nav navbar-right">';
+        $html[] = '<li><a href="#"><span class="fa fa-bell-o" style="color: white; font-size: 25px; margin: 20px 25px 0 0;"></span></a>';
         
         return implode(PHP_EOL, $html);
     }
@@ -52,6 +69,9 @@ class Bar extends Renderer
         $html = array();
         
         $html[] = '</ul>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
         $html[] = '</nav>';
         
         return implode(PHP_EOL, $html);
