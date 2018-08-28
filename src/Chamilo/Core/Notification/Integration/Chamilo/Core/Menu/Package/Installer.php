@@ -21,4 +21,14 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
     {
         parent::__construct($formValues, Item::DISPLAY_BOTH, false);
     }
+
+    /**
+     * Do not install the menu item in the database since this item needs special treatment and needs to be fixed
+     *
+     * @return bool|void
+     */
+    public function extra()
+    {
+
+    }
 }
