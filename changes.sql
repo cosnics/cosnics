@@ -463,3 +463,5 @@ CREATE TABLE `repository_workspace_office365_reference` (
   PRIMARY KEY (id),
   KEY `rwor.workspace_id` (`workspace_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `menu_item` ADD `icon_class` VARCHAR(255) NULL AFTER `type`;
