@@ -70,9 +70,7 @@ class ApplicationItem extends Bar
         {
             if(!empty($this->getItem()->getIconClass()))
             {
-                $html[] = '<div class="chamilo-menu-item-css-icon" style="padding: 13px; padding-left: 5px;">';
-                $html[] = '<span style="font-size: 24px;" class="' . $this->getItem()->getIconClass() . '"></span>';
-                $html[] = '</div>';
+                $html[]= $this->renderCssIcon();
             }
             else
             {
