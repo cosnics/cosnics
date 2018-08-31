@@ -8,13 +8,15 @@
 
 <style>
     .notifications-list {
-        max-width: 450px;
+        width: 100%;
         box-shadow: 3px 3px 8px lightgrey;
+        margin-bottom: 0;
     }
 
     .notifications-list .list-group-item {
         border-radius: 0;
         display: flex;
+        justify-content: space-between;
     }
 
     .notifications-list .list-group-item:hover {
@@ -35,9 +37,11 @@
     }
 
     .notifications-list .notification-description {
-        color: #333333;
         text-decoration: none;
         cursor: pointer;
+        background-color: inherit !important;
+        color: #333333 !important;
+        text-align: left !important;
     }
 
     .notifications-list .notification-timestamp {
@@ -47,12 +51,21 @@
     }
 
     .notifications-list .notification-actions {
-        min-width: 30px;
         font-size: 20px;
         font-weight: bold;
         text-align: right;
         color: #999999;
         cursor: pointer;
+        margin-left: 15px;
+    }
+
+    .notifications-list .notification-actions .btn {
+        padding: 0;
+    }
+
+    .notifications-list .notification-actions .btn:hover {
+        padding: 0;
+        text-decoration: none;
     }
 
     .actions-menu .dropdown-item {
@@ -99,7 +112,9 @@
     }
 </style>
 
-<div id="notifications" class="notifications-widget">
+{% set notificationsID = "notifications" ~ random() %}
+
+<div id="{{ notificationsID }}" class="notifications-widget">
     <div class="list-group notifications-list">
         <div class="list-group-item notifications-list-title">
             Nieuwe meldingen
@@ -147,7 +162,7 @@
 
         $(window).on('load', function () {
             new Vue({
-                el: '#notifications',
+                el: '#{{ notificationsID }}',
                 data: {
                     notifications: [
                         {

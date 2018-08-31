@@ -154,10 +154,13 @@
 
 /* Set minimum width for full view to 1400px */
 @media ( max-width : 900px) {
+	.navbar.navbar-chamilo {
+		min-height: 50px;
+	}
 	.navbar-header {
 		float: none;
 	}
-	.navbar .container-fluid .navbar-header .navbar-brand {
+	.navbar .container-fluid .navbar-header .navbar-brand > img {
 		padding-top: 0;
 	}
 	.navbar-left, .navbar-right {
