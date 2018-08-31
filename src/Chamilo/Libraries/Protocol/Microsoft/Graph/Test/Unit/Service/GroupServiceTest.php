@@ -1,6 +1,8 @@
 <?php
+
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Unit\Service;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
@@ -28,6 +30,11 @@ class GroupServiceTest extends ChamiloTestCase
     protected $userServiceMock;
 
     /**
+     * @var ConfigurationConsulter | \PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $configurationConsulterMock;
+
+    /**
      * @var GroupService
      */
     protected $groupService;
@@ -43,8 +50,11 @@ class GroupServiceTest extends ChamiloTestCase
         $this->userServiceMock = $this->getMockBuilder(UserService::class)
             ->disableOriginalConstructor()->getMock();
 
+        $this->configurationConsulterMock = $this->getMockBuilder(ConfigurationConsulter::class)
+            ->disableOriginalConstructor()->getMock();
 
-        $this->groupService = new GroupService($this->userServiceMock, $this->groupRepositoryMock);
+        $this->groupService =
+            new GroupService($this->userServiceMock, $this->groupRepositoryMock, $this->configurationConsulterMock);
     }
 
     /**
@@ -536,7 +546,6 @@ class GroupServiceTest extends ChamiloTestCase
 
         $this->assertEquals(3, $this->groupService->getOrCreatePlanIdForGroup($groupId));
     }
-    
 
     /**
      * Mocks the getGroupMember function of the GroupRepository

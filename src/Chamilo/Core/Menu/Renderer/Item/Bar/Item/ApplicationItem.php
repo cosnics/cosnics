@@ -68,16 +68,25 @@ class ApplicationItem extends Bar
         
         if ($this->getItem()->show_icon())
         {
-            $integrationNamespace = $this->getItem()->get_application() . '\Integration\Chamilo\Core\Menu';
-            $imagePath = Theme::getInstance()->getImagePath(
-                $integrationNamespace, 
-                'Menu' . ($this->isSelected() ? 'Selected' : ''));
-            
-            $html[] = '<img class="chamilo-menu-item-icon' .
-                 ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' . $imagePath .
-                 '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+            if(!empty($this->getItem()->getIconClass()))
+            {
+                $html[]= $this->renderCssIcon();
+            }
+            else
+            {
+                $integrationNamespace = $this->getItem()->get_application() . '\Integration\Chamilo\Core\Menu';
+                $imagePath = Theme::getInstance()->getImagePath(
+                    $integrationNamespace,
+                    'Menu' . ($this->isSelected() ? 'Selected' : '')
+                );
+
+                $html[] = '<img class="chamilo-menu-item-icon' .
+                    ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' .
+                    $imagePath .
+                    '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+            }
         }
-        
+
         if ($this->getItem()->show_title())
         {
             $html[] = '<div class="chamilo-menu-item-label' .

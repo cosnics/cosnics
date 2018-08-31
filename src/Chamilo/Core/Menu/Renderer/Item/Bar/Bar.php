@@ -31,6 +31,17 @@ abstract class Bar extends Renderer
         return true;
     }
 
+    protected function renderCssIcon()
+    {
+        $html = [];
+
+        $html[] = '<div class="chamilo-menu-item-css-icon" style="padding: 15px; padding-left: 5px;">';
+        $html[] = '<span style="font-size: 20px;" class="' . $this->getItem()->getIconClass() . '"></span>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
     public function render()
     {
         if (! $this->canViewMenuItem($this->getMenuRenderer()->get_user()))

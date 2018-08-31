@@ -36,9 +36,16 @@ class LinkItem extends Bar
 
         if ($this->getItem()->show_icon())
         {
-            $html[] = '<img class="chamilo-menu-item-icon' .
-                ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '
-                    " src="' . $imagePath . '" alt="' . $title . '" />';
+            if(!empty($this->getItem()->getIconClass()))
+            {
+                $html[]= $this->renderCssIcon();
+            }
+            else
+            {
+                $html[] = '<img class="chamilo-menu-item-icon' .
+                    ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '
+                        " src="' . $imagePath . '" alt="' . $title . '" />';
+            }
         }
 
         if($this->getItem()->show_title())

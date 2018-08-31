@@ -65,6 +65,8 @@ class ItemForm extends FormValidator
         $this->addRule(Item::PROPERTY_PARENT, Translation::get('ThisFieldIsRequired'), 'required');
         
         $this->addElement('checkbox', Item::PROPERTY_HIDDEN, Translation::get('Hidden'));
+        $this->addElement('text', Item::PROPERTY_ICON_CLASS, Translation::get('IconClass'), ['class' => 'form-control']);
+
         $this->addElement('category');
         
         $this->addElement('category', Translation::get('Titles'));
@@ -177,7 +179,8 @@ class ItemForm extends FormValidator
         $defaults[Item::PROPERTY_PARENT] = $item->get_parent();
         $defaults[Item::PROPERTY_HIDDEN] = $item->get_hidden();
         $defaults[Item::PROPERTY_TYPE] = $item->get_type();
-        
+        $defaults[Item::PROPERTY_ICON_CLASS] = $item->getIconClass();
+
         parent::setDefaults($defaults);
     }
 
