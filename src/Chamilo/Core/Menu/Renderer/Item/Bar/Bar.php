@@ -35,8 +35,9 @@ abstract class Bar extends Renderer
     {
         $html = [];
 
-        $html[] = '<div class="chamilo-menu-item-css-icon" style="padding: 15px; padding-left: 5px;">';
-        $html[] = '<span style="font-size: 20px;" class="' . $this->getItem()->getIconClass() . '"></span>';
+        $html[] = '<div class="chamilo-menu-item-css-icon' .
+            ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '">';
+        $html[] = '<span class="chamilo-menu-item-css-icon-class ' . $this->getItem()->getIconClass() . '"></span>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
