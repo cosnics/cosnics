@@ -60,8 +60,13 @@ class NotificationWidgetItem extends PriorityItem
      *
      * @return bool
      */
-    public function canViewMenuItem(User $user)
+    public function canViewMenuItem(User $user = null)
     {
+        if(!$user instanceof User)
+        {
+            return false;
+        }
+
         $authorizationChecker = $this->getAuthorizationChecker();
 
         return Application::is_active('Chamilo\Core\Notification') &&
