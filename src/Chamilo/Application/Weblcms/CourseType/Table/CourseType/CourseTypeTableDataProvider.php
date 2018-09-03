@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -28,13 +29,14 @@ class CourseTypeTableDataProvider extends DataClassTableDataProvider
     /**
      * Retrieves the objects for this table
      *
+     * @param Condition $condition
      * @param $offset int
      * @param $count int
      * @param $order_property String
      *
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieve_data($condition = null, $offset = null, $count = null, $order_property = null)
     {
         if ($order_property == null)
         {
@@ -52,7 +54,7 @@ class CourseTypeTableDataProvider extends DataClassTableDataProvider
      *
      * @return int
      */
-    public function count_data($condition)
+    public function count_data($condition = null)
     {
         return DataManager::count(CourseType::class_name(), new DataClassCountParameters($condition));
     }

@@ -98,13 +98,22 @@ class CategoryItem extends Bar
         
         if ($this->getItem()->show_icon())
         {
-            $imagePath = Theme::getInstance()->getImagePath(
-                Manager::context(), 
-                'Menu/Folder' . ($selected ? 'Selected' : ''));
-            
-            $html[] = '<img class="chamilo-menu-item-icon' .
-                 ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' . $imagePath .
-                 '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+            if(!empty($this->getItem()->getIconClass()))
+            {
+                $html[]= $this->renderCssIcon();
+            }
+            else
+            {
+                $imagePath = Theme::getInstance()->getImagePath(
+                    Manager::context(),
+                    'Menu/Folder' . ($selected ? 'Selected' : '')
+                );
+
+                $html[] = '<img class="chamilo-menu-item-icon' .
+                    ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' .
+                    $imagePath .
+                    '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+            }
         }
         
         if ($this->getItem()->show_title())

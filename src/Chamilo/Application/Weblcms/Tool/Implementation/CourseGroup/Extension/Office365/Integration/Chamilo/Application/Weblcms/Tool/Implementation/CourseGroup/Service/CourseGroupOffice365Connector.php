@@ -419,8 +419,7 @@ class CourseGroupOffice365Connector
         $course = $this->courseService->getCourseById($courseGroup->get_course_code());
         if ($course instanceof Course)
         {
-            $courseGroupName =
-                $course->get_title() . ' - ' . $courseGroupName . ' (' . $course->get_visual_code() . ')';
+            $courseGroupName = $courseGroupName . ' - ' . $course->get_title() . ' (' . $course->get_visual_code() . ')';
         }
 
         return $courseGroupName;
