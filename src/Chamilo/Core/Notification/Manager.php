@@ -13,6 +13,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 abstract class Manager extends Application
 {
     const ACTION_VIEW = 'Viewer';
+    const ACTION_MANAGE_FILTERS = 'FilterManager';
+
     const DEFAULT_ACTION = self::ACTION_VIEW;
 
     /**

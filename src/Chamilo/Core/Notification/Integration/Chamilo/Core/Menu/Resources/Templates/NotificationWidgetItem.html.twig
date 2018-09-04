@@ -14,6 +14,11 @@
         width: 450px;
     }
 
+    .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications{
+        max-height: 480px;
+        overflow-y: scroll;
+    }
+
     .chamilo-menu-item-link .chamilo-menu-item-css-icon {
         color: white;
         font-size: 20px;
@@ -44,6 +49,25 @@
         display: none;
     }
 
+    .chamilo-menu-item-notifications ul li div.notifications-footer {
+        border-top: 1px solid #dddddd;
+        background-color: white;
+        text-align: right;
+        padding: 5px 17px;
+        font-size: 12px;
+    }
+
+    .chamilo-menu-item-notifications ul li div.notifications-footer a {
+        display: inline-block !important;
+        background-color: white !important;
+        color: #337ab7 !important;
+    }
+
+    .chamilo-menu-item-notifications ul li div.notifications-footer a:hover {
+        text-decoration: underline;
+        color: #23527c;
+    }
+
     @media ( max-width : 900px) {
         .chamilo-menu-item-notifications ul.dropdown-notifications {
             position: fixed;
@@ -57,10 +81,21 @@
             width: 100%;
         }
 
+        .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications{
+            max-height: calc(100vh - 78px);
+        }
+
         .chamilo-menu-item-notifications .dropdown-notifications .notifications-list {
             min-width: 100%;
             max-width: 100%;
             box-shadow: none;
+        }
+
+        .chamilo-menu-item-notifications ul.dropdown-notifications div.notifications-footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
 
         .navbar-chamilo div.navbar-header ul.nav li a.chamilo-menu-item-link {
@@ -84,6 +119,10 @@
         .chamilo-menu-item-notifications .new-notifications-label {
             top: 5px;
         }
+
+        body.no-scroll {
+            overflow: hidden;
+        }
     }
 </style>
 
@@ -94,7 +133,27 @@
     </a>
     <ul class="dropdown-notifications dropdown-menu dropdown-menu-right">
         <li>
-            {% include 'Chamilo\\Core\\Notification:NotificationsWidget.html.twig' %}
+            <div class="visible-notifications">
+                {% include 'Chamilo\\Core\\Notification:NotificationsWidget.html.twig' %}
+            </div>
+            <div class="notifications-footer">
+                <a href="{{ VIEWER_URL }}">Bekijk alle meldingen</a> - <a href="{{ FILTER_MANAGER_URL }}">Beheer de actieve filters</a>
+            </div>
         </li>
     </ul>
 </li>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var notificationsElement = $('.chamilo-menu-item-notifications');
+
+        notificationsElement.on('show.bs.dropdown', function () {
+            $('body').addClass('no-scroll');
+        });
+
+        notificationsElement.on('hide.bs.dropdown', function () {
+            $('body').removeClass('no-scroll');
+        });
+    });
+</script>

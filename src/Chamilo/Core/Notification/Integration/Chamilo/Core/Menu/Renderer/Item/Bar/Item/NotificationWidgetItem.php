@@ -3,9 +3,11 @@
 namespace Chamilo\Core\Notification\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
 use Chamilo\Core\Menu\Renderer\Item\Bar\PriorityItem;
+use Chamilo\Core\Notification\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  * @package Chamilo\Core\Notification\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item
@@ -48,8 +50,26 @@ class NotificationWidgetItem extends PriorityItem
             return '';
         }
 
+        $viewerUrl = new Redirect(
+            [
+                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_ACTION => Manager::ACTION_VIEW
+            ]
+        );
+
+        $filterManagerUrl = new Redirect(
+            [
+                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_ACTION => Manager::ACTION_MANAGE_FILTERS
+            ]
+        );
+
         return $this->getTwig()->render(
-            'Chamilo\Core\Notification\Integration\Chamilo\Core\Menu:NotificationWidgetItem.html.twig'
+            'Chamilo\Core\Notification\Integration\Chamilo\Core\Menu:NotificationWidgetItem.html.twig',
+            [
+                'VIEWER_URL' => $viewerUrl->getUrl(),
+                'FILTER_MANAGER_URL' => $filterManagerUrl->getUrl()
+            ]
         );
     }
 

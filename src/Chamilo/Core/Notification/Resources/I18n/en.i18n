@@ -1,1 +1,5 @@
 TypeName = "Notifications"
+ViewerComponent = "View notifications"
+FilterManagerComponent = "Manage active filters"
+RemoveSelectedFilters = "Remove selected filters"
+FilterMessage = "Active filter"
