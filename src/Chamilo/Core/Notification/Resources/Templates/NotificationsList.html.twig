@@ -1,5 +1,3 @@
-{{ HEADER|raw }}
-
 {% set appContext = 'Chamilo\\Core\\Notification' %}
 
 {{ getJavascript('Common.js', 'Hogent\\Libraries') }}
@@ -166,7 +164,6 @@
 
 <script type="text/javascript">
     (function () {
-
         $(window).on('load', function () {
             new Vue({
                 el: '#{{ notificationsID }}',
@@ -272,83 +269,9 @@
                                     id: 9
                                 }
                             ]
-                        },
-                        {
-                            message: 'Jonas DESMET heeft een het item <b>Stage attest</b> toegevoegd aan zijn portfolio',
-                            time: '20 augustus 2018 - 18u35',
-                            url: '',
-                            isRead: true,
-                            isNew: false,
-                            filters: [
-                                {
-                                    message: 'Verberg deze melding',
-                                    id: null
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van het portfolio van <b>Jonas DESMET</b>',
-                                    id: 7
-                                }
-                            ]
-                        },
-                        {
-                            message: 'Filip WATTEEUW heeft de publicatie <b>WEGWERKZAAMHEDEN GENT 2018 / 2019</b> toegevoegd aan de cursus <b>Burgers pesten voor beginners</b>',
-                            time: '15 augustus 2018 - 10u13',
-                            url: '',
-                            isRead: true,
-                            isNew: false,
-                            filters: [
-                                {
-                                    message: 'Verberg deze melding',
-                                    id: null
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van de cursus <b>Burgers pesten voor beginners</b>',
-                                    id: 8
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van nieuwe publicaties in de cursus <b>Burgers pesten voor beginners</b>',
-                                    id: 9
-                                }
-                            ]
-                        },
-                        {
-                            message: 'Jonas DESMET heeft een het item <b>Stage attest</b> toegevoegd aan zijn portfolio',
-                            time: '20 augustus 2018 - 18u35',
-                            url: '',
-                            isRead: true,
-                            isNew: false,
-                            filters: [
-                                {
-                                    message: 'Verberg deze melding',
-                                    id: null
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van het portfolio van <b>Jonas DESMET</b>',
-                                    id: 7
-                                }
-                            ]
-                        },
-                        {
-                            message: 'Filip WATTEEUW heeft de publicatie <b>WEGWERKZAAMHEDEN GENT 2018 / 2019</b> toegevoegd aan de cursus <b>Burgers pesten voor beginners</b>',
-                            time: '15 augustus 2018 - 10u13',
-                            url: '',
-                            isRead: true,
-                            isNew: false,
-                            filters: [
-                                {
-                                    message: 'Verberg deze melding',
-                                    id: null
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van de cursus <b>Burgers pesten voor beginners</b>',
-                                    id: 8
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van nieuwe publicaties in de cursus <b>Burgers pesten voor beginners</b>',
-                                    id: 9
-                                }
-                            ]
-                        },
+                        }
+                    ],
+                    additionalNotifications: [
                         {
                             message: 'Jonas DESMET heeft een het item <b>Stage attest</b> toegevoegd aan zijn portfolio',
                             time: '20 augustus 2018 - 18u35',
@@ -400,11 +323,28 @@
                             return !notification.isNew;
                         })
                     }
+                },
+                mounted: function() {
+                    var vueInstance = this;
+                    var stop = false;
+
+                    $(this.$el.querySelector('.notifications-list')).on('loadNewData', function () {
+                        if(stop) { return; }
+                        for(i = 0; i < 6; i++) {
+                            vueInstance.notifications.push(vueInstance.additionalNotifications[0]);
+                            vueInstance.notifications.push(vueInstance.additionalNotifications[1]);
+
+                            stop = true;
+                        }
+                    });
+
+                    for(i = 0; i < 3; i++) {
+                        vueInstance.notifications.push(vueInstance.additionalNotifications[0]);
+                        vueInstance.notifications.push(vueInstance.additionalNotifications[1]);
+                    }
                 }
             });
         });
 
     })();
 </script>
-
-{{ FOOTER|raw }}

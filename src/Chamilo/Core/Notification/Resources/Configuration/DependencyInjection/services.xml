@@ -6,7 +6,7 @@
     <services>
         <defaults autowire="true" public="true" />
 
-        <prototype namespace="Chamilo\Core\Notification\" resource="../../../{Service,Storage/Repository}/*"/>
+        <prototype namespace="Chamilo\Core\Notification\" resource="../../../{Service}/*"/>
 
     </services>
 </container>

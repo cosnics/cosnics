@@ -14,7 +14,7 @@
         width: 450px;
     }
 
-    .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications{
+    .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications {
         max-height: 480px;
         overflow-y: scroll;
     }
@@ -134,7 +134,7 @@
     <ul class="dropdown-notifications dropdown-menu dropdown-menu-right">
         <li>
             <div class="visible-notifications">
-                {% include 'Chamilo\\Core\\Notification:NotificationsWidget.html.twig' %}
+                {% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
             </div>
             <div class="notifications-footer">
                 <a href="{{ VIEWER_URL }}">Bekijk alle meldingen</a> - <a href="{{ FILTER_MANAGER_URL }}">Beheer de actieve filters</a>
@@ -154,6 +154,18 @@
 
         notificationsElement.on('hide.bs.dropdown', function () {
             $('body').removeClass('no-scroll');
+        });
+
+        var visibleNotifications = $('.visible-notifications');
+
+        visibleNotifications.on('scroll', function() {
+            var scrollTop = $(this).scrollTop();
+            var divHeight = $(this)[0].scrollHeight;
+            var scrollBarHeight = $(this)[0].clientHeight;
+
+            if(scrollTop + scrollBarHeight >= divHeight) {
+                $(this).find('.notifications-list').trigger('loadNewData');
+            }
         });
     });
 </script>

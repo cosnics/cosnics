@@ -10,12 +10,26 @@
 {{ BUTTON_TOOLBAR|raw }}
 
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
+    <li role="presentation"><a href="#notifications" aria-controls="entities" role="tab" data-toggle="tab">{{ 'Notifications'|trans({}, appContext) }}</a></li>
     <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ ENTITY_NAME }}</a></li>
     <li role="presentation"><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
     <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
 </ul>
 
 <div class="dynamic-visual-tab-content tab-content">
+    <div role="tabpanel" class="tab-pane tab-pane-with-border" id="notifications">
+        <style>
+            .dynamic-visual-tab-content #notifications .list-group-item {
+                border: 1px solid #ddd;
+                padding: 10px 15px;
+            }
+
+            .dynamic-visual-tab-content #notifications .list-group-item.notifications-list-title {
+                padding: 5px 15px;
+            }
+        </style>
+        {% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
+    </div>
     <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entities">
         {{ ENTITY_TABLE|raw }}
     </div>
