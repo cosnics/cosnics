@@ -142,7 +142,7 @@ class RequestManager
      *
      * @return int
      */
-    public function changeDocumentsVisibility(array $requests)
+    public function changeDocumentsVisibility(\Chamilo\Libraries\Storage\Iterator\DataClassIterator $requests)
     {
         $failures = 0;
 
