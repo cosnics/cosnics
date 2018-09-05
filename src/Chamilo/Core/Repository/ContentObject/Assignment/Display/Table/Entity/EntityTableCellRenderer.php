@@ -90,10 +90,8 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
 
         /** @var Assignment $assignment */
         $assignment = $this->get_table()->get_component()->get_root_content_object();
-        $hasEntries = $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0;
 
-        if ($this->getRightsService()->canUserViewEntity($this->get_component()->getUser(), $this->get_component()->getAssignment(), $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]) &
-            $hasEntries)
+        if ($this->canViewEntity($entity))
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -110,6 +108,8 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
                 )
             );
         }
+
+        $hasEntries = $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0;
 
         if ($this->getRightsService()->canUserDownloadEntriesFromEntity($this->get_component()->getUser(), $this->get_component()->getAssignment(), $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]) &&
             $hasEntries)
@@ -195,6 +195,30 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
     protected function getTable()
     {
         return $this->get_table();
+    }
+
+    protected function canViewEntity($entity)
+    {
+        /** @var Assignment $assignment */
+        $hasEntries = $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0;
+
+        return $this->getRightsService()->canUserViewEntity(
+                $this->get_component()->getUser(),
+                $this->get_component()->getAssignment(),
+                $entity[Entry::PROPERTY_ENTITY_TYPE],
+                $entity[Entry::PROPERTY_ENTITY_ID])
+            && $hasEntries;
+    }
+
+    protected function getEntityUrl($entity)
+    {
+        return $this->get_component()->get_url(
+            array(
+                Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
+                Manager::PARAM_ENTITY_TYPE => $entity[Entry::PROPERTY_ENTITY_TYPE],
+                Manager::PARAM_ENTITY_ID => $entity[Entry::PROPERTY_ENTITY_ID]
+            )
+        );
     }
 
     abstract protected function isEntity($entityId, $userId);
