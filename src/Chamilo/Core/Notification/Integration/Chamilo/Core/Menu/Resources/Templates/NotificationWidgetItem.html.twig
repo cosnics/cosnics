@@ -11,12 +11,30 @@
 
     .chamilo-menu-item-notifications ul.dropdown-notifications{
         padding-top: 30px;
-        width: 450px;
+        width: 452px;
     }
 
     .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications {
         max-height: 480px;
         overflow-y: scroll;
+        background-color: white;
+    }
+
+    .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications::-webkit-scrollbar {
+        width: 15px;
+    }
+
+    .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications::-webkit-scrollbar-track  {
+        background: #f1f1f1;
+    }
+
+    .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications .notifications-list {
+        box-shadow: none;
+        border-radius: 0;
     }
 
     .chamilo-menu-item-link .chamilo-menu-item-css-icon {
@@ -126,7 +144,12 @@
     }
 </style>
 
-<li class="chamilo-menu-item-priority dropdown chamilo-menu-item-notifications">
+{{ getJavascript('VueCommon.js', 'Hogent\\Libraries') }}
+{% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
+
+{% set notificationsID = "notifications" ~ random() %}
+
+<li class="chamilo-menu-item-priority dropdown chamilo-menu-item-notifications" id="{{ notificationsID }}">
     <a href="#" class="dropdown-toggle chamilo-menu-item-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
         <span class="fa fa-bell-o chamilo-menu-item-css-icon"></span>
         <span class="new-notifications-label">2</span>
@@ -134,7 +157,7 @@
     <ul class="dropdown-notifications dropdown-menu dropdown-menu-right">
         <li>
             <div class="visible-notifications">
-                {% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
+                <notifications-list scroll-detector-element=".visible-notifications" show-filters ref="notificationsList"></notifications-list>
             </div>
             <div class="notifications-footer">
                 <a href="{{ VIEWER_URL }}">Bekijk alle meldingen</a> - <a href="{{ FILTER_MANAGER_URL }}">Beheer de actieve filters</a>
@@ -145,6 +168,10 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        new Vue({
+            el: '#{{ notificationsID }}',
+            data: {}
+        });
 
         var notificationsElement = $('.chamilo-menu-item-notifications');
 
@@ -154,18 +181,6 @@
 
         notificationsElement.on('hide.bs.dropdown', function () {
             $('body').removeClass('no-scroll');
-        });
-
-        var visibleNotifications = $('.visible-notifications');
-
-        visibleNotifications.on('scroll', function() {
-            var scrollTop = $(this).scrollTop();
-            var divHeight = $(this)[0].scrollHeight;
-            var scrollBarHeight = $(this)[0].clientHeight;
-
-            if(scrollTop + scrollBarHeight >= divHeight) {
-                $(this).find('.notifications-list').trigger('loadNewData');
-            }
         });
     });
 </script>

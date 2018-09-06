@@ -1,5 +1,21 @@
 {{ HEADER|raw }}
 
+{{ getJavascript('VueCommon.js', 'Hogent\\Libraries') }}
 {% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
+
+<div id="notifications">
+    <notifications-list scroll-detector-element="window" show-filters></notifications-list>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        new Vue({
+            el: '#notifications',
+            data: {
+
+            }
+        })
+    });
+</script>
 
 {{ FOOTER|raw }}

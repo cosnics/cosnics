@@ -1,9 +1,5 @@
 {% set appContext = 'Chamilo\\Core\\Notification' %}
 
-{{ getJavascript('Common.js', 'Hogent\\Libraries') }}
-{{ getJavascript('VueCommon.js', 'Hogent\\Libraries') }}
-{{ getCss('Common.css', 'Hogent\\Libraries') }}
-
 <style>
     .notifications-list {
         width: 100%;
@@ -117,25 +113,26 @@
     }
 </style>
 
-{% set notificationsID = "notifications" ~ random() %}
-
-<div id="{{ notificationsID }}">
+<script type="text/x-template" id="notifications-template">
     <div class="list-group notifications-list">
         <div class="list-group-item notifications-list-title">
             Nieuwe meldingen
         </div>
-        <div class="list-group-item" v-for="notification in newNotifications" v-bind:class="{ 'unread-notification': !notification.isRead }">
+        <div class="list-group-item" v-for="notification in newNotifications"
+             v-bind:class="{ 'unread-notification': !notification.isRead }">
             <a class="notification-description">
                 <div v-html="notification.message"></div>
-                <div class="notification-timestamp"><span class="fa fa-clock-o"></span> {{ '{{ notification.time }}' }}</div>
+                <div class="notification-timestamp"><span
+                            class="fa fa-clock-o"></span> {{ '{{ notification.time }}' }}</div>
             </a>
-            <div class="notification-actions">
+            <div class="notification-actions" v-if="showFilters">
                 <div>
                     <b-dropdown class="actions-menu" right variant="link" size="lg" no-caret>
                         <template slot="button-content">
                             ...
                         </template>
-                        <b-dropdown-item v-for="filter in notification.filters"><span v-html="filter.message"></span></b-dropdown-item>
+                        <b-dropdown-item v-for="filter in notification.filters"><span
+                                    v-html="filter.message"></span></b-dropdown-item>
                     </b-dropdown>
                 </div>
             </div>
@@ -143,31 +140,39 @@
         <div class="list-group-item notifications-list-title">
             Eerdere meldingen
         </div>
-        <div class="list-group-item" v-for="notification in previousNotifications" v-bind:class="{ 'unread-notification': !notification.isRead }">
+        <div class="list-group-item" v-for="notification in previousNotifications"
+             v-bind:class="{ 'unread-notification': !notification.isRead }">
             <a class="notification-description">
                 <div v-html="notification.message"></div>
-                <div class="notification-timestamp"><span class="fa fa-clock-o"></span> {{ '{{ notification.time }}' }}</div>
+                <div class="notification-timestamp"><span
+                            class="fa fa-clock-o"></span> {{ '{{ notification.time }}' }}</div>
             </a>
-            <div class="notification-actions">
+            <div class="notification-actions" v-if="showFilters">
                 <div>
                     <b-dropdown class="actions-menu" right variant="link" size="lg" no-caret>
                         <template slot="button-content">
                             ...
                         </template>
-                        <b-dropdown-item v-for="filter in notification.filters"><span v-html="filter.message"></span></b-dropdown-item>
+                        <b-dropdown-item v-for="filter in notification.filters"><span
+                                    v-html="filter.message"></span></b-dropdown-item>
                     </b-dropdown>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</script>
 
 <script type="text/javascript">
     (function () {
-        $(window).on('load', function () {
-            new Vue({
-                el: '#{{ notificationsID }}',
-                data: {
+
+        Vue.component('notifications-list', {
+            template: '#notifications-template',
+            props: {
+                showFilters: Boolean,
+                scrollDetectorElement: String
+            },
+            data: function () {
+                return {
                     notifications: [
                         {
                             message: 'Sonia VANDERMEERSCH heeft een nieuwe inzending geplaatst in de opdracht <b>Programmeren 101</b> in de cursus <b>Web Development</b>',
@@ -311,40 +316,47 @@
                             ]
                         }
                     ]
-                },
-                computed: {
-                    newNotifications: function() {
-                        return this.notifications.filter(function(notification) {
-                            return notification.isNew;
-                        })
-                    },
-                    previousNotifications: function() {
-                        return this.notifications.filter(function(notification) {
-                            return !notification.isNew;
-                        })
-                    }
-                },
-                mounted: function() {
+                };
+            },
+            computed: {
+                newNotifications: function () {
+                    return this.notifications.filter(function (notification) {
+                        return notification.isNew;
+                    })
+                }
+                ,
+                previousNotifications: function () {
+                    return this.notifications.filter(function (notification) {
+                        return !notification.isNew;
+                    })
+                }
+            },
+            methods: {
+                loadData: function() {
                     var vueInstance = this;
-                    var stop = false;
 
-                    $(this.$el.querySelector('.notifications-list')).on('loadNewData', function () {
-                        if(stop) { return; }
-                        for(i = 0; i < 6; i++) {
-                            vueInstance.notifications.push(vueInstance.additionalNotifications[0]);
-                            vueInstance.notifications.push(vueInstance.additionalNotifications[1]);
-
-                            stop = true;
-                        }
-                    });
-
-                    for(i = 0; i < 3; i++) {
+                    for (i = 0; i < 3; i++) {
                         vueInstance.notifications.push(vueInstance.additionalNotifications[0]);
                         vueInstance.notifications.push(vueInstance.additionalNotifications[1]);
                     }
                 }
-            });
-        });
+            },
+            mounted: function () {
+                this.loadData();
+                var vueInstance = this;
 
+                if(this.scrollDetectorElement) {
+                    $(this.scrollDetectorElement).on('scroll', function() {
+                        var scrollTop = $(this).scrollTop();
+                        var divHeight = $(this)[0].scrollHeight;
+                        var scrollBarHeight = $(this)[0].clientHeight;
+
+                        if((scrollTop + scrollBarHeight) >= (divHeight - 5)) {
+                            vueInstance.loadData();
+                        }
+                    });
+                }
+            }
+        });
     })();
 </script>

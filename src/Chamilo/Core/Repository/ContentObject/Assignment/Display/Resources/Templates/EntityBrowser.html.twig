@@ -1,5 +1,19 @@
 {{ HEADER|raw }}
 
+{{ getJavascript('VueCommon.js', 'Hogent\\Libraries') }}
+
+<style>
+    .dynamic-visual-tab-content #notifications .list-group-item {
+        border: 1px solid #ddd;
+        padding: 10px 15px;
+    }
+
+    .dynamic-visual-tab-content #notifications .list-group-item.notifications-list-title {
+        padding: 5px 15px;
+    }
+</style>
+{% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
+
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
 
 {% set valueTrue = '<i class="fa fa-check value-true" aria-hidden="true"></i>' %}
@@ -18,17 +32,7 @@
 
 <div class="dynamic-visual-tab-content tab-content">
     <div role="tabpanel" class="tab-pane tab-pane-with-border" id="notifications">
-        <style>
-            .dynamic-visual-tab-content #notifications .list-group-item {
-                border: 1px solid #ddd;
-                padding: 10px 15px;
-            }
-
-            .dynamic-visual-tab-content #notifications .list-group-item.notifications-list-title {
-                padding: 5px 15px;
-            }
-        </style>
-        {% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
+        <notifications-list></notifications-list>
     </div>
     <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entities">
         {{ ENTITY_TABLE|raw }}
@@ -114,5 +118,16 @@
 
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        new Vue({
+            el: '#notifications',
+            data: {
+
+            }
+        })
+    });
+</script>
 
 {{ FOOTER|raw }}
