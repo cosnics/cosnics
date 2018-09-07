@@ -15,6 +15,7 @@ abstract class Manager extends AjaxManager
 {
     const ACTION_UPLOAD_ENTRY_ATTACHMENT = 'upload_entry_attachment';
     const ACTION_DELETE_ENTRY_ATTACHMENT = 'delete_entry_attachment';
+    const ACTION_GET_NOTIFICATIONS = 'GetNotifications';
 
     const DEFAULT_ACTION = self::ACTION_UPLOAD_ENTRY_ATTACHMENT;
 

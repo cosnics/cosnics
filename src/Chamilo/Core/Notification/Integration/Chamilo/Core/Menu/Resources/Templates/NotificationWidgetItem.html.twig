@@ -157,7 +157,11 @@
     <ul class="dropdown-notifications dropdown-menu dropdown-menu-right">
         <li>
             <div class="visible-notifications">
-                <notifications-list scroll-detector-element=".visible-notifications" show-filters ref="notificationsList"></notifications-list>
+                <notifications-list
+                        scroll-detector-element="#{{ notificationsID }} .visible-notifications"
+                        show-filters ref="notificationsList"
+                        retrieve-notifications-url="index.php?application=Chamilo\Core\Notification\Ajax&go=GetNotifications">
+                </notifications-list>
             </div>
             <div class="notifications-footer">
                 <a href="{{ VIEWER_URL }}">Bekijk alle meldingen</a> - <a href="{{ FILTER_MANAGER_URL }}">Beheer de actieve filters</a>

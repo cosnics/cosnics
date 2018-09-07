@@ -118,45 +118,31 @@
         <div class="list-group-item notifications-list-title">
             Nieuwe meldingen
         </div>
-        <div class="list-group-item" v-for="notification in newNotifications"
-             v-bind:class="{ 'unread-notification': !notification.isRead }">
-            <a class="notification-description">
-                <div v-html="notification.message"></div>
-                <div class="notification-timestamp"><span
-                            class="fa fa-clock-o"></span> {{ '{{ notification.time }}' }}</div>
-            </a>
-            <div class="notification-actions" v-if="showFilters">
-                <div>
-                    <b-dropdown class="actions-menu" right variant="link" size="lg" no-caret>
-                        <template slot="button-content">
-                            ...
-                        </template>
-                        <b-dropdown-item v-for="filter in notification.filters"><span
-                                    v-html="filter.message"></span></b-dropdown-item>
-                    </b-dropdown>
-                </div>
-            </div>
-        </div>
+        <notification v-for="notification in newNotifications" :notification="notification" :showFilters="showFilters"></notification>
         <div class="list-group-item notifications-list-title">
             Eerdere meldingen
         </div>
-        <div class="list-group-item" v-for="notification in previousNotifications"
-             v-bind:class="{ 'unread-notification': !notification.isRead }">
-            <a class="notification-description">
-                <div v-html="notification.message"></div>
-                <div class="notification-timestamp"><span
-                            class="fa fa-clock-o"></span> {{ '{{ notification.time }}' }}</div>
-            </a>
-            <div class="notification-actions" v-if="showFilters">
-                <div>
-                    <b-dropdown class="actions-menu" right variant="link" size="lg" no-caret>
-                        <template slot="button-content">
-                            ...
-                        </template>
-                        <b-dropdown-item v-for="filter in notification.filters"><span
-                                    v-html="filter.message"></span></b-dropdown-item>
-                    </b-dropdown>
-                </div>
+        <notification v-for="notification in previousNotifications" :notification="notification" :showFilters="showFilters"></notification>
+    </div>
+</script>
+
+<script type="text/x-template" id="notification-template">
+    <div class="list-group-item"
+         v-bind:class="{ 'unread-notification': !notification.isRead }">
+        <a class="notification-description">
+            <div v-html="notification.message"></div>
+            <div class="notification-timestamp"><span
+                        class="fa fa-clock-o"></span> {{ '{{ notification.time }}' }}</div>
+        </a>
+        <div class="notification-actions" v-if="showFilters">
+            <div>
+                <b-dropdown class="actions-menu" right variant="link" size="lg" no-caret>
+                    <template slot="button-content">
+                        ...
+                    </template>
+                    <b-dropdown-item v-for="filter in notification.filters"><span
+                                v-html="filter.message"></span></b-dropdown-item>
+                </b-dropdown>
             </div>
         </div>
     </div>
@@ -165,157 +151,25 @@
 <script type="text/javascript">
     (function () {
 
+        Vue.component('notification', {
+            template: '#notification-template',
+            props: {
+                notification: Object,
+                showFilters: Boolean
+            }
+        });
+
         Vue.component('notifications-list', {
             template: '#notifications-template',
             props: {
                 showFilters: Boolean,
-                scrollDetectorElement: String
+                scrollDetectorElement: String,
+                retrieveNotificationsUrl: String
             },
             data: function () {
                 return {
-                    notifications: [
-                        {
-                            message: 'Sonia VANDERMEERSCH heeft een nieuwe inzending geplaatst in de opdracht <b>Programmeren 101</b> in de cursus <b>Web Development</b>',
-                            time: '4 uur geleden',
-                            url: '',
-                            isRead: false,
-                            isNew: true,
-                            filters: [
-                                {
-                                    message: 'Verberg deze melding',
-                                    id: null
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van de cursus <b>Web Development</b>',
-                                    id: 1
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van de opdracht <b>Programmeren 101</b> in de cursus <b>Web Development</b>',
-                                    id: 2
-                                }
-                            ]
-                        },
-                        {
-                            message: 'Tom DEMETS heeft de aankondiging <b>Examenrooster 2018</b> geplaatst in de cursus <b>Elektronica voor gevorderden</b>',
-                            time: '20 uur geleden',
-                            url: '',
-                            isRead: false,
-                            isNew: true,
-                            filters: [
-                                {
-                                    message: 'Verberg deze melding',
-                                    id: null
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van de cursus <b>Elektronica voor gevorderden</b>',
-                                    id: 3
-                                },
-                                {
-                                    message: 'Verberg alle meldingen over <b>aankondigingen</b> in de cursus <b>Elektronica voor gevorderden</b>',
-                                    id: 4
-                                }
-                            ]
-                        },
-                        {
-                            message: 'Lucas VANDEREECKEN heeft het leerpad <b>Kritisch denken</b> aangepast in de cursus <b>Kritisch denken voor beginners</b>',
-                            time: 'gisteren - 20u20',
-                            url: '',
-                            isRead: false,
-                            isNew: false,
-                            filters: [
-                                {
-                                    message: 'Verberg deze melding',
-                                    id: null
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van de cursus <b>Kritisch denken voor beginners</b>',
-                                    id: 5
-                                },
-                                {
-                                    message: 'Verberg alle meldingen in het leerpad <b>Kritisch denken</b> in de cursus <b>Kritisch denken voor beginners</b>',
-                                    id: 6
-                                }
-                            ]
-                        },
-                        {
-                            message: 'Jonas DESMET heeft een het item <b>Stage attest</b> toegevoegd aan zijn portfolio',
-                            time: '20 augustus 2018 - 18u35',
-                            url: '',
-                            isRead: true,
-                            isNew: false,
-                            filters: [
-                                {
-                                    message: 'Verberg deze melding',
-                                    id: null
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van het portfolio van <b>Jonas DESMET</b>',
-                                    id: 7
-                                }
-                            ]
-                        },
-                        {
-                            message: 'Filip WATTEEUW heeft de publicatie <b>WEGWERKZAAMHEDEN GENT 2018 / 2019</b> toegevoegd aan de cursus <b>Burgers pesten voor beginners</b>',
-                            time: '15 augustus 2018 - 10u13',
-                            url: '',
-                            isRead: true,
-                            isNew: false,
-                            filters: [
-                                {
-                                    message: 'Verberg deze melding',
-                                    id: null
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van de cursus <b>Burgers pesten voor beginners</b>',
-                                    id: 8
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van nieuwe publicaties in de cursus <b>Burgers pesten voor beginners</b>',
-                                    id: 9
-                                }
-                            ]
-                        }
-                    ],
-                    additionalNotifications: [
-                        {
-                            message: 'Jonas DESMET heeft een het item <b>Stage attest</b> toegevoegd aan zijn portfolio',
-                            time: '20 augustus 2018 - 18u35',
-                            url: '',
-                            isRead: true,
-                            isNew: false,
-                            filters: [
-                                {
-                                    message: 'Verberg deze melding',
-                                    id: null
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van het portfolio van <b>Jonas DESMET</b>',
-                                    id: 7
-                                }
-                            ]
-                        },
-                        {
-                            message: 'Filip WATTEEUW heeft de publicatie <b>WEGWERKZAAMHEDEN GENT 2018 / 2019</b> toegevoegd aan de cursus <b>Burgers pesten voor beginners</b>',
-                            time: '15 augustus 2018 - 10u13',
-                            url: '',
-                            isRead: true,
-                            isNew: false,
-                            filters: [
-                                {
-                                    message: 'Verberg deze melding',
-                                    id: null
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van de cursus <b>Burgers pesten voor beginners</b>',
-                                    id: 8
-                                },
-                                {
-                                    message: 'Verberg alle meldingen van nieuwe publicaties in de cursus <b>Burgers pesten voor beginners</b>',
-                                    id: 9
-                                }
-                            ]
-                        }
-                    ]
+                    notifications: [],
+                    isLoading: false
                 };
             },
             computed: {
@@ -334,25 +188,43 @@
             methods: {
                 loadData: function() {
                     var vueInstance = this;
+                    this.isLoading = true;
 
-                    for (i = 0; i < 3; i++) {
-                        vueInstance.notifications.push(vueInstance.additionalNotifications[0]);
-                        vueInstance.notifications.push(vueInstance.additionalNotifications[1]);
-                    }
+                    this.$http.post(this.retrieveNotificationsUrl).then(function(result) {
+                        var newNotifications = result.body;
+
+                        newNotifications.forEach(function(notification) {
+                            vueInstance.notifications.push(notification)
+                        });
+
+                        vueInstance.isLoading = false;
+                    })
                 }
             },
             mounted: function () {
                 this.loadData();
+
                 var vueInstance = this;
+                var isWindow = false;
+
+                if(this.scrollDetectorElement === 'window') {
+                    this.scrollDetectorElement = window;
+                    isWindow = true;
+                }
 
                 if(this.scrollDetectorElement) {
                     $(this.scrollDetectorElement).on('scroll', function() {
-                        var scrollTop = $(this).scrollTop();
-                        var divHeight = $(this)[0].scrollHeight;
-                        var scrollBarHeight = $(this)[0].clientHeight;
+                        if(vueInstance.isLoading) {
+                            return;
+                        }
 
-                        if((scrollTop + scrollBarHeight) >= (divHeight - 5)) {
+                        var scrollTop = isWindow ? window.scrollY : $(this).scrollTop();
+                        var divHeight = isWindow ? document.body.offsetHeight : $(this)[0].scrollHeight;
+                        var containerHeight = isWindow ? window.innerHeight : $(this)[0].clientHeight;
+
+                        if((scrollTop + containerHeight) >= (divHeight - 5)) {
                             vueInstance.loadData();
+                            console.log('loadData' + vueInstance.scrollDetectorElement);
                         }
                     });
                 }

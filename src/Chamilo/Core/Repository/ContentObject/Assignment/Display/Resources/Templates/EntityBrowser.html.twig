@@ -11,6 +11,16 @@
     .dynamic-visual-tab-content #notifications .list-group-item.notifications-list-title {
         padding: 5px 15px;
     }
+
+    .dynamic-visual-tabs .new-notifications-label {
+        background-color: red;
+        color: white !important;
+        border-radius: 20px;
+        padding: 2px 5px;
+        font-size: 10px;
+        margin-left: 3px;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    }
 </style>
 {% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
 
@@ -24,7 +34,7 @@
 {{ BUTTON_TOOLBAR|raw }}
 
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
-    <li role="presentation"><a href="#notifications" aria-controls="entities" role="tab" data-toggle="tab">{{ 'Notifications'|trans({}, appContext) }}</a></li>
+    <li role="presentation"><a href="#notifications" aria-controls="entities" role="tab" data-toggle="tab">{{ 'Notifications'|trans({}, appContext) }} <span class="new-notifications-label">2</span></a></li>
     <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ ENTITY_NAME }}</a></li>
     <li role="presentation"><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
     <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
@@ -32,7 +42,9 @@
 
 <div class="dynamic-visual-tab-content tab-content">
     <div role="tabpanel" class="tab-pane tab-pane-with-border" id="notifications">
-        <notifications-list></notifications-list>
+        <notifications-list scroll-detector-element="window"
+                retrieve-notifications-url="index.php?go=CourseViewer&application=Chamilo%5CApplication%5CWeblcms&course=3&tool=Assignment&browser=Table&tool_action=Display&publication=93&assignment_display_action=Ajax&assignment_display_ajax_action=GetNotifications">
+        </notifications-list>
     </div>
     <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entities">
         {{ ENTITY_TABLE|raw }}

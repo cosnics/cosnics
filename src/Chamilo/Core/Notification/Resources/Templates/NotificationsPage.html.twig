@@ -4,7 +4,9 @@
 {% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
 
 <div id="notifications">
-    <notifications-list scroll-detector-element="window" show-filters></notifications-list>
+    <notifications-list scroll-detector-element="window" show-filters
+        retrieve-notifications-url="index.php?application=Chamilo\Core\Notification\Ajax&go=GetNotifications">
+    </notifications-list>
 </div>
 
 <script type="text/javascript">
