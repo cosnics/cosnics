@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User;
 
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -19,15 +20,27 @@ class UserGroups
     private $border;
 
     /**
+     * Limit the shown groups to the given list of available groups in a certain context
+     *
+     * @var Group[]
+     */
+    protected $availableGroups;
+
+    /**
      * Constructor
      * 
      * @param $user_id int
      * @param $border boolean Indicates if a border should be included
      */
-    public function __construct($user_id, $border = true)
+    public function __construct($user_id, $border = true, $availableGroups = [])
     {
         $this->user_id = $user_id;
         $this->border = $border;
+
+        foreach($availableGroups as $availableGroup)
+        {
+            $this->availableGroups[$availableGroup->getId()] = $availableGroup;
+        }
     }
 
     /**
@@ -60,6 +73,11 @@ class UserGroups
         {
             while ($group = $group_relations->next_result())
             {
+                if(!$this->isGroupValid($group))
+                {
+                    continue;
+                }
+
                 $html[] = '<li>';
                 $html[] = $group->get_name();
                 $html[] = ' (';
@@ -77,5 +95,15 @@ class UserGroups
         $html[] = '<div style="clear:both;"><span></span></div>';
         $html[] = '</div>';
         return implode(PHP_EOL, $html);
+    }
+
+    protected function isGroupValid(Group $group)
+    {
+        if(!is_array($this->availableGroups) || count($this->availableGroups) == 0)
+        {
+            return false;
+        }
+
+        return array_key_exists($group->getId(), $this->availableGroups);
     }
 }

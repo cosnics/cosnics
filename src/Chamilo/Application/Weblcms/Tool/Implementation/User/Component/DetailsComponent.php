@@ -20,13 +20,20 @@ class DetailsComponent extends Manager
 
         $html[] = $this->render_header();
 
+        $availableGroups =
+            \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_subscribed_platform_groups(
+                [$this->get_course_id()]
+            )->as_array();
+
         if (Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS))
         {
+            /** @var \Chamilo\Core\User\Storage\DataClass\User $user */
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
                 \Chamilo\Core\User\Storage\DataClass\User::class_name(),
                 Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS));
+
             $details = new UserDetails($user);
-            $groups = new UserGroups($user->get_id());
+            $groups = new UserGroups($user->get_id(), true, $availableGroups);
             $course_groups = new UserCourseGroups($user->get_id(), $this->get_course_id());
 
             $html[] = $details->toHtml();
@@ -42,7 +49,7 @@ class DetailsComponent extends Manager
                     \Chamilo\Core\User\Storage\DataClass\User::class_name(),
                     $user_id);
                 $details = new UserDetails($user);
-                $groups = new UserGroups($user->get_id());
+                $groups = new UserGroups($user->get_id(), true, $availableGroups);
                 $course_groups = new UserCourseGroups($user->get_id(), $this->get_course_id());
 
                 $html[] = $details->toHtml();
