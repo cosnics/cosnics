@@ -52,7 +52,7 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 
         $defaults = [
             self::PROPERTY_USE_PLANNER . '[' . $courseGroup->getId() . ']' =>
-                $this->courseGroupOffice365ReferenceService->courseGroupHasPlannerReference($courseGroup)
+                $this->courseGroupOffice365ReferenceService->courseGroupHasLinkedReference($courseGroup)
         ];
 
         $courseGroupForm->setDefaults($defaults);
