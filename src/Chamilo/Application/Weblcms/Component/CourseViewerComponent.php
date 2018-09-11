@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit;
+use Chamilo\Application\Weblcms\Interfaces\IgnoreToolTrackingInterface;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
@@ -120,23 +121,28 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             }
         }
 
-        Event::trigger(
-            'VisitCourse',
-            Manager::context(),
-            array(
-                CourseVisit::PROPERTY_USER_ID => $this->get_user_id(),
-                CourseVisit::PROPERTY_COURSE_ID => $this->get_course_id(),
-                CourseVisit::PROPERTY_TOOL_ID => $this->course_tool_registration->get_id(),
-                CourseVisit::PROPERTY_CATEGORY_ID => $category,
-                CourseVisit::PROPERTY_PUBLICATION_ID => $publicationId
-            )
-        );
+        $managerClass = $this->course_tool_registration->getContext() . '\Manager';
+        if(!class_exists($managerClass) || !is_subclass_of($managerClass, IgnoreToolTrackingInterface::class))
+        {
+            Event::trigger(
+                'VisitCourse',
+                Manager::context(),
+                array(
+                    CourseVisit::PROPERTY_USER_ID => $this->get_user_id(),
+                    CourseVisit::PROPERTY_COURSE_ID => $this->get_course_id(),
+                    CourseVisit::PROPERTY_TOOL_ID => $this->course_tool_registration->get_id(),
+                    CourseVisit::PROPERTY_CATEGORY_ID => $category,
+                    CourseVisit::PROPERTY_PUBLICATION_ID => $publicationId
+                )
+            );
+
+            DataManager::log_course_module_access($this->get_course_id(), $this->get_user_id(), $tool, $category);
+        }
 
         $result = \Chamilo\Application\Weblcms\Tool\Manager::factory_and_launch(
             $this->course_tool_registration->getContext(),
             $this);
 
-        DataManager::log_course_module_access($this->get_course_id(), $this->get_user_id(), $tool, $category);
 
         return $result;
     }
