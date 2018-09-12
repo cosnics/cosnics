@@ -265,6 +265,16 @@ class PublicationRepository implements PublicationRepositoryInterface
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $publication
+     *
+     * @return int[]
+     */
+    public function getTargetUserIdsForPublication(ContentObjectPublication $publication)
+    {
+        return DataManager::getPublicationTargetUserIds($publication->getId(), $publication->get_course_id());
+    }
+
+    /**
      * Returns the course groups for who the content object is published
      *
      * @param ContentObjectPublication $publication

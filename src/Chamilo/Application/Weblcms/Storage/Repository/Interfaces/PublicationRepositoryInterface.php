@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Storage\Repository\Interfaces;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Interface to determine the necessary functions for the publication repository
@@ -70,6 +71,13 @@ interface PublicationRepositoryInterface
      * @return User[]
      */
     public function findTargetUsersForPublication(ContentObjectPublication $publication);
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $publication
+     *
+     * @return int[]
+     */
+    public function getTargetUserIdsForPublication(ContentObjectPublication $publication);
 
     /**
      * Returns the course groups for who the content object is published

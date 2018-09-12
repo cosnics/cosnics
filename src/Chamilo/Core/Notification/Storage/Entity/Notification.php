@@ -29,16 +29,9 @@ class Notification
     /**
      * @var string
      *
-     * @ORM\Column(name="description_variable", type="string", nullable=false)
+     * @ORM\Column(name="description_context", type="string", nullable=false, length=1024)
      */
-    protected $descriptionVariable;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description_parameters", type="string", nullable=false)
-     */
-    protected $descriptionParameters;
+    protected $descriptionContext;
 
     /**
      * @var string
@@ -76,33 +69,21 @@ class Notification
     /**
      * @return string
      */
-    public function getDescriptionVariable()
+    public function getDescriptionContext()
     {
-        return $this->descriptionVariable;
+        return $this->descriptionContext;
     }
 
     /**
-     * @param string $descriptionVariable
+     * @param string $descriptionContext
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\Notification
      */
-    public function setDescriptionVariable(string $descriptionVariable)
+    public function setDescriptionContext(string $descriptionContext)
     {
-        $this->descriptionVariable = $descriptionVariable;
-    }
+        $this->descriptionContext = $descriptionContext;
 
-    /**
-     * @return string
-     */
-    public function getDescriptionParameters()
-    {
-        return $this->descriptionParameters;
-    }
-
-    /**
-     * @param string $descriptionParameters
-     */
-    public function setDescriptionParameters(string $descriptionParameters)
-    {
-        $this->descriptionParameters = $descriptionParameters;
+        return $this;
     }
 
     /**
@@ -115,10 +96,14 @@ class Notification
 
     /**
      * @param string $url
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\Notification
      */
     public function setUrl(string $url)
     {
         $this->url = $url;
+
+        return $this;
     }
 
     /**
@@ -131,10 +116,14 @@ class Notification
 
     /**
      * @param \DateTime $date
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\Notification
      */
     public function setDate(\DateTime $date)
     {
         $this->date = $date;
+
+        return $this;
     }
 
     /**
@@ -155,9 +144,13 @@ class Notification
 
     /**
      * @param \Chamilo\Core\Notification\Storage\Entity\Filter $filter
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\Notification
      */
     public function addFilter(Filter $filter)
     {
         $this->filters[] = $filter;
+
+        return $this;
     }
 }

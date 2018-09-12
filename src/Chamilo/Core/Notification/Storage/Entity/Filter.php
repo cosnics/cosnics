@@ -36,16 +36,9 @@ class Filter
     /**
      * @var string
      *
-     * @ORM\Column(name="description_variable", type="string", nullable=false)
+     * @ORM\Column(name="description_context", type="string", nullable=false, length=1024)
      */
-    protected $descriptionVariable;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description_parameters", type="string", nullable=false)
-     */
-    protected $descriptionParameters;
+    protected $descriptionContext;
 
     /**
      * @var \Chamilo\Core\Notification\Storage\Entity\Notification[]
@@ -72,42 +65,34 @@ class Filter
 
     /**
      * @param string $path
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\Filter
      */
     public function setPath(string $path)
     {
         $this->path = $path;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getDescriptionVariable()
+    public function getDescriptionContext()
     {
-        return $this->descriptionVariable;
+        return $this->descriptionContext;
     }
 
     /**
-     * @param string $descriptionVariable
+     * @param string $descriptionContext
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\Filter
      */
-    public function setDescriptionVariable(string $descriptionVariable)
+    public function setDescriptionContext(string $descriptionContext)
     {
-        $this->descriptionVariable = $descriptionVariable;
-    }
+        $this->descriptionContext = $descriptionContext;
 
-    /**
-     * @return string
-     */
-    public function getDescriptionParameters()
-    {
-        return $this->descriptionParameters;
-    }
-
-    /**
-     * @param string $descriptionParameters
-     */
-    public function setDescriptionParameters(string $descriptionParameters)
-    {
-        $this->descriptionParameters = $descriptionParameters;
+        return $this;
     }
 
     /**

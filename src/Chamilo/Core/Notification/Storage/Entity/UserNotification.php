@@ -55,7 +55,7 @@ class UserNotification
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -70,10 +70,14 @@ class UserNotification
 
     /**
      * @param int $userId
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification
      */
     public function setUserId($userId)
     {
         $this->userId = $userId;
+
+        return $this;
     }
 
     /**
@@ -86,10 +90,14 @@ class UserNotification
 
     /**
      * @param Notification $notification
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification
      */
     public function setNotification(Notification $notification)
     {
         $this->notification = $notification;
+
+        return $this;
     }
 
     /**
@@ -102,10 +110,14 @@ class UserNotification
 
     /**
      * @param bool $read
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification
      */
     public function setRead(bool $read)
     {
         $this->read = $read;
+
+        return $this;
     }
 
 }
