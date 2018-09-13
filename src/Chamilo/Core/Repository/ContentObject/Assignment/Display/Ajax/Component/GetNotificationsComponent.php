@@ -22,6 +22,14 @@ class GetNotificationsComponent extends Manager
             '{"message":"<b>Tom DEMETS</b> heeft nieuwe feedback geplaatst op de inzending van <b>Sonia VANDERMEERSCH</b>","time":"20 uur geleden","url":"","isRead":false,"isNew":true,"filters":[]},' .
             '{"message":"<b>Sonia VANDERMEERSCH</b> heeft een nieuwe inzending geplaatst","time":"gisteren - 20u20","url":"","isRead":true,"isNew":false,"filters":[]}]';
 
+
+//        $filter = $filterManager->getFilterForPath('publication:' . $publicationId);
+//        $notifications = $notificationManager->getNotificationsForFilters([$filter]);
+
+        $filterPath = 'Chamilo\Application\Weblcms::Publication:5';
+        $filter = $filterManager->getFilterForPath($filterPath);
+        $notifications = $notificationManager->getNotificationsForFilters([$filter]);
+
         return new JsonResponse($jsonResponse, 200, [], true);
     }
 }

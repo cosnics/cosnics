@@ -6,9 +6,11 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Notification\Domain\NotificationTriggerData;
+use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Service\FilterManager;
 use Chamilo\Core\Notification\Service\NotificationManager;
 use Chamilo\Core\Notification\Service\NotificationProcessor\NotificationProcessorInterface;
+use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
@@ -61,6 +63,11 @@ class EntryNotificationProcessor implements NotificationProcessorInterface
     protected $notificationManager;
 
     /**
+     * @var \Chamilo\Core\Notification\Service\NotificationTranslator
+     */
+    protected $notificationTranslator;
+
+    /**
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Domain\NotificationTriggerData | NotificationTriggerData $notificationTriggerData
      *
      * @throws \Doctrine\ORM\ORMException
@@ -108,6 +115,25 @@ class EntryNotificationProcessor implements NotificationProcessorInterface
             );
         }
 
+        $targetUserIds = $this->getTargetUserIds($course, $entry);
+        $filters = $this->getFilters($publication, $course, $assignment);
+        $url = $this->getNotificationUrl($course, $publication, $entry);
+        $descriptionContext = $this->getNotificationTranslationContext($assignment, $course, $entry);
+        $date = new \DateTime($entry->getSubmitted());
+
+        $this->notificationManager->createNotificationForUsers(
+            $url, $descriptionContext, $date, $targetUserIds, $filters
+        );
+    }
+
+    /**
+     * @param Course $course
+     * @param Entry $entry
+     *
+     * @return int[]
+     */
+    protected function getTargetUserIds($course, $entry)
+    {
         $courseTeachers = $this->courseService->getTeachersFromCourse($course);
         $entityUsers = $this->entityServiceManager->getEntityServiceByType($entry->getEntityType())->getUsersForEntity(
             $entry->getEntityId()
@@ -126,45 +152,83 @@ class EntryNotificationProcessor implements NotificationProcessorInterface
             $targetUserIds[] = $entityUser->getId();
         }
 
+        return $targetUserIds;
+    }
+
+    /**
+     * @param ContentObjectPublication $publication
+     * @param Course $course
+     * @param Assignment $assignment
+     *
+     * @return Filter[]
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    protected function getFilters($publication, $course, $assignment): array
+    {
+        foreach ($this->translator->getFallbackLocales() as $locale)
+        {
+            $translation = $this->translator->trans(
+                'NotificationFilterCourse',
+                [
+                    'COURSE_TITLE' => $course->get_title(),
+                    'TOOL' => $this->translator->trans(
+                        'TypeName', [],
+                        'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool()
+                    )
+                ],
+                'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
+            );
+        }
+
         $filters = [
             $this->filterManager->getOrCreateFilterByPath(
                 'course:' . $publication->get_course_id(),
-                [
-                    'context' => 'Chamilo\Application\Weblcms\Tool\Implementation\Assignment',
-                    'variable' => 'NotificationFilterCourse',
-                    'parameters' => ['COURSE_TITLE' => $course->get_title()]
-                ]
+                    new TranslationContext(
+                        'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 'NotificationFilterCourse',
+                        ['COURSE_TITLE' => $course->get_title()]
+                    )
             ),
             $this->filterManager->getOrCreateFilterByPath(
                 'tool:' . $publication->get_tool() . '-course:' . $publication->get_course_id(),
-                [
-                    'context' => 'Chamilo\Application\Weblcms\Tool\Implementation\Assignment',
-                    'variable' => 'NotificationFilterTool',
-                    'parameters' => [
-                        'COURSE_TITLE' => $course->get_title(),
-                        'TOOL' => [
-                            'context' => 'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool(),
-                            'variable' => 'TypeName', 'parameters' => []
+                    new TranslationContext(
+                        'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 'NotificationFilterTool',
+                        [
+                            'COURSE_TITLE' => $course->get_title(),
+                            'TOOL' => new TranslationContext(
+                                'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool(), 'TypeName'
+                            )
                         ]
-                    ]
-                ]
+                    )
             ),
             $this->filterManager->getOrCreateFilterByPath(
                 'publication:' . $publication->getId(),
-                [
-                    'context' => 'Chamilo\Application\Weblcms\Tool\Implementation\Assignment',
-                    'variable' => 'NotificationFilterPublication',
-                    'parameters' => [
-                        'PUBLICATION_TITLE' => $assignment->get_title(), 'COURSE_TITLE' => $course->get_title(),
-                        'TOOL' => [
-                            'context' => 'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool(),
-                            'variable' => 'TypeName', 'parameters' => []
+                    new TranslationContext(
+                        'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 'NotificationFilterPublication',
+                        [
+                            'COURSE_TITLE' => $course->get_title(), 'PUBLICATION_TITLE' => $assignment->get_title(),
+                            'TOOL' => new TranslationContext(
+                                'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool(), 'TypeName'
+                            )
                         ]
-                    ]
-                ]
+
+                    )
             )
         ];
 
+        return $filters;
+    }
+
+    /**
+     * @param Course $course
+     * @param ContentObjectPublication $publication
+     * @param Entry $entry
+     *
+     * @return string
+     */
+    protected function getNotificationUrl($course, $publication, $entry): string
+    {
         $parameters = [
             Application::PARAM_CONTEXT => 'Chamilo\Application\Weblcms',
             Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
@@ -176,24 +240,32 @@ class EntryNotificationProcessor implements NotificationProcessorInterface
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_ENTRY,
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTRY_ID => $entry->getId(),
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID => $entry->getEntityId(),
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE => $entry->getEntityType()
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE => $entry->getEntityType(
+            )
         ];
 
         $redirect = new Redirect($parameters);
         $url = $redirect->getUrl();
 
-        $descriptionContext =
+        return $url;
+    }
+
+    /**
+     * @param Assignment $assignment
+     * @param Course $course
+     * @param Entry $entry
+     *
+     * @return TranslationContext
+     */
+    protected function getNotificationTranslationContext($assignment, $course, $entry): string
+    {
+        return new TranslationContext(
+            'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 'NewAssignmentEntry',
             [
-                'context' => 'Chamilo\Application\Weblcms\Tool\Implementation\Assignment',
-                'variable' => 'NewAssignmentEntry',
-                'parameters' => [
-                    'PUBLICATION_TITLE' => $assignment->get_title(), 'COURSE_TITLE' => $course->get_title(),
-                    'USER' => $this->userService->getUserFullNameById($entry->getUserId())
-                ]
-            ];
+                'PUBLICATION_TITLE' => $assignment->get_title(), 'COURSE_TITLE' => $course->get_title(),
+                'USER' => $this->userService->getUserFullNameById($entry->getUserId())
+            ]
 
-        $date = new \DateTime($entry->getSubmitted());
-
-        $this->notificationManager->createNotificationForUsers($url, $descriptionContext, $date, $targetUserIds, $filters);
+        );
     }
 }

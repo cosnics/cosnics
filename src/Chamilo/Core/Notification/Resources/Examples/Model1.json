@@ -1,0 +1,41 @@
+{
+  "actor": "Freek Vandenbos",
+  "verb": "Submitted",
+  "object": {
+    "namespace": "Chamilo\\Application\\Weblcms",
+    "type": "entry",
+    "path": "entry:80",
+    "name": null,
+    "id": 80
+  },
+  "context": [
+    {
+      "namespace": "Chamilo\\Application\\Weblcms",
+      "type": "course",
+      "path": "course:5",
+      "name": "Programmeren 101",
+      "id": 5
+    },
+    {
+      "namespace": "Chamilo\\Application\\Weblcms",
+      "type": "tool",
+      "path": "tool:Assignment",
+      "name": "Assignment",
+      "id": "Assignment"
+    },
+    {
+      "namespace": "Chamilo\\Application\\Weblcms",
+      "type": "publication",
+      "path": "publication:20",
+      "name": "Opdracht week 1",
+      "id": 20
+    },
+    {
+      "namespace": "Chamilo\\Core\\Repository\\ContentObject\\Assignment",
+      "type": "assignment",
+      "path": "assignment:50",
+      "name": "Opdracht week 1",
+      "id": 50
+    }
+  ]
+}

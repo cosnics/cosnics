@@ -1,0 +1,14 @@
+[
+  {
+    "viewingContext": "Chamilo",
+    "nl": "Freek Vandenbos heeft een nieuwe inzending geplaatst in de opdracht Week 1 in de cursus Programmeren 101"
+  },
+  {
+    "viewingContext": "Chamilo\\Application\\Weblcms::course:5",
+    "nl": "Freek Vandenbos heeft een nieuwe inzending geplaatst in de opdracht Week 1"
+  },
+  {
+    "viewingContext": "Chamilo\\Application\\Weblcms::publication:10",
+    "nl": "Freek Vandenbos heeft een nieuwe inzending geplaatst"
+  }
+]

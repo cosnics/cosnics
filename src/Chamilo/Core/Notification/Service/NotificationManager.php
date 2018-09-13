@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Notification\Service;
 
+use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Notification\Storage\Entity\Notification;
 use Chamilo\Core\Notification\Storage\Entity\UserNotification;
@@ -19,8 +20,13 @@ class NotificationManager
     protected $notificationRepository;
 
     /**
+     * @var \Chamilo\Core\Notification\Service\NotificationTranslator
+     */
+    protected $notificationTranslator;
+
+    /**
      * @param string $url
-     * @param array $descriptionContext
+     * @param \Chamilo\Core\Notification\Domain\TranslationContext $translationContext
      * @param \DateTime $date
      * @param array $targetUserIds
      * @param Filter[] $filters
@@ -28,7 +34,9 @@ class NotificationManager
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function createNotificationForUsers($url, $descriptionContext, $date, $targetUserIds = [], $filters = [])
+    public function createNotificationForUsers(
+        $url, TranslationContext $translationContext, $date, $targetUserIds = [], $filters = []
+    )
     {
         $notification = new Notification();
 
@@ -43,19 +51,19 @@ class NotificationManager
         }
 
         $notification->setUrl($url)
-            ->setDescriptionContext(json_encode($descriptionContext))
+            ->setDescriptionContext($this->notificationTranslator->createNotificationTranslations($translationContext))
             ->setDate($date)
             ->setFilters($filters);
 
         $this->notificationRepository->createNotification($notification);
 
         $userNotifications = [];
-        foreach($targetUserIds as $targetUserId)
+        foreach ($targetUserIds as $targetUserId)
         {
             $userNotification = new UserNotification();
             $userNotification->setNotification($notification)
-                    ->setUserId($targetUserId)
-                    ->setRead(false);
+                ->setUserId($targetUserId)
+                ->setRead(false);
 
             $userNotifications[] = $userNotification;
         }

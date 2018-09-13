@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Notification\Service;
 
+use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Storage\Entity\Filter;
 
 /**
@@ -17,22 +18,29 @@ class FilterManager
     protected $filterRepository;
 
     /**
+     * @var \Chamilo\Core\Notification\Service\NotificationTranslator
+     */
+    protected $notificationTranslator;
+
+    /**
      * @param string $filterPath
-     * @param array $descriptionContext
+     * @param \Chamilo\Core\Notification\Domain\TranslationContext $translationContext
      *
      * @return \Chamilo\Core\Notification\Storage\Entity\Filter
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function getOrCreateFilterByPath($filterPath, $descriptionContext)
+    public function getOrCreateFilterByPath($filterPath, TranslationContext $translationContext)
     {
         $filter = $this->filterRepository->findByPath($filterPath);
         if(!$filter instanceof Filter)
         {
             $filter = new Filter();
 
-            $filter->setDescriptionContext(json_encode($descriptionContext))
+            $descriptionContext = $this->notificationTranslator->createNotificationTranslations($translationContext);
+
+            $filter->setDescriptionContext($descriptionContext)
                 ->setPath($filterPath);
 
             $this->filterRepository->createFilter($filter);
