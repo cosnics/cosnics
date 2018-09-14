@@ -6,6 +6,7 @@ use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Notification\Storage\Entity\Notification;
 use Chamilo\Core\Notification\Storage\Entity\UserNotification;
+use Chamilo\Core\Notification\Storage\Repository\NotificationRepository;
 
 /**
  * @package Chamilo\Core\Notification\Service
@@ -20,13 +21,27 @@ class NotificationManager
     protected $notificationRepository;
 
     /**
-     * @var \Chamilo\Core\Notification\Service\NotificationTranslator
+     * @var NotificationTranslator
      */
     protected $notificationTranslator;
 
     /**
+     * NotificationManager constructor.
+     *
+     * @param \Chamilo\Core\Notification\Storage\Repository\NotificationRepository $notificationRepository
+     * @param NotificationTranslator $notificationTranslator
+     */
+    public function __construct(
+        NotificationRepository $notificationRepository, NotificationTranslator $notificationTranslator
+    )
+    {
+        $this->notificationRepository = $notificationRepository;
+        $this->notificationTranslator = $notificationTranslator;
+    }
+
+    /**
      * @param string $url
-     * @param \Chamilo\Core\Notification\Domain\TranslationContext $translationContext
+     * @param \Chamilo\Core\Notification\Domain\ViewingContext[] $viewingContexts
      * @param \DateTime $date
      * @param array $targetUserIds
      * @param Filter[] $filters
@@ -35,7 +50,7 @@ class NotificationManager
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createNotificationForUsers(
-        $url, TranslationContext $translationContext, $date, $targetUserIds = [], $filters = []
+        $url, array $viewingContexts, $date, $targetUserIds = [], $filters = []
     )
     {
         $notification = new Notification();
@@ -51,7 +66,9 @@ class NotificationManager
         }
 
         $notification->setUrl($url)
-            ->setDescriptionContext($this->notificationTranslator->createNotificationTranslations($translationContext))
+            ->setDescriptionContext(
+                $this->notificationTranslator->createNotificationDescriptionContext($viewingContexts)
+            )
             ->setDate($date)
             ->setFilters($filters);
 

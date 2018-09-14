@@ -4,6 +4,7 @@ namespace Chamilo\Core\Notification\Service;
 
 use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Storage\Entity\Filter;
+use Chamilo\Core\Notification\Storage\Repository\FilterRepository;
 
 /**
  * @package Chamilo\Core\Notification\Service
@@ -18,9 +19,23 @@ class FilterManager
     protected $filterRepository;
 
     /**
-     * @var \Chamilo\Core\Notification\Service\NotificationTranslator
+     * @var NotificationTranslator
      */
     protected $notificationTranslator;
+
+    /**
+     * FilterManager constructor.
+     *
+     * @param \Chamilo\Core\Notification\Storage\Repository\FilterRepository $filterRepository
+     * @param NotificationTranslator $notificationTranslator
+     */
+    public function __construct(
+        FilterRepository $filterRepository, NotificationTranslator $notificationTranslator
+    )
+    {
+        $this->filterRepository = $filterRepository;
+        $this->notificationTranslator = $notificationTranslator;
+    }
 
     /**
      * @param string $filterPath
@@ -38,7 +53,7 @@ class FilterManager
         {
             $filter = new Filter();
 
-            $descriptionContext = $this->notificationTranslator->createNotificationTranslations($translationContext);
+            $descriptionContext = $this->notificationTranslator->translateToAllLanguagesAndEncode($translationContext);
 
             $filter->setDescriptionContext($descriptionContext)
                 ->setPath($filterPath);

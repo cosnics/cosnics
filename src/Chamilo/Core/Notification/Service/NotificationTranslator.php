@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Notification\Service;
 
 use Chamilo\Core\Notification\Domain\TranslationContext;
+use Chamilo\Core\Notification\Domain\ViewingContext;
 use Chamilo\Core\Notification\Storage\Entity\Notification;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\Translation\Translator;
@@ -30,11 +31,38 @@ class NotificationTranslator
     }
 
     /**
+     * @param ViewingContext[] $viewingContexts
+     *
+     * @return string
+     */
+    public function createNotificationDescriptionContext($viewingContexts = [])
+    {
+        $descriptionContext = [];
+
+        foreach ($viewingContexts as $viewingContext)
+        {
+            $viewingContextArray = [
+                'path' => $viewingContext->getPath()
+            ];
+
+            foreach ($this->translator->getFallbackLocales() as $locale)
+            {
+                $viewingContextArray[$locale] =
+                    $this->translateRecursively($viewingContext->getTranslationContext(), $locale);
+            }
+
+            $descriptionContext[] = $viewingContextArray;
+        }
+
+        return json_encode($descriptionContext);
+    }
+
+    /**
      * @param \Chamilo\Core\Notification\Domain\TranslationContext $translationContext
      *
      * @return string
      */
-    public function createNotificationTranslations(TranslationContext $translationContext)
+    public function translateToAllLanguagesAndEncode(TranslationContext $translationContext)
     {
         $translations = [];
 
@@ -59,7 +87,7 @@ class NotificationTranslator
         {
             if ($parameter instanceof TranslationContext)
             {
-                $parameters[$key] = $this->translateRecursively($translationContext, $locale);
+                $parameters[$key] = $this->translateRecursively($parameter, $locale);
             }
         }
 
@@ -70,27 +98,44 @@ class NotificationTranslator
 
     /**
      * @param \Chamilo\Core\Notification\Storage\Entity\Notification $notification
+     * @param string $viewingContextPath
      *
      * @return string
      */
-    public function getTranslationFromNotification(Notification $notification)
+    public function getTranslationFromNotification(Notification $notification, string $viewingContextPath)
     {
         $userLocale = $this->translator->getLocale();
+        $activeViewingContext = null;
 
-        $translations = json_decode($notification->getDescriptionContext(), true);
-        if (!array_key_exists($userLocale, $translations))
+        $viewingContexts = json_decode($notification->getDescriptionContext(), true);
+        foreach ($viewingContexts as $viewingContext)
+        {
+            if ($viewingContext['path'] == $viewingContextPath)
+            {
+                $activeViewingContext = $viewingContext;
+            }
+        }
+
+        if (!$activeViewingContext)
+        {
+            throw new \InvalidArgumentException(
+                sprintf('The given viewing context with path %s could not be found', $viewingContextPath)
+            );
+        }
+
+        if (!array_key_exists($userLocale, $activeViewingContext))
         {
             $userLocale = 'en';
         }
 
-        if (!array_key_exists($userLocale, $translations))
+        if (!array_key_exists($userLocale, $activeViewingContext))
         {
             throw new \InvalidArgumentException(
                 'No valid translation has been found for the given locale nor for the english fallback'
             );
         }
 
-        return $translations[$userLocale];
+        return $activeViewingContext[$userLocale];
     }
 
 }

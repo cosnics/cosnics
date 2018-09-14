@@ -70,5 +70,17 @@
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
         </service>
 
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationProcessor"
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationProcessor">
+            <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
+            <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.entity_service_manager" />
+            <argument type="service" id="chamilo.application.weblcms.service.publication" />
+            <argument type="service" id="chamilo.application.weblcms.service.course" />
+            <argument type="service" id="chamilo.core.user.service.user_service" />
+            <argument type="service" id="chamilo.core.repository.workspace.repository.content_object_repository" />
+            <argument type="service" id="Chamilo\Core\Notification\Service\FilterManager" />
+            <argument type="service" id="Chamilo\Core\Notification\Service\NotificationManager" />
+        </service>
+
     </services>
 </container>

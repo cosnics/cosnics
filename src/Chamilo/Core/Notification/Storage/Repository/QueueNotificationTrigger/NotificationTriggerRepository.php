@@ -1,8 +1,7 @@
 <?php
 
-namespace Chamilo\Core\Notification\Repository\QueueNotificationTrigger;
+namespace Chamilo\Core\Notification\Storage\Repository\QueueNotificationTrigger;
 
-use Chamilo\Core\Notification\QueueNotificationTrigger\QueueNotificationTriggerRepositoryInterface;
 use Doctrine\ORM\EntityRepository;
 
 /**

@@ -3,8 +3,8 @@
 namespace Chamilo\Core\Notification\Service\NotificationTriggerHandler;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Core\Notification\Repository\QueueNotificationTrigger\NotificationTriggerRepository;
-use Chamilo\Core\Notification\Repository\QueueNotificationTrigger\RedisRepository;
+use Chamilo\Core\Notification\Storage\Repository\QueueNotificationTrigger\NotificationTriggerRepository;
+use Chamilo\Core\Notification\Storage\Repository\QueueNotificationTrigger\RedisRepository;
 
 /**
  * @package Chamilo\Core\Notification\Service\NotificationTriggerHandler

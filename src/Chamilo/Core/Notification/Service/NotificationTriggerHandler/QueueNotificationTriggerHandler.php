@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Notification\Service\NotificationTriggerHandler;
 
 use Chamilo\Core\Notification\Domain\NotificationTriggerData;
-use Chamilo\Core\Notification\QueueNotificationTrigger\QueueNotificationTriggerRepositoryInterface;
+use Chamilo\Core\Notification\Storage\Repository\QueueNotificationTrigger\QueueNotificationTriggerRepositoryInterface;
 
 /**
  * @package Chamilo\Core\Notification\Service\NotificationTriggerHandler
@@ -13,14 +13,14 @@ use Chamilo\Core\Notification\QueueNotificationTrigger\QueueNotificationTriggerR
 class QueueNotificationTriggerHandler implements NotificationTriggerHandlerInterface
 {
     /**
-     * @var \Chamilo\Core\Notification\QueueNotificationTrigger\QueueNotificationTriggerRepositoryInterface
+     * @var \Chamilo\Core\Notification\Storage\Repository\QueueNotificationTrigger\QueueNotificationTriggerRepositoryInterface
      */
     protected $queueNotificationTriggerRepository;
 
     /**
      * QueueNotificationTriggerHandler constructor.
      *
-     * @param \Chamilo\Core\Notification\QueueNotificationTrigger\QueueNotificationTriggerRepositoryInterface $queueNotificationTriggerRepository
+     * @param \Chamilo\Core\Notification\Storage\Repository\QueueNotificationTrigger\QueueNotificationTriggerRepositoryInterface $queueNotificationTriggerRepository
      */
     public function __construct(QueueNotificationTriggerRepositoryInterface $queueNotificationTriggerRepository)
     {

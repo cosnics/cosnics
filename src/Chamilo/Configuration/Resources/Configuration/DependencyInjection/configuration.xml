@@ -12,6 +12,9 @@
                 id="chamilo.configuration.service.configuration_cache_loader" />
         </service>
 
+        <service id="Chamilo\Configuration\Service\ConfigurationConsulter"
+                 alias="chamilo.configuration.service.configuration_consulter" />
+
         <service
             id="chamilo.configuration.service.configuration_cache_loader"
             class="Chamilo\Configuration\Service\DataCacheLoader">

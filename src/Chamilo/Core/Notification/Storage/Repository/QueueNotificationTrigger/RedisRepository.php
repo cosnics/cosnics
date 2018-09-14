@@ -1,8 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Notification\Repository\QueueNotificationTrigger;
-
-use Chamilo\Core\Notification\QueueNotificationTrigger\QueueNotificationTriggerRepositoryInterface;
+namespace Chamilo\Core\Notification\Storage\Repository\QueueNotificationTrigger;
 
 /**
  * @package Chamilo\Core\Notification\Repository\QueueNotificationTrigger
