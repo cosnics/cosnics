@@ -49,7 +49,7 @@ class ReportingBlockStyle
         $this->titleTextColor = ReportingTemplateStyle::parseColor($color);
     }
 
-    public function getTitleFont($font)
+    public function getTitleFont()
     {
         return $this->titleFont;
     }
