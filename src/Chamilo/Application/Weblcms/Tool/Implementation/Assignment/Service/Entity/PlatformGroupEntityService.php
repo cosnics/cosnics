@@ -238,7 +238,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
         $entity = DataManager::retrieve_by_id(Group::class_name(), $entityId);
         $groupUserIds = $entity->get_users(true, true);
 
-        return $this->userService->findUsersByIdentifiersOrderdByName($groupUserIds);
+        return $this->userService->findUsersByIdentifiers($groupUserIds);
     }
 
     /**

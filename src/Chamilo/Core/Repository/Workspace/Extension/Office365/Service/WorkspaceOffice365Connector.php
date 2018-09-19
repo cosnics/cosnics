@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\Workspace\Extension\Office365\Service;
 
 use Chamilo\Core\Repository\Workspace\Extension\Office365\Service\WorkspaceOffice365ReferenceService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceUserService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
@@ -27,18 +28,31 @@ class WorkspaceOffice365Connector
     protected $graphGroupService;
 
     /**
+     * @var \Chamilo\Core\Repository\Workspace\Service\WorkspaceUserService
+     */
+    protected $workspaceUserService;
+
+    /**
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
+     */
+    protected $graphUserService;
+
+    /**
      * WorkspaceOffice365Connector constructor.
      *
      * @param \Chamilo\Core\Repository\Workspace\Extension\Office365\Service\WorkspaceOffice365ReferenceService $workspaceOffice365ReferenceService
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService $graphGroupService
+     * @param \Chamilo\Core\Repository\Workspace\Service\WorkspaceUserService $workspaceUserService
      */
     public function __construct(
         WorkspaceOffice365ReferenceService $workspaceOffice365ReferenceService,
-        GroupService $graphGroupService
+        GroupService $graphGroupService, UserService $graphUserService, WorkspaceUserService $workspaceUserService
     )
     {
         $this->workspaceOffice365ReferenceService = $workspaceOffice365ReferenceService;
         $this->graphGroupService = $graphGroupService;
+        $this->workspaceUserService = $workspaceUserService;
+        $this->graphUserService = $graphUserService;
     }
 
     /**
@@ -112,6 +126,23 @@ class WorkspaceOffice365Connector
         $reference = $this->workspaceOffice365ReferenceService->getWorkspaceReference($workspace);
 
         $this->graphGroupService->updateGroupName($reference->getOffice365GroupId(), $workspace->getName());
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function syncGroupForWorkspace(Workspace $workspace, User $user)
+    {
+        if(!$this->isOffice365GroupActiveForWorkspace($workspace))
+        {
+            return;
+        }
+
+        $reference = $this->workspaceOffice365ReferenceService->getWorkspaceReference($workspace);
+        $workspaceUsers = $this->workspaceUserService->getAllUsersInWorkspace($workspace);
+
+        $this->graphGroupService->syncUsersToGroup($reference->getOffice365GroupId(), $workspaceUsers);
     }
 
     /**

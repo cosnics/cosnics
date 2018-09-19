@@ -249,7 +249,7 @@ class CourseGroupEntityService implements EntityServiceInterface
         $courseGroup = DataManager::retrieve_by_id(CourseGroup::class_name(), $entityId);
         $courseGroupMemberIds = $courseGroup->get_members(true, true);
 
-        return $this->userService->findUsersByIdentifiersOrderdByName($courseGroupMemberIds);
+        return $this->userService->findUsersByIdentifiers($courseGroupMemberIds);
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Workspace\Repository;
 
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
@@ -7,6 +8,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -45,37 +47,44 @@ class EntityRelationRepository
         $entityRelationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceEntityRelation::class_name(),
-                WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID),
-            new StaticConditionVariable($workspaceImplementation->getId()));
+                WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID
+            ),
+            new StaticConditionVariable($workspaceImplementation->getId())
+        );
 
         $entityRelationConditions[] = new EqualityCondition(
             new OperationConditionVariable(
                 new PropertyConditionVariable(
                     WorkspaceEntityRelation::class_name(),
-                    WorkspaceEntityRelation::PROPERTY_RIGHTS),
+                    WorkspaceEntityRelation::PROPERTY_RIGHTS
+                ),
                 OperationConditionVariable::BITWISE_AND,
-                new StaticConditionVariable($right)),
-            new StaticConditionVariable($right));
+                new StaticConditionVariable($right)
+            ),
+            new StaticConditionVariable($right)
+        );
 
         $entityRelationConditions[] = $this->getEntitiesCondition($entities);
 
         $entityRelationCondition = new AndCondition($entityRelationConditions);
 
         return DataManager::count(
-            WorkspaceEntityRelation::class_name(),
-            new DataClassCountParameters($entityRelationCondition)) > 0;
+                WorkspaceEntityRelation::class_name(),
+                new DataClassCountParameters($entityRelationCondition)
+            ) > 0;
     }
 
     /**
      *
      * @param integer[] $entities
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
      */
     private function getEntitiesCondition($entities)
     {
         $entitiesHash = md5(serialize($entities));
 
-        if (! isset(self::$entitiesConditions[$entitiesHash]))
+        if (!isset(self::$entitiesConditions[$entitiesHash]))
         {
             $entityTypeConditions = array();
 
@@ -89,13 +98,17 @@ class EntityRelationRepository
                     $entityConditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
                             WorkspaceEntityRelation::class_name(),
-                            WorkspaceEntityRelation::PROPERTY_ENTITY_TYPE),
-                        new StaticConditionVariable($entityType));
+                            WorkspaceEntityRelation::PROPERTY_ENTITY_TYPE
+                        ),
+                        new StaticConditionVariable($entityType)
+                    );
                     $entityConditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
                             WorkspaceEntityRelation::class_name(),
-                            WorkspaceEntityRelation::PROPERTY_ENTITY_ID),
-                        new StaticConditionVariable($entityIdentifier));
+                            WorkspaceEntityRelation::PROPERTY_ENTITY_ID
+                        ),
+                        new StaticConditionVariable($entityIdentifier)
+                    );
 
                     $entityTypeConditions[] = new AndCondition($entityConditions);
                 }
@@ -112,40 +125,71 @@ class EntityRelationRepository
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
      * @param integer $entityType
      * @param integer $entityIdentifier
+     *
      * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation
      */
-    public function findEntityRelationForWorkspaceEntityTypeAndIdentifier(Workspace $workspace, $entityType,
-        $entityIdentifier)
+    public function findEntityRelationForWorkspaceEntityTypeAndIdentifier(
+        Workspace $workspace, $entityType,
+        $entityIdentifier
+    )
     {
         $entityConditions = array();
 
         $entityConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceEntityRelation::class_name(),
-                WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID),
-            new StaticConditionVariable($workspace->getId()));
+                WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID
+            ),
+            new StaticConditionVariable($workspace->getId())
+        );
 
         $entityConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceEntityRelation::class_name(),
-                WorkspaceEntityRelation::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable($entityType));
+                WorkspaceEntityRelation::PROPERTY_ENTITY_TYPE
+            ),
+            new StaticConditionVariable($entityType)
+        );
         $entityConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceEntityRelation::class_name(),
-                WorkspaceEntityRelation::PROPERTY_ENTITY_ID),
-            new StaticConditionVariable($entityIdentifier));
+                WorkspaceEntityRelation::PROPERTY_ENTITY_ID
+            ),
+            new StaticConditionVariable($entityIdentifier)
+        );
 
         $entityCondition = new AndCondition($entityConditions);
 
         return DataManager::retrieve(
             WorkspaceEntityRelation::class_name(),
-            new DataClassRetrieveParameters($entityCondition));
+            new DataClassRetrieveParameters($entityCondition)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     *
+     * @return WorkspaceEntityRelation[] | mixed[]
+     */
+    public function findEntityRelationsForWorkspace(Workspace $workspace)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                WorkspaceEntityRelation::class_name(),
+                WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID
+            ),
+            new StaticConditionVariable($workspace->getId())
+        );
+
+        return DataManager::retrieves(
+            WorkspaceEntityRelation::class, new DataClassRetrievesParameters($condition)
+        )->as_array();
     }
 
     /**
      *
      * @param integer $identifier
+     *
      * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation
      */
     public function findEntityRelationByIdentifier($identifier)
