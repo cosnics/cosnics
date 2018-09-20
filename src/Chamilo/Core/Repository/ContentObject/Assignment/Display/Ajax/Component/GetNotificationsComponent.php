@@ -26,9 +26,9 @@ class GetNotificationsComponent extends Manager
 //        $filter = $filterManager->getFilterForPath('publication:' . $publicationId);
 //        $notifications = $notificationManager->getNotificationsForFilters([$filter]);
 
-        $filterPath = 'Chamilo\Application\Weblcms::Publication:5';
-        $filter = $filterManager->getFilterForPath($filterPath);
-        $notifications = $notificationManager->getNotificationsForFilters([$filter]);
+//        $filterPath = 'Chamilo\Application\Weblcms::Publication:5';
+//        $filter = $filterManager->getFilterForPath($filterPath);
+//        $notifications = $notificationManager->getNotificationsForFilters([$filter]);
 
         return new JsonResponse($jsonResponse, 200, [], true);
     }
