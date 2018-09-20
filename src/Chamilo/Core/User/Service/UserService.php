@@ -83,8 +83,13 @@ class UserService
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    public function findUsersByIdentifiersOrderdByName($userIdentifiers)
+    public function findUsersByIdentifiers($userIdentifiers)
     {
+        if (empty($userIdentifiers))
+        {
+            return [];
+        }
+
         return $this->userRepository->findUsersByIdentifiersOrderedByName($userIdentifiers);
     }
 

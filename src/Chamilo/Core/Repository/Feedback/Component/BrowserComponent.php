@@ -79,7 +79,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $feedbackCount = $feedbacks instanceof ResultSet ? $feedbacks->size() : count($feedbacks);
 
-            if ($feedbackCount && ! $this->get_parent()->is_allowed_to_create_feedback())
+            if ($feedbackCount == 0)
             {
                 $html[] = $this->renderFeedbackButtonToolbar();
                 $html[] = '<div class="clearfix"></div>';

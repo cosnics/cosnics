@@ -31,6 +31,7 @@ class ForumTopicForm extends ContentObjectForm
      * Updates a ForumTopic.
      *
      * @return ForumTopic
+     * @throws \Exception
      */
     public function update_content_object()
     {
@@ -43,9 +44,10 @@ class ForumTopicForm extends ContentObjectForm
     /**
      * Build the creation form to create a ForumTopic.
      *
-     * @param type $default_content_object
+     * @param array $htmleditor_options
+     * @param bool $in_tab
      */
-    public function build_creation_form($default_content_object = null)
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
         parent::build_creation_form();
     }
@@ -53,11 +55,14 @@ class ForumTopicForm extends ContentObjectForm
     /**
      * Build the editing form to edit a ForumTopic.
      *
-     * @param type $object
+     * @param array $htmleditor_options
+     * @param bool $in_tab
+     *
+     * @throws \HTML_QuickForm_Error
      */
-    public function build_editing_form($object)
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
         $this->addElement(
             'checkbox',

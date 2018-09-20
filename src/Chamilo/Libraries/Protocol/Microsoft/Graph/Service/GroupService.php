@@ -436,4 +436,62 @@ class GroupService
 
         return str_replace('{GROUP_ID}', $group->getMailNickname(), $groupUrl);
     }
+
+    /**
+     * Syncs the given users to the given groups. Optionally excluding some users from being removed
+     *
+     * @param int $groupId
+     * @param User[] $users
+     * @param User[] | null $excludedUsersForRemoval
+     */
+    public function syncUsersToGroup($groupId, $users = array(), $excludedUsersForRemoval = [])
+    {
+        $group = $this->groupRepository->getGroup($groupId);
+        if (!$group instanceof Group)
+        {
+            throw new \RuntimeException(
+                'The group with identifier ' . $groupId . ' could not be found'
+            );
+        }
+
+        $currentAzureUserIdentifiers = [];
+
+        foreach($users as $user)
+        {
+            $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
+            if (!empty($azureUserIdentifier))
+            {
+                $currentAzureUserIdentifiers[] = $azureUserIdentifier;
+            }
+        }
+
+        $excludedUsersForRemovalIdentifiers = [];
+        foreach ($excludedUsersForRemoval as $user)
+        {
+            $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
+            if (!empty($azureUserIdentifier))
+            {
+                $excludedUsersForRemovalIdentifiers[] = $azureUserIdentifier;
+            }
+        }
+
+        $office365GroupMemberIdentifiers = $this->getGroupMembers($groupId);
+
+        $usersToAdd = array_diff($currentAzureUserIdentifiers, $office365GroupMemberIdentifiers);
+        foreach ($usersToAdd as $userToAdd)
+        {
+            $this->groupRepository->subscribeMemberInGroup($groupId, $userToAdd);
+        }
+
+        $usersToRemove = array_diff($office365GroupMemberIdentifiers, $currentAzureUserIdentifiers);
+        if(!empty($excludedUsersForRemovalIdentifiers))
+        {
+            $usersToRemove = array_diff($usersToRemove, $excludedUsersForRemovalIdentifiers);
+        }
+
+        foreach ($usersToRemove as $userToRemove)
+        {
+            $this->groupRepository->removeMemberFromGroup($groupId, $userToRemove);
+        }
+    }
 }

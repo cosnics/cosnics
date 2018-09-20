@@ -108,4 +108,14 @@ class GroupRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieve(Group::class, new DataClassRetrieveParameters($condition));
     }
+
+    /**
+     * @param int $groupId
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass | Group
+     */
+    public function findGroupByIdentifier($groupId)
+    {
+        return $this->dataClassRepository->retrieveById(Group::class, $groupId);
+    }
 }

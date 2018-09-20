@@ -77,6 +77,23 @@ class Office365WorkspaceExtension implements WorkspaceExtensionInterface
                 false, null, '_blank'
             )
         );
+
+        if($this->workspaceOffice365Connector->isOffice365GroupActiveForWorkspace($workspace))
+        {
+            $workspaceExtensionActions->addButton(
+                new Button(
+                    $this->translator->trans('SyncOffice365Group', [], Manager::context()), new FontAwesomeGlyph('refresh'),
+                    $workspaceComponent->get_url(
+                        [
+                            Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_EXTENSION_LAUNCHER,
+                            ExtensionLauncherComponent::PARAM_EXTENSION_CONTEXT => Manager::context(),
+                            Manager::PARAM_ACTION => Manager::ACTION_SYNC_GROUP
+                        ]
+                    ),
+                    Button::DISPLAY_ICON_AND_LABEL
+                )
+            );
+        }
     }
 
     /**

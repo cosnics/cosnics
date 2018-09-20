@@ -54,6 +54,23 @@ class GroupService
     }
 
     /**
+     * @param int $groupIdentifier
+     *
+     * @return Group
+     */
+    public function getGroupByIdentifier($groupIdentifier)
+    {
+        $group = $this->groupRepository->findGroupByIdentifier($groupIdentifier);
+
+        if (!$group instanceof Group)
+        {
+            throw new \RuntimeException('Could not find the group with identifier ' . $groupIdentifier);
+        }
+
+        return $group;
+    }
+
+    /**
      * @param string $groupCode
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */

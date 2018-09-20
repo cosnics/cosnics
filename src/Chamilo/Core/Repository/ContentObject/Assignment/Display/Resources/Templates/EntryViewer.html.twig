@@ -6,12 +6,15 @@
     }
 
     #droppy {
+        margin-bottom: 15px;
+        padding: 5px;
+    }
+
+    .droppy-upload {
         border: 2px dashed #D4D4D4;
         border-radius: 5px;
         background: white;
         cursor: pointer;
-        margin-bottom: 15px;
-        padding: 5px;
     }
 
     .dz-drag-hover {
@@ -155,35 +158,36 @@
                                     </h3>
                                 </div>
                                 <div class="panel-body"!-->
-                            {% if CAN_EDIT_ASSIGNMENT %}
-                                <div id="droppy">
 
-                                    <table class="table table-striped table-data table-borderless"
+                                <div id="droppy" {% if CAN_EDIT_ASSIGNMENT %} class="droppy-upload" {% endif %}>
+                                     <table class="table table-striped table-data table-borderless"
                                            id="entry-attachments-list">
                                         <tbody>
                                         {% for ATTACHED_CONTENT_OBJECT in ATTACHED_CONTENT_OBJECTS %}
                                             <tr id="attachment{{ ATTACHED_CONTENT_OBJECT.attachment_id }}">
                                                 <td><a href="#"
                                                        onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': ATTACHED_CONTENT_OBJECT.content_object.id}) }}'); return false;">{{ ATTACHED_CONTENT_OBJECT.content_object.title }}
+                                                    </a>
                                                 </td>
                                                 <td>{{ ATTACHED_CONTENT_OBJECT.content_object.user }}</td>
                                                 <td>{{ ATTACHED_CONTENT_OBJECT.content_object.date }}</td>
+                                                {% if CAN_EDIT_ASSIGNMENT %}
                                                 <td align="center"><a href="#"
                                                                       onclick="javascript:removeAssignmentEntryAttachment({{ ATTACHED_CONTENT_OBJECT.attachment_id }}); return false;"
                                                                       class="btn btn-default btn-xs"><span
                                                                 class="fa fa-remove"></span></a></td>
+                                                {% endif %}
                                             </tr>
                                         {% endfor %}
                                         </tbody>
                                     </table>
-
+                                    {% if CAN_EDIT_ASSIGNMENT %}
                                     <div class="droppy-message dz-message">Versleep verbeterde versies naar hier of klik
                                         om
                                         op te laden.
                                     </div>
-
+                                    {% endif %}
                                 </div>
-                            {% endif %}
                             <!--/div>
                         </div!-->
                         </div>

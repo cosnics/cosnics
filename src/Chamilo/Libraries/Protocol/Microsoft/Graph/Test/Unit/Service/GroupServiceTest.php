@@ -547,6 +547,114 @@ class GroupServiceTest extends ChamiloTestCase
         $this->assertEquals(3, $this->groupService->getOrCreatePlanIdForGroup($groupId));
     }
 
+    public function testSyncUsersToGroup()
+    {
+        $groupId = 5;
+
+        $user1 = new User();
+        $user1->setId(8);
+
+        $user2 = new User();
+        $user2->setId(20);
+
+        $users = [];
+        $users[] = $user1;
+        $users[] = $user2;
+
+        $excludedUser = new User();
+        $excludedUser->setId(10);
+
+        $exlucdedUsers = [$excludedUser];
+
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('getGroup')
+            ->with($groupId)
+            ->will($this->returnValue(new \Microsoft\Graph\Model\Group(['id' => 5, 'displayName' => 'Group 101'])));
+
+        $this->userServiceMock->expects($this->exactly(3))
+            ->method('getAzureUserIdentifier')
+            ->will(
+                $this->returnCallback(
+                    function (User $user) {
+                        return $user->getId();
+                    }
+                )
+            );
+
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('listGroupMembers')
+            ->will(
+                $this->returnValue(
+                    [new \Microsoft\Graph\Model\User(['id' => 6]), new \Microsoft\Graph\Model\User(['id' => 10])]
+                )
+            );
+
+        $this->groupRepositoryMock->expects($this->exactly(2))
+            ->method('subscribeMemberInGroup')
+            ->withConsecutive(
+                [5, 8], [5, 20]
+            );
+
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('removeMemberFromGroup')
+            ->with(5, 6);
+
+        $this->groupService->syncUsersToGroup($groupId, $users, $exlucdedUsers);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testSyncUsersToGroupWithInvalidGroup()
+    {
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('getGroup')
+            ->with(5)
+            ->will($this->returnValue(null));
+
+        $this->groupService->syncUsersToGroup(5, []);
+    }
+
+    public function testGetGroupUrl()
+    {
+        $groupId = 5;
+
+        $groupUrl = 'http://GOTO.GROUP/{GROUP_ID}';
+
+        $this->configurationConsulterMock->expects($this->once())
+            ->method('getSetting')
+            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri'])
+            ->will($this->returnValue($groupUrl));
+
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('getGroup')
+            ->with($groupId)
+            ->will(
+                $this->returnValue(
+                    new \Microsoft\Graph\Model\Group(
+                        ['id' => 5, 'displayName' => 'Group 101', 'mailNickname' => 'testgroup@microsoft.com']
+                    )
+                )
+            );
+
+        $this->assertEquals('http://GOTO.GROUP/testgroup@microsoft.com', $this->groupService->getGroupUrl($groupId));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetGroupUrlWithInvalidGroup()
+    {
+        $groupId = 5;
+
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('getGroup')
+            ->with($groupId)
+            ->will($this->returnValue(null));
+
+        $this->groupService->getGroupUrl($groupId);
+    }
+
     /**
      * Mocks the getGroupMember function of the GroupRepository
      *

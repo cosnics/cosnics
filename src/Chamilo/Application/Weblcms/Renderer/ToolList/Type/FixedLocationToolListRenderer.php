@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Renderer\ToolList\Type;
 
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
@@ -56,7 +57,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
     /**
      * The Course
      *
-     * @var \application\weblcms\course\Course;
+     * @var \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course
      */
     private $course;
 
@@ -75,7 +76,8 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $course_settings_controller = CourseSettingsController::getInstance();
         $course_tool_layout = $course_settings_controller->get_course_setting(
             $this->course,
-            CourseSettingsConnector::TOOL_LAYOUT);
+            CourseSettingsConnector::TOOL_LAYOUT
+        );
 
         $this->number_of_columns = ($course_tool_layout % 2 == 0) ? 3 : 2;
 
@@ -91,7 +93,8 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $course_settings_controller = CourseSettingsController::getInstance();
         $course_tool_layout = $course_settings_controller->get_course_setting(
             $this->course,
-            CourseSettingsConnector::TOOL_LAYOUT);
+            CourseSettingsConnector::TOOL_LAYOUT
+        );
 
         $visible_tools = $this->get_visible_tools();
 
@@ -99,10 +102,13 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->course->get_id()));
+            new StaticConditionVariable($this->course->get_id())
+        );
         $order_property = array(
             new OrderBy(
-                new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_DISPLAY_ORDER)));
+                new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_DISPLAY_ORDER)
+            )
+        );
         $parameters = new DataClassRetrievesParameters($condition, null, null, $order_property);
         $sections = DataManager::retrieves(CourseSection::class_name(), $parameters);
 
@@ -148,11 +154,12 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         while ($section = $sections->next_result())
         {
             $sec_name = $section->get_type() == CourseSection::TYPE_CUSTOM ? $section->get_name() : Translation::get(
-                $section->get_name());
+                $section->get_name()
+            );
 
-            if (! $section->is_visible())
+            if (!$section->is_visible())
             {
-                if (! $this->is_course_admin)
+                if (!$this->is_course_admin)
                 {
                     continue;
                 }
@@ -164,7 +171,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             }
 
             if ($section->get_type() == CourseSection::TYPE_DISABLED && ($course_tool_layout < 3 ||
-                 ! $this->is_course_admin))
+                    !$this->is_course_admin))
             {
                 continue;
             }
@@ -179,7 +186,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 }
             }
 
-            if ($section->get_type() == CourseSection::TYPE_ADMIN && ! $this->is_course_admin)
+            if ($section->get_type() == CourseSection::TYPE_ADMIN && !$this->is_course_admin)
             {
                 continue;
             }
@@ -187,7 +194,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $selectedTab = $this->get_parent()->getRequest()->get(self::PARAM_SELECTED_TAB);
 
             if ((isset($selectedTab) && $section->getId() == $selectedTab) ||
-                 (! isset($selectedTab) && $sections->is_first()))
+                (!isset($selectedTab) && $sections->is_first()))
             {
                 $active = 'active';
             }
@@ -203,7 +210,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $html[] = '">' . $sec_name . '</a></li>';
 
             if ($section->getId() == $selectedTab ||
-                 ! isset($selectedTab) && $section->get_type() == CourseSection::TYPE_TOOL)
+                !isset($selectedTab) && $section->get_type() == CourseSection::TYPE_TOOL)
             {
                 if ($section->get_type() == CourseSection::TYPE_LINK)
                 {
@@ -233,17 +240,17 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $html[] = '</div>';
 
         $html[] = '<script type="text/javascript" src="' .
-             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HomeAjax.js' . '"></script>';
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HomeAjax.js' . '"></script>';
         $html[] = '<script type="text/javascript" src="' .
-             Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'CourseHome.js' .
-             '"></script>';
+            Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'CourseHome.js' .
+            '"></script>';
 
         return implode(PHP_EOL, $html);
     }
 
     private function get_publication_links()
     {
-        if (! isset($this->publication_links))
+        if (!isset($this->publication_links))
         {
             $parent = $this->get_parent();
 
@@ -251,18 +258,23 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectPublication::class_name(),
-                    ContentObjectPublication::PROPERTY_COURSE_ID),
-                new StaticConditionVariable($parent->get_course_id()));
+                    ContentObjectPublication::PROPERTY_COURSE_ID
+                ),
+                new StaticConditionVariable($parent->get_course_id())
+            );
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectPublication::class_name(),
-                    ContentObjectPublication::PROPERTY_SHOW_ON_HOMEPAGE),
-                new StaticConditionVariable(1));
+                    ContentObjectPublication::PROPERTY_SHOW_ON_HOMEPAGE
+                ),
+                new StaticConditionVariable(1)
+            );
             $condition = new AndCondition($conditions);
 
             $this->publication_links = DataManager::retrieves(
                 ContentObjectPublication::class_name(),
-                new DataClassRetrievesParameters($condition));
+                new DataClassRetrievesParameters($condition)
+            );
         }
 
         return $this->publication_links;
@@ -281,16 +293,18 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $course_settings_controller = CourseSettingsController::getInstance();
         $course_tool_layout = $course_settings_controller->get_course_setting(
             $this->course,
-            CourseSettingsConnector::TOOL_LAYOUT);
+            CourseSettingsConnector::TOOL_LAYOUT
+        );
 
         if ($course_tool_layout > 2)
         {
             $tool_visible = $course_settings_controller->get_course_setting(
                 $this->course,
                 CourseSetting::COURSE_SETTING_TOOL_VISIBLE,
-                $tool->get_id());
+                $tool->get_id()
+            );
 
-            if (! $tool_visible && $tool->get_section_type() != CourseSection::TYPE_ADMIN)
+            if (!$tool_visible && $tool->get_section_type() != CourseSection::TYPE_ADMIN)
             {
                 return $section_types_map[CourseSection::TYPE_DISABLED];
             }
@@ -305,19 +319,24 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 CourseToolRelCourseSection::class_name(),
-                CourseToolRelCourseSection::PROPERTY_TOOL_ID),
-            new StaticConditionVariable($tool->get_id()));
+                CourseToolRelCourseSection::PROPERTY_TOOL_ID
+            ),
+            new StaticConditionVariable($tool->get_id())
+        );
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
                 CourseToolRelCourseSection::class_name(),
-                CourseToolRelCourseSection::PROPERTY_SECTION_ID),
-            $section_types_map);
+                CourseToolRelCourseSection::PROPERTY_SECTION_ID
+            ),
+            $section_types_map
+        );
 
         $condition = new AndCondition($conditions);
 
         $course_tool_rel_course_section = DataManager::retrieves(
             CourseToolRelCourseSection::class_name(),
-            new DataClassRetrievesParameters($condition));
+            new DataClassRetrievesParameters($condition)
+        );
 
         if ($course_tool_rel_course_section->size() > 0)
         {
@@ -386,28 +405,35 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 if ($parent->is_allowed(WeblcmsRights::EDIT_RIGHT))
                 {
                     $html[] = '<a href="' .
-                         $parent->get_url(
+                        $parent->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => $lcms_action,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id())) .
-                         '"><span class="glyphicon glyphicon-' . $visibleClass . '"></span></a>';
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id(
+                                )
+                            )
+                        ) .
+                        '"><span class="glyphicon glyphicon-' . $visibleClass . '"></span></a>';
                 }
 
                 // Show delete-icon
                 if ($parent->is_allowed(WeblcmsRights::DELETE_RIGHT))
                 {
                     $html[] = '<a href="' .
-                         $parent->get_url(
+                        $parent->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::ACTION_DELETE_LINKS,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id())) .
-                         '"><span class="glyphicon glyphicon-remove text-danger"></span></a>';
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id(
+                                )
+                            )
+                        ) .
+                        '"><span class="glyphicon glyphicon-remove text-danger"></span></a>';
                 }
 
                 $html[] = '</div>';
                 // Show tool-icon + name
 
-                if ($publication->get_tool() == \Chamilo\Application\Weblcms\Tool\Implementation\Link\Manager::TOOL_NAME)
+                if ($publication->get_tool() ==
+                    \Chamilo\Application\Weblcms\Tool\Implementation\Link\Manager::TOOL_NAME)
                 {
                     $url = $publication->get_content_object()->get_url();
                     $target = ' target="_blank"';
@@ -415,22 +441,25 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 else
                 {
                     $class = 'Chamilo\Application\Weblcms\Tool\Implementation\\' .
-                         StringUtilities::getInstance()->createString($publication->get_tool())->upperCamelize() .
-                         '\Manager';
+                        StringUtilities::getInstance()->createString($publication->get_tool())->upperCamelize() .
+                        '\Manager';
                     $url = $parent->get_url(
                         array(
                             'tool_action' => null,
                             Manager::PARAM_COMPONENT_ACTION => null,
                             Manager::PARAM_TOOL => $publication->get_tool(),
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => $class::ACTION_VIEW,
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id()),
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id()
+                        ),
                         array(),
-                        true);
+                        true
+                    );
                     $target = '';
                 }
 
                 $toolNamespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace(
-                    $publication->get_tool());
+                    $publication->get_tool()
+                );
 
                 $identRenderer = new IdentRenderer($toolNamespace, false, $isDisabled);
 
@@ -510,14 +539,16 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $tool_visible = $course_settings_controller->get_course_setting(
                 $this->course,
                 CourseSetting::COURSE_SETTING_TOOL_VISIBLE,
-                $tool->get_id());
+                $tool->get_id()
+            );
 
             $isNew = false;
             $isDisabled = false;
 
             if ($tool_visible || $section->get_type() == CourseSection::TYPE_ADMIN)
             {
-                $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::ACTION_MAKE_TOOL_INVISIBLE;
+                $lcms_action =
+                    \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::ACTION_MAKE_TOOL_INVISIBLE;
                 $visibleClass = 'eye-open';
 
                 if ($parent->tool_has_new_publications($tool->get_name(), $this->course))
@@ -537,7 +568,8 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
             $title = Translation::get('TypeName', null, $tool_namespace);
 
-            if ($section->get_type() == CourseSection::TYPE_TOOL || $section->get_type() == CourseSection::TYPE_DISABLED)
+            if ($section->get_type() == CourseSection::TYPE_TOOL ||
+                $section->get_type() == CourseSection::TYPE_DISABLED)
             {
                 $html[] = '<div id="tool_' . $tool->get_id() . '" class="tool">';
                 $id = ' id="drag_' . $tool->get_id() . '"';
@@ -547,16 +579,28 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 $html[] = '<div class="tool">';
             }
 
+            $canChangeCourseSetting = $course_settings_controller->canChangeCourseSetting(
+                $this->course, CourseSetting::COURSE_SETTING_TOOL_VISIBLE,
+                $tool->get_id()
+            );
+
             // Show visibility-icon
-            if ($this->is_course_admin && $section->get_type() != CourseSection::TYPE_ADMIN)
+            if ($this->is_course_admin && $canChangeCourseSetting && $section->get_type() != CourseSection::TYPE_ADMIN)
             {
                 $html[] = '<a href="' .
-                     $parent->get_url(
+                    $parent->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::PARAM_ACTION => $lcms_action,
-                            \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::PARAM_TOOL => $tool->get_name())) .
-                     '"><span class="glyphicon glyphicon-' . $visibleClass . '"></span></a>';
+                            \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::PARAM_TOOL => $tool->get_name(
+                            )
+                        )
+                    ) .
+                    '"><span class="glyphicon glyphicon-' . $visibleClass . '"></span></a>';
                 $html[] = '&nbsp;&nbsp;&nbsp;';
+            }
+            else
+            {
+                $html[] = '<span style="width: 27px; display: inline-block;" class="no-visibility-icon"></span>';
             }
 
             $identRenderer = new IdentRenderer($tool_namespace, $isNew, $isDisabled);
@@ -565,13 +609,15 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $html[] = '&nbsp;';
 
             $html[] = '<a id="tool_text" href="' . $parent->get_url(
-                array(Manager::PARAM_TOOL => $tool->get_name()),
-                array(
-                    Manager::PARAM_COMPONENT_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE,
-                    Manager::PARAM_CATEGORY),
-                true) . '" ' . $link_class . '>';
+                    array(Manager::PARAM_TOOL => $tool->get_name()),
+                    array(
+                        Manager::PARAM_COMPONENT_ACTION,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE,
+                        Manager::PARAM_CATEGORY
+                    ),
+                    true
+                ) . '" ' . $link_class . '>';
 
             $html[] = $title;
             $html[] = '</a>';

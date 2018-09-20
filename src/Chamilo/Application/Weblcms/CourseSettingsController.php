@@ -300,6 +300,19 @@ class CourseSettingsController
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param string $settingName
+     * @param int $toolId
+     *
+     * @return bool
+     */
+    public function canChangeCourseSetting(Course $course, $settingName, $toolId = 0)
+    {
+        $settingObject = $this->get_course_setting_object_from_name_and_tool($settingName, $toolId);
+        return $course->can_change_course_setting($settingObject);
+    }
+
+    /**
      * Retrieves a setting for a given course type The settings are all retrieved at once because usually we need more
      * then one setting.
      * The settings are cached for future retrieval
