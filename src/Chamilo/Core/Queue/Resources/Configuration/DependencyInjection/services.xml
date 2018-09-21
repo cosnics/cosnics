@@ -13,5 +13,21 @@
             <argument>Chamilo\Core\Queue\Storage\Entity\BinLog</argument>
         </service>
 
+        <service id="Chamlio\Core\Queue\Service\PsrContext" class="\Interop\Queue\PsrContext">
+            <factory service="Chamilo\Core\Queue\Service\ConnectionFactory" method="createContext" />
+        </service>
+
+        <service id="Chamilo\Core\Queue\Service\Worker">
+            <argument type="service" id="Chamlio\Core\Queue\Service\PsrContext" />
+        </service>
+
+        <service id="Chamilo\Core\Queue\Service\Producer">
+            <argument type="service" id="Chamlio\Core\Queue\Service\PsrContext" />
+        </service>
+
+        <prototype namespace="Chamilo\Core\Queue\Console\Command\" resource="../../../Console/Command/*">
+            <tag name="chamilo.libraries.console.command"/>
+        </prototype>
+
     </services>
 </container>

@@ -49,7 +49,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function getAlias()
     {
-        return 'chamilo.core.notification';
+        return 'chamilo.core.queue';
     }
 
     /**
