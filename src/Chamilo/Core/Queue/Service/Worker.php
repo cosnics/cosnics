@@ -12,18 +12,34 @@ use Interop\Queue\PsrContext;
 class Worker
 {
     /**
-     * @var \Interop\Queue\PsrContext
+     * @var PsrContext
      */
     protected $psrContext;
 
     /**
+     * @var JobSerializer
+     */
+    protected $jobSerializer;
+
+    /**
+     * @var JobProcessorFactory
+     */
+    protected $jobProcessorFactory;
+
+    /**
      * Worker constructor.
      *
-     * @param \Interop\Queue\PsrContext $psrContext
+     * @param PsrContext $psrContext
+     * @param JobSerializer $jobSerializer
+     * @param JobProcessorFactory $jobProcessorFactory
      */
-    public function __construct(PsrContext $psrContext)
+    public function __construct(
+        PsrContext $psrContext, JobSerializer $jobSerializer, JobProcessorFactory $jobProcessorFactory
+    )
     {
         $this->psrContext = $psrContext;
+        $this->jobSerializer = $jobSerializer;
+        $this->jobProcessorFactory = $jobProcessorFactory;
     }
 
     /**
@@ -34,7 +50,18 @@ class Worker
         $destination = $this->psrContext->createQueue($topic);
         $consumer = $this->psrContext->createConsumer($destination);
         $message = $consumer->receive();
-        var_dump($message);
-        $consumer->acknowledge($message);
+
+        try
+        {
+            $job = $this->jobSerializer->deserializeJob($message);
+            $processor = $this->jobProcessorFactory->createJobProcessor($job);
+            $processor->processJob($job);
+
+            $consumer->acknowledge($message);
+        }
+        catch(\Throwable $ex)
+        {
+            $consumer->reject($message);
+        }
     }
 }

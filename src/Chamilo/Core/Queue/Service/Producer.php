@@ -2,7 +2,9 @@
 
 namespace Chamilo\Core\Queue\Service;
 
+use Chamilo\Core\Queue\Domain\Job;
 use Enqueue\Client\Message;
+use Interop\Queue\PsrContext;
 
 class Producer
 {
@@ -12,27 +14,37 @@ class Producer
     protected $psrContext;
 
     /**
+     * @var JobSerializer
+     */
+    protected $jobSerializer;
+
+    /**
      * Producer constructor.
      *
      * @param \Interop\Queue\PsrContext $psrContext
+     * @param JobSerializer $jobSerializer
      */
-    public function __construct(\Interop\Queue\PsrContext $psrContext)
+    public function __construct(PsrContext $psrContext, JobSerializer $jobSerializer)
     {
         $this->psrContext = $psrContext;
+        $this->jobSerializer = $jobSerializer;
     }
 
     /**
+     * @param \Chamilo\Core\Queue\Domain\Job $job
      * @param string $queueName
-     * @param string $messageContent
      *
      * @throws \Interop\Queue\Exception
      * @throws \Interop\Queue\InvalidDestinationException
      * @throws \Interop\Queue\InvalidMessageException
      */
-    public function sendMessage(string $queueName, string $messageContent)
+    public function sendJob(Job $job, string $queueName)
     {
+        $messageContent = $this->jobSerializer->serializeJob($job);
+
         $queue = $this->psrContext->createQueue($queueName);
         $message = $this->psrContext->createMessage($messageContent);
+
         $producer = $this->psrContext->createProducer();
         $producer->send($queue, $message);
     }

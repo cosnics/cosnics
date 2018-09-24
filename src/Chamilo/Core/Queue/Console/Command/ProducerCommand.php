@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Queue\Console\Command;
 
+use Chamilo\Core\Queue\Domain\Job;
+use Chamilo\Core\Queue\Service\EchoProcessor;
 use Chamilo\Core\Queue\Service\Producer;
 use Chamilo\Core\Queue\Service\Worker;
 use Symfony\Component\Console\Command\Command;
@@ -50,9 +52,6 @@ class ProducerCommand extends Command
             ->addArgument(
                 self::ARG_TOPIC, InputArgument::REQUIRED,
                 $this->translator->trans('QueueWorkerCommandDescription', [], 'Chamilo\Core\Queue')
-            )
-            ->addArgument(
-                self::ARG_MESSAGE, InputArgument::REQUIRED, 'message'
             );
     }
 
@@ -68,7 +67,8 @@ class ProducerCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->producer->sendMessage($input->getArgument(self::ARG_TOPIC), $input->getArgument(self::ARG_MESSAGE));
+        $job = new Job(EchoProcessor::class, new \DateTime());
+        $this->producer->sendJob($job, $input->getArgument(self::ARG_TOPIC));
     }
 
 }
