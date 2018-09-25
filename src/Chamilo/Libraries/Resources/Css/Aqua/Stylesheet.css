@@ -71,3 +71,7 @@ figcaption {
 .text-maintenance {
     font-weight: bold;
 }
+
+span[lang] {
+    font-style: normal;
+}

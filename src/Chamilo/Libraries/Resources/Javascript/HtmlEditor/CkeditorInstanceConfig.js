@@ -5,7 +5,7 @@
 CKEDITOR.editorConfig = function(config)
 {
     config.uiColor = '#F5F5F5';
-    config.plugins = 'uploadwidget,a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image2,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,mathjax,widget,embed,filebrowser,autoembed';
+    config.plugins = 'uploadwidget,a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image2,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,mathjax,widget,embed,filebrowser,autoembed,codesnippet,footnotes';
     config.extraPlugins = "resource,resourceupload,chamilo,chamilofakeobjects,autosave,quickquestion,resourcestylecontextmenu";
 
     config.menu_groups = 'clipboard,' + 'form,' + 'tablecell,tablecellproperties,tablerow,tablecolumn,table,'
@@ -25,7 +25,7 @@ CKEDITOR.editorConfig = function(config)
             [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
             [ 'Link', 'Unlink', 'Anchor' ],
             [ 'Chamilo', 'Image', 'Embed', 'Mathjax', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar',
-                    'PageBreak' ], '/', [ 'Format', 'Font', 'FontSize' ], [ 'TextColor', 'BGColor' ],
+                    'PageBreak', 'Footnotes', 'CodeSnippet' ], '/', [ 'Format', 'Font', 'FontSize' ], [ 'TextColor', 'BGColor' ],
             [ 'Maximize', 'ShowBlocks', '-', 'About' ] ];
 
     config.toolbar_Basic = [
@@ -36,7 +36,7 @@ CKEDITOR.editorConfig = function(config)
                     'JustifyRight', 'JustifyBlock', 'Outdent', 'Indent' ],
             '/',
             [ 'Link', 'Unlink', 'Anchor', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Embed', 'Mathjax',
-                    'Smiley', 'Quickquestion', '-', 'Templates', 'SpecialChar', '-', 'Source' ] ];
+                    'Smiley', 'Quickquestion', '-', 'Templates', 'SpecialChar', 'Footnotes', 'CodeSnippet', '-', 'Source' ] ];
 
     /*config.filebrowserBrowseUrl = web_path
         + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo';*/
@@ -74,6 +74,11 @@ CKEDITOR.editorConfig = function(config)
 
     config.mathJaxLib = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML';
 
+    config.forcePasteAsPlainText = false;
+    //config.pasteFromWordRemoveFontStyles = true;
+    //config.pasteFromWordRemoveStyles = true;
+    config.pasteFromWordPromptCleanup = true;
+    config.codeSnippet_theme = 'github';
     config.autosave = {
         SaveKey: null, // fix to force unique savekey (even for page with multiple instances)
         // Save Content on Destroy - Setting to Save content on editor destroy (Default is false) ...
@@ -88,6 +93,4 @@ CKEDITOR.editorConfig = function(config)
         // Delay
         delay : 15 //@todo: check performance with large pages
     };
-
-    config.meh = "lol";
 };
