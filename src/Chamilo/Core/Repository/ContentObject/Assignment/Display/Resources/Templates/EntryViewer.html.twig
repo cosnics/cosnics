@@ -5,6 +5,12 @@
         max-width: 100%;
     }
 
+    .title-underlined {
+        border-bottom: 1px solid #dddddd;
+        padding-bottom: 7px;
+        margin-bottom: 25px;
+    }
+
     #droppy {
         margin-bottom: 15px;
         padding: 5px;
@@ -90,14 +96,17 @@
                 <div class="col-xs-12">
                 <ul class="nav nav-pills content-nav">
                     <li role="presentation" class="active"><a href="#">{{ 'Content'|trans({}, appContext) }}</a></li>
-                    {% if CAN_EDIT_ASSIGNMENT %}<li role="presentation"><a href="#score">{{ 'ScoreEntry'|trans({}, appContext) }}</a></li>{% endif %}
-                    <li role="presentation"><a href="#corrected-versions">{{ 'CorrectedVersions'|trans({}, appContext) }}<span class="badge">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
+                    {% if CAN_EDIT_ASSIGNMENT %}<li role="presentation"><a href="#score">{{ 'ScoreEntry'|trans({}, appContext) }}</a></li>
+                        <li role="presentation"><a href="#corrected-versions">{{ 'CorrectedVersions'|trans({}, appContext) }}<span class="badge">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
+                    {% elseif ATTACHED_CONTENT_OBJECTS|length > 0 %}
+                        <li role="presentation"><a href="#corrected-versions">{{ 'CorrectedVersions'|trans({}, appContext) }}<span class="badge">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
+                    {% endif %}
                     <li role="presentation"><a href="#feedback">{{ 'Feedback'|trans({}, appContext) }} <span class="badge">{{ FEEDBACK_COUNT }}</span></a></li>
                 </ul>
                 </div>
 
                 <div class="col-xs-12 content-object-rendition">
-                    <h3 class="entry-title">{{ CONTENT_OBJECT_TITLE }}
+                    <h3 class="entry-title title-underlined">{{ CONTENT_OBJECT_TITLE }}
                         <span class="badge score-badge {% if SCORE > 0 %} score-success {% else %}no-score{% endif %}">{% if SCORE %}{{ SCORE }}%{% else %}{{ 'NoScore'|trans({}, appContext) }}{% endif %}</span>
                     </h3>
                     <div class="submitted-details">{{ SUBMITTED_BY }} {% if SUBMITTED_BY != ENTITY_NAME %}({{ ENTITY_NAME }}) {% endif %}{{ 'At'|trans({}, appContext) }} {{ SUBMITTED_DATE }}</div>
@@ -107,7 +116,7 @@
                     <div class="row">
                         <div class="col-xs-12" id="score">
                             {% if CAN_EDIT_ASSIGNMENT %}
-                                <h3>{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
+                                <h3 class="title-underlined">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
                                 <style> label {
                                         margin-bottom: 5px !important;
                                     }
@@ -175,7 +184,11 @@
                                     </h3>
                                 </div>
                                 <div class="panel-body"!-->
-                                <h3 id="corrected-versions">{{ 'CorrectedVersions'|trans({}, appContext) }}</h3>
+                                {% if CAN_EDIT_ASSIGNMENT %}
+                                    <h3 id="corrected-versions" class="title-underlined">{{ 'CorrectedVersions'|trans({}, appContext) }}</h3>
+                                {% elseif ATTACHED_CONTENT_OBJECTS|length > 0  %}
+                                    <h3 id="corrected-versions" class="title-underlined">{{ 'CorrectedVersions'|trans({}, appContext) }}</h3>
+                                {% endif %}
 
                                 <div id="droppy" {% if CAN_EDIT_ASSIGNMENT %} class="droppy-upload" {% endif %}>
                                      <table class="table table-striped table-data table-borderless"
@@ -214,7 +227,7 @@
 
                     <div class="row">
                         <div class="col-xs-12" id="feedback">
-                   {% if FEEDBACK_COUNT > 0 %} <h3>Feedback</h3> {% endif %}
+                  <h3 class="title-underlined">Feedback</h3>
                             {{ FEEDBACK_MANAGER|raw }}
                         </div>
                     </div>
@@ -363,7 +376,7 @@
     {% endif %}
 
     <div role="tabpanel" class="{% if HAS_ENTRY -%}tab-pane tab-pane-with-border{%- endif %}" id="assignment">
-        <h3>{{ ASSIGNMENT_TITLE }}</h3>
+        <h3 class="title-underlined">{{ ASSIGNMENT_TITLE }}</h3>
 
         {{ ASSIGNMENT_RENDITION|raw }}
     </div>
