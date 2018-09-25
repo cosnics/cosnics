@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityRepository;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class BinLogRepository extends EntityRepository
+class JobEntityRepository extends EntityRepository
 {
 
 }

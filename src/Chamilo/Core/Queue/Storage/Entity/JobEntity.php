@@ -9,16 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  *
- * @ORM\Entity(repositoryClass="Chamilo\Core\Queue\Storage\Repository\BinLogRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\Core\Queue\Storage\Repository\JobEntityRepository")
  * @ORM\Table(
- *     name="queue_bin_log",
+ *     name="queue_job",
  *     indexes={
  *          @ORM\Index(name="qn_date", columns={"date"}),
  *          @ORM\Index(name="qn_status", columns={"status"})
  *     }
  * )
  */
-class BinLog
+class JobEntity
 {
     /**
      * @var int

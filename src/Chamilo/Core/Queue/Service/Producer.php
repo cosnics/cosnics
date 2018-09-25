@@ -3,7 +3,6 @@
 namespace Chamilo\Core\Queue\Service;
 
 use Chamilo\Core\Queue\Domain\Job;
-use Enqueue\Client\Message;
 use Interop\Queue\PsrContext;
 
 class Producer

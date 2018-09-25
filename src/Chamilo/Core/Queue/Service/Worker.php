@@ -53,7 +53,7 @@ class Worker
 
         try
         {
-            $job = $this->jobSerializer->deserializeJob($message);
+            $job = $this->jobSerializer->deserializeJob($message->getBody());
             $processor = $this->jobProcessorFactory->createJobProcessor($job);
             $processor->processJob($job);
 
@@ -62,6 +62,8 @@ class Worker
         catch(\Throwable $ex)
         {
             $consumer->reject($message);
+            echo $ex->getMessage();
+            echo $ex->getTraceAsString();
         }
     }
 }

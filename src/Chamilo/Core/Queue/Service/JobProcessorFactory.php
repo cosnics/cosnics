@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Queue\Service;
 
 use Chamilo\Core\Queue\Domain\Job;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @package Chamilo\Core\Queueu\Service\NotificationProcessor
@@ -15,6 +16,16 @@ class JobProcessorFactory
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $serviceContainer;
+
+    /**
+     * JobProcessorFactory constructor.
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $serviceContainer
+     */
+    public function __construct(ContainerInterface $serviceContainer)
+    {
+        $this->serviceContainer = $serviceContainer;
+    }
 
     /**
      * @param \Chamilo\Core\Queue\Domain\Job $job

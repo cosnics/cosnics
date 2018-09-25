@@ -8,9 +8,9 @@
 
         <prototype namespace="Chamilo\Core\Queue\" resource="../../../{Service, Storage/Repository}/*"/>
 
-        <service id="Chamilo\Core\Queue\Storage\Repository\BinLogRepository">
+        <service id="Chamilo\Core\Queue\Storage\Repository\JobEntityRepository">
             <factory service="doctrine.orm.entity_manager" method="getRepository" />
-            <argument>Chamilo\Core\Queue\Storage\Entity\BinLog</argument>
+            <argument>Chamilo\Core\Queue\Storage\Entity\JobEntity</argument>
         </service>
 
         <service id="Chamlio\Core\Queue\Service\PsrContext" class="\Interop\Queue\PsrContext">
