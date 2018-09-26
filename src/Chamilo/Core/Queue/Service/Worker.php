@@ -27,33 +27,44 @@ class Worker
     protected $jobProcessorFactory;
 
     /**
+     * @var \Chamilo\Core\Queue\Service\JobEntityManager
+     */
+    protected $jobEntityManager;
+
+    /**
      * Worker constructor.
      *
      * @param PsrContext $psrContext
      * @param JobSerializer $jobSerializer
      * @param JobProcessorFactory $jobProcessorFactory
+     * @param \Chamilo\Core\Queue\Service\JobEntityManager $jobEntityManager
      */
     public function __construct(
-        PsrContext $psrContext, JobSerializer $jobSerializer, JobProcessorFactory $jobProcessorFactory
+        PsrContext $psrContext, JobSerializer $jobSerializer, JobProcessorFactory $jobProcessorFactory,
+        JobEntityManager $jobEntityManager
     )
     {
         $this->psrContext = $psrContext;
         $this->jobSerializer = $jobSerializer;
         $this->jobProcessorFactory = $jobProcessorFactory;
+        $this->jobEntityManager = $jobEntityManager;
     }
 
     /**
-     * @param string $topic
+     * @param string $queueName
      */
-    public function waitForJobAndExecute($topic)
+    public function waitForJobAndExecute($queueName)
     {
-        $destination = $this->psrContext->createQueue($topic);
+        $destination = $this->psrContext->createQueue($queueName);
         $consumer = $this->psrContext->createConsumer($destination);
         $message = $consumer->receive();
 
         try
         {
-            $job = $this->jobSerializer->deserializeJob($message->getBody());
+            $jobEntityId = $message->getBody();
+            $jobEntity = $this->jobEntityManager->findJob($jobEntityId);
+            $job = $this->jobSerializer->deserializeJob($jobEntity->getMessage());
+
             $processor = $this->jobProcessorFactory->createJobProcessor($job);
             $processor->processJob($job);
 

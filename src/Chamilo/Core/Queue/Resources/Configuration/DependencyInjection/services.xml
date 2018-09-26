@@ -6,23 +6,19 @@
     <services>
         <defaults autowire="true" public="true" />
 
-        <prototype namespace="Chamilo\Core\Queue\" resource="../../../{Service, Storage/Repository}/*"/>
+        <prototype namespace="Chamilo\Core\Queue\" resource="../../../{Service, Storage/Repository}/*" exclude="../../../Service/Producer"/>
 
         <service id="Chamilo\Core\Queue\Storage\Repository\JobEntityRepository">
             <factory service="doctrine.orm.entity_manager" method="getRepository" />
             <argument>Chamilo\Core\Queue\Storage\Entity\JobEntity</argument>
         </service>
 
-        <service id="Chamlio\Core\Queue\Service\PsrContext" class="\Interop\Queue\PsrContext">
-            <factory service="Chamilo\Core\Queue\Service\ConnectionFactory" method="createContext" />
+        <service id="Chamilo\Core\Queue\Service\Producer\ProducerInterface" class="Chamilo\Core\Queue\Service\Producer\ProducerInterface">
+            <factory service="Chamilo\Core\Queue\Service\ProducerFactory" method="createProducer" />
         </service>
 
-        <service id="Chamilo\Core\Queue\Service\Worker">
-            <argument type="service" id="Chamlio\Core\Queue\Service\PsrContext" />
-        </service>
-
-        <service id="Chamilo\Core\Queue\Service\Producer">
-            <argument type="service" id="Chamlio\Core\Queue\Service\PsrContext" />
+        <service id="Interop\Queue\PsrContext" class="Interop\Queue\PsrContext">
+            <factory service="Chamilo\Core\Queue\Service\PsrContextFactory" method="createContext" />
         </service>
 
         <prototype namespace="Chamilo\Core\Queue\Console\Command\" resource="../../../Console/Command/*">

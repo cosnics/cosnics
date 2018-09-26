@@ -4,7 +4,7 @@ namespace Chamilo\Core\Queue\Console\Command;
 
 use Chamilo\Core\Queue\Domain\Job;
 use Chamilo\Core\Queue\Service\EchoProcessor;
-use Chamilo\Core\Queue\Service\Producer;
+use Chamilo\Core\Queue\Service\Dispatcher;
 use Chamilo\Core\Queue\Service\Worker;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,7 +23,7 @@ class ProducerCommand extends Command
     const ARG_MESSAGE = 'message';
 
     /**
-     * @var \Chamilo\Core\Queue\Service\Producer
+     * @var \Chamilo\Core\Queue\Service\Dispatcher
      */
     protected $producer;
 
@@ -35,10 +35,10 @@ class ProducerCommand extends Command
     /**
      * WorkerCommand constructor.
      *
-     * @param \Chamilo\Core\Queue\Service\Producer $producer
+     * @param \Chamilo\Core\Queue\Service\Dispatcher $producer
      * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function __construct(Producer $producer, Translator $translator)
+    public function __construct(Dispatcher $producer, Translator $translator)
     {
         $this->producer = $producer;
         $this->translator = $translator;
@@ -68,7 +68,7 @@ class ProducerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $job = new Job(EchoProcessor::class, new \DateTime());
-        $this->producer->sendJob($job, $input->getArgument(self::ARG_TOPIC));
+        $this->producer->dispatchJob($job, $input->getArgument(self::ARG_TOPIC));
     }
 
 }

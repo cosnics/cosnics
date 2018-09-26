@@ -20,6 +20,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class JobEntity
 {
+    const STATUS_CREATED = 1;
+    const STATUS_SENT_TO_QUEUE = 2;
+    const STATUS_IN_PROGRESS = 3;
+    const STATUS_SUCCESS = 4;
+    const STATUS_FAILED = 5;
+    const STATUS_RETRY = 6;
+
     /**
      * @var int
      *
@@ -68,10 +75,14 @@ class JobEntity
 
     /**
      * @param string $message
+     *
+     * @return \Chamilo\Core\Queue\Storage\Entity\JobEntity
      */
     public function setMessage(string $message)
     {
         $this->message = $message;
+
+        return $this;
     }
 
     /**
@@ -84,10 +95,14 @@ class JobEntity
 
     /**
      * @param \DateTime $date
+     *
+     * @return \Chamilo\Core\Queue\Storage\Entity\JobEntity
      */
     public function setDate(\DateTime $date)
     {
         $this->date = $date;
+
+        return $this;
     }
 
     /**
@@ -100,10 +115,14 @@ class JobEntity
 
     /**
      * @param int $status
+     *
+     * @return \Chamilo\Core\Queue\Storage\Entity\JobEntity
      */
     public function setStatus(int $status)
     {
         $this->status = $status;
+
+        return $this;
     }
 
 }

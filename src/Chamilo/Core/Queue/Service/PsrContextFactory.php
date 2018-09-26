@@ -3,13 +3,18 @@
 namespace Chamilo\Core\Queue\Service;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Doctrine\DBAL\Driver\Connection;
-use Enqueue\Dbal\DbalConnectionFactory;
+use Chamilo\Core\Queue\Service\Producer\BeanstalkProducer;
+use Chamilo\Core\Queue\Service\Producer\DBALProducer;
+use Doctrine\DBAL\Connection;
+use Enqueue\Dbal\DbalContext;
 use Enqueue\Pheanstalk\PheanstalkConnectionFactory;
-use Interop\Queue\PsrConnectionFactory;
-use Interop\Queue\PsrContext;
 
-class ConnectionFactory implements PsrConnectionFactory
+/**
+ * @package Chamilo\Core\Queue\Service
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
+class PsrContextFactory
 {
     /**
      * @var \Chamilo\Configuration\Service\ConfigurationConsulter
@@ -25,7 +30,7 @@ class ConnectionFactory implements PsrConnectionFactory
      * QueueConnectionFactory constructor.
      *
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     * @param \Doctrine\DBAL\Driver\Connection $dbalConnection
+     * @param \Doctrine\DBAL\Connection $dbalConnection
      */
     public function __construct(ConfigurationConsulter $configurationConsulter, Connection $dbalConnection)
     {
@@ -34,7 +39,7 @@ class ConnectionFactory implements PsrConnectionFactory
     }
 
     /**
-     * @return PsrContext
+     * @return \Interop\Queue\PsrContext
      */
     public function createContext()
     {
@@ -52,8 +57,7 @@ class ConnectionFactory implements PsrConnectionFactory
                 return $factory->createContext();
             case 'database':
             default:
-                $factory = new DbalConnectionFactory($this->dbalConnection);
-                return $factory->createContext();
+                return new DbalContext($this->dbalConnection, ['table_name' => 'queue_queue']);
         }
     }
 }

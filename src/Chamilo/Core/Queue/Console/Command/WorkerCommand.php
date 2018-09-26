@@ -16,7 +16,7 @@ use Symfony\Component\Translation\Translator;
  */
 class WorkerCommand extends Command
 {
-    const ARG_TOPIC = 'topic';
+    const ARG_QUEUE = 'queue';
 
     /**
      * @var Worker
@@ -46,9 +46,10 @@ class WorkerCommand extends Command
     {
         $this->setName('chamilo:queue:worker')
             ->addArgument(
-                self::ARG_TOPIC, InputArgument::REQUIRED,
-                $this->translator->trans('QueueWorkerCommandDescription', [], 'Chamilo\Core\Queue')
-            );
+                self::ARG_QUEUE, InputArgument::REQUIRED,
+                $this->translator->trans('QueueWorkerCommandQueueArgDescription', [], 'Chamilo\Core\Queue')
+            )
+            ->setDescription($this->translator->trans('QueueWorkerCommandDescription', [], 'Chamilo\Core\Queue'));
     }
 
     /**
@@ -59,7 +60,7 @@ class WorkerCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->worker->waitForJobAndExecute($input->getArgument(self::ARG_TOPIC));
+        $this->worker->waitForJobAndExecute($input->getArgument(self::ARG_QUEUE));
     }
 
 }
