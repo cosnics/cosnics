@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Queue\Service;
 
-use Chamilo\Core\Queue\Domain\Job;
+use Chamilo\Core\Queue\Storage\Entity\Job;
 
 /**
  * Interface JobProcessorInterface
@@ -13,9 +13,7 @@ use Chamilo\Core\Queue\Domain\Job;
 interface JobProcessorInterface
 {
     /**
-     * @param \Chamilo\Core\Queue\Domain\Job $job
-     *
-     * @return mixed
+     * @param \Chamilo\Core\Queue\Storage\Entity\Job $job
      */
     public function processJob(Job $job);
 }

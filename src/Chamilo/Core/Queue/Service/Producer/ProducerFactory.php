@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Queue\Service;
+namespace Chamilo\Core\Queue\Service\Producer;
 
 use Chamilo\Core\Queue\Service\Producer\BeanstalkProducer;
 use Chamilo\Core\Queue\Service\Producer\DBALProducer;

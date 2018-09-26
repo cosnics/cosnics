@@ -2,8 +2,9 @@
 
 namespace Chamilo\Core\Queue\Service;
 
-use Chamilo\Core\Queue\Storage\Entity\JobEntity;
+use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Queue\Storage\Repository\JobEntityRepository;
+use JMS\Serializer\Serializer;
 
 /**
  * @package Chamilo\Core\Queue\Service
@@ -18,44 +19,45 @@ class JobEntityManager
     protected $jobEntityRepository;
 
     /**
+     * @var \JMS\Serializer\Serializer
+     */
+    protected $serializer;
+
+    /**
      * JobEntityManager constructor.
      *
      * @param \Chamilo\Core\Queue\Storage\Repository\JobEntityRepository $jobEntityRepository
+     * @param \JMS\Serializer\Serializer $serializer
      */
-    public function __construct(JobEntityRepository $jobEntityRepository)
+    public function __construct(JobEntityRepository $jobEntityRepository, Serializer $serializer)
     {
         $this->jobEntityRepository = $jobEntityRepository;
+        $this->serializer = $serializer;
     }
 
     /**
-     * @param string $jobJSON
-     *
-     * @return \Chamilo\Core\Queue\Storage\Entity\JobEntity
+     * @param \Chamilo\Core\Queue\Storage\Entity\Job $job
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function addJobToDatabase($jobJSON = '')
+    public function createJob(Job $job)
     {
-        $jobEntity = new JobEntity();
+        $job->setDate(new \DateTime())
+            ->setStatus(Job::STATUS_CREATED)
+            ->serializeParameters($this->serializer);
 
-        $jobEntity->setDate(new \DateTime())
-            ->setMessage($jobJSON)
-            ->setStatus(JobEntity::STATUS_CREATED);
-
-        $this->jobEntityRepository->createJobEntity($jobEntity);
-
-        return $jobEntity;
+        $this->jobEntityRepository->createJobEntity($job);
     }
 
     /**
-     * @param \Chamilo\Core\Queue\Storage\Entity\JobEntity $jobEntity
+     * @param \Chamilo\Core\Queue\Storage\Entity\Job $jobEntity
      * @param int $newStatus
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function changeJobStatus(JobEntity $jobEntity, $newStatus = JobEntity::STATUS_SUCCESS)
+    public function changeJobStatus(Job $jobEntity, $newStatus = Job::STATUS_SUCCESS)
     {
         $jobEntity->setStatus($newStatus);
         $this->jobEntityRepository->updateJobEntity($jobEntity);
@@ -64,17 +66,19 @@ class JobEntityManager
     /**
      * @param int $jobId
      *
-     * @return JobEntity
+     * @return Job
      */
     public function findJob($jobId)
     {
         $job = $this->jobEntityRepository->find($jobId);
-        if(!$job instanceof JobEntity)
+        if(!$job instanceof Job)
         {
             throw new \RuntimeException(
                 sprintf('Could not find the job entity with id %s in the database', $jobId)
             );
         }
+
+        $job->deserializeParameters($this->serializer);
 
         return $job;
     }

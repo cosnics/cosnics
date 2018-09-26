@@ -2,10 +2,9 @@
 
 namespace Chamilo\Core\Queue\Console\Command;
 
-use Chamilo\Core\Queue\Domain\Job;
 use Chamilo\Core\Queue\Service\EchoProcessor;
-use Chamilo\Core\Queue\Service\Dispatcher;
-use Chamilo\Core\Queue\Service\Worker;
+use Chamilo\Core\Queue\Service\JobProducer;
+use Chamilo\Core\Queue\Storage\Entity\Job;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,7 +22,7 @@ class ProducerCommand extends Command
     const ARG_MESSAGE = 'message';
 
     /**
-     * @var \Chamilo\Core\Queue\Service\Dispatcher
+     * @var \Chamilo\Core\Queue\Service\JobProducer
      */
     protected $producer;
 
@@ -35,10 +34,10 @@ class ProducerCommand extends Command
     /**
      * WorkerCommand constructor.
      *
-     * @param \Chamilo\Core\Queue\Service\Dispatcher $producer
+     * @param \Chamilo\Core\Queue\Service\JobProducer $producer
      * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function __construct(Dispatcher $producer, Translator $translator)
+    public function __construct(JobProducer $producer, Translator $translator)
     {
         $this->producer = $producer;
         $this->translator = $translator;
@@ -61,14 +60,15 @@ class ProducerCommand extends Command
      *
      * @return int|null|void
      *
-     * @throws \Interop\Queue\Exception
-     * @throws \Interop\Queue\InvalidDestinationException
-     * @throws \Interop\Queue\InvalidMessageException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $job = new Job(EchoProcessor::class, new \DateTime());
-        $this->producer->dispatchJob($job, $input->getArgument(self::ARG_TOPIC));
+        $job = new Job();
+        $job->setProcessorClass(EchoProcessor::class);
+
+        $this->producer->produceJob($job, $input->getArgument(self::ARG_TOPIC));
     }
 
 }

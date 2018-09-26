@@ -17,11 +17,6 @@ class Worker
     protected $psrContext;
 
     /**
-     * @var JobSerializer
-     */
-    protected $jobSerializer;
-
-    /**
      * @var JobProcessorFactory
      */
     protected $jobProcessorFactory;
@@ -35,17 +30,14 @@ class Worker
      * Worker constructor.
      *
      * @param PsrContext $psrContext
-     * @param JobSerializer $jobSerializer
      * @param JobProcessorFactory $jobProcessorFactory
      * @param \Chamilo\Core\Queue\Service\JobEntityManager $jobEntityManager
      */
     public function __construct(
-        PsrContext $psrContext, JobSerializer $jobSerializer, JobProcessorFactory $jobProcessorFactory,
-        JobEntityManager $jobEntityManager
+        PsrContext $psrContext, JobProcessorFactory $jobProcessorFactory, JobEntityManager $jobEntityManager
     )
     {
         $this->psrContext = $psrContext;
-        $this->jobSerializer = $jobSerializer;
         $this->jobProcessorFactory = $jobProcessorFactory;
         $this->jobEntityManager = $jobEntityManager;
     }
@@ -62,8 +54,7 @@ class Worker
         try
         {
             $jobEntityId = $message->getBody();
-            $jobEntity = $this->jobEntityManager->findJob($jobEntityId);
-            $job = $this->jobSerializer->deserializeJob($jobEntity->getMessage());
+            $job = $this->jobEntityManager->findJob($jobEntityId);
 
             $processor = $this->jobProcessorFactory->createJobProcessor($job);
             $processor->processJob($job);

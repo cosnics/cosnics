@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Queue\Storage\Repository;
 
-use Chamilo\Core\Queue\Storage\Entity\JobEntity;
+use Chamilo\Core\Queue\Storage\Entity\Job;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -13,24 +13,24 @@ use Doctrine\ORM\EntityRepository;
 class JobEntityRepository extends EntityRepository
 {
     /**
-     * @param \Chamilo\Core\Queue\Storage\Entity\JobEntity $jobEntity
+     * @param \Chamilo\Core\Queue\Storage\Entity\Job $jobEntity
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function createJobEntity(JobEntity $jobEntity)
+    public function createJobEntity(Job $jobEntity)
     {
         $this->getEntityManager()->persist($jobEntity);
         $this->getEntityManager()->flush();
     }
 
     /**
-     * @param \Chamilo\Core\Queue\Storage\Entity\JobEntity $jobEntity
+     * @param \Chamilo\Core\Queue\Storage\Entity\Job $jobEntity
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function updateJobEntity(JobEntity $jobEntity)
+    public function updateJobEntity(Job $jobEntity)
     {
         $this->getEntityManager()->flush();
     }

@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Queue\Service;
 
-use Chamilo\Core\Queue\Domain\Job;
+use Chamilo\Core\Queue\Storage\Entity\Job;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -28,7 +28,7 @@ class JobProcessorFactory
     }
 
     /**
-     * @param \Chamilo\Core\Queue\Domain\Job $job
+     * @param \Chamilo\Core\Queue\Storage\Entity\Job $job
      *
      * @return \Chamilo\Core\Queue\Service\JobProcessorInterface
      */
