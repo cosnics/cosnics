@@ -19,7 +19,7 @@ use Symfony\Component\Translation\Translator;
  */
 class ProducerCommand extends Command
 {
-    const ARG_QUEUE = 'topic';
+    const ARG_QUEUE = 'queue';
     const ARG_MESSAGE = 'message';
 
     /**

@@ -2,9 +2,8 @@
 
 namespace Chamilo\Core\Queue\Storage\Entity;
 
-use Chamilo\Core\Queue\Domain\JobParametersInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Serializer;
 
 /**
  * @package Chamilo\Core\Queue\Storage\Entity
@@ -46,20 +45,6 @@ class Job
     protected $processorClass;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="parameters_class", type="string")
-     */
-    protected $parametersClass;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="parameters", type="text")
-     */
-    protected $parameters;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
@@ -74,9 +59,19 @@ class Job
     protected $status;
 
     /**
-     * @var JobParametersInterface
+     * @var JobParameter[] | \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\Core\Queue\Storage\Entity\JobParameter", mappedBy="job")
      */
     protected $jobParameters;
+
+    /**
+     * Job constructor.
+     */
+    public function __construct()
+    {
+        $this->jobParameters = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -143,42 +138,56 @@ class Job
     }
 
     /**
-     * @param \Chamilo\Core\Queue\Domain\JobParametersInterface $jobParameters
+     * @param string $parameterName
+     *
+     * @return string
      */
-    public function setJobParameters(JobParametersInterface $jobParameters)
+    public function getParameter($parameterName)
     {
-        $this->jobParameters = $jobParameters;
-    }
-
-    /**
-     * @return \Chamilo\Core\Queue\Domain\JobParametersInterface
-     */
-    public function getJobParameters()
-    {
-        return $this->jobParameters;
-    }
-
-    /**
-     * @param \JMS\Serializer\Serializer $serializer
-     */
-    public function serializeParameters(Serializer $serializer)
-    {
-        $this->parametersClass = get_class($this->jobParameters);
-        $this->parameters = $serializer->serialize($this->jobParameters, 'json');
-    }
-
-    /**
-     * @param \JMS\Serializer\Serializer $serializer
-     */
-    public function deserializeParameters(Serializer $serializer)
-    {
-        if(!class_exists($this->parametersClass))
+        foreach ($this->jobParameters as $parameter)
         {
-            $this->jobParameters = null;
-            return;
+            if ($parameter->getName() == $parameterName)
+            {
+                return $parameter->getValue();
+            }
         }
 
-        $this->jobParameters = $serializer->deserialize($this->parameters, $this->parametersClass, 'json');
+        return null;
+    }
+
+    /**
+     * @param string $parameterName
+     * @param string $value
+     */
+    public function setParameter($parameterName, $value)
+    {
+        if(empty($parameterName))
+        {
+            throw new \InvalidArgumentException('The given parameter name can not be empty');
+        }
+
+        if (empty($value))
+        {
+            throw new \InvalidArgumentException(
+                sprintf('The given parameter value for parameter %s can not be empty', $parameterName)
+            );
+        }
+
+        foreach($this->jobParameters as $parameter)
+        {
+            if($parameter->getName() == $parameterName)
+            {
+                $parameter->setValue($value);
+                return;
+            }
+        }
+
+        $parameter = new JobParameter();
+        $parameter->setName($parameterName)
+            ->setJob($this)
+            ->setValue($value);
+
+        $this->jobParameters->add($parameter);
     }
 
 }
