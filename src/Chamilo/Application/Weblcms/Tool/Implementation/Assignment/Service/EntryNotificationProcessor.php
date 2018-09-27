@@ -9,13 +9,13 @@ use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager;
-use Chamilo\Core\Notification\Domain\NotificationTriggerData;
 use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Domain\ViewingContext;
 use Chamilo\Core\Notification\Service\FilterManager;
 use Chamilo\Core\Notification\Service\NotificationManager;
-use Chamilo\Core\Notification\Service\NotificationProcessor\NotificationProcessorInterface;
 use Chamilo\Core\Notification\Storage\Entity\Filter;
+use Chamilo\Core\Queue\Service\JobProcessorInterface;
+use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
@@ -28,7 +28,7 @@ use Chamilo\Libraries\File\Redirect;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class EntryNotificationProcessor implements NotificationProcessorInterface
+class EntryNotificationJobProcessor implements JobProcessorInterface
 {
     /**
      * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
@@ -100,18 +100,21 @@ class EntryNotificationProcessor implements NotificationProcessorInterface
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Domain\NotificationTriggerData | NotificationTriggerData $notificationTriggerData
+     * @param \Chamilo\Core\Queue\Storage\Entity\Job $job
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function processNotificationTrigger(NotificationTriggerData $notificationTriggerData)
+    public function processJob(Job $job)
     {
-        $entry = $this->assignmentService->findEntryByIdentifier($notificationTriggerData->getEntryId());
+        /** @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Domain\EntryNotificationJobParameters $jobParameters */
+        $jobParameters = $job->getJobParameters();
+
+        $entry = $this->assignmentService->findEntryByIdentifier($jobParameters->getEntryId());
         if (!$entry instanceof Entry)
         {
             throw new \InvalidArgumentException(
-                sprintf('The given entry with id %s could not be found', $notificationTriggerData->getEntryId())
+                sprintf('The given entry with id %s could not be found', $jobParameters->getEntryId())
             );
         }
 

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Queue\Service;
 
+use Chamilo\Core\Queue\Storage\Entity\Job;
 use Interop\Queue\PsrContext;
 
 /**
@@ -55,11 +56,14 @@ class Worker
         {
             $jobEntityId = $message->getBody();
             $job = $this->jobEntityManager->findJob($jobEntityId);
+            $this->jobEntityManager->changeJobStatus($job, Job::STATUS_IN_PROGRESS);
 
             $processor = $this->jobProcessorFactory->createJobProcessor($job);
             $processor->processJob($job);
 
             $consumer->acknowledge($message);
+
+            $this->jobEntityManager->changeJobStatus($job, Job::STATUS_SUCCESS);
         }
         catch(\Throwable $ex)
         {

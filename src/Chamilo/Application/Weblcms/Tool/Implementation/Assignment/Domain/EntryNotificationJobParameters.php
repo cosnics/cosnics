@@ -2,28 +2,31 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Domain;
 
+use Chamilo\Core\Queue\Domain\JobParametersInterface;
+
+use JMS\Serializer\Annotation\Type;
+
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Domain
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class NotificationTriggerData extends \Chamilo\Core\Notification\Domain\NotificationTriggerData
+class EntryNotificationJobParameters implements JobParametersInterface
 {
     /**
      * @var int
+     *
+     * @Type("int")
      */
     protected $entryId;
 
     /**
      * NotificationTriggerData constructor.
      *
-     * @param string $processorClass
-     * @param \DateTime $created
      * @param int $entryId
      */
-    public function __construct($processorClass, $created, $entryId)
+    public function __construct($entryId)
     {
-        parent::__construct($processorClass, $created);
         $this->entryId = $entryId;
     }
 
