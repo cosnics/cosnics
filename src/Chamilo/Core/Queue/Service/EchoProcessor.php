@@ -18,6 +18,10 @@ class EchoProcessor implements JobProcessorInterface
     {
         var_dump($job->getProcessorClass());
         var_dump($job->getDate());
-        var_dump($job->getJobParameters());
+
+        foreach($job->getParameters() as $parameter)
+        {
+            var_dump($parameter);
+        }
     }
 }

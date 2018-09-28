@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Notification\Test\Source;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Domain\EntryNotificationJobParameters;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationJobProcessor;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;
@@ -20,11 +19,9 @@ class EntryNotificationProcessorTest extends DependencyInjectionBasedTestCase
      */
     public function testProcessEntryNotificationJob()
     {
-        $jobParameters = new EntryNotificationJobParameters(200);
-
         $job = new Job();
         $job->setProcessorClass(EntryNotificationJobProcessor::class);
-        $job->setJobParameters($jobParameters);
+        $job->setParameter(EntryNotificationJobProcessor::PARAM_ENTRY_ID, 200);
 
         $this->getEntityNotificationProcessor()->processJob($job);
     }

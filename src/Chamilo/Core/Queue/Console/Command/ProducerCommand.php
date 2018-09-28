@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Queue\Console\Command;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Domain\EntryNotificationJobParameters;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationJobProcessor;
 use Chamilo\Core\Queue\Service\EchoProcessor;
 use Chamilo\Core\Queue\Service\JobProducer;
 use Chamilo\Core\Queue\Storage\Entity\Job;
@@ -68,7 +69,7 @@ class ProducerCommand extends Command
     {
         $job = new Job();
         $job->setProcessorClass(EchoProcessor::class);
-        $job->setJobParameters(new EntryNotificationJobParameters(200));
+        $job->setParameter(EntryNotificationJobProcessor::PARAM_ENTRY_ID, 200);
 
         $this->producer->produceJob($job, $input->getArgument(self::ARG_QUEUE));
     }

@@ -9,6 +9,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\En
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\EntryTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
+use Chamilo\Core\Queue\Service\JobProducer;
+use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
@@ -63,15 +65,24 @@ class AssignmentDataProvider
     protected $ephorusEnabled;
 
     /**
+     * @var JobProducer
+     */
+    protected $jobProducer;
+
+    /**
      * AssignmentDataProvider constructor.
      *
      * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager $entityServiceManager
+     * @param \Chamilo\Core\Queue\Service\JobProducer $jobProducer
      */
-    public function __construct(AssignmentService $assignmentService, EntityServiceManager $entityServiceManager)
+    public function __construct(
+        AssignmentService $assignmentService, EntityServiceManager $entityServiceManager, JobProducer $jobProducer
+    )
     {
         $this->assignmentService = $assignmentService;
         $this->entityServiceManager = $entityServiceManager;
+        $this->jobProducer = $jobProducer;
     }
 
     /**
@@ -349,13 +360,27 @@ class AssignmentDataProvider
      * @param string $ipAdress
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createEntry($entityType, $entityId, $userId, $contentObjectId, $ipAdress)
     {
-        return $this->assignmentService->createEntry(
+        $entry = $this->assignmentService->createEntry(
             $this->contentObjectPublication, $entityType, $entityId, $userId,
             $contentObjectId, $ipAdress
         );
+
+        if($entry instanceof Entry)
+        {
+            $job = new Job();
+            $job->setProcessorClass(EntryNotificationJobProcessor::class)
+                ->setParameter(EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId());
+
+            $this->jobProducer->produceJob($job, 'notifications');
+        }
+
+        return $entry;
     }
 
     /**
@@ -497,6 +522,7 @@ class AssignmentDataProvider
 
     /**
      * @param Score $score
+     *
      * @return Score
      */
     public function createScore(Score $score)

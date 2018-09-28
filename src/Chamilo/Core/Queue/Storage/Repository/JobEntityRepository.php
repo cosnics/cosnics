@@ -21,6 +21,12 @@ class JobEntityRepository extends EntityRepository
     public function createJobEntity(Job $jobEntity)
     {
         $this->getEntityManager()->persist($jobEntity);
+
+        foreach($jobEntity->getParameters() as $parameter)
+        {
+            $this->getEntityManager()->persist($parameter);
+        }
+
         $this->getEntityManager()->flush();
     }
 

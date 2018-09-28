@@ -87,7 +87,7 @@ class NotificationTranslator
         {
             if ($parameter instanceof TranslationContext)
             {
-                $parameters[$key] = $this->translateRecursively($parameter, $locale);
+                $parameters[$key] = lcfirst($this->translateRecursively($parameter, $locale));
             }
         }
 

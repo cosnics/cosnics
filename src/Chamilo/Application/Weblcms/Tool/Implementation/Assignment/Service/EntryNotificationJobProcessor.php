@@ -30,6 +30,8 @@ use Chamilo\Libraries\File\Redirect;
  */
 class EntryNotificationJobProcessor implements JobProcessorInterface
 {
+    const PARAM_ENTRY_ID = 'entry_id';
+
     /**
      * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
      */
@@ -107,14 +109,13 @@ class EntryNotificationJobProcessor implements JobProcessorInterface
      */
     public function processJob(Job $job)
     {
-        /** @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Domain\EntryNotificationJobParameters $jobParameters */
-        $jobParameters = $job->getJobParameters();
+        $entryId = $job->getParameter(self::PARAM_ENTRY_ID);
 
-        $entry = $this->assignmentService->findEntryByIdentifier($jobParameters->getEntryId());
+        $entry = $this->assignmentService->findEntryByIdentifier($entryId);
         if (!$entry instanceof Entry)
         {
             throw new \InvalidArgumentException(
-                sprintf('The given entry with id %s could not be found', $jobParameters->getEntryId())
+                sprintf('The given entry with id %s could not be found', $entryId)
             );
         }
 
@@ -226,7 +227,7 @@ class EntryNotificationJobProcessor implements JobProcessorInterface
                     [
                         '{COURSE_TITLE}' => $course->get_title(),
                         '{TOOL}' => new TranslationContext(
-                            'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool(), 'TypeName'
+                            'Chamilo\Application\Weblcms\Tool\Implementation\\' . $publication->get_tool(), 'TypeName'
                         )
                     ]
                 )

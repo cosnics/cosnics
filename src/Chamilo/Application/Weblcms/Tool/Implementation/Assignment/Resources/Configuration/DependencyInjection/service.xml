@@ -10,6 +10,7 @@
                 class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider">
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
             <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.entity_service_manager" />
+            <argument type="service" id="Chamilo\Core\Queue\Service\JobProducer" />
         </service>
 
         <service
@@ -70,8 +71,8 @@
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
         </service>
 
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationProcessor"
-                 class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationProcessor">
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationJobProcessor"
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationJobProcessor">
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
             <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.entity_service_manager" />
             <argument type="service" id="chamilo.application.weblcms.service.publication" />

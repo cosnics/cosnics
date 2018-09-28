@@ -91,10 +91,14 @@ class Job
 
     /**
      * @param string $processorClass
+     *
+     * @return \Chamilo\Core\Queue\Storage\Entity\Job
      */
     public function setProcessorClass(string $processorClass)
     {
         $this->processorClass = $processorClass;
+
+        return $this;
     }
 
     /**
@@ -135,6 +139,14 @@ class Job
         $this->status = $status;
 
         return $this;
+    }
+
+    /**
+     * @return \Chamilo\Core\Queue\Storage\Entity\JobParameter[]|\Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getParameters()
+    {
+        return $this->jobParameters;
     }
 
     /**

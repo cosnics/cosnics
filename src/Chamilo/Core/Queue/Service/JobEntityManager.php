@@ -44,8 +44,7 @@ class JobEntityManager
     public function createJob(Job $job)
     {
         $job->setDate(new \DateTime())
-            ->setStatus(Job::STATUS_CREATED)
-            ->serializeParameters($this->serializer);
+            ->setStatus(Job::STATUS_CREATED);
 
         $this->jobEntityRepository->createJobEntity($job);
     }
@@ -77,8 +76,6 @@ class JobEntityManager
                 sprintf('Could not find the job entity with id %s in the database', $jobId)
             );
         }
-
-        $job->deserializeParameters($this->serializer);
 
         return $job;
     }
