@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\Repository\ContentObject\Assignment">
+    <settings>
+        <category name="general">
+
+            <setting
+                name="show_compact_feedback"
+                field="toggle"
+                default="1">
+                <options type="static">
+                    <option
+                        name="show_compact_feedback"
+                        value="1" />
+                </options>
+            </setting>
+        </category>
+    </settings>
+</package>

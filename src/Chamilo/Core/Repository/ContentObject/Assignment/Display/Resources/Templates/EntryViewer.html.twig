@@ -93,6 +93,7 @@
     {% if HAS_ENTRY %}
         <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entry">
             <div class="row">
+                {% if not SHOW_COMPACT_FEEDBACK %}
                 <div class="col-xs-12">
                 <ul class="nav nav-pills content-nav">
                     <li role="presentation" class="active"><a href="#">{{ 'Content'|trans({}, appContext) }}</a></li>
@@ -104,15 +105,25 @@
                     <li role="presentation"><a href="#feedback">{{ 'Feedback'|trans({}, appContext) }} <span class="badge">{{ FEEDBACK_COUNT }}</span></a></li>
                 </ul>
                 </div>
+                {% endif %}
 
+                {% if SHOW_COMPACT_FEEDBACK %}
+                <div class="col-lg-7 content-object-rendition">
+                {% else %}
                 <div class="col-xs-12 content-object-rendition">
+                {% endif %}
                     <h3 class="entry-title title-underlined">{{ CONTENT_OBJECT_TITLE }}
                         <span class="badge score-badge {% if SCORE > 0 %} score-success {% else %}no-score{% endif %}">{% if SCORE %}{{ SCORE }}%{% else %}{{ 'NoScore'|trans({}, appContext) }}{% endif %}</span>
                     </h3>
                     <div class="submitted-details">{{ SUBMITTED_BY }} {% if SUBMITTED_BY != ENTITY_NAME %}({{ ENTITY_NAME }}) {% endif %}{{ 'At'|trans({}, appContext) }} {{ SUBMITTED_DATE }}</div>
                     {{ CONTENT_OBJECT_RENDITION|raw }}
                 </div>
+
+                {% if SHOW_COMPACT_FEEDBACK %}
+                <div class="col-lg-5">
+                {% else %}
                 <div class="col-xs-12">
+                {% endif %}
                     <div class="row">
                         <div class="col-xs-12" id="score">
                             {% if CAN_EDIT_ASSIGNMENT %}

@@ -238,7 +238,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                     self::PARAM_ENTRY_ID => $this->getEntry()->getId()
                 ]
             ),
-            'ATTACHED_CONTENT_OBJECTS' => $this->getAttachedContentObjects()
+            'ATTACHED_CONTENT_OBJECTS' => $this->getAttachedContentObjects(),
+            'SHOW_COMPACT_FEEDBACK' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Repository\ContentObject\Assignment', 'show_compact_feedback'])
         ];
 
         return array_merge($baseParameters, $extendParameters);

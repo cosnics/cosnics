@@ -465,3 +465,6 @@ CREATE TABLE `repository_workspace_office365_reference` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `menu_item` ADD `icon_class` VARCHAR(255) NULL AFTER `type`;
+
+INSERT INTO `configuration_setting` (`context`, `variable`, `value`, `user_setting`) VALUES ('Chamilo\\Core\\Repository\\ContentObject\\Assignment', 'show_compact_feedback', '1', '0');
+
