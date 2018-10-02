@@ -380,5 +380,8 @@ class AuthenticationValidator
     {
         $authentication = Authentication::factory($user->getAuthenticationSource());
         $authentication->logout($user);
+
+        Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
+        Session::destroy();
     }
 }

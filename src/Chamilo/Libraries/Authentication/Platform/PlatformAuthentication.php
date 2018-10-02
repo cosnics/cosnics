@@ -1,13 +1,14 @@
 <?php
+
 namespace Chamilo\Libraries\Authentication\Platform;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsername;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Authentication\AuthenticationException;
-use Chamilo\Libraries\Authentication\CredentialsAuthentication;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Authentication\AuthenticationInterface;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -16,46 +17,66 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PlatformAuthentication extends CredentialsAuthentication implements ChangeablePassword, ChangeableUsername
+class PlatformAuthentication implements AuthenticationInterface, ChangeablePassword, ChangeableUsername
 {
-    use DependencyInjectionContainerTrait;
+    const PARAM_LOGIN = 'login';
+    const PARAM_PASSWORD = 'password';
 
     /**
-     *
-     * @param string $userName
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
-    public function __construct($userName = null)
+    protected $request;
+
+    /**
+     * @var \Chamilo\Libraries\Hashing\HashingUtilities
+     */
+    protected $hashingUtilities;
+
+    /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    protected $userService;
+
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    protected $translator;
+
+    /**
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     *
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     */
+    public function login()
     {
-        parent::__construct($userName);
-        $this->initializeContainer();
+        $username = $this->request->getFromPost(self::PARAM_LOGIN);
+        $password = $this->request->getFromPost(self::PARAM_PASSWORD);
+        $passwordHash = $this->hashingUtilities->hashString($password);
+
+        $user = $this->userService->findUserByUsername($username);
+        if(!$user instanceof User || $user->getAuthenticationSource() != 'Platform')
+        {
+            return null;
+        }
+
+        if ($user->get_password() == $passwordHash)
+        {
+            return $user;
+        }
+
+        throw new AuthenticationException(
+            $this->translator->trans('UsernameOrPasswordIncorrect', [], 'Chamilo\Libraries')
+        );
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    public function getHashingUtilities()
+    public function logout(User $user)
     {
-        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Authentication\CredentialsAuthentication::login()
-     */
-    public function login($password)
-    {
-        $passwordHash = $this->getHashingUtilities()->hashString($password);
-
-        if ($this->getUser() instanceof User && $this->getUser()->get_password() == $passwordHash)
-        {
-
-            return true;
-        }
-        else
-        {
-            throw new AuthenticationException(Translation::get('UsernameOrPasswordIncorrect'));
-        }
+        $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
+        $redirect->toUrl();
+        exit();
     }
 
     /**
@@ -65,11 +86,13 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
      * @param string $newPassword
      *
      * @return boolean
+     *
+     * @throws \Exception
      */
     public function changePassword(User $user, $oldPassword, $newPassword)
     {
         // Check whether we have an actual User object
-        if (! $user instanceof User)
+        if (!$user instanceof User)
         {
             return false;
         }
@@ -80,7 +103,7 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
             return false;
         }
 
-        $oldPasswordHash = $this->getHashingUtilities()->hashString($oldPassword);
+        $oldPasswordHash = $this->hashingUtilities->hashString($oldPassword);
 
         // Verify that the entered old password matches the stored password
         if ($oldPasswordHash != $user->get_password())
@@ -89,7 +112,7 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
         }
 
         // Set the password
-        $user->set_password($this->getHashingUtilities()->hashString($newPassword));
+        $user->set_password($this->hashingUtilities->hashString($newPassword));
 
         return $user->update();
     }
@@ -100,6 +123,6 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
      */
     public function getPasswordRequirements()
     {
-        return Translation::get('GeneralPasswordRequirements');
+        return $this->translator->trans('GeneralPasswordRequirements', [], 'Chamilo\Libraries\Authentication\Platform');
     }
 }

@@ -468,3 +468,9 @@ ALTER TABLE `menu_item` ADD `icon_class` VARCHAR(255) NULL AFTER `type`;
 
 INSERT INTO `configuration_setting` (`context`, `variable`, `value`, `user_setting`) VALUES ('Chamilo\\Core\\Repository\\ContentObject\\Assignment', 'show_compact_feedback', '1', '0');
 
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Authentication\\Anonymous', 'Chamilo\\Libraries\\Authentication', 'Authentication', 'AnonymousAuthentication', '1', '1.0.0', '1');
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Authentication\\Cas', 'Chamilo\\Libraries\\Authentication', 'Authentication', 'CasAuthentication', '1', '1.0.0', '1');
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Authentication\\Ldap', 'Chamilo\\Libraries\\Authentication', 'Authentication', 'LdapAuthentication', '1', '1.0.0', '1');
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Authentication\\Platform', 'Chamilo\\Libraries\\Authentication', 'Authentication', 'PlatformAuthentication', '1', '1.0.0', '1');
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Authentication\\SecurityToken', 'Chamilo\\Libraries\\Authentication', 'Authentication', 'SecurityTokenAuthentication', '1', '1.0.0', '1');
+

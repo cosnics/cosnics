@@ -87,16 +87,7 @@ abstract class Authentication
      */
     public function logout($user)
     {
-        $this->trackLogout($user);
-        Session::destroy();
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function trackLogout($user)
-    {
         Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
+        Session::destroy();
     }
 }

@@ -42,6 +42,26 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     * @param string $securityToken
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function findUserBySecurityToken($securityToken)
+    {
+        return DataManager::retrieve_user_by_security_token($securityToken);
+    }
+
+    /**
+     * @param string $officialCode
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function findUserByOfficialCode($officialCode)
+    {
+        return DataManager::retrieve_user_by_official_code($officialCode);
+    }
+
+    /**
      * Finds a user by a list of parameters
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition

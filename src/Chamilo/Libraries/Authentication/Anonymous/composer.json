@@ -1,0 +1,42 @@
+{
+    "name": "cosnics/libraries/authentication/anonymous",
+    "version": "1.0.0",
+    "description": "Anonymous authentication",
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "require-dev": {
+    },
+    "keywords": [
+        "Libraries"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "extra": {
+        "cosnics": {
+            "name": "AnonymousAuthentication",
+            "context": "Chamilo\\Libraries\\Authentication\\Anonymous",
+            "type": "Chamilo\\Libraries\\Authentication",
+            "install": {
+                "core": 0,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Libraries",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}
