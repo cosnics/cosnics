@@ -40,6 +40,9 @@
             <argument
                     type="service"
                     id="chamilo.libraries.architecture.error_handler.exception_logger"/>
+            <argument
+                type="service"
+                id="Chamilo\Libraries\Authentication\AuthenticationValidator" />
             <argument>%chamilo.configuration.version%</argument>
             <argument
                     type="service"

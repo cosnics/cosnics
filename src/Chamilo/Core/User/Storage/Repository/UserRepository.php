@@ -147,6 +147,16 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     * @param string $usernameOrEmail
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function findUserByUsernameOrEmail($usernameOrEmail)
+    {
+        return \Chamilo\Core\User\Storage\DataManager::retrieveUserByUsernameOrEmail($usernameOrEmail);
+    }
+
+    /**
      *
      * @return User[]
      */

@@ -54,10 +54,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
-        $authenticationValidator = new AuthenticationValidator(
-            $this->getRequest(),
-            $this->getService('chamilo.configuration.service.configuration_consulter')
-        );
+        $authenticationValidator = $this->getAuthenticationValidator();
 
         $alreadyAuthenticated = $authenticationValidator->isAuthenticated();
 
@@ -190,5 +187,13 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     public function get_tool_id()
     {
         return 'Calendar';
+    }
+
+    /**
+     * @return AuthenticationValidator
+     */
+    protected function getAuthenticationValidator()
+    {
+        return $this->getService(AuthenticationValidator::class);
     }
 }

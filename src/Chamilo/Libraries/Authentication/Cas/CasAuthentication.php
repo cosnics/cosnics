@@ -6,8 +6,10 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Translation\Translation;
 use phpCAS;
 use Symfony\Component\Translation\Translator;
@@ -19,7 +21,7 @@ use Symfony\Component\Translation\Translator;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CasAuthentication implements AuthenticationInterface
+class CasAuthentication extends Authentication implements AuthenticationInterface
 {
     /**
      * @var string[]
@@ -32,42 +34,27 @@ class CasAuthentication implements AuthenticationInterface
     protected $hasBeenInitialized = false;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    protected $configurationConsulter;
-
-    /**
-     * @var \Chamilo\Core\User\Service\UserService
-     */
-    protected $userService;
-
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    protected $translator;
-
-    /**
-     * CasAuthentication constructor.
-     *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function __construct(
-        ConfigurationConsulter $configurationConsulter, UserService $userService, Translator $translator
-    )
-    {
-        $this->configurationConsulter = $configurationConsulter;
-        $this->userService = $userService;
-        $this->translator = $translator;
-    }
-
-    /**
      *
      * @see \Chamilo\Libraries\Authentication\ExternalAuthentication::login()
      */
     public function login()
     {
+        if(!$this->isAuthSourceActive())
+        {
+            return null;
+        }
+
+        $externalAuthenticationEnabled = $this->configurationConsulter->getSetting(
+            array('Chamilo\Core\Admin', 'enableExternalAuthentication')
+        );
+
+        $bypassExternalAuthentication = (boolean) $this->request->getFromUrl('noExtAuth', false);
+
+        if (!$externalAuthenticationEnabled || $bypassExternalAuthentication)
+        {
+            return null;
+        }
+
         if (!$this->hasBeenInitialized)
         {
             $this->initializeClient();
@@ -344,5 +331,25 @@ class CasAuthentication implements AuthenticationInterface
                 $this->initializeClient();
             }
         }
+    }
+
+    /**
+     * Returns the priority of the authentication, lower priorities come first
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 300;
+    }
+
+    /**
+     * Returns the short name of the authentication to check in the settings
+     *
+     * @return string
+     */
+    public function getAuthenticationType()
+    {
+        return 'Cas';
     }
 }

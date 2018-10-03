@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Authentication\Anonymous;
 
 use Chamilo\Configuration\Configuration;
@@ -6,6 +7,7 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\Authentication\QueryAuthentication;
@@ -13,6 +15,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Authentication method for anonymous users.
@@ -25,45 +28,28 @@ use Chamilo\Libraries\Platform\Session\SessionUtilities;
  * @package Chamilo\Libraries\Authentication\Anonymous
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AnonymousAuthentication implements AuthenticationInterface
+class AnonymousAuthentication extends Authentication implements AuthenticationInterface
 {
-    /**
-     *
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    protected $request;
-
-    /**
-     * @var \Chamilo\Core\User\Service\UserService
-     */
-    protected $userService;
-
-    /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    protected $configurationConsulter;
-
     /**
      * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
     protected $sessionUtilities;
 
     /**
-     * AnonymousAuthentication constructor.
+     * Authentication constructor.
      *
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      */
     public function __construct(
-        ChamiloRequest $request, UserService $userService, ConfigurationConsulter $configurationConsulter,
-        SessionUtilities $sessionUtilities
+        ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
+        UserService $userService, SessionUtilities $sessionUtilities
     )
     {
-        $this->request = $request;
-        $this->userService = $userService;
-        $this->configurationConsulter = $configurationConsulter;
+        parent::__construct($configurationConsulter, $translator, $request, $userService);
         $this->sessionUtilities = $sessionUtilities;
     }
 
@@ -72,8 +58,14 @@ class AnonymousAuthentication implements AuthenticationInterface
      */
     public function login()
     {
+        if(!$this->isAuthSourceActive())
+        {
+            return null;
+        }
+
         $allowedAnonymousAuthenticationUrl = $this->configurationConsulter->getSetting(
-            array('Chamilo\Core\Admin', 'anonymous_authentication_url'));
+            array('Chamilo\Core\Admin', 'anonymous_authentication_url')
+        );
 
         $allowedAnonymousAuthenticationUrl = str_replace('http://', '', $allowedAnonymousAuthenticationUrl);
         $allowedAnonymousAuthenticationUrl = str_replace('https://', '', $allowedAnonymousAuthenticationUrl);
@@ -97,7 +89,9 @@ class AnonymousAuthentication implements AuthenticationInterface
         $redirect = new Redirect(
             array(
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_ACCESS_ANONYMOUSLY));
+                Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_ACCESS_ANONYMOUSLY
+            )
+        );
 
         $redirect->toUrl();
 
@@ -119,11 +113,31 @@ class AnonymousAuthentication implements AuthenticationInterface
         $securityToken = $this->request->cookies->get(md5('anonymous_authentication'));
         $user = null;
 
-        if (! empty($securityToken))
+        if (!empty($securityToken))
         {
             $user = $this->userService->getUserBySecurityToken($securityToken);
         }
 
         return $user;
+    }
+
+    /**
+     * Returns the priority of the authentication, lower priorities come first
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 200;
+    }
+
+    /**
+     * Returns the short name of the authentication to check in the settings
+     *
+     * @return string
+     */
+    public function getAuthenticationType()
+    {
+        return 'Anonymous';
     }
 }

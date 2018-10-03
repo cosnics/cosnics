@@ -2,13 +2,19 @@
 
 namespace Chamilo\Libraries\Authentication\Platform;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsername;
+use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Hashing\HashingUtilities;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -17,15 +23,9 @@ use Chamilo\Libraries\File\Redirect;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PlatformAuthentication implements AuthenticationInterface, ChangeablePassword, ChangeableUsername
+class PlatformAuthentication extends Authentication
+    implements AuthenticationInterface, ChangeablePassword, ChangeableUsername
 {
-    const PARAM_LOGIN = 'login';
-    const PARAM_PASSWORD = 'password';
-
-    /**
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    protected $request;
 
     /**
      * @var \Chamilo\Libraries\Hashing\HashingUtilities
@@ -33,14 +33,22 @@ class PlatformAuthentication implements AuthenticationInterface, ChangeablePassw
     protected $hashingUtilities;
 
     /**
-     * @var \Chamilo\Core\User\Service\UserService
+     * Authentication constructor.
+     *
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     * @param \Chamilo\Libraries\Hashing\HashingUtilities $hashingUtilities
      */
-    protected $userService;
-
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    protected $translator;
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
+        UserService $userService, HashingUtilities $hashingUtilities
+    )
+    {
+        parent::__construct($configurationConsulter, $translator, $request, $userService);
+        $this->hashingUtilities = $hashingUtilities;
+    }
 
     /**
      * @return \Chamilo\Core\User\Storage\DataClass\User
@@ -49,15 +57,15 @@ class PlatformAuthentication implements AuthenticationInterface, ChangeablePassw
      */
     public function login()
     {
-        $username = $this->request->getFromPost(self::PARAM_LOGIN);
-        $password = $this->request->getFromPost(self::PARAM_PASSWORD);
-        $passwordHash = $this->hashingUtilities->hashString($password);
-
-        $user = $this->userService->findUserByUsername($username);
-        if(!$user instanceof User || $user->getAuthenticationSource() != 'Platform')
+        $user = $this->getUserFromCredentialsRequest();
+        if(!$user instanceof User)
         {
             return null;
         }
+
+        $password = $this->request->getFromPost(self::PARAM_PASSWORD);
+
+        $passwordHash = $this->hashingUtilities->hashString($password);
 
         if ($user->get_password() == $passwordHash)
         {
@@ -124,5 +132,25 @@ class PlatformAuthentication implements AuthenticationInterface, ChangeablePassw
     public function getPasswordRequirements()
     {
         return $this->translator->trans('GeneralPasswordRequirements', [], 'Chamilo\Libraries\Authentication\Platform');
+    }
+
+    /**
+     * Returns the priority of the authentication, lower priorities come first
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 500;
+    }
+
+    /**
+     * Returns the short name of the authentication to check in the settings
+     *
+     * @return string
+     */
+    public function getAuthenticationType()
+    {
+        return 'Platform';
     }
 }

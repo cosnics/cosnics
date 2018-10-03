@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\AuthenticationCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheServicesConstructorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineEventListenerCompilerPass;
@@ -45,6 +46,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
             new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Libraries') . 'DependencyInjection'));
 
         $xmlFileLoader->load('architecture.xml');
+        $xmlFileLoader->load('authentication.xml');
         $xmlFileLoader->load('cache.xml');
         $xmlFileLoader->load('file.xml');
         $xmlFileLoader->load('format.xml');
@@ -76,6 +78,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $container->addCompilerPass(new CacheServicesConstructorCompilerPass());
         $container->addCompilerPass(new DoctrineEventListenerCompilerPass());
         $container->addCompilerPass(new FormTypeCompilerPass());
+        $container->addCompilerPass(new AuthenticationCompilerPass());
     }
 
     /**

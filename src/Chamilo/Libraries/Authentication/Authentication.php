@@ -1,93 +1,102 @@
 <?php
 namespace Chamilo\Libraries\Authentication;
 
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Libraries\Authentication
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
  */
-abstract class Authentication
+abstract class Authentication implements AuthenticationInterface
 {
+    const PARAM_LOGIN = 'login';
+    const PARAM_PASSWORD = 'password';
 
     /**
-     *
-     * @return string[]
+     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
      */
-    public static function getExternalAuthenticationTypes()
+    protected $configurationConsulter;
+
+    /**
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
+     */
+    protected $request;
+
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    protected $translator;
+
+    /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    protected $userService;
+
+    /**
+     * Authentication constructor.
+     *
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     */
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request, UserService $userService
+    )
     {
-        return array('Cas');
+        $this->configurationConsulter = $configurationConsulter;
+        $this->translator = $translator;
+        $this->request = $request;
+        $this->userService = $userService;
+
     }
 
     /**
-     *
-     * @return string[]
+     * @return bool
      */
-    public static function getCredentialsAuthenticationTypes()
+    protected function isAuthSourceActive()
     {
-        return array('Ldap', 'Platform');
+        return (bool) $this->configurationConsulter->getSetting(
+            array('Chamilo\Core\Admin', 'enable' . $this->getAuthenticationType() . 'Authentication')
+        );
     }
 
     /**
+     * @return \Chamilo\Core\User\Storage\DataClass\User|null
      *
-     * @return string[]
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
-    public static function getQueryAuthenticationTypes()
+    protected function getUserFromCredentialsRequest()
     {
-        return array('SecurityToken', 'Anonymous');
-    }
+        $username = $this->request->getFromPost(self::PARAM_LOGIN);
 
-    /**
-     *
-     * @return boolean
-     */
-    public static function anonymous_user_exists()
-    {
-        $anonymous_user = \Chamilo\Core\User\Storage\DataManager::retrieve_anonymous_user();
-        return $anonymous_user instanceof \Chamilo\Core\User\Storage\DataClass\User;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public static function as_anonymous_user()
-    {
-        if (self::anonymous_user_exists())
-        {
-            $anonymous_user = \Chamilo\Core\User\Storage\DataManager::retrieve_anonymous_user();
-            Session::register('_uid', $anonymous_user->get_id());
-            return $anonymous_user;
-        }
-        else
+        if(empty($username))
         {
             return null;
         }
+
+        $user = $this->userService->getUserByUsernameOrEmail($username);
+        if(!$user instanceof User)
+        {
+            throw new AuthenticationException($this->translator->trans('InvalidUsername', [], 'Chamilo\Libraries'));
+        }
+
+        if($user->getAuthenticationSource() != $this->getAuthenticationType())
+        {
+            return null;
+        }
+
+        if(!$this->isAuthSourceActive())
+        {
+            throw new AuthenticationException($this->translator->trans('AuthSourceNotActive', [], 'Chamilo\Libraries'));
+        }
+
+        return $user;
     }
 
-    /**
-     *
-     * @param string $authenticationMethod
-     * @return \Chamilo\Libraries\Authentication\Authentication
-     */
-    public static function factory($authenticationMethod)
-    {
-        $authenticationClass = __NAMESPACE__ . '\\' . $authenticationMethod . '\\' . $authenticationMethod .
-             'Authentication';
-        return new $authenticationClass();
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function logout($user)
-    {
-        Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
-        Session::destroy();
-    }
 }

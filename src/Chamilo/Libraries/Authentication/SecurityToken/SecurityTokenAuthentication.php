@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Authentication\SecurityToken;
 
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\Authentication\QueryAuthentication;
@@ -17,38 +18,8 @@ use Symfony\Component\Translation\Translator;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SecurityTokenAuthentication implements AuthenticationInterface
+class SecurityTokenAuthentication extends Authentication implements AuthenticationInterface
 {
-    /**
-     *
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    protected $request;
-
-    /**
-     * @var \Chamilo\Core\User\Service\UserService
-     */
-    protected $userService;
-
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    protected $translator;
-
-    /**
-     * SecurityTokenAuthentication constructor.
-     *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function __construct(ChamiloRequest $request, UserService $userService, Translator $translator)
-    {
-        $this->request = $request;
-        $this->userService = $userService;
-        $this->translator = $translator;
-    }
-
     /**
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
@@ -57,6 +28,11 @@ class SecurityTokenAuthentication implements AuthenticationInterface
      */
     public function login()
     {
+        if(!$this->isAuthSourceActive())
+        {
+            return null;
+        }
+
         $securityToken = $this->request->query->get(User::PROPERTY_SECURITY_TOKEN);
 
         if ($securityToken)
@@ -81,6 +57,26 @@ class SecurityTokenAuthentication implements AuthenticationInterface
      */
     public function logout(User $user)
     {
-        // TODO: Implement logout() method.
+
+    }
+
+    /**
+     * Returns the priority of the authentication, lower priorities come first
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 100;
+    }
+
+    /**
+     * Returns the short name of the authentication to check in the settings
+     *
+     * @return string
+     */
+    public function getAuthenticationType()
+    {
+        return 'SecurityToken';
     }
 }

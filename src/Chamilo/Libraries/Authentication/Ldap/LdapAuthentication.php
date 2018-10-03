@@ -6,6 +6,7 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\File\Redirect;
@@ -21,55 +22,13 @@ use Symfony\Component\Translation\Translator;
  *
  * @package \Chamilo\Libraries\Authentication\Ldap
  */
-class LdapAuthentication implements AuthenticationInterface
+class LdapAuthentication extends Authentication implements AuthenticationInterface
 {
-    const PARAM_LOGIN = 'login';
-    const PARAM_PASSWORD = 'password';
-
     /**
      *
      * @var string[]
      */
     private $ldapSettings;
-
-    /**
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    protected $request;
-
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    protected $translator;
-
-    /**
-     * @var \Chamilo\Core\User\Service\UserService
-     */
-    protected $userService;
-
-    /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    protected $configurationConsulter;
-
-    /**
-     * LdapAuthentication constructor.
-     *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     */
-    public function __construct(
-        ChamiloRequest $request, Translator $translator, UserService $userService,
-        ConfigurationConsulter $configurationConsulter
-    )
-    {
-        $this->request = $request;
-        $this->translator = $translator;
-        $this->userService = $userService;
-        $this->configurationConsulter = $configurationConsulter;
-    }
 
     /**
      * @return \Chamilo\Core\User\Storage\DataClass\User
@@ -79,19 +38,18 @@ class LdapAuthentication implements AuthenticationInterface
      */
     public function login()
     {
+        $user = $this->getUserFromCredentialsRequest();
+        if(!$user)
+        {
+            return null;
+        }
+
         if (!$this->isConfigured())
         {
             throw new \Exception($this->translator->trans('CheckLDAPConfiguration', [], 'Chamilo\Libraries'));
         }
 
-        $username = $this->request->getFromPost(self::PARAM_LOGIN);
         $password = $this->request->getFromPost(self::PARAM_PASSWORD);
-
-        $user = $this->userService->findUserByUsername($username);
-        if(!$user instanceof User || $user->getAuthenticationSource() != 'Ldap')
-        {
-            return null;
-        }
 
         $settings = $this->getConfiguration();
 
@@ -100,7 +58,7 @@ class LdapAuthentication implements AuthenticationInterface
         if ($ldapConnect)
         {
             ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
-            $filter = '(uid=' . $username . ')';
+            $filter = '(uid=' . $user->get_username() . ')';
 
             $result = ldap_bind($ldapConnect, $settings['rdn'], $settings['password']);
             $search_result = ldap_search($ldapConnect, $settings['search_dn'], $filter);
@@ -187,7 +145,13 @@ class LdapAuthentication implements AuthenticationInterface
 //            throw new \Exception($this->translator->trans('CheckLDAPConfiguration', [], 'Chamilo\Libraries'));
 //        }
 //
-//        $username = $this->request->getFromPost(self::PARAM_LOGIN);
+//
+//        $user = $this->getUserFromRequest();
+//        if(!$user)
+//        {
+//            return null;
+//        }
+//
 //        $settings = $this->getConfiguration();
 //
 //        $ldapConnect = ldap_connect($settings['host'], $settings['port']);
@@ -196,13 +160,13 @@ class LdapAuthentication implements AuthenticationInterface
 //        {
 //            ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
 //            $ldapBind = ldap_bind($ldapConnect, $settings['rdn'], $settings['password']);
-//            $filter = '(uid=' . $username . ')';
+//            $filter = '(uid=' . $user->get_username() . ')';
 //            $search_result = ldap_search($ldapConnect, $settings['search_dn'], $filter);
 //            $info = ldap_get_entries($ldapConnect, $search_result);
 //
 //            $parser = new LdapParser();
 //
-//            return $parser->parse($info, $username);
+//            return $parser->parse($info, $user->get_username());
 //        }
 //
 //        ldap_close($ldapConnect);
@@ -250,5 +214,25 @@ class LdapAuthentication implements AuthenticationInterface
         }
 
         return $this->ldapSettings;
+    }
+
+    /**
+     * Returns the priority of the authentication, lower priorities come first
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 400;
+    }
+
+    /**
+     * Returns the short name of the authentication to check in the settings
+     *
+     * @return string
+     */
+    public function getAuthenticationType()
+    {
+        return 'Ldap';
     }
 }

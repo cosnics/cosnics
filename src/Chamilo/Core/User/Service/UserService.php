@@ -128,6 +128,16 @@ class UserService
     }
 
     /**
+     * @param $usernameOrEmail
+     *
+     * @return User
+     */
+    public function getUserByUsernameOrEmail($usernameOrEmail)
+    {
+        return $this->userRepository->findUserByUsernameOrEmail($usernameOrEmail);
+    }
+
+    /**
      * @param string $username
      *
      * @return bool
