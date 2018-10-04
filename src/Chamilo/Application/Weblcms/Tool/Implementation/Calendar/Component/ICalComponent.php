@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Authentication\QueryAuthentication;
+use Chamilo\Libraries\Authentication\SecurityToken\SecurityTokenAuthentication;
 use Chamilo\Libraries\Calendar\Renderer\Type\ICalRenderer;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
@@ -61,7 +61,8 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         $securityCode = $this->getRequest()->get(User::PROPERTY_SECURITY_TOKEN);
         if (isset($securityCode))
         {
-            $authentication = QueryAuthentication::factory('SecurityToken', $this->getRequest());
+            $authentication = $this->getSecurityTokenAuthentication();
+            $authentication->disableAuthSourceCheck();
             $user = $authentication->login();
 
             if ($user instanceof User)
@@ -123,6 +124,14 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 return implode(PHP_EOL, $html);
             }
         }
+    }
+
+    /**
+     * @return SecurityTokenAuthentication
+     */
+    protected function getSecurityTokenAuthentication()
+    {
+        return $this->getService(SecurityTokenAuthentication::class);
     }
 
     /**

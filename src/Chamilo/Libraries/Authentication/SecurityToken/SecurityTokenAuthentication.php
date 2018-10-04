@@ -2,14 +2,10 @@
 
 namespace Chamilo\Libraries\Authentication\SecurityToken;
 
-use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
-use Chamilo\Libraries\Authentication\QueryAuthentication;
-use Chamilo\Libraries\Platform\ChamiloRequest;
-use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -21,6 +17,11 @@ use Symfony\Component\Translation\Translator;
 class SecurityTokenAuthentication extends Authentication implements AuthenticationInterface
 {
     /**
+     * @var bool
+     */
+    protected $disableAuthSourceCheck = false;
+
+    /**
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      *
@@ -28,7 +29,7 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
      */
     public function login()
     {
-        if(!$this->isAuthSourceActive())
+        if(!$this->disableAuthSourceCheck && !$this->isAuthSourceActive())
         {
             return null;
         }
@@ -50,6 +51,14 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
         }
 
         return null;
+    }
+
+    /**
+     * Disables the check if the auth source is active or not (used to make sure that this can run for certain components only)
+     */
+    public function disableAuthSourceCheck()
+    {
+        $this->disableAuthSourceCheck = true;
     }
 
     /**
