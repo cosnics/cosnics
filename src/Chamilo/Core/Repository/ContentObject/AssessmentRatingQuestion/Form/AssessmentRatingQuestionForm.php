@@ -157,7 +157,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
         return $htmlEditorOptions;
     }
 
-    public function create_content_object($object)
+    public function create_content_object()
     {
         $this->set_content_object_properties(new AssessmentRatingQuestion());
         return parent::create_content_object();
