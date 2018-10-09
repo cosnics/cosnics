@@ -76,7 +76,7 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
      */
     public function getPriority()
     {
-        return 100;
+        return 300;
     }
 
     /**

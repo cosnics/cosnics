@@ -223,7 +223,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
      */
     public function getPriority()
     {
-        return 400;
+        return 100;
     }
 
     /**

@@ -340,7 +340,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
      */
     public function getPriority()
     {
-        return 300;
+        return 500;
     }
 
     /**

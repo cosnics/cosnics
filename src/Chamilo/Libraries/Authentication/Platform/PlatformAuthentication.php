@@ -141,7 +141,7 @@ class PlatformAuthentication extends Authentication
      */
     public function getPriority()
     {
-        return 500;
+        return 200;
     }
 
     /**

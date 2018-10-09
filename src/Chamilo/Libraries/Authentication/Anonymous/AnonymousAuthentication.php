@@ -124,7 +124,7 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
      */
     public function getPriority()
     {
-        return 200;
+        return 400;
     }
 
     /**
