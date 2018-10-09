@@ -571,7 +571,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             if ($section->get_type() == CourseSection::TYPE_TOOL ||
                 $section->get_type() == CourseSection::TYPE_DISABLED)
             {
-                $html[] = '<div id="tool_' . $tool->get_id() . '" class="tool">';
+                $html[] = '<div id="tool_' . $tool->get_id() . '" class="tool" style="display: block !important">';
                 $id = ' id="drag_' . $tool->get_id() . '"';
             }
             else
