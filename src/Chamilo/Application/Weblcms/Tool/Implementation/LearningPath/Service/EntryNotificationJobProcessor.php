@@ -1,11 +1,12 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Queue\Service\JobProcessorInterface;
 use Chamilo\Core\Queue\Storage\Entity\Job;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service
@@ -15,31 +16,36 @@ use Chamilo\Core\Queue\Storage\Entity\Job;
 class EntryNotificationJobProcessor extends AssignmentJobProcessor implements JobProcessorInterface
 {
     const PARAM_ENTRY_ID = 'entry_id';
+    const PARAM_CONTENT_OBJECT_PUBLICATION_ID = 'content_object_publication_id';
 
     /**
      * @param \Chamilo\Core\Queue\Storage\Entity\Job $job
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
      */
     public function processJob(Job $job)
     {
         $entryId = $job->getParameter(self::PARAM_ENTRY_ID);
-        $this->processForEntry($entryId);
+        $contentObjectPublicationId = $job->getParameter(self::PARAM_ENTRY_ID);
+        $this->processForEntry($entryId, $contentObjectPublicationId);
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $publication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      *
      * @return array
      */
-    protected function getNotificationViewingContextVariables(Course $course, ContentObjectPublication $publication)
+    protected function getNotificationViewingContextVariables(Course $course, ContentObjectPublication $publication, TreeNodeData $treeNodeData)
     {
         return [
             'Chamilo' => 'NotificationNewAssignmentEntry',
             'Chamilo\\Application\\Weblcms::Course:' . $course->getId() => 'NotificationNewAssignmentEntryCourse',
-            'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId() => 'NotificationNewAssignmentEntryPublication'
+            'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId() => 'NotificationNewAssignmentEntryPublication',
+            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath::TreeNodeData:' . $treeNodeData->getId() => 'NotificationNewAssignmentEntryAssignmentTreeNode'
         ];
     }
 }

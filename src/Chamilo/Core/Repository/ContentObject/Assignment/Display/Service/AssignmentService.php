@@ -230,7 +230,7 @@ abstract class AssignmentService
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Feedback[]
      */
     public function findFeedbackByEntry(
         \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
