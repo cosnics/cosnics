@@ -48,6 +48,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     const TYPE_ARCHIVE = 10;
     const TYPE_APPLICATION = 11;
     const TYPE_FLASH = 12;
+    const TYPE_CODE = 13;
 
     private $contents;
 
@@ -364,6 +365,11 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         return FileType::is_audio($this->get_extension());
     }
 
+    public function is_code()
+    {
+        return FileType::is_code($this->get_extension());
+    }
+
     /**
      * Get extensions for images
      *
@@ -416,6 +422,11 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         return FileType::get_type_extensions(FileType::TYPE_AUDIO);
     }
 
+    public static function get_code_types()
+    {
+        return FileType::get_type_extensions(FileType::TYPE_CODE);
+    }
+
     public static function get_showable_types()
     {
         $showable_types = array();
@@ -423,6 +434,8 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         $showable_types[] = 'htm';
         $showable_types[] = 'txt';
         $showable_types[] = 'pdf';
+        $showable_types[] = 'java';
+
         // $showable_types[] = 'pps';
         // $showable_types[] = 'ppt';
         // $showable_types[] = 'doc';
@@ -453,6 +466,10 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         elseif ($this->is_video())
         {
             return 'video';
+        }
+        elseif ($this->is_code())
+        {
+            return 'code';
         }
         else
         {

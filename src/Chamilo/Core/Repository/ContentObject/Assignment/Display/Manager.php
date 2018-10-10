@@ -37,6 +37,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
     const ACTION_SUBMIT = 'Submitter';
     const ACTION_BROWSE = 'Browser';
     const ACTION_ENTRY = 'Entry';
+    const ACTION_ENTRY_CODE_PAGE_CORRECTOR = 'EntryCodePageCorrector';
     const ACTION_DELETE = self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM;
     const ACTION_AJAX = 'Ajax';
     const ACTION_EPHORUS = 'Ephorus';
@@ -154,7 +155,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
     protected function initializeEntry()
     {
         $entryIdentifier = $this->getRequest()->query->get(self::PARAM_ENTRY_ID);
-
         if (!$entryIdentifier)
         {
             throw new NoObjectSelectedException(Translation::get('Entry'));

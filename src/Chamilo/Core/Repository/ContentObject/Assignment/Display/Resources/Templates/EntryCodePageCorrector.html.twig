@@ -1,0 +1,17 @@
+{{ HEADER|raw }}
+
+<style>
+
+</style>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/go.min.js"></script>
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
+{% set commonContext = 'Chamilo\\Libraries' %}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{{ form_start(form) }}
+    {% use 'chamilo_form_layout.html.twig' %}
+        {{ form_row(form.description) }}
+<button type="submit" class="btn btn-default">{{ 'SaveCorrectedEntry'|trans({}, appContext) }}</button>
+{{ form_end(form) }}
+
+{{ FOOTER|raw }}

@@ -1,0 +1,1 @@
+copy of ckeditor plugin

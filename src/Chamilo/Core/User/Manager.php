@@ -4,6 +4,7 @@ namespace Chamilo\Core\User;
 use Chamilo\Core\User\Component\UserApproverComponent;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
@@ -207,5 +208,13 @@ abstract class Manager extends Application
     public function get_breadcrumb_generator()
     {
         return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+    }
+
+    /**
+     * @return AuthenticationValidator
+     */
+    public function getAuthenticationValidator()
+    {
+        return $this->getService(AuthenticationValidator::class);
     }
 }

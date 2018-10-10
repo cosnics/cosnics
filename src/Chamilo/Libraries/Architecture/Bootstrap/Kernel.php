@@ -87,19 +87,26 @@ class Kernel
     private $user;
 
     /**
+     * @var \Chamilo\Libraries\Authentication\AuthenticationValidator
+     */
+    protected $authenticationValidator;
+
+    /**
      *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Architecture\Factory\ApplicationFactory $applicationFactory
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     * @param \Chamilo\Libraries\Authentication\AuthenticationValidator $authenticationValidator
      * @param integer $version
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
     public function __construct(
         \Chamilo\Libraries\Platform\ChamiloRequest $request,
         ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
-        SessionUtilities $sessionUtilities, ExceptionLoggerInterface $exceptionLogger, $version, User $user = null
+        SessionUtilities $sessionUtilities, ExceptionLoggerInterface $exceptionLogger,
+        AuthenticationValidator $authenticationValidator, $version, User $user = null
     )
     {
         $this->request = $request;
@@ -109,6 +116,7 @@ class Kernel
         $this->exceptionLogger = $exceptionLogger;
         $this->version = $version;
         $this->user = $user;
+        $this->authenticationValidator = $authenticationValidator;
     }
 
     /**
@@ -403,7 +411,6 @@ class Kernel
         }
 
         $this->sendResponse($response);
-
     }
 
     /**
@@ -474,7 +481,7 @@ class Kernel
 
         $stateParameters = json_decode($decodedState, true);
 
-        if(!is_array($stateParameters) || !array_key_exists('landingPageParameters', $stateParameters))
+        if (!is_array($stateParameters) || !array_key_exists('landingPageParameters', $stateParameters))
         {
             return $this;
         }
@@ -499,8 +506,12 @@ class Kernel
 
     /**
      *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException
      * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Exception
      */
     protected function checkAuthentication()
     {
@@ -513,11 +524,9 @@ class Kernel
             'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport'
         );
 
-        $authenticationValidator = new AuthenticationValidator($this->getRequest(), $this->getConfigurationConsulter());
-
         if ($applicationRequiresAuthentication)
         {
-            if (!$authenticationValidator->validate())
+            if (!$this->authenticationValidator->validate())
             {
                 throw new NotAuthenticatedException(true);
             }
@@ -529,6 +538,8 @@ class Kernel
     /**
      *
      * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Exception
      */
     protected function traceVisit()
     {

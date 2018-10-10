@@ -22,6 +22,7 @@ class FileType
     const TYPE_ARCHIVE = 10;
     const TYPE_APPLICATION = 11;
     const TYPE_FLASH = 12;
+    const TYPE_CODE = 13;
 
     // Map of all file extensions and their respective MIME-type
     /**
@@ -337,7 +338,9 @@ class FileType
             'zip',
             'zipx'),
         self::TYPE_APPLICATION => array('app', 'bat', 'exe', 'msi', 'sh'),
-        self::TYPE_FLASH => array('fla', 'flv', 'swc', 'swf', 'swt'));
+        self::TYPE_FLASH => array('fla', 'flv', 'swc', 'swf', 'swt'),
+        self::TYPE_CODE => array('java')
+    );
 
     /**
      *
@@ -357,7 +360,8 @@ class FileType
             self::TYPE_WEB => Translation::get('FileTypeWeb'),
             self::TYPE_ARCHIVE => Translation::get('FileTypeArchive'),
             self::TYPE_APPLICATION => Translation::get('FileTypeApplication'),
-            self::TYPE_FLASH => Translation::get('FileTypeFlash'));
+            self::TYPE_FLASH => Translation::get('FileTypeFlash'),
+            self::TYPE_CODE => Translation::get('FileTypeCode'));
     }
 
     /**
@@ -404,6 +408,9 @@ class FileType
                 break;
             case self::TYPE_FLASH :
                 return Translation::get('FileTypeFlash');
+                break;
+            case self::TYPE_CODE :
+                return Translation::get('FileTypeCode');
                 break;
         }
     }
@@ -623,5 +630,15 @@ class FileType
     public static function is_archive($extension)
     {
         return self::is_extension_from_type($extension, self::TYPE_ARCHIVE);
+    }
+
+    /**
+     *
+     * @param string $extension
+     * @return boolean
+     */
+    public static function is_code($extension)
+    {
+        return self::is_extension_from_type($extension, self::TYPE_CODE);
     }
 }

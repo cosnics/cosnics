@@ -65,6 +65,30 @@ class UserService
     }
 
     /**
+     * Retrieves a user by a given security token
+     *
+     * @param string $securityToken
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function getUserBySecurityToken($securityToken)
+    {
+        return $this->userRepository->findUserBySecurityToken($securityToken);
+    }
+
+    /**
+     * Retrieves a user by a given official code
+     *
+     * @param string $officialCode
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function getUserByOfficialCode($officialCode)
+    {
+        return $this->userRepository->findUserByOfficialCode($officialCode);
+    }
+
+    /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      * @param integer $offset
@@ -101,6 +125,16 @@ class UserService
     public function findUserByUsername($username)
     {
         return $this->userRepository->findUserByUsername($username);
+    }
+
+    /**
+     * @param $usernameOrEmail
+     *
+     * @return User
+     */
+    public function getUserByUsernameOrEmail($usernameOrEmail)
+    {
+        return $this->userRepository->findUserByUsernameOrEmail($usernameOrEmail);
     }
 
     /**

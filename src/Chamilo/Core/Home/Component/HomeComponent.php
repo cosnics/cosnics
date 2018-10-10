@@ -23,9 +23,7 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
-        $authenticationValidator = new AuthenticationValidator(
-            $this->getRequest(), 
-            $this->getService('chamilo.configuration.service.configuration_consulter'));
+        $authenticationValidator = $this->getAuthenticationValidator();
         $authenticationValidator->validate();
         
         BreadcrumbTrail::getInstance()->truncate();
@@ -40,5 +38,13 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
         $html[] = $this->render_footer();
         
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @return AuthenticationValidator
+     */
+    protected function getAuthenticationValidator()
+    {
+        return $this->getService(AuthenticationValidator::class);
     }
 }

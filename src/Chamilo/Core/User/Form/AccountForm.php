@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsername;
 use Chamilo\Libraries\Authentication\Authentication;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -38,14 +39,25 @@ class AccountForm extends FormValidator
     private $adm;
 
     /**
-     * Creates a new AccountForm
+     * @var AuthenticationValidator
      */
-    public function __construct($form_type, $user, $action)
+    protected $authenticationValidator;
+
+    /**
+     * Creates a new AccountForm
+     *
+     * @param $form_type
+     * @param $user
+     * @param $action
+     * @param \Chamilo\Libraries\Authentication\AuthenticationValidator $authenticationValidator
+     */
+    public function __construct($form_type, $user, $action, AuthenticationValidator $authenticationValidator)
     {
         parent::__construct('user_account', 'post', $action);
 
         $this->user = $user;
         $this->adm = \Chamilo\Core\Admin\Storage\DataManager::getInstance();
+        $this->authenticationValidator = $authenticationValidator;
 
         $this->form_type = $form_type;
         if ($this->form_type == self::TYPE_EDIT)
@@ -187,7 +199,7 @@ class AccountForm extends FormValidator
         $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array("size" => "50"));
 
         if ($configurationConsulter->get_setting(array(Manager::context(), 'allow_change_username')) == 0 ||
-            !Authentication::factory($this->user->get_auth_source()) instanceof ChangeableUsername
+            !$this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof ChangeableUsername
         )
         {
             $this->freeze(User::PROPERTY_USERNAME);
@@ -212,7 +224,7 @@ class AccountForm extends FormValidator
 
         // Password
         if ($configurationConsulter->get_setting(array(Manager::context(), 'allow_change_password')) == 1 &&
-            Authentication::factory($this->user->get_auth_source()) instanceof ChangeablePassword
+            $this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof ChangeablePassword
         )
         {
             $this->addElement('category', Translation::get('ChangePassword'));
@@ -419,7 +431,7 @@ class AccountForm extends FormValidator
         }
 
         if ($configurationConsulter->get_setting(array(Manager::context(), 'allow_change_username')) &&
-            Authentication::factory($this->user->get_auth_source()) instanceof ChangeableUsername
+            $this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof ChangeableUsername
         )
         {
             $user->set_username($values[User::PROPERTY_USERNAME]);
@@ -427,10 +439,10 @@ class AccountForm extends FormValidator
 
         if ($configurationConsulter->get_setting(array(Manager::context(), 'allow_change_password')) &&
             strlen($values[User::PROPERTY_PASSWORD]) &&
-            Authentication::factory($this->user->get_auth_source()) instanceof ChangeablePassword
+            $this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof ChangeablePassword
         )
         {
-            $result = Authentication::factory($this->user->get_auth_source())->changePassword(
+            $result = $this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source())->changePassword(
                 $user,
                 $values[User::PROPERTY_PASSWORD],
                 $values[self::NEW_PASSWORD]

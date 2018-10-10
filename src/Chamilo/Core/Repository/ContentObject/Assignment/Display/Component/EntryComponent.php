@@ -205,6 +205,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject() ? $this->getEntry()->getContentObject()->get_title() : Translation::getInstance()->getTranslation('SubmissionRemoved', null, Manager::context()),
             'CONTENT_OBJECT_RENDITION' => $this->getEntry()->getContentObject() ? $this->renderContentObject() : null,
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
+            'FEEDBACK_COUNT' => $this->count_feedbacks(),
             'SUBMITTED_DATE' => $submittedDate,
             'SUBMITTED_BY' => $this->getUserService()->getUserFullNameById($this->getEntry()->getUserId()),
             'SCORE_FORM' => $scoreForm->createView(),
@@ -237,7 +238,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                     self::PARAM_ENTRY_ID => $this->getEntry()->getId()
                 ]
             ),
-            'ATTACHED_CONTENT_OBJECTS' => $this->getAttachedContentObjects()
+            'ATTACHED_CONTENT_OBJECTS' => $this->getAttachedContentObjects(),
+            'SHOW_COMPACT_FEEDBACK' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Repository\ContentObject\Assignment', 'show_compact_feedback'])
         ];
 
         return array_merge($baseParameters, $extendParameters);
@@ -478,6 +480,33 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             }
 
             $buttonToolBar->addButtonGroup($buttonGroup);
+
+/*            if ($this->getDataProvider()->canEditAssignment())
+            {
+                $buttonToolBar->addButtonGroup(
+                    new ButtonGroup(
+                        array(
+                            new Button(
+                                Translation::get(
+                                    'CorrectCurrentEntry'
+                                ),
+                                new FontAwesomeGlyph('pencil-square-o'),
+                                $this->get_url(
+                                    [
+                                        self::PARAM_ACTION => self::ACTION_ENTRY_CODE_PAGE_CORRECTOR,
+                                        self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                                        self::PARAM_ENTITY_ID => $this->getEntityIdentifier(),
+                                        self::PARAM_ENTRY_ID => $this->getEntry()->getId()
+                                    ]
+                                ),
+                                Button::DISPLAY_ICON_AND_LABEL,
+                                false,
+                                'btn-success'
+                            )
+                        )
+                    )
+                );
+            }*/
 
             $buttonGroup = new ButtonGroup();
 

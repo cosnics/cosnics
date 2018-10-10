@@ -9,7 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Authentication\QueryAuthentication;
+use Chamilo\Libraries\Authentication\SecurityToken\SecurityTokenAuthentication;
 use Chamilo\Libraries\Calendar\Renderer\Type\ICalRenderer;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
@@ -33,17 +33,16 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
 
     public function run()
     {
-        $authenticationValidator = new AuthenticationValidator(
-            $this->getRequest(),
-            $this->getService('chamilo.configuration.service.configuration_consulter')
-        );
+        $authenticationValidator = $this->getAuthenticationValidator();
 
         $alreadyAuthenticated = $authenticationValidator->isAuthenticated();
 
         $securityCode = $this->getRequest()->get(User::PROPERTY_SECURITY_TOKEN);
         if (isset($securityCode))
         {
-            $authentication = QueryAuthentication::factory('SecurityToken', $this->getRequest());
+            $authentication = $this->getSecurityTokenAuthentication();
+            $authentication->disableAuthSourceCheck();
+
             $user = $authentication->login();
 
             if ($user instanceof User)
@@ -120,6 +119,14 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
+     * @return SecurityTokenAuthentication
+     */
+    protected function getSecurityTokenAuthentication()
+    {
+        return $this->getService(SecurityTokenAuthentication::class);
+    }
+
+    /**
      *
      * @param User $user
      *
@@ -145,5 +152,13 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     {
         $icalRenderer = new ICalRenderer($this->getCalendarRendererProvider($user));
         $icalRenderer->renderAndSend();
+    }
+
+    /**
+     * @return AuthenticationValidator
+     */
+    protected function getAuthenticationValidator()
+    {
+        return $this->getService(AuthenticationValidator::class);
     }
 }

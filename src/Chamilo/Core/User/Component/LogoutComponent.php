@@ -18,9 +18,7 @@ class LogoutComponent extends Manager
     public function run()
     {
         // $this->checkAuthorization(Manager::context(), 'Logout');
-        $authenticationHandler = new AuthenticationValidator(
-            $this->getRequest(), 
-            $this->getService('chamilo.configuration.service.configuration_consulter'));
+        $authenticationHandler = $this->getAuthenticationValidator();
         $authenticationHandler->logout($this->getUser());
         exit();
     }

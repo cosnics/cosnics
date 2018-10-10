@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
@@ -10,7 +11,9 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -24,310 +27,122 @@ class AuthenticationValidator
     const PARAM_AUTHENTICATION_ERROR = 'authentication_error';
 
     /**
-     *
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
+     * @var ChamiloRequest
      */
-    private $request;
+    protected $request;
 
     /**
-     *
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var ConfigurationConsulter
      */
-    private $configurationConsulter;
+    protected $configurationConsulter;
 
     /**
-     *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @var \Symfony\Component\Translation\Translator
      */
-    public function __construct(ChamiloRequest $request, ConfigurationConsulter $configurationConsulter)
+    protected $translator;
+
+    /**
+     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    protected $sessionUtilities;
+
+    /**
+     * @var \Chamilo\Libraries\Authentication\AuthenticationInterface[]
+     */
+    protected $authentications;
+
+    /**
+     * AuthenticationValidator constructor.
+     *
+     * @param ChamiloRequest $request
+     * @param ConfigurationConsulter $configurationConsulter
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
+     */
+    public function __construct(
+        ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, Translator $translator,
+        SessionUtilities $sessionUtilities
+    )
     {
         $this->request = $request;
         $this->configurationConsulter = $configurationConsulter;
+        $this->translator = $translator;
+        $this->sessionUtilities = $sessionUtilities;
+
+        $this->authentications = [];
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     * @param \Chamilo\Libraries\Authentication\AuthenticationInterface $authentication
      */
-    public function getRequest()
+    public function addAuthentication(AuthenticationInterface $authentication)
     {
-        return $this->request;
+        $this->authentications[$authentication->getPriority()] = $authentication;
+        ksort($this->authentications);
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
-    public function setRequest(ChamiloRequest $request)
-    {
-        $this->request = $request;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    public function getConfigurationConsulter()
-    {
-        return $this->configurationConsulter;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
-    {
-        $this->configurationConsulter = $configurationConsulter;
-    }
-
-    /**
-     *
      * @return boolean
+     *
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
     public function validate()
     {
-        if (! $this->isAuthenticated())
-        {
-            if ($this->performCredentialsAuthentication())
-            {
-                return true;
-            }
-
-            if ($this->performQueryAuthentication())
-            {
-
-                return true;
-            }
-
-            if ($this->performExternalAuthentication())
-            {
-                return true;
-            }
-
-            return false;
-        }
-        else
+        if ($this->isAuthenticated())
         {
             return true;
         }
+
+        $user = null;
+
+        foreach ($this->authentications as $authentication)
+        {
+            $user = $authentication->login();
+
+            if($user instanceof User)
+            {
+                break;
+            }
+        }
+
+
+        if (!$user instanceof User)
+        {
+            return false;
+        }
+
+        $this->validateUser($user);
+        $this->setAuthenticatedUser($user);
+        $this->trackLogin($user);
+        $this->redirectAfterLogin();
+
+        return true;
     }
 
     /**
-     *
      * @return boolean
      */
     public function isAuthenticated()
     {
-        $user_id = Session::get_user_id();
-        return ! empty($user_id);
-    }
+        $user_id = $this->sessionUtilities->getUserId();
 
-    /**
-     *
-     * @return boolean
-     */
-    public function performExternalAuthentication()
-    {
-        $externalAuthenticationEnabled = $this->getConfigurationConsulter()->getSetting(
-            array('Chamilo\Core\Admin', 'enableExternalAuthentication'));
-        $bypassExternalAuthentication = (boolean) Request::get('noExtAuth', false);
-
-        if (! $externalAuthenticationEnabled || $bypassExternalAuthentication)
-        {
-            return false;
-        }
-
-        $externalAuthenticationTypes = Authentication::getExternalAuthenticationTypes();
-
-        foreach ($externalAuthenticationTypes as $externalAuthenticationType)
-        {
-            $sourceEnabled = $this->getConfigurationConsulter()->getSetting(
-                array('Chamilo\Core\Admin', 'enable' . $externalAuthenticationType . 'Authentication'));
-
-            if ($sourceEnabled)
-            {
-                $authentication = ExternalAuthentication::factory($externalAuthenticationType);
-
-                $user = $authentication->login();
-
-                if ($user instanceof User)
-                {
-                    $this->isValidUser($user);
-                    break;
-                }
-            }
-        }
-
-        if ($user instanceof User)
-        {
-            $this->setAuthenticatedUser($user);
-            $this->trackLogin($user);
-            $this->redirectAfterLogin();
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /**
-     *
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function performQueryAuthentication()
-    {
-        $queryAuthenticationTypes = Authentication::getQueryAuthenticationTypes();
-        $disabledSources = 0;
-
-        foreach ($queryAuthenticationTypes as $queryAuthenticationType)
-        {
-            $sourceEnabled = $this->getConfigurationConsulter()->getSetting(
-                array('Chamilo\Core\Admin', 'enable' . $queryAuthenticationType . 'Authentication'));
-
-            if ($sourceEnabled)
-            {
-                $authentication = QueryAuthentication::factory($queryAuthenticationType, $this->getRequest());
-
-                $user = $authentication->login();
-
-                if ($user instanceof User)
-                {
-                    $this->isValidUser($user);
-                    break;
-                }
-            }
-            else
-            {
-                $disabledSources ++;
-            }
-        }
-
-        if (isset($user) && $user instanceof User)
-        {
-            $this->setAuthenticatedUser($user);
-            $this->trackLogin($user);
-            $this->redirectAfterLogin();
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /**
-     *
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function performCredentialsAuthentication()
-    {
-        $userIdentifier = $this->getRequest()->request->get(CredentialsAuthentication::PARAM_LOGIN);
-        $password = $this->getRequest()->request->get(CredentialsAuthentication::PARAM_PASSWORD);
-
-        if ($userIdentifier && $password)
-        {
-            if (\Chamilo\Core\User\Storage\DataManager::usernameOrEmailExists($userIdentifier))
-            {
-                $user = \Chamilo\Core\User\Storage\DataManager::retrieveUserByUsernameOrEmail($userIdentifier);
-
-                $this->isValidUser($user);
-
-                $authenticationSource = $user->getAuthenticationSource();
-
-                $sourceEnabled = $this->getConfigurationConsulter()->getSetting(
-                    array('Chamilo\Core\Admin', 'enable' . $authenticationSource . 'Authentication'));
-
-                if (! $sourceEnabled)
-                {
-                    throw new AuthenticationException(Translation::get('AccountNotActive'));
-                }
-                else
-                {
-                    $authentication = CredentialsAuthentication::factory($authenticationSource, $user->get_username());
-                    $authentication->login($password);
-                }
-            }
-            else
-            {
-                $errorMessages = array();
-                $disabledSources = 0;
-
-                $credentialsAuthenticationTypes = Authentication::getCredentialsAuthenticationTypes();
-
-                foreach ($credentialsAuthenticationTypes as $credentialsAuthenticationType)
-                {
-                    $sourceEnabled = $this->getConfigurationConsulter()->getSetting(
-                        array('Chamilo\Core\Admin', 'enable' . $credentialsAuthenticationType . 'Authentication'));
-
-                    if ($sourceEnabled)
-                    {
-                        $authentication = CredentialsAuthentication::factory(
-                            $credentialsAuthenticationType,
-                            $userIdentifier);
-
-                        if ($authentication instanceof UserRegistrationSupport)
-                        {
-
-                            try
-                            {
-                                if ($authentication->login($password))
-                                {
-                                    $user = $authentication->registerNewUser();
-                                }
-                                break;
-                            }
-                            catch (AuthenticationException $exception)
-                            {
-                                $errorMessages[] = $exception->getErrorMessage();
-                            }
-                        }
-                        else
-                        {
-                            $disabledSources ++;
-                        }
-                    }
-                    else
-                    {
-                        $disabledSources ++;
-                    }
-                }
-
-                if (! $user instanceof User)
-                {
-                    if (count($credentialsAuthenticationTypes) == $disabledSources)
-                    {
-                        $errorMessages[] = Translation::get('UsernameOrPasswordIncorrect');
-                    }
-
-                    throw new AuthenticationException(implode('<br />', $errorMessages));
-                }
-            }
-
-            $this->setAuthenticatedUser($user);
-            $this->trackLogin($user);
-            $this->redirectAfterLogin();
-
-            return $user;
-        }
+        return !empty($user_id);
     }
 
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    private function setAuthenticatedUser(User $user)
+    protected function setAuthenticatedUser(User $user)
     {
-        \Chamilo\Libraries\Platform\Session\Session::register('_uid', $user->get_id());
+        $this->sessionUtilities->register('_uid', $user->getId());
     }
 
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    private function trackLogin(User $user)
+    protected function trackLogin(User $user)
     {
         Event::trigger('Login', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
     }
@@ -335,10 +150,10 @@ class AuthenticationValidator
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
-     * @return boolean
      */
-    private function isValidUser(User $user)
+    protected function validateUser(User $user)
     {
         $userExpirationDate = $user->get_expiration_date();
         $userActivationDate = $user->get_activation_date();
@@ -346,26 +161,26 @@ class AuthenticationValidator
         $accountHasExpired = ($userExpirationDate != '0' && $userExpirationDate < time());
         $accountNotActivated = ($userActivationDate != '0' && $userActivationDate > time());
 
-        if (($accountHasExpired || $accountNotActivated || ! $user->get_active()) && ! $user->is_platform_admin())
+        if (($accountHasExpired || $accountNotActivated || !$user->get_active()) && !$user->is_platform_admin())
         {
             throw new AuthenticationException(Translation::get('AccountNotActive'));
         }
-
-        return true;
     }
 
-    private function redirectAfterLogin()
+    protected function redirectAfterLogin()
     {
-        $context = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
-        if ($this->getRequest()->query->count() > 0 && $context != 'Chamilo\Core\Home')
+        $context = $this->request->query->get(Application::PARAM_CONTEXT);
+        if ($this->request->query->count() > 0 && $context != 'Chamilo\Core\Home')
         {
-            $parameters = $this->getRequest()->query->all();
+            $parameters = $this->request->query->all();
         }
         else
         {
             $parameters = array(
-                Application::PARAM_CONTEXT => $this->getConfigurationConsulter()->getSetting(
-                    array('Chamilo\Core\Admin', 'page_after_login')));
+                Application::PARAM_CONTEXT => $this->configurationConsulter->getSetting(
+                    array('Chamilo\Core\Admin', 'page_after_login')
+                )
+            );
         }
 
         $redirect = new Redirect($parameters);
@@ -374,11 +189,37 @@ class AuthenticationValidator
     }
 
     /**
-     * \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
     public function logout(User $user)
     {
-        $authentication = Authentication::factory($user->getAuthenticationSource());
-        $authentication->logout($user);
+        Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
+        Session::destroy();
+
+        foreach($this->authentications as $authentication)
+        {
+            if($authentication->getAuthenticationType() == $user->getAuthenticationSource())
+            {
+                $authentication->logout($user);
+            }
+        }
+    }
+
+    /**
+     * @param string $authenticationType
+     *
+     * @return \Chamilo\Libraries\Authentication\AuthenticationInterface|null
+     */
+    public function getAuthenticationByType($authenticationType)
+    {
+        foreach($this->authentications as $authentication)
+        {
+            if($authenticationType == $authentication->getAuthenticationType())
+            {
+                return $authentication;
+            }
+        }
+
+        return null;
     }
 }

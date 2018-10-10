@@ -1,13 +1,20 @@
 <?php
+
 namespace Chamilo\Libraries\Authentication\Platform;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsername;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
-use Chamilo\Libraries\Authentication\CredentialsAuthentication;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Authentication\AuthenticationInterface;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Hashing\HashingUtilities;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -16,46 +23,68 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PlatformAuthentication extends CredentialsAuthentication implements ChangeablePassword, ChangeableUsername
+class PlatformAuthentication extends Authentication
+    implements AuthenticationInterface, ChangeablePassword, ChangeableUsername
 {
-    use DependencyInjectionContainerTrait;
 
     /**
-     *
-     * @param string $userName
+     * @var \Chamilo\Libraries\Hashing\HashingUtilities
      */
-    public function __construct($userName = null)
+    protected $hashingUtilities;
+
+    /**
+     * Authentication constructor.
+     *
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     * @param \Chamilo\Libraries\Hashing\HashingUtilities $hashingUtilities
+     */
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
+        UserService $userService, HashingUtilities $hashingUtilities
+    )
     {
-        parent::__construct($userName);
-        $this->initializeContainer();
+        parent::__construct($configurationConsulter, $translator, $request, $userService);
+        $this->hashingUtilities = $hashingUtilities;
     }
 
     /**
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
-    public function getHashingUtilities()
+    public function login()
     {
-        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+        $user = $this->getUserFromCredentialsRequest();
+        if(!$user instanceof User)
+        {
+            return null;
+        }
+
+        $password = $this->request->getFromPost(self::PARAM_PASSWORD);
+
+        $passwordHash = $this->hashingUtilities->hashString($password);
+
+        if ($user->get_password() == $passwordHash)
+        {
+            return $user;
+        }
+
+        throw new AuthenticationException(
+            $this->translator->trans('UsernameOrPasswordIncorrect', [], 'Chamilo\Libraries')
+        );
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Authentication\CredentialsAuthentication::login()
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    public function login($password)
+    public function logout(User $user)
     {
-        $passwordHash = $this->getHashingUtilities()->hashString($password);
-
-        if ($this->getUser() instanceof User && $this->getUser()->get_password() == $passwordHash)
-        {
-
-            return true;
-        }
-        else
-        {
-            throw new AuthenticationException(Translation::get('UsernameOrPasswordIncorrect'));
-        }
+        $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
+        $redirect->toUrl();
+        exit();
     }
 
     /**
@@ -65,11 +94,13 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
      * @param string $newPassword
      *
      * @return boolean
+     *
+     * @throws \Exception
      */
     public function changePassword(User $user, $oldPassword, $newPassword)
     {
         // Check whether we have an actual User object
-        if (! $user instanceof User)
+        if (!$user instanceof User)
         {
             return false;
         }
@@ -80,7 +111,7 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
             return false;
         }
 
-        $oldPasswordHash = $this->getHashingUtilities()->hashString($oldPassword);
+        $oldPasswordHash = $this->hashingUtilities->hashString($oldPassword);
 
         // Verify that the entered old password matches the stored password
         if ($oldPasswordHash != $user->get_password())
@@ -89,7 +120,7 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
         }
 
         // Set the password
-        $user->set_password($this->getHashingUtilities()->hashString($newPassword));
+        $user->set_password($this->hashingUtilities->hashString($newPassword));
 
         return $user->update();
     }
@@ -100,6 +131,26 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
      */
     public function getPasswordRequirements()
     {
-        return Translation::get('GeneralPasswordRequirements');
+        return $this->translator->trans('GeneralPasswordRequirements', [], 'Chamilo\Libraries\Authentication\Platform');
+    }
+
+    /**
+     * Returns the priority of the authentication, lower priorities come first
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 200;
+    }
+
+    /**
+     * Returns the short name of the authentication to check in the settings
+     *
+     * @return string
+     */
+    public function getAuthenticationType()
+    {
+        return 'Platform';
     }
 }
