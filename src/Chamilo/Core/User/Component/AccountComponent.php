@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Form\AccountForm;
@@ -28,15 +29,16 @@ class AccountComponent extends ProfileComponent
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ManageAccount');
-        
+
         $user = $this->get_user();
-        
-        $this->form = new AccountForm(AccountForm::TYPE_EDIT, $user, $this->get_url());
-        
+
+        $this->form =
+            new AccountForm(AccountForm::TYPE_EDIT, $user, $this->get_url(), $this->getAuthenticationValidator());
+
         if ($this->form->validate())
         {
             $success = $this->form->update_account();
-            if (! $success)
+            if (!$success)
             {
                 if (isset($_FILES['picture_uri']) && $_FILES['picture_uri']['error'])
                 {
@@ -53,9 +55,10 @@ class AccountComponent extends ProfileComponent
                 $pos_message = 'UserProfileUpdated';
             }
             $this->redirect(
-                Translation::get($success ? $pos_message : $neg_message), 
-                ($success ? false : true), 
-                array(Application::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT));
+                Translation::get($success ? $pos_message : $neg_message),
+                ($success ? false : true),
+                array(Application::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT)
+            );
         }
         else
         {

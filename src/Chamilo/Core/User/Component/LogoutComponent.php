@@ -22,12 +22,4 @@ class LogoutComponent extends Manager
         $authenticationHandler->logout($this->getUser());
         exit();
     }
-
-    /**
-     * @return AuthenticationValidator
-     */
-    protected function getAuthenticationValidator()
-    {
-        return $this->getService(AuthenticationValidator::class);
-    }
 }

@@ -128,7 +128,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                     foreach ($users as $index => $user)
                     {
                         $auth_source = $user->get_auth_source();
-                        $auth = Authentication::factory($auth_source);
+                        $auth = $this->getAuthenticationValidator()->getAuthenticationByType($auth_source);
                         if (! $user->get_active())
                         {
                             $html[] = '<div class="alert alert-danger">' . Translation::getInstance()->getTranslation(

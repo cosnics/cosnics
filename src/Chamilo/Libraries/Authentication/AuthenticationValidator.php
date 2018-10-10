@@ -204,4 +204,22 @@ class AuthenticationValidator
             }
         }
     }
+
+    /**
+     * @param string $authenticationType
+     *
+     * @return \Chamilo\Libraries\Authentication\AuthenticationInterface|null
+     */
+    public function getAuthenticationByType($authenticationType)
+    {
+        foreach($this->authentications as $authentication)
+        {
+            if($authenticationType == $authentication->getAuthenticationType())
+            {
+                return $authentication;
+            }
+        }
+
+        return null;
+    }
 }
