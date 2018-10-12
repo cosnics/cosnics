@@ -29,14 +29,14 @@ interface FeedbackSupport
      * Retrieve a specific Feedback instance
      * 
      * @param int $feedback_id
-     * @return \core\repository\content_object\portfolio\feedback\Feedback
+     * @return \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
      */
     public function retrieve_feedback($feedback_id);
 
     /**
      * Returns an newly instantiated Feedback object
      * 
-     * @return \core\repository\content_object\portfolio\feedback\Feedback
+     * @return \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
      */
     public function get_feedback();
 
@@ -57,7 +57,7 @@ interface FeedbackSupport
     /**
      * Is the user allowed to update this feedback instance
      * 
-     * @param Feedback $feedback
+     * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback
      * @return boolean
      */
     public function is_allowed_to_update_feedback($feedback);
@@ -65,7 +65,7 @@ interface FeedbackSupport
     /**
      * Is the user allowed to delete this feedback instance
      * 
-     * @param Feedback $feedback
+     * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback
      * @return boolean
      */
     public function is_allowed_to_delete_feedback($feedback);

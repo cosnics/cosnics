@@ -170,6 +170,8 @@ class Job
     /**
      * @param string $parameterName
      * @param string $value
+     *
+     * @return \Chamilo\Core\Queue\Storage\Entity\Job
      */
     public function setParameter($parameterName, $value)
     {
@@ -190,7 +192,7 @@ class Job
             if($parameter->getName() == $parameterName)
             {
                 $parameter->setValue($value);
-                return;
+                return $this;
             }
         }
 
@@ -200,6 +202,8 @@ class Job
             ->setValue($value);
 
         $this->jobParameters->add($parameter);
+
+        return $this;
     }
 
 }

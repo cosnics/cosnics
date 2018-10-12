@@ -77,7 +77,6 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\AssignmentService $assignmentService
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService $treeNodeDataService
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager $entityServiceManager
      * @param \Chamilo\Application\Weblcms\Service\PublicationService $publicationService
      * @param \Chamilo\Application\Weblcms\Service\CourseService $courseService
      * @param \Chamilo\Core\User\Service\UserService $userService
@@ -87,7 +86,6 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      */
     public function __construct(
         AssignmentService $assignmentService, TreeNodeDataService $treeNodeDataService,
-        EntityServiceManager $entityServiceManager,
         PublicationService $publicationService, CourseService $courseService,
         UserService $userService, ContentObjectRepository $contentObjectRepository,
         FilterManager $filterManager, NotificationManager $notificationManager
@@ -95,7 +93,6 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
     {
         $this->assignmentService = $assignmentService;
         $this->treeNodeDataService = $treeNodeDataService;
-        $this->entityServiceManager = $entityServiceManager;
         $this->publicationService = $publicationService;
         $this->courseService = $courseService;
         $this->userService = $userService;
@@ -262,7 +259,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 new TranslationContext(
                     'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 'NotificationFilterPublication',
                     [
-                        '{COURSE_TITLE}' => $course->get_title(), '{PUBLICATION_TITLE}' => $learningPath->get_title()
+                        '{COURSE_TITLE}' => $course->get_title(), '{LEARNING_PATH_TITLE}' => $learningPath->get_title()
                     ]
 
                 )
@@ -272,7 +269,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 new TranslationContext(
                     'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 'NotificationFilterLearningPathAssignment',
                     [
-                        '{COURSE_TITLE}' => $course->get_title(), '{PUBLICATION_TITLE}' => $learningPath->get_title(),
+                        '{COURSE_TITLE}' => $course->get_title(), '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                         '{ASSIGNMENT_TITLE}' => $assignment->get_title()
                     ]
 
@@ -308,7 +305,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             new TranslationContext(
                 'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', $translations[$key],
                 [
-                    '{PUBLICATION_TITLE}' => $learningPath->get_title(),
+                    '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
                     '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
                 ]
@@ -321,7 +318,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             new TranslationContext(
                 'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', $translations[$key],
                 [
-                    '{PUBLICATION_TITLE}' => $learningPath->get_title(),
+                    '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
                     '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
                 ]
@@ -334,7 +331,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             new TranslationContext(
                 'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', $translations[$key],
                 [
-                    '{PUBLICATION_TITLE}' => $learningPath->get_title(),
+                    '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
                     '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
                 ]
@@ -347,7 +344,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             new TranslationContext(
                 'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', $translations[$key],
                 [
-                    '{PUBLICATION_TITLE}' => $assignment->get_title(),
+                    '{LEARNING_PATH_TITLE}' => $assignment->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
                     '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
                 ]

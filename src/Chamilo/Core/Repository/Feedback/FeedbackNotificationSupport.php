@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Feedback;
 
+use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationHandlerInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
 
 /**

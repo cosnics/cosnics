@@ -19,27 +19,21 @@ class CreatorComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_parent()->is_allowed_to_create_feedback())
+        if (! $this->feedbackRightsBridge->canCreateFeedback())
         {
             throw new NotAllowedException();
         }
         
-        $form = new FeedbackForm($this->get_url());
+        $form = new FeedbackForm($this, $this->get_url());
         
         if ($form->validate())
         {
             try
             {
                 $values = $form->exportValues();
-                
-                $feedback = $this->get_parent()->get_feedback();
-                $feedback = $this->get_parent()->get_feedback();
-                $feedback->set_user_id($this->get_user_id());
-                $feedback->set_comment($values[Feedback::PROPERTY_COMMENT]);
-                $feedback->set_creation_date(time());
-                $feedback->set_modification_date(time());
-                
-                $success = $feedback->create();
+
+                $feedback = $this->feedbackBridge->createFeedback($this->getUser(), $values[Feedback::PROPERTY_COMMENT]);
+                $success = $feedback instanceof Feedback;
                 
                 $this->notifyNewFeedback($feedback);
                 

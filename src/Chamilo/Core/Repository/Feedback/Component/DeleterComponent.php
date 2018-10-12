@@ -35,21 +35,14 @@ class DeleterComponent extends Manager
             
             foreach ($feedback_ids as $feedback_id)
             {
-                $feedback = $this->get_parent()->retrieve_feedback($feedback_id);
+                $feedback = $this->feedbackBridge->getFeedbackById($feedback_id);
                 
-                if (! $this->get_parent()->is_allowed_to_delete_feedback($feedback))
+                if (! $this->feedbackRightsBridge->canDeleteFeedback($feedback))
                 {
                     throw new NotAllowedException();
                 }
                 
-                if (! $feedback->delete())
-                {
-                    throw new \Exception(
-                        Translation::get(
-                            'ObjectNotDeleted', 
-                            array('OBJECT' => Translation::get('Feedback')), 
-                            Utilities::COMMON_LIBRARIES));
-                }
+                $this->feedbackBridge->deleteFeedback($feedback);
             }
             
             $success = true;
