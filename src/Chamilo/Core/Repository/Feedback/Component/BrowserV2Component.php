@@ -37,8 +37,8 @@ class BrowserV2Component extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $canViewFeedback = $this->feedbackRightsBridge->canViewFeedback();
-        $canCreateFeedback = $this->feedbackRightsBridge->canCreateFeedback();
+        $canViewFeedback = $this->feedbackRightsManagerBridge->canViewFeedback();
+        $canCreateFeedback = $this->feedbackRightsManagerBridge->canCreateFeedback();
 
         if (!$canViewFeedback && !$canCreateFeedback)
         {
@@ -60,7 +60,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
 
             $formData = $form->getData();
 
-            $feedback = $this->feedbackBridge->createFeedback($this->getUser(), $formData[Feedback::PROPERTY_COMMENT]);
+            $feedback = $this->feedbackDataManagerBridge->createFeedback($this->getUser(), $formData[Feedback::PROPERTY_COMMENT]);
             $success = $feedback instanceof Feedback;
 
             $this->notifyNewFeedback($feedback);
@@ -79,7 +79,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
             );
         }
 
-        $feedback = $this->feedbackBridge->getFeedback(
+        $feedback = $this->feedbackDataManagerBridge->getFeedback(
             $this->getPager()->getNumberOfItemsPerPage(),
             $this->getPager()->getCurrentRangeOffset()
         );
@@ -91,7 +91,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
 
         $feedbackCount = count($feedback);
 
-        if ($this->feedbackBridge->countFeedback() > $feedbackCount)
+        if ($this->feedbackDataManagerBridge->countFeedback() > $feedbackCount)
         {
             $pagination = $this->getPagerRenderer()->renderPaginationWithPageLimit(
                 $this->get_parameters(),
@@ -138,14 +138,14 @@ class BrowserV2Component extends Manager implements DelegateComponent
             );
 
             $feedbackDTO['photoUrl'] = $profilePhotoUrl->getUrl();
-            $feedbackDTO['updateAllowed'] = $this->feedbackRightsBridge->canEditFeedback($feedbackItem);
+            $feedbackDTO['updateAllowed'] = $this->feedbackRightsManagerBridge->canEditFeedback($feedbackItem);
             $feedbackDTO['updateUrl'] = $this->get_url(
                 [
                     Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
                     Manager::PARAM_FEEDBACK_ID => $feedbackItem->get_id()
                 ]
             );
-            $feedbackDTO['deleteAllowed'] = $this->feedbackRightsBridge->canDeleteFeedback($feedbackItem);
+            $feedbackDTO['deleteAllowed'] = $this->feedbackRightsManagerBridge->canDeleteFeedback($feedbackItem);
             $feedbackDTO['deleteUrl'] = $this->get_url(
                 [
                     Manager::PARAM_ACTION => Manager::ACTION_DELETE,
@@ -188,8 +188,8 @@ class BrowserV2Component extends Manager implements DelegateComponent
 
         $hasNotification = false;
 
-        $isAllowedToViewFeedback = $this->feedbackRightsBridge->canViewFeedback();
-        $isAllowedToCreateFeedback = $this->feedbackRightsBridge->canCreateFeedback();
+        $isAllowedToViewFeedback = $this->feedbackRightsManagerBridge->canViewFeedback();
+        $isAllowedToCreateFeedback = $this->feedbackRightsManagerBridge->canCreateFeedback();
 
         if ($isAllowedToViewFeedback || $isAllowedToCreateFeedback)
         {
@@ -197,7 +197,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
 
             if ($isAllowedToViewFeedback)
             {
-                $feedbackCount = $this->feedbackBridge->countFeedback();
+                $feedbackCount = $this->feedbackDataManagerBridge->countFeedback();
                 $portfolioNotification = $this->get_application()->retrieve_notification();
                 $hasNotification = $portfolioNotification instanceof Notification;
             }
@@ -269,7 +269,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
             $this->pager = new Pager(
                 $this->getCount(),
                 1,
-                $this->feedbackBridge->countFeedback(),
+                $this->feedbackDataManagerBridge->countFeedback(),
                 $this->getPageNumber()
             );
         }

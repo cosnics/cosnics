@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Feedback;
 
-use Chamilo\Core\Repository\Feedback\Bridge\FeedbackBridgeAdapter;
-use Chamilo\Core\Repository\Feedback\Bridge\FeedbackBridgeInterface;
-use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsBridgeAdapter;
-use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsBridgeInterface;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackDataManagerAdapter;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackDataManagerInterface;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsManagerAdapter;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsManagerInterface;
 use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationService;
 use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationServiceInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
@@ -36,14 +36,14 @@ abstract class Manager extends Application
     const CONFIGURATION_SHOW_FEEDBACK_HEADER = 'showFeedbackHeader';
 
     /**
-     * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackBridgeInterface
+     * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackDataManagerInterface
      */
-    protected $feedbackBridge;
+    protected $feedbackDataManagerBridge;
 
     /**
-     * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsBridgeInterface
+     * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsManagerInterface
      */
-    protected $feedbackRightsBridge;
+    protected $feedbackRightsManagerBridge;
 
     /**
      * Manager constructor.
@@ -68,26 +68,26 @@ abstract class Manager extends Application
      */
     protected function initializeBridges(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        if($applicationConfiguration->get(self::PARAM_FEEDBACK_BRIDGE) instanceof FeedbackBridgeInterface)
+        if($applicationConfiguration->get(self::PARAM_FEEDBACK_BRIDGE) instanceof FeedbackDataManagerInterface)
         {
-            $this->feedbackBridge = $applicationConfiguration->get(self::PARAM_FEEDBACK_BRIDGE);
+            $this->feedbackDataManagerBridge = $applicationConfiguration->get(self::PARAM_FEEDBACK_BRIDGE);
         }
         else
         {
             /** @var \Chamilo\Core\Repository\Feedback\FeedbackSupport $application */
             $application = $this->get_application();
-            $this->feedbackBridge = new FeedbackBridgeAdapter($application);
+            $this->feedbackDataManagerBridge = new FeedbackDataManagerAdapter($application);
         }
 
-        if($applicationConfiguration->get(self::PARAM_FEEDBACK_RIGHTS_BRIDGE) instanceof FeedbackRightsBridgeInterface)
+        if($applicationConfiguration->get(self::PARAM_FEEDBACK_RIGHTS_BRIDGE) instanceof FeedbackRightsManagerInterface)
         {
-            $this->feedbackRightsBridge = $applicationConfiguration->get(self::PARAM_FEEDBACK_RIGHTS_BRIDGE);
+            $this->feedbackRightsManagerBridge = $applicationConfiguration->get(self::PARAM_FEEDBACK_RIGHTS_BRIDGE);
         }
         else
         {
             /** @var \Chamilo\Core\Repository\Feedback\FeedbackSupport $application */
             $application = $this->get_application();
-            $this->feedbackRightsBridge = new FeedbackRightsBridgeAdapter($application);
+            $this->feedbackRightsManagerBridge = new FeedbackRightsManagerAdapter($application);
         }
     }
 

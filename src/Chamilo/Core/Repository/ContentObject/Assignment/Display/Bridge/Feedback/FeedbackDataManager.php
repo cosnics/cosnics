@@ -2,9 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Bridge\Feedback;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\Feedback\Bridge\FeedbackBridgeInterface;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackDataManagerInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -13,12 +12,12 @@ use Chamilo\Core\User\Storage\DataClass\User;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class FeedbackBridge implements FeedbackBridgeInterface
+class FeedbackDataManager implements FeedbackDataManagerInterface
 {
     /**
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+     * @var AssignmentFeedbackDataManagerInterface
      */
-    protected $dataProvider;
+    protected $assignmentFeedbackDataManager;
 
     /**
      * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
@@ -26,13 +25,13 @@ class FeedbackBridge implements FeedbackBridgeInterface
     protected $entry;
 
     /**
-     * FeedbackBridge constructor.
+     * FeedbackDataManager constructor.
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $dataProvider
+     * @param AssignmentFeedbackDataManagerInterface $assignmentFeedbackDataManager
      */
-    public function __construct(AssignmentDataProvider $dataProvider)
+    public function __construct(AssignmentFeedbackDataManagerInterface $assignmentFeedbackDataManager)
     {
-        $this->dataProvider = $dataProvider;
+        $this->assignmentFeedbackDataManager = $assignmentFeedbackDataManager;
     }
 
     /**
@@ -51,44 +50,25 @@ class FeedbackBridge implements FeedbackBridgeInterface
      */
     public function createFeedback(User $user, $feedback)
     {
-        $feedbackObject = $this->dataProvider->initializeFeedback();
-        $feedbackObject->setEntryId($this->entry->getId());
-
-        $feedbackObject->set_user_id($user->getId());
-        $feedbackObject->set_comment($feedback);
-        $feedbackObject->set_creation_date(time());
-        $feedbackObject->set_modification_date(time());
-
-        if(!$feedbackObject->create())
-        {
-            throw new \RuntimeException('Could not create feedback in the database');
-        }
-
-        return $feedbackObject;
+        return $this->assignmentFeedbackDataManager->createFeedback($user, $feedback, $this->entry);
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback
+     * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback $feedback
      *
      * @throws \Exception
      */
     public function updateFeedback(Feedback $feedback)
     {
-        if(!$feedback->update())
-        {
-            throw new \RuntimeException('Could not update feedback in the database');
-        }
+        $this->assignmentFeedbackDataManager->updateFeedback($feedback);
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback
+     * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback $feedback
      */
     public function deleteFeedback(Feedback $feedback)
     {
-        if(!$feedback->delete())
-        {
-            throw new \RuntimeException('Could not delete feedback in the database');
-        }
+        $this->assignmentFeedbackDataManager->deleteFeedback($feedback);
     }
 
     /**
@@ -99,7 +79,7 @@ class FeedbackBridge implements FeedbackBridgeInterface
      */
     public function getFeedback($count = null, $offset = null)
     {
-        return $this->dataProvider->findFeedbackByEntry($this->entry);
+       return $this->assignmentFeedbackDataManager->getFeedbackByEntry($this->entry);
     }
 
     /**
@@ -107,7 +87,7 @@ class FeedbackBridge implements FeedbackBridgeInterface
      */
     public function countFeedback()
     {
-        return $this->dataProvider->countFeedbackByEntry($this->entry);
+        return $this->assignmentFeedbackDataManager->countFeedbackByEntry($this->entry);
     }
 
     /**
@@ -117,6 +97,6 @@ class FeedbackBridge implements FeedbackBridgeInterface
      */
     public function getFeedbackById($feedbackId)
     {
-        return $this->dataProvider->findFeedbackByIdentifier($feedbackId);
+        return $this->assignmentFeedbackDataManager->getFeedbackByIdentifier($feedbackId);
     }
 }

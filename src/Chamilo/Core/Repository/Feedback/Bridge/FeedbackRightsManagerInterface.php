@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-interface FeedbackRightsBridgeInterface
+interface FeedbackRightsManagerInterface
 {
     /**
      * @return bool

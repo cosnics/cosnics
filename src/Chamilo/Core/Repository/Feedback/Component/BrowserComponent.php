@@ -33,8 +33,8 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $canViewFeedback = $this->feedbackRightsBridge->canViewFeedback();
-        $canCreateFeedback = $this->feedbackRightsBridge->canCreateFeedback();
+        $canViewFeedback = $this->feedbackRightsManagerBridge->canViewFeedback();
+        $canCreateFeedback = $this->feedbackRightsManagerBridge->canCreateFeedback();
 
         if (!$canViewFeedback && !$canCreateFeedback)
         {
@@ -52,7 +52,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $values = $form->exportValues();
 
-            $feedback = $this->feedbackBridge->createFeedback($this->getUser(), $values[Feedback::PROPERTY_COMMENT]);
+            $feedback = $this->feedbackDataManagerBridge->createFeedback($this->getUser(), $values[Feedback::PROPERTY_COMMENT]);
             $success = $feedback instanceof Feedback;
 
             $this->notifyNewFeedback($feedback);
@@ -71,7 +71,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $html = array();
 
-            $feedbacks = $this->feedbackBridge->getFeedback(
+            $feedbacks = $this->feedbackDataManagerBridge->getFeedback(
                 $this->getPager()->getNumberOfItemsPerPage(),
                 $this->getPager()->getCurrentRangeOffset()
             );
@@ -130,8 +130,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                         '<div class="feedback-date">' . $this->format_date($feedback->get_creation_date()) .
                         '</div></h4>';
 
-                    $allowedToUpdateFeedback = $this->feedbackRightsBridge->canEditFeedback($feedback);
-                    $allowedToDeleteFeedback = $this->feedbackRightsBridge->canDeleteFeedback($feedback);
+                    $allowedToUpdateFeedback = $this->feedbackRightsManagerBridge->canEditFeedback($feedback);
+                    $allowedToDeleteFeedback = $this->feedbackRightsManagerBridge->canDeleteFeedback($feedback);
 
                     if ($allowedToUpdateFeedback || $allowedToDeleteFeedback)
                     {
@@ -160,7 +160,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = '</div>';
                 $html[] = '</div>';
 
-                if ($this->feedbackBridge->countFeedback() > $feedbackCount)
+                if ($this->feedbackDataManagerBridge->countFeedback() > $feedbackCount)
                 {
                     $html[] = '<div class="row">';
                     $html[] = '<div class="col-xs-12 feedback-pagination">';
@@ -215,8 +215,8 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $hasNotification = false;
 
-        $isAllowedToViewFeedback = $this->feedbackRightsBridge->canViewFeedback();
-        $isAllowedToCreateFeedback = $this->feedbackRightsBridge->canCreateFeedback();
+        $isAllowedToViewFeedback = $this->feedbackRightsManagerBridge->canViewFeedback();
+        $isAllowedToCreateFeedback = $this->feedbackRightsManagerBridge->canCreateFeedback();
 
         if ($isAllowedToViewFeedback || $isAllowedToCreateFeedback)
         {
@@ -224,7 +224,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             if ($isAllowedToViewFeedback)
             {
-                $feedbackCount = $this->feedbackBridge->countFeedback();
+                $feedbackCount = $this->feedbackDataManagerBridge->countFeedback();
                 $portfolioNotification = $this->get_parent()->retrieve_notification();
                 $hasNotification = $portfolioNotification instanceof Notification;
             }
@@ -357,7 +357,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->pager = new Pager(
                 $this->getCount(),
                 1,
-                $this->feedbackBridge->countFeedback(),
+                $this->feedbackDataManagerBridge->countFeedback(),
                 $this->getPageNumber()
             );
         }

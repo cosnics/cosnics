@@ -12,7 +12,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-interface FeedbackBridgeInterface
+interface FeedbackDataManagerInterface
 {
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user

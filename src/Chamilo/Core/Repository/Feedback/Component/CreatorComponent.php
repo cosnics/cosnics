@@ -19,7 +19,7 @@ class CreatorComponent extends Manager
      */
     public function run()
     {
-        if (! $this->feedbackRightsBridge->canCreateFeedback())
+        if (! $this->feedbackRightsManagerBridge->canCreateFeedback())
         {
             throw new NotAllowedException();
         }
@@ -32,7 +32,7 @@ class CreatorComponent extends Manager
             {
                 $values = $form->exportValues();
 
-                $feedback = $this->feedbackBridge->createFeedback($this->getUser(), $values[Feedback::PROPERTY_COMMENT]);
+                $feedback = $this->feedbackDataManagerBridge->createFeedback($this->getUser(), $values[Feedback::PROPERTY_COMMENT]);
                 $success = $feedback instanceof Feedback;
                 
                 $this->notifyNewFeedback($feedback);

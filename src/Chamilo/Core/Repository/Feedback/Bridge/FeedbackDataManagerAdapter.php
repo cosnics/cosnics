@@ -11,8 +11,10 @@ use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
  * @package Chamilo\Core\Repository\Feedback\Bridge
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ *
+ * @deprecated only used to provide a temporary solution between the old FeedbackSupport interface and the new bridge architecture. Implement your own FeedbackBridge
  */
-class FeedbackBridgeAdapter implements FeedbackBridgeInterface
+class FeedbackDataManagerAdapter implements FeedbackDataManagerInterface
 {
     /**
      * @var \Chamilo\Core\Repository\Feedback\FeedbackSupport

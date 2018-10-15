@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Bridge\Feedback;
 
-use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsBridgeInterface;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsManagerInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -10,7 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class FeedbackRightsBridge implements FeedbackRightsBridgeInterface
+class FeedbackRightsManager implements FeedbackRightsManagerInterface
 {
     /**
      * @var \Chamilo\Core\User\Storage\DataClass\User

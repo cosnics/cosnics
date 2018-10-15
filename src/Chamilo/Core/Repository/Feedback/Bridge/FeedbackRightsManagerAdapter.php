@@ -8,8 +8,10 @@ use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
  * @package Chamilo\Core\Repository\Feedback\Bridge
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ *
+ * @deprecated only used to provide a temporary solution between the old FeedbackSupport interface and the new bridge architecture. Implement your own FeedbackBridge
  */
-class FeedbackRightsBridgeAdapter implements FeedbackRightsBridgeInterface
+class FeedbackRightsManagerAdapter implements FeedbackRightsManagerInterface
 {
     /**
      * @var \Chamilo\Core\Repository\Feedback\FeedbackSupport
