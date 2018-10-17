@@ -32,14 +32,6 @@ interface AssignmentServiceBridgeInterface
      *
      * @return integer
      */
-    public function countDistinctFeedbackByTreeNodeAndEntityType(TreeNode $treeNode, $entityType);
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
-     * @param integer $entityType
-     *
-     * @return integer
-     */
     public function countDistinctLateEntriesByTreeNodeAndEntityType(TreeNode $treeNode, $entityType);
 
     /**

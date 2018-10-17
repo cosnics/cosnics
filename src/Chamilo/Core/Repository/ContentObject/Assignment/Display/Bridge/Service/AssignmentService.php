@@ -53,7 +53,8 @@ abstract class AssignmentService
 
     /**
      * @param Score $score
-     * @return Score
+     *
+     * @return Score | \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score
      */
     public function createScore(Score $score)
     {
@@ -115,7 +116,7 @@ abstract class AssignmentService
      *
      * @param integer $entryIdentifier
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
+     * @return Entry
      */
     public function findEntryByIdentifier($entryIdentifier)
     {
@@ -223,7 +224,7 @@ abstract class AssignmentService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment $entryAttachment
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment|\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment $entryAttachment
      */
     public function deleteEntryAttachment(EntryAttachment $entryAttachment)
     {
