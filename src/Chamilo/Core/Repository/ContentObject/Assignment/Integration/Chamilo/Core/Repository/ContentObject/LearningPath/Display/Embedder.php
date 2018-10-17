@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentEphorusRepository;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\EphorusRepository;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\AssignmentDataProvider;
@@ -41,7 +41,7 @@ class Embedder extends ContentObjectEmbedder
             $this->get_application()->getTranslator(),
             new LearningPathAssignmentService(
                 new LearningPathAssignmentRepository($this->getDataClassRepository()),
-                new LearningPathAssignmentEphorusRepository($this->getDataClassRepository())
+                new EphorusRepository($this->getDataClassRepository())
             )
         );
 

@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Feedback;
 
-use Chamilo\Core\Repository\Feedback\Bridge\FeedbackDataManagerAdapter;
-use Chamilo\Core\Repository\Feedback\Bridge\FeedbackDataManagerInterface;
-use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsManagerAdapter;
-use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsManagerInterface;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeAdapter;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsServiceBridgeAdapter;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsServiceBridgeInterface;
 use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationService;
 use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationServiceInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
@@ -36,12 +36,12 @@ abstract class Manager extends Application
     const CONFIGURATION_SHOW_FEEDBACK_HEADER = 'showFeedbackHeader';
 
     /**
-     * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackDataManagerInterface
+     * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface
      */
     protected $feedbackDataManagerBridge;
 
     /**
-     * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsManagerInterface
+     * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsServiceBridgeInterface
      */
     protected $feedbackRightsManagerBridge;
 
@@ -68,7 +68,7 @@ abstract class Manager extends Application
      */
     protected function initializeBridges(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        if($applicationConfiguration->get(self::PARAM_FEEDBACK_BRIDGE) instanceof FeedbackDataManagerInterface)
+        if($applicationConfiguration->get(self::PARAM_FEEDBACK_BRIDGE) instanceof FeedbackServiceBridgeInterface)
         {
             $this->feedbackDataManagerBridge = $applicationConfiguration->get(self::PARAM_FEEDBACK_BRIDGE);
         }
@@ -76,10 +76,10 @@ abstract class Manager extends Application
         {
             /** @var \Chamilo\Core\Repository\Feedback\FeedbackSupport $application */
             $application = $this->get_application();
-            $this->feedbackDataManagerBridge = new FeedbackDataManagerAdapter($application);
+            $this->feedbackDataManagerBridge = new FeedbackServiceBridgeAdapter($application);
         }
 
-        if($applicationConfiguration->get(self::PARAM_FEEDBACK_RIGHTS_BRIDGE) instanceof FeedbackRightsManagerInterface)
+        if($applicationConfiguration->get(self::PARAM_FEEDBACK_RIGHTS_BRIDGE) instanceof FeedbackRightsServiceBridgeInterface)
         {
             $this->feedbackRightsManagerBridge = $applicationConfiguration->get(self::PARAM_FEEDBACK_RIGHTS_BRIDGE);
         }
@@ -87,7 +87,7 @@ abstract class Manager extends Application
         {
             /** @var \Chamilo\Core\Repository\Feedback\FeedbackSupport $application */
             $application = $this->get_application();
-            $this->feedbackRightsManagerBridge = new FeedbackRightsManagerAdapter($application);
+            $this->feedbackRightsManagerBridge = new FeedbackRightsServiceBridgeAdapter($application);
         }
     }
 

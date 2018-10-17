@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="tracking_weblcms_learning_path_assignment_entry">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="tree_node_attempt_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="tree_node_data_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="content_object_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="entity_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="submitted"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="entity_type"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="user_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="ip_address"
+            type="text"
+            length="15"
+            fixed="true"
+            notnull="1" />
+    </properties>
+    <index name="id">
+        <indexproperty name="id" />
+    </index>
+    <index name="tree_node_attempt_id">
+        <indexproperty name="tree_node_attempt_id" />
+    </index>
+    <index name="tree_node_data_id">
+        <indexproperty name="tree_node_data_id" />
+    </index>
+    <index name="entity_id">
+        <indexproperty name="entity_id" />
+    </index>
+    <index name="entity">
+        <indexproperty name="entity_id" />
+        <indexproperty name="entity_type" />
+    </index>
+</object>
