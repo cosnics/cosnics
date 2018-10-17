@@ -474,3 +474,9 @@ INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Authentication\\Platform', 'Chamilo\\Libraries\\Authentication', 'Authentication', 'PlatformAuthentication', '1', '1.0.0', '1');
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Authentication\\SecurityToken', 'Chamilo\\Libraries\\Authentication', 'Authentication', 'SecurityTokenAuthentication', '1', '1.0.0', '1');
 
+/** Notifications **/
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES
+(null, 'Chamilo\\Core\\Notification', 'Chamilo\\Core', NULL, 'Notification', 1, '1.0.0', 1);
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES
+(null, 'Chamilo\\Core\\Queue', 'Chamilo\\Core', NULL, 'Notification', 1, '1.0.0', 1);
+
