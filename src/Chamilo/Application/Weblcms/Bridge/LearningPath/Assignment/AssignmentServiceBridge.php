@@ -607,7 +607,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return bool
@@ -616,5 +616,4 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     {
         return $this->assignmentService->isContentObjectAttachedToEntry($entry, $contentObject);
     }
-
 }

@@ -174,15 +174,6 @@ interface AssignmentServiceBridgeInterface
      *
      * @return integer
      */
-    public function countDistinctFeedbackForTreeNodeEntityTypeAndId(TreeNode $treeNode, $entityType, $entityId);
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return integer
-     */
     public function countDistinctScoreForTreeNodeEntityTypeAndId(TreeNode $treeNode, $entityType, $entityId);
 
     /**
