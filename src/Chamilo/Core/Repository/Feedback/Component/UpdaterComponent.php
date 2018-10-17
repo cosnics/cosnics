@@ -28,14 +28,14 @@ class UpdaterComponent extends Manager
         $feedback_id = Request::get(self::PARAM_FEEDBACK_ID);
         $this->set_parameter(self::PARAM_FEEDBACK_ID, $feedback_id);
 
-        $feedback = $this->feedbackDataManagerBridge->getFeedbackById($feedback_id);
+        $feedback = $this->feedbackServiceBridge->getFeedbackById($feedback_id);
 
         if (!$feedback instanceof Feedback)
         {
             throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Feedback'), $feedback_id);
         }
 
-        if (!$this->feedbackRightsManagerBridge->canEditFeedback($feedback))
+        if (!$this->feedbackRightsServiceBridge->canEditFeedback($feedback))
         {
             throw new NotAllowedException();
         }
@@ -49,7 +49,7 @@ class UpdaterComponent extends Manager
                 $values = $form->exportValues();
 
                 $feedback->set_comment($values[Feedback::PROPERTY_COMMENT]);
-                $this->feedbackDataManagerBridge->updateFeedback($feedback);
+                $this->feedbackServiceBridge->updateFeedback($feedback);
 
                 $message = Translation::get(
                     'ObjectUpdated',

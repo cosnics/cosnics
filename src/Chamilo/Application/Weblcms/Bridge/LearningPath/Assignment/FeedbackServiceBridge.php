@@ -2,29 +2,47 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\FeedbackService;
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\FeedbackServiceBridgeInterface;
-use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathAssignmentFeedbackDataManagerInterface;
-use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Feedback;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
 
+/**
+ * @package Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
 class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
 {
     /**
-     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
+     * @var FeedbackService
      */
-    protected $learningPathAssignmentService;
+    protected $feedbackService;
 
     /**
-     * FeedbackDataManager constructor.
-     *
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService $learningPathService
+     * @var \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
      */
-    public function __construct(LearningPathAssignmentService $learningPathService)
+    protected $contentObjectPublication;
+
+    /**
+     * FeedbackServiceBridge constructor.
+     *
+     * @param FeedbackService $feedbackService
+     */
+    public function __construct(FeedbackService $feedbackService)
     {
-        $this->learningPathAssignmentService = $learningPathService;
+        $this->feedbackService = $feedbackService;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     */
+    public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        $this->contentObjectPublication = $contentObjectPublication;
     }
 
     /**
@@ -35,7 +53,7 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
      */
     public function countDistinctFeedbackByTreeNodeDataAndEntityType(TreeNodeData $treeNodeData, $entityType)
     {
-        return $this->learningPathAssignmentService->countDistinctFeedbackByTreeNodeDataAndEntityType(
+        return $this->feedbackService->countDistinctFeedbackByTreeNodeDataAndEntityType(
             $treeNodeData, $entityType
         );
     }
@@ -51,7 +69,7 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
         TreeNodeData $treeNodeData, $entityType, $entityId
     )
     {
-        return $this->learningPathAssignmentService->countFeedbackForTreeNodeDataByEntityTypeAndEntityId(
+        return $this->feedbackService->countFeedbackForTreeNodeDataByEntityTypeAndEntityId(
             $treeNodeData, $entityType, $entityId
         );
     }
@@ -68,39 +86,39 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
         $entityId
     )
     {
-        return $this->learningPathAssignmentService->countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
+        return $this->feedbackService->countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
             $treeNodeData, $entityType, $entityId
         );
     }
 
     /**
-     * @param Entry $entry
+     * @param Entry|\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Feedback[]
      */
     public function getFeedbackByEntry(Entry $entry)
     {
-        return $this->learningPathAssignmentService->findFeedbackByEntry($entry);
+        return $this->feedbackService->findFeedbackByEntry($entry);
     }
 
     /**
      * @param integer $feedbackIdentifier
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
     public function getFeedbackByIdentifier($feedbackIdentifier)
     {
-        return $this->learningPathAssignmentService->findFeedbackByIdentifier($feedbackIdentifier);
+        return $this->feedbackService->findFeedbackByIdentifier($feedbackIdentifier);
     }
 
     /**
-     * @param Entry $entry
+     * @param Entry|\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
      *
      * @return integer
      */
     public function countFeedbackByEntry(Entry $entry)
     {
-        return $this->learningPathAssignmentService->countFeedbackByEntry($entry);
+        return $this->feedbackService->countFeedbackByEntry($entry);
     }
 
     /**
@@ -110,55 +128,36 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
      */
     public function countFeedbackByEntryIdentifier($entryIdentifier)
     {
-        return $this->learningPathAssignmentService->countFeedbackByEntryIdentifier($entryIdentifier);
+        return $this->feedbackService->countFeedbackByEntryIdentifier($entryIdentifier);
     }
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $feedback
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
     public function createFeedback(User $user, $feedback, Entry $entry)
     {
-        $feedbackObject = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Feedback();
-        $feedbackObject->setEntryId($entry->getId());
-
-        $feedbackObject->set_user_id($user->getId());
-        $feedbackObject->set_comment($feedback);
-        $feedbackObject->set_creation_date(time());
-        $feedbackObject->set_modification_date(time());
-
-        if(!$feedbackObject->create())
-        {
-            throw new \RuntimeException('Could not create feedback in the database');
-        }
-
-        return $feedbackObject;
+        return $this->feedbackService->createFeedbackForPublicationAndEntry($user, $feedback, $entry, $this->contentObjectPublication);
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Feedback $feedback
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Feedback $feedback
      *
      * @throws \Exception
      */
     public function updateFeedback(Feedback $feedback)
     {
-        if(!$feedback->update())
-        {
-            throw new \RuntimeException('Could not update feedback in the database');
-        }
+        $this->feedbackService->updateFeedback($feedback);
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Feedback $feedback
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Feedback $feedback
      */
     public function deleteFeedback(Feedback $feedback)
     {
-        if(!$feedback->delete())
-        {
-            throw new \RuntimeException('Could not delete feedback in the database');
-        }
+        $this->feedbackService->deleteFeedback($feedback);
     }
 }

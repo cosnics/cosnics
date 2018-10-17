@@ -6,9 +6,9 @@
     <services>
 
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Service\EntryNotificationJobProcessor"
-                 class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationJobProcessor">
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Service\EntryNotificationJobProcessor">
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service" />
-            <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.entity_service_manager" />
+            <argument type="service" id="chamilo.core.repository.content_object.learning_path.service.tree_node_data_service" />
             <argument type="service" id="chamilo.application.weblcms.service.publication" />
             <argument type="service" id="chamilo.application.weblcms.service.course" />
             <argument type="service" id="chamilo.core.user.service.user_service" />
@@ -18,9 +18,9 @@
         </service>
 
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Service\EntryFeedbackNotificationJobProcessor"
-                 class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryFeedbackNotificationJobProcessor">
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Service\EntryFeedbackNotificationJobProcessor">
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service" />
-            <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.entity_service_manager" />
+            <argument type="service" id="chamilo.core.repository.content_object.learning_path.service.tree_node_data_service" />
             <argument type="service" id="chamilo.application.weblcms.service.publication" />
             <argument type="service" id="chamilo.application.weblcms.service.course" />
             <argument type="service" id="chamilo.core.user.service.user_service" />

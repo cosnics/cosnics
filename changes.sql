@@ -474,3 +474,5 @@ INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Authentication\\Platform', 'Chamilo\\Libraries\\Authentication', 'Authentication', 'PlatformAuthentication', '1', '1.0.0', '1');
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Authentication\\SecurityToken', 'Chamilo\\Libraries\\Authentication', 'Authentication', 'SecurityTokenAuthentication', '1', '1.0.0', '1');
 
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath\\Assignment', 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath', 'LearningPathBridge', 'AssignmentLearningPathBridge', '1', '1.0.0', '1');
+

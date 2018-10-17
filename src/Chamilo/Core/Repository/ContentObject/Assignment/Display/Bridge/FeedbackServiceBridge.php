@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Bridge\Feedback;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface;
@@ -15,7 +15,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
 {
     /**
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Bridge\Interfaces\FeedbackServiceBridgeInterface
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface
      */
     protected $assignmentFeedbackServiceBridge;
 
@@ -25,11 +25,11 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
     protected $entry;
 
     /**
-     * FeedbackDataManager constructor.
+     * FeedbackServiceBridge constructor.
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Bridge\Interfaces\FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge
      */
-    public function __construct(\Chamilo\Core\Repository\ContentObject\Assignment\Bridge\Interfaces\FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge)
+    public function __construct(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge)
     {
         $this->assignmentFeedbackServiceBridge = $assignmentFeedbackServiceBridge;
     }

@@ -6,7 +6,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
 {
     const PROPERTY_CONTENT_OBJECT_PUBLICATION_ID = 'content_object_publication_id';
 

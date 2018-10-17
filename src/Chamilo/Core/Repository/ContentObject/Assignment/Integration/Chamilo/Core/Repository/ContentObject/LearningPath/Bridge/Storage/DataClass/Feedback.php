@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 
 /**
  *
- * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass
+ * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
