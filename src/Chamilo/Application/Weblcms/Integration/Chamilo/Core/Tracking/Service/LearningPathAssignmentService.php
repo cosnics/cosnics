@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Service\EntryNotificationJobProcessor;
 use Chamilo\Core\Queue\Service\JobProducer;
 use Chamilo\Core\Queue\Storage\Entity\Job;
@@ -62,7 +62,6 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
         $entry = parent::createEntry($treeNodeData, $treeNodeAttempt, $entityType, $entityId, $userId, $contentObjectId, $ipAddress);
         if($entry instanceof Entry)
         {
-            $treeNodeAttempt->get_publication_id();
             $job = new Job();
             $job->setProcessorClass(EntryNotificationJobProcessor::class)
                 ->setParameter(EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId())

@@ -21,14 +21,6 @@ abstract class EphorusService extends \Chamilo\Core\Repository\ContentObject\Ass
     protected $ephorusRepository;
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\Repository\EphorusRepository $ephorusRepository
-     */
-    public function __construct(EphorusRepository $ephorusRepository)
-    {
-        parent::__construct($ephorusRepository);
-    }
-
-    /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *

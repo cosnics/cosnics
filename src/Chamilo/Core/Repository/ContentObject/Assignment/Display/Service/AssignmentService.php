@@ -141,7 +141,7 @@ abstract class AssignmentService
 
         if (!$this->assignmentRepository->createEntry($entry))
         {
-            throw new \RuntimeException('Could not create a new score for entry ' . $entry->getId());
+            throw new \RuntimeException('Could not create a new entry');
         }
 
         return $entry;
