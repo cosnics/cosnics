@@ -17,7 +17,8 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 {
-    const PROPERTY_USE_PLANNER = 'use_planner';
+    const PROPERTY_USE_GROUP = 'use_group';
+    const PROPERTY_USE_GROUP_AND_TEAM = 'use_group_and_team';
 
     /**
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService
@@ -44,14 +45,19 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
     {
         $id = $courseGroup->getId() ? $courseGroup->getId() : 0;
 
-        // Creation form or editing form without linked forum category
         $courseGroupForm->addElement(
-            'checkbox', self::PROPERTY_USE_PLANNER . '[' . $id . ']',
+            'checkbox', self::PROPERTY_USE_GROUP . '[' . $id . ']',
             Translation::getInstance()->getTranslation('UseOffice365Group')
         );
 
+        $courseGroupForm->addElement(
+            'checkbox', self::PROPERTY_USE_GROUP_AND_TEAM . '[' . $id . ']',
+            Translation::getInstance()->getTranslation('UseOffice365GroupAndTeam')
+        );
+
+
         $defaults = [
-            self::PROPERTY_USE_PLANNER . '[' . $courseGroup->getId() . ']' =>
+            self::PROPERTY_USE_GROUP . '[' . $courseGroup->getId() . ']' =>
                 $this->courseGroupOffice365ReferenceService->courseGroupHasLinkedReference($courseGroup)
         ];
 
