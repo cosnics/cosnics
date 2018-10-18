@@ -8,7 +8,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Note extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note
+class Note extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note
 {
     public static function get_table_name()
     {

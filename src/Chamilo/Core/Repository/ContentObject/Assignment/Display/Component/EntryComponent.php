@@ -4,19 +4,19 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackRightsServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreFormType;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\FormHandler\SetScoreFormHandler;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryNavigator;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreFormProcessor;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreService;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -30,13 +30,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
-use Chamilo\Libraries\Storage\Cache\DataClassResultCache;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -191,6 +185,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
         $configuration->set(\Chamilo\Core\Repository\Feedback\Manager::CONFIGURATION_SHOW_FEEDBACK_HEADER, false);
 
+        $this->buildBridgeServices();
+
         $feedbackManager = $this->getApplicationFactory()->getApplication(
             "Chamilo\Core\Repository\Feedback", $configuration,
             \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE
@@ -243,6 +239,20 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         ];
 
         return array_merge($baseParameters, $extendParameters);
+    }
+
+    protected function buildBridgeServices()
+    {
+        /** @var FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge */
+        $assignmentFeedbackServiceBridge = $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
+        $feedbackServiceBridge = new FeedbackServiceBridge($assignmentFeedbackServiceBridge);
+        $feedbackServiceBridge->setEntry($this->entry);
+
+        $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge();
+        $feedbackRightsServiceBridge->setCurrentUser($this->getUser());
+
+        $this->getBridgeManager()->addBridge($feedbackServiceBridge);
+        $this->getBridgeManager()->addBridge($feedbackRightsServiceBridge);
     }
 
     /**

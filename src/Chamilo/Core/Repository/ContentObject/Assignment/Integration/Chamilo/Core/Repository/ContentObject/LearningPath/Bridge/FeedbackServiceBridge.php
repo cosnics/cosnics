@@ -1,10 +1,10 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Bridge\Feedback\AssignmentFeedbackDataManagerInterface;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -14,7 +14,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class FeedbackServiceBridge implements \Chamilo\Core\Repository\ContentObject\Assignment\Bridge\Interfaces\FeedbackServiceBridgeInterface
+class FeedbackServiceBridge implements \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface
 {
 
     /**
@@ -26,6 +26,16 @@ class FeedbackServiceBridge implements \Chamilo\Core\Repository\ContentObject\As
      * @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\FeedbackServiceBridgeInterface
      */
     protected $learningPathAssignmentFeedbackServiceBridge;
+
+    /**
+     * FeedbackServiceBridge constructor.
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\FeedbackServiceBridgeInterface $learningPathAssignmentFeedbackServiceBridge
+     */
+    public function __construct(FeedbackServiceBridgeInterface $learningPathAssignmentFeedbackServiceBridge)
+    {
+        $this->learningPathAssignmentFeedbackServiceBridge = $learningPathAssignmentFeedbackServiceBridge;
+    }
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
@@ -93,7 +103,7 @@ class FeedbackServiceBridge implements \Chamilo\Core\Repository\ContentObject\As
     /**
      * @param integer $feedbackIdentifier
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
     public function getFeedbackByIdentifier($feedbackIdentifier)
     {
@@ -101,7 +111,7 @@ class FeedbackServiceBridge implements \Chamilo\Core\Repository\ContentObject\As
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return integer
      */
@@ -111,9 +121,9 @@ class FeedbackServiceBridge implements \Chamilo\Core\Repository\ContentObject\As
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback[]
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback[]
      */
     public function getFeedbackByEntry(Entry $entry)
     {
@@ -123,7 +133,7 @@ class FeedbackServiceBridge implements \Chamilo\Core\Repository\ContentObject\As
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $feedback
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
      */
@@ -133,7 +143,7 @@ class FeedbackServiceBridge implements \Chamilo\Core\Repository\ContentObject\As
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Feedback $feedback
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Feedback $feedback
      */
     public function updateFeedback(Feedback $feedback)
     {
@@ -141,7 +151,7 @@ class FeedbackServiceBridge implements \Chamilo\Core\Repository\ContentObject\As
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Feedback $feedback
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Feedback $feedback
      */
     public function deleteFeedback(Feedback $feedback)
     {

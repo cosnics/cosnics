@@ -2,6 +2,9 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\AssignmentServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EphorusServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\FeedbackServiceBridge;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
@@ -128,6 +131,8 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             }
         }
 
+        $this->buildBridgeServices();
+
         try
         {
             $context = $this->get_root_content_object()->package() . '\Display';
@@ -149,6 +154,39 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
                 )
             );
         }
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    protected function buildBridgeServices()
+    {
+        /** @var LearningPath $learningPath */
+        $learningPath = $this->publication->getContentObject();
+
+        /** @var AssignmentServiceBridge $assignmentServiceBridge */
+        $assignmentServiceBridge = $this->getService(AssignmentServiceBridge::class);
+
+        $assignmentServiceBridge->setCanEditAssignment(
+            $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication)
+        );
+        $assignmentServiceBridge->setContentObjectPublication($this->publication);
+        $assignmentServiceBridge->setLearningPathTrackingService($this->trackingService);
+        $assignmentServiceBridge->setTargetUserIds(
+            $this->getTrackingParameters($this->publication->getId())->getLearningPathTargetUserIds($learningPath)
+        );
+
+        $this->getBridgeManager()->addBridge($assignmentServiceBridge);
+
+        /** @var FeedbackServiceBridge $assignmentFeedbackServiceBridge */
+        $assignmentFeedbackServiceBridge = $this->getService(FeedbackServiceBridge::class);
+        $assignmentFeedbackServiceBridge->setContentObjectPublication($this->publication);
+        $this->getBridgeManager()->addBridge($assignmentFeedbackServiceBridge);
+
+        /** @var EphorusServiceBridge $assignmentEphorusServiceBridge */
+        $assignmentEphorusServiceBridge = $this->getService(EphorusServiceBridge::class);
+        $this->getBridgeManager()->addBridge($assignmentEphorusServiceBridge);
     }
 
     public function get_root_content_object()
@@ -603,7 +641,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $ephorusToolRegistration =
             \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_course_tool_by_name('Ephorus');
 
-        if(!$ephorusToolRegistration)
+        if (!$ephorusToolRegistration)
         {
             return false;
         }

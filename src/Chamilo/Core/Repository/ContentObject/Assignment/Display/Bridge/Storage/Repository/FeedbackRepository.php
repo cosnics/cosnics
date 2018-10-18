@@ -76,6 +76,16 @@ abstract class FeedbackRepository
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback $feedback
+     *
+     * @return bool
+     */
+    public function deleteFeedback(Feedback $feedback)
+    {
+        return $this->dataClassRepository->delete($feedback);
+    }
+
+    /**
      *
      * @param integer $entryIdentifier
      *

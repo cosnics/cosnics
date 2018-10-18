@@ -257,7 +257,7 @@ abstract class AssignmentRepository extends \Chamilo\Core\Repository\ContentObje
      * @param int $entityType
      * @param int $entityIdentifier
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function findLastEntryForEntityByTreeNodeData(TreeNodeData $treeNodeData, $entityType, $entityIdentifier)
     {

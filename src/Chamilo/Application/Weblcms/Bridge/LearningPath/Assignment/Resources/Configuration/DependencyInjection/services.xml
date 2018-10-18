@@ -8,5 +8,9 @@
 
         <prototype namespace="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\" resource="../../../{Service, Storage/Repository}/*" />
 
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\AssignmentServiceBridge" />
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EphorusServiceBridge" />
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\FeedbackServiceBridge" />
+
     </services>
 </container>

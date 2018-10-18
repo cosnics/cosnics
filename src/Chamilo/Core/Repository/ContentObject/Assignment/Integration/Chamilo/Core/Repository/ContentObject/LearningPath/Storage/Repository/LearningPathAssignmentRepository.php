@@ -52,7 +52,7 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
     )
     {
         return $this->findTargetsForEntityType(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER,
+            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::ENTITY_TYPE_USER,
             $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
             $this->getTreeNodeDataCondition($treeNodeData),
             $offset,
@@ -81,7 +81,7 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
     )
     {
         return $this->findTargetsForEntityTypeWithEntries(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER,
+            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::ENTITY_TYPE_USER,
             $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
             $this->getTreeNodeDataCondition($treeNodeData),
             $offset,
@@ -306,7 +306,7 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
      * @param int $entityType
      * @param int $entityIdentifier
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function findLastEntryForEntityByTreeNodeData(TreeNodeData $treeNodeData, $entityType, $entityIdentifier)
     {
@@ -337,7 +337,7 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
         $treeNodeDataCondition = new EqualityCondition(
             new PropertyConditionVariable(
                 $this->getEntryClassName(),
-                \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::PROPERTY_TREE_NODE_DATA_ID
+                \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::PROPERTY_TREE_NODE_DATA_ID
             ),
             new StaticConditionVariable($treeNodeDataIdentifier)
         );

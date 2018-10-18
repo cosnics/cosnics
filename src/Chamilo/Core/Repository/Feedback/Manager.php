@@ -38,12 +38,12 @@ abstract class Manager extends Application
     /**
      * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface
      */
-    protected $feedbackDataManagerBridge;
+    protected $feedbackServiceBridge;
 
     /**
      * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsServiceBridgeInterface
      */
-    protected $feedbackRightsManagerBridge;
+    protected $feedbackRightsServiceBridge;
 
     /**
      * Manager constructor.
@@ -68,26 +68,26 @@ abstract class Manager extends Application
      */
     protected function initializeBridges(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        if($applicationConfiguration->get(self::PARAM_FEEDBACK_BRIDGE) instanceof FeedbackServiceBridgeInterface)
+        try
         {
-            $this->feedbackDataManagerBridge = $applicationConfiguration->get(self::PARAM_FEEDBACK_BRIDGE);
+            $this->feedbackServiceBridge = $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
         }
-        else
+        catch(\Exception $ex)
         {
             /** @var \Chamilo\Core\Repository\Feedback\FeedbackSupport $application */
             $application = $this->get_application();
-            $this->feedbackDataManagerBridge = new FeedbackServiceBridgeAdapter($application);
+            $this->feedbackServiceBridge = new FeedbackServiceBridgeAdapter($application);
         }
 
-        if($applicationConfiguration->get(self::PARAM_FEEDBACK_RIGHTS_BRIDGE) instanceof FeedbackRightsServiceBridgeInterface)
+        try
         {
-            $this->feedbackRightsManagerBridge = $applicationConfiguration->get(self::PARAM_FEEDBACK_RIGHTS_BRIDGE);
+            $this->feedbackRightsServiceBridge = $this->getBridgeManager()->getBridgeByInterface(FeedbackRightsServiceBridgeInterface::class);
         }
-        else
+        catch(\Exception $ex)
         {
             /** @var \Chamilo\Core\Repository\Feedback\FeedbackSupport $application */
             $application = $this->get_application();
-            $this->feedbackRightsManagerBridge = new FeedbackRightsServiceBridgeAdapter($application);
+            $this->feedbackRightsServiceBridge = new FeedbackRightsServiceBridgeAdapter($application);
         }
     }
 

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Bridge\Feedback;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge;
 
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsServiceBridgeInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;

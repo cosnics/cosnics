@@ -233,7 +233,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function getCurrentEntityType(TreeNode $treeNode)
     {
-        return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER;
+        return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::ENTITY_TYPE_USER;
     }
 
     /**
@@ -280,7 +280,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function isUserPartOfEntity(User $user, $entityType, $entityId)
     {
         return $entityType ==
-            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER &&
+            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::ENTITY_TYPE_USER &&
             $entityId == $user->getId();
     }
 
@@ -403,7 +403,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      *
      * @param integer[] $entryIdentifiers
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntriesByIdentifiers($entryIdentifiers)
     {
@@ -481,7 +481,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     {
         $this->assignmentService->updateScore($score);
 
-        /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry $entry */
+        /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry $entry */
         $entry = $this->findEntryByIdentifier($score->getEntryId());
         if (!$entry instanceof Entry)
         {
@@ -512,7 +512,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
 
     /**
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
     public function initializeFeedback()
     {
@@ -533,7 +533,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @param integer $entityType
      * @param integer[] $entityIdentifiers
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntriesByTreeNodeEntityTypeAndIdentifiers(TreeNode $treeNode, $entityType, $entityIdentifiers)
     {
@@ -546,7 +546,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      *
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntriesByTreeNode(TreeNode $treeNode)
     {
@@ -571,7 +571,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment
      */
     public function attachContentObjectToEntry(Entry $entry, ContentObject $contentObject)
     {

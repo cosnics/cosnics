@@ -9,7 +9,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\FormHandler;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreService;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormHandler;
 use Symfony\Component\Form\FormInterface;

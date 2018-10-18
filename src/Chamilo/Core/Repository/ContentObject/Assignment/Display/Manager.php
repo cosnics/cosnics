@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -55,7 +55,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
     protected $entityIdentifier;
 
     /**
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      */
     protected $entry;
 

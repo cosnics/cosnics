@@ -3,7 +3,9 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Repository\FeedbackRepository;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service
@@ -52,7 +54,7 @@ abstract class FeedbackService
 
     /**
      *
-     * @param Entry $entry
+     * @param Entry|\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
      *
      * @return integer
      */
@@ -63,7 +65,7 @@ abstract class FeedbackService
 
     /**
      *
-     * @param Entry $entry
+     * @param Entry|\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Feedback[]
      */
@@ -95,5 +97,54 @@ abstract class FeedbackService
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
     abstract protected function createFeedbackInstance();
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string $feedback
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
+     */
+    public function createFeedback(User $user, $feedback, Entry $entry)
+    {
+        $feedbackObject = $this->createFeedbackInstance();
+        $feedbackObject->setEntryId($entry->getId());
+
+        $feedbackObject->set_user_id($user->getId());
+        $feedbackObject->set_comment($feedback);
+        $feedbackObject->set_creation_date(time());
+        $feedbackObject->set_modification_date(time());
+
+        if(!$this->feedbackRepository->createFeedback($feedbackObject))
+        {
+            throw new \RuntimeException('Could not create feedback in the database');
+        }
+
+        return $feedbackObject;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback $feedback
+     *
+     * @throws \Exception
+     */
+    public function updateFeedback(Feedback $feedback)
+    {
+        if(!$this->feedbackRepository->updateFeedback($feedback))
+        {
+            throw new \RuntimeException('Could not update feedback in the database');
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback $feedback
+     */
+    public function deleteFeedback(Feedback $feedback)
+    {
+        if(!$this->feedbackRepository->deleteFeedback($feedback))
+        {
+            throw new \RuntimeException('Could not delete feedback in the database');
+        }
+    }
 
 }

@@ -479,4 +479,5 @@ INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `
 (null, 'Chamilo\\Core\\Notification', 'Chamilo\\Core', NULL, 'Notification', 1, '1.0.0', 1);
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES
 (null, 'Chamilo\\Core\\Queue', 'Chamilo\\Core', NULL, 'Notification', 1, '1.0.0', 1);
-
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES
+(NULL, 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath\\Assignment', 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath', 'LearningPathBridge', 'AssignmentLearningPathBridge', '1', '1.0.0', '1');

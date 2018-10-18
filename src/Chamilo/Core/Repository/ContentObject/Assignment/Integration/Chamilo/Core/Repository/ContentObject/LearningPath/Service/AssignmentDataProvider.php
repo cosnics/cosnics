@@ -4,10 +4,10 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entry\EntryTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
@@ -301,7 +301,7 @@ class AssignmentDataProvider
      */
     public function getCurrentEntityType()
     {
-        return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER;
+        return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::ENTITY_TYPE_USER;
     }
 
     /**
@@ -359,7 +359,7 @@ class AssignmentDataProvider
     public function isUserPartOfEntity(User $user, $entityType, $entityId)
     {
         return $entityType ==
-            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER &&
+            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::ENTITY_TYPE_USER &&
             $entityId == $user->getId();
     }
 
@@ -380,7 +380,7 @@ class AssignmentDataProvider
      * @param integer $contentObjectId
      * @param string $ipAdress
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      */
     public function createEntry($entityType, $entityId, $userId, $contentObjectId, $ipAdress)
     {
@@ -396,7 +396,7 @@ class AssignmentDataProvider
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      */
     public function deleteEntry(Entry $entry)
     {
@@ -488,7 +488,7 @@ class AssignmentDataProvider
      *
      * @param integer $entryIdentifier
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      */
     public function findEntryByIdentifier($entryIdentifier)
     {
@@ -499,7 +499,7 @@ class AssignmentDataProvider
      *
      * @param integer[] $entryIdentifiers
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntriesByIdentifiers($entryIdentifiers)
     {
@@ -563,7 +563,7 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score $score
      *
      * @throws \Exception
      */
@@ -571,7 +571,7 @@ class AssignmentDataProvider
     {
         $this->learningPathAssignmentService->updateScore($score);
 
-        /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry $entry */
+        /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry $entry */
         $entry = $this->findEntryByIdentifier($score->getEntryId());
         if (!$entry instanceof Entry)
         {
@@ -588,7 +588,7 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $submittedNote
      *
@@ -612,7 +612,7 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note $note
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note $note
      *
      * @return boolean
      */
@@ -632,9 +632,9 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score
      */
     public function findScoreByEntry(Entry $entry)
     {
@@ -643,9 +643,9 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note
      */
     public function findNoteByEntry(Entry $entry)
     {
@@ -654,7 +654,7 @@ class AssignmentDataProvider
 
     /**
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
     public function initializeFeedback()
     {
@@ -673,7 +673,7 @@ class AssignmentDataProvider
      *
      * @param integer $feedbackIdentifier
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
     public function findFeedbackByIdentifier($feedbackIdentifier)
     {
@@ -682,7 +682,7 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return integer
      */
@@ -693,7 +693,7 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -707,7 +707,7 @@ class AssignmentDataProvider
      * @param integer $entityType
      * @param integer[] $entityIdentifiers
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntriesByEntityTypeAndIdentifiers($entityType, $entityIdentifiers)
     {
@@ -718,7 +718,7 @@ class AssignmentDataProvider
 
     /**
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntries()
     {
@@ -739,10 +739,10 @@ class AssignmentDataProvider
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment
      */
     public function attachContentObjectToEntry(Entry $entry, ContentObject $contentObject)
     {
@@ -750,7 +750,7 @@ class AssignmentDataProvider
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment $entryAttachment
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment $entryAttachment
      */
     public function deleteEntryAttachment(EntryAttachment $entryAttachment)
     {
@@ -768,7 +768,7 @@ class AssignmentDataProvider
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return EntryAttachment[]
      */
@@ -778,7 +778,7 @@ class AssignmentDataProvider
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return bool

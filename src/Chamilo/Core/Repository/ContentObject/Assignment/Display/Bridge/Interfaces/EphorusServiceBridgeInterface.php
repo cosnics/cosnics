@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;

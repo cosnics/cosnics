@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Traits;
 
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
+use Chamilo\Libraries\Architecture\Bridge\BridgeManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -256,5 +257,13 @@ trait DependencyInjectionContainerTrait
     public function getSessionUtilities()
     {
         return $this->getService('chamilo.libraries.platform.session.session_utilities');
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Architecture\Bridge\BridgeManager
+     */
+    public function getBridgeManager()
+    {
+        return $this->getService(BridgeManager::class);
     }
 }

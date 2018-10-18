@@ -33,7 +33,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         
         $loader = new XmlFileLoader(
             $container, 
-            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Application\Weblcms\Tool\Implementation\Assignment') . 'DependencyInjection'));
+            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Application\Weblcms\Tool\Implementation\LearningPath') . 'DependencyInjection'));
         
         $loader->load('service.xml');
     }

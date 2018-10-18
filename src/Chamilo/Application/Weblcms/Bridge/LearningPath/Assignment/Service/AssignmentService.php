@@ -85,7 +85,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment
      */
     protected function createEntryAttachmentInstance()
     {

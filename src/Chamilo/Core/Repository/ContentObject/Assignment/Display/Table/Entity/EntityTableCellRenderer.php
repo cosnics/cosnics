@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
