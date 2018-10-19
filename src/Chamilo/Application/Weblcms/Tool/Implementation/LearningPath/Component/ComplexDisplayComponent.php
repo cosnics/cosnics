@@ -186,6 +186,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
         /** @var EphorusServiceBridge $assignmentEphorusServiceBridge */
         $assignmentEphorusServiceBridge = $this->getService(EphorusServiceBridge::class);
+        $assignmentEphorusServiceBridge->setEphorusEnabled($this->isEphorusEnabled());
         $this->getBridgeManager()->addBridge($assignmentEphorusServiceBridge);
     }
 

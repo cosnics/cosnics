@@ -575,7 +575,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param integer $contentObjectId
      * @param string $ipAddress
      *
-     * @return void
+     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -598,6 +598,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
             $this->jobProducer->produceJob($job, 'notifications');
         }
 
+        return $entry;
     }
 
     /**

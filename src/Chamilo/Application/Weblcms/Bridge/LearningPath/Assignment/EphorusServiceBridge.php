@@ -39,7 +39,7 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     /**
      * @param bool $ephorusEnabled
      */
-    protected function setEphorusEnabled($ephorusEnabled)
+    public function setEphorusEnabled($ephorusEnabled)
     {
         $this->ephorusEnabled = $ephorusEnabled;
     }

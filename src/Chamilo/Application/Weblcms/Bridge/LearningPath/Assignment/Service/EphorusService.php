@@ -15,4 +15,17 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Repositor
  */
 class EphorusService extends \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Service\EphorusService
 {
+    /**
+     * @var EphorusRepository
+     */
+    protected $ephorusRepository;
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Repository\EphorusRepository $ephorusRepository
+     */
+    public function __construct(EphorusRepository $ephorusRepository)
+    {
+        parent::__construct($ephorusRepository);
+    }
+
 }

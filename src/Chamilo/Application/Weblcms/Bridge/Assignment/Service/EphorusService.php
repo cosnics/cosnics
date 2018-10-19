@@ -2,8 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentEphorusRepository;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\EphorusRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -23,6 +22,14 @@ class EphorusService extends \Chamilo\Core\Repository\ContentObject\Assignment\D
      * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\EphorusRepository
      */
     protected $ephorusRepository;
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\EphorusRepository $ephorusRepository
+     */
+    public function __construct(EphorusRepository $ephorusRepository)
+    {
+        parent::__construct($ephorusRepository);
+    }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication

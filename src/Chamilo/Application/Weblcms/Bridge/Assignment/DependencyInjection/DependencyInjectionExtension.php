@@ -54,6 +54,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function getAlias()
     {
-        return 'chamilo.application.weblcms.bridge.learning_path.assignment';
+        return 'chamilo.application.weblcms.bridge.assignment';
     }
 }
