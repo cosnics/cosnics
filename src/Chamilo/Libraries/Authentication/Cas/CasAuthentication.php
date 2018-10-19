@@ -73,7 +73,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
                 strpos($userAttributes['person_number'], $casValidationString) !== false)
 
             {
-                $user = $this->userService->getUserBySecurityToken(
+                $user = $this->userService->getUserByOfficialCode(
                     $userAttributes['person_number']
                 );
 
@@ -86,6 +86,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
             }
             elseif (is_numeric($userAttributes['person_number']) && $userAttributes['person_number'] == - 1)
             {
+
                 $user = $this->userService->findUserByUsername($userAttributes['email']);
 
                 if (!$user instanceof User)
