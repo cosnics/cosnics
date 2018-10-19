@@ -390,9 +390,9 @@ class ExporterComponent extends Manager
      */
     private function render_table($worksheet, $title, $description, $table, $block_row)
     {
-        $column = 0;
-        $column1 = 1;
-        $column2 = 2;
+        $column = 1;
+        $column1 = 2;
+        $column2 = 3;
         $color = Color::COLOR_BLUE;
         
         $styleArray = array(
@@ -400,7 +400,7 @@ class ExporterComponent extends Manager
         
         $block_row ++;
         $block_row ++;
-        
+
         $worksheet->setCellValueByColumnAndRow($column, $block_row, $title);
         // $this->wrap_text($worksheet, $column, $block_row);
         $worksheet->mergeCells('A' . $block_row . ':G' . $block_row);
