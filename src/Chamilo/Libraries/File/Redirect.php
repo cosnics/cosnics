@@ -18,25 +18,25 @@ class Redirect
      *
      * @var string[]
      */
-    private $parameters;
+    protected $parameters;
 
     /**
      *
      * @var string[]
      */
-    private $filterParameters;
+    protected $filterParameters;
 
     /**
      *
      * @var boolean
      */
-    private $encodeEntities;
+    protected $encodeEntities;
 
     /**
      *
      * @var string
      */
-    private $anchor;
+    protected $anchor;
 
     /**
      *
@@ -75,7 +75,7 @@ class Redirect
      *
      * @return string[]
      */
-    private function getParameters()
+    protected function getParameters()
     {
         return $this->parameters;
     }
@@ -147,7 +147,7 @@ class Redirect
      *
      * @return string[]
      */
-    private function getFilteredParameters()
+    protected function getFilteredParameters()
     {
         $parameters = $this->getParameters();
         $filterParameters = $this->getFilterParameters();
@@ -177,7 +177,7 @@ class Redirect
      * @param string[] $parameters
      * @return string
      */
-    private function getWebLink($url, $parameters = array ())
+    protected function getWebLink($url, $parameters = array ())
     {
         $parameters = $this->getFilteredParameters();
 

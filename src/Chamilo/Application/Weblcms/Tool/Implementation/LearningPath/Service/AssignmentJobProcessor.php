@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager;
+use Chamilo\Core\Notification\Domain\NotificationRedirect;
 use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Domain\ViewingContext;
 use Chamilo\Core\Notification\Service\FilterManager;
@@ -211,7 +212,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             )
         ];
 
-        $redirect = new Redirect($parameters);
+        $redirect = new NotificationRedirect($parameters);
         $url = $redirect->getUrl();
 
         return $url;
@@ -257,7 +258,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             $this->filterManager->getOrCreateFilterByPath(
                 'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId(),
                 new TranslationContext(
-                    'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 'NotificationFilterPublication',
+                    'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', 'NotificationFilterPublication',
                     [
                         '{COURSE_TITLE}' => $course->get_title(), '{LEARNING_PATH_TITLE}' => $learningPath->get_title()
                     ]
@@ -267,7 +268,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             $this->filterManager->getOrCreateFilterByPath(
                 'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $treeNodeData->getId(),
                 new TranslationContext(
-                    'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 'NotificationFilterLearningPathAssignment',
+                    'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', 'NotificationFilterLearningPathAssignment',
                     [
                         '{COURSE_TITLE}' => $course->get_title(), '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                         '{ASSIGNMENT_TITLE}' => $assignment->get_title()

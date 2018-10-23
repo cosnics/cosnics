@@ -28,7 +28,7 @@ class EntryNotificationJobProcessor extends AssignmentJobProcessor implements Jo
     public function processJob(Job $job)
     {
         $entryId = $job->getParameter(self::PARAM_ENTRY_ID);
-        $contentObjectPublicationId = $job->getParameter(self::PARAM_ENTRY_ID);
+        $contentObjectPublicationId = $job->getParameter(self::PARAM_CONTENT_OBJECT_PUBLICATION_ID);
         $this->processForEntry($entryId, $contentObjectPublicationId);
     }
 

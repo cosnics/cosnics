@@ -7,6 +7,7 @@ use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Notification\Storage\Entity\Notification;
 use Chamilo\Core\Notification\Storage\Entity\UserNotification;
 use Chamilo\Core\Notification\Storage\Repository\NotificationRepository;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Core\Notification\Service
@@ -86,5 +87,27 @@ class NotificationManager
         }
 
         $this->notificationRepository->createUserNotifications($userNotifications);
+    }
+
+    /**
+     * @param \Chamilo\Core\Notification\Storage\Entity\Filter $filter
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return Notification[]
+     */
+    public function getNotificationsByFilterForUser(Filter $filter, User $user)
+    {
+        return $this->notificationRepository->findNotificationsByFilterForUser($filter, $user);
+    }
+
+    /**
+     * @param \Chamilo\Core\Notification\Storage\Entity\Filter $filter
+     * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
+     *
+     * * @return Notification[]
+     */
+    public function getNotificationsByFilter(Filter $filter, User $user = null)
+    {
+        return $this->notificationRepository->findNotificationsByFilter($filter, $user);
     }
 }

@@ -29,14 +29,14 @@ class Filter
     /**
      * @var string
      *
-     * @ORM\Column(name="path", type="string", nullable=false)
+     * @ORM\Column(name="path", type="string", nullable=false, length=512)
      */
     protected $path;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description_context", type="string", nullable=false, length=1024)
+     * @ORM\Column(name="description_context", type="text", nullable=false)
      */
     protected $descriptionContext;
 

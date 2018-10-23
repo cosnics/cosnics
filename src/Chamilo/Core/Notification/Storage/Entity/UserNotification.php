@@ -53,6 +53,13 @@ class UserNotification
     protected $read;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_viewed", type="boolean")
+     */
+    protected $viewed;
+
+    /**
      * @return int
      */
     public function getId()
@@ -116,6 +123,26 @@ class UserNotification
     public function setRead(bool $read)
     {
         $this->read = $read;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isViewed()
+    {
+        return $this->viewed;
+    }
+
+    /**
+     * @param bool $viewed
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification
+     */
+    public function setViewed(bool $viewed)
+    {
+        $this->viewed = $viewed;
 
         return $this;
     }

@@ -23,7 +23,7 @@ class NotificationTrigger
     /**
      * @var string
      *
-     * @ORM\Column(name="description_variable", type="string", nullable=false, length="1024")
+     * @ORM\Column(name="description_variable", type="text", nullable=false)
      */
     protected $notificationContext;
 

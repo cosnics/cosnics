@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager;
+use Chamilo\Core\Notification\Domain\NotificationRedirect;
 use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Domain\ViewingContext;
 use Chamilo\Core\Notification\Service\FilterManager;
@@ -183,7 +184,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             )
         ];
 
-        $redirect = new Redirect($parameters);
+        $redirect = new NotificationRedirect($parameters);
         $url = $redirect->getUrl();
 
         return $url;
@@ -205,14 +206,14 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             $this->filterManager->getOrCreateFilterByPath(
                 'Chamilo\\Application\\Weblcms::Course:' . $course->getId(),
                 new TranslationContext(
-                    'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 'NotificationFilterCourse',
+                    'Chamilo\Application\Weblcms', 'NotificationFilterCourse',
                     ['{COURSE_TITLE}' => $course->get_title()]
                 )
             ),
             $this->filterManager->getOrCreateFilterByPath(
                 'Chamilo\\Application\\Weblcms::Tool:' . $publication->get_tool() . '::Course:' . $publication->get_course_id(),
                 new TranslationContext(
-                    'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 'NotificationFilterTool',
+                    'Chamilo\Application\Weblcms', 'NotificationFilterTool',
                     [
                         '{COURSE_TITLE}' => $course->get_title(),
                         '{TOOL}' => new TranslationContext(
