@@ -71,6 +71,7 @@ class PropertiesConditionVariable extends ConditionVariable
      * Determines the alias of the dataclass
      *
      * @return string
+     * @deprecated DO NOT use this anymore!
      */
     public function get_alias()
     {

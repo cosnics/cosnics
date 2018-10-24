@@ -27,6 +27,7 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Exception\ConnectionException;
@@ -441,6 +442,12 @@ class DependencyInjectionContainerBuilder
 
             $exceptionLoggerFactory = new ExceptionLoggerFactory($this->getFileConfigurationConsulter());
 
+            $conditionPartTranslatorService = new ConditionPartTranslatorService(
+                new ConditionPartTranslatorFactory($this->getClassnameUtilities()),
+                new ConditionPartCache(),
+                $this->getFileConfigurationConsulter()->getSetting(
+                    array('Chamilo\Configuration', 'debug', 'enable_query_cache')));
+
             $this->registrationConsulter = new RegistrationConsulter(
                 $this->getStringUtilities(),
                 new DataCacheLoader(
@@ -453,11 +460,8 @@ class DependencyInjectionContainerBuilder
                                     $connectionFactory->getConnection(),
                                     new StorageAliasGenerator($this->getClassnameUtilities()),
                                     $exceptionLoggerFactory->createExceptionLogger(),
-                                    new ConditionPartTranslatorService(
-                                        new ConditionPartTranslatorFactory($this->getClassnameUtilities()),
-                                        new ConditionPartCache(),
-                                        $this->getFileConfigurationConsulter()->getSetting(
-                                            array('Chamilo\Configuration', 'debug', 'enable_query_cache')))),
+                                    $conditionPartTranslatorService,
+                                    new ParametersProcessor($conditionPartTranslatorService)),
                                 new DataClassFactory())))));
         }
 

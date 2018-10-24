@@ -148,7 +148,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
                 if ($options['autoincrement'] == true)
                 {
-                    $primaryKeyName = $this->getStorageAliasGenerator()->get_constraint_name(
+                    $primaryKeyName = $this->getStorageAliasGenerator()->getConstraintName(
                         $storageUnitName,
                         $storageUnitName,
                         StorageAliasGenerator::TYPE_CONSTRAINT);
@@ -159,7 +159,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
             foreach ($indexes as $index => $attributes)
             {
-                $indexName = $this->getStorageAliasGenerator()->get_constraint_name(
+                $indexName = $this->getStorageAliasGenerator()->getConstraintName(
                     $storageUnitName,
                     $index,
                     StorageAliasGenerator::TYPE_CONSTRAINT);

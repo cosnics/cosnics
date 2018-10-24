@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
- * @deprecated Use DataClassIterator, RecordIterator or ArrayIterator now
+ * @deprecated Use DataClassIterator or ArrayIterator now
  */
 class DataClassResultSet extends ArrayResultSet
 {

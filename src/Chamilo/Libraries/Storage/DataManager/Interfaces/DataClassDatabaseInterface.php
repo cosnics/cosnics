@@ -1,11 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Interfaces;
 
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
@@ -40,7 +43,7 @@ interface DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      * @return string[]
      */
-    public function retrieve($dataClassName, $parameters = null);
+    public function retrieve($dataClassName, DataClassRetrieveParameters $parameters);
 
     /**
      *
@@ -53,10 +56,10 @@ interface DataClassDatabaseInterface
     /**
      *
      * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
      * @return string[]
      */
-    public function record($dataClassName, $parameters = null);
+    public function record($dataClassName, RecordRetrieveParameters $parameters);
 
     /**
      *
@@ -74,7 +77,7 @@ interface DataClassDatabaseInterface
      * @throws Exception
      * @return boolean
      */
-    public function update($dataClassStorageUnitName, Condition $condition, $propertiesToUpdate);
+    public function update($dataClassStorageUnitName, Condition $condition = null, $propertiesToUpdate);
 
     /**
      *
@@ -84,7 +87,7 @@ interface DataClassDatabaseInterface
      * @throws Exception
      * @return boolean
      */
-    public function updates($dataClassName, DataClassProperties $properties, $condition);
+    public function updates($dataClassName, DataClassProperties $properties, Condition $condition = null);
 
     /**
      *
@@ -92,7 +95,7 @@ interface DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @return boolean
      */
-    public function delete($dataClassName, $condition);
+    public function delete($dataClassName, Condition $condition = null);
 
     /**
      *
@@ -100,7 +103,7 @@ interface DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
      * @return integer
      */
-    public function count($dataClassName, $parameters);
+    public function count($dataClassName, DataClassCountParameters $parameters);
 
     /**
      *
@@ -108,7 +111,7 @@ interface DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
      * @return integer[]
      */
-    public function countGrouped($dataClassName, $parameters);
+    public function countGrouped($dataClassName, DataClassCountGroupedParameters $parameters);
 
     /**
      *
@@ -117,22 +120,6 @@ interface DataClassDatabaseInterface
      * @return string[]
      */
     public function distinct($dataClassName, DataClassDistinctParameters $parameters);
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param string $property
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @return integer
-     */
-    public function retrieveMaximumValue($dataClassName, $property, Condition $condition = null);
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\CompositeDataClass $compositeDataClass
-     * @return string[]
-     */
-    public function retrieveCompositeDataClassAdditionalProperties(CompositeDataClass $compositeDataClass);
 
     /**
      *

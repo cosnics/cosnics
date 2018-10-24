@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Course\OpenCourse\Service\Interfaces;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  */
 interface OpenCourseServiceInterface
 {
+
     /**
      * Retrieves the open courses for a given user
      *
@@ -22,11 +23,9 @@ interface OpenCourseServiceInterface
      * @param int $count
      * @param OrderBy[] $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
-    public function getOpenCourses(
-        User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = array()
-    );
+    public function getOpenCourses(User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = array());
 
     /**
      * Returns the closed courses
@@ -36,7 +35,7 @@ interface OpenCourseServiceInterface
      * @param int $count
      * @param array $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function getClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array());
 
@@ -77,6 +76,7 @@ interface OpenCourseServiceInterface
      * @param int[] $roleIds
      *
      * @return
+     *
      */
     public function attachRolesToCoursesByIds(User $user, $courseIds = array(), $roleIds = array());
 
@@ -89,6 +89,7 @@ interface OpenCourseServiceInterface
      * @param int[] $roleIds
      *
      * @return
+     *
      */
     public function updateRolesForCourses(User $user, $courseIds = array(), $roleIds = array());
 
@@ -99,6 +100,7 @@ interface OpenCourseServiceInterface
      * @param int[] $courseIds
      *
      * @return
+     *
      */
     public function removeCoursesAsOpenCourse(User $user, $courseIds);
 

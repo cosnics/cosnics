@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
@@ -21,16 +20,19 @@ class AttemptSummaryCalculator
     const STATISTICS_NOT_STARTED = 2;
 
     /**
+     *
      * @var string[][][][]
      */
     protected $treeNodeStatisticsCache;
 
     /**
+     *
      * @var AttemptService
      */
     protected $attemptService;
 
     /**
+     *
      * @var TrackingRepositoryInterface
      */
     protected $trackingRepository;
@@ -41,9 +43,7 @@ class AttemptSummaryCalculator
      * @param AttemptService $attemptService
      * @param TrackingRepositoryInterface $trackingRepository
      */
-    public function __construct(
-        AttemptService $attemptService, TrackingRepositoryInterface $trackingRepository
-    )
+    public function __construct(AttemptService $attemptService, TrackingRepositoryInterface $trackingRepository)
     {
         $this->treeNodeStatisticsCache = [];
         $this->attemptService = $attemptService;
@@ -59,9 +59,7 @@ class AttemptSummaryCalculator
      *
      * @return int|string
      */
-    public function getTotalTimeSpentInTreeNode(
-        LearningPath $learningPath, User $user, TreeNode $treeNode
-    )
+    public function getTotalTimeSpentInTreeNode(LearningPath $learningPath, User $user, TreeNode $treeNode)
     {
         $totalTime = 0;
 
@@ -83,7 +81,7 @@ class AttemptSummaryCalculator
     }
 
     /**
-     * Returns the average score of the given user  in the given TreeNode
+     * Returns the average score of the given user in the given TreeNode
      *
      * @param LearningPath $learningPath
      * @param User $user
@@ -91,9 +89,7 @@ class AttemptSummaryCalculator
      *
      * @return float
      */
-    public function getAverageScoreInTreeNode(
-        LearningPath $learningPath, User $user, TreeNode $treeNode
-    )
+    public function getAverageScoreInTreeNode(LearningPath $learningPath, User $user, TreeNode $treeNode)
     {
         $totalScore = 0;
         $treeNodeAttempts = $this->attemptService->getTreeNodeAttemptsForTreeNode($learningPath, $user, $treeNode);
@@ -120,9 +116,7 @@ class AttemptSummaryCalculator
      *
      * @return int
      */
-    public function getMaximumScoreInTreeNode(
-        LearningPath $learningPath, User $user, TreeNode $treeNode
-    )
+    public function getMaximumScoreInTreeNode(LearningPath $learningPath, User $user, TreeNode $treeNode)
     {
         $maximumScore = 0;
 
@@ -130,8 +124,7 @@ class AttemptSummaryCalculator
 
         foreach ($treeNodeAttempts as $treeNodeAttempt)
         {
-            $maximumScore = $maximumScore < $treeNodeAttempt->get_score() ?
-                (int) $treeNodeAttempt->get_score() : $maximumScore;
+            $maximumScore = $maximumScore < $treeNodeAttempt->get_score() ? (int) $treeNodeAttempt->get_score() : $maximumScore;
         }
 
         return $maximumScore;
@@ -146,9 +139,7 @@ class AttemptSummaryCalculator
      *
      * @return int
      */
-    public function getMinimumScoreInTreeNode(
-        LearningPath $learningPath, User $user, TreeNode $treeNode
-    )
+    public function getMinimumScoreInTreeNode(LearningPath $learningPath, User $user, TreeNode $treeNode)
     {
         $minimumScore = null;
 
@@ -156,8 +147,7 @@ class AttemptSummaryCalculator
 
         foreach ($treeNodeAttempts as $treeNodeAttempt)
         {
-            $minimumScore = is_null($minimumScore) || $minimumScore > $treeNodeAttempt->get_score() ?
-                (int) $treeNodeAttempt->get_score() : $minimumScore;
+            $minimumScore = is_null($minimumScore) || $minimumScore > $treeNodeAttempt->get_score() ? (int) $treeNodeAttempt->get_score() : $minimumScore;
         }
 
         if (is_null($minimumScore))
@@ -177,14 +167,12 @@ class AttemptSummaryCalculator
      *
      * @return string
      */
-    public function getLastAttemptScoreForTreeNode(
-        LearningPath $learningPath, User $user, TreeNode $treeNode
-    )
+    public function getLastAttemptScoreForTreeNode(LearningPath $learningPath, User $user, TreeNode $treeNode)
     {
         $treeNodeAttempts = $this->attemptService->getTreeNodeAttemptsForTreeNode($learningPath, $user, $treeNode);
         $treeNodeAttempt = array_pop($treeNodeAttempts);
 
-        if (!$treeNodeAttempt instanceof TreeNodeAttempt)
+        if (! $treeNodeAttempt instanceof TreeNodeAttempt)
         {
             return 0;
         }
@@ -198,11 +186,9 @@ class AttemptSummaryCalculator
      * @param LearningPath $learningPath
      * @param TreeNode $treeNode
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findTargetUsersWithoutLearningPathAttempts(
-        LearningPath $learningPath, TreeNode $treeNode
-    )
+    public function findTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode)
     {
         $statistics = $this->getLearningPathStatisticsForTreeNode($learningPath, $treeNode);
 
@@ -217,9 +203,7 @@ class AttemptSummaryCalculator
      *
      * @return int
      */
-    public function countTargetUsersWithoutLearningPathAttempts(
-        LearningPath $learningPath, TreeNode $treeNode
-    )
+    public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode)
     {
         $statistics = $this->getLearningPathStatisticsForTreeNode($learningPath, $treeNode);
 
@@ -234,9 +218,7 @@ class AttemptSummaryCalculator
      *
      * @return int
      */
-    public function countTargetUsersWithFullLearningPathAttempts(
-        LearningPath $learningPath, TreeNode $treeNode
-    )
+    public function countTargetUsersWithFullLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode)
     {
         $statistics = $this->getLearningPathStatisticsForTreeNode($learningPath, $treeNode);
 
@@ -249,11 +231,9 @@ class AttemptSummaryCalculator
      * @param LearningPath $learningPath
      * @param TreeNode $treeNode
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findTargetUsersWithPartialLearningPathAttempts(
-        LearningPath $learningPath, TreeNode $treeNode
-    )
+    public function findTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode)
     {
         $statistics = $this->getLearningPathStatisticsForTreeNode($learningPath, $treeNode);
 
@@ -268,9 +248,7 @@ class AttemptSummaryCalculator
      *
      * @return int
      */
-    public function countTargetUsersWithPartialLearningPathAttempts(
-        LearningPath $learningPath, TreeNode $treeNode
-    )
+    public function countTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode)
     {
         $statistics = $this->getLearningPathStatisticsForTreeNode($learningPath, $treeNode);
 
@@ -285,35 +263,30 @@ class AttemptSummaryCalculator
      *
      * @return \string[][][]
      */
-    protected function getLearningPathStatisticsForTreeNode(
-        LearningPath $learningPath, TreeNode $treeNode
-    )
+    protected function getLearningPathStatisticsForTreeNode(LearningPath $learningPath, TreeNode $treeNode)
     {
         $cacheKey = md5($learningPath->getId() . ':' . $treeNode->getId());
-        if (!array_key_exists($cacheKey, $this->treeNodeStatisticsCache))
+        if (! array_key_exists($cacheKey, $this->treeNodeStatisticsCache))
         {
             $treeNodeDataIds = $treeNode->getTreeNodeDataIdsFromSelfAndDescendants();
 
             $usersWithCompletedNodesCount = $this->trackingRepository->findTargetUsersWithLearningPathAttempts(
-                $learningPath, $treeNodeDataIds
-            );
+                $learningPath,
+                $treeNodeDataIds);
 
             foreach ($usersWithCompletedNodesCount as $userWithCompletedNodesCount)
             {
                 if ($userWithCompletedNodesCount['nodes_completed'] == count($treeNodeDataIds))
                 {
-                    $this->treeNodeStatisticsCache[$cacheKey][self::STATISTICS_COMPLETED][] =
-                        $userWithCompletedNodesCount;
+                    $this->treeNodeStatisticsCache[$cacheKey][self::STATISTICS_COMPLETED][] = $userWithCompletedNodesCount;
                 }
                 elseif ($userWithCompletedNodesCount['nodes_completed'] == 0)
                 {
-                    $this->treeNodeStatisticsCache[$cacheKey][self::STATISTICS_NOT_STARTED][] =
-                        $userWithCompletedNodesCount;
+                    $this->treeNodeStatisticsCache[$cacheKey][self::STATISTICS_NOT_STARTED][] = $userWithCompletedNodesCount;
                 }
                 else
                 {
-                    $this->treeNodeStatisticsCache[$cacheKey][self::STATISTICS_STARTED][] =
-                        $userWithCompletedNodesCount;
+                    $this->treeNodeStatisticsCache[$cacheKey][self::STATISTICS_STARTED][] = $userWithCompletedNodesCount;
                 }
             }
         }

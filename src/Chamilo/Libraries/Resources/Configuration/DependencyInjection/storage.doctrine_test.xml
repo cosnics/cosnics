@@ -46,6 +46,9 @@
                     id="chamilo.libraries.storage.data_manager.doctrine.service.condition_part_translator_service" />
             <argument
                     type="service"
+                    id="chamilo.libraries.storage.data_manager.doctrine.service.parameters_processor" />
+            <argument
+                    type="service"
                     id="chamilo.libraries.storage.data_manager.doctrine.processor.record_processor" />
         </service>
 

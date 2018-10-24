@@ -14,70 +14,69 @@ class OperationConditionVariable extends ConditionVariable
     /**
      * A constant defining an addition
      *
-     * @var int
+     * @var integer
      */
     const ADDITION = 1;
 
     /**
      * A constant defining a subtraction
      *
-     * @var int
+     * @var integer
      */
     const MINUS = 2;
 
     /**
      * A constant defining a multiplication
      *
-     * @var int
+     * @var integer
      */
     const MULTIPLICATION = 3;
 
     /**
      * A constant defining a division
      *
-     * @var int
+     * @var integer
      */
     const DIVISION = 4;
 
     /**
      * Bits that are set in both $a and $b are set
      *
-     * @var int
+     * @var integer
      */
     const BITWISE_AND = 5;
 
     /**
      * Bits that are set in either $a or $b are set
      *
-     * @var int
+     * @var integer
      */
     const BITWISE_OR = 6;
 
     /**
      * The ConditionVariable on the left side of the operation
      *
-     * @var \libraries\storage\ConditionVariable
+     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     private $left;
 
     /**
      * The operator that connects both ConditionVariables
      *
-     * @var int
+     * @var integer
      */
     private $operator;
 
     /**
      * The ConditionVariable on the right side of the operation
      *
-     * @var \libraries\storage\ConditionVariable
+     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     private $right;
 
     /**
      * Constructor
      *
-     * @param string $context
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $left
      * @param integer $operator
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $right
@@ -112,7 +111,7 @@ class OperationConditionVariable extends ConditionVariable
     /**
      * Get the operator that connects both ConditionVariables
      *
-     * @return int
+     * @return integer
      */
     public function get_operator()
     {
@@ -122,7 +121,7 @@ class OperationConditionVariable extends ConditionVariable
     /**
      * Set the operator that connects both ConditionVariables
      *
-     * @param $operator int
+     * @param integer $operator
      */
     public function set_operator($operator)
     {

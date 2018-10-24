@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Course\OpenCourse\Test\Unit\Service;
 
 use Chamilo\Application\Weblcms\Course\OpenCourse\Service\Interfaces\OpenCourseServiceInterface;
@@ -12,7 +11,7 @@ use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
@@ -22,17 +21,21 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  */
 class OpenCourseServiceTest extends ChamiloTestCase
 {
+
     /**
+     *
      * @var OpenCourseRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $openCourseRepositoryMock;
 
     /**
+     *
      * @var AuthorizationCheckerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $authorizationCheckerMock;
 
     /**
+     *
      * @var UserRoleServiceInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $userRoleServiceMock;
@@ -51,8 +54,9 @@ class OpenCourseServiceTest extends ChamiloTestCase
         $this->userRoleServiceMock = $this->getMockForAbstractClass(UserRoleServiceInterface::class);
 
         $this->openCourseService = new OpenCourseService(
-            $this->openCourseRepositoryMock, $this->authorizationCheckerMock, $this->userRoleServiceMock
-        );
+            $this->openCourseRepositoryMock,
+            $this->authorizationCheckerMock,
+            $this->userRoleServiceMock);
     }
 
     public function tearDown()
@@ -68,16 +72,13 @@ class OpenCourseServiceTest extends ChamiloTestCase
         $user = new User();
         $context = 'Chamilo\Application\Weblcms\Course\OpenCourse';
         $action = 'ManageOpenCourses';
-        $iterator = new RecordIterator(Course::class, [new Course()]);
+        $iterator = new DataClassIterator(Course::class, [new Course()]);
 
-        $this->authorizationCheckerMock->expects($this->once())
-            ->method('isAuthorized')
-            ->with($user, $context, $action)
-            ->will($this->returnValue(true));
+        $this->authorizationCheckerMock->expects($this->once())->method('isAuthorized')->with($user, $context, $action)->will(
+            $this->returnValue(true));
 
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('findAllOpenCourses')
-            ->will($this->returnValue($iterator));
+        $this->openCourseRepositoryMock->expects($this->once())->method('findAllOpenCourses')->will(
+            $this->returnValue($iterator));
 
         $this->assertEquals($iterator, $this->openCourseService->getOpenCourses($user));
     }
@@ -88,36 +89,28 @@ class OpenCourseServiceTest extends ChamiloTestCase
     public function testGetOpenCoursesNoManager()
     {
         $user = new User();
-        $iterator = new RecordIterator(Course::class, [new Course()]);
+        $iterator = new DataClassIterator(Course::class, [new Course()]);
         $roles = array(new Role());
 
-        $this->authorizationCheckerMock->expects($this->once())
-            ->method('isAuthorized')
-            ->will($this->returnValue(false));
+        $this->authorizationCheckerMock->expects($this->once())->method('isAuthorized')->will($this->returnValue(false));
 
-        $this->openCourseRepositoryMock->expects($this->never())
-            ->method('findAllOpenCourses');
+        $this->openCourseRepositoryMock->expects($this->never())->method('findAllOpenCourses');
 
-        $this->userRoleServiceMock->expects($this->once())
-            ->method('getRolesForUser')
-            ->with($user)
-            ->will($this->returnValue($roles));
+        $this->userRoleServiceMock->expects($this->once())->method('getRolesForUser')->with($user)->will(
+            $this->returnValue($roles));
 
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('findOpenCoursesByRoles')
-            ->with($roles)
-            ->will($this->returnValue($iterator));
+        $this->openCourseRepositoryMock->expects($this->once())->method('findOpenCoursesByRoles')->with($roles)->will(
+            $this->returnValue($iterator));
 
         $this->assertEquals($iterator, $this->openCourseService->getOpenCourses($user));
     }
 
     public function testGetClosedCourses()
     {
-        $iterator = new RecordIterator(Course::class, [new Course()]);
+        $iterator = new DataClassIterator(Course::class, [new Course()]);
 
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('findClosedCourses')
-            ->will($this->returnValue($iterator));
+        $this->openCourseRepositoryMock->expects($this->once())->method('findClosedCourses')->will(
+            $this->returnValue($iterator));
 
         $this->assertEquals($iterator, $this->openCourseService->getClosedCourses());
     }
@@ -130,14 +123,11 @@ class OpenCourseServiceTest extends ChamiloTestCase
 
         $fakeCount = 5;
 
-        $this->authorizationCheckerMock->expects($this->once())
-            ->method('isAuthorized')
-            ->with($user, $context, $action)
-            ->will($this->returnValue(true));
+        $this->authorizationCheckerMock->expects($this->once())->method('isAuthorized')->with($user, $context, $action)->will(
+            $this->returnValue(true));
 
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('countAllOpenCourses')
-            ->will($this->returnValue($fakeCount));
+        $this->openCourseRepositoryMock->expects($this->once())->method('countAllOpenCourses')->will(
+            $this->returnValue($fakeCount));
 
         $this->assertEquals($fakeCount, $this->openCourseService->countOpenCourses($user));
     }
@@ -150,24 +140,17 @@ class OpenCourseServiceTest extends ChamiloTestCase
         $user = new User();
         $roles = array(new Role());
 
-        $this->authorizationCheckerMock->expects($this->once())
-            ->method('isAuthorized')
-            ->will($this->returnValue(false));
+        $this->authorizationCheckerMock->expects($this->once())->method('isAuthorized')->will($this->returnValue(false));
 
-        $this->openCourseRepositoryMock->expects($this->never())
-            ->method('countAllOpenCourses');
+        $this->openCourseRepositoryMock->expects($this->never())->method('countAllOpenCourses');
 
-        $this->userRoleServiceMock->expects($this->once())
-            ->method('getRolesForUser')
-            ->with($user)
-            ->will($this->returnValue($roles));
+        $this->userRoleServiceMock->expects($this->once())->method('getRolesForUser')->with($user)->will(
+            $this->returnValue($roles));
 
         $fakeCount = 5;
 
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('countOpenCoursesByRoles')
-            ->with($roles)
-            ->will($this->returnValue($fakeCount));
+        $this->openCourseRepositoryMock->expects($this->once())->method('countOpenCoursesByRoles')->with($roles)->will(
+            $this->returnValue($fakeCount));
 
         $this->assertEquals($fakeCount, $this->openCourseService->countOpenCourses($user));
     }
@@ -176,9 +159,8 @@ class OpenCourseServiceTest extends ChamiloTestCase
     {
         $fakeCount = 5;
 
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('countClosedCourses')
-            ->will($this->returnValue($fakeCount));
+        $this->openCourseRepositoryMock->expects($this->once())->method('countClosedCourses')->will(
+            $this->returnValue($fakeCount));
 
         $this->assertEquals($fakeCount, $this->openCourseService->countClosedCourses());
     }
@@ -188,10 +170,8 @@ class OpenCourseServiceTest extends ChamiloTestCase
         $course = new Course();
         $resultSet = new ArrayResultSet(array(new Role()));
 
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('getRolesForOpenCourse')
-            ->with($course)
-            ->will($this->returnValue($resultSet));
+        $this->openCourseRepositoryMock->expects($this->once())->method('getRolesForOpenCourse')->with($course)->will(
+            $this->returnValue($resultSet));
 
         $this->assertEquals($resultSet, $this->openCourseService->getRolesForOpenCourse($course));
     }
@@ -206,23 +186,19 @@ class OpenCourseServiceTest extends ChamiloTestCase
         $context = 'Chamilo\Application\Weblcms\Course\OpenCourse';
         $action = 'ManageOpenCourses';
 
-        $this->authorizationCheckerMock->expects($this->once())
-            ->method('checkAuthorization')
-            ->with($user, $context, $action);
+        $this->authorizationCheckerMock->expects($this->once())->method('checkAuthorization')->with(
+            $user,
+            $context,
+            $action);
 
-        $this->openCourseRepositoryMock->expects($this->exactly(4))
-            ->method('create')
-            ->withConsecutive(
-                $this->callback(
-                    function ($courseEntityRelation)
-                    {
-                        return $courseEntityRelation instanceof CourseEntityRelation &&
-                        $courseEntityRelation->getEntityType() == CourseEntityRelation::ENTITY_TYPE_ROLE &&
-                        $courseEntityRelation->getEntityId() == 3 && $courseEntityRelation->get_course_id() == 2;
-                    }
-                )
-            )
-            ->will($this->returnValue(true));
+        $this->openCourseRepositoryMock->expects($this->exactly(4))->method('create')->withConsecutive(
+            $this->callback(
+                function ($courseEntityRelation)
+                {
+                    return $courseEntityRelation instanceof CourseEntityRelation &&
+                         $courseEntityRelation->getEntityType() == CourseEntityRelation::ENTITY_TYPE_ROLE &&
+                         $courseEntityRelation->getEntityId() == 3 && $courseEntityRelation->get_course_id() == 2;
+                }))->will($this->returnValue(true));
 
         $this->openCourseService->attachRolesToCoursesByIds($user, $courseIds, $roleIds);
     }
@@ -231,8 +207,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
     {
         $user = new User();
 
-        $this->openCourseRepositoryMock->expects($this->never())
-            ->method('create');
+        $this->openCourseRepositoryMock->expects($this->never())->method('create');
 
         $this->openCourseService->attachRolesToCoursesByIds($user, array(2, 4), array());
     }
@@ -241,8 +216,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
     {
         $user = new User();
 
-        $this->openCourseRepositoryMock->expects($this->never())
-            ->method('create');
+        $this->openCourseRepositoryMock->expects($this->never())->method('create');
 
         $this->openCourseService->attachRolesToCoursesByIds($user, array(), array(3, 5));
     }
@@ -254,23 +228,19 @@ class OpenCourseServiceTest extends ChamiloTestCase
     {
         $user = new User();
 
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue(false));
+        $this->openCourseRepositoryMock->expects($this->once())->method('create')->will($this->returnValue(false));
 
         $this->openCourseService->attachRolesToCoursesByIds($user, array(2), array(1));
     }
 
     /**
      * Tests that the attachRolesToCoursesByIds function throws an exception if you are no manager for open courses
-     *
      * @expectedException \Exception
      */
     public function testAttachRolesToCoursesByIdsNoManager()
     {
-        $this->authorizationCheckerMock->expects($this->once())
-            ->method('checkAuthorization')
-            ->will($this->throwException(new \Exception()));
+        $this->authorizationCheckerMock->expects($this->once())->method('checkAuthorization')->will(
+            $this->throwException(new \Exception()));
 
         $this->openCourseService->attachRolesToCoursesByIds(new User(), array(2), array(1));
     }
@@ -284,28 +254,25 @@ class OpenCourseServiceTest extends ChamiloTestCase
         $context = 'Chamilo\Application\Weblcms\Course\OpenCourse';
         $action = 'ManageOpenCourses';
 
-        $this->authorizationCheckerMock->expects($this->once())
-            ->method('checkAuthorization')
-            ->with($user, $context, $action);
+        $this->authorizationCheckerMock->expects($this->once())->method('checkAuthorization')->with(
+            $user,
+            $context,
+            $action);
 
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('removeCoursesAsOpenCourse')
-            ->with($courseIds)
-            ->will($this->returnValue(true));
+        $this->openCourseRepositoryMock->expects($this->once())->method('removeCoursesAsOpenCourse')->with($courseIds)->will(
+            $this->returnValue(true));
 
         $this->openCourseService->removeCoursesAsOpenCourse($user, $courseIds);
     }
 
     /**
      * Tests that the removeCoursesAsOpenCourse function throws an exception if you are no manager for open courses
-     * 
      * @expectedException \Exception
      */
     public function testRemoveCoursesAsOpenCourseNoManager()
     {
-        $this->authorizationCheckerMock->expects($this->once())
-            ->method('checkAuthorization')
-            ->will($this->throwException(new \Exception()));
+        $this->authorizationCheckerMock->expects($this->once())->method('checkAuthorization')->will(
+            $this->throwException(new \Exception()));
 
         $this->openCourseService->removeCoursesAsOpenCourse(new User(), array(2));
     }
@@ -315,9 +282,8 @@ class OpenCourseServiceTest extends ChamiloTestCase
      */
     public function testRemoveCoursesAsOpenCourseFails()
     {
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('removeCoursesAsOpenCourse')
-            ->will($this->returnValue(false));
+        $this->openCourseRepositoryMock->expects($this->once())->method('removeCoursesAsOpenCourse')->will(
+            $this->returnValue(false));
 
         $this->openCourseService->removeCoursesAsOpenCourse(new User(), array(2, 4));
     }
@@ -332,28 +298,22 @@ class OpenCourseServiceTest extends ChamiloTestCase
         $context = 'Chamilo\Application\Weblcms\Course\OpenCourse';
         $action = 'ManageOpenCourses';
 
-        $this->authorizationCheckerMock->expects($this->exactly(2))
-            ->method('checkAuthorization')
-            ->with($user, $context, $action);
+        $this->authorizationCheckerMock->expects($this->exactly(2))->method('checkAuthorization')->with(
+            $user,
+            $context,
+            $action);
 
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('removeCoursesAsOpenCourse')
-            ->with($courseIds)
-            ->will($this->returnValue(true));
+        $this->openCourseRepositoryMock->expects($this->once())->method('removeCoursesAsOpenCourse')->with($courseIds)->will(
+            $this->returnValue(true));
 
-        $this->openCourseRepositoryMock->expects($this->exactly(4))
-            ->method('create')
-            ->withConsecutive(
-                $this->callback(
-                    function ($courseEntityRelation)
-                    {
-                        return $courseEntityRelation instanceof CourseEntityRelation &&
-                        $courseEntityRelation->getEntityType() == CourseEntityRelation::ENTITY_TYPE_ROLE &&
-                        $courseEntityRelation->getEntityId() == 3 && $courseEntityRelation->get_course_id() == 2;
-                    }
-                )
-            )
-            ->will($this->returnValue(true));
+        $this->openCourseRepositoryMock->expects($this->exactly(4))->method('create')->withConsecutive(
+            $this->callback(
+                function ($courseEntityRelation)
+                {
+                    return $courseEntityRelation instanceof CourseEntityRelation &&
+                         $courseEntityRelation->getEntityType() == CourseEntityRelation::ENTITY_TYPE_ROLE &&
+                         $courseEntityRelation->getEntityId() == 3 && $courseEntityRelation->get_course_id() == 2;
+                }))->will($this->returnValue(true));
 
         $this->openCourseService->updateRolesForCourses($user, $courseIds, $roleIds);
     }
@@ -366,15 +326,11 @@ class OpenCourseServiceTest extends ChamiloTestCase
         $roles = array(new Role());
         $resultSet = new ArrayResultSet($roles);
 
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('getRolesForOpenCourse')
-            ->with($course)
-            ->will($this->returnValue($resultSet));
+        $this->openCourseRepositoryMock->expects($this->once())->method('getRolesForOpenCourse')->with($course)->will(
+            $this->returnValue($resultSet));
 
-        $this->userRoleServiceMock->expects($this->once())
-            ->method('doesUserHasAtLeastOneRole')
-            ->with($user, $roles)
-            ->will($this->returnValue(true));
+        $this->userRoleServiceMock->expects($this->once())->method('doesUserHasAtLeastOneRole')->with($user, $roles)->will(
+            $this->returnValue(true));
 
         $this->assertTrue($this->openCourseService->isCourseOpenForUser($course, $user));
     }
@@ -383,13 +339,11 @@ class OpenCourseServiceTest extends ChamiloTestCase
     {
         $resultSet = new ArrayResultSet(array(new Role()));
 
-        $this->openCourseRepositoryMock->expects($this->once())
-            ->method('getRolesForOpenCourse')
-            ->will($this->returnValue($resultSet));
+        $this->openCourseRepositoryMock->expects($this->once())->method('getRolesForOpenCourse')->will(
+            $this->returnValue($resultSet));
 
-        $this->userRoleServiceMock->expects($this->once())
-            ->method('doesUserHasAtLeastOneRole')
-            ->will($this->returnValue(false));
+        $this->userRoleServiceMock->expects($this->once())->method('doesUserHasAtLeastOneRole')->will(
+            $this->returnValue(false));
 
         $this->assertFalse($this->openCourseService->isCourseOpenForUser(new Course(), new User()));
     }

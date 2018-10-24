@@ -45,6 +45,9 @@
                     id="chamilo.libraries.storage.data_manager.doctrine.service.condition_part_translator_service" />
             <argument
                     type="service"
+                    id="chamilo.libraries.storage.data_manager.doctrine.service.parameters_processor" />
+            <argument
+                    type="service"
                     id="chamilo.libraries.storage.data_manager.doctrine.processor.record_processor" />
         </service>
 
@@ -114,6 +117,14 @@
                 type="service"
                 id="chamilo.libraries.storage.cache.condition_part_cache" />
             <argument>%chamilo.configuration.debug.enable_query_cache%</argument>
+        </service>
+        
+        <service
+            id="chamilo.libraries.storage.data_manager.doctrine.service.parameters_processor"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.service.condition_part_translator_service" />
         </service>
     </services>
 </container>

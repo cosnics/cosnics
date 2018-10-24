@@ -26,7 +26,7 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
      * @param int $count
      * @param OrderBy[] $order_property
      *
-     * @return ResultSet | RecordIterator
+     * @return ResultSet | DataClassIterator
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {

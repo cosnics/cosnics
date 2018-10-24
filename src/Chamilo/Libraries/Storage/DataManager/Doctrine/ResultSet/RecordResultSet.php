@@ -7,7 +7,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
- * @deprecated Use RecordIterator now
+ * @deprecated Use DataClassIterator now
  */
 class RecordResultSet extends \Chamilo\Libraries\Storage\ResultSet\RecordResultSet
 {

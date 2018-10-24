@@ -2,8 +2,10 @@
 namespace Chamilo\Configuration\Storage\Repository;
 
 use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 
 /**
  *
@@ -49,11 +51,14 @@ class ConfigurationRepository
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findSettingsAsRecords()
     {
-        return $this->getDataClassRepository()->records(Setting::class_name(), new RecordRetrievesParameters());
+        return $this->getDataClassRepository()->records(
+            Setting::class_name(),
+            new RecordRetrievesParameters(
+                new DataClassProperties(array(new PropertiesConditionVariable(Setting::class)))));
     }
 
     /**

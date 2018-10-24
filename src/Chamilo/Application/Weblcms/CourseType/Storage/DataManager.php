@@ -3,6 +3,8 @@ namespace Chamilo\Application\Weblcms\CourseType\Storage;
 
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeUserOrder;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
@@ -14,9 +16,9 @@ use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * This class represents the data manager for this package
@@ -67,7 +69,14 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $joins->add(new Join(CourseTypeUserOrder::class_name(), $join_condition, Join::TYPE_LEFT));
 
-        $parameters = new RecordRetrievesParameters(null, $condition, $max_objects, $offset, $order_by, $joins);
+        $parameters = new RecordRetrievesParameters(
+            new DataClassProperties(array(new PropertiesConditionVariable(CourseType::class))),
+            $condition,
+            $max_objects,
+            $offset,
+            $order_by,
+            $joins);
+
         return self::records(CourseType::class_name(), $parameters);
     }
 

@@ -322,7 +322,7 @@ class AttemptTrackingService
      * @param int $count
      * @param array $orderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getLearningPathAttemptsWithUser(
         LearningPath $learningPath, TreeNode $treeNode = null, Condition $condition = null,
@@ -363,7 +363,7 @@ class AttemptTrackingService
      * @param int $count
      * @param array $orderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getTargetUsersWithLearningPathAttempts(
         LearningPath $learningPath, TreeNode $treeNode = null,

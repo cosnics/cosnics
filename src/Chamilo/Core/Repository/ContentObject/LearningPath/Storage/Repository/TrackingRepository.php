@@ -10,7 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -188,7 +188,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
      * @param int $count
      * @param array $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function findLearningPathAttemptsWithUser(LearningPath $learningPath, $treeNodeDataIds = array(),
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array())
@@ -294,7 +294,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
      * @param int $count
      * @param array $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function findTargetUsersWithLearningPathAttempts(LearningPath $learningPath, $treeNodeDataIds = array(),
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array())
@@ -424,7 +424,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
      *
      * @param LearningPath $learningPath
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts(LearningPath $learningPath)
     {

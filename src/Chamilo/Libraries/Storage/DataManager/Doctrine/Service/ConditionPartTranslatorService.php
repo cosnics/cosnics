@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Service;
 
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
@@ -14,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class ConditionPartTranslatorService
+class ConditionPartTranslatorService implements ConditionPartTranslatorServiceInterface
 {
 
     /**
@@ -116,7 +117,7 @@ class ConditionPartTranslatorService
      *
      * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Condition\ConditionTranslator
+     * @return \Chamilo\Libraries\Storage\Query\ConditionPartTranslator
      */
     protected function getConditionPartTranslator(DataClassDatabaseInterface $dataClassDatabase,
         ConditionPart $conditionPart)

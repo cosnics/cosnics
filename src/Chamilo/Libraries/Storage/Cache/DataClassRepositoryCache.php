@@ -5,7 +5,6 @@ use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -13,7 +12,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -385,32 +383,5 @@ class DataClassRepositoryCache
         }
 
         return true;
-    }
-
-    /**
-     *
-     * @param string $className
-     * @param \Chamilo\Libraries\Storage\Iterator\RecordIterator $recordIterator
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     * @throws \Exception
-     * @return boolean
-     */
-    public function addForRecordIterator($className, RecordIterator $recordIterator,
-        RecordRetrievesParameters $parameters)
-    {
-        if (! $parameters instanceof RecordRetrievesParameters)
-        {
-            throw new \Exception('Illegal parameters passed to the RecordResultSetCache');
-        }
-
-        if (! $recordIterator instanceof RecordIterator)
-        {
-            $type = is_object($recordIterator) ? get_class($recordIterator) : gettype($recordIterator);
-            throw new \Exception(
-                'The RecordResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
-                     $type . '.');
-        }
-
-        return $this->add($className, $parameters, $recordIterator);
     }
 }

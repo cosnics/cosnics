@@ -20,6 +20,16 @@ class PropertiesConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate()
     {
-        return $this->getConditionVariable()->get_alias() . '.*';
+        $className = $this->getPropertiesConditionVariable()->get_class();
+        return $this->getDataClassDatabase()->getAlias($className::get_table_name()) . '.*';
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable
+     */
+    public function getPropertiesConditionVariable()
+    {
+        return $this->getConditionVariable();
     }
 }

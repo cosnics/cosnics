@@ -15,9 +15,9 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
      *
      * @see \Chamilo\Libraries\Storage\DataManager\DataSourceName::get_implemented_driver()
      */
-    public function get_implemented_driver()
+    public function getImplementedDriver()
     {
-        switch ($this->get_driver())
+        switch ($this->getDriver())
         {
             case self::DRIVER_OCI8 :
                 return 'Doctrine\DBAL\Driver\OCI8\Driver';

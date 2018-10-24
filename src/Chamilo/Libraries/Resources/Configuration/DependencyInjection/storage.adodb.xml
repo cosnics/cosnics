@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <!-- Connection -->
+        <service
+            id="chamilo.libraries.storage.data_manager.adodb.data_source_name"
+            class="Chamilo\Libraries\Storage\DataManager\AdoDb\DataSourceName">
+            <argument>%chamilo.configuration.database%</argument>
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.adodb.factory.connection_factory"
+            class="Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConnectionFactory">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.adodb.data_source_name" />
+        </service>
+
+        <service
+            id="adodb.connection"
+            class="ADOConnection">
+            <factory
+                service="chamilo.libraries.storage.data_manager.adodb.factory.connection_factory"
+                method="getConnection" />
+        </service>
+
+        <!-- Database Layer -->
+        <service
+            id="chamilo.libraries.storage.data_manager.adodb.database.data_class_database"
+            class="Chamilo\Libraries\Storage\DataManager\AdoDb\Database\DataClassDatabase">
+            <argument
+                type="service"
+                id="adodb.connection" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.storage_alias_generator" />
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.error_handler.exception_logger" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.adodb.service.condition_part_translator_service" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.adodb.service.parameters_processor" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.adodb.processor.record_processor" />
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.adodb.database.storage_unit_database"
+            class="Chamilo\Libraries\Storage\DataManager\AdoDb\Database\StorageUnitDatabase">
+            <argument
+                type="service"
+                id="adodb.connection" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.storage_alias_generator" />
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.error_handler.exception_logger" />
+        </service>
+
+        <!-- Repositories -->
+
+        <service
+            id="chamilo.libraries.storage.data_manager.adodb.data_class_repository"
+            class="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.cache.data_class_repository_cache" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.adodb.database.data_class_database" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_class.data_class_factory" />
+            <argument>%chamilo.configuration.debug.enable_query_cache%</argument>
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.adodb.storage_unit_repository"
+            class="Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.adodb.database.storage_unit_database" />
+        </service>
+
+        <!-- Utilities -->
+
+        <service
+            id="chamilo.libraries.storage.data_manager.adodb.factory.condition_part_translator_factory"
+            class="Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConditionPartTranslatorFactory">
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.classname_utilities" />
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.adodb.processor.record_processor"
+            class="Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor">
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.adodb.service.condition_part_translator_service"
+            class="Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.adodb.factory.condition_part_translator_factory" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.cache.condition_part_cache" />
+            <argument>%chamilo.configuration.debug.enable_query_cache%</argument>
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.adodb.service.parameters_processor"
+            class="Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ParametersProcessor">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.adodb.service.condition_part_translator_service" />
+        </service>
+    </services>
+</container>

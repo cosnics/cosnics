@@ -18,7 +18,7 @@ abstract class ConditionVariableTranslator
      *
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
-    private $condition_variable;
+    private $conditionVariable;
 
     /**
      *
@@ -26,7 +26,7 @@ abstract class ConditionVariableTranslator
      */
     public function __construct(ConditionVariable $conditionVariable)
     {
-        $this->condition_variable = $conditionVariable;
+        $this->conditionVariable = $conditionVariable;
     }
 
     /**
@@ -35,7 +35,7 @@ abstract class ConditionVariableTranslator
      */
     public function get_condition_variable()
     {
-        return $this->condition_variable;
+        return $this->conditionVariable;
     }
 
     /**
@@ -47,15 +47,15 @@ abstract class ConditionVariableTranslator
     /**
      *
      * @param string $type
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $condition_variable
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator
      */
-    public static function factory($type, ConditionVariable $condition_variable)
+    public static function factory($type, ConditionVariable $conditionVariable)
     {
         $class = 'Chamilo\Libraries\Storage\DataManager\\' . $type . '\Variable\\' .
-             ClassnameUtilities::getInstance()->getClassnameFromObject($condition_variable) . 'Translator';
+            ClassnameUtilities::getInstance()->getClassnameFromObject($conditionVariable) . 'Translator';
 
-        return new $class($condition_variable);
+            return new $class($conditionVariable);
     }
 
     /**

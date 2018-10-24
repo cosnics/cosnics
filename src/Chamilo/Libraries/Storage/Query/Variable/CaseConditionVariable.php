@@ -18,7 +18,7 @@ class CaseConditionVariable extends ConditionVariable
      *
      * @var \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable[]
      */
-    private $case_elements;
+    private $caseElements;
 
     /**
      * The alias of the case
@@ -35,7 +35,7 @@ class CaseConditionVariable extends ConditionVariable
      */
     public function __construct($caseElements = array(), $alias = null)
     {
-        $this->case_elements = $caseElements;
+        $this->caseElements = $caseElements;
         $this->alias = $alias;
     }
 
@@ -46,7 +46,7 @@ class CaseConditionVariable extends ConditionVariable
      */
     public function get_case_elements()
     {
-        return $this->case_elements;
+        return $this->caseElements;
     }
 
     /**
@@ -56,7 +56,7 @@ class CaseConditionVariable extends ConditionVariable
      */
     public function set_case_elements($caseElements)
     {
-        $this->case_elements = $caseElements;
+        $this->caseElements = $caseElements;
     }
 
     /**
@@ -66,7 +66,7 @@ class CaseConditionVariable extends ConditionVariable
      */
     public function add(CaseElementConditionVariable $case_element)
     {
-        $this->case_elements[] = $case_element;
+        $this->caseElements[] = $case_element;
     }
 
     /**

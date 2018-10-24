@@ -41,7 +41,7 @@ class StorageAliasGenerator
     {
         $this->classnameUtilities = $classnameUtilities;
 
-        foreach ($this->get_types() as $type)
+        foreach ($this->getTypes() as $type)
         {
             $this->aliases[$type] = array();
         }
@@ -81,8 +81,19 @@ class StorageAliasGenerator
     /**
      *
      * @return string[]
+     * @deprecated Use getTypes() now
      */
     public function get_types()
+
+    {
+        return $this->getTypes();
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getTypes()
     {
         return array(self::TYPE_TABLE, self::TYPE_CONSTRAINT);
     }
@@ -90,10 +101,32 @@ class StorageAliasGenerator
     /**
      *
      * @return string[]
+     * @deprecated Use getAliases() now
      */
     public function get_aliases()
+
+    {
+        return $this->getAliases();
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getAliases()
     {
         return $this->aliases;
+    }
+
+    /**
+     *
+     * @param unknown $class
+     * @return string
+     * @deprecated Use getDataClassAlias() now
+     */
+    public function get_data_class_alias($class)
+    {
+        return $this->getDataClassAlias($class);
     }
 
     /**
@@ -101,12 +134,23 @@ class StorageAliasGenerator
      * @param string $class
      * @return string
      */
-    public function get_data_class_alias($class)
+    public function getDataClassAlias($class)
     {
         $classnameUtilities = $this->getClassnameUtilities();
         $namespace = $classnameUtilities->getPackageNameFromNamespace(
             $classnameUtilities->getNamespaceFromClassname($class));
-        return $this->get_table_alias($class::get_table_name(), $namespace . '_');
+        return $this->getTableAlias($class::get_table_name(), $namespace . '_');
+    }
+
+    /**
+     *
+     * @param string $tableName
+     * @return string
+     * @deprecated Use getTableAlias() now
+     */
+    public function get_table_alias($tableName)
+    {
+        return $this->getTableAlias($tableName);
     }
 
     /**
@@ -114,37 +158,37 @@ class StorageAliasGenerator
      * @param string $table_name
      * @return string
      */
-    public function get_table_alias($table_name)
+    public function getTableAlias($tableName)
     {
-        if (array_key_exists($table_name, $this->aliases[self::TYPE_TABLE]))
+        if (array_key_exists($tableName, $this->aliases[self::TYPE_TABLE]))
         {
-            return $this->aliases[self::TYPE_TABLE][$table_name];
+            return $this->aliases[self::TYPE_TABLE][$tableName];
         }
         else
         {
-            $possible_name = 'alias_';
-            $parts = explode('_', $table_name);
+            $possibleName = 'alias_';
+            $parts = explode('_', $tableName);
 
             foreach ($parts as $part)
             {
-                $possible_name .= $part{0};
+                $possibleName .= $part{0};
             }
 
-            if (in_array($possible_name, $this->aliases[self::TYPE_TABLE]))
+            if (in_array($possibleName, $this->aliases[self::TYPE_TABLE]))
             {
-                $original_name = $possible_name;
+                $originalName = $possibleName;
                 $index = 'a';
 
-                while (in_array($possible_name, $this->aliases[self::TYPE_TABLE]))
+                while (in_array($possibleName, $this->aliases[self::TYPE_TABLE]))
                 {
-                    $possible_name = $original_name . '_' . $index;
+                    $possibleName = $originalName . '_' . $index;
                     $index ++;
                 }
             }
 
-            $this->aliases[self::TYPE_TABLE][$table_name] = $possible_name;
+            $this->aliases[self::TYPE_TABLE][$tableName] = $possibleName;
 
-            return $possible_name;
+            return $possibleName;
         }
     }
 
@@ -153,37 +197,49 @@ class StorageAliasGenerator
      * @param string $table_name
      * @param string $column
      * @return string
+     * @deprecated Use getConstraintName() now
      */
     public function get_constraint_name($table_name, $column)
     {
-        $possible_name = '';
-        $parts = explode('_', $table_name);
+        return $this->getConstraintName($table_name, $column);
+    }
+
+    /**
+     *
+     * @param string $tableName
+     * @param string $column
+     * @return string
+     */
+    public function getConstraintName($tableName, $column)
+    {
+        $possibleName = '';
+        $parts = explode('_', $tableName);
 
         foreach ($parts as $part)
         {
-            $possible_name .= $part{0};
+            $possibleName .= $part{0};
         }
 
-        $possible_name = $possible_name . '_' . $column;
+        $possibleName = $possibleName . '_' . $column;
 
-        if (! array_key_exists($possible_name, $this->aliases[self::TYPE_CONSTRAINT]))
+        if (! array_key_exists($possibleName, $this->aliases[self::TYPE_CONSTRAINT]))
         {
-            $this->aliases[self::TYPE_CONSTRAINT][$possible_name] = serialize(array($table_name, $column));
-            return $possible_name;
+            $this->aliases[self::TYPE_CONSTRAINT][$possibleName] = serialize(array($tableName, $column));
+            return $possibleName;
         }
         else
         {
-            $original_name = $possible_name;
+            $originalName = $possibleName;
             $index = 'a';
 
-            while (array_key_exists($possible_name, $this->aliases[self::TYPE_CONSTRAINT]))
+            while (array_key_exists($possibleName, $this->aliases[self::TYPE_CONSTRAINT]))
             {
-                $possible_name = $original_name . '_' . $index;
+                $possibleName = $originalName . '_' . $index;
                 $index ++;
             }
 
-            $this->aliases[self::TYPE_CONSTRAINT][$possible_name] = serialize(array($table_name, $column));
-            return $possible_name;
+            $this->aliases[self::TYPE_CONSTRAINT][$possibleName] = serialize(array($tableName, $column));
+            return $possibleName;
         }
     }
 }

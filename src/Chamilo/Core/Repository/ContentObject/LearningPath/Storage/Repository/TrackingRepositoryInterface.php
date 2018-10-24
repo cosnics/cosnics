@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -109,7 +109,7 @@ interface TrackingRepositoryInterface
      * @param int $count
      * @param array $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function findLearningPathAttemptsWithUser(LearningPath $learningPath, $treeNodeDataIds = array(),
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array());
@@ -136,7 +136,7 @@ interface TrackingRepositoryInterface
      * @param int $count
      * @param array $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function findTargetUsersWithLearningPathAttempts(LearningPath $learningPath, $treeNodeDataIds = array(),
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array());
@@ -157,7 +157,7 @@ interface TrackingRepositoryInterface
      *
      * @param LearningPath $learningPath
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts(LearningPath $learningPath);
 }

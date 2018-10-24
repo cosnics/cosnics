@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
@@ -26,10 +27,11 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 
 /**
  *
@@ -293,7 +295,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters = null)
     {
@@ -308,8 +310,7 @@ class DataClassRepository
 
             if (! $dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
-                $dataClassRepositoryCache->addForRecordIterator(
-                    $dataClassName,
+                $dataClassRepositoryCache->addForDataClassIterator(
                     $this->__records($dataClassName, $parameters),
                     $parameters);
             }
@@ -567,7 +568,18 @@ class DataClassRepository
      */
     public function retrieveMaximumValue($dataClassName, $property, Condition $condition = null)
     {
-        return $this->getDataClassDatabase()->retrieveMaximumValue($dataClassName, $property, $condition);
+        $parameters = new RecordRetrieveParameters(
+            new DataClassProperties(
+                array(
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::MAX,
+                        new PropertyConditionVariable($dataClassName, $property),
+                        self::ALIAS_MAX_SORT))),
+            $condition);
+
+        $record = $this->getDataClassDatabase()->record($dataClassName, $parameters);
+
+        return (int) $record[self::ALIAS_MAX_SORT];
     }
 
     /**
@@ -656,7 +668,18 @@ class DataClassRepository
      */
     public function retrieveCompositeDataClassAdditionalProperties(CompositeDataClass $compositeDataClass)
     {
-        return $this->getDataClassDatabase()->retrieveCompositeDataClassAdditionalProperties($compositeDataClass);
+        if (! $compositeDataClass->is_extended())
+        {
+            return array();
+        }
+
+        $parameters = new RecordRetrieveParameters(
+            new DataClassProperties(array(new PropertiesConditionVariable($compositeDataClass::class_name()))),
+            new EqualityCondition(
+                new PropertyConditionVariable($compositeDataClass::class_name(), $compositeDataClass::PROPERTY_ID),
+                new StaticConditionVariable($compositeDataClass->getId())));
+
+        return $this->getDataClassDatabase()->record($compositeDataClass, $parameters);
     }
 
     /**
@@ -705,11 +728,11 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     protected function __records($dataClassName, RecordRetrievesParameters $parameters)
     {
-        return new RecordIterator($dataClassName, $this->getDataClassDatabase()->records($dataClassName, $parameters));
+        return new DataClassIterator($dataClassName, $this->getDataClassDatabase()->records($dataClassName, $parameters));
     }
 
     /**

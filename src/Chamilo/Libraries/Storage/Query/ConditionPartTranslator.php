@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query;
 
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 
 /**
@@ -16,7 +16,7 @@ abstract class ConditionPartTranslator
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService
+     * @var \Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface
      */
     private $conditionPartTranslatorService;
 
@@ -34,11 +34,11 @@ abstract class ConditionPartTranslator
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface $conditionPartTranslatorService
      * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
      */
-    public function __construct(ConditionPartTranslatorService $conditionPartTranslatorService,
+    public function __construct(ConditionPartTranslatorServiceInterface $conditionPartTranslatorService,
         DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart)
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
@@ -48,7 +48,7 @@ abstract class ConditionPartTranslator
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService
+     * @return \Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface
      */
     public function getConditionPartTranslatorService()
     {
@@ -57,9 +57,10 @@ abstract class ConditionPartTranslator
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface $conditionPartTranslatorService
      */
-    public function setConditionPartTranslatorService(ConditionPartTranslatorService $conditionPartTranslatorService)
+    public function setConditionPartTranslatorService(
+        ConditionPartTranslatorServiceInterface $conditionPartTranslatorService)
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
     }

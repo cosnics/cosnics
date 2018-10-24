@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -62,7 +62,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      * @param int $count
      * @param OrderBy[] $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function getOpenCourses(User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = array())
     {
@@ -83,7 +83,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      * @param int $count
      * @param array $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function getClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array())
     {

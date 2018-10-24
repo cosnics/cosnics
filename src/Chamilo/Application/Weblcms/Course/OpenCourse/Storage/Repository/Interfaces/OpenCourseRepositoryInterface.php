@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Course\OpenCourse\Storage\Repository\Inter
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -23,7 +23,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      * @param int $count
      * @param OrderBy[] $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function findOpenCoursesByRoles($roles = array(), Condition $condition = null, $offset = null, $count = null, $orderBy = array());
 
@@ -35,7 +35,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      * @param int $count
      * @param OrderBy[] $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function findAllOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array());
 
@@ -47,7 +47,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      * @param int $count
      * @param OrderBy[] $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array());
 

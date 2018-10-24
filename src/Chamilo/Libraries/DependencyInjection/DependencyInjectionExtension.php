@@ -53,6 +53,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader->load('hashing.xml');
         $xmlFileLoader->load('platform.xml');
         $xmlFileLoader->load('storage.xml');
+        $xmlFileLoader->load('storage.adodb.xml');
         $xmlFileLoader->load('storage.doctrine.xml');
         $xmlFileLoader->load('storage.doctrine_test.xml');
         $xmlFileLoader->load('storage.doctrine_orm.xml');

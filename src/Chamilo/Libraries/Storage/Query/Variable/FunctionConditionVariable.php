@@ -14,28 +14,28 @@ class FunctionConditionVariable extends ConditionVariable
     /**
      * A constant defining a sum
      *
-     * @var int
+     * @var integer
      */
     const SUM = 1;
 
     /**
      * A constant defining a count
      *
-     * @var int
+     * @var integer
      */
     const COUNT = 2;
 
     /**
      * A constant defining a minimum
      *
-     * @var int
+     * @var integer
      */
     const MIN = 3;
 
     /**
      * A constant defining a maximum
      *
-     * @var int
+     * @var integer
      */
     const MAX = 4;
 

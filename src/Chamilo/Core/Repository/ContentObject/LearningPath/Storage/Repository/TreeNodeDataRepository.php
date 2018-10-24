@@ -56,7 +56,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(
             TreeNodeData::class_name(),
-            new DataClassRetrievesParameters($condition, null, null)
+            new DataClassRetrievesParameters($condition)
         );
     }
 

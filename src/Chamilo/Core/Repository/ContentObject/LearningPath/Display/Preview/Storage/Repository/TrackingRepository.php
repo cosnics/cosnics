@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Tracki
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Utilities\UUID;
 
@@ -343,7 +343,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      *
      * @param LearningPath $learningPath
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts(
         LearningPath $learningPath
@@ -389,7 +389,7 @@ class TrackingRepository implements TrackingRepositoryInterface
             }
         }
 
-        return new RecordIterator(TreeNodeAttempt::class_name(), $allData);
+        return new DataClassIterator(TreeNodeAttempt::class_name(), $allData);
     }
 
     /**
@@ -419,14 +419,14 @@ class TrackingRepository implements TrackingRepositoryInterface
      * @param int $count
      * @param array $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function findLearningPathAttemptsWithUser(
         LearningPath $learningPath, $treeNodeDataIds = array(),
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     )
     {
-        return new RecordIterator(DummyTreeNodeAttempt::class, array());
+        return new DataClassIterator(DummyTreeNodeAttempt::class, array());
     }
 
     /**
@@ -455,14 +455,14 @@ class TrackingRepository implements TrackingRepositoryInterface
      * @param int $count
      * @param array $orderBy
      *
-     * @return RecordIterator
+     * @return DataClassIterator
      */
     public function findTargetUsersWithLearningPathAttempts(
         LearningPath $learningPath, $treeNodeDataIds = array(),
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     )
     {
-        return new RecordIterator(User::class_name(), array());
+        return new DataClassIterator(User::class_name(), array());
     }
 
     /**

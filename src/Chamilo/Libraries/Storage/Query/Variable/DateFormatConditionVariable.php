@@ -17,7 +17,7 @@ class DateFormatConditionVariable extends ConditionVariable
      *
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
-    private $condition_variable;
+    private $conditionVariable;
 
     /**
      * The DateFormat string
@@ -40,7 +40,7 @@ class DateFormatConditionVariable extends ConditionVariable
      */
     public function __construct($format, $conditionVariable, $alias = null)
     {
-        $this->condition_variable = $conditionVariable;
+        $this->conditionVariable = $conditionVariable;
         $this->format = $format;
         $this->alias = $alias;
     }
@@ -52,7 +52,7 @@ class DateFormatConditionVariable extends ConditionVariable
      */
     public function get_condition_variable()
     {
-        return $this->condition_variable;
+        return $this->conditionVariable;
     }
 
     /**
@@ -62,7 +62,7 @@ class DateFormatConditionVariable extends ConditionVariable
      */
     public function set_condition_variable($conditionVariable)
     {
-        $this->condition_variable = $conditionVariable;
+        $this->conditionVariable = $conditionVariable;
     }
 
     /**

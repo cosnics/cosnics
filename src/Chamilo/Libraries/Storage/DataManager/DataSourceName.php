@@ -77,6 +77,12 @@ abstract class DataSourceName
     private $database;
 
     /**
+     *
+     * @var string
+     */
+    private $charset;
+
+    /**
      * Constructor
      *
      * @param string[] $settings
@@ -90,6 +96,7 @@ abstract class DataSourceName
         $this->host = $settings['host'];
         $this->port = isset($settings['port']) ? $settings['port'] : null;
         $this->database = $settings['name'];
+        $this->charset = $settings['charset'];
     }
 
     /**
@@ -106,12 +113,24 @@ abstract class DataSourceName
      *
      * @param boolean $implementation
      * @return string
+     * @deprecated Use getDriver() now
      */
     public function get_driver($implementation = false)
     {
+        return $this->getDriver($implementation);
+    }
+
+    /**
+     * Get the database driver to be used
+     *
+     * @param boolean $implementation
+     * @return string
+     */
+    public function getDriver($implementation = false)
+    {
         if ($implementation)
         {
-            return $this->get_implemented_driver();
+            return $this->getImplementedDriver();
         }
         else
         {
@@ -123,8 +142,19 @@ abstract class DataSourceName
      * Set the database driver to be used
      *
      * @param string $driver
+     * @deprecated Use setDriver() now
      */
     public function set_driver($driver)
+    {
+        $this->setDriver($driver);
+    }
+
+    /**
+     * Set the database driver to be used
+     *
+     * @param string $driver
+     */
+    public function setDriver($driver)
     {
         $this->driver = $driver;
     }
@@ -133,8 +163,19 @@ abstract class DataSourceName
      * Get the username to be used to make the connection
      *
      * @return string
+     * @deprecated Use getUsername() now
      */
     public function get_username()
+    {
+        return $this->getUsername();
+    }
+
+    /**
+     * Get the username to be used to make the connection
+     *
+     * @return string
+     */
+    public function getUsername()
     {
         return $this->username;
     }
@@ -143,8 +184,19 @@ abstract class DataSourceName
      * Set the username to be used to make the connection
      *
      * @param string $username
+     * @deprecated Use setUsername() now
      */
     public function set_username($username)
+    {
+        $this->setUsername($username);
+    }
+
+    /**
+     * Set the username to be used to make the connection
+     *
+     * @param string $username
+     */
+    public function setUsername($username)
     {
         $this->username = $username;
     }
@@ -153,8 +205,19 @@ abstract class DataSourceName
      * Get the password to be used to make the connection
      *
      * @return string
+     * @deprecated Use getPassword() now
      */
     public function get_password()
+    {
+        return $this->getPassword();
+    }
+
+    /**
+     * Get the password to be used to make the connection
+     *
+     * @return string
+     */
+    public function getPassword()
     {
         return $this->password;
     }
@@ -163,8 +226,19 @@ abstract class DataSourceName
      * Set the password to be used to make the connection
      *
      * @param string $password
+     * @deprecated Use setPassword() now
      */
     public function set_password($password)
+    {
+        $this->setPassword($password);
+    }
+
+    /**
+     * Set the password to be used to make the connection
+     *
+     * @param string $password
+     */
+    public function setPassword($password)
     {
         $this->password = $password;
     }
@@ -173,8 +247,19 @@ abstract class DataSourceName
      * Get the host to be used to make the connection
      *
      * @return string
+     * @deprecated Use getHost() now
      */
     public function get_host()
+    {
+        return $this->getHost();
+    }
+
+    /**
+     * Get the host to be used to make the connection
+     *
+     * @return string
+     */
+    public function getHost()
     {
         return $this->host;
     }
@@ -183,8 +268,19 @@ abstract class DataSourceName
      * Set the host to be used to make the connection
      *
      * @param string $host
+     * @deprecated Use setHost() now
      */
     public function set_host($host)
+    {
+        $this->setHost($host);
+    }
+
+    /**
+     * Set the host to be used to make the connection
+     *
+     * @param string $host
+     */
+    public function setHost($host)
     {
         $this->host = $host;
     }
@@ -193,8 +289,19 @@ abstract class DataSourceName
      * Get the port to be used to make the connection
      *
      * @return string
+     * @deprecated Use getPort() now
      */
     public function get_port()
+    {
+        return $this->getPort();
+    }
+
+    /**
+     * Get the port to be used to make the connection
+     *
+     * @return string
+     */
+    public function getPort()
     {
         return $this->port;
     }
@@ -203,8 +310,19 @@ abstract class DataSourceName
      * Set the port to be used to make the connection
      *
      * @param string $port
+     * @deprecated Use setPort() now
      */
     public function set_port($port)
+    {
+        $this->setPort($port);
+    }
+
+    /**
+     * Set the port to be used to make the connection
+     *
+     * @param string $port
+     */
+    public function setPort($port)
     {
         $this->port = $port;
     }
@@ -213,8 +331,19 @@ abstract class DataSourceName
      * Get the database we want to connect to
      *
      * @return string
+     * @deprecated Use getDatabase() now
      */
     public function get_database()
+    {
+        return $this->getDatabase();
+    }
+
+    /**
+     * Get the database we want to connect to
+     *
+     * @return string
+     */
+    public function getDatabase()
     {
         return $this->database;
     }
@@ -223,10 +352,51 @@ abstract class DataSourceName
      * Set the database we want to connect to
      *
      * @param string $database
+     * @deprecated Use setDatabase() now
      */
     public function set_database($database)
     {
+        $this->setDatabase($database);
+    }
+
+    /**
+     * Set the database we want to connect to
+     *
+     * @param string $database
+     */
+    public function setDatabase($database)
+    {
         $this->database = $database;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getCharset()
+    {
+        return $this->charset;
+    }
+
+    /**
+     *
+     * @param string $charset
+     */
+    public function setCharset($charset)
+    {
+        $this->charset = $charset;
+    }
+
+    /**
+     * Parse a string to a valid data source name
+     *
+     * @param string $type
+     * @return \Chamilo\Libraries\Storage\DataManager\DataSourceName
+     * @deprecated Use getFromConfiguration() now
+     */
+    public static function get_from_config($type)
+    {
+        return static::getFromConfiguration($type);
     }
 
     /**
@@ -235,7 +405,7 @@ abstract class DataSourceName
      * @param string $type
      * @return \Chamilo\Libraries\Storage\DataManager\DataSourceName
      */
-    public static function get_from_config($type)
+    public static function getFromConfiguration($type)
     {
         $fileConfigurationConsulter = new ConfigurationConsulter(
             new FileConfigurationLoader(
@@ -280,11 +450,11 @@ abstract class DataSourceName
         // Get the driver
         if (preg_match('|^(.+?)\((.*?)\)$|', $string, $arr))
         {
-            $dataSourceName->set_driver($arr[1]);
+            $dataSourceName->setDriver($arr[1]);
         }
         else
         {
-            $dataSourceName->set_driver($string);
+            $dataSourceName->setDriver($string);
         }
 
         if (! count($connectionString))
@@ -301,12 +471,12 @@ abstract class DataSourceName
 
             if (($position = strpos($string, ':')) !== false)
             {
-                $dataSourceName->set_username(rawurldecode(substr($string, 0, $position)));
-                $dataSourceName->set_password(rawurldecode(substr($string, $position + 1)));
+                $dataSourceName->setUsername(rawurldecode(substr($string, 0, $position)));
+                $dataSourceName->setPassword(rawurldecode(substr($string, $position + 1)));
             }
             else
             {
-                $dataSourceName->set_username(rawurldecode($string));
+                $dataSourceName->setUsername(rawurldecode($string));
             }
         }
 
@@ -329,7 +499,7 @@ abstract class DataSourceName
             }
 
             if (strpos($connectionString, '//') === 0 && strpos($connectionString, '/', 2) !== false &&
-                 $dataSourceName->get_driver() == 'oci8')
+                $dataSourceName->getDriver() == 'oci8')
             {
                 // oracle's "Easy Connect" syntax: "username/password@[//]host[:port][/service_name]"
                 // e.g. "scott/tiger@//mymachine:1521/oracle"
@@ -358,8 +528,8 @@ abstract class DataSourceName
             $port = null;
         }
 
-        $dataSourceName->set_host($protocol_options);
-        $dataSourceName->set_port($port);
+        $dataSourceName->setHost($protocol_options);
+        $dataSourceName->setPort($port);
 
         // Get database if there is one: $connection_string => database
         if ($connectionString)
@@ -367,12 +537,12 @@ abstract class DataSourceName
             // /database
             if (($position = strpos($connectionString, '?')) === false)
             {
-                $dataSourceName->set_database($connectionString);
+                $dataSourceName->setDatabase($connectionString);
             }
             // /database?param1=value1&param2=value2
             else
             {
-                $dataSourceName->set_database(substr($connectionString, 0, $position));
+                $dataSourceName->setDatabase(substr($connectionString, 0, $position));
 
                 /*
                  * Ignore the following for now
@@ -407,27 +577,27 @@ abstract class DataSourceName
      *
      * @return boolean
      */
-    public function is_valid()
+    public function isValid()
     {
-        $driver = $this->get_driver();
+        $driver = $this->getDriver();
         if (! isset($driver))
         {
             return false;
         }
 
-        $username = $this->get_username();
+        $username = $this->getUsername();
         if (! isset($username))
         {
             return false;
         }
 
-        $host = $this->get_host();
+        $host = $this->getHost();
         if (! isset($host))
         {
             return false;
         }
 
-        $database = $this->get_database();
+        $database = $this->getDatabase();
         if (! isset($database))
         {
             return false;
@@ -437,11 +607,32 @@ abstract class DataSourceName
     }
 
     /**
+     *
+     * @return boolean
+     * @deprecated Use isValid() now
+     */
+    public function is_valid()
+    {
+        return $this->isValid();
+    }
+
+    /**
+     * Return the actual name of the implementation in a specific storage layer implementation
+     *
+     * @return string
+     * @deprecated Use getImplementedDriver() now
+     */
+    public function get_implemented_driver()
+    {
+        return $this->getImplementedDriver();
+    }
+
+    /**
      * Return the actual name of the implementation in a specific storage layer implementation
      *
      * @return string
      */
-    abstract public function get_implemented_driver();
+    abstract public function getImplementedDriver();
 
     /**
      * Factory to instantiate the correct type of DataSourceName
@@ -458,25 +649,35 @@ abstract class DataSourceName
     /**
      *
      * @return string
+     * @deprecated Use getConnectionString() now
      */
     public function get_connection_string()
     {
+        return $this->getConnectionString();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getConnectionString()
+    {
         $string = array();
 
-        $string[] = $this->get_driver(true);
+        $string[] = $this->getDriver(true);
         $string[] = '://';
-        $string[] = $this->get_username();
+        $string[] = $this->getUsername();
         $string[] = ':';
-        $string[] = $this->get_password();
+        $string[] = $this->getPassword();
         $string[] = '@';
-        $string[] = $this->get_host();
-        if ($this->get_port())
+        $string[] = $this->getHost();
+        if ($this->getPort())
         {
             $string[] = ':';
-            $string[] = $this->get_port();
+            $string[] = $this->getPort();
         }
         $string[] = '/';
-        $string[] = $this->get_database();
+        $string[] = $this->getDatabase();
 
         return implode('', $string);
     }

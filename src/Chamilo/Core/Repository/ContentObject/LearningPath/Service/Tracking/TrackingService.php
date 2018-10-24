@@ -546,7 +546,7 @@ class TrackingService
      * @param int $count
      * @param array $orderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getLearningPathAttemptsWithUser(LearningPath $learningPath, TreeNode $treeNode = null,
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array())
@@ -584,7 +584,7 @@ class TrackingService
      * @param int $count
      * @param array $orderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\StoDataClassIteratorDataClassIterator
      */
     public function getTargetUsersWithLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode,
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array())
@@ -604,7 +604,7 @@ class TrackingService
      * @param LearningPath $learningPath
      * @param TreeNode $treeNode
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode)
     {
@@ -643,7 +643,7 @@ class TrackingService
      * @param LearningPath $learningPath
      * @param TreeNode $treeNode
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode)
     {
