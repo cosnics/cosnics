@@ -51,13 +51,7 @@ class HtmlEditorFormType extends AbstractType
     {
         $label = ! empty($view->vars['label']) ? $view->vars['label'] : Translation::get($view->vars['name']);
 
-        $html_editor = FormValidatorHtmlEditor::factory(
-            LocalSetting::getInstance()->get('html_editor'),
-            $view->vars['full_name'],
-            $label,
-            false,
-            $options['html_editor_options'],
-            $options['html_editor_attributes']);
+        $html_editor = new FormValidatorHtmlEditor($view->vars['full_name'], $label, false, $options['html_editor_options'], $options['html_editor_attributes']);
 
         $javascript = array();
 
