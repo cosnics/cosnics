@@ -22,7 +22,7 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
-
+use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service
@@ -152,12 +152,13 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $filters = $this->getFilters($publication, $course, $assignment);
         $url = $this->getNotificationUrl($course, $publication, $entry);
         $viewingContexts = $this->getNotificationViewingContexts($publication, $assignment, $course, $entry);
+        $notificationContexts = $this->getNotificationContexts($publication, $course);
 
         $date = new \DateTime();
         $date->setTimestamp($entry->getSubmitted());
 
         $this->notificationManager->createNotificationForUsers(
-            $url, $viewingContexts, $date, $targetUserIds, $filters
+            $url, $viewingContexts, $date, $targetUserIds, $filters, $notificationContexts
         );
     }
     /**
@@ -203,14 +204,14 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
     protected function getFilters($publication, $course, $assignment): array
     {
         $filters = [
-            $this->filterManager->getOrCreateFilterByPath(
+            $this->filterManager->getOrCreateFilterByContextPath(
                 'Chamilo\\Application\\Weblcms::Course:' . $course->getId(),
                 new TranslationContext(
                     'Chamilo\Application\Weblcms', 'NotificationFilterCourse',
                     ['{COURSE_TITLE}' => $course->get_title()]
                 )
             ),
-            $this->filterManager->getOrCreateFilterByPath(
+            $this->filterManager->getOrCreateFilterByContextPath(
                 'Chamilo\\Application\\Weblcms::Tool:' . $publication->get_tool() . '::Course:' . $publication->get_course_id(),
                 new TranslationContext(
                     'Chamilo\Application\Weblcms', 'NotificationFilterTool',
@@ -222,7 +223,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                     ]
                 )
             ),
-            $this->filterManager->getOrCreateFilterByPath(
+            $this->filterManager->getOrCreateFilterByContextPath(
                 'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId(),
                 new TranslationContext(
                     'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', 'NotificationFilterPublication',
@@ -235,6 +236,23 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         ];
 
         return $filters;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $publication
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return string[]
+     */
+    protected function getNotificationContexts(ContentObjectPublication $publication, Course $course)
+    {
+        return [
+            'Chamilo',
+            'Assignment',
+            'Chamilo\\Application\\Weblcms::Course:' . $course->getId(),
+            'Chamilo\\Application\\Weblcms::Tool:' . $publication->get_tool() . '::Course:' . $course->getId(),
+            'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId()
+        ];
     }
 
     /**

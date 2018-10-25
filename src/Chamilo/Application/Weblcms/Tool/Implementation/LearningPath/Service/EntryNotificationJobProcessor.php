@@ -45,7 +45,7 @@ class EntryNotificationJobProcessor extends AssignmentJobProcessor implements Jo
             'Chamilo' => 'NotificationNewAssignmentEntry',
             'Chamilo\\Application\\Weblcms::Course:' . $course->getId() => 'NotificationNewAssignmentEntryCourse',
             'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId() => 'NotificationNewAssignmentEntryPublication',
-            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath::TreeNodeData:' . $treeNodeData->getId() => 'NotificationNewAssignmentEntryAssignmentTreeNode'
+            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() . '::TreeNodeData:' . $treeNodeData->getId() => 'NotificationNewAssignmentEntryAssignmentTreeNode'
         ];
     }
 }

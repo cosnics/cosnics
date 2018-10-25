@@ -76,7 +76,7 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
             'Chamilo' => 'NotificationNewAssignmentFeedback',
             'Chamilo\\Application\\Weblcms::Course:' . $course->getId() => 'NotificationNewAssignmentFeedbackCourse',
             'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId() => 'NotificationNewAssignmentFeedbackPublication',
-            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath::TreeNodeData:' . $treeNodeData->getId() => 'NotificationNewAssignmentFeedbackAssignmentTreeNode'
+            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() . '::TreeNodeData:' . $treeNodeData->getId() => 'NotificationNewAssignmentFeedbackAssignmentTreeNode'
         ];
     }
 }

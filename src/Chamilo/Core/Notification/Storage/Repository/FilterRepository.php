@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Notification\Storage\Repository;
 
 use Chamilo\Core\Notification\Storage\Entity\Filter;
+use Chamilo\Core\Notification\Storage\Entity\NotificationContext;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -13,13 +14,13 @@ use Doctrine\ORM\EntityRepository;
 class FilterRepository extends EntityRepository
 {
     /**
-     * @param string $filterPath
+     * @param \Chamilo\Core\Notification\Storage\Entity\NotificationContext $notificationContext
      *
-     * @return \Chamilo\Core\Notification\Storage\Entity\Filter|object
+     * @return object|Filter
      */
-    public function findByPath($filterPath)
+    public function findFilterByNotificationContext(NotificationContext $notificationContext)
     {
-        return $this->findOneBy(['path' => $filterPath]);
+        return $this->findOneBy(array('notificationContext' => $notificationContext));
     }
 
     /**

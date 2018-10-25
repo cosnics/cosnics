@@ -14,7 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
  *     name="notification_user_notification",
  *     indexes={
  *          @ORM\Index(name="nun_read", columns={"is_read"}),
+ *          @ORM\Index(name="nun_viewed", columns={"is_viewed"}),
  *          @ORM\Index(name="nun_user_id", columns={"user_id"}),
+ *          @ORM\Index(name="nun_date", columns={"date"}),
  *          @ORM\Index(name="nun_user_read", columns={"user_id", "is_read"})
  *     }
  * )
@@ -46,6 +48,14 @@ class UserNotification
     protected $notification;
 
     /**
+     * @var NotificationContext
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\Core\Notification\Storage\Entity\NotificationContext")
+     * @ORM\JoinColumn(name="notification_context", nullable=false)
+     */
+    protected $notificationContext;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="is_read", type="boolean")
@@ -58,6 +68,13 @@ class UserNotification
      * @ORM\Column(name="is_viewed", type="boolean")
      */
     protected $viewed;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime", nullable=false)
+     */
+    protected $date;
 
     /**
      * @return int
@@ -143,6 +160,46 @@ class UserNotification
     public function setViewed(bool $viewed)
     {
         $this->viewed = $viewed;
+
+        return $this;
+    }
+
+    /**
+     * @return NotificationContext
+     */
+    public function getNotificationContext(): NotificationContext
+    {
+        return $this->notificationContext;
+    }
+
+    /**
+     * @param NotificationContext $notificationContext
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification
+     */
+    public function setNotificationContext(NotificationContext $notificationContext)
+    {
+        $this->notificationContext = $notificationContext;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate(): \DateTime
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime $date
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification
+     */
+    public function setDate(\DateTime $date)
+    {
+        $this->date = $date;
 
         return $this;
     }

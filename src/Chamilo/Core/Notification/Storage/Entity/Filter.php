@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Notification\Storage\Entity;
 
+use Chamilo\Core\Notification\Storage\Entity\NotificationContext;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,8 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Chamilo\Core\Notification\Storage\Repository\FilterRepository")
  * @ORM\Table(
- *     name="notification_filter",
- *     indexes={@ORM\Index(name="nf_path", columns={"path"})}
+ *     name="notification_filter"
  * )
  */
 class Filter
@@ -27,11 +27,12 @@ class Filter
     protected $id;
 
     /**
-     * @var string
+     * @var NotificationContext
      *
-     * @ORM\Column(name="path", type="string", nullable=false, length=512)
+     * @ORM\ManyToOne(targetEntity="Chamilo\Core\Notification\Storage\Entity\NotificationContext")
+     * @ORM\JoinColumn(name="notification_context", nullable=false)
      */
-    protected $path;
+    protected $notificationContext;
 
     /**
      * @var string
@@ -56,22 +57,21 @@ class Filter
     }
 
     /**
-     * @return string
+     * @return \Chamilo\Core\Notification\Storage\Entity\NotificationContext
      */
-    public function getPath()
+    public function getNotificationContext()
     {
-        return $this->path;
+        return $this->notificationContext;
     }
 
     /**
-     * @param string $path
+     * @param \Chamilo\Core\Notification\Storage\Entity\NotificationContext $notificationContext
      *
      * @return \Chamilo\Core\Notification\Storage\Entity\Filter
      */
-    public function setPath(string $path)
+    public function setNotificationContext(NotificationContext $notificationContext)
     {
-        $this->path = $path;
-
+        $this->notificationContext = $notificationContext;
         return $this;
     }
 

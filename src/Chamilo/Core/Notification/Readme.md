@@ -63,8 +63,8 @@ We have chosen to denormalize the relation between the context and a notificatio
 and the relation between the user and the notification. We will store every possible context for a user in his 
 relation table. Extremely simplified it would look like this:
 
-| id      | userId    | contextId      | notificationId |    
-|---------|:---------:|:--------------:|:--------------:|
+| id      | userId    | contextId      | notificationId | date  |   
+|---------|:---------:|:--------------:|:--------------:|:-----:|
 
 The query would be simplified a lot. The join would only be used to retrieve the actual data and not for filtering.
 Thus increasing the performance for the retrieved notifications. At the cost of storing a multitude of data. 
@@ -72,7 +72,8 @@ Thus increasing the performance for the retrieved notifications. At the cost of 
 ``` 
 SELECT * FROM UserNotification UN
 JOIN Notification N on N.id = UN.notificationId
-WHERE UN.userId = 2 AND UC.contextId = 5;
+WHERE UN.userId = 2 AND UC.contextId = 5
+ORDER BY DATE DESC LIMIT 0, 20;
 ```
 
 # The Compromises

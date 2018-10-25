@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Notification\Storage\Repository;
 
-use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Notification\Storage\Entity\Notification;
 use Chamilo\Core\Notification\Storage\Entity\UserNotification;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -29,14 +28,14 @@ class NotificationRepository extends EntityRepository
     }
 
     /**
-     * @param array $userNotifications
+     * @param UserNotification[] $userNotifications
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createUserNotifications($userNotifications = [])
     {
-        foreach($userNotifications as $userNotification)
+        foreach ($userNotifications as $userNotification)
         {
             $this->getEntityManager()->persist($userNotification);
         }
@@ -45,44 +44,112 @@ class NotificationRepository extends EntityRepository
     }
 
     /**
-     * @param \Chamilo\Core\Notification\Storage\Entity\Filter $filter
+     * @param \Chamilo\Core\Notification\Storage\Entity\NotificationContext[] $contexts
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int $offset
+     * @param int $count
      *
      * @return Notification[]
      */
-    public function findNotificationsByFilterForUser(Filter $filter, User $user)
+    public function findNotificationsByContextsForUser(array $contexts, User $user, $offset = null, $count = null)
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder()
             ->select('notification')
-            ->select('filter')
-            ->select('user')
+            ->addSelect('filter')
+            ->addSelect('user')
             ->from(UserNotification::class, 'user')
             ->join('user.notifications', 'notification')
             ->join('notification.filters', 'filter')
-            ->where('filter.id = :filterId')
+            ->where('user.context IN (:contexts)')
             ->andWhere('user.userId =:userId')
-            ->setParameter('filterId', $filter->getId())
-            ->setParameter('userId', $user->getId());
+            ->setParameter('contexts', $contexts)
+            ->setParameter('userId', $user->getId())
+            ->orderBy('user.date', 'DESC');
+
+        if ($offset)
+        {
+            $queryBuilder->setFirstResult($offset);
+        }
+
+        if ($count)
+        {
+            $queryBuilder->setMaxResults($count);
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }
 
     /**
-     * @param \Chamilo\Core\Notification\Storage\Entity\Filter $filter
+     * @param array $contexts
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * * @return Notification[]
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findNotificationsByFilter(Filter $filter)
+    public function countUnseenNotificationsByContextsForUser(array $contexts, User $user)
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder()
-            ->select('notification')
-            ->select('filter')
-            ->select('user')
-            ->from(Filter::class, 'filter')
-            ->join('filter.notifications', 'notification')
-            ->where('filter.id = :filterId')
-            ->setParameter('filterId', $filter->getId());
+            ->select('COUNT(user.notificationId)')
+            ->from(UserNotification::class, 'user')
+            ->where('user.context IN (:contexts)')
+            ->andWhere('user.userId =:userId')
+            ->setParameter('contexts', $contexts)
+            ->setParameter('userId', $user->getId());
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param \Chamilo\Core\Notification\Storage\Entity\NotificationContext[] $contexts
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function setNotificationsViewedForUserAndContexts(array $contexts, User $user)
+    {
+        $query = $this->getEntityManager()
+            ->createQuery(
+                'UPDATE ' . UserNotification::class .
+                ' UN SET UN.viewed = true WHERE UN.userId = :userId AND UN.notificationContext IN (:contexts) AND UN.viewed = false'
+            )
+            ->setParameter('userId', $user->getId())
+            ->setParameter('contexts', $contexts);
+
+        $query->execute();
+    }
+
+    /**
+     * @param \Chamilo\Core\Notification\Storage\Entity\Notification $notification
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function setNotificationReadForUser(Notification $notification, User $user)
+    {
+        $query = $this->getEntityManager()
+            ->createQuery(
+                'UPDATE ' . UserNotification::class .
+                ' UN SET UN.read = true WHERE UN.userId = :userId AND UN.notification = :notification AND UN.read = false'
+            )
+            ->setParameter('userId', $user->getId())
+            ->setParameter('notification', $notification);
+
+        $query->execute();
+    }
+
+    /**
+     * @param \Chamilo\Core\Notification\Storage\Entity\Notification $notification
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function countUserNotificationsByNotificationAndUser(Notification $notification, User $user)
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder()
+            ->select('count(user.id')
+            ->from(UserNotification::class, 'user')
+            ->where('user.notification = :notification')
+            ->andWhere('user.userId = :userId')
+            ->setParameter('notification', $notification)
+            ->setParameter('userId', $user->getId());
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
     }
 }

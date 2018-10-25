@@ -177,12 +177,13 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $filters = $this->getFilters($publication, $course, $assignment, $learningPath, $treeNodeData);
         $url = $this->getNotificationUrl($course, $publication, $treeNodeData, $entry);
         $viewingContexts = $this->getNotificationViewingContexts($publication, $assignment, $learningPath, $treeNodeData, $course, $entry);
+        $notificationContexts = $this->getNotificationContexts($publication, $course, $treeNodeData);
 
         $date = new \DateTime();
         $date->setTimestamp($entry->getSubmitted());
 
         $this->notificationManager->createNotificationForUsers(
-            $url, $viewingContexts, $date, $targetUserIds, $filters
+            $url, $viewingContexts, $date, $targetUserIds, $filters, $notificationContexts
         );
     }
 
@@ -236,14 +237,14 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
     )
     {
         $filters = [
-            $this->filterManager->getOrCreateFilterByPath(
+            $this->filterManager->getOrCreateFilterByContextPath(
                 'Chamilo\\Application\\Weblcms::Course:' . $course->getId(),
                 new TranslationContext(
                     'Chamilo\Application\Weblcms', 'NotificationFilterCourse',
                     ['{COURSE_TITLE}' => $course->get_title()]
                 )
             ),
-            $this->filterManager->getOrCreateFilterByPath(
+            $this->filterManager->getOrCreateFilterByContextPath(
                 'Chamilo\\Application\\Weblcms::Tool:' . $publication->get_tool() . '::Course:' . $publication->get_course_id(),
                 new TranslationContext(
                     'Chamilo\Application\Weblcms', 'NotificationFilterTool',
@@ -255,7 +256,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                     ]
                 )
             ),
-            $this->filterManager->getOrCreateFilterByPath(
+            $this->filterManager->getOrCreateFilterByContextPath(
                 'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId(),
                 new TranslationContext(
                     'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', 'NotificationFilterPublication',
@@ -265,8 +266,8 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
 
                 )
             ),
-            $this->filterManager->getOrCreateFilterByPath(
-                'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $treeNodeData->getId(),
+            $this->filterManager->getOrCreateFilterByContextPath(
+                'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() . '::TreeNodeData:' . $treeNodeData->getId(),
                 new TranslationContext(
                     'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', 'NotificationFilterLearningPathAssignment',
                     [
@@ -279,6 +280,25 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         ];
 
         return $filters;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $publication
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     *
+     * @return string[]
+     */
+    protected function getNotificationContexts(ContentObjectPublication $publication, Course $course, TreeNodeData $treeNodeData)
+    {
+        return [
+            'Chamilo',
+            'Assignment',
+            'Chamilo\\Application\\Weblcms::Course:' . $course->getId(),
+            'Chamilo\\Application\\Weblcms::Tool:' . $publication->get_tool() . '::Course:' . $course->getId(),
+            'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId(),
+            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() . '::TreeNodeData:' . $treeNodeData->getId()
+        ];
     }
 
     /**
@@ -339,7 +359,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             )
         );
 
-        $key = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath::TreeNodeData:' . $treeNodeData->getId();
+        $key = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() . '::TreeNodeData:' . $treeNodeData->getId();
         $viewingContexts[] = new ViewingContext(
             $key,
             new TranslationContext(

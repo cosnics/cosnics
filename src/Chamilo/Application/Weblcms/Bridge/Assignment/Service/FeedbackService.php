@@ -15,9 +15,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
  *
  * @package Chamilo\Application\Weblcms\Bridge\Assignment\Service
  *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class FeedbackService extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service\FeedbackService

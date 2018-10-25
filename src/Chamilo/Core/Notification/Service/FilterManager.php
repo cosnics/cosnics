@@ -24,21 +24,28 @@ class FilterManager
     protected $notificationTranslator;
 
     /**
+     * @var \Chamilo\Core\Notification\Service\NotificationContextManager
+     */
+    protected $notificationContextManager;
+
+    /**
      * FilterManager constructor.
      *
      * @param \Chamilo\Core\Notification\Storage\Repository\FilterRepository $filterRepository
+     * @param \Chamilo\Core\Notification\Service\NotificationContextManager $notificationContextManager
      * @param NotificationTranslator $notificationTranslator
      */
     public function __construct(
-        FilterRepository $filterRepository, NotificationTranslator $notificationTranslator
+        FilterRepository $filterRepository, NotificationContextManager $notificationContextManager, NotificationTranslator $notificationTranslator
     )
     {
         $this->filterRepository = $filterRepository;
         $this->notificationTranslator = $notificationTranslator;
+        $this->notificationContextManager = $notificationContextManager;
     }
 
     /**
-     * @param string $filterPath
+     * @param string $contextPath
      * @param \Chamilo\Core\Notification\Domain\TranslationContext $translationContext
      *
      * @return \Chamilo\Core\Notification\Storage\Entity\Filter
@@ -46,9 +53,11 @@ class FilterManager
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function getOrCreateFilterByPath($filterPath, TranslationContext $translationContext)
+    public function getOrCreateFilterByContextPath($contextPath, TranslationContext $translationContext)
     {
-        $filter = $this->filterRepository->findByPath($filterPath);
+        $notificationContext = $this->notificationContextManager->getOrCreateContextByPath($contextPath);
+        $filter = $this->filterRepository->findFilterByNotificationContext($notificationContext);
+
         if(!$filter instanceof Filter)
         {
             $filter = new Filter();
@@ -56,7 +65,7 @@ class FilterManager
             $descriptionContext = $this->notificationTranslator->translateToAllLanguagesAndEncode($translationContext);
 
             $filter->setDescriptionContext($descriptionContext)
-                ->setPath($filterPath);
+                ->setNotificationContext($notificationContext);
 
             $this->filterRepository->createFilter($filter);
         }
