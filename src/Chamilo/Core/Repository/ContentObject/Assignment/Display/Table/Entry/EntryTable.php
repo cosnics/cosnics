@@ -95,8 +95,13 @@ abstract class EntryTable extends RecordTable implements TableFormActionsSupport
 
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD)),
-                Translation::get('DownloadSelected')
+                $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD
+                    )
+                ),
+                Translation::get('DownloadSelected'),
+                false
             )
         );
 
