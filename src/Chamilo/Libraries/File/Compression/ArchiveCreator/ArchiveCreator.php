@@ -150,7 +150,8 @@ class ArchiveCreator
      */
     protected function handleArchiveFolder(ArchiveFolder $archiveFolder, $temporaryPath)
     {
-        $folderPath = $temporaryPath . DIRECTORY_SEPARATOR . $archiveFolder->getName();
+        $folderName = \Chamilo\Libraries\File\Filesystem::create_unique_name($temporaryPath, $archiveFolder->getName());
+        $folderPath = $temporaryPath . DIRECTORY_SEPARATOR . $folderName;
         $this->fileSystem->mkdir($folderPath);
 
         foreach ($archiveFolder->getArchiveItems() as $archiveItem)
@@ -165,7 +166,8 @@ class ArchiveCreator
      */
     protected function handleArchiveFile(ArchiveFile $archiveFile, $temporaryPath)
     {
-        $filePath = $temporaryPath . DIRECTORY_SEPARATOR . $archiveFile->getName();
+        $fileName = \Chamilo\Libraries\File\Filesystem::create_unique_name($temporaryPath, $archiveFile->getName());
+        $filePath = $temporaryPath . DIRECTORY_SEPARATOR . $fileName;
         $originalPath = $archiveFile->getOriginalPath();
 
         if (is_dir($originalPath))
