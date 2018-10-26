@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\User\Service\UserImporter;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
@@ -7,8 +6,8 @@ use Chamilo\Core\User\Domain\UserImporter\ImportUserData;
 use Chamilo\Core\User\Domain\UserImporter\ImportUserResult;
 use Chamilo\Core\User\Domain\UserImporter\UserImporterResult;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
@@ -23,32 +22,39 @@ use Symfony\Component\Translation\Translator;
  */
 class UserImporter
 {
+
     /**
+     *
      * @var ImportParserFactory
      */
     protected $userImportParserFactory;
 
     /**
-     * @var UserRepository
+     *
+     * @var \Chamilo\Core\User\Service\UserService
      */
-    protected $userRepository;
+    protected $userService;
 
     /**
+     *
      * @var ConfigurationConsulter
      */
     protected $configurationConsulter;
 
     /**
+     *
      * @var HashingUtilities
      */
     protected $hashingUtilities;
 
     /**
+     *
      * @var MailerInterface
      */
     protected $mailer;
 
     /**
+     *
      * @var Translator
      */
     protected $translator;
@@ -57,24 +63,40 @@ class UserImporter
      * UserImporter constructor.
      *
      * @param ImportParserFactory $userImportParserFactory
-     * @param UserRepository $userRepository
+     * @param \Chamilo\Core\User\Service\UserService $userService
      * @param ConfigurationConsulter $configurationConsulter
      * @param HashingUtilities $hashingUtilities
      * @param MailerInterface $mailer
      * @param Translator $translator
      */
-    public function __construct(
-        ImportParserFactory $userImportParserFactory, UserRepository $userRepository,
-        ConfigurationConsulter $configurationConsulter, HashingUtilities $hashingUtilities,
-        MailerInterface $mailer, Translator $translator
-    )
+    public function __construct(ImportParserFactory $userImportParserFactory, UserService $userService,
+        ConfigurationConsulter $configurationConsulter, HashingUtilities $hashingUtilities, MailerInterface $mailer,
+        Translator $translator)
     {
         $this->userImportParserFactory = $userImportParserFactory;
-        $this->userRepository = $userRepository;
+        $this->userService = $userService;
         $this->configurationConsulter = $configurationConsulter;
         $this->hashingUtilities = $hashingUtilities;
         $this->mailer = $mailer;
         $this->translator = $translator;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    public function getUserService()
+    {
+        return $this->userService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     */
+    public function setUserService(UserService $userService)
+    {
+        $this->userService = $userService;
     }
 
     /**
@@ -139,9 +161,8 @@ class UserImporter
      * @param UserImporterResult $userImporterResult
      * @param bool $sendMailToNewUsers
      */
-    protected function createUsers(
-        User $currentUser, $importUsersData, UserImporterResult $userImporterResult, $sendMailToNewUsers = false
-    )
+    protected function createUsers(User $currentUser, $importUsersData, UserImporterResult $userImporterResult,
+        $sendMailToNewUsers = false)
     {
         foreach ($importUsersData as $importUserData)
         {
@@ -152,7 +173,7 @@ class UserImporter
                 continue;
             }
 
-            if (!$importUserData->isDelete())
+            if (! $importUserData->isDelete())
             {
                 $importUserData->setPropertiesForUser($this->hashingUtilities);
             }
@@ -161,7 +182,7 @@ class UserImporter
 
             if ($importUserData->isNew())
             {
-                if (!$this->userRepository->create($user))
+                if (! $this->getUserService()->createUser($user))
                 {
                     $importUserResult->addMessage($this->translateMessage('ImportUserCouldNotCreateUserInDatabase'));
                     $importUserResult->setFailed();
@@ -170,9 +191,9 @@ class UserImporter
                 {
                     $importUserResult->setSuccessful();
                     $this->updateLanguageSettingForUser($importUserData);
-                    $this->userRepository->triggerImportEvent($currentUser, $user);
+                    $this->getUserService()->triggerImportEvent($currentUser, $user);
 
-                    if($sendMailToNewUsers)
+                    if ($sendMailToNewUsers)
                     {
                         $this->sendEmailToNewUser($importUserData);
                     }
@@ -181,7 +202,7 @@ class UserImporter
 
             if ($importUserData->isUpdate())
             {
-                if (!$this->userRepository->update($user))
+                if (! $this->getUserService()->updateUser($user))
                 {
                     $importUserResult->addMessage($this->translateMessage('ImportUserCouldNotUpdateUserInDatabase'));
                     $importUserResult->setFailed();
@@ -191,7 +212,7 @@ class UserImporter
                     $importUserResult->setSuccessful();
                     $this->updateLanguageSettingForUser($importUserData);
 
-                    if($sendMailToNewUsers && $importUserData->mustNotifyUser())
+                    if ($sendMailToNewUsers && $importUserData->mustNotifyUser())
                     {
                         $this->sendEmailToNewUser($importUserData);
                     }
@@ -202,7 +223,7 @@ class UserImporter
             {
                 $user->set_active(false);
 
-                if (!$this->userRepository->update($user))
+                if (! $this->getUserService()->updateUser($user))
                 {
                     $importUserResult->addMessage($this->translateMessage('ImportUserCouldNotDeleteUserFromDatabase'));
                     $importUserResult->setFailed();
@@ -218,7 +239,8 @@ class UserImporter
     }
 
     /**
-     * Updates the language setting for a given user, identified by his import data. If the language is not set
+     * Updates the language setting for a given user, identified by his import data.
+     * If the language is not set
      * then it will not be updated
      *
      * @param ImportUserData $importUserData
@@ -230,9 +252,11 @@ class UserImporter
             return;
         }
 
-        if (!$this->userRepository->createUserSettingForSettingAndUser(
-            'Chamilo\Core\Admin', 'platform_language', $importUserData->getUser(), $importUserData->getLanguage()
-        ))
+        if (! $this->getUserService()->createUserSettingForSettingAndUser(
+            'Chamilo\Core\Admin',
+            'platform_language',
+            $importUserData->getUser(),
+            $importUserData->getLanguage()))
         {
             $importUserResult = $importUserData->getImportUserResult();
 
@@ -259,20 +283,16 @@ class UserImporter
         $options['site_url'] = Path::getInstance()->getBasePath(true);
 
         $options['admin_firstname'] = $this->configurationConsulter->getSetting(
-            array('Chamilo\Core\Admin', 'administrator_firstname')
-        );
+            array('Chamilo\Core\Admin', 'administrator_firstname'));
 
         $options['admin_surname'] = $this->configurationConsulter->getSetting(
-            array('Chamilo\Core\Admin', 'administrator_surname')
-        );
+            array('Chamilo\Core\Admin', 'administrator_surname'));
 
         $options['admin_telephone'] = $this->configurationConsulter->getSetting(
-            array('Chamilo\Core\Admin', 'administrator_telephone')
-        );
+            array('Chamilo\Core\Admin', 'administrator_telephone'));
 
         $options['admin_email'] = $this->configurationConsulter->getSetting(
-            array('Chamilo\Core\Admin', 'administrator_email')
-        );
+            array('Chamilo\Core\Admin', 'administrator_email'));
 
         $subject = $this->translateMessage('YourRegistrationOn') . ' ' . $options['site_name'];
 
@@ -290,8 +310,7 @@ class UserImporter
             array(),
             array(),
             $options['admin_firstname'] . ' ' . $options['admin_surname'],
-            $options['admin_email']
-        );
+            $options['admin_email']);
 
         $importUserResult = $importUserData->getImportUserResult();
 
@@ -307,6 +326,7 @@ class UserImporter
     }
 
     /**
+     *
      * @param ImportUserData $importUserData
      * @param ImportUserResult $importUserResult
      */
@@ -320,15 +340,16 @@ class UserImporter
             throw new \RuntimeException($this->translateMessage('ImportUserNoUsernameFound'));
         }
 
-        $user = $this->userRepository->findUserByUsername($importUserData->getUsername());
+        $user = $this->getUserService()->findUserByUsername($importUserData->getUsername());
 
-        if($user instanceof User)
+        if ($user instanceof User)
         {
             $importUserData->setUser($user);
         }
     }
 
     /**
+     *
      * @param ImportUserData $importUserData
      * @param ImportUserResult $importUserResult
      */
@@ -337,7 +358,7 @@ class UserImporter
         $user = $importUserData->getUser();
         $userExists = $user instanceof User;
 
-        if (!$importUserData->hasValidAction())
+        if (! $importUserData->hasValidAction())
         {
             $importUserResult->addMessage($this->translateMessage('ImportUserNoValidActionFound'));
             $importUserResult->setFailed();
@@ -366,12 +387,12 @@ class UserImporter
             throw new \RuntimeException($this->translateMessage('ImportUserUserAlreadyExists'));
         }
 
-        if($importUserData->isNew())
+        if ($importUserData->isNew())
         {
             $importUserData->setUser(new User());
         }
 
-        if ($importUserData->isUpdate() && !$userExists)
+        if ($importUserData->isUpdate() && ! $userExists)
         {
             $importUserResult->setFailed();
             $importUserResult->addMessage($this->translateMessage('ImportUserUserDoesNotExist'));
@@ -379,7 +400,7 @@ class UserImporter
             throw new \RuntimeException($this->translateMessage('ImportUserUserDoesNotExist'));
         }
 
-        if ($importUserData->isDelete() && !$userExists)
+        if ($importUserData->isDelete() && ! $userExists)
         {
             $importUserResult->setSuccessful();
             $importUserResult->addMessage($this->translateMessage('ImportUserUserAlreadyRemoved'));
@@ -387,12 +408,13 @@ class UserImporter
     }
 
     /**
+     *
      * @param ImportUserData $importUserData
      * @param ImportUserResult $importUserResult
      */
     protected function validateStatus($importUserData, $importUserResult)
     {
-        if ($importUserData->isNew() && !$importUserData->hasValidStatus())
+        if ($importUserData->isNew() && ! $importUserData->hasValidStatus())
         {
             $importUserResult->addMessage($this->translateMessage('ImportUserNoValidStatusFound'));
             $importUserData->setStatusToStudent();
@@ -400,12 +422,13 @@ class UserImporter
     }
 
     /**
+     *
      * @param ImportUserData $importUserData
      * @param ImportUserResult $importUserResult
      */
     protected function validateActive($importUserData, $importUserResult)
     {
-        if ($importUserData->isNew() && !$importUserData->isActiveSet())
+        if ($importUserData->isNew() && ! $importUserData->isActiveSet())
         {
             $importUserResult->addMessage($this->translateMessage('ImportUserActiveNotFound'));
             $importUserData->setActive(true);
@@ -413,6 +436,7 @@ class UserImporter
     }
 
     /**
+     *
      * @param ImportUserData $importUserData
      * @param ImportUserResult $importUserResult
      */
@@ -426,13 +450,14 @@ class UserImporter
     }
 
     /**
+     *
      * @param ImportUserData $importUserData
      * @param ImportUserResult $importUserResult
      * @param string $platformLanguage
      */
     protected function validateLanguage($importUserData, $importUserResult, $platformLanguage)
     {
-        if ($importUserData->isNew() && !$importUserData->hasValidLanguage())
+        if ($importUserData->isNew() && ! $importUserData->hasValidLanguage())
         {
             $importUserResult->addMessage($this->translateMessage('ImportUserNoValidLanguageFound'));
             $importUserData->setLanguage($platformLanguage);
@@ -440,6 +465,7 @@ class UserImporter
     }
 
     /**
+     *
      * @param ImportUserData $importUserData
      * @param ImportUserResult $importUserResult
      * @param bool $emailRequired

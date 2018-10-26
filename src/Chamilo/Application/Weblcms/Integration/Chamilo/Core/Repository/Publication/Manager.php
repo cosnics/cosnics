@@ -23,16 +23,15 @@ use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
-use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class Manager implements PublicationInterface
@@ -436,6 +435,9 @@ class Manager implements PublicationInterface
             }
         }
 
+        $containerBuilder = DependencyInjectionContainerBuilder::getInstance();
+        $container = $containerBuilder->createContainer();
+
         if ($options[ContentObjectPublication::PROPERTY_EMAIL_SENT])
         {
             $mailerFactory = new MailerFactory(Configuration::getInstance());
@@ -446,7 +448,7 @@ class Manager implements PublicationInterface
                 new CourseRepository(),
                 new PublicationRepository(),
                 new ContentObjectRepository(),
-                new UserRepository()
+                $container->get('chamilo.core.user.service.user_service')
             );
 
             $contentObjectPublicationMailer->mailPublication($publication);

@@ -5,13 +5,12 @@ use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -215,9 +214,13 @@ class SubscribeComponent extends Manager
      */
     protected function findUsersByIds(array $userIds = array())
     {
-        $userRepository = new UserRepository();
+        /**
+         *
+         * @var \Chamilo\Core\User\UserService $userService
+         */
+        $userService = $this->getService('chamilo.core.user.service.user_service');
 
-        return $userRepository->findUsers(
+        return $userService->findUsers(
             new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds));
     }
 

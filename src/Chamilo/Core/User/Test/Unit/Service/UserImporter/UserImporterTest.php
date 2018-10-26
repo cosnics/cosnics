@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\User\Test\Unit\Service\UserImporter;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
@@ -7,8 +6,8 @@ use Chamilo\Core\User\Domain\UserImporter\ImportUserData;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserInterface;
 use Chamilo\Core\User\Service\UserImporter\UserImporter;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
@@ -22,42 +21,51 @@ use Symfony\Component\Translation\Translator;
  */
 class UserImporterTest extends ChamiloTestCase
 {
+
     /**
+     *
      * @var UserImporter
      */
     protected $userImporter;
 
     /**
+     *
      * @var ImportParserFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $importParserFactoryMock;
 
     /**
-     * @var UserRepository | \PHPUnit_Framework_MockObject_MockObject
+     *
+     * @var UserService | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $userRepositoryMock;
+    protected $userServiceMock;
 
     /**
+     *
      * @var ConfigurationConsulter | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $configurationConsulterMock;
 
     /**
+     *
      * @var HashingUtilities | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $hashingUtilitiesMock;
 
     /**
+     *
      * @var MailerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $mailerMock;
 
     /**
+     *
      * @var Translator | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $translatorMock;
 
     /**
+     *
      * @var UploadedFile
      */
     protected $uploadedFile;
@@ -67,35 +75,29 @@ class UserImporterTest extends ChamiloTestCase
      */
     public function setUp()
     {
-        $this->importParserFactoryMock = $this->getMockBuilder(ImportParserFactory::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->importParserFactoryMock = $this->getMockBuilder(ImportParserFactory::class)->disableOriginalConstructor()->getMock();
 
-        $this->userRepositoryMock = $this->getMockBuilder(UserRepository::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->userServiceMock = $this->getMockBuilder(UserService::class)->disableOriginalConstructor()->getMock();
 
-        $this->configurationConsulterMock = $this->getMockBuilder(ConfigurationConsulter::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->configurationConsulterMock = $this->getMockBuilder(ConfigurationConsulter::class)->disableOriginalConstructor()->getMock();
 
-        $this->hashingUtilitiesMock = $this->getMockBuilder(HashingUtilities::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->hashingUtilitiesMock = $this->getMockBuilder(HashingUtilities::class)->disableOriginalConstructor()->getMock();
 
-        $this->mailerMock = $this->getMockBuilder(MailerInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->mailerMock = $this->getMockBuilder(MailerInterface::class)->disableOriginalConstructor()->getMock();
 
-        $this->translatorMock = $this->getMockBuilder(Translator::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->translatorMock = $this->getMockBuilder(Translator::class)->disableOriginalConstructor()->getMock();
 
         $this->userImporter = new UserImporter(
-            $this->importParserFactoryMock, $this->userRepositoryMock, $this->configurationConsulterMock,
-            $this->hashingUtilitiesMock, $this->mailerMock, $this->translatorMock
-        );
+            $this->importParserFactoryMock,
+            $this->userServiceMock,
+            $this->configurationConsulterMock,
+            $this->hashingUtilitiesMock,
+            $this->mailerMock,
+            $this->translatorMock);
 
-        $this->translatorMock->expects($this->any())
-            ->method('trans')
-            ->will($this->returnArgument(0));
+        $this->translatorMock->expects($this->any())->method('trans')->will($this->returnArgument(0));
 
-        $this->uploadedFile = $this->getMockBuilder(UploadedFile::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->uploadedFile = $this->getMockBuilder(UploadedFile::class)->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -112,9 +114,20 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'A', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'A',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockUserCreate();
@@ -130,15 +143,25 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'A', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'A',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockUserCreate();
 
-        $this->userRepositoryMock->expects($this->once())
-            ->method('triggerImportEvent');
+        $this->userServiceMock->expects($this->once())->method('triggerImportEvent');
 
         $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
     }
@@ -149,15 +172,25 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'A', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'A',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockUserCreate();
 
-        $this->mailerMock->expects($this->once())
-            ->method('sendMail');
+        $this->mailerMock->expects($this->once())->method('sendMail');
 
         $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile, true);
     }
@@ -168,22 +201,30 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'A', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'A',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockUserCreate();
         $this->mockCreateUserSettingForSettingAndUser();
 
-        $this->mailerMock->expects($this->once())
-            ->method('sendMail')
-            ->will($this->throwException(new \Exception()));
+        $this->mailerMock->expects($this->once())->method('sendMail')->will($this->throwException(new \Exception()));
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile, true);
         $this->assertTrue(
-            in_array('ImportUserMailNotSent', $userImporterResult->getSuccessUserResults()[0]->getMessages())
-        );
+            in_array('ImportUserMailNotSent', $userImporterResult->getSuccessUserResults()[0]->getMessages()));
     }
 
     public function testImportUsersWithInvalidUsername()
@@ -192,17 +233,27 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'A', '', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'A',
+            '',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockUserCreate(0);
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertTrue(
-            in_array('ImportUserNoUsernameFound', $userImporterResult->getFailedUserResults()[0]->getMessages())
-        );
+            in_array('ImportUserNoUsernameFound', $userImporterResult->getFailedUserResults()[0]->getMessages()));
     }
 
     public function testImportUsersWithInvalidAction()
@@ -211,17 +262,27 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'C', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'C',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockUserCreate(0);
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertTrue(
-            in_array('ImportUserNoValidActionFound', $userImporterResult->getFailedUserResults()[0]->getMessages())
-        );
+            in_array('ImportUserNoValidActionFound', $userImporterResult->getFailedUserResults()[0]->getMessages()));
     }
 
     public function testImportUsersWithInvalidActive()
@@ -230,9 +291,20 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'A', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', null,
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'A',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            null,
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockUserCreate(1);
@@ -241,12 +313,9 @@ class UserImporterTest extends ChamiloTestCase
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
 
         $this->assertTrue(
-            in_array('ImportUserActiveNotFound', $userImporterResult->getSuccessUserResults()[0]->getMessages())
-        );
+            in_array('ImportUserActiveNotFound', $userImporterResult->getSuccessUserResults()[0]->getMessages()));
 
-        $this->assertTrue(
-            $userImporterResult->getSuccessUserResults()[0]->getImportUserData()->getUser()->get_active()
-        );
+        $this->assertTrue($userImporterResult->getSuccessUserResults()[0]->getImportUserData()->getUser()->get_active());
     }
 
     public function testImportUsersWithInvalidAuthSource()
@@ -255,9 +324,20 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'A', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', null,
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', '', 'blablabla'
-        );
+            'A',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            null,
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            '',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockUserCreate(1);
@@ -266,13 +346,11 @@ class UserImporterTest extends ChamiloTestCase
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
 
         $this->assertTrue(
-            in_array('ImportUserAuthSourceNotFound', $userImporterResult->getSuccessUserResults()[0]->getMessages())
-        );
+            in_array('ImportUserAuthSourceNotFound', $userImporterResult->getSuccessUserResults()[0]->getMessages()));
 
         $this->assertEquals(
             'Platform',
-            $userImporterResult->getSuccessUserResults()[0]->getImportUserData()->getUser()->getAuthenticationSource()
-        );
+            $userImporterResult->getSuccessUserResults()[0]->getImportUserData()->getUser()->getAuthenticationSource());
     }
 
     public function testImportUsersWithInvalidStatus()
@@ -281,9 +359,20 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'A', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '2', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', '', 'blablabla'
-        );
+            'A',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '2',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            '',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockUserCreate(1);
@@ -292,13 +381,11 @@ class UserImporterTest extends ChamiloTestCase
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
 
         $this->assertTrue(
-            in_array('ImportUserNoValidStatusFound', $userImporterResult->getSuccessUserResults()[0]->getMessages())
-        );
+            in_array('ImportUserNoValidStatusFound', $userImporterResult->getSuccessUserResults()[0]->getMessages()));
 
         $this->assertEquals(
             User::STATUS_STUDENT,
-            $userImporterResult->getSuccessUserResults()[0]->getImportUserData()->getUser()->get_status()
-        );
+            $userImporterResult->getSuccessUserResults()[0]->getImportUserData()->getUser()->get_status());
     }
 
     public function testImportUsersWithInvalidLanguage()
@@ -307,28 +394,38 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'A', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'de', '2', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', '', 'blablabla'
-        );
+            'A',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'de',
+            '2',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            '',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockUserCreate(1);
         $this->mockCreateUserSettingForSettingAndUser();
 
-        $this->configurationConsulterMock->expects($this->at(1))
-            ->method('getSetting')
-            ->with(['Chamilo\Core\Admin', 'platform_language'])
-            ->will($this->returnValue('en'));
+        $this->configurationConsulterMock->expects($this->at(1))->method('getSetting')->with(
+            ['Chamilo\Core\Admin', 'platform_language'])->will($this->returnValue('en'));
 
-        $this->userRepositoryMock->expects($this->once())
-            ->method('createUserSettingForSettingAndUser')
-            ->with('Chamilo\Core\Admin', 'platform_language', $this->anything(), 'en');
+        $this->userServiceMock->expects($this->once())->method('createUserSettingForSettingAndUser')->with(
+            'Chamilo\Core\Admin',
+            'platform_language',
+            $this->anything(),
+            'en');
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
 
         $this->assertTrue(
-            in_array('ImportUserNoValidLanguageFound', $userImporterResult->getSuccessUserResults()[0]->getMessages())
-        );
+            in_array('ImportUserNoValidLanguageFound', $userImporterResult->getSuccessUserResults()[0]->getMessages()));
     }
 
     public function testImportUsersWithInvalidEmail()
@@ -337,24 +434,32 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'A', 'test001', 'Eric', 'Peeters', '', '123456789', 'de', '2', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', '', 'blablabla'
-        );
+            'A',
+            'test001',
+            'Eric',
+            'Peeters',
+            '',
+            '123456789',
+            'de',
+            '2',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            '',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
 
-        $this->configurationConsulterMock->expects($this->at(0))
-            ->method('getSetting')
-            ->with(['Chamilo\Core\User', 'require_email'])
-            ->will($this->returnValue(true));
+        $this->configurationConsulterMock->expects($this->at(0))->method('getSetting')->with(
+            ['Chamilo\Core\User', 'require_email'])->will($this->returnValue(true));
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
 
         $this->assertTrue(
             in_array(
-                'ImportUserEmailRequiredForNewUsers', $userImporterResult->getFailedUserResults()[0]->getMessages()
-            )
-        );
+                'ImportUserEmailRequiredForNewUsers',
+                $userImporterResult->getFailedUserResults()[0]->getMessages()));
     }
 
     public function testImportUsersWithCreateFailed()
@@ -363,17 +468,29 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'A', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'A',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockUserCreate(1, false);
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertTrue(
-            in_array('ImportUserCouldNotCreateUserInDatabase', $userImporterResult->getFailedUserResults()[0]->getMessages())
-        );
+            in_array(
+                'ImportUserCouldNotCreateUserInDatabase',
+                $userImporterResult->getFailedUserResults()[0]->getMessages()));
     }
 
     public function testImportUsersWithCreateWhenUserExists()
@@ -382,17 +499,27 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'A', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'A',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockFindUserByUsername(new User());
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertTrue(
-            in_array('ImportUserUserAlreadyExists', $userImporterResult->getFailedUserResults()[0]->getMessages())
-        );
+            in_array('ImportUserUserAlreadyExists', $userImporterResult->getFailedUserResults()[0]->getMessages()));
     }
 
     public function testImportUsersWithUpdate()
@@ -401,9 +528,20 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'U', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'U',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockFindUserByUsername(new User());
@@ -420,9 +558,20 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'U;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'U', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'U',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockFindUserByUsername(new User());
@@ -431,9 +580,8 @@ class UserImporterTest extends ChamiloTestCase
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertTrue(
             in_array(
-                'ImportUserCouldNotUpdateUserInDatabase', $userImporterResult->getFailedUserResults()[0]->getMessages()
-            )
-        );
+                'ImportUserCouldNotUpdateUserInDatabase',
+                $userImporterResult->getFailedUserResults()[0]->getMessages()));
     }
 
     public function testImportUsersWithUpdateUserNotExists()
@@ -442,18 +590,26 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'U;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'U', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'U',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertTrue(
-            in_array(
-                'ImportUserUserDoesNotExist', $userImporterResult->getFailedUserResults()[0]->getMessages()
-            )
-        );
+            in_array('ImportUserUserDoesNotExist', $userImporterResult->getFailedUserResults()[0]->getMessages()));
     }
 
     public function testImportUsersWithUpdatEmptyLanguage()
@@ -462,16 +618,26 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'U;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'U', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', '', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'U',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            '',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockFindUserByUsername(new User());
         $this->mockUserUpdate(1, true);
 
-        $this->userRepositoryMock->expects($this->never())
-            ->method('createUserSettingForSettingAndUser');
+        $this->userServiceMock->expects($this->never())->method('createUserSettingForSettingAndUser');
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertEquals(1, $userImporterResult->countSuccessUserResults());
@@ -483,9 +649,20 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'D;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'D', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'D',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockFindUserByUsername(new User());
@@ -501,9 +678,20 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'D;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'D', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'D',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockFindUserByUsername(new User());
@@ -513,9 +701,7 @@ class UserImporterTest extends ChamiloTestCase
         $this->assertTrue(
             in_array(
                 'ImportUserCouldNotDeleteUserFromDatabase',
-                $userImporterResult->getFailedUserResults()[0]->getMessages()
-            )
-        );
+                $userImporterResult->getFailedUserResults()[0]->getMessages()));
     }
 
     public function testImportUsersWithDeleteUserNotExists()
@@ -524,18 +710,26 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'D;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'D', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'D',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertTrue(
-            in_array(
-                'ImportUserUserAlreadyRemoved', $userImporterResult->getSuccessUserResults()[0]->getMessages()
-            )
-        );
+            in_array('ImportUserUserAlreadyRemoved', $userImporterResult->getSuccessUserResults()[0]->getMessages()));
     }
 
     public function testImportUsersWithUpdateAddWhenUserExists()
@@ -544,9 +738,20 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'U;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'UA', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'UA',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockCreateUserSettingForSettingAndUser();
@@ -563,9 +768,20 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'U;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'UA', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'UA',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockCreateUserSettingForSettingAndUser();
@@ -581,16 +797,26 @@ class UserImporterTest extends ChamiloTestCase
 
         $importUsersData[] = new ImportUserData(
             'U;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
-            'U', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
-            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
-        );
+            'U',
+            'test001',
+            'Eric',
+            'Peeters',
+            'no-reply@test.com',
+            '123456789',
+            'nl',
+            '5',
+            '1',
+            '4487965131387',
+            '2017-01-05 00:00:00',
+            '2017-01-05 00:00:00',
+            'Platform',
+            'blablabla');
 
         $this->mockImportUserData($importUsersData);
         $this->mockFindUserByUsername(new User());
         $this->mockUserUpdate(1);
 
-        $this->mailerMock->expects($this->once())
-            ->method('sendMail');
+        $this->mailerMock->expects($this->once())->method('sendMail');
 
         $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile, true);
     }
@@ -602,67 +828,57 @@ class UserImporterTest extends ChamiloTestCase
      */
     protected function mockImportUserData($importUsersData = [])
     {
-        $importParserMock = $this->getMockBuilder(ImportParserInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $importParserMock = $this->getMockBuilder(ImportParserInterface::class)->disableOriginalConstructor()->getMock();
 
-        $this->importParserFactoryMock->expects($this->once())
-            ->method('getImportParserForUploadedFile')
-            ->with($this->uploadedFile)
-            ->will($this->returnValue($importParserMock));
+        $this->importParserFactoryMock->expects($this->once())->method('getImportParserForUploadedFile')->with(
+            $this->uploadedFile)->will($this->returnValue($importParserMock));
 
-        $importParserMock->expects($this->once())
-            ->method('parse')
-            ->with($this->uploadedFile)
-            ->will($this->returnValue($importUsersData));
+        $importParserMock->expects($this->once())->method('parse')->with($this->uploadedFile)->will(
+            $this->returnValue($importUsersData));
     }
 
     /**
-     * Mocks the create function from the UserRepository
+     * Mocks the create function from the UserService
      *
      * @param int $numberOfCalls
      * @param bool $returnValue
      */
     protected function mockUserCreate($numberOfCalls = 1, $returnValue = true)
     {
-        $this->userRepositoryMock->expects($this->exactly($numberOfCalls))
-            ->method('create')
-            ->will($this->returnValue($returnValue));
+        $this->userServiceMock->expects($this->exactly($numberOfCalls))->method('createUser')->will(
+            $this->returnValue($returnValue));
     }
 
     /**
-     * Mocks the update function from the UserRepository
+     * Mocks the update function from the UserService
      *
      * @param int $numberOfCalls
      * @param bool $returnValue
      */
     protected function mockUserUpdate($numberOfCalls = 1, $returnValue = true)
     {
-        $this->userRepositoryMock->expects($this->exactly($numberOfCalls))
-            ->method('update')
-            ->will($this->returnValue($returnValue));
+        $this->userServiceMock->expects($this->exactly($numberOfCalls))->method('updateUser')->will(
+            $this->returnValue($returnValue));
     }
 
     /**
-     * Mocks the createUserSettingForSettingAndUser function from the UserRepository
+     * Mocks the createUserSettingForSettingAndUser function from the UserService
      */
     protected function mockCreateUserSettingForSettingAndUser()
     {
-        $this->userRepositoryMock->expects($this->once())
-            ->method('createUserSettingForSettingAndUser')
-            ->will($this->returnValue(true));
+        $this->userServiceMock->expects($this->once())->method('createUserSettingForSettingAndUser')->will(
+            $this->returnValue(true));
     }
 
     /**
-     * Mocks the create function from the UserRepository
+     * Mocks the create function from the UserService
      *
      * @param User|null $returnUser
      */
     protected function mockFindUserByUsername(User $returnUser = null)
     {
-        $this->userRepositoryMock->expects($this->once())
-            ->method('findUserByUsername')
-            ->will($this->returnValue($returnUser));
+        $this->userServiceMock->expects($this->once())->method('findUserByUsername')->will(
+            $this->returnValue($returnUser));
     }
-
 }
 

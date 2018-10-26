@@ -6,6 +6,11 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  *
@@ -59,6 +64,28 @@ class ConfigurationRepository
             Setting::class_name(),
             new RecordRetrievesParameters(
                 new DataClassProperties(array(new PropertiesConditionVariable(Setting::class)))));
+    }
+
+    /**
+     *
+     * @param string $context
+     * @param string $variable
+     * @return \Chamilo\Configuration\Storage\DataClass\Setting
+     */
+    public function findSettingByContextAndVariableName($context, $variable)
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT),
+            new StaticConditionVariable($context));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_VARIABLE),
+            new StaticConditionVariable($variable));
+
+        return $this->getDataClassRepository()->retrieve(
+            Setting::class,
+            new DataClassRetrieveParameters(new AndCondition($conditions)));
     }
 
     /**

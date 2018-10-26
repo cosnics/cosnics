@@ -8,8 +8,8 @@ use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\PublicationReposit
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
@@ -23,7 +23,7 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Service class that mails a content object publication to a user
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ContentObjectPublicationMailer
@@ -61,42 +61,60 @@ class ContentObjectPublicationMailer
 
     /**
      *
-     * @var UserRepository
+     * @var \Chamilo\Core\User\Service\UserService
      */
-    protected $userRepository;
+    protected $userService;
 
     /**
      * ContentObjectPublicationMailer constructor.
-     * 
+     *
      * @param MailerInterface $mailer
      * @param Translation $translator
      * @param CourseRepositoryInterface $courseRepository
      * @param PublicationRepositoryInterface $publicationRepository
      * @param ContentObjectRepository $contentObjectRepository
-     * @param UserRepository $userRepository
+     * @param \Chamilo\Core\User\Service\UserService $userService
      */
-    public function __construct(MailerInterface $mailer, Translation $translator, 
-        CourseRepositoryInterface $courseRepository, PublicationRepositoryInterface $publicationRepository, 
-        ContentObjectRepository $contentObjectRepository, UserRepository $userRepository)
+    public function __construct(MailerInterface $mailer, Translation $translator,
+        CourseRepositoryInterface $courseRepository, PublicationRepositoryInterface $publicationRepository,
+        ContentObjectRepository $contentObjectRepository, UserService $userService)
     {
         $this->mailer = $mailer;
         $this->translator = $translator;
         $this->courseRepository = $courseRepository;
         $this->publicationRepository = $publicationRepository;
         $this->contentObjectRepository = $contentObjectRepository;
-        $this->userRepository = $userRepository;
+        $this->userService = $userService;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    public function getUserService()
+    {
+        return $this->userService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     */
+    public function setUserService(UserService $userService)
+    {
+        $this->userService = $userService;
     }
 
     /**
      * Mails the given publication to the target users
-     * 
+     *
      * @param ContentObjectPublication $contentObjectPublication
      */
     public function mailPublication(ContentObjectPublication $contentObjectPublication)
     {
         set_time_limit(3600);
-        
-        $user = $this->userRepository->findUserById($contentObjectPublication->get_publisher_id());
+
+        $user = $this->getUserService()->findUserByIdentifier($contentObjectPublication->get_publisher_id());
         $content_object = $contentObjectPublication->get_content_object();
         $tool = $contentObjectPublication->get_tool();
         $link = $this->getContentObjectPublicationUrl($contentObjectPublication);
@@ -116,18 +134,18 @@ class ContentObjectPublicationMailer
 
         $body .= $this->getTranslation('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' .
              $link . '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
-        
+
         $body .= $content_object->get_description();
         $body .= '--<br />';
-        
+
         $body .= $user->get_fullname() . ' - ' . $course->get_visual_code() . ' - ' . $course->get_title() . ' - ' .
              $this->getTranslation('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
-        
+
         $targetUsers = $this->getTargetUserEmails($contentObjectPublication, $user);
-        
+
         $mailFiles = array();
         $body = $this->parseResources($body, $mailFiles);
-        
+
         if ($content_object->has_attachments())
         {
             $body .= '<br ><br >' . $this->getTranslation('AttachmentWarning', array('LINK' => $link));
@@ -139,44 +157,44 @@ class ContentObjectPublicationMailer
         $log .= "mail for publication " . $contentObjectPublication->getId() . " in course ";
         $log .= $course->get_title();
         $log .= " to: \n";
-        
+
         $subject = $this->getTranslation(
-            'NewPublicationMailSubject', 
+            'NewPublicationMailSubject',
             array('COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title()));
-        
+
         $mail = new Mail(
-            $subject, 
-            $body, 
-            $targetUsers, 
-            true, 
-            array(), 
-            array(), 
-            $user->get_fullname(), 
-            $user->get_email(), 
-            null, 
-            null, 
+            $subject,
+            $body,
+            $targetUsers,
+            true,
+            array(),
+            array(),
+            $user->get_fullname(),
+            $user->get_email(),
+            null,
+            null,
             $mailFiles);
-        
+
         try
         {
             $this->mailer->sendMail($mail);
-            
+
             $log .= " (successfull)\n";
         }
         catch (\Exception $ex)
         {
             $log .= " (unsuccessfull)\n";
         }
-        
+
         $this->logMailProgress($log);
-        
+
         $contentObjectPublication->set_email_sent(true);
         $contentObjectPublication->update();
     }
 
     /**
      * Builds and returns the link to the content object publicatoin
-     * 
+     *
      * @param ContentObjectPublication $contentObjectPublication
      *
      * @return string
@@ -184,24 +202,24 @@ class ContentObjectPublicationMailer
     protected function getContentObjectPublicationUrl(ContentObjectPublication $contentObjectPublication)
     {
         $parameters = array();
-        
+
         $parameters[Manager::PARAM_CONTEXT] = Manager::package();
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $parameters[Manager::PARAM_COURSE] = $contentObjectPublication->get_course_id();
         $parameters[Manager::PARAM_TOOL] = $contentObjectPublication->get_tool();
-        
+
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
-        
+
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $contentObjectPublication->getId();
-        
+
         $redirect = new Redirect($parameters);
-        
+
         return $redirect->getUrl();
     }
 
     /**
      * Parses the resources and if they are images, add them as attachments
-     * 
+     *
      * @param string $body
      * @param array $mailFiles
      *
@@ -212,9 +230,9 @@ class ContentObjectPublicationMailer
         $doc = new \DOMDocument();
         $doc->loadHTML('<?xml encoding="utf-8" ?>' . $body);
         $elements = $doc->getElementsByTagName('resource');
-        
+
         $index = 0;
-        
+
         foreach ($elements as $i => $element)
         {
             $type = $element->attributes->getNamedItem('type')->value;
@@ -223,19 +241,19 @@ class ContentObjectPublicationMailer
             {
                 /** @var File $object */
                 $object = $this->contentObjectRepository->findById($id);
-                
+
                 if ($object->is_image())
                 {
                     $mailFiles[] = new MailFile(
-                        $object->get_filename(), 
-                        $object->get_full_path(), 
+                        $object->get_filename(),
+                        $object->get_full_path(),
                         $object->get_mime_type());
-                    
+
                     $elem = $doc->createElement('img');
                     $elem->setAttribute('src', 'cid:' . $index);
                     $elem->setAttribute('alt', $object->get_filename());
                     $element->parentNode->replaceChild($elem, $element);
-                    
+
                     $index ++;
                 }
                 else
@@ -248,13 +266,13 @@ class ContentObjectPublicationMailer
                 $element->parentNode->removeChild($element);
             }
         }
-        
+
         return $doc->saveHTML();
     }
 
     /**
      * Returns the email addresses of the target users for the publication
-     * 
+     *
      * @param ContentObjectPublication $contentObjectPublication
      * @param User $publisher
      *
@@ -263,26 +281,26 @@ class ContentObjectPublicationMailer
     protected function getTargetUserEmails(ContentObjectPublication $contentObjectPublication, User $publisher)
     {
         $target_email = array();
-        
+
         $target_email[] = $publisher->get_email();
         $target_users = $this->publicationRepository->findPublicationTargetUsers($contentObjectPublication);
-        
+
         foreach ($target_users as $target_user)
         {
-            if(!array_key_exists(User::PROPERTY_ACTIVE, $target_user) || $target_user[User::PROPERTY_ACTIVE] == 1)
+            if (! array_key_exists(User::PROPERTY_ACTIVE, $target_user) || $target_user[User::PROPERTY_ACTIVE] == 1)
             {
                 $target_email[] = $target_user[User::PROPERTY_EMAIL];
             }
         }
-        
+
         $unique_email = array_unique($target_email);
-        
+
         return $unique_email;
     }
 
     /**
      * Logs the progress of the mailing
-     * 
+     *
      * @param string $logMessage
      */
     protected function logMailProgress($logMessage)
@@ -290,12 +308,12 @@ class ContentObjectPublicationMailer
         if (Configuration::getInstance()->get_setting(array('Chamilo\Application\Weblcms', 'log_mails')))
         {
             $dir = Path::getInstance()->getLogPath() . 'mail';
-            
+
             if (! file_exists($dir) and ! is_dir($dir))
             {
                 mkdir($dir);
             }
-            
+
             $today = date("Ymd", mktime());
             $logfile = $dir . '//' . "mails_sent_$today" . ".log";
             $mail_log = new FileLogger($logfile, true);
@@ -305,7 +323,7 @@ class ContentObjectPublicationMailer
 
     /**
      * Helper function to get the translation
-     * 
+     *
      * @param string $variable
      * @param array $parameters
      * @param string $context

@@ -114,7 +114,7 @@ class AssignmentEntriesBlock extends AssignmentReportingManager
 
             if ($isGroupSubmission)
             {
-                $individual_submitter = $this->getUserService()->getUserFullNameById($entry[Entry::PROPERTY_USER_ID]);
+                $individual_submitter = $this->getUserService()->getUserFullNameByIdentifier($entry[Entry::PROPERTY_USER_ID]);
                 $reporting_data->add_data_category_row($key, self::$COLUMN_INDIVIDUAL_SUBMITTER, $individual_submitter);
             }
         }

@@ -199,7 +199,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
             'FEEDBACK_COUNT' => $this->count_feedbacks(),
             'SUBMITTED_DATE' => $submittedDate,
-            'SUBMITTED_BY' => $this->getUserService()->getUserFullNameById($this->getEntry()->getUserId()),
+            'SUBMITTED_BY' => $this->getUserService()->getUserFullNameByIdentifier($this->getEntry()->getUserId()),
             'SCORE_FORM' => $scoreForm->createView(),
             'SCORE' => $this->getScore(),
             'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
@@ -841,7 +841,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 ContentObject::class, $entryAttachment->getAttachmentId()
             );
 
-            $owner = $this->getUserService()->getUserFullNameById($contentObject->get_owner_id());
+            $owner = $this->getUserService()->getUserFullNameByIdentifier($contentObject->get_owner_id());
 
             $contentObjectAttachments[] =
                 [

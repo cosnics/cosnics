@@ -6,7 +6,6 @@ use Chamilo\Core\User\Form\UserImportForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory;
 use Chamilo\Core\User\Service\UserImporter\UserImporter;
-use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\HashingUtilities;
@@ -38,7 +37,7 @@ class ImporterComponent extends Manager
         {
             $userImporter = new UserImporter(
                 new ImportParserFactory(),
-                new UserRepository(),
+                $this->getService('chamilo.core.user.service.user_service'),
                 $this->getConfigurationConsulter(),
                 $this->getHashingUtilities(),
                 $this->getMailer(),

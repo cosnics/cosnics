@@ -107,10 +107,10 @@ class ReportRenderer
             'INTERNET_RESULTS' => $internetResults,
             'RESULTS' => $resultParameters,
             'REQUEST' => $request,
-            'REQUEST_USER_NAME' => $this->userService->getUserFullNameById(
+            'REQUEST_USER_NAME' => $this->userService->getUserFullNameByIdentifier(
                 $request->get_request_user_id()
             ),
-            'AUTHOR' => $this->userService->getUserFullNameById(
+            'AUTHOR' => $this->userService->getUserFullNameByIdentifier(
                 $request->get_author_id()
             )
         ];
