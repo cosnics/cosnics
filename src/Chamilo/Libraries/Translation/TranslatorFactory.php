@@ -9,7 +9,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
 use Symfony\Component\Translation\Loader\IniFileLoader;
 use Symfony\Component\Translation\Loader\XliffFileLoader;

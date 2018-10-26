@@ -2,28 +2,24 @@
 
 namespace Chamilo\Core\Repository\Component;
 
+use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Metadata\Service\EntityService;
-use Chamilo\Core\Metadata\Relation\Service\RelationService;
-use Chamilo\Core\Metadata\Element\Service\ElementService;
-use Chamilo\Core\Metadata\Service\InstanceService;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  *

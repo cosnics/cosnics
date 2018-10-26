@@ -3,7 +3,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\PlatformGroup;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
 
 /**
  *

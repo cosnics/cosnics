@@ -3,7 +3,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\CourseGroup;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 
 /**
  *

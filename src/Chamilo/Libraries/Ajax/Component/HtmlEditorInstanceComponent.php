@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -34,13 +33,7 @@ class HtmlEditorInstanceComponent extends \Chamilo\Libraries\Ajax\Manager
         $attributes = str_replace('\"', '"', $attributes);
         $attributes = json_decode($attributes, true);
 
-        $html_editor = FormValidatorHtmlEditor::factory(
-            LocalSetting::getInstance()->get('html_editor'),
-            $name,
-            $label,
-            false,
-            $options,
-            $attributes);
+        $html_editor = new FormValidatorHtmlEditor($name, $label, false, $options, $attributes);
 
         echo $html_editor->render();
     }

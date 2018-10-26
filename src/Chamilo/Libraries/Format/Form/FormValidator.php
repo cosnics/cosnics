@@ -5,7 +5,6 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -114,8 +113,8 @@ EOT;
 
         HTML_QuickForm::setRequiredNote(
             '<span class="form_required"><img src="' . Theme::getInstance()->getCommonImagePath('Action/Required') .
-                 '" alt="*" title ="*"/>&nbsp;<small>' .
-                 Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES) . '</small></span>');
+            '" alt="*" title ="*"/>&nbsp;<small>' .
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES) . '</small></span>');
         $required_note_template = <<<EOT
 	<div class="form-row row">
 		<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label"></div>
@@ -137,16 +136,16 @@ EOT;
         $element_template[] = '<div class="form-row row ' . $extraClasses . '">';
         $element_template[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">';
         $element_template[] = '{label}<!-- BEGIN required --><span class="form_required"><img src="' .
-             Theme::getInstance()->getCommonImagePath('Action/Required') .
-             '" alt="*" title ="*"/></span> <!-- END required -->';
-        $element_template[] = '</div>';
-        $element_template[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
-        $element_template[] = '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
-        $element_template[] = '<div class="form_feedback"></div></div>';
-        $element_template[] = '<div class="clear">&nbsp;</div>';
-        $element_template[] = '</div>';
+            Theme::getInstance()->getCommonImagePath('Action/Required') .
+            '" alt="*" title ="*"/></span> <!-- END required -->';
+            $element_template[] = '</div>';
+            $element_template[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
+            $element_template[] = '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
+            $element_template[] = '<div class="form_feedback"></div></div>';
+            $element_template[] = '<div class="clear">&nbsp;</div>';
+            $element_template[] = '</div>';
 
-        return implode(PHP_EOL, $element_template);
+            return implode(PHP_EOL, $element_template);
     }
 
     /**
@@ -167,62 +166,62 @@ EOT;
             'datepicker',
             $dir . 'Element/HTML_QuickForm_datepicker.php',
             'HTML_QuickForm_datepicker');
-        $this->registerElementType(
-            'timepicker',
-            $dir . 'Element/HTML_QuickForm_timepicker.php',
-            'HTML_QuickForm_timepicker');
+            $this->registerElementType(
+                'timepicker',
+                $dir . 'Element/HTML_QuickForm_timepicker.php',
+                'HTML_QuickForm_timepicker');
 
-        // Element finder elements
-        $this->registerElementType(
-            'upload_or_create',
-            $dir . 'Element/HTML_QuickForm_upload_or_create.php',
-            'HTML_QuickForm_upload_or_create');
-        $this->registerElementType(
-            'element_finder',
-            $dir . 'Element/HTML_QuickForm_element_finder.php',
-            'HTML_QuickForm_element_finder');
-        $this->registerElementType(
-            'advanced_element_finder',
-            $dir . 'Element/HTML_QuickForm_advanced_element_finder.php',
-            'HTML_QuickForm_advanced_element_finder');
-        $this->registerElementType(
-            'image_selecter',
-            $dir . 'Element/HTML_QuickForm_image_selecter.php',
-            'HTML_QuickForm_image_selecter');
+                // Element finder elements
+                $this->registerElementType(
+                    'upload_or_create',
+                    $dir . 'Element/HTML_QuickForm_upload_or_create.php',
+                    'HTML_QuickForm_upload_or_create');
+                    $this->registerElementType(
+                        'element_finder',
+                        $dir . 'Element/HTML_QuickForm_element_finder.php',
+                        'HTML_QuickForm_element_finder');
+                        $this->registerElementType(
+                            'advanced_element_finder',
+                            $dir . 'Element/HTML_QuickForm_advanced_element_finder.php',
+                            'HTML_QuickForm_advanced_element_finder');
+                            $this->registerElementType(
+                                'image_selecter',
+                                $dir . 'Element/HTML_QuickForm_image_selecter.php',
+                                'HTML_QuickForm_image_selecter');
 
-        $this->registerElementType(
-            'user_group_finder',
-            $dir . 'Element/HTML_QuickForm_user_group_finder.php',
-            'HTML_QuickForm_user_group_finder');
+                                $this->registerElementType(
+                                    'user_group_finder',
+                                    $dir . 'Element/HTML_QuickForm_user_group_finder.php',
+                                    'HTML_QuickForm_user_group_finder');
 
-        // Button elements
-        $this->registerElementType(
-            'style_button',
-            $dir . 'Element/HTML_QuickForm_stylebutton.php',
-            'HTML_QuickForm_stylebutton');
-        $this->registerElementType(
-            'style_submit_button',
-            $dir . 'Element/HTML_QuickForm_stylesubmitbutton.php',
-            'HTML_QuickForm_stylesubmitbutton');
-        $this->registerElementType(
-            'style_reset_button',
-            $dir . 'Element/HTML_QuickForm_styleresetbutton.php',
-            'HTML_QuickForm_styleresetbutton');
+                                    // Button elements
+                                    $this->registerElementType(
+                                        'style_button',
+                                        $dir . 'Element/HTML_QuickForm_stylebutton.php',
+                                        'HTML_QuickForm_stylebutton');
+                                        $this->registerElementType(
+                                            'style_submit_button',
+                                            $dir . 'Element/HTML_QuickForm_stylesubmitbutton.php',
+                                            'HTML_QuickForm_stylesubmitbutton');
+                                            $this->registerElementType(
+                                                'style_reset_button',
+                                                $dir . 'Element/HTML_QuickForm_styleresetbutton.php',
+                                                'HTML_QuickForm_styleresetbutton');
 
-        // Checkbox and radio elements
-        $this->registerElementType(
-            'radio',
-            $dir . 'Element/HTML_QuickForm_bootstrap_radio.php',
-            'HTML_QuickForm_bootstrap_radio');
+                                                // Checkbox and radio elements
+                                                $this->registerElementType(
+                                                    'radio',
+                                                    $dir . 'Element/HTML_QuickForm_bootstrap_radio.php',
+                                                    'HTML_QuickForm_bootstrap_radio');
 
-        $this->registerElementType(
-            'checkbox',
-            $dir . 'Element/HTML_QuickForm_extended_checkbox.php',
-            'HTML_QuickForm_extended_checkbox');
+                                                    $this->registerElementType(
+                                                        'checkbox',
+                                                        $dir . 'Element/HTML_QuickForm_extended_checkbox.php',
+                                                        'HTML_QuickForm_extended_checkbox');
 
-        $this->registerElementType('toggle', $dir . 'Element/HTML_QuickForm_toggle.php', 'HTML_QuickForm_toggle');
+                                                        $this->registerElementType('toggle', $dir . 'Element/HTML_QuickForm_toggle.php', 'HTML_QuickForm_toggle');
 
-        $this->registerElementType('category', $dir . 'Element/HTML_QuickForm_category.php', 'HTML_QuickForm_category');
+                                                        $this->registerElementType('category', $dir . 'Element/HTML_QuickForm_category.php', 'HTML_QuickForm_category');
     }
 
     public function registerAdditionalRules()
@@ -445,13 +444,7 @@ EOT;
      */
     public function add_html_editor($name, $label, $required = true, $options = array(), $attributes = array())
     {
-        $html_editor = FormValidatorHtmlEditor::factory(
-            LocalSetting::getInstance()->get('html_editor'),
-            $name,
-            $label,
-            $required,
-            $options,
-            $attributes);
+        $html_editor = new FormValidatorHtmlEditor($name, $label, $required, $options, $attributes);
         $html_editor->set_form($this);
         $html_editor->add();
     }
@@ -507,13 +500,7 @@ EOT;
      */
     public function create_html_editor($name, $label, $options = array(), $attributes = array())
     {
-        $html_editor = FormValidatorHtmlEditor::factory(
-            LocalSetting::getInstance()->get('html_editor'),
-            $name,
-            $label,
-            false,
-            $options,
-            $attributes);
+        $html_editor = new FormValidatorHtmlEditor($name, $label, false, $options, $attributes);
         $html_editor->set_form($this);
 
         return $html_editor->create();
@@ -617,7 +604,7 @@ EOT;
             'date_compare',
             'lte');
 
-        return $elements;
+            return $elements;
     }
 
     /**
@@ -743,30 +730,28 @@ EOT;
             '',
             Translation::get($noSelection),
             '0',
-            array(
-                'onclick' => 'javascript:receivers_hide(\'receivers_window_' . $elementName . '\')',
+            array('onclick' => 'javascript:receivers_hide(\'receivers_window_' . $elementName . '\')',
                 'id' => 'receiver_' . $elementName));
-        $choices[] = $this->createElement(
-            'radio',
-            $elementName . '_option',
-            '',
-            Translation::get('SelectGroupsUsers'),
-            '1',
-            array('onclick' => 'javascript:receivers_show(\'receivers_window_' . $elementName . '\')'));
-        $this->addGroup($choices, null, $elementLabel, '', false);
-        $this->addElement(
-            'html',
-            '<div style="margin-left: 25px; display: block;" id="receivers_window_' . $elementName . '">');
+            $choices[] = $this->createElement(
+                'radio',
+                $elementName . '_option',
+                '',
+                Translation::get('SelectGroupsUsers'),
+                '1',
+                array('onclick' => 'javascript:receivers_show(\'receivers_window_' . $elementName . '\')'));
+            $this->addGroup($choices, null, $elementLabel, '', false);
+            $this->addElement(
+                'html',
+                '<div style="margin-left: 25px; display: block;" id="receivers_window_' . $elementName . '">');
 
-        $this->add_element_finder_with_legend($elementName, null, $attributes, $legend);
+            $this->add_element_finder_with_legend($elementName, null, $attributes, $legend);
 
-        $this->addElement('html', '</div>');
-        $this->addElement(
-            'html',
-            "<script type=\"text/javascript\">
+            $this->addElement('html', '</div>');
+            $this->addElement(
+                'html',
+                "<script type=\"text/javascript\">
 					/* <![CDATA[ */
-					var expiration_" . $elementName .
-                 " = document.getElementById('receiver_" . $elementName . "');
+					var expiration_" . $elementName . " = document.getElementById('receiver_" . $elementName . "');
 					if (expiration_" . $elementName . ".checked)
 					{
 						receivers_hide('receivers_window_" . $elementName . "');
@@ -848,8 +833,7 @@ EOT;
                 '',
                 Translation::get($radioType),
                 $radioType,
-                array(
-                    'onclick' => 'javascript:receivers_hide(\'' . $elementName . 'receivers_window\')',
+                array('onclick' => 'javascript:receivers_hide(\'' . $elementName . 'receivers_window\')',
                     'id' => $elementName . 'receiver'));
         }
 
@@ -859,65 +843,64 @@ EOT;
             '',
             Translation::get('SelectGroupsUsers'),
             '1',
-            array(
-                'onclick' => 'javascript:receivers_show(\'' . $elementName . 'receivers_window\')',
+            array('onclick' => 'javascript:receivers_show(\'' . $elementName . 'receivers_window\')',
                 'id' => $elementName . 'group'));
-        $this->addGroup($choices, null, $elementLabel, '<br />', false);
-        $idGroup = $elementName . 'group';
-        $nameWindow = $elementName . 'receivers_window';
-        $this->addElement(
-            'html',
-            '<div style="margin-left: 25px; display: block;" id="' . $elementName . 'receivers_window">');
+            $this->addGroup($choices, null, $elementLabel, '<br />', false);
+            $idGroup = $elementName . 'group';
+            $nameWindow = $elementName . 'receivers_window';
+            $this->addElement(
+                'html',
+                '<div style="margin-left: 25px; display: block;" id="' . $elementName . 'receivers_window">');
 
-        $element_finder = $this->createElement(
-            'user_group_finder',
-            $elementName . '_elements',
-            '',
-            $attributes['search_url'],
-            $attributes['locale'],
-            $attributes['defaults'],
-            $attributes['options']);
+            $element_finder = $this->createElement(
+                'user_group_finder',
+                $elementName . '_elements',
+                '',
+                $attributes['search_url'],
+                $attributes['locale'],
+                $attributes['defaults'],
+                $attributes['options']);
 
-        $element_finder->excludeElements($attributes['exclude']);
+            $element_finder->excludeElements($attributes['exclude']);
 
-        $this->addElement($element_finder);
-        $this->addElement('html', '</div>');
+            $this->addElement($element_finder);
+            $this->addElement('html', '</div>');
 
-        $this->addElement(
-            'html',
-            "<script type=\"text/javascript\">
+            $this->addElement(
+                'html',
+                "<script type=\"text/javascript\">
 					/* <![CDATA[ */
 					var expiration_" . $elementName . " = document.getElementById('$idGroup');
-					if (expiration_" . $elementName . ".checked)
-					{
-						receivers_show('$nameWindow');
-					}
-                    else
-                    {
-                        receivers_hide('$nameWindow');
-                    }
-					function receivers_show(item) {
-						el = document.getElementById(item);
-						el.style.display='';
-					}
-					function receivers_hide(item) {
-						el = document.getElementById(item);
-						el.style.display='none';
-					}
-					function reset_receivers_" . $elementName . "()
+                if (expiration_" . $elementName . ".checked)
+                {
+                receivers_show('$nameWindow');
+    }
+                else
+                {
+                receivers_hide('$nameWindow');
+    }
+                function receivers_show(item) {
+                el = document.getElementById(item);
+                el.style.display='';
+    }
+                function receivers_hide(item) {
+                el = document.getElementById(item);
+                el.style.display='none';
+    }
+                function reset_receivers_" . $elementName . "()
 					{
 						setTimeout(
 							function()
 							{
 								if (expiration_" . $elementName . ".checked)
-									receivers_show('$nameWindow');
-								else
-									receivers_hide('$nameWindow');
-							},30);
-    				}
-    				$(document).ready(function ()
-					{
-						$(document).on('click', ':reset', reset_receivers_" . $elementName . ");
+                receivers_show('$nameWindow');
+                else
+                receivers_hide('$nameWindow');
+    },30);
+    }
+                $(document).ready(function ()
+                {
+                $(document).on('click', ':reset', reset_receivers_" . $elementName . ");
 					});
 					/* ]]> */
 					</script>\n");
@@ -935,12 +918,12 @@ EOT;
         $this->with_progress_bar = true;
         $this->updateAttributes(
             "onsubmit=\"javascript: myUpload.start('dynamic_div','" .
-                 Theme::getInstance()->getCommonImagePath('Action/ProgressBar', 'gif') . "','" .
-                 Translation::get('PleaseStandBy') . "','" . $this->getAttribute('id') . "');\"");
+            Theme::getInstance()->getCommonImagePath('Action/ProgressBar', 'gif') . "','" .
+            Translation::get('PleaseStandBy') . "','" . $this->getAttribute('id') . "');\"");
         $this->addElement(
             'html',
             '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                 'Upload.js" type="text/javascript"></script>');
+            'Upload.js" type="text/javascript"></script>');
         $this->addElement(
             'html',
             '<script type="text/javascript">var myUpload = new upload(' . (abs(intval($delay)) * 1000) . ');</script>');
@@ -1329,20 +1312,20 @@ EOT;
             $name,
             null,
             ' id="' . $name . '" data-element="' . $name . '" class="image-uploader-data"');
-        $this->addElement(
-            'static',
-            null,
-            $label,
-            '<div class="thumbnail" data-element="' . $name . '"><img class="image-uploader-preview" src="' .
-                 Theme::getInstance()->getImagePath('Chamilo\Configuration', 'ImagePlaceholder') . '" /></div>');
-        $this->addElement('file', $name . '-file', null, 'class="image-uploader-file" data-element="' . $name . '"');
+            $this->addElement(
+                'static',
+                null,
+                $label,
+                '<div class="thumbnail" data-element="' . $name . '"><img class="image-uploader-preview" src="' .
+                Theme::getInstance()->getImagePath('Chamilo\Configuration', 'ImagePlaceholder') . '" /></div>');
+            $this->addElement('file', $name . '-file', null, 'class="image-uploader-file" data-element="' . $name . '"');
 
-        $this->addElement('html', '</div>');
+            $this->addElement('html', '</div>');
 
-        $this->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ImageUploader.js'));
+            $this->addElement(
+                'html',
+                ResourceManager::getInstance()->get_resource_html(
+                    Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ImageUploader.js'));
     }
 
     /**
@@ -1381,7 +1364,7 @@ EOT;
             'html',
             ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                     'Plugin/Jquery/jquery.file.upload.single.js'));
+                'Plugin/Jquery/jquery.file.upload.single.js'));
     }
 
     /**
@@ -1436,7 +1419,7 @@ EOT;
 
         $dropzoneHtml[] = '<button data-dz-remove class="btn btn-danger delete">';
         $dropzoneHtml[] = '<i class="glyphicon glyphicon-trash"></i> <span>' . $this->getTranslation('Delete') .
-             '</span>';
+        '</span>';
         $dropzoneHtml[] = '</button>';
 
         $dropzoneHtml[] = '</div>';
@@ -1477,7 +1460,7 @@ EOT;
         if ($markRequired)
         {
             $label .= '<span class="form_required"><img src="' .
-                 Theme::getInstance()->getCommonImagePath('Action/Required') . '" alt="*" title ="*"/></span>';
+                Theme::getInstance()->getCommonImagePath('Action/Required') . '" alt="*" title ="*"/></span>';
         }
 
         $this->addElement('static', $elementName . '_static_data', $label, implode(PHP_EOL, $dropzoneHtml));
@@ -1500,13 +1483,13 @@ EOT;
         $javascriptHtml[] = '<script type="text/javascript">';
         $javascriptHtml[] = '$(document).ready(function() {';
         $javascriptHtml[] = '$("#' . $elementName . '-upload-container").fileUpload({' .
-             implode(', ', $dropzoneOptionsString) . '});';
-        $javascriptHtml[] = '});';
-        $javascriptHtml[] = '</script>';
+            implode(', ', $dropzoneOptionsString) . '});';
+            $javascriptHtml[] = '});';
+            $javascriptHtml[] = '</script>';
 
-        $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
+            $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
 
-        $this->addElement('html', '</div>');
+            $this->addElement('html', '</div>');
     }
 
     /**

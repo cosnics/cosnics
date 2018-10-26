@@ -2,7 +2,6 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
 
 /**
  *

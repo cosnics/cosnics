@@ -6,7 +6,6 @@ use Chamilo\Configuration\Service\FileConfigurationLoader;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
 use Chamilo\Libraries\Cache\Assetic\JavascriptCacheService;
 use Chamilo\Libraries\Cache\Assetic\StylesheetCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;

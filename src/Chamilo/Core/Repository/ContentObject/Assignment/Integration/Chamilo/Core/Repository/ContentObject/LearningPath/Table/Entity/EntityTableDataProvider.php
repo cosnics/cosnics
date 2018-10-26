@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entity;
 
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+
 
 /**
  *

@@ -8,8 +8,6 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Learnin
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Tool\LastAccessToToolsBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\User\UsersTrackingBlock;
 use Chamilo\Core\Reporting\ReportingTemplate;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
