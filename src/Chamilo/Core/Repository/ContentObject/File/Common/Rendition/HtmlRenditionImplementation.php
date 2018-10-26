@@ -14,7 +14,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class HtmlRenditionImplementation extends RenditionImplementation
 {
@@ -113,11 +112,6 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
         return $buttonToolBarRenderer->render();
-
-        return implode(PHP_EOL, [
-            $object->get_icon_image(Theme::ICON_MEDIUM),
-            $this->renderActions()
-        ]);
     }
 
     /**

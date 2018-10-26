@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
-use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 /**
  *

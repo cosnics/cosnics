@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\S
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\PublicationCategoryCourseGroupServiceDecorator;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupFormDecorator;
-use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Decorates the service for course groups. Adding additional functionality for the common course group functionality

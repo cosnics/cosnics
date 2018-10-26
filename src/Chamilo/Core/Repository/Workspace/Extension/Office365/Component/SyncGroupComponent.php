@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Workspace\Extension\Office365\Manager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * @package Chamilo\Core\Repository\Workspace\Extension\Office365

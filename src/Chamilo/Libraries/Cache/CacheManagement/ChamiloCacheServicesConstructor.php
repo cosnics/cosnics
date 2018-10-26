@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Cache\CacheManagement;
 
 use Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheService;
 use Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheService;
-use Chamilo\Application\Calendar\Extension\Office365\Service\RequestCacheService;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\DataCacheLoader;

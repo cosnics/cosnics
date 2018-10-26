@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Format\Form;
 
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * The combination of options available for the FormValidatorHtmlEditor Should be implemented for each specific editor
@@ -11,7 +12,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @package Chamilo\Libraries\Format\Form
  * @author Scaramanga
  */
-abstract class FormValidatorHtmlEditorOptions
+class FormValidatorHtmlEditorOptions
 {
     const OPTION_SKIN = 'skin';
 
@@ -39,23 +40,22 @@ abstract class FormValidatorHtmlEditorOptions
     /**
      * Whether or not the toolbar should be collapse by default
      */
-    const OPTION_COLLAPSE_TOOLBAR = 'collapse_toolbar';
+    const OPTION_COLLAPSE_TOOLBAR = 'toolbarStartupExpanded';
 
     /**
      * Path to the editors configuration file
      */
-    const OPTION_CONFIGURATION = 'configuration';
+    const OPTION_CONFIGURATION = 'customConfig';
 
     /**
      * Whether or not the content of the editor should be treated as a standalone page
      */
-    const OPTION_FULL_PAGE = 'full_page';
+    const OPTION_FULL_PAGE = 'fullPage';
 
     /**
      * Path to available templates for the editor
      */
-    const OPTION_TEMPLATES = 'templates';
-
+    const OPTION_TEMPLATES = 'templates_files';
     const OPTION_RENDER_RESOURCE_INLINE = 'render_resource_inline';
 
     /**
@@ -81,18 +81,9 @@ abstract class FormValidatorHtmlEditorOptions
      */
     public function get_option_names()
     {
-        return array(
-            self::OPTION_COLLAPSE_TOOLBAR,
-            self::OPTION_CONFIGURATION,
-            self::OPTION_FULL_PAGE,
-            self::OPTION_LANGUAGE,
-            self::OPTION_TEMPLATES,
-            self::OPTION_TOOLBAR,
-            self::OPTION_SKIN,
-            self::OPTION_HEIGHT,
-            self::OPTION_WIDTH,
-            self::OPTION_RENDER_RESOURCE_INLINE
-        );
+        return array(self::OPTION_COLLAPSE_TOOLBAR, self::OPTION_CONFIGURATION, self::OPTION_FULL_PAGE,
+            self::OPTION_LANGUAGE, self::OPTION_TEMPLATES, self::OPTION_TOOLBAR, self::OPTION_SKIN, self::OPTION_HEIGHT,
+            self::OPTION_WIDTH, self::OPTION_RENDER_RESOURCE_INLINE);
     }
 
     /**
@@ -154,6 +145,23 @@ abstract class FormValidatorHtmlEditorOptions
     }
 
     /**
+     *
+     * @param boolean $value
+     * @return boolean
+     */
+    public function process_collapse_toolbar($value)
+    {
+        if ($value === true)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    /**
      * Process the generic options into editor specific ones
      *
      * @return string
@@ -188,6 +196,19 @@ abstract class FormValidatorHtmlEditorOptions
 
     public function set_defaults()
     {
+        $application = Request::get('application');
+        $app_sys_path = Path::getInstance()->getJavascriptPath($application) . 'HtmlEditor/CkeditorInstanceConfig.js';
+
+        if (file_exists($app_sys_path))
+        {
+            $path = Path::getInstance()->getJavascriptPath($application, true) . 'HtmlEditor/CkeditorInstanceConfig.js';
+        }
+        else
+        {
+            $path = Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+            'HtmlEditor/CkeditorInstanceConfig.js';
+        }
+
         $available_options = $this->get_option_names();
 
         foreach ($available_options as $available_option)
@@ -222,6 +243,13 @@ abstract class FormValidatorHtmlEditorOptions
 
                     case self::OPTION_RENDER_RESOURCE_INLINE :
                         $this->set_option($available_option, true);
+                        break;
+                    case self::OPTION_SKIN :
+                        $this->set_option($available_option, 'moono-lisa');
+                        break;
+                    case self::OPTION_CONFIGURATION :
+                        $this->set_option($available_option, $path);
+                        break;
                 }
             }
         }
@@ -263,27 +291,6 @@ abstract class FormValidatorHtmlEditorOptions
         else
         {
             return '\'' . $value . '\'';
-        }
-    }
-
-    /**
-     *
-     * @param string $type
-     * @param string[] $options
-     * @return \Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions
-     */
-    public static function factory($type, $options = array())
-    {
-        $class = __NAMESPACE__ . '\\' . 'FormValidator' .
-             StringUtilities::getInstance()->createString($type)->upperCamelize() . 'HtmlEditorOptions';
-
-        if (class_exists($class))
-        {
-            return new $class($options);
-        }
-        else
-        {
-            return null;
         }
     }
 }

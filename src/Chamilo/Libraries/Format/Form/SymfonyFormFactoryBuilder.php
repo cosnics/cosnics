@@ -5,7 +5,6 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Hogent\Application\Weblcms\Tool\Implementation\Survey\Form\CustomCourseSurveyDates\FormType;
 use Symfony\Bridge\Twig\Extension\FormExtension;
-use Symfony\Bridge\Twig\Form\TwigRenderer;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
