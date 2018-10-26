@@ -281,7 +281,8 @@ class Filesystem
      */
     public static function create_safe_name($desiredName)
     {
-        return StringUtilities::getInstance()->createString($desiredName)->toAscii()->__toString();
+        $asciiString = StringUtilities::getInstance()->createString($desiredName)->toAscii()->__toString();
+        return preg_replace('/[:;!\x20\x2F\x5C]/', '_', $asciiString);
     }
 
     /**
