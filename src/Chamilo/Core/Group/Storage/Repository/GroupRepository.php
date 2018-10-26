@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Group\Storage\Repository;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -21,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class GroupRepository extends CommonDataClassRepository
 {
+
     /**
      * Finds a GroupRelUser object by a given group code and user id
      *
@@ -35,13 +35,11 @@ class GroupRepository extends CommonDataClassRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-            new StaticConditionVariable($userId)
-        );
+            new StaticConditionVariable($userId));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE),
-            new StaticConditionVariable($groupCode)
-        );
+            new StaticConditionVariable($groupCode));
 
         $condition = new AndCondition($conditions);
 
@@ -52,20 +50,15 @@ class GroupRepository extends CommonDataClassRepository
                 Group::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-                    new PropertyConditionVariable(
-                        Group::class,
-                        Group::PROPERTY_ID
-                    )
-                )
-            )
-        );
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_ID))));
 
         return $this->dataClassRepository->retrieve(
-            GroupRelUser::class, new DataClassRetrieveParameters($condition, array(), $joins)
-        );
+            GroupRelUser::class,
+            new DataClassRetrieveParameters($condition, array(), $joins));
     }
 
     /**
+     *
      * @param int $groupId
      * @param int $userId
      *
@@ -77,19 +70,17 @@ class GroupRepository extends CommonDataClassRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-            new StaticConditionVariable($userId)
-        );
+            new StaticConditionVariable($userId));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($groupId)
-        );
+            new StaticConditionVariable($groupId));
 
         $condition = new AndCondition($conditions);
 
         return $this->dataClassRepository->retrieve(
-            GroupRelUser::class, new DataClassRetrieveParameters($condition, array(), $joins)
-        );
+            GroupRelUser::class,
+            new DataClassRetrieveParameters($condition, array()));
     }
 
     /**
@@ -103,13 +94,13 @@ class GroupRepository extends CommonDataClassRepository
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE),
-            new StaticConditionVariable($groupCode)
-        );
+            new StaticConditionVariable($groupCode));
 
         return $this->dataClassRepository->retrieve(Group::class, new DataClassRetrieveParameters($condition));
     }
 
     /**
+     *
      * @param int $groupId
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass | Group

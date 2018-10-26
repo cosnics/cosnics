@@ -4,10 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Common\Rendition\Html
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\Assignment\Common\Rendition\HtmlRenditionImplementation;
-use Chamilo\Libraries\Format\Table\PropertiesTable;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {

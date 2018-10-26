@@ -5,7 +5,6 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryDownloader;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Gedmo\Translator\Entity\Translation;
 
 /**
  *

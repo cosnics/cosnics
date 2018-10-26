@@ -5,7 +5,6 @@ namespace Chamilo\Libraries\Console\Command;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Cache\CacheManagement\CacheManager;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

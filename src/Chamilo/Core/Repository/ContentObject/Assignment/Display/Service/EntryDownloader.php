@@ -15,9 +15,8 @@ use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFile;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFolder;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**

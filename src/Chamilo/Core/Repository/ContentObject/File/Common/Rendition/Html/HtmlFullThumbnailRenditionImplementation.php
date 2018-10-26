@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\HtmlRenditionImplementation;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -33,7 +32,7 @@ class HtmlFullThumbnailRenditionImplementation extends HtmlRenditionImplementati
             $this->get_context())->render($parameters);
 
         $downloadUrl = \Chamilo\Core\Repository\Manager::get_document_downloader_url(
-            $object->get_id(), 
+            $object->get_id(),
             $object->calculate_security_code());
 
         return $this->getTwig()->render(
