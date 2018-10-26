@@ -78,12 +78,12 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
                 break;
             case Score::PROPERTY_SCORE:
                 $score = $entry[Score::PROPERTY_SCORE];
-                if($score > 0)
+                if(is_null($score))
                 {
-                    return $score . '%';
+                    return null;
                 }
 
-                return null;
+                return $score . '%';
             case EntryTableColumnModel::PROPERTY_FEEDBACK_COUNT :
                 return $this->get_table()->getAssignmentDataProvider()->countFeedbackByEntryIdentifier(
                     $entry[Entry::PROPERTY_ID]
