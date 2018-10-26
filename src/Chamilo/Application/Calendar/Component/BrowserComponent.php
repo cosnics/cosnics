@@ -72,10 +72,12 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $sessionUtilities = $this->getSessionUtilities();
         $asAdmin = $sessionUtilities->get('_as_admin');
-        if($asAdmin && $asAdmin > 0)
+
+        if ($asAdmin && $asAdmin > 0)
         {
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $asAdmin);
-            if(!$user instanceof User || !$user->is_platform_admin())
+
+            $user = $this->getUserService()->findUserByIdentifier($asAdmin);
+            if (! $user instanceof User || ! $user->is_platform_admin())
             {
                 throw new NotAllowedException();
             }

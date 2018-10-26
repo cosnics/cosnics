@@ -3,6 +3,7 @@ namespace Chamilo\Application\Portfolio\Component;
 
 use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Application\Portfolio\Rights;
+use Chamilo\Application\Portfolio\Service\RightsService;
 use Chamilo\Application\Portfolio\Storage\DataClass\Feedback;
 use Chamilo\Application\Portfolio\Storage\DataClass\Notification;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
@@ -16,7 +17,6 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSup
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -27,7 +27,6 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -36,11 +35,11 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- * Main portfolio viewing component
  *
- * @package application\portfolio$HomeComponent
+ * @package Chamilo\Application\Portfolio\Component$HomeComponent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements PortfolioDisplaySupport, DelegateComponent,
@@ -49,37 +48,29 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @var \application\portfolio\Publication
+     * @var \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
     private $publication;
 
     /**
      *
-     * @var \user\User
+     * @var \Chamilo\Core\User\Storage\DataClass\\User
      */
-    private $virtual_user;
+    private $virtualUser;
 
     /**
      *
-     * @var int
+     * @var integer
      */
-    private $rights_user_id;
+    private $rightsUserIdentifier;
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     */
     public function run()
     {
-        $this->set_parameter(self::PARAM_USER_ID, $this->get_current_user_id());
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER_ID),
-            new StaticConditionVariable($this->get_current_user_id()));
-        $this->publication = DataManager::retrieve(
-            Publication::class_name(),
-            new DataClassRetrieveParameters($condition));
-
-        if (! $this->publication instanceof Publication)
-        {
-            $this->initializeRootPortfolio();
-        }
+        $this->set_parameter(self::PARAM_USER_ID, $this->getCurrentUserId());
 
         $context = Portfolio::package() . '\Display';
 
@@ -90,24 +81,37 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @return \application\portfolio\Publication
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
-    function get_publication()
+    public function getPublication()
     {
-        return $this->publication;
-    }
+        if (! isset($this->publication))
+        {
+            $this->publication = $this->getPublicationService()->getPublicationForUserIdentifier(
+                $this->getCurrentUserId());
 
-    /*
-     * (non-PHPdoc) @see \repository\DisplaySupport::get_root_content_object()
-     */
-    public function get_root_content_object()
-    {
-        return $this->get_publication()->get_content_object();
+            if (! $this->publication instanceof Publication)
+            {
+                $this->publication = $this->getPublicationService()->createRootPortfolioAndPublicationForUser(
+                    $this->getCurrentUser());
+            }
+        }
+
+        return $this->publication;
     }
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::retrieve_portfolio_feedbacks()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_root_content_object()
+     */
+    public function get_root_content_object()
+    {
+        return $this->getPublication()->get_content_object();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrieve_portfolio_feedbacks()
      */
     public function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count, $offset)
     {
@@ -125,7 +129,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::count_portfolio_feedbacks()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::count_portfolio_feedbacks()
      */
     public function count_portfolio_feedbacks(ComplexContentObjectPathNode $node)
     {
@@ -136,7 +140,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::retrieve_portfolio_feedback()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrieve_portfolio_feedback()
      */
     public function retrieve_portfolio_feedback($feedback_id)
     {
@@ -159,7 +163,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
                 $node->get_complex_content_object_item()->get_id()) : null);
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Feedback::class_name(), Feedback::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($this->get_publication()->get_id()));
+            new StaticConditionVariable($this->getPublication()->get_id()));
 
         if (! $this->is_allowed_to_view_feedback($node))
         {
@@ -173,25 +177,25 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_feedback()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_feedback()
      */
     public function get_portfolio_feedback()
     {
         $feedback = new Feedback();
-        $feedback->set_publication_id($this->get_publication()->get_id());
+        $feedback->set_publication_id($this->getPublication()->get_id());
 
         return $feedback;
     }
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_tree_menu_url()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_tree_menu_url()
      */
     public function get_portfolio_tree_menu_url()
     {
         return Path::getInstance()->getBasePath(true) . 'index.php?' . Application::PARAM_CONTEXT . '=' .
              Manager::context() . '&' . Application::PARAM_ACTION . '=' . Manager::ACTION_HOME . '&' .
-             Manager::PARAM_USER_ID . '=' . $this->get_current_user_id() . '&' .
+             Manager::PARAM_USER_ID . '=' . $this->getCurrentUserId() . '&' .
              \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_ACTION . '=' .
              \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT . '&' .
              \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_STEP . '=' . Menu::NODE_PLACEHOLDER;
@@ -199,7 +203,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::is_allowed_to_update_feedback()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_update_feedback()
      */
     public function is_allowed_to_update_feedback($feedback)
     {
@@ -208,7 +212,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::is_allowed_to_delete_feedback()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_delete_feedback()
      */
     public function is_allowed_to_delete_feedback($feedback)
     {
@@ -217,14 +221,14 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::is_allowed_to_create_feedback()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_create_feedback()
      */
     public function is_allowed_to_create_feedback(ComplexContentObjectPathNode $node = null)
     {
-        $is_publisher = $this->get_rights_user_id() == $this->get_publication()->get_publisher_id();
+        $is_publisher = $this->get_rights_user_id() == $this->getPublication()->get_publisher_id();
 
-        $has_right = Rights::getInstance()->is_allowed(
-            Rights::GIVE_FEEDBACK_RIGHT,
+        $has_right = $this->getRightsService()->is_allowed(
+            RightsService::GIVE_FEEDBACK_RIGHT,
             $this->get_location($node),
             $this->get_rights_user_id());
 
@@ -233,14 +237,14 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::is_allowed_to_view_feedback()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_view_feedback()
      */
     public function is_allowed_to_view_feedback(ComplexContentObjectPathNode $node = null)
     {
-        $is_publisher = $this->get_rights_user_id() == $this->get_publication()->get_publisher_id();
+        $is_publisher = $this->get_rights_user_id() == $this->getPublication()->get_publisher_id();
 
-        $has_right = Rights::getInstance()->is_allowed(
-            Rights::VIEW_FEEDBACK_RIGHT,
+        $has_right = $this->getRightsService()->is_allowed(
+            RightsService::VIEW_FEEDBACK_RIGHT,
             $this->get_location($node),
             $this->get_rights_user_id());
 
@@ -249,24 +253,24 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::is_allowed_to_edit_content_object()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_edit_content_object()
      */
     public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node = null)
     {
-        $isPublisher = $this->get_publication()->get_publisher_id() == $this->get_rights_user_id();
+        $isPublisher = $this->getPublication()->get_publisher_id() == $this->get_rights_user_id();
 
-        $contextEditRight = Rights::getInstance()->is_allowed(
-            Rights::EDIT_RIGHT,
+        $contextEditRight = $this->getRightsService()->is_allowed(
+            RightsService::EDIT_RIGHT,
             $this->get_location($node),
             $this->get_rights_user_id());
 
-        $portfolioEditRight = RightsService::getInstance()->canEditContentObject(
+        $portfolioEditRight = $this->getWorkspaceRightsService()->canEditContentObject(
             $this->get_user(),
             $this->get_root_content_object());
 
         if ($node instanceof ComplexContentObjectPathNode)
         {
-            $contentObjectEditRight = RightsService::getInstance()->canEditContentObject(
+            $contentObjectEditRight = $this->getWorkspaceRightsService()->canEditContentObject(
                 $this->get_user(),
                 $node->get_content_object());
         }
@@ -280,14 +284,14 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::is_allowed_to_view_content_object()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_view_content_object()
      */
     public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node = null)
     {
-        $is_publisher = $this->get_rights_user_id() == $this->get_publication()->get_publisher_id();
+        $is_publisher = $this->get_rights_user_id() == $this->getPublication()->get_publisher_id();
 
-        $has_right = Rights::getInstance()->is_allowed(
-            Rights::VIEW_RIGHT,
+        $has_right = $this->getRightsService()->is_allowed(
+            RightsService::VIEW_RIGHT,
             $this->get_location($node),
             $this->get_rights_user_id());
 
@@ -296,7 +300,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioBookmarkSupport::get_portfolio_bookmark()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport::get_portfolio_bookmark()
      */
     public function get_portfolio_bookmark($current_step)
     {
@@ -317,9 +321,9 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
         return $content_object;
     }
 
-    /*
-     * (non-PHPdoc) @see
-     * \repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_additional_actions()
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_additional_actions()
      */
     public function get_portfolio_additional_actions()
     {
@@ -337,7 +341,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioComplexRights::get_locations()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_locations()
      */
     public function get_locations($nodes)
     {
@@ -359,21 +363,21 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function get_location(ComplexContentObjectPathNode $node = null)
     {
-        return Rights::getInstance()->get_location($node, $this->get_publication()->get_id());
+        return $this->getRightsService()->get_location($node, $this->getPublication()->get_id());
     }
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioComplexRights::get_available_rights()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_available_rights()
      */
     public function get_available_rights()
     {
-        return Rights::get_available_rights();
+        return $this->getRightsService()->getAvailableRights();
     }
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioComplexRights::get_entities()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_entities()
      */
     public function get_entities()
     {
@@ -386,80 +390,73 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioComplexRights::get_selected_entities()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_selected_entities()
      */
     public function get_selected_entities(ComplexContentObjectPathNode $node)
     {
         $location = $this->get_location($node);
 
-        return DataManager::retrieve_rights_location_rights_for_location(
-            $location->get_publication_id(),
-            $location->get_node_id(),
+        return $this->getRightsService()->findRightsLocationEntityRightsForLocationAndRights(
+            $location,
             $this->get_available_rights());
     }
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioComplexRights::invert_location_entity_right()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::invert_location_entity_right()
      */
-    public function invert_location_entity_right($right_id, $entity_id, $entity_type, $location_id)
+    public function invert_location_entity_right($rightId, $entityId, $entityType, $locationId)
     {
-        return Rights::getInstance()->invert_location_entity_right(
-            $right_id,
-            $entity_id,
-            $entity_type,
-            $location_id,
-            $this->get_publication()->get_id());
+        return $this->getRightsService()->invertLocationEntityRight(
+            $rightId,
+            $entityId,
+            $entityType,
+            $locationId,
+            $this->getPublication()->getId());
     }
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioComplexRights::is_allowed_to_set_content_object_rights()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::is_allowed_to_set_content_object_rights()
      */
     public function is_allowed_to_set_content_object_rights()
     {
-        return $this->get_user()->is_platform_admin() ||
-             ($this->get_user_id() == $this->get_publication()->get_publisher_id());
+        return $this->getUser()->is_platform_admin() ||
+             ($this->getUser()->getId() == $this->getPublication()->get_publisher_id());
     }
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioComplexRights::retrieve_portfolio_possible_view_users()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::retrieve_portfolio_possible_view_users()
      */
-    public function retrieve_portfolio_possible_view_users($condition, $count, $offset, $order_property)
+    public function retrieve_portfolio_possible_view_users($condition, $count, $offset, $orderProperty)
     {
-        return \Chamilo\Core\User\Storage\DataManager::retrieves(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
+        return $this->getUserService()->findUsers($condition, $offset, $count, $orderProperty);
     }
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioComplexRights::count_portfolio_possible_view_users()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::count_portfolio_possible_view_users()
      */
     public function count_portfolio_possible_view_users($condition)
     {
-        return \Chamilo\Core\User\Storage\DataManager::count(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            new DataClassCountParameters($condition));
+        return $this->getUserService()->countUsers($condition);
     }
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioComplexRights::set_portfolio_virtual_user_id()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::set_portfolio_virtual_user_id()
      */
-    public function set_portfolio_virtual_user_id($virtual_user_id)
+    public function set_portfolio_virtual_user_id($virtualUserId)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            $virtual_user_id);
+        $user = $this->getUserService()->findUserByIdentifier($virtualUserId);
 
         if ($user instanceof \Chamilo\Core\User\Storage\DataClass\User)
         {
             $emulation = $this->get_emulation_storage();
-            $emulation[\Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_VIRTUAL_USER_ID] = $virtual_user_id;
+            $emulation[\Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_VIRTUAL_USER_ID] = $virtualUserId;
             Session::register(__NAMESPACE__, serialize($emulation));
-            $this->virtual_user = $user;
+            $this->virtualUser = $user;
 
             return true;
         }
@@ -471,34 +468,34 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioComplexRights::clear_virtual_user_id()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::clear_virtual_user_id()
      */
     public function clear_virtual_user_id()
     {
         $emulation = $this->get_emulation_storage();
         unset($emulation[\Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_VIRTUAL_USER_ID]);
         Session::register(__NAMESPACE__, serialize($emulation));
-        unset($this->virtual_user);
-        unset($this->rights_user_id);
+        unset($this->virtualUser);
+        unset($this->rightsUserIdentifier);
 
         return true;
     }
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioComplexRights::get_portfolio_virtual_user()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_portfolio_virtual_user()
      */
     public function get_portfolio_virtual_user()
     {
-        if (! isset($this->virtual_user))
+        if (! isset($this->virtualUser))
         {
             $emulation = $this->get_emulation_storage();
-            $this->virtual_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            $this->virtualUser = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
                 \Chamilo\Core\User\Storage\DataClass\User::class_name(),
                 $emulation[\Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_VIRTUAL_USER_ID]);
         }
 
-        return $this->virtual_user;
+        return $this->virtualUser;
     }
 
     /**
@@ -517,7 +514,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     private function get_rights_user_id()
     {
-        if (! isset($this->rights_user_id))
+        if (! isset($this->rightsUserIdentifier))
         {
             if ($this instanceof PortfolioComplexRights && $this->is_allowed_to_set_content_object_rights())
             {
@@ -525,34 +522,34 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
                 if ($virtual_user instanceof \Chamilo\Core\User\Storage\DataClass\User)
                 {
-                    $this->rights_user_id = $virtual_user->get_id();
+                    $this->rightsUserIdentifier = $virtual_user->get_id();
                 }
                 else
                 {
-                    $this->rights_user_id = $this->get_user_id();
+                    $this->rightsUserIdentifier = $this->get_user_id();
                 }
             }
             else
             {
-                $this->rights_user_id = $this->get_user_id();
+                $this->rightsUserIdentifier = $this->get_user_id();
             }
         }
 
-        return $this->rights_user_id;
+        return $this->rightsUserIdentifier;
     }
 
     /**
      *
-     * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::is_own_portfolio()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_own_portfolio()
      */
     public function is_own_portfolio()
     {
-        return $this->get_user_id() == $this->get_publication()->get_publisher_id();
+        return $this->get_user_id() == $this->getPublication()->get_publisher_id();
     }
 
     /**
      *
-     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::retrieve_portfolio_notification()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrieve_portfolio_notification()
      */
     public function retrieve_portfolio_notification(
         \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node)
@@ -563,7 +560,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Notification::class_name(), Notification::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($this->get_publication()->get_id()));
+            new StaticConditionVariable($this->getPublication()->get_id()));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Notification::class_name(), Notification::PROPERTY_COMPLEX_CONTENT_OBJECT_ID),
@@ -594,7 +591,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Notification::class_name(), Notification::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($this->get_publication()->get_id()));
+            new StaticConditionVariable($this->getPublication()->get_id()));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Notification::class_name(), Notification::PROPERTY_COMPLEX_CONTENT_OBJECT_ID),
@@ -607,70 +604,13 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_notification()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_notification()
      */
     public function get_portfolio_notification()
     {
         $notification = new Notification();
-        $notification->set_publication_id($this->get_publication()->get_id());
+        $notification->set_publication_id($this->getPublication()->get_id());
 
         return $notification;
-    }
-
-    /**
-     * Initializes the root portfolio for the current user
-     *
-     * @throws NotAllowedException
-     */
-    protected function initializeRootPortfolio()
-    {
-        $template_registration = \Chamilo\Core\Repository\Configuration::registration_default_by_type(
-            Portfolio::package());
-
-        $portfolio = new Portfolio();
-        $portfolio->set_title($this->get_current_user()->get_fullname());
-        $portfolio->set_description(Translation::get('NoInstructionYetDescription'));
-        $portfolio->set_owner_id($this->get_current_user()->getId());
-
-        $portfolio->set_template_registration_id($template_registration->getId());
-        $portfolio->create();
-
-        $this->publication = new Publication();
-        $this->publication->set_content_object_id($portfolio->getId());
-        $this->publication->set_publisher_id($this->get_current_user()->getId());
-        $this->publication->set_published(time());
-        $this->publication->set_modified(time());
-
-        if (! $this->publication->create())
-        {
-            throw new NotAllowedException();
-        }
-
-        /** @var ComplexContentObjectPath $contentObjectPath */
-        $contentObjectPath = $portfolio->get_complex_content_object_path();
-        $rootNode = $contentObjectPath->get_root();
-        $rootNodeHash = $rootNode->get_hash();
-
-        $this->createRightsForEveryUserOnLocation($this->publication->getId(), $rootNodeHash);
-    }
-
-    /**
-     * Creates rights for the "everyone" entity on a given location
-     *
-     * @param int $publicationId
-     * @param string $nodeId
-     *
-     * @return bool
-     */
-    protected function createRightsForEveryUserOnLocation($publicationId, $nodeId)
-    {
-        $location_entity_right = new RightsLocationEntityRight();
-        $location_entity_right->set_location_id($nodeId);
-        $location_entity_right->set_publication_id($publicationId);
-        $location_entity_right->set_right_id(Rights::VIEW_RIGHT);
-        $location_entity_right->set_entity_id(0);
-        $location_entity_right->set_entity_type(0);
-
-        return $location_entity_right->create();
     }
 }

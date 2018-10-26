@@ -18,20 +18,20 @@ class CodeComponent extends \Chamilo\Application\Portfolio\Manager
 
     public function run()
     {
-        $official_code = Request::get(self::PARAM_USER_ID);
-        
-        if (is_numeric($official_code))
+        $officialCode = Request::get(self::PARAM_USER_ID);
+
+        if (is_numeric($officialCode))
         {
             try
             {
-                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_official_code($official_code);
-                
+                $user = $this->getUserService()->findUserByOfficialCode($officialCode);
+
                 if ($user instanceof User)
                 {
                     $redirect = new Redirect(
                         array(
-                            self::PARAM_CONTEXT => self::package(), 
-                            self::PARAM_ACTION => self::ACTION_HOME, 
+                            self::PARAM_CONTEXT => self::package(),
+                            self::PARAM_ACTION => self::ACTION_HOME,
                             self::PARAM_USER_ID => $user->get_id()));
                     $redirect->toUrl();
                 }

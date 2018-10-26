@@ -85,6 +85,15 @@ trait DependencyInjectionContainerTrait
 
     /**
      *
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    public function getUserService()
+    {
+        return $this->getService('chamilo.core.user.service.user_service');
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\File\PathBuilder
      */
     public function getPathBuilder()
@@ -111,6 +120,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     *
      * @return \Chamilo\Configuration\Service\RegistrationConsulter
      */
     public function getRegistrationConsulter()
@@ -178,6 +188,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     *
      * @return \Chamilo\Libraries\Format\Theme
      */
     public function getThemeUtilities()
@@ -216,13 +227,12 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     *
      * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
     protected function getDataClassRepository()
     {
-        return $this->getService(
-            'chamilo.libraries.storage.data_manager.doctrine.data_class_repository'
-        );
+        return $this->getService('chamilo.libraries.storage.data_manager.doctrine.data_class_repository');
     }
 
     /**
@@ -235,6 +245,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     *
      * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
      */
     public function getClassnameUtilities()
@@ -243,6 +254,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     *
      * @return \Chamilo\Libraries\Utilities\StringUtilities
      */
     public function getStringUtilities()
@@ -251,6 +263,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     *
      * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
     public function getSessionUtilities()

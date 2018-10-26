@@ -116,6 +116,56 @@ class UserService
 
     /**
      *
+     * @param string $securityToken
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function findUserBySecurityToken($securityToken)
+    {
+        return $this->getUserRepository()->findUserBySecurityToken($securityToken);
+    }
+
+    /**
+     *
+     * @param string $officialCode
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function findUserByOfficialCode($officialCode)
+    {
+        return $this->getUserRepository()->findUserByOfficialCode($officialCode);
+    }
+
+    /**
+     *
+     * @param integer[] $userIdentifiers
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findUsersByIdentifiersOrderedByName($userIdentifiers)
+    {
+        return $this->getUserRepository()->findUsersByIdentifiersOrderedByName($userIdentifiers);
+    }
+
+    /**
+     *
+     * @param string $email
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function findUserByEmail($email)
+    {
+        return $this->getUserRepository()->findUserByEmail($email);
+    }
+
+    /**
+     *
+     * @param string $usernameOrEmail
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function findUserByUsernameOrEmail($usernameOrEmail)
+    {
+        return $this->getUserRepository()->findUserByUsernameOrEmail($usernameOrEmail);
+    }
+
+    /**
+     *
      * @param int $identifier
      *
      * @return null|string
@@ -229,7 +279,7 @@ class UserService
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
-    public function createUserFromValues($firstName, $lastName, $username, $officialCode, $emailAddress, $password,
+    public function createUserFromParameters($firstName, $lastName, $username, $officialCode, $emailAddress, $password,
         $authSource = 'Platform')
     {
         $requiredParameters = [
@@ -264,7 +314,7 @@ class UserService
 
         $user->set_password($this->getHashingUtilities()->hashString($password));
 
-        if (! $this->getUserRepository()->create($user))
+        if (! $this->createUser($user))
         {
             throw new \RuntimeException('Could not create the user');
         }
@@ -376,6 +426,9 @@ class UserService
      */
     public function createUser(User $user)
     {
+        $user->set_registration_date(time());
+        $user->set_security_token(sha1(time() . uniqid()));
+
         return $this->getUserRepository()->createUser($user);
     }
 

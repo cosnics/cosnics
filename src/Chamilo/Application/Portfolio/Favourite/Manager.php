@@ -17,12 +17,12 @@ abstract class Manager extends Application
     const PARAM_FAVOURITE_USER_ID = 'favourite_user_id';
     const PARAM_ACTION = 'favourite_action';
     const PARAM_SOURCE = 'source';
-    
+
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
     const ACTION_CREATE = 'Creator';
-    
+
     // Default action
     const DEFAULT_ACTION = self::ACTION_BROWSE;
     const SOURCE_USER_BROWSER = 'user_browser';
@@ -30,23 +30,26 @@ abstract class Manager extends Application
 
     /**
      * The favourite service
-     * 
+     *
      * @var FavouriteService
      */
     protected $favouriteService;
 
     /**
      * Returns the favourite service
-     * 
+     *
      * @return FavouriteService
      */
     public function getFavouriteService()
     {
         if (! isset($this->favouriteService))
         {
-            $this->favouriteService = new FavouriteService(new FavouriteRepository(), Translation::getInstance());
+            $this->favouriteService = new FavouriteService(
+                new FavouriteRepository(),
+                Translation::getInstance(),
+                $this->getUserService());
         }
-        
+
         return $this->favouriteService;
     }
 }

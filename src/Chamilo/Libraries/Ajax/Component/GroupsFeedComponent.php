@@ -91,7 +91,7 @@ abstract class GroupsFeedComponent extends \Chamilo\Libraries\Ajax\Manager
             $user_category = new AdvancedElementFinderElement('users', 'category', 'Users', 'Users');
             $elements->add_element($user_category);
 
-            while ($user = $users->next_result())
+            foreach ($users as $user)
             {
                 $user_category->add_child($this->get_user_element($user));
             }
@@ -142,19 +142,15 @@ abstract class GroupsFeedComponent extends \Chamilo\Libraries\Ajax\Manager
             $condition = $conditions[0];
         }
 
-        $this->user_count = \Chamilo\Core\User\Storage\DataManager::count(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            new DataClassCountParameters($condition));
+        $this->user_count = $this->getUserService()->countUsers($condition);
 
-        return \Chamilo\Core\User\Storage\DataManager::retrieves(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            new DataClassRetrievesParameters(
-                $condition,
-                $this->get_offset(),
-                100,
-                array(
-                    new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                    new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)))));
+        return $this->getUserService()->findUsers(
+            $condition,
+            $this->get_offset(),
+            100,
+            array(
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))));
     }
 
     /**

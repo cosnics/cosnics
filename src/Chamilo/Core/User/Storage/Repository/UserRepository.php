@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Storage\Repository;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Core\User\Storage\Repository\Interfaces\UserRepositoryInterface;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
@@ -16,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -153,7 +153,11 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findUserByUsername($username)
     {
-        return \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username($username);
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
+            new StaticConditionVariable($username));
+
+        return $this->getDataClassRepository()->retrieve(User::class, new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -162,7 +166,18 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findUserByUsernameOrEmail($usernameOrEmail)
     {
-        return \Chamilo\Core\User\Storage\DataManager::retrieveUserByUsernameOrEmail($usernameOrEmail);
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL),
+            new StaticConditionVariable($usernameOrEmail));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
+            new StaticConditionVariable($usernameOrEmail));
+
+        return $this->getDataClassRepository()->retrieve(
+            User::class_name(),
+            new DataClassRetrieveParameters(new OrCondition($conditions)));
     }
 
     /**
@@ -244,6 +259,15 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      *
+     * @see \Chamilo\Core\User\Storage\Repository\Interfaces\UserRepositoryInterface::deleteUserSetting()
+     */
+    public function deleteUserSetting(UserSetting $userSetting)
+    {
+        return $this->getDataClassRepository()->delete($userSetting);
+    }
+
+    /**
+     *
      * @see \Chamilo\Core\User\Storage\Repository\Interfaces\UserRepositoryInterface::createUser()
      */
     public function createUser(User $user)
@@ -258,5 +282,14 @@ class UserRepository implements UserRepositoryInterface
     public function updateUser(User $user)
     {
         return $this->getDataClassRepository()->update($user);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\User\Storage\Repository\Interfaces\UserRepositoryInterface::deleteUser()
+     */
+    public function deleteUser(User $user)
+    {
+        return $this->getDataClassRepository()->delete($user);
     }
 }

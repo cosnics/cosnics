@@ -123,6 +123,13 @@ interface UserRepositoryInterface
 
     /**
      *
+     * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
+     * @return boolean
+     */
+    public function deleteUserSetting(UserSetting $userSetting);
+
+    /**
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return boolean
      */
@@ -134,4 +141,11 @@ interface UserRepositoryInterface
      * @return boolean
      */
     public function updateUser(User $user);
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return boolean
+     */
+    public function deleteUser(User $user);
 }
