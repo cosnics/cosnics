@@ -290,6 +290,8 @@ class UserRepository implements UserRepositoryInterface
      */
     public function deleteUser(User $user)
     {
-        return $this->getDataClassRepository()->delete($user);
+        // TODO: $user->delete() still implements some business logic
+        // return $this->getDataClassRepository()->delete($user);
+        return $user->delete();
     }
 }

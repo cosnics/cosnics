@@ -13,7 +13,7 @@ class Notification extends \Chamilo\Core\Repository\ContentObject\Portfolio\Stor
 
     /**
      * Get the default properties of all feedback
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
@@ -37,5 +37,14 @@ class Notification extends \Chamilo\Core\Repository\ContentObject\Portfolio\Stor
     public function set_publication_id($publication_id)
     {
         $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'portfolio_notification';
     }
 }

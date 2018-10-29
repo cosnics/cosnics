@@ -20,6 +20,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 use Symfony\Component\Translation\Translator;
+use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
+use Chamilo\Application\Portfolio\Storage\DataClass\Feedback;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
@@ -28,6 +32,10 @@ use Symfony\Component\Translation\Translator;
  */
 class RightsService
 {
+    // Parameters
+    const PARAM_VIRTUAL_USER_ID = 'virtual_user_id';
+
+    // Rights
     const VIEW_RIGHT = 1;
     const VIEW_FEEDBACK_RIGHT = 2;
     const GIVE_FEEDBACK_RIGHT = 3;
@@ -71,15 +79,24 @@ class RightsService
 
     /**
      *
+     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    private $sessionUtilities;
+
+    /**
+     *
      * @param \Chamilo\Application\Portfolio\Storage\Repository\RightsRepository $rightsRepository
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      */
-    public function __construct(RightsRepository $rightsRepository, UserService $userService, Translator $translator)
+    public function __construct(RightsRepository $rightsRepository, UserService $userService, Translator $translator,
+        SessionUtilities $sessionUtilities)
     {
         $this->userService = $userService;
         $this->rightsRepository = $rightsRepository;
         $this->translator = $translator;
+        $this->sessionUtilities = $sessionUtilities;
     }
 
     /**
@@ -134,6 +151,24 @@ class RightsService
     public function setTranslator($translator)
     {
         $this->translator = $translator;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    public function getSessionUtilities()
+    {
+        return $this->sessionUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
+     */
+    public function setSessionUtilities(SessionUtilities $sessionUtilities)
+    {
+        $this->sessionUtilities = $sessionUtilities;
     }
 
     /**
@@ -547,5 +582,151 @@ class RightsService
         }
 
         return $this->getRightsRepository()->findRightsLocationEntityRightsForLocationAndRights($location, $rights);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     * @param integer $rightsUserIdentifier
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
+     * @return boolean
+     */
+    public function isAllowedToViewFeedback(Publication $publication, int $rightsUserIdentifier,
+        ComplexContentObjectPathNode $node = null)
+    {
+        return $this->isAllowedForFeedbackRight(self::VIEW_FEEDBACK_RIGHT, $publication, $rightsUserIdentifier, $node);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     * @param integer $rightsUserIdentifier
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
+     * @return boolean
+     */
+    public function isAllowedToCreateFeedback(Publication $publication, int $rightsUserIdentifier,
+        ComplexContentObjectPathNode $node = null)
+    {
+        return $this->isAllowedForFeedbackRight(self::GIVE_FEEDBACK_RIGHT, $publication, $rightsUserIdentifier, $node);
+    }
+
+    /**
+     *
+     * @param integer $right
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     * @param integer $rightsUserIdentifier
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
+     * @return boolean
+     */
+    public function isAllowedForFeedbackRight(int $right, Publication $publication, int $rightsUserIdentifier,
+        ComplexContentObjectPathNode $node = null)
+    {
+        $hasRight = $this->is_allowed($right, $this->get_location($node), $rightsUserIdentifier);
+
+        return $this->isPublisher($publication, $rightsUserIdentifier) || $hasRight;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     * @param integer $rightsUserIdentifier
+     * @return boolean
+     */
+    public function isPublisher(Publication $publication, int $rightsUserIdentifier)
+    {
+        return $rightsUserIdentifier == $publication->get_publisher_id();
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Feedback $feedback
+     * @param integer $rightsUserIdentifier
+     * @return boolean
+     */
+    public function isFeedbackOwner(Feedback $feedback, int $rightsUserIdentifier)
+    {
+        return $feedback->get_user_id() == $rightsUserIdentifier;
+    }
+
+    /**
+     * Get the user_id that should be used for rights checks
+     *
+     * @return int
+     */
+    private function getRightsUserIdentifier(User $currentUser)
+    {
+        $virtualUser = $this->getVirtualUser();
+
+        if ($virtualUser instanceof User)
+        {
+            return $virtualUser->getId();
+        }
+        else
+        {
+            return $currentUser->getId();
+        }
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     * @return boolean
+     */
+    public function isAllowedToSetContentObjectRights(User $currentUser, Publication $publication)
+    {
+        return $currentUser->is_platform_admin() || $this->isPublisher($publication, $currentUser->getId());
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function getVirtualUser()
+    {
+        $emulation = $this->getEmulationStorage();
+        $virtualUserIdentifier = $emulation[self::PARAM_VIRTUAL_USER_ID];
+
+        return $this->getUserService()->findUserByIdentifier($virtualUserIdentifier);
+    }
+
+    public function setVirtualUser($virtualUserIdentifier)
+    {
+        $user = $this->getUserService()->findUserByIdentifier($virtualUserIdentifier);
+
+        if ($user instanceof User)
+        {
+            $emulation = $this->getEmulationStorage();
+            $emulation[self::PARAM_VIRTUAL_USER_ID] = $virtualUserIdentifier;
+            $this->getSessionUtilities()->register(__NAMESPACE__, serialize($emulation));
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function clearVirtualUser()
+    {
+        $emulation = $this->getEmulationStorage();
+        unset($emulation[self::PARAM_VIRTUAL_USER_ID]);
+        $this->getSessionUtilities()->register(__NAMESPACE__, serialize($emulation));
+
+        return true;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    private function getEmulationStorage()
+    {
+        return (array) unserialize($this->getSessionUtilities()->retrieve(__NAMESPACE__));
     }
 }
