@@ -80,9 +80,9 @@ class DeleterComponent extends Manager
 
                     foreach ($assignmentTreeNodes as $treeNode)
                     {
-//                        $this->getLearningPathAssignmentService()->deleteEntriesByTreeNodeData(
-//                            $treeNode->getTreeNodeData()
-//                        );
+                        $this->getLearningPathAssignmentService()->deleteEntriesByTreeNodeData(
+                            $publication, $treeNode->getTreeNodeData()
+                        );
                     }
                 }
 
@@ -123,7 +123,7 @@ class DeleterComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
      */
     protected function getLearningPathAssignmentService()
     {

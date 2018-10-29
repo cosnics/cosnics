@@ -51,6 +51,7 @@ class Embedder extends ContentObjectEmbedder
         /** @var \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface $trackingParameters * */
         $trackingParameters = $this->get_application()->get_parent()->getTrackingParameters();
 
+        $assignmentDataProvider->setContentObjectPublication($this->get_application()->get_application()->get_publication());
         $assignmentDataProvider->setLearningPath($this->learningPath);
         $assignmentDataProvider->setLearningPathTrackingService($this->trackingService);
         $assignmentDataProvider->setTreeNode($this->treeNode);

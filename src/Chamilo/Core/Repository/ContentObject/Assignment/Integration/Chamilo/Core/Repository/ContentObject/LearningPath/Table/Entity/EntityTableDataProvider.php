@@ -29,7 +29,7 @@ class EntityTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return $this->getTable()->getLearningPathAssignmentService()->findTargetUsersForTreeNodeData(
-            $this->getTable()->getTreeNodeData(), $this->getTable()->getUserIds(), $condition, $offset, $count,
+            $this->getTable()->getContentObjectPublication(), $this->getTable()->getTreeNodeData(), $this->getTable()->getUserIds(), $condition, $offset, $count,
             $order_property
         );
     }
@@ -45,7 +45,7 @@ class EntityTableDataProvider
     public function count_data($condition)
     {
         return $this->getTable()->getLearningPathAssignmentService()->countTargetUsersForTreeNodeData(
-            $this->getTable()->getTreeNodeData(), $this->getTable()->getUserIds(), $condition
+            $this->getTable()->getContentObjectPublication(),  $this->getTable()->getTreeNodeData(), $this->getTable()->getUserIds(), $condition
         );
     }
 
