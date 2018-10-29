@@ -1,11 +1,10 @@
 <?php
 namespace Chamilo\Application\Portfolio\Service;
 
-use Chamilo\Application\Portfolio\Storage\Repository\FeedbackRepository;
-use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Application\Portfolio\Storage\DataClass\Feedback;
+use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
+use Chamilo\Application\Portfolio\Storage\Repository\FeedbackRepository;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
-use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
@@ -23,11 +22,19 @@ class FeedbackService
 
     /**
      *
-     * @param \Chamilo\Application\Portfolio\Storage\Repository\FeedbackRepository $feedbackRepository
+     * @var \Chamilo\Application\Portfolio\Service\RightsService
      */
-    public function __construct(FeedbackRepository $feedbackRepository)
+    private $rightsService;
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\Repository\FeedbackRepository $feedbackRepository
+     * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
+     */
+    public function __construct(FeedbackRepository $feedbackRepository, RightsService $rightsService)
     {
         $this->feedbackRepository = $feedbackRepository;
+        $this->rightsService = $rightsService;
     }
 
     /**
@@ -46,6 +53,24 @@ class FeedbackService
     public function setFeedbackRepository(FeedbackRepository $feedbackRepository)
     {
         $this->feedbackRepository = $feedbackRepository;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Portfolio\Service\RightsService
+     */
+    public function getRightsService()
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService)
+    {
+        $this->rightsService = $rightsService;
     }
 
     /**
@@ -81,12 +106,12 @@ class FeedbackService
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Feedback[]
      */
     public function findFeedbackForPublicationNodeUserIdentifierCountAndOffset(Publication $publication,
-        ComplexContentObjectPathNode $node, int $userIdentifier = null, int $count = null, int $offset = null)
+        ComplexContentObjectPathNode $node, User $user, int $count = null, int $offset = null)
     {
         return $this->findFeedbackForPublicationComplexContentObjectUserIdentifiersCountAndOffset(
             $publication->getId(),
             $this->getComplexContentObjectIdentifierForNode($node),
-            $userIdentifier,
+            $this->getFeedbackUserIdentifier($user, $node),
             $count,
             $offset);
     }
@@ -115,16 +140,16 @@ class FeedbackService
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
-     * @param integer $userIdentifier
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return integer
      */
-    public function countFeedbackForPublicationNodeAndUserIdentifier(Publication $publication, ComplexContentObjectPathNode $node,
-        int $userIdentifier = null)
+    public function countFeedbackForPublicationNodeAndUser(Publication $publication, ComplexContentObjectPathNode $node,
+        User $user)
     {
         return $this->countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(
             $publication->getId(),
             $this->getComplexContentObjectIdentifierForNode($node),
-            $userIdentifier);
+            $this->getFeedbackUserIdentifier($user, $node));
     }
 
     /**
@@ -151,5 +176,21 @@ class FeedbackService
     private function getComplexContentObjectIdentifierForNode(ComplexContentObjectPathNode $node)
     {
         return $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->getId() : null;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
+     * @return integer
+     */
+    private function getFeedbackUserIdentifier(User $currentUser, ComplexContentObjectPathNode $node = null)
+    {
+        if (! $this->getRightsService()->isAllowedToViewFeedback($node))
+        {
+            return $this->getRightsService()->getRightsUserIdentifier($currentUser);
+        }
+
+        return null;
     }
 }

@@ -6,7 +6,6 @@ use Chamilo\Application\Portfolio\Rights;
 use Chamilo\Application\Portfolio\Service\RightsService;
 use Chamilo\Application\Portfolio\Storage\DataClass\Feedback;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
-use Chamilo\Application\Portfolio\Storage\DataManager;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
@@ -22,11 +21,6 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -110,7 +104,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
         return $this->getFeedbackService()->findFeedbackForPublicationNodeUserIdentifierCountAndOffset(
             $this->getPublication(),
             $node,
-            $this->getFeedbackUserIdentifier($node),
+            $this->getUser(),
             $count,
             $offset);
     }
@@ -121,10 +115,10 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function count_portfolio_feedbacks(ComplexContentObjectPathNode $node)
     {
-        return $this->getFeedbackService()->countFeedbackForPublicationNodeAndUserIdentifier(
+        return $this->getFeedbackService()->countFeedbackForPublicationNodeAndUser(
             $this->getPublication(),
             $node,
-            $this->getFeedbackUserIdentifier($node));
+            $this->getUser());
     }
 
     /**
@@ -134,21 +128,6 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
     public function retrieve_portfolio_feedback($feedbackIdentifier)
     {
         return $this->getFeedbackService()->findFeedbackByIdentfier($feedbackIdentifier);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
-     * @return integer
-     */
-    private function getFeedbackUserIdentifier(ComplexContentObjectPathNode $node = null)
-    {
-        if (! $this->is_allowed_to_view_feedback($node))
-        {
-            return $this->get_rights_user_id();
-        }
-
-        return null;
     }
 
     /**
@@ -180,7 +159,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function is_allowed_to_update_feedback($feedback)
     {
-        return $this->getRightsService()->isFeedbackOwner($feedback, $this->get_rights_user_id());
+        return $this->getRightsService()->isFeedbackOwner($feedback, $this->getUser());
     }
 
     /**
@@ -189,7 +168,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function is_allowed_to_delete_feedback($feedback)
     {
-        return $this->getRightsService()->isFeedbackOwner($feedback, $this->get_rights_user_id());
+        return $this->getRightsService()->isFeedbackOwner($feedback, $this->getUser());
     }
 
     /**
@@ -198,10 +177,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function is_allowed_to_create_feedback(ComplexContentObjectPathNode $node = null)
     {
-        return $this->getRightsService()->isAllowedToCreateFeedback(
-            $this->getPublication(),
-            $this->get_rights_user_id(),
-            $node);
+        return $this->getRightsService()->isAllowedToCreateFeedback($this->getPublication(), $this->getUser(), $node);
     }
 
     /**
@@ -210,10 +186,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function is_allowed_to_view_feedback(ComplexContentObjectPathNode $node = null)
     {
-        return $this->getRightsService()->isAllowedToViewFeedback(
-            $this->getPublication(),
-            $this->get_rights_user_id(),
-            $node);
+        return $this->getRightsService()->isAllowedToViewFeedback($this->getPublication(), $this->getUser(), $node);
     }
 
     /**

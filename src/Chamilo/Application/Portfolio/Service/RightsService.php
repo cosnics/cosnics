@@ -587,40 +587,41 @@ class RightsService
     /**
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
-     * @param integer $rightsUserIdentifier
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      * @return boolean
      */
-    public function isAllowedToViewFeedback(Publication $publication, int $rightsUserIdentifier,
+    public function isAllowedToViewFeedback(Publication $publication, User $user,
         ComplexContentObjectPathNode $node = null)
     {
-        return $this->isAllowedForFeedbackRight(self::VIEW_FEEDBACK_RIGHT, $publication, $rightsUserIdentifier, $node);
+        return $this->isAllowedForFeedbackRight(self::VIEW_FEEDBACK_RIGHT, $publication, $user, $node);
     }
 
     /**
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
-     * @param integer $rightsUserIdentifier
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      * @return boolean
      */
-    public function isAllowedToCreateFeedback(Publication $publication, int $rightsUserIdentifier,
+    public function isAllowedToCreateFeedback(Publication $publication, User $user,
         ComplexContentObjectPathNode $node = null)
     {
-        return $this->isAllowedForFeedbackRight(self::GIVE_FEEDBACK_RIGHT, $publication, $rightsUserIdentifier, $node);
+        return $this->isAllowedForFeedbackRight(self::GIVE_FEEDBACK_RIGHT, $publication, $user, $node);
     }
 
     /**
      *
      * @param integer $right
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
-     * @param integer $rightsUserIdentifier
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      * @return boolean
      */
-    public function isAllowedForFeedbackRight(int $right, Publication $publication, int $rightsUserIdentifier,
+    public function isAllowedForFeedbackRight(int $right, Publication $publication, User $user,
         ComplexContentObjectPathNode $node = null)
     {
+        $rightsUserIdentifier = $this->getRightsUserIdentifier($user);
         $hasRight = $this->is_allowed($right, $this->get_location($node), $rightsUserIdentifier);
 
         return $this->isPublisher($publication, $rightsUserIdentifier) || $hasRight;
@@ -629,23 +630,23 @@ class RightsService
     /**
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
-     * @param integer $rightsUserIdentifier
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return boolean
      */
-    public function isPublisher(Publication $publication, int $rightsUserIdentifier)
+    public function isPublisher(Publication $publication, User $user)
     {
-        return $rightsUserIdentifier == $publication->get_publisher_id();
+        return $this->getRightsUserIdentifier($user) == $publication->get_publisher_id();
     }
 
     /**
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Feedback $feedback
-     * @param integer $rightsUserIdentifier
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return boolean
      */
-    public function isFeedbackOwner(Feedback $feedback, int $rightsUserIdentifier)
+    public function isFeedbackOwner(Feedback $feedback, User $user)
     {
-        return $feedback->get_user_id() == $rightsUserIdentifier;
+        return $feedback->get_user_id() == $this->getRightsUserIdentifier($user);
     }
 
     /**
@@ -653,7 +654,7 @@ class RightsService
      *
      * @return int
      */
-    private function getRightsUserIdentifier(User $currentUser)
+    public function getRightsUserIdentifier(User $user)
     {
         $virtualUser = $this->getVirtualUser();
 
@@ -663,7 +664,7 @@ class RightsService
         }
         else
         {
-            return $currentUser->getId();
+            return $user->getId();
         }
     }
 
