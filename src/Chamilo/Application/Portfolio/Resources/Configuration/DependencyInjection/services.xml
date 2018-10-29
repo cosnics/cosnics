@@ -9,6 +9,10 @@
 				id="chamilo.application.portfolio.storage.repository.rights_repository" />
 			<argument type="service" id="chamilo.core.user.service.user_service" />
 			<argument type="service" id="symfony.component.translation.translator" />
+			<argument type="service"
+				id="chamilo.libraries.platform.session.session_utilities" />
+			<argument type="service"
+				id="Chamilo\Core\Repository\Workspace\Service\WorkspaceService" />
 		</service>
 		<service
 			id="chamilo.application.portfolio.storage.repository.rights_repository"
@@ -21,6 +25,8 @@
 			class="Chamilo\Application\Portfolio\Service\FeedbackService">
 			<argument type="service"
 				id="chamilo.application.portfolio.storage.repository.feedback_repository" />
+			<argument type="service"
+				id="chamilo.application.portfolio.service.rights_service" />
 		</service>
 
 		<service
