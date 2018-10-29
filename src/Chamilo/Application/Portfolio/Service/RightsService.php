@@ -85,18 +85,26 @@ class RightsService
 
     /**
      *
+     * @var \Chamilo\Core\Repository\Workspace\Service\RightsService
+     */
+    private $workspaceRightsService;
+
+    /**
+     *
      * @param \Chamilo\Application\Portfolio\Storage\Repository\RightsRepository $rightsRepository
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
+     * @param \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService
      */
     public function __construct(RightsRepository $rightsRepository, UserService $userService, Translator $translator,
-        SessionUtilities $sessionUtilities)
+        SessionUtilities $sessionUtilities, WorkspaceRightsService $workspaceRightsService)
     {
         $this->userService = $userService;
         $this->rightsRepository = $rightsRepository;
         $this->translator = $translator;
         $this->sessionUtilities = $sessionUtilities;
+        $this->workspaceRightsService = $workspaceRightsService;
     }
 
     /**
@@ -169,6 +177,25 @@ class RightsService
     public function setSessionUtilities(SessionUtilities $sessionUtilities)
     {
         $this->sessionUtilities = $sessionUtilities;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Workspace\Service\RightsService
+     */
+    public function getWorkspaceRightsService()
+    {
+        return $this->workspaceRightsService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService
+     */
+    public function setWorkspaceRightsService(
+        \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService)
+    {
+        $this->workspaceRightsService = $workspaceRightsService;
     }
 
     /**
@@ -570,6 +597,18 @@ class RightsService
 
     /**
      *
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
+     */
+    public function findRightsLocationEntityRightsForPublicationNodeAndAvailableRights(Publication $publication,
+        ComplexContentObjectPathNode $node = null)
+    {
+        return $this->findRightsLocationEntityRightsForLocationAndRights(
+            $this->get_location($node, $publication->getId()),
+            $this->getAvailableRights());
+    }
+
+    /**
+     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation $location
      * @param integer[] $rights
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight[]
@@ -622,7 +661,7 @@ class RightsService
         ComplexContentObjectPathNode $node = null)
     {
         $rightsUserIdentifier = $this->getRightsUserIdentifier($user);
-        $hasRight = $this->is_allowed($right, $this->get_location($node), $rightsUserIdentifier);
+        $hasRight = $this->is_allowed($right, $this->get_location($node, $publication->getId()), $rightsUserIdentifier);
 
         return $this->isPublisher($publication, $rightsUserIdentifier) || $hasRight;
     }
@@ -691,6 +730,11 @@ class RightsService
         return $this->getUserService()->findUserByIdentifier($virtualUserIdentifier);
     }
 
+    /**
+     *
+     * @param integer $virtualUserIdentifier
+     * @return boolean
+     */
     public function setVirtualUser($virtualUserIdentifier)
     {
         $user = $this->getUserService()->findUserByIdentifier($virtualUserIdentifier);
@@ -729,5 +773,73 @@ class RightsService
     private function getEmulationStorage()
     {
         return (array) unserialize($this->getSessionUtilities()->retrieve(__NAMESPACE__));
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
+     * @return boolean
+     */
+    public function isAllowedToEditContentObject(Publication $publication, User $user,
+        ComplexContentObjectPathNode $node = null)
+    {
+        $isPublisher = $this->isPublisher($publication, $user);
+
+        $hasContextEditRight = $this->is_allowed(
+            RightsService::EDIT_RIGHT,
+            $this->get_location($node, $publication->getId()),
+            $this->getRightsUserIdentifier($user));
+
+        $hasPortfolioEditRight = $this->getWorkspaceRightsService()->canEditContentObject(
+            $user,
+            $publication->get_content_object());
+
+        $hasContentObjectEditRight = $this->isAllowedToEditContentObjectInWorkspace();
+
+        return $isPublisher || $hasContextEditRight || $hasPortfolioEditRight || $hasContentObjectEditRight;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
+     * @return boolean
+     */
+    public function isAllowedToEditContentObjectInWorkspace(User $user, ComplexContentObjectPathNode $node = null)
+    {
+        if ($node instanceof ComplexContentObjectPathNode)
+        {
+            $hasContentObjectEditRight = $this->getWorkspaceRightsService()->canEditContentObject(
+                $user,
+                $node->get_content_object());
+        }
+        else
+        {
+            $hasContentObjectEditRight = false;
+        }
+
+        return $hasContentObjectEditRight;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
+     * @return boolean
+     */
+    public function isAllowedToViewContentObject(Publication $publication, User $user,
+        ComplexContentObjectPathNode $node = null)
+    {
+        $isPublisher = $this->isPublisher($publication, $user);
+
+        $hasViewRight = $this->is_allowed(
+            RightsService::VIEW_RIGHT,
+            $this->get_location($node, $publication->getId()),
+            $this->getRightsUserIdentifier($user));
+
+        return $isPublisher || $hasViewRight;
     }
 }

@@ -2,8 +2,6 @@
 namespace Chamilo\Application\Portfolio\Component;
 
 use Chamilo\Application\Portfolio\Manager;
-use Chamilo\Application\Portfolio\Rights;
-use Chamilo\Application\Portfolio\Service\RightsService;
 use Chamilo\Application\Portfolio\Storage\DataClass\Feedback;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
@@ -37,18 +35,6 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      * @var \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
     private $publication;
-
-    /**
-     *
-     * @var \Chamilo\Core\User\Storage\DataClass\\User
-     */
-    private $virtualUser;
-
-    /**
-     *
-     * @var integer
-     */
-    private $rightsUserIdentifier;
 
     /**
      *
@@ -195,29 +181,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node = null)
     {
-        $isPublisher = $this->getPublication()->get_publisher_id() == $this->get_rights_user_id();
-
-        $contextEditRight = $this->getRightsService()->is_allowed(
-            RightsService::EDIT_RIGHT,
-            $this->get_location($node),
-            $this->get_rights_user_id());
-
-        $portfolioEditRight = $this->getWorkspaceRightsService()->canEditContentObject(
-            $this->get_user(),
-            $this->get_root_content_object());
-
-        if ($node instanceof ComplexContentObjectPathNode)
-        {
-            $contentObjectEditRight = $this->getWorkspaceRightsService()->canEditContentObject(
-                $this->get_user(),
-                $node->get_content_object());
-        }
-        else
-        {
-            $contentObjectEditRight = false;
-        }
-
-        return $isPublisher || $contextEditRight || $portfolioEditRight || $contentObjectEditRight;
+        return $this->getRightsService()->isAllowedToEditContentObject($this->getPublication(), $this->getUser(), $node);
     }
 
     /**
@@ -226,14 +190,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node = null)
     {
-        $is_publisher = $this->get_rights_user_id() == $this->getPublication()->get_publisher_id();
-
-        $has_right = $this->getRightsService()->is_allowed(
-            RightsService::VIEW_RIGHT,
-            $this->get_location($node),
-            $this->get_rights_user_id());
-
-        return $is_publisher || $has_right;
+        return $this->getRightsService()->isAllowedToViewContentObject($publication, $user, $node);
     }
 
     /**
@@ -287,21 +244,10 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
         foreach ($nodes as $node)
         {
-            $locations[] = $this->get_location($node);
+            $locations[] = $this->getRightsService()->get_location($node, $this->getPublication()->get_id());
         }
 
         return $locations;
-    }
-
-    /**
-     *
-     * @param ComplexContentObjectPathNode $node
-     *
-     * @return \application\portfolio\RightsLocation
-     */
-    public function get_location(ComplexContentObjectPathNode $node = null)
-    {
-        return $this->getRightsService()->get_location($node, $this->getPublication()->get_id());
     }
 
     /**
@@ -332,11 +278,9 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function get_selected_entities(ComplexContentObjectPathNode $node)
     {
-        $location = $this->get_location($node);
-
-        return $this->getRightsService()->findRightsLocationEntityRightsForLocationAndRights(
-            $location,
-            $this->get_available_rights());
+        return $this->getRightsService()->findRightsLocationEntityRightsForPublicationNodeAndAvailableRights(
+            $this->getPublication(),
+            $node);
     }
 
     /**
@@ -408,43 +352,12 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
     }
 
     /**
-     * Get the user_id that should be used for rights checks
-     *
-     * @return int
-     */
-    private function get_rights_user_id()
-    {
-        if (! isset($this->rightsUserIdentifier))
-        {
-            if ($this instanceof PortfolioComplexRights && $this->is_allowed_to_set_content_object_rights())
-            {
-                $virtual_user = $this->get_portfolio_virtual_user();
-
-                if ($virtual_user instanceof \Chamilo\Core\User\Storage\DataClass\User)
-                {
-                    $this->rightsUserIdentifier = $virtual_user->get_id();
-                }
-                else
-                {
-                    $this->rightsUserIdentifier = $this->get_user_id();
-                }
-            }
-            else
-            {
-                $this->rightsUserIdentifier = $this->get_user_id();
-            }
-        }
-
-        return $this->rightsUserIdentifier;
-    }
-
-    /**
      *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_own_portfolio()
      */
     public function is_own_portfolio()
     {
-        return $this->get_user_id() == $this->getPublication()->get_publisher_id();
+        return $this->getRightsService()->isPublisher($this->getPublication(), $this->getUser());
     }
 
     /**
