@@ -168,6 +168,6 @@ class CreatorComponent extends Manager
             return [];
         }
 
-        return $types;
+        return explode(',', $types);
     }
 }
