@@ -80,9 +80,9 @@ class DeleterComponent extends Manager
 
                     foreach ($assignmentTreeNodes as $treeNode)
                     {
-                        $this->getLearningPathAssignmentService()->deleteEntriesByTreeNodeData(
-                            $treeNode->getTreeNodeData()
-                        );
+//                        $this->getLearningPathAssignmentService()->deleteEntriesByTreeNodeData(
+//                            $treeNode->getTreeNodeData()
+//                        );
                     }
                 }
 
