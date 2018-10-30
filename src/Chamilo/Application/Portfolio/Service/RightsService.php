@@ -98,7 +98,8 @@ class RightsService
      * @param \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService
      */
     public function __construct(RightsRepository $rightsRepository, UserService $userService, Translator $translator,
-        SessionUtilities $sessionUtilities, WorkspaceRightsService $workspaceRightsService)
+        SessionUtilities $sessionUtilities,
+        \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService)
     {
         $this->userService = $userService;
         $this->rightsRepository = $rightsRepository;
@@ -660,10 +661,12 @@ class RightsService
     public function isAllowedForFeedbackRight(int $right, Publication $publication, User $user,
         ComplexContentObjectPathNode $node = null)
     {
-        $rightsUserIdentifier = $this->getRightsUserIdentifier($user);
-        $hasRight = $this->is_allowed($right, $this->get_location($node, $publication->getId()), $rightsUserIdentifier);
+        $hasRight = $this->is_allowed(
+            $right,
+            $this->get_location($node, $publication->getId()),
+            $this->getRightsUserIdentifier($user));
 
-        return $this->isPublisher($publication, $rightsUserIdentifier) || $hasRight;
+        return $this->isPublisher($publication, $user) || $hasRight;
     }
 
     /**
@@ -796,7 +799,7 @@ class RightsService
             $user,
             $publication->get_content_object());
 
-        $hasContentObjectEditRight = $this->isAllowedToEditContentObjectInWorkspace();
+        $hasContentObjectEditRight = $this->isAllowedToEditContentObjectInWorkspace($user, $node);
 
         return $isPublisher || $hasContextEditRight || $hasPortfolioEditRight || $hasContentObjectEditRight;
     }

@@ -5,6 +5,7 @@ use Chamilo\Application\Portfolio\Storage\DataClass\Feedback;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Application\Portfolio\Storage\Repository\FeedbackRepository;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
@@ -111,7 +112,7 @@ class FeedbackService
         return $this->findFeedbackForPublicationComplexContentObjectUserIdentifiersCountAndOffset(
             $publication->getId(),
             $this->getComplexContentObjectIdentifierForNode($node),
-            $this->getFeedbackUserIdentifier($user, $node),
+            $this->getFeedbackUserIdentifier($publication, $user, $node),
             $count,
             $offset);
     }
@@ -149,7 +150,7 @@ class FeedbackService
         return $this->countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(
             $publication->getId(),
             $this->getComplexContentObjectIdentifierForNode($node),
-            $this->getFeedbackUserIdentifier($user, $node));
+            $this->getFeedbackUserIdentifier($publication, $user, $node));
     }
 
     /**
@@ -180,13 +181,15 @@ class FeedbackService
 
     /**
      *
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      * @return integer
      */
-    private function getFeedbackUserIdentifier(User $currentUser, ComplexContentObjectPathNode $node = null)
+    private function getFeedbackUserIdentifier(Publication $publication, User $currentUser,
+        ComplexContentObjectPathNode $node = null)
     {
-        if (! $this->getRightsService()->isAllowedToViewFeedback($node))
+        if (! $this->getRightsService()->isAllowedToViewFeedback($publication, $currentUser, $node))
         {
             return $this->getRightsService()->getRightsUserIdentifier($currentUser);
         }

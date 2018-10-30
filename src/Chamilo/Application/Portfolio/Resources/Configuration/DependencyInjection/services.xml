@@ -12,7 +12,7 @@
 			<argument type="service"
 				id="chamilo.libraries.platform.session.session_utilities" />
 			<argument type="service"
-				id="Chamilo\Core\Repository\Workspace\Service\WorkspaceService" />
+				id="Chamilo\Core\Repository\Workspace\Service\RightsService" />
 		</service>
 		<service
 			id="chamilo.application.portfolio.storage.repository.rights_repository"

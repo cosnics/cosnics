@@ -19,11 +19,12 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\File\Redirect;
+use \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager as PortfolioDisplayManager;
 
 /**
  *
- * @package Chamilo\Application\Portfolio\Component$HomeComponent
+ * @package Chamilo\Application\Portfolio\Component
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements PortfolioDisplaySupport, DelegateComponent,
@@ -44,11 +45,9 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
     {
         $this->set_parameter(self::PARAM_USER_ID, $this->getCurrentUserId());
 
-        $context = Portfolio::package() . '\Display';
-
         return $this->getApplicationFactory()->getApplication(
-            $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            Portfolio::package() . '\Display',
+            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this))->run();
     }
 
     /**
@@ -131,12 +130,15 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function get_portfolio_tree_menu_url()
     {
-        return Path::getInstance()->getBasePath(true) . 'index.php?' . Application::PARAM_CONTEXT . '=' .
-             Manager::context() . '&' . Application::PARAM_ACTION . '=' . Manager::ACTION_HOME . '&' .
-             Manager::PARAM_USER_ID . '=' . $this->getCurrentUserId() . '&' .
-             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_ACTION . '=' .
-             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT . '&' .
-             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_STEP . '=' . Menu::NODE_PLACEHOLDER;
+        $redirect = new Redirect(
+            array(
+                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_ACTION => Manager::ACTION_HOME,
+                Manager::PARAM_USER_ID => $this->getCurrentUserId(),
+                PortfolioDisplayManager::PARAM_ACTION => PortfolioDisplayManager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                PortfolioDisplayManager::PARAM_STEP => Menu::NODE_PLACEHOLDER));
+
+        return $redirect->getUrl();
     }
 
     /**
@@ -190,7 +192,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node = null)
     {
-        return $this->getRightsService()->isAllowedToViewContentObject($publication, $user, $node);
+        return $this->getRightsService()->isAllowedToViewContentObject($this->getPublication(), $this->getUser(), $node);
     }
 
     /**
@@ -202,9 +204,16 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
         $portfolioOwner = $this->get_root_content_object()->get_owner();
 
         $content_object = new Bookmark();
-        $content_object->set_title(Translation::get('BookmarkTitle', array('NAME' => $portfolioOwner->get_fullname())));
+        $content_object->set_title(
+            $this->getTranslator()->trans(
+                'BookmarkTitle',
+                ['NAME' => $portfolioOwner->get_fullname()],
+                self::context()));
         $content_object->set_description(
-            Translation::get('BookmarkDescription', array('NAME' => $portfolioOwner->get_fullname())));
+            $this->getTranslator()->trans(
+                'BookmarkDescription',
+                ['NAME' => $portfolioOwner->get_fullname()],
+                self::context()));
         $content_object->set_application(__NAMESPACE__);
         $content_object->set_url(
             $this->get_url(
@@ -224,7 +233,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
     {
         return array(
             new Button(
-                Translation::get('BrowserComponent'),
+                $this->getTranslator()->trans('BrowserComponent', [], self::context()),
                 new FontAwesomeGlyph('search'),
                 $this->get_url(
                     array(self::PARAM_ACTION => self::ACTION_BROWSE),
@@ -265,11 +274,9 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function get_entities()
     {
-        $entities = array();
-        $entities[UserEntity::ENTITY_TYPE] = new UserEntity();
-        $entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
-
-        return $entities;
+        return array(
+            UserEntity::ENTITY_TYPE => new UserEntity(),
+            PlatformGroupEntity::ENTITY_TYPE => new PlatformGroupEntity());
     }
 
     /**
@@ -374,10 +381,8 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
     }
 
     /**
-     * Retrieves the portfolio notifications for the given node
      *
-     * @param ComplexContentObjectPathNode $node
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrievePortfolioNotifications()
      */
     public function retrievePortfolioNotifications(
         \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node)
