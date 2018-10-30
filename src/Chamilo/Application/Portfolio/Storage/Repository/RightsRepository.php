@@ -103,7 +103,7 @@ class RightsRepository
 
         return $this->getDataClassRepository()->retrieves(
             RightsLocationEntityRight::class,
-            new DataClassRetrievesParameters($condition, null, null, $order));
+            new DataClassRetrievesParameters($condition, null, null, array($order)));
     }
 
     /**
