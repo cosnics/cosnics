@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Portfolio\Table\User;
 
 use Chamilo\Application\Portfolio\Favourite\Manager;
+use Chamilo\Application\Portfolio\Favourite\Service\FavouriteService;
 use Chamilo\Application\Portfolio\Service\PublicationService;
 use Chamilo\Application\Portfolio\Service\RightsService;
 use Chamilo\Core\User\Service\UserService;
@@ -9,10 +10,8 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService;
-use Symfony\Component\Translation\Translator;
 use Chamilo\Libraries\Format\Theme;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -43,7 +42,7 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
 
     /**
      *
-     * @var \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService
+     * @var \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService
      */
     private $favouriteService;
 
@@ -66,7 +65,7 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
      * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
-     * @param \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService $favouriteService
+     * @param \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService $favouriteService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      * @throws \Exception
@@ -141,7 +140,7 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
 
     /**
      *
-     * @return \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService
+     * @return \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService
      */
     public function getFavouriteService()
     {
@@ -150,7 +149,7 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
 
     /**
      *
-     * @param \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService $favouriteService
+     * @param \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService $favouriteService
      */
     public function setFavouriteService(FavouriteService $favouriteService)
     {

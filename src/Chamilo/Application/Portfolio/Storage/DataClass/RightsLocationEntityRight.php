@@ -1,12 +1,11 @@
-<?php
+F<?php
 namespace Chamilo\Application\Portfolio\Storage\DataClass;
 
 use Chamilo\Application\Portfolio\Storage\DataManager;
 
 /**
- * RightsLocationEntityRight
- * 
- * @package application\portfolio
+ *
+ * @package Chamilo\Application\Portfolio\Storage\DataClass
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntityRight
@@ -22,7 +21,7 @@ class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntit
     {
         $default_property_names = parent::get_default_property_names();
         $default_property_names[] = self::PROPERTY_PUBLICATION_ID;
-        
+
         return $default_property_names;
     }
 

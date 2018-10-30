@@ -8,9 +8,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * A portfolio publication
  *
- * @package application\portfolio$Publication
+ * @package Chamilo\Application\Portfolio\Storage\DataClass
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Publication extends DataClass

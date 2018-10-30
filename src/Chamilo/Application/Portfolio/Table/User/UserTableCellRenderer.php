@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Portfolio\Table\User;
 
-use Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService;
 use Chamilo\Application\Portfolio\Favourite\Manager as FavouriteManager;
+use Chamilo\Application\Portfolio\Favourite\Service\FavouriteService;
 use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Application\Portfolio\Service\PublicationService;
 use Chamilo\Application\Portfolio\Service\RightsService;
@@ -30,7 +30,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
     /**
      *
-     * @var \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService
+     * @var \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService
      */
     private $favouriteService;
 
@@ -89,7 +89,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
     /**
      *
-     * @return \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService
+     * @return \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService
      */
     public function getFavouriteService()
     {
@@ -98,7 +98,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
     /**
      *
-     * @param \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService $favouriteService
+     * @param \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService $favouriteService
      */
     public function setFavouriteService(FavouriteService $favouriteService)
     {

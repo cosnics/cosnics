@@ -10,9 +10,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * A structural representation of a portfolio item in the context of it's portfolio and the portfolio application
- * 
- * @package application\portfolio
+ *
+ * @package Chamilo\Application\Portfolio\Storage\DataClass
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
@@ -44,7 +43,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
         $default_property_names[] = self::PROPERTY_PUBLICATION_ID;
         $default_property_names[] = self::PROPERTY_NODE_ID;
         $default_property_names[] = self::PROPERTY_INHERIT;
-        
+
         return $default_property_names;
     }
 
@@ -139,13 +138,13 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_PUBLICATION_ID), 
+                new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->get_publication_id()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID), 
+                new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID),
                 new StaticConditionVariable($this->get_node_id()));
             $condition = new AndCondition($conditions);
-            
+
             return DataManager::deletes(RightsLocation::class_name(), $condition);
         }
         else
@@ -156,7 +155,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
 
     /**
      * Clear all configured rights for this location
-     * 
+     *
      * @return boolean
      */
     public function clear_rights()
@@ -166,7 +165,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
 
     /**
      * Clear the given right for this location
-     * 
+     *
      * @param int $right_id
      * @return boolean
      */

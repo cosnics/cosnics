@@ -7,10 +7,8 @@ use Chamilo\Libraries\File\Redirect;
 
 /**
  *
- * @package application\personal_calendar\integration\core\repository\publication
+ * @package Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class LocationResult extends ContextLocationResult
 {
@@ -23,9 +21,9 @@ class LocationResult extends ContextLocationResult
     {
         $portfolioUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Portfolio\Manager::package(), 
+                Application::PARAM_CONTEXT => \Chamilo\Application\Portfolio\Manager::package(),
                 \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_STEP => $result->get_id()));
-        
+
         return $portfolioUrl->getUrl();
     }
 }

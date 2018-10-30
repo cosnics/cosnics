@@ -12,9 +12,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * Portfolio browser component, used to browse for other users' portfolio
  *
- * @package application\portfolio
+ * @package Chamilo\Application\Portfolio\Component
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BrowserComponent extends TabComponent implements TableSupport

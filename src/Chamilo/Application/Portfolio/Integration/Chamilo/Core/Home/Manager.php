@@ -1,6 +1,11 @@
 <?php
 namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Home;
 
+/**
+ *
+ * @package Chamilo\Application\Portfolio\Integration\Chamilo\Core\Home
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class Manager
 {
 

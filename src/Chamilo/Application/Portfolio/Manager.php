@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Application\Portfolio;
 
-use \Chamilo\Core\Repository\Workspace\Service\RightsService as WorkspaceRightsService;
+use Chamilo\Application\Portfolio\Favourite\Service\FavouriteService;
 use Chamilo\Application\Portfolio\Service\FeedbackService;
 use Chamilo\Application\Portfolio\Service\NotificationService;
 use Chamilo\Application\Portfolio\Service\PublicationService;
 use Chamilo\Application\Portfolio\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Service\RightsService as WorkspaceRightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService;
 
 /**
  *
@@ -108,7 +108,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService
+     * @return \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService
      */
     public function getFavouriteService()
     {

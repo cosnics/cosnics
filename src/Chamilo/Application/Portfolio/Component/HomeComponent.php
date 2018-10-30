@@ -2,10 +2,10 @@
 namespace Chamilo\Application\Portfolio\Component;
 
 use Chamilo\Application\Portfolio\Manager;
-use Chamilo\Application\Portfolio\Storage\DataClass\Feedback;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager as PortfolioDisplayManager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
@@ -16,11 +16,9 @@ use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\File\Redirect;
-use \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager as PortfolioDisplayManager;
 
 /**
  *
@@ -192,7 +190,10 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node = null)
     {
-        return $this->getRightsService()->isAllowedToViewContentObjectForNode($this->getPublication(), $this->getUser(), $node);
+        return $this->getRightsService()->isAllowedToViewContentObjectForNode(
+            $this->getPublication(),
+            $this->getUser(),
+            $node);
     }
 
     /**

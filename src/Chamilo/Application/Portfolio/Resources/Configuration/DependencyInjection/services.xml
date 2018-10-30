@@ -66,17 +66,17 @@
 		</service>
 
 		<service
-			id="Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService"
-			class="Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService">
+			id="Chamilo\Application\Portfolio\Favourite\Service\FavouriteService"
+			class="Chamilo\Application\Portfolio\Favourite\Service\FavouriteService">
 			<argument type="service"
-				id="Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository" />
+				id="Chamilo\Application\Portfolio\Favourite\Storage\Repository\FavouriteRepository" />
 			<argument type="service" id="symfony.component.translation.translator" />
 			<argument type="service" id="chamilo.core.user.service.user_service" />
 		</service>
 
 		<service
-			id="Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository"
-			class="Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository">
+			id="Chamilo\Application\Portfolio\Favourite\Storage\Repository\FavouriteRepository"
+			class="Chamilo\Application\Portfolio\Favourite\Storage\Repository\FavouriteRepository">
 			<argument type="service"
 				id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
 		</service>

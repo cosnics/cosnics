@@ -13,9 +13,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * Manager class that guarantees the integration of the portfolio application with the portfolio content object
- * 
- * @package application\portfolio\integration\repository\content_object\portfolio
+ *
+ * @package Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\ContentObject\Portfolio
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Manager implements PortfolioInterface
@@ -23,7 +22,7 @@ class Manager implements PortfolioInterface
 
     /**
      * Update references to a given set of node ids
-     * 
+     *
      * @param int[] $old_node_ids
      * @param int[] $new_node_ids
      * @return boolean
@@ -34,52 +33,52 @@ class Manager implements PortfolioInterface
         {
             return false;
         }
-        
+
         $node_id_map = array_combine($old_node_ids, $new_node_ids);
-        
+
         foreach ($node_id_map as $old_node_id => $new_node_id)
         {
             $properties = new DataClassProperties();
             $properties->add(
                 new DataClassProperty(
                     new PropertyConditionVariable(
-                        RightsLocationEntityRight::class_name(), 
-                        RightsLocationEntityRight::PROPERTY_LOCATION_ID), 
+                        RightsLocationEntityRight::class_name(),
+                        RightsLocationEntityRight::PROPERTY_LOCATION_ID),
                     new StaticConditionVariable($new_node_id)));
-            
+
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    RightsLocationEntityRight::class_name(), 
-                    RightsLocationEntityRight::PROPERTY_LOCATION_ID), 
+                    RightsLocationEntityRight::class_name(),
+                    RightsLocationEntityRight::PROPERTY_LOCATION_ID),
                 new StaticConditionVariable($old_node_id));
-            
+
             if (! DataManager::updates(RightsLocationEntityRight::class_name(), $properties, $condition))
             {
                 return false;
             }
-            
+
             $properties = new DataClassProperties();
             $properties->add(
                 new DataClassProperty(
-                    new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID), 
+                    new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID),
                     new StaticConditionVariable($new_node_id)));
-            
+
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID), 
+                new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID),
                 new StaticConditionVariable($old_node_id));
-            
+
             if (! DataManager::updates(RightsLocation::class_name(), $properties, $condition))
             {
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
      * Delete references to the given node ids
-     * 
+     *
      * @param int[] $node_ids
      * @return boolean
      */
@@ -87,24 +86,24 @@ class Manager implements PortfolioInterface
     {
         $condition = new InCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class_name(), 
-                RightsLocationEntityRight::PROPERTY_LOCATION_ID), 
+                RightsLocationEntityRight::class_name(),
+                RightsLocationEntityRight::PROPERTY_LOCATION_ID),
             $node_ids);
-        
+
         if (! DataManager::deletes(RightsLocationEntityRight::class_name(), $condition))
         {
             return false;
         }
-        
+
         $condition = new InCondition(
-            new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID), 
+            new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID),
             $node_ids);
-        
+
         if (! DataManager::deletes(RightsLocation::class_name(), $condition))
         {
             return false;
         }
-        
+
         return true;
     }
 }

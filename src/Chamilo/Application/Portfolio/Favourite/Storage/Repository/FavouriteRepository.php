@@ -1,8 +1,7 @@
 <?php
-namespace Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository;
+namespace Chamilo\Application\Portfolio\Favourite\Storage\Repository;
 
 use Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite;
-use Chamilo\Application\Portfolio\Favourite\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;

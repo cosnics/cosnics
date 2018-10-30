@@ -2,9 +2,8 @@
 namespace Chamilo\Application\Portfolio\Storage\DataClass;
 
 /**
- * A portfolio feedback item
  *
- * @package application\portfolio
+ * @package Chamilo\Application\Portfolio\Storage\DataClass
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Feedback extends \Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Feedback

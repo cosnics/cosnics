@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Portfolio\Favourite\Component;
 
 use Chamilo\Application\Portfolio\Favourite\Manager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

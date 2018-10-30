@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Portfolio\Favourite;
 
-use Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService;
+use Chamilo\Application\Portfolio\Favourite\Service\FavouriteService;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
@@ -28,7 +28,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService
+     * @return \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService
      */
     public function getFavouriteService()
     {

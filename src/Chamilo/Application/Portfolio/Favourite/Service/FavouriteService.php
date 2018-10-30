@@ -1,15 +1,14 @@
 <?php
-namespace Chamilo\Application\Portfolio\Favourite\Infrastructure\Service;
+namespace Chamilo\Application\Portfolio\Favourite\Service;
 
-use Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository;
 use Chamilo\Application\Portfolio\Favourite\Manager;
 use Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite;
+use Chamilo\Application\Portfolio\Favourite\Storage\Repository\FavouriteRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Symfony\Component\Translation\Translator;
 
@@ -23,7 +22,7 @@ class FavouriteService
 
     /**
      *
-     * @var \Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository
+     * @var \Chamilo\Application\Portfolio\Favourite\Repository\FavouriteRepository
      */
     protected $favouriteRepository;
 
@@ -42,7 +41,7 @@ class FavouriteService
     /**
      * FavouriteService constructor.
      *
-     * @param \Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository $favouriteRepository
+     * @param \Chamilo\Application\Portfolio\Favourite\Repository\FavouriteRepository $favouriteRepository
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(FavouriteRepository $favouriteRepository, Translator $translator,

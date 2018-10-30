@@ -3,7 +3,7 @@ namespace Chamilo\Application\Portfolio\Storage\DataClass;
 
 /**
  *
- * @package repository\content_object\portfolio\display
+ * @package Chamilo\Application\Portfolio\Storage\DataClass
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Notification extends \Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Notification
