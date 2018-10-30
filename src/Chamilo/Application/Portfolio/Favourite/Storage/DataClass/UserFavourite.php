@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * Describes the favourite of a user for another user
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class UserFavourite extends DataClass
@@ -57,5 +57,14 @@ class UserFavourite extends DataClass
     public function setFavouriteUserId($favouriteUserId)
     {
         $this->set_default_property(self::PROPERTY_FAVOURITE_USER_ID, $favouriteUserId);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'portfolio_user_favourite';
     }
 }

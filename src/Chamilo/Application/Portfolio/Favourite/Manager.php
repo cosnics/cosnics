@@ -1,10 +1,8 @@
 <?php
 namespace Chamilo\Application\Portfolio\Favourite;
 
-use Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository;
 use Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -29,27 +27,11 @@ abstract class Manager extends Application
     const SOURCE_FAVOURITES_BROWSER = 'favourites_browser';
 
     /**
-     * The favourite service
      *
-     * @var FavouriteService
-     */
-    protected $favouriteService;
-
-    /**
-     * Returns the favourite service
-     *
-     * @return FavouriteService
+     * @return \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService
      */
     public function getFavouriteService()
     {
-        if (! isset($this->favouriteService))
-        {
-            $this->favouriteService = new FavouriteService(
-                new FavouriteRepository(),
-                Translation::getInstance(),
-                $this->getUserService());
-        }
-
-        return $this->favouriteService;
+        return $this->getService(FavouriteService::class);
     }
 }

@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Application\Portfolio\Storage\Repository;
 
+use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 
 /**
  *

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Application\Portfolio\Service;
 
+use Chamilo\Application\Portfolio\Storage\DataClass\Feedback;
+use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation;
 use Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Application\Portfolio\Storage\Repository\RightsRepository;
@@ -9,7 +11,9 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -20,10 +24,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 use Symfony\Component\Translation\Translator;
-use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
-use Chamilo\Application\Portfolio\Storage\DataClass\Feedback;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
-use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
@@ -833,15 +833,51 @@ class RightsService
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      * @return boolean
      */
-    public function isAllowedToViewContentObject(Publication $publication, User $user,
+    public function isAllowedToViewContentObjectForNode(Publication $publication, User $user,
         ComplexContentObjectPathNode $node = null)
+    {
+        return $this->isAllowedToViewContentObject(
+            $publication,
+            $user,
+            $this->get_location($node, $publication->getId()));
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation $rightsLocation
+     * @return boolean
+     */
+    public function isAllowedToViewContentObject(Publication $publication, User $user, RightsLocation $rightsLocation)
     {
         $isPublisher = $this->isPublisher($publication, $user);
 
         $hasViewRight = $this->is_allowed(
             RightsService::VIEW_RIGHT,
-            $this->get_location($node, $publication->getId()),
+            $rightsLocation,
             $this->getRightsUserIdentifier($user));
+
+        return $isPublisher || $hasViewRight;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return boolean
+     */
+    public function isAllowedToViewUserPublication(Publication $publication, User $user)
+    {
+        $isPublisher = $this->isPublisher($publication, $user);
+
+        $location = new RightsLocation();
+        $location->set_node_id(md5(serialize(array($publication->get_content_object_id()))));
+        $location->set_publication_id($publication->get_id());
+        $location->set_inherit(0);
+        $location->set_parent_id(null);
+
+        $hasViewRight = $this->is_allowed(RightsService::VIEW_RIGHT, $location, $this->getRightsUserIdentifier($user));
 
         return $isPublisher || $hasViewRight;
     }

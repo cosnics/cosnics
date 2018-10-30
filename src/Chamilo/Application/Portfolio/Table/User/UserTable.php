@@ -2,18 +2,21 @@
 namespace Chamilo\Application\Portfolio\Table\User;
 
 use Chamilo\Application\Portfolio\Favourite\Manager;
+use Chamilo\Application\Portfolio\Service\PublicationService;
+use Chamilo\Application\Portfolio\Service\RightsService;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Application\Portfolio\Service\RightsService;
+use Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService;
+use Symfony\Component\Translation\Translator;
+use Chamilo\Libraries\Format\Theme;
 
 /**
- * A table which represents all users which have portfolios published
  *
- * @package application\portfolio
+ * @package Chamilo\Application\Portfolio\Table\User
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserTable extends DataClassTable implements TableFormActionsSupport
@@ -33,19 +36,53 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
     private $rightsService;
 
     /**
+     *
+     * @var \Chamilo\Application\Portfolio\Service\PublicationService
+     */
+    private $publicationService;
+
+    /**
+     *
+     * @var \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService
+     */
+    private $favouriteService;
+
+    /**
+     *
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\Theme
+     */
+    private $themeUtilities;
+
+    /**
      * Constructor
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $component
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
+     * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
+     * @param \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService $favouriteService
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      * @throws \Exception
      */
-    public function __construct($component, UserService $userService, RightsService $rightsService)
+    public function __construct($component, UserService $userService, RightsService $rightsService,
+        PublicationService $publicationService, FavouriteService $favouriteService, Translator $translator,
+        Theme $themeUtilities)
     {
-        parent::__construct($component);
-
         $this->userService = $userService;
         $this->rightsService = $rightsService;
+        $this->publicationService = $publicationService;
+        $this->favouriteService = $favouriteService;
+        $this->translator = $translator;
+        $this->themeUtilities = $themeUtilities;
+
+        parent::__construct($component);
     }
 
     /**
@@ -85,6 +122,78 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
     }
 
     /**
+     *
+     * @return \Chamilo\Application\Portfolio\Service\PublicationService
+     */
+    public function getPublicationService()
+    {
+        return $this->publicationService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
+     */
+    public function setPublicationService(PublicationService $publicationService)
+    {
+        $this->publicationService = $publicationService;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService
+     */
+    public function getFavouriteService()
+    {
+        return $this->favouriteService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService $favouriteService
+     */
+    public function setFavouriteService(FavouriteService $favouriteService)
+    {
+        $this->favouriteService = $favouriteService;
+    }
+
+    /**
+     *
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
+    }
+
+    /**
+     *
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Theme
+     */
+    public function getThemeUtilities()
+    {
+        return $this->themeUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     */
+    public function setThemeUtilities(Theme $themeUtilities)
+    {
+        $this->themeUtilities = $themeUtilities;
+    }
+
+    /**
      * Returns the implemented form actions
      *
      * @return TableFormActions
@@ -99,7 +208,7 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
                     array(
                         \Chamilo\Application\Portfolio\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_BROWSE_FAVOURITES,
                         Manager::PARAM_ACTION => Manager::ACTION_CREATE)),
-                Translation::getInstance()->getTranslation('CreateFavourites', null, Manager::context()),
+                $this->getTranslator()->trans('CreateFavourites', [], Manager::context()),
                 false));
 
         return $actions;
@@ -128,34 +237,15 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
     {
         if (! isset($this->cell_renderer))
         {
-            $this->cell_renderer = new UserTableCellRenderer($this, $this->getRightsService());
+            $this->cell_renderer = new UserTableCellRenderer(
+                $this,
+                $this->getRightsService(),
+                $this->getFavouriteService(),
+                $this->getTranslator(),
+                $this->getPublicationService(),
+                $this->getThemeUtilities());
         }
 
         return $this->cell_renderer;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\Table::getData()
-     */
-    public function getData($offset, $count, $orderColumns, $orderDirections)
-    {
-        $resultSet = $this->get_data_provider()->retrieve_data(
-            $this->get_condition(),
-            $offset,
-            $count,
-            $this->determineOrderProperties($orderColumns, $orderDirections));
-
-        $tableData = array();
-
-        if ($resultSet)
-        {
-            foreach ($resultSet as $result)
-            {
-                $this->handle_result($tableData, $result);
-            }
-        }
-
-        return $tableData;
     }
 }

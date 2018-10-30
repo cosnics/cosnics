@@ -7,7 +7,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Deletes the given favourites
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class DeleterComponent extends Manager
@@ -20,19 +20,17 @@ class DeleterComponent extends Manager
     {
         $favouriteService = $this->getFavouriteService();
         $userFavouriteIds = $this->getRequest()->get(self::PARAM_FAVOURITE_ID);
-        
-        $translator = Translation::getInstance();
-        
+
         try
         {
             $favouriteService->deleteUserFavouritesById($userFavouriteIds);
-            
-            $objectTranslation = $translator->getTranslation('UserFavourite', null, Manager::context());
-            
+
+            $objectTranslation = $this->getTranslator()->trans('UserFavourite', [], Manager::context());
+
             $success = true;
-            $message = $translator->getTranslation(
-                'ObjectDeleted', 
-                array('OBJECT' => $objectTranslation), 
+            $message = $this->getTranslator()->trans(
+                'ObjectDeleted',
+                array('OBJECT' => $objectTranslation),
                 Utilities::COMMON_LIBRARIES);
         }
         catch (\Exception $ex)
@@ -40,7 +38,7 @@ class DeleterComponent extends Manager
             $success = false;
             $message = $ex->getMessage();
         }
-        
+
         $source = $this->getRequest()->get(self::PARAM_SOURCE);
         if (! $source || $source == self::SOURCE_FAVOURITES_BROWSER)
         {
@@ -51,10 +49,10 @@ class DeleterComponent extends Manager
         {
             $returnParameters = array(
                 \Chamilo\Application\Portfolio\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_BROWSE);
-            
+
             $filterParameters = array(self::PARAM_ACTION);
         }
-        
+
         $this->redirect($message, ! $success, $returnParameters, $filterParameters);
     }
 }

@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Portfolio\Service;
 
-use Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
+use Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Symfony\Component\Translation\Translator;
 

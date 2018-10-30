@@ -4,13 +4,14 @@ namespace Chamilo\Application\Portfolio\Favourite\Infrastructure\Service;
 use Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository;
 use Chamilo\Application\Portfolio\Favourite\Manager;
 use Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\User\Service\UserService;
+use Symfony\Component\Translation\Translator;
 
 /**
  * The favourite service
@@ -22,13 +23,13 @@ class FavouriteService
 
     /**
      *
-     * @var FavouriteRepository
+     * @var \Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository
      */
     protected $favouriteRepository;
 
     /**
      *
-     * @var Translation
+     * @var \Symfony\Component\Translation\Translator
      */
     protected $translator;
 
@@ -41,10 +42,10 @@ class FavouriteService
     /**
      * FavouriteService constructor.
      *
-     * @param FavouriteRepository $favouriteRepository
-     * @param Translation $translator
+     * @param \Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository $favouriteRepository
+     * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function __construct(FavouriteRepository $favouriteRepository, Translation $translator,
+    public function __construct(FavouriteRepository $favouriteRepository, Translator $translator,
         UserService $userService)
     {
         $this->favouriteRepository = $favouriteRepository;
@@ -88,14 +89,12 @@ class FavouriteService
     {
         if (! $sourceUser instanceof User)
         {
-            throw new \InvalidArgumentException(
-                $this->translator->getTranslation('InvalidSourceUser', null, Manager::context()));
+            throw new \InvalidArgumentException($this->translator->trans('InvalidSourceUser', [], Manager::context()));
         }
 
         if (! $favouriteUser instanceof User)
         {
-            throw new \InvalidArgumentException(
-                $this->translator->getTranslation('InvalidFavouriteUser', null, Manager::context()));
+            throw new \InvalidArgumentException($this->translator->trans('InvalidFavouriteUser', [], Manager::context()));
         }
 
         $userFavourite = new UserFavourite();
@@ -107,7 +106,7 @@ class FavouriteService
             $objectTranslation = $this->getObjectTranslation();
 
             throw new \RuntimeException(
-                $this->translator->getTranslation(
+                $this->translator->trans(
                     'ObjectNotCreated',
                     array('OBJECT' => $objectTranslation),
                     Utilities::COMMON_LIBRARIES));
@@ -156,7 +155,7 @@ class FavouriteService
         if (! $userFavourite->delete())
         {
             throw new \RuntimeException(
-                $this->translator->getTranslation(
+                $this->translator->trans(
                     'ObjectNotCreated',
                     array('OBJECT' => $objectTranslation),
                     Utilities::COMMON_LIBRARIES));
@@ -227,6 +226,6 @@ class FavouriteService
      */
     protected function getObjectTranslation()
     {
-        return $this->translator->getTranslation('UserFavourite', null, Manager::context());
+        return $this->translator->trans('UserFavourite', [], Manager::context());
     }
 }

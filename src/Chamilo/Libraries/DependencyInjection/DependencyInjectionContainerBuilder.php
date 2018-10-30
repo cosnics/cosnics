@@ -448,6 +448,8 @@ class DependencyInjectionContainerBuilder
                 $this->getFileConfigurationConsulter()->getSetting(
                     array('Chamilo\Configuration', 'debug', 'enable_query_cache')));
 
+            $storageAliasGenerator = new StorageAliasGenerator($this->getClassnameUtilities());
+
             $this->registrationConsulter = new RegistrationConsulter(
                 $this->getStringUtilities(),
                 new DataCacheLoader(
@@ -458,10 +460,10 @@ class DependencyInjectionContainerBuilder
                                 new DataClassRepositoryCache(),
                                 new DataClassDatabase(
                                     $connectionFactory->getConnection(),
-                                    new StorageAliasGenerator($this->getClassnameUtilities()),
+                                    $storageAliasGenerator,
                                     $exceptionLoggerFactory->createExceptionLogger(),
                                     $conditionPartTranslatorService,
-                                    new ParametersProcessor($conditionPartTranslatorService)),
+                                    new ParametersProcessor($conditionPartTranslatorService, $storageAliasGenerator)),
                                 new DataClassFactory())))));
         }
 

@@ -5,9 +5,8 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 
 /**
- * Table data provider
  *
- * @package application\portfolio
+ * @package Chamilo\Application\Portfolio\Table\User
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserTableDataProvider extends DataClassTableDataProvider
@@ -23,7 +22,7 @@ class UserTableDataProvider extends DataClassTableDataProvider
      * Constructor
      *
      * @param Table $table
-     * @param \Chamilo\Core\User\Service\UserService $mobilityService
+     * @param \Chamilo\Core\User\Service\UserService $userService
      */
     public function __construct($table, UserService $userService)
     {

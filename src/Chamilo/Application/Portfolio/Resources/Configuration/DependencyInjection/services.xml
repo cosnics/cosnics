@@ -3,10 +3,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 	<services>
-		<service id="chamilo.application.portfolio.service.rights_service"
+		<service id="Chamilo\Application\Portfolio\Service\RightsService"
 			class="Chamilo\Application\Portfolio\Service\RightsService">
 			<argument type="service"
-				id="chamilo.application.portfolio.storage.repository.rights_repository" />
+				id="Chamilo\Application\Portfolio\Storage\Repository\RightsRepository" />
 			<argument type="service" id="chamilo.core.user.service.user_service" />
 			<argument type="service" id="symfony.component.translation.translator" />
 			<argument type="service"
@@ -15,52 +15,68 @@
 				id="Chamilo\Core\Repository\Workspace\Service\RightsService" />
 		</service>
 		<service
-			id="chamilo.application.portfolio.storage.repository.rights_repository"
+			id="Chamilo\Application\Portfolio\Storage\Repository\RightsRepository"
 			class="Chamilo\Application\Portfolio\Storage\Repository\RightsRepository">
 			<argument type="service"
 				id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
 		</service>
 
-		<service id="chamilo.application.portfolio.service.feedback_service"
+		<service id="Chamilo\Application\Portfolio\Service\FeedbackService"
 			class="Chamilo\Application\Portfolio\Service\FeedbackService">
 			<argument type="service"
-				id="chamilo.application.portfolio.storage.repository.feedback_repository" />
+				id="Chamilo\Application\Portfolio\Storage\Repository\FeedbackRepository" />
 			<argument type="service"
-				id="chamilo.application.portfolio.service.rights_service" />
+				id="Chamilo\Application\Portfolio\Service\RightsService" />
 		</service>
 
 		<service
-			id="chamilo.application.portfolio.storage.repository.feedback_repository"
+			id="Chamilo\Application\Portfolio\Storage\Repository\FeedbackRepository"
 			class="Chamilo\Application\Portfolio\Storage\Repository\FeedbackRepository">
 			<argument type="service"
 				id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
 		</service>
 
-		<service id="chamilo.application.portfolio.service.notification_service"
+		<service id="Chamilo\Application\Portfolio\Service\NotificationService"
 			class="Chamilo\Application\Portfolio\Service\NotificationService">
 			<argument type="service"
-				id="chamilo.application.portfolio.storage.repository.notification_repository" />
+				id="Chamilo\Application\Portfolio\Storage\Repository\NotificationRepository" />
 		</service>
 
 		<service
-			id="chamilo.application.portfolio.storage.repository.notification_repository"
+			id="Chamilo\Application\Portfolio\Storage\Repository\NotificationRepository"
 			class="Chamilo\Application\Portfolio\Storage\Repository\NotificationRepository">
 			<argument type="service"
 				id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
 		</service>
 
-		<service id="chamilo.application.portfolio.service.publication_service"
+		<service id="Chamilo\Application\Portfolio\Service\PublicationService"
 			class="Chamilo\Application\Portfolio\Service\PublicationService">
 			<argument type="service"
-				id="chamilo.application.portfolio.storage.repository.publication_repository" />
+				id="Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository" />
 			<argument type="service"
-				id="chamilo.application.portfolio.service.rights_service" />
+				id="Chamilo\Application\Portfolio\Service\RightsService" />
 			<argument type="service" id="symfony.component.translation.translator" />
 		</service>
 
 		<service
-			id="chamilo.application.portfolio.storage.repository.publication_repository"
+			id="Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository"
 			class="Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository">
+			<argument type="service"
+				id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+		</service>
+
+		<service
+			id="Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService"
+			class="Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService">
+			<argument type="service"
+				id="Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository" />
+			<argument type="service" id="symfony.component.translation.translator" />
+			<argument type="service" id="chamilo.core.user.service.user_service" />
+		</service>
+
+		<service
+			id="Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository"
+			class="Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository">
 			<argument type="service"
 				id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
 		</service>

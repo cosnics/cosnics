@@ -192,7 +192,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node = null)
     {
-        return $this->getRightsService()->isAllowedToViewContentObject($this->getPublication(), $this->getUser(), $node);
+        return $this->getRightsService()->isAllowedToViewContentObjectForNode($this->getPublication(), $this->getUser(), $node);
     }
 
     /**
@@ -208,12 +208,12 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
             $this->getTranslator()->trans(
                 'BookmarkTitle',
                 ['NAME' => $portfolioOwner->get_fullname()],
-                self::context()));
+                Manager::context()));
         $content_object->set_description(
             $this->getTranslator()->trans(
                 'BookmarkDescription',
                 ['NAME' => $portfolioOwner->get_fullname()],
-                self::context()));
+                Manager::context()));
         $content_object->set_application(__NAMESPACE__);
         $content_object->set_url(
             $this->get_url(
@@ -233,7 +233,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
     {
         return array(
             new Button(
-                $this->getTranslator()->trans('BrowserComponent', [], self::context()),
+                $this->getTranslator()->trans('BrowserComponent', [], Manager::context()),
                 new FontAwesomeGlyph('search'),
                 $this->get_url(
                     array(self::PARAM_ACTION => self::ACTION_BROWSE),

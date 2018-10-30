@@ -7,9 +7,8 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumn
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 
 /**
- * Table column model
- * 
- * @package application\portfolio$UserTableColumnModel
+ *
+ * @package Chamilo\Application\Portfolio\Table\User
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport

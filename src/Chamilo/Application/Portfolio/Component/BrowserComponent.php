@@ -29,14 +29,21 @@ class BrowserComponent extends TabComponent implements TableSupport
     public function build()
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        $table = new UserTable($this, $this->getUserService(), $this->getRightsService());
+        $table = new UserTable(
+            $this,
+            $this->getUserService(),
+            $this->getRightsService(),
+            $this->getPublicationService(),
+            $this->getFavouriteService(),
+            $this->getTranslator(),
+            $this->getThemeUtilities());
         $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
 
         $html = array();
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $table->as_html();
+        $html[] = $table->render();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

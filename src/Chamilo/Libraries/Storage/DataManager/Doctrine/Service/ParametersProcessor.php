@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Service;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase;
+use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -38,11 +39,19 @@ class ParametersProcessor
 
     /**
      *
+     * @var \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
+     */
+    protected $storageAliasGenerator;
+
+    /**
+     *
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
      */
-    public function __construct(ConditionPartTranslatorService $conditionPartTranslatorService)
+    public function __construct(ConditionPartTranslatorService $conditionPartTranslatorService,
+        StorageAliasGenerator $storageAliasGenerator)
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
+        $this->storageAliasGenerator = $storageAliasGenerator;
     }
 
     /**
@@ -61,6 +70,24 @@ class ParametersProcessor
     public function setConditionPartTranslatorService(ConditionPartTranslatorService $conditionPartTranslatorService)
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
+     */
+    public function getStorageAliasGenerator()
+    {
+        return $this->storageAliasGenerator;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
+     */
+    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator)
+    {
+        $this->storageAliasGenerator = $storageAliasGenerator;
     }
 
     /**
@@ -258,6 +285,8 @@ class ParametersProcessor
     protected function processJoins(DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, $dataClassName,
         Joins $joins = null)
     {
+        $storageAliasGenerator = $this->getStorageAliasGenerator();
+
         if ($joins instanceof Joins)
         {
             foreach ($joins->get() as $join)
@@ -269,23 +298,23 @@ class ParametersProcessor
                 {
                     case Join::TYPE_NORMAL :
                         $queryBuilder->join(
-                            $this->getAlias($dataClassName::get_table_name()),
+                            $storageAliasGenerator->getTableAlias($dataClassName::get_table_name()),
                             $joinDataClassName::get_table_name(),
-                            $this->getAlias($joinDataClassName::get_table_name()),
+                            $storageAliasGenerator->getTableAlias($joinDataClassName::get_table_name()),
                             $joinCondition);
                         break;
                     case Join::TYPE_RIGHT :
                         $queryBuilder->rightJoin(
-                            $this->getAlias($dataClassName::get_table_name()),
+                            $storageAliasGenerator->getTableAlias($dataClassName::get_table_name()),
                             $joinDataClassName::get_table_name(),
-                            $this->getAlias($joinDataClassName::get_table_name()),
+                            $storageAliasGenerator->getTableAlias($joinDataClassName::get_table_name()),
                             $joinCondition);
                         break;
                     case Join::TYPE_LEFT :
                         $queryBuilder->leftJoin(
-                            $this->getAlias($dataClassName::get_table_name()),
+                            $storageAliasGenerator->getTableAlias($dataClassName::get_table_name()),
                             $joinDataClassName::get_table_name(),
-                            $this->getAlias($joinDataClassName::get_table_name()),
+                            $storageAliasGenerator->getTableAlias($joinDataClassName::get_table_name()),
                             $joinCondition);
                         break;
                 }

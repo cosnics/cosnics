@@ -5,6 +5,7 @@ use Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite;
 use Chamilo\Application\Portfolio\Favourite\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
@@ -19,7 +20,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * Wrapper for the Portfolio Favourite DataManager
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -28,15 +28,48 @@ class FavouriteRepository
     const PROPERTY_USER_ID = 'user_id';
 
     /**
+     *
+     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     */
+    private $dataClassRepository;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     */
+    public function __construct(DataClassRepository $dataClassRepository)
+    {
+        $this->dataClassRepository = $dataClassRepository;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     */
+    protected function getDataClassRepository()
+    {
+        return $this->dataClassRepository;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     */
+    protected function setDataClassRepository($dataClassRepository)
+    {
+        $this->dataClassRepository = $dataClassRepository;
+    }
+
+    /**
      * Finds a user favourite by a given id
      *
      * @param int $userFavouriteId
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite
      */
     public function findUserFavouriteById($userFavouriteId)
     {
-        return DataManager::retrieve_by_id(UserFavourite::class_name(), $userFavouriteId);
+        return $this->getDataClassRepository()->retrieveById(UserFavourite::class, $userFavouriteId);
     }
 
     /**
@@ -45,25 +78,25 @@ class FavouriteRepository
      * @param int $sourceUserId
      * @param int $favouriteUserId
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite
      */
     public function findUserFavouriteBySourceAndFavouriteUserId($sourceUserId, $favouriteUserId)
     {
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_SOURCE_USER_ID),
+            new PropertyConditionVariable(UserFavourite::class, UserFavourite::PROPERTY_SOURCE_USER_ID),
             new StaticConditionVariable($sourceUserId));
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_FAVOURITE_USER_ID),
+            new PropertyConditionVariable(UserFavourite::class, UserFavourite::PROPERTY_FAVOURITE_USER_ID),
             new StaticConditionVariable($favouriteUserId));
 
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassRetrieveParameters($condition);
 
-        return DataManager::retrieve(UserFavourite::class_name(), $parameters);
+        return $this->getDataClassRepository()->retrieve(UserFavourite::class, $parameters);
     }
 
     /**
@@ -72,7 +105,7 @@ class FavouriteRepository
      * @param User $sourceUser
      * @param Condition $condition
      *
-     * @return int
+     * @return integer
      */
     public function countFavouriteUsers(User $sourceUser, $condition = null)
     {
@@ -80,7 +113,7 @@ class FavouriteRepository
             $this->getUserFavouriteCondition($sourceUser, $condition),
             $this->getFavouriteUsersJoins());
 
-        return DataManager::count(User::class_name(), $parameters);
+        return $this->getDataClassRepository()->count(User::class, $parameters);
     }
 
     /**
@@ -98,21 +131,21 @@ class FavouriteRepository
     {
         $properties = array();
 
-        $properties[] = new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_ID);
+        $properties[] = new PropertyConditionVariable(UserFavourite::class, UserFavourite::PROPERTY_ID);
 
-        $properties[] = new FixedPropertyConditionVariable(User::class_name(), User::PROPERTY_ID, self::PROPERTY_USER_ID);
+        $properties[] = new FixedPropertyConditionVariable(User::class, User::PROPERTY_ID, self::PROPERTY_USER_ID);
 
-        $properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME);
-        $properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME);
-        $properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE);
+        $properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME);
+        $properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);
+        $properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE);
 
         $dataClassProperties = new DataClassProperties($properties);
 
         if (! $orderProperty)
         {
             $orderProperty = array(
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)));
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)));
         }
 
         $parameters = new RecordRetrievesParameters(
@@ -123,7 +156,7 @@ class FavouriteRepository
             $orderProperty,
             $this->getFavouriteUsersJoins());
 
-        return DataManager::records(User::class_name(), $parameters);
+        return $this->getDataClassRepository()->records(User::class, $parameters);
     }
 
     /**
@@ -158,7 +191,7 @@ class FavouriteRepository
     protected function getSourceUserCondition(User $sourceUser)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_SOURCE_USER_ID),
+            new PropertyConditionVariable(UserFavourite::class, UserFavourite::PROPERTY_SOURCE_USER_ID),
             new StaticConditionVariable($sourceUser->getId()));
     }
 
@@ -172,10 +205,10 @@ class FavouriteRepository
         $joins = new Joins();
         $joins->add(
             new Join(
-                UserFavourite::class_name(),
+                UserFavourite::class,
                 new EqualityCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
-                    new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_FAVOURITE_USER_ID))));
+                    new PropertyConditionVariable(User::class, User::PROPERTY_ID),
+                    new PropertyConditionVariable(UserFavourite::class, UserFavourite::PROPERTY_FAVOURITE_USER_ID))));
 
         return $joins;
     }

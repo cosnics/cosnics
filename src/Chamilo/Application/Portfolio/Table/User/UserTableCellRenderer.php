@@ -1,30 +1,22 @@
 <?php
 namespace Chamilo\Application\Portfolio\Table\User;
 
-use Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository;
 use Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService;
+use Chamilo\Application\Portfolio\Favourite\Manager as FavouriteManager;
 use Chamilo\Application\Portfolio\Manager;
-use Chamilo\Application\Portfolio\Rights;
-use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
-use Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation;
-use Chamilo\Application\Portfolio\Storage\DataManager;
+use Chamilo\Application\Portfolio\Service\PublicationService;
+use Chamilo\Application\Portfolio\Service\RightsService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Application\Portfolio\Service\RightsService;
+use Symfony\Component\Translation\Translator;
 
 /**
- * Table cell renderer
  *
- * @package application\portfolio
+ * @package Chamilo\Application\Portfolio\Table\User
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
@@ -38,13 +30,43 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
     /**
      *
+     * @var \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService
+     */
+    private $favouriteService;
+
+    /**
+     *
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     *
+     * @var \Chamilo\Application\Portfolio\Service\PublicationService
+     */
+    private $publicationService;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\Theme
+     */
+    private $themeUtilities;
+
+    /**
+     *
      * @param \Chamilo\Libraries\Format\Table\Table $table
      * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
      */
-    public function __construct($table, RightsService $rightsService)
+    public function __construct($table, RightsService $rightsService, FavouriteService $favouriteService,
+        Translator $translator, PublicationService $publicationService, Theme $themeUtilities)
     {
         parent::__construct($table);
+
         $this->rightsService = $rightsService;
+        $this->favouriteService = $favouriteService;
+        $this->translator = $translator;
+        $this->publicationService = $publicationService;
+        $this->themeUtilities = $themeUtilities;
     }
 
     /**
@@ -66,45 +88,114 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
     }
 
     /**
+     *
+     * @return \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService
+     */
+    public function getFavouriteService()
+    {
+        return $this->favouriteService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService $favouriteService
+     */
+    public function setFavouriteService(FavouriteService $favouriteService)
+    {
+        $this->favouriteService = $favouriteService;
+    }
+
+    /**
+     *
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
+    }
+
+    /**
+     *
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Portfolio\Service\PublicationService
+     */
+    public function getPublicationService()
+    {
+        return $this->publicationService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
+     */
+    public function setPublicationService(PublicationService $publicationService)
+    {
+        $this->publicationService = $publicationService;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Theme
+     */
+    public function getThemeUtilities()
+    {
+        return $this->themeUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     */
+    public function setThemeUtilities(Theme $themeUtilities)
+    {
+        $this->themeUtilities = $themeUtilities;
+    }
+
+    /**
      * Returns the actions toolbar
      *
-     * @param \user\User $result
-     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return string
      */
-    public function get_actions($result)
+    public function get_actions($user)
     {
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
-        if ($this->can_view_user_portfolio($result) || $result->get_id() == $this->get_component()->get_user_id())
+        if ($this->canViewUserPortfolio($user))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ShowPortfolio', array('USER' => $result->get_fullname())),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->getTranslator()->trans('ShowPortfolio', array('USER' => $user->get_fullname())),
+                    $this->getThemeUtilities()->getCommonImagePath('Action/Browser'),
                     $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_HOME,
-                            Manager::PARAM_USER_ID => $result->get_id())),
+                        array(Manager::PARAM_ACTION => Manager::ACTION_HOME, Manager::PARAM_USER_ID => $user->getId())),
                     ToolbarItem::DISPLAY_ICON));
 
-            $favouriteService = new FavouriteService(new FavouriteRepository(), Translation::getInstance());
-            $favouriteContext = \Chamilo\Application\Portfolio\Favourite\Manager::context();
+            $favouriteService = $this->getFavouriteService();
+            $favouriteContext = FavouriteManager::context();
 
             $possibleFavouriteUser = new User();
-            $possibleFavouriteUser->setId($result->getId());
+            $possibleFavouriteUser->setId($user->getId());
 
             if (! $favouriteService->isUserFavourite($this->get_component()->getUser(), $possibleFavouriteUser))
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::getInstance()->getTranslation('CreateFavourite', null, $favouriteContext),
-                        Theme::getInstance()->getImagePath($favouriteContext, 'CreateFavourite'),
+                        $this->getTranslator()->trans('CreateFavourite', [], $favouriteContext),
+                        $this->getThemeUtilities()->getImagePath($favouriteContext, 'CreateFavourite'),
                         $this->get_component()->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_BROWSE_FAVOURITES,
-                                \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Favourite\Manager::ACTION_CREATE,
-                                \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_FAVOURITE_USER_ID => $result->getId())),
+                                FavouriteManager::PARAM_ACTION => FavouriteManager::ACTION_CREATE,
+                                FavouriteManager::PARAM_FAVOURITE_USER_ID => $user->getId())),
                         ToolbarItem::DISPLAY_ICON));
             }
             else
@@ -115,14 +206,14 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::getInstance()->getTranslation('DeleteFavourite', null, $favouriteContext),
-                        Theme::getInstance()->getImagePath($favouriteContext, 'DeleteFavourite'),
+                        $this->getTranslator()->trans('DeleteFavourite', [], $favouriteContext),
+                        $this->getThemeUtilities()->getImagePath($favouriteContext, 'DeleteFavourite'),
                         $this->get_component()->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_BROWSE_FAVOURITES,
-                                \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Favourite\Manager::ACTION_DELETE,
-                                \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_FAVOURITE_ID => $favouriteUser->getId(),
-                                \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_SOURCE => \Chamilo\Application\Portfolio\Favourite\Manager::SOURCE_USER_BROWSER)),
+                                FavouriteManager::PARAM_ACTION => FavouriteManager::ACTION_DELETE,
+                                FavouriteManager::PARAM_FAVOURITE_ID => $favouriteUser->getId(),
+                                FavouriteManager::PARAM_SOURCE => FavouriteManager::SOURCE_USER_BROWSER)),
                         ToolbarItem::DISPLAY_ICON,
                         true));
             }
@@ -131,51 +222,32 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ShowPortfolioNotAllowed', array('USER' => $result->get_fullname())),
-                    Theme::getInstance()->getCommonImagePath('Action/BrowserNa'),
+                    $this->getTranslator()->trans('ShowPortfolioNotAllowed', array('USER' => $user->get_fullname())),
+                    $this->getThemeUtilities()->getCommonImagePath('Action/BrowserNa'),
                     null,
                     ToolbarItem::DISPLAY_ICON));
         }
 
-        return $toolbar->as_html();
+        return $toolbar->render();
     }
 
     /**
      * Determine whether or not the currently logged-in user can view the user's portfolio
      *
-     * @param \user\User $result
-     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return boolean
      */
-    public function can_view_user_portfolio($result)
+    public function canViewUserPortfolio(User $user)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER_ID),
-            new StaticConditionVariable($result->get_id()));
-        $user_publication = DataManager::retrieve(
-            Publication::class_name(),
-            new DataClassRetrieveParameters($condition));
+        $userPublication = $this->getPublicationService()->getPublicationForUserIdentifier($user->getId());
 
-        if (! $user_publication)
+        if (! $userPublication)
         {
             return true;
         }
 
-        $node_id = md5(serialize(array($user_publication->get_content_object_id())));
-
-        $location = new RightsLocation();
-
-        $location->set_node_id($node_id);
-        $location->set_publication_id($user_publication->get_id());
-        $location->set_inherit(0);
-        $location->set_parent_id(null);
-
-        $is_publisher = $this->get_table()->get_component()->get_user_id() == $result->get_id();
-        $has_right = $this->getRightsService()->is_allowed(
-            Rights::VIEW_RIGHT,
-            $location,
-            $this->get_table()->get_component()->get_user_id());
-
-        return $is_publisher || $has_right;
+        return $this->getRightsService()->isAllowedToViewUserPublication(
+            $userPublication,
+            $this->get_table()->get_component()->getUser());
     }
 }

@@ -1,13 +1,18 @@
 <?php
 namespace Chamilo\Application\Portfolio;
 
+use \Chamilo\Core\Repository\Workspace\Service\RightsService as WorkspaceRightsService;
+use Chamilo\Application\Portfolio\Service\FeedbackService;
+use Chamilo\Application\Portfolio\Service\NotificationService;
+use Chamilo\Application\Portfolio\Service\PublicationService;
+use Chamilo\Application\Portfolio\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService;
 
 /**
- * Portfolio Application
  *
- * @package application\portfolio$Manager
+ * @package Chamilo\Application\Portfolio
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends Application
@@ -62,7 +67,7 @@ abstract class Manager extends Application
      */
     public function getRightsService()
     {
-        return $this->getService('chamilo.application.portfolio.service.rights_service');
+        return $this->getService(RightsService::class);
     }
 
     /**
@@ -71,7 +76,7 @@ abstract class Manager extends Application
      */
     public function getWorkspaceRightsService()
     {
-        return \Chamilo\Core\Repository\Workspace\Service\RightsService::getInstance();
+        return $this->getService(WorkspaceRightsService::class);
     }
 
     /**
@@ -80,7 +85,7 @@ abstract class Manager extends Application
      */
     public function getFeedbackService()
     {
-        return $this->getService('chamilo.application.portfolio.service.feedback_service');
+        return $this->getService(FeedbackService::class);
     }
 
     /**
@@ -89,7 +94,7 @@ abstract class Manager extends Application
      */
     public function getNotificationService()
     {
-        return $this->getService('chamilo.application.portfolio.service.notification_service');
+        return $this->getService(NotificationService::class);
     }
 
     /**
@@ -98,6 +103,15 @@ abstract class Manager extends Application
      */
     public function getPublicationService()
     {
-        return $this->getService('chamilo.application.portfolio.service.publication_service');
+        return $this->getService(PublicationService::class);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService
+     */
+    public function getFavouriteService()
+    {
+        return $this->getService(FavouriteService::class);
     }
 }

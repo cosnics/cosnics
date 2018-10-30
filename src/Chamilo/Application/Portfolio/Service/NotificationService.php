@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Application\Portfolio\Service;
 
-use Chamilo\Application\Portfolio\Storage\Repository\NotificationRepository;
 use Chamilo\Application\Portfolio\Storage\DataClass\Notification;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Application\Portfolio\Storage\Repository\NotificationRepository;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
