@@ -28,6 +28,11 @@ class CreatorComponent extends Manager
      */
     public function run()
     {
+        if(empty($this->get_allowed_content_object_types()))
+        {
+            throw new UserException($this->getTranslator()->trans('NoSubmissionPossible', [], Manager::context()));
+        }
+
         $this->checkAccessRights();
 
         $this->verifyStartEndTime();
@@ -157,6 +162,12 @@ class CreatorComponent extends Manager
 
     public function get_allowed_content_object_types()
     {
-        return explode(',', $this->get_root_content_object()->get_allowed_types());
+        $types = $this->get_root_content_object()->get_allowed_types();
+        if(empty($types))
+        {
+            return [];
+        }
+
+        return explode(',', $types);
     }
 }

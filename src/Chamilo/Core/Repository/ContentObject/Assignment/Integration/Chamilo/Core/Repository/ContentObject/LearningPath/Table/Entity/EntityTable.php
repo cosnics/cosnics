@@ -2,8 +2,9 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entity;
 
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
-use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -20,7 +21,7 @@ class EntityTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Disp
     const TABLE_IDENTIFIER = User::PROPERTY_ID;
 
     /**
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService
+     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
      */
     protected $learningPathAssignmentService;
 
@@ -35,17 +36,24 @@ class EntityTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Disp
     protected $userIds;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
+     */
+    protected $contentObjectPublication;
+
+    /**
      * EntityTable constructor.
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $component
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param int[] $userIds
      */
     public function __construct(
         Application $component, AssignmentDataProvider $assignmentDataProvider,
         LearningPathAssignmentService $assignmentService,
+        ContentObjectPublication $contentObjectPublication,
         TreeNodeData $treeNodeData,
         $userIds = []
     )
@@ -53,12 +61,13 @@ class EntityTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Disp
         $this->learningPathAssignmentService = $assignmentService;
         $this->treeNodeData = $treeNodeData;
         $this->userIds = $userIds;
+        $this->contentObjectPublication = $contentObjectPublication;
 
         parent::__construct($component, $assignmentDataProvider);
     }
 
     /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
      */
     public function getLearningPathAssignmentService()
     {
@@ -71,6 +80,14 @@ class EntityTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Disp
     public function getTreeNodeData()
     {
         return $this->treeNodeData;
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
+     */
+    public function getContentObjectPublication()
+    {
+        return $this->contentObjectPublication;
     }
 
     /**

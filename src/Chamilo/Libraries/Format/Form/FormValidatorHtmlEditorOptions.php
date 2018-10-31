@@ -149,7 +149,7 @@ class FormValidatorHtmlEditorOptions
      * @param boolean $value
      * @return boolean
      */
-    public function process_collapse_toolbar($value)
+    public function process_toolbarStartupExpanded($value)
     {
         if ($value === true)
         {

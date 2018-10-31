@@ -30,6 +30,7 @@ class EntryTableDataProvider
         $learningPathAssignmentService = $this->getTable()->getLearningPathAssignmentService();
 
         return $learningPathAssignmentService->findEntriesForTreeNodeDataEntityTypeAndId(
+            $this->getTable()->getContentObjectPublication(),
             $this->getTable()->getTreeNodeData(),
             Entry::ENTITY_TYPE_USER,
             $this->getTable()->getEntityId(),
@@ -49,6 +50,7 @@ class EntryTableDataProvider
         $learningPathAssignmentService = $this->getTable()->getLearningPathAssignmentService();
 
         return $learningPathAssignmentService->countEntriesForTreeNodeDataEntityTypeAndId(
+            $this->getTable()->getContentObjectPublication(),
             $this->getTable()->getTreeNodeData(),
             Entry::ENTITY_TYPE_USER,
             $this->getTable()->getEntityId(),
