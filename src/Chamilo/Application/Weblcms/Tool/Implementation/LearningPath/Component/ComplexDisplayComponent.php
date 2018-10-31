@@ -18,7 +18,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
-use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Interfaces\EphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
@@ -43,12 +42,12 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupport, AssessmentDisplaySupport,

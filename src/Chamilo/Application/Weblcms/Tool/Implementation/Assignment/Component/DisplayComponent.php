@@ -8,7 +8,6 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\FeedbackServiceBridge;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory;

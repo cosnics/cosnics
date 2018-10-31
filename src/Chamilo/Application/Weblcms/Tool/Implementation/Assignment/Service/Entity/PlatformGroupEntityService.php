@@ -5,9 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Ent
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntityRenderer\PlatformGroupEntityRenderer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\PlatformGroup\EntityTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\PlatformGroup\EntryTable;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\User\Service\UserService;

@@ -60,7 +60,7 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
                     $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]
                 );
 
-                if(empty($lastScore))
+                if(is_null($lastScore))
                 {
                     return null;
                 }

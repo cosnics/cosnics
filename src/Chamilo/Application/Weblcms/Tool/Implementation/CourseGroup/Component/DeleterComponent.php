@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;

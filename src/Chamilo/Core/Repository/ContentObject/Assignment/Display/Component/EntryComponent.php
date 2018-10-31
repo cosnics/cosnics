@@ -632,7 +632,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $entityNavigatorActions->addButton(
                 new Button(
-                    '<span class="badge" style="color: white; background-color: #5bc0de;">'
+                    '<span class="badge" style="color: white; background-color: #5bc0de; height: 19px; top: 0;">'
                     . $currentEntityPosition . ' / ' . $entitiesCount . '</span>',
                     null,
                     '#',
@@ -708,7 +708,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $entriesNavigatorActions->addButton(
                 new Button(
-                    '<span class="badge" style="color: white; background-color: #28a745;">'
+                    '<span class="badge" style="color: white; background-color: #28a745; height: 19px; top: 0;">'
                     . $currentEntryPosition . ' / ' . $entriesCount . '</span>',
                     null,
                     '#',

@@ -3,7 +3,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entry;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 
 /**
  *
@@ -31,6 +30,7 @@ class EntryTableDataProvider
         $learningPathAssignmentService = $this->getTable()->getLearningPathAssignmentService();
 
         return $learningPathAssignmentService->findEntriesForTreeNodeDataEntityTypeAndId(
+            $this->getTable()->getContentObjectPublication(),
             $this->getTable()->getTreeNodeData(),
             Entry::ENTITY_TYPE_USER,
             $this->getTable()->getEntityId(),
@@ -50,6 +50,7 @@ class EntryTableDataProvider
         $learningPathAssignmentService = $this->getTable()->getLearningPathAssignmentService();
 
         return $learningPathAssignmentService->countEntriesForTreeNodeDataEntityTypeAndId(
+            $this->getTable()->getContentObjectPublication(),
             $this->getTable()->getTreeNodeData(),
             Entry::ENTITY_TYPE_USER,
             $this->getTable()->getEntityId(),

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BaseHeader;
 use Chamilo\Libraries\Platform\Session\Session;
 

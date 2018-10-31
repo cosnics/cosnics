@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\EntryTable;
@@ -23,7 +22,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service

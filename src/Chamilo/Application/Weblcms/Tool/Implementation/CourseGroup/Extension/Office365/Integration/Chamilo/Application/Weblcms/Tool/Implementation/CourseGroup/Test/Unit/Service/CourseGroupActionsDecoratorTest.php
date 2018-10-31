@@ -2,17 +2,15 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Test\Unit\Service;
 
+use \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService;
+use \Symfony\Component\Translation\Translator;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupActionsDecorator;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use \Symfony\Component\Translation\Translator;
-use \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService;
 
 /**
  * Tests the CourseGroupActionsDecorator
@@ -82,7 +80,7 @@ class CourseGroupActionsDecoratorTest extends ChamiloTestCase
             ->method('courseGroupHasLinkedReference')
             ->with($courseGroup)
             ->will($this->returnValue(true));
-        
+
         $this->courseGroupActionsDecorator->addCourseGroupActions($buttonToolbar, $courseGroup, $user, true);
 
         /** @var SplitDropdownButton $splitDropDownButton */

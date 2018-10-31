@@ -5,9 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Ent
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntityRenderer\UserEntityRenderer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entity\User\EntityTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\User\EntryTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;

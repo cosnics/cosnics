@@ -20,50 +20,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 abstract class LearningPathAssignmentEphorusRepository extends AssignmentEphorusRepository
 {
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
-     *
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findAssignmentEntriesWithRequestsByTreeNodeData(
-        TreeNodeData $treeNodeData, RecordRetrievesParameters $recordRetrievesParameters = null
-    )
-    {
-        $entryConditions =
-            $this->getConditionForTreeNodeData($treeNodeData, $recordRetrievesParameters->getCondition());
-        $recordRetrievesParameters->setCondition($entryConditions);
-
-        return $this->findAssignmentEntriesWithRequests($recordRetrievesParameters);
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param int[] $entryIds
-     *
-     * @return Request[]
-     */
-    public function findEphorusRequestsForAssignmentEntriesByTreeNodeData(
-        TreeNodeData $treeNodeData, array $entryIds = []
-    )
-    {
-        return $this->findEphorusRequestsForAssignmentEntries(
-            $entryIds, $this->getConditionForTreeNodeData($treeNodeData)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countAssignmentEntriesWithRequestsByTreeNodeData(
-        TreeNodeData $treeNodeData, Condition $condition = null
-    )
-    {
-        return $this->countAssignmentEntriesWithRequests($this->getConditionForTreeNodeData($treeNodeData, $condition));
-    }
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
@@ -71,7 +27,7 @@ abstract class LearningPathAssignmentEphorusRepository extends AssignmentEphorus
      *
      * @return Condition
      */
-    private function getConditionForTreeNodeData(TreeNodeData $treeNodeData, Condition $condition = null)
+    protected function getConditionForTreeNodeData(TreeNodeData $treeNodeData, Condition $condition = null)
     {
         $conditions = [];
 

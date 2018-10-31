@@ -5,7 +5,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 

@@ -9,7 +9,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Translation\Translation;
 use phpCAS;
 use Symfony\Component\Translation\Translator;
@@ -73,7 +72,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
                 strpos($userAttributes['person_number'], $casValidationString) !== false)
 
             {
-                $user = $this->userService->getUserBySecurityToken(
+                $user = $this->userService->getUserByOfficialCode(
                     $userAttributes['person_number']
                 );
 
@@ -86,6 +85,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
             }
             elseif (is_numeric($userAttributes['person_number']) && $userAttributes['person_number'] == - 1)
             {
+
                 $user = $this->userService->findUserByUsername($userAttributes['email']);
 
                 if (!$user instanceof User)
