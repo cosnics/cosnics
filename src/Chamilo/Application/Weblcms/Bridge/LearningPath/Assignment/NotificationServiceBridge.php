@@ -55,6 +55,7 @@ class NotificationServiceBridge implements NotificationServiceBridgeInterface
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      *
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException

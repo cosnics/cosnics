@@ -181,11 +181,13 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         /** @var FeedbackServiceBridge $assignmentFeedbackServiceBridge */
         $assignmentFeedbackServiceBridge = $this->getService(FeedbackServiceBridge::class);
         $assignmentFeedbackServiceBridge->setContentObjectPublication($this->publication);
+        $assignmentFeedbackServiceBridge->setContentObjectPublication($this->publication);
         $this->getBridgeManager()->addBridge($assignmentFeedbackServiceBridge);
 
         /** @var EphorusServiceBridge $assignmentEphorusServiceBridge */
         $assignmentEphorusServiceBridge = $this->getService(EphorusServiceBridge::class);
         $assignmentEphorusServiceBridge->setEphorusEnabled($this->isEphorusEnabled());
+        $assignmentEphorusServiceBridge->setContentObjectPublication($this->publication);
         $this->getBridgeManager()->addBridge($assignmentEphorusServiceBridge);
     }
 

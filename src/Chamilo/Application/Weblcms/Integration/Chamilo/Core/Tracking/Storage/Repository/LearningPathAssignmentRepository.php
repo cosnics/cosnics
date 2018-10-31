@@ -62,7 +62,7 @@ class LearningPathAssignmentRepository extends
     )
     {
         return $this->findTargetsForEntityType(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER,
+            Entry::ENTITY_TYPE_USER,
             $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
             $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
             $offset,
@@ -93,7 +93,7 @@ class LearningPathAssignmentRepository extends
     )
     {
         return $this->findTargetsForEntityTypeWithEntries(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER,
+            Entry::ENTITY_TYPE_USER,
             $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
             $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
             $offset,
@@ -350,7 +350,7 @@ class LearningPathAssignmentRepository extends
      * @param int $entityType
      * @param int $entityIdentifier
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function findLastEntryForEntityByTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityIdentifier

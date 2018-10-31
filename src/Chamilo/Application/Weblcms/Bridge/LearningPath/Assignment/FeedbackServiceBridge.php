@@ -54,7 +54,7 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
     public function countDistinctFeedbackByTreeNodeDataAndEntityType(TreeNodeData $treeNodeData, $entityType)
     {
         return $this->feedbackService->countDistinctFeedbackByTreeNodeDataAndEntityType(
-            $treeNodeData, $entityType
+            $this->contentObjectPublication, $treeNodeData, $entityType
         );
     }
 
@@ -70,7 +70,7 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
     )
     {
         return $this->feedbackService->countFeedbackForTreeNodeDataByEntityTypeAndEntityId(
-            $treeNodeData, $entityType, $entityId
+            $this->contentObjectPublication, $treeNodeData, $entityType, $entityId
         );
     }
 
@@ -87,7 +87,7 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
     )
     {
         return $this->feedbackService->countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
-            $treeNodeData, $entityType, $entityId
+            $this->contentObjectPublication, $treeNodeData, $entityType, $entityId
         );
     }
 

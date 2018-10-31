@@ -109,7 +109,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function countDistinctEntriesByTreeNodeAndEntityType(TreeNode $treeNode, $entityType)
     {
         return $this->assignmentService->countDistinctEntriesByTreeNodeDataAndEntityType(
-            $treeNode->getTreeNodeData(), $entityType
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $entityType
         );
     }
 
@@ -125,7 +125,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
         $assignment = $treeNode->getContentObject();
 
         return $this->assignmentService->countDistinctLateEntriesByTreeNodeDataAndEntityType(
-            $assignment, $treeNode->getTreeNodeData(), $entityType
+            $assignment, $this->contentObjectPublication, $treeNode->getTreeNodeData(), $entityType
         );
     }
 
@@ -138,7 +138,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function countEntitiesByEntityType(TreeNode $treeNode, $entityType)
     {
         return $this->assignmentService->countTargetUsersForTreeNodeData(
-            $treeNode->getTreeNodeData(), $this->targetUserIds
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $this->targetUserIds
         );
     }
 
@@ -151,7 +151,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function countEntitiesWithEntriesByEntityType(TreeNode $treeNode, $entityType)
     {
         return $this->assignmentService->countTargetUsersWithEntriesForTreeNodeData(
-            $treeNode->getTreeNodeData(), $this->targetUserIds
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $this->targetUserIds
         );
     }
 
@@ -164,7 +164,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function findEntitiesWithEntriesByEntityType(TreeNode $treeNode, $entityType)
     {
         return $this->assignmentService->findTargetUsersWithEntriesForTreeNodeData(
-            $treeNode->getTreeNodeData(), $this->targetUserIds
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $this->targetUserIds
         );
     }
 
@@ -205,7 +205,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function getEntityTableForType(Application $application, TreeNode $treeNode, $entityType)
     {
         return new EntityTable(
-            $application, $this, $this->assignmentService, $treeNode->getTreeNodeData(),
+            $application, $this, $this->assignmentService, $this->contentObjectPublication, $treeNode->getTreeNodeData(),
             $this->targetUserIds
         );
     }
@@ -221,7 +221,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function getEntryTableForEntityTypeAndId(Application $application, TreeNode $treeNode, $entityType, $entityId)
     {
         return new EntryTable(
-            $application, $this, $entityId, $this->assignmentService, $treeNode->getTreeNodeData()
+            $application, $this, $entityId, $this->assignmentService, $this->contentObjectPublication, $treeNode->getTreeNodeData()
         );
     }
 
@@ -304,7 +304,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @param integer $contentObjectId
      * @param string $ipAdress
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -319,7 +319,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
         $this->learningPathTrackingService->setActiveAttemptCompleted($learningPath, $treeNode, $user);
 
         return $this->assignmentService->createEntry(
-            $treeNode->getTreeNodeData(), $treeNodeAttempt, $entityType, $entityId, $userId,
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $treeNodeAttempt, $entityType, $entityId, $userId,
             $contentObjectId, $ipAdress
         );
     }
@@ -342,7 +342,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function countEntriesForTreeNodeEntityTypeAndId(TreeNode $treeNode, $entityType, $entityId)
     {
         return $this->assignmentService->countEntriesForTreeNodeDataEntityTypeAndId(
-            $treeNode->getTreeNodeData(), $entityType, $entityId
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $entityType, $entityId
         );
     }
 
@@ -356,7 +356,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function countDistinctScoreForTreeNodeEntityTypeAndId(TreeNode $treeNode, $entityType, $entityId)
     {
         return $this->assignmentService->countDistinctScoreForTreeNodeDataEntityTypeAndId(
-            $treeNode->getTreeNodeData(), $entityType, $entityId
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $entityType, $entityId
         );
     }
 
@@ -370,7 +370,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function getAverageScoreForTreeNodeEntityTypeAndId(TreeNode $treeNode, $entityType, $entityId)
     {
         return $this->assignmentService->getAverageScoreForTreeNodeDataEntityTypeAndId(
-            $treeNode->getTreeNodeData(), $entityType, $entityId
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $entityType, $entityId
         );
     }
 
@@ -384,7 +384,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function getLastScoreForTreeNodeEntityTypeAndId(TreeNode $treeNode, $entityType, $entityId)
     {
         return $this->assignmentService->getLastScoreForTreeNodeDataEntityTypeAndId(
-            $treeNode->getTreeNodeData(), $entityType, $entityId
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $entityType, $entityId
         );
     }
 
@@ -538,7 +538,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function findEntriesByTreeNodeEntityTypeAndIdentifiers(TreeNode $treeNode, $entityType, $entityIdentifiers)
     {
         return $this->assignmentService->findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
-            $treeNode->getTreeNodeData(), $entityType, $entityIdentifiers
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $entityType, $entityIdentifiers
         );
     }
 
@@ -550,7 +550,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function findEntriesByTreeNode(TreeNode $treeNode)
     {
-        return $this->assignmentService->findEntriesByTreeNodeData($treeNode->getTreeNodeData());
+        return $this->assignmentService->findEntriesByTreeNodeData($this->contentObjectPublication, $treeNode->getTreeNodeData());
     }
 
     /**
@@ -563,7 +563,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function findLastEntryForEntity(TreeNode $treeNode, $entityType, $entityIdentifier)
     {
         return $this->assignmentService->findLastEntryForEntity(
-            $treeNode->getTreeNodeData(), $entityType, $entityIdentifier
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $entityType, $entityIdentifier
         );
     }
 
