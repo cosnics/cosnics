@@ -23,6 +23,11 @@
         </service>
 
         <service
+                alias="symfony.component.translation.translator"
+                id="Symfony\Component\Translation\Translator">
+        </service>
+
+        <service
             id="chamilo.libraries.format.twig.twig_factory"
             class="Chamilo\Libraries\Format\Twig\TwigEnvironmentFactory" />
 

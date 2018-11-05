@@ -1,64 +1,69 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container xmlns="http://symfony.com/schema/dic/services"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-	<services>
-		<service id="chamilo.core.user.user" class="Chamilo\Core\User\Storage\DataClass\User">
-			<factory service="chamilo.core.user.factory.user_factory"
-				method="getUser" />
-		</service>
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="chamilo.core.user.user" class="Chamilo\Core\User\Storage\DataClass\User">
+            <factory service="chamilo.core.user.factory.user_factory"
+                     method="getUser"/>
+        </service>
 
-		<service id="chamilo.core.user.factory.user_factory" class="Chamilo\Core\User\Factory\UserFactory">
-			<argument type="service"
-				id="chamilo.libraries.platform.session.session_utilities" />
-			<argument type="service" id="chamilo.core.user.service.user_service" />
-			<argument type="service"
-				id="chamilo.configuration.service.configuration_consulter" />
-			<argument type="service" id="chamilo.libraries.format.theme" />
-			<argument type="service" id="chamilo.libraries.platform.translation" />
-			<argument type="service"
-				id="chamilo.libraries.platform.configuration.local_setting" />
-		</service>
+        <service id="chamilo.core.user.factory.user_factory" class="Chamilo\Core\User\Factory\UserFactory">
+            <argument type="service"
+                      id="chamilo.libraries.platform.session.session_utilities"/>
+            <argument type="service" id="chamilo.core.user.service.user_service"/>
+            <argument type="service"
+                      id="chamilo.configuration.service.configuration_consulter"/>
+            <argument type="service" id="chamilo.libraries.format.theme"/>
+            <argument type="service" id="chamilo.libraries.platform.translation"/>
+            <argument type="service"
+                      id="chamilo.libraries.platform.configuration.local_setting"/>
+        </service>
 
-		<service id="chamilo.core.user.service.user_service" class="Chamilo\Core\User\Service\UserService">
-			<argument type="service"
-				id="chamilo.core.user.storage.repository.user_repository" />
-			<argument type="service" id="chamilo.libraries.hashing.hashing_utilities" />
-			<argument type="service"
-				id="chamilo.configuration.service.configuration_service" />
-		</service>
+        <service id="chamilo.core.user.service.user_service" class="Chamilo\Core\User\Service\UserService">
+            <argument type="service"
+                      id="chamilo.core.user.storage.repository.user_repository"/>
+            <argument type="service" id="chamilo.libraries.hashing.hashing_utilities"/>
+            <argument type="service"
+                      id="chamilo.configuration.service.configuration_service"/>
+        </service>
 
-		<service id="chamilo.core.user.service.password_generator"
-			class="Chamilo\Core\User\Service\PasswordGenerator">
-		</service>
+        <service
+                alias="chamilo.core.user.service.user_service"
+                id="Chamilo\Core\User\Service\UserService">
+        </service>
 
-		<service id="chamilo.core.user.storage.repository.user_repository"
-			class="Chamilo\Core\User\Storage\Repository\UserRepository">
-			<argument type="service"
-				id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
-		</service>
+        <service id="chamilo.core.user.service.password_generator"
+                 class="Chamilo\Core\User\Service\PasswordGenerator">
+        </service>
 
-		<service id="chamilo.core.user.service.session_handler" class="Chamilo\Core\User\Service\SessionHandler">
-			<factory service="chamilo.core.user.factory.session_handler_factory"
-				method="getSessionHandler" />
-		</service>
+        <service id="chamilo.core.user.storage.repository.user_repository"
+                 class="Chamilo\Core\User\Storage\Repository\UserRepository">
+            <argument type="service"
+                      id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository"/>
+        </service>
 
-		<service id="chamilo.core.user.storage.repository.session_repository"
-			class="Chamilo\Core\User\Storage\Repository\SessionRepository">
-			<argument type="service"
-				id="chamilo.libraries.storage.cache.data_class_repository_cache" />
-			<argument type="service"
-				id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
-		</service>
+        <service id="chamilo.core.user.service.session_handler" class="Chamilo\Core\User\Service\SessionHandler">
+            <factory service="chamilo.core.user.factory.session_handler_factory"
+                     method="getSessionHandler"/>
+        </service>
 
-		<service id="chamilo.core.user.factory.session_handler_factory"
-			class="Chamilo\Core\User\Factory\SessionHandlerFactory">
-			<argument type="service"
-				id="chamilo.configuration.service.file_configuration_locator" />
-			<argument>%chamilo.configuration.session.session_handler%</argument>
-			<argument type="service"
-				id="chamilo.core.user.storage.repository.session_repository" />
-		</service>
+        <service id="chamilo.core.user.storage.repository.session_repository"
+                 class="Chamilo\Core\User\Storage\Repository\SessionRepository">
+            <argument type="service"
+                      id="chamilo.libraries.storage.cache.data_class_repository_cache"/>
+            <argument type="service"
+                      id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository"/>
+        </service>
 
-	</services>
+        <service id="chamilo.core.user.factory.session_handler_factory"
+                 class="Chamilo\Core\User\Factory\SessionHandlerFactory">
+            <argument type="service"
+                      id="chamilo.configuration.service.file_configuration_locator"/>
+            <argument>%chamilo.configuration.session.session_handler%</argument>
+            <argument type="service"
+                      id="chamilo.core.user.storage.repository.session_repository"/>
+        </service>
+
+    </services>
 </container>

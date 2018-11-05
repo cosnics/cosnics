@@ -1,12 +1,15 @@
 <?php
+
 namespace Chamilo\Application\Portfolio\Service;
 
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
+use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Symfony\Component\Translation\Translator;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  *
@@ -40,8 +43,10 @@ class PublicationService
      * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
      * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function __construct(PublicationRepository $publicationRepository, RightsService $rightsService,
-        Translator $translator)
+    public function __construct(
+        PublicationRepository $publicationRepository, RightsService $rightsService,
+        Translator $translator
+    )
     {
         $this->publicationRepository = $publicationRepository;
         $this->rightsService = $rightsService;
@@ -105,6 +110,7 @@ class PublicationService
     /**
      *
      * @param integer $userIdentifier
+     *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
     public function getPublicationForUserIdentifier($userIdentifier)
@@ -115,7 +121,8 @@ class PublicationService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @throws \NotAllowedException
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
     public function createRootPortfolioAndPublicationForUser(User $user)
@@ -123,7 +130,7 @@ class PublicationService
         $portfolio = $this->createRootPortfolioForUser($user);
         $publication = $this->getPublicationInstanceForPortfolioAndUser($portfolio, $user);
 
-        if (! $this->createPublication($publication))
+        if (!$this->createPublication($publication))
         {
             throw new NotAllowedException();
         }
@@ -136,17 +143,20 @@ class PublicationService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return \Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio
      */
     public function createRootPortfolioForUser(User $user)
     {
         $templateRegistration = \Chamilo\Core\Repository\Configuration::registration_default_by_type(
-            Portfolio::package());
+            Portfolio::package()
+        );
 
         $portfolio = new Portfolio();
         $portfolio->set_title($user->get_fullname());
         $portfolio->set_description(
-            $this->translator->trans('NoInstructionYetDescription', [], 'Chamilo\Application\Portfolio'));
+            $this->translator->trans('NoInstructionYetDescription', [], 'Chamilo\Application\Portfolio')
+        );
         $portfolio->set_owner_id($user->getId());
 
         $portfolio->set_template_registration_id($templateRegistration->getId());
@@ -159,6 +169,7 @@ class PublicationService
      *
      * @param \Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio $portfolio
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
     public function getPublicationInstanceForPortfolioAndUser(Portfolio $portfolio, User $user)
@@ -172,10 +183,13 @@ class PublicationService
      * @param integer $publisherIdentifier
      * @param integer $published
      * @param integer $modified
+     *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
-    public function getPublicationInstanceForParameters($contentObjectIdentifier, $publisherIdentifier, $published,
-        $modified)
+    public function getPublicationInstanceForParameters(
+        $contentObjectIdentifier, $publisherIdentifier, $published,
+        $modified
+    )
     {
         $publication = new Publication();
 
@@ -194,6 +208,93 @@ class PublicationService
     public function createPublication(Publication $publication)
     {
         return $this->getPublicationRepository()->createPublication($publication);
+    }
+
+    /**
+     * @param $contentObjectIdentifier
+     *
+     * @return integer
+     */
+    public function countPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    {
+        return $this->countPublicationsForContentObjectIdentifiers([$contentObjectIdentifier]);
+    }
+
+    /**
+     * @param integer[] $contentObjectIdentifiers
+     *
+     * @return integer
+     */
+    public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers)
+    {
+        return $this->getPublicationRepository()->countPublicationsForContentObjectIdentifiers(
+            $contentObjectIdentifiers
+        );
+    }
+
+    /**
+     * @param integer $type
+     * @param integer $objectIdentifier
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $count
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
+     *
+     * @return string[]
+     */
+    public function findPublicationRecordsForTypeAndIdentifier(
+        $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, $condition = null,
+        $count = null,
+        $offset = null, $orderProperties = null
+    )
+    {
+        if ($type !== PublicationInterface::ATTRIBUTES_TYPE_OBJECT &&
+            $type !== PublicationInterface::ATTRIBUTES_TYPE_USER)
+        {
+            return [];
+        }
+        else
+        {
+            return $this->getPublicationRepository()->findPublicationRecordsForTypeAndIdentifier(
+                $type, $objectIdentifier, $condition, $count,
+                $offset, $orderProperties
+            );
+        }
+    }
+
+    /**
+     * @param integer $publicationIdentifier
+     *
+     * @return string[]
+     * @throws \Exception
+     */
+    public function findPublicationRecordByIdentifier(int $publicationIdentifier)
+    {
+        return $this->getPublicationRepository()->findPublicationRecordByIdentifier($publicationIdentifier);
+    }
+
+    /**
+     * @param integer $type
+     * @param integer $objectIdentifier
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return integer
+     */
+    public function countPublicationsForTypeAndIdentifier(
+        $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null
+    )
+    {
+        if ($type !== PublicationInterface::ATTRIBUTES_TYPE_OBJECT &&
+            $type !== PublicationInterface::ATTRIBUTES_TYPE_USER)
+        {
+            return 0;
+        }
+        else
+        {
+            return $this->getPublicationRepository()->countPublicationsForTypeAndIdentifier(
+                $type, $objectIdentifier, $condition
+            );
+        }
     }
 }
 
