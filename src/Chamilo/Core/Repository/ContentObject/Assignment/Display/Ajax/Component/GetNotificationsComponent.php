@@ -2,7 +2,9 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Component;
 
+use Chamilo\Core\Notification\Service\NotificationTranslator;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -22,14 +24,25 @@ class GetNotificationsComponent extends Manager
             '{"message":"<b>Tom DEMETS</b> heeft nieuwe feedback geplaatst op de inzending van <b>Sonia VANDERMEERSCH</b>","time":"20 uur geleden","url":"","isRead":false,"isNew":true,"filters":[]},' .
             '{"message":"<b>Sonia VANDERMEERSCH</b> heeft een nieuwe inzending geplaatst","time":"gisteren - 20u20","url":"","isRead":true,"isNew":false,"filters":[]}]';
 
+        $notificationServiceBridge = $this->getNotificationServiceBridge();
+        $notifications = $notificationServiceBridge->getNotificationsForUser($this->getUser());
 
-//        $filter = $filterManager->getFilterForPath('publication:' . $publicationId);
-//        $notifications = $notificationManager->getNotificationsForFilters([$filter]);
+        return new JsonResponse($notifications, 200, [], true);
+    }
 
-//        $filterPath = 'Chamilo\Application\Weblcms::Publication:5';
-//        $filter = $filterManager->getFilterForPath($filterPath);
-//        $notifications = $notificationManager->getNotificationsForFilters([$filter]);
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface
+     */
+    protected function getNotificationServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(NotificationServiceBridgeInterface::class);
+    }
 
-        return new JsonResponse($jsonResponse, 200, [], true);
+    /**
+     * @return NotificationTranslator
+     */
+    protected function getNotificationTranslator()
+    {
+        return $this->getService(NotificationTranslator::class);
     }
 }

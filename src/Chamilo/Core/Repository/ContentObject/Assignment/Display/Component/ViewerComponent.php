@@ -88,6 +88,13 @@ class ViewerComponent extends Manager implements TableSupport
             $assignment->get_end_time()
         );
 
+        $notificationsUrl = $this->get_url(
+            [
+                self::PARAM_ACTION => self::ACTION_AJAX,
+                \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::ACTION_GET_NOTIFICATIONS
+            ]
+        );
+
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
@@ -101,7 +108,8 @@ class ViewerComponent extends Manager implements TableSupport
             'VISIBILITY_SUBMISSIONS' => $assignment->get_visibility_submissions(),
             'ENTITY_TABLE' => $this->renderEntityTable(),
             'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
-            'ADMINISTRATOR_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email'])
+            'ADMINISTRATOR_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email']),
+            'NOTIFICATIONS_URL' => $notificationsUrl
         ];
     }
 

@@ -86,7 +86,7 @@ class NotificationManager
 
         $userNotifications = [];
 
-        foreach($contextPaths as $contextPath)
+        foreach ($contextPaths as $contextPath)
         {
             $notificationContext = $this->contextManager->getOrCreateContextByPath($contextPath);
 
@@ -108,19 +108,44 @@ class NotificationManager
     }
 
     /**
+     * @param Notification[] $notifications
+     * @param string $viewingContext
+     *
+     * @return array
+     */
+    public function prepareNotificationsForAjax($notifications, $viewingContext)
+    {
+        $notificationsData = [];
+
+        foreach($notifications as $notification)
+        {
+            $notificationsData[] = [
+                'message' => $this->notificationTranslator->getTranslationFromNotification($notification, $viewingContext),
+                'time' => $notification->getDate(),
+                'isRead' => $notification->getUsers()[0]->isRead(),
+                'isViewed' => $notification->getUsers()[0]->isViewed(),
+                'url' => '',
+                'filters' => []
+            ];
+        }
+
+        return $notificationsData;
+    }
+
+    /**
      * @param int $notificationId
      *
      * @return Notification
      */
     public function getNotificationById($notificationId = 0)
     {
-        if(empty($notificationId))
+        if (empty($notificationId))
         {
             throw new \RuntimeException('The given notification id can not be empty');
         }
 
         $notification = $this->notificationRepository->find($notificationId);
-        if(!$notification instanceof Notification)
+        if (!$notification instanceof Notification)
         {
             throw new \RuntimeException(sprintf('The notification with id %s could not be found', $notificationId));
         }
@@ -149,16 +174,18 @@ class NotificationManager
      *
      * @return Notification[]
      */
-    public function getNotificationsByContextPathsForUser(array $contextPaths, User $user, $offset = null, $count = null)
+    public function getNotificationsByContextPathsForUser(array $contextPaths, User $user, $offset = null, $count = null
+    )
     {
         $contexts = [];
 
-        foreach($contextPaths as $contextPath)
+        foreach ($contextPaths as $contextPath)
         {
             $contexts[] = $this->contextManager->getContextByPath($contextPath);
         }
 
-        $notifications = $this->notificationRepository->findNotificationsByContextsForUser($contexts, $user, $offset, $count);
+        $notifications =
+            $this->notificationRepository->findNotificationsByContextsForUser($contexts, $user, $offset, $count);
 
         $this->setNotificationsViewedForUserAndContextPaths($contextPaths, $user);
 
@@ -190,7 +217,7 @@ class NotificationManager
     {
         $contexts = [];
 
-        foreach($contextPaths as $contextPath)
+        foreach ($contextPaths as $contextPath)
         {
             $contexts[] = $this->contextManager->getContextByPath($contextPath);
         }
@@ -215,7 +242,7 @@ class NotificationManager
     {
         $contexts = [];
 
-        foreach($contextPaths as $contextPath)
+        foreach ($contextPaths as $contextPath)
         {
             $contexts[] = $this->contextManager->getContextByPath($contextPath);
         }

@@ -43,13 +43,6 @@ class NotificationServiceBridge implements NotificationServiceBridgeInterface
      */
     public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
     {
-        if (!$contentObjectPublication->getContentObject() instanceof Assignment)
-        {
-            throw new \RuntimeException(
-                'The given content object publication does not reference a valid assignment and should not be used'
-            );
-        }
-
         $this->contentObjectPublication = $contentObjectPublication;
     }
 

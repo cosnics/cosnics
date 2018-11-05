@@ -75,11 +75,14 @@ class NotificationService
         User $user, TreeNode $treeNode, ContentObjectPublication $contentObjectPublication, $offset = null, $count = null
     )
     {
-        return $this->notificationManager->getNotificationsByContextPathForUser(
-            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $contentObjectPublication->getId() .
-            '::TreeNodeData:' . $treeNode->getTreeNodeData()->getId(),
-            $user, $offset, $count
+        $contextPath = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' .
+            $contentObjectPublication->getId() . '::TreeNodeData:' . $treeNode->getTreeNodeData()->getId();
+
+        $notifications = $this->notificationManager->getNotificationsByContextPathForUser(
+            $contextPath, $user, $offset, $count
         );
+
+        return $this->notificationManager->prepareNotificationsForAjax($notifications, $contextPath);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\AssignmentServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EphorusServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\FeedbackServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServiceBridge;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
@@ -170,8 +171,10 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $assignmentServiceBridge->setCanEditAssignment(
             $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication)
         );
+
         $assignmentServiceBridge->setContentObjectPublication($this->publication);
         $assignmentServiceBridge->setLearningPathTrackingService($this->trackingService);
+
         $assignmentServiceBridge->setTargetUserIds(
             $this->getTrackingParameters($this->publication->getId())->getLearningPathTargetUserIds($learningPath)
         );
@@ -181,7 +184,6 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         /** @var FeedbackServiceBridge $assignmentFeedbackServiceBridge */
         $assignmentFeedbackServiceBridge = $this->getService(FeedbackServiceBridge::class);
         $assignmentFeedbackServiceBridge->setContentObjectPublication($this->publication);
-        $assignmentFeedbackServiceBridge->setContentObjectPublication($this->publication);
         $this->getBridgeManager()->addBridge($assignmentFeedbackServiceBridge);
 
         /** @var EphorusServiceBridge $assignmentEphorusServiceBridge */
@@ -189,6 +191,11 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $assignmentEphorusServiceBridge->setEphorusEnabled($this->isEphorusEnabled());
         $assignmentEphorusServiceBridge->setContentObjectPublication($this->publication);
         $this->getBridgeManager()->addBridge($assignmentEphorusServiceBridge);
+
+        /** @var NotificationServiceBridge $assignmentNotificationServiceBridge */
+        $assignmentNotificationServiceBridge = $this->getService(NotificationServiceBridge::class);
+        $assignmentNotificationServiceBridge->setContentObjectPublication($this->publication);
+        $this->getBridgeManager()->addBridge($assignmentNotificationServiceBridge);
     }
 
     public function get_root_content_object()

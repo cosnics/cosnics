@@ -11,6 +11,7 @@
         <service id="Chamilo\Application\Weblcms\Bridge\Assignment\AssignmentServiceBridge" />
         <service id="Chamilo\Application\Weblcms\Bridge\Assignment\EphorusServiceBridge" />
         <service id="Chamilo\Application\Weblcms\Bridge\Assignment\FeedbackServiceBridge" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\NotificationServiceBridge" />
 
     </services>
 </container>
