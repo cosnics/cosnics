@@ -120,7 +120,9 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
 
             usort(
                 $publicationAttributes,
-                function (Attributes $publicationAttributeLeft, Attributes $publicationAttributeRight) use ($orderProperty) {
+                function (Attributes $publicationAttributeLeft, Attributes $publicationAttributeRight) use (
+                    $orderProperty
+                ) {
                     return strcasecmp(
                         $publicationAttributeLeft->get_default_property(
                             $orderProperty->getConditionVariable()->get_property()

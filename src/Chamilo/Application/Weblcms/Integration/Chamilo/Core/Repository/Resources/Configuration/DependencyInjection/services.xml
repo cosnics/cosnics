@@ -21,7 +21,9 @@
                       id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service"/>
             <argument type="service"
                       id="chamilo.core.repository.workspace.repository.content_object_repository"/>
-            <argument type="string">Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\EntryAttachment</argument>
+            <argument
+                    type="string">Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\EntryAttachment
+            </argument>
         </service>
 
         <service
@@ -31,7 +33,9 @@
                       id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service"/>
             <argument type="service"
                       id="chamilo.core.repository.workspace.repository.content_object_repository"/>
-            <argument type="string">Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment</argument>
+            <argument
+                    type="string">Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment
+            </argument>
         </service>
     </services>
 </container>

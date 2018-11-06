@@ -4,75 +4,76 @@
     <services>
         <service id="chamilo.application.weblcms.service.course"
                  class="Chamilo\Application\Weblcms\Service\CourseService">
-            <argument type="service" id="chamilo.application.weblcms.storage.repository.course_repository" />
-            <argument type="service" id="chamilo.application.weblcms.service.course_settings" />
-            <argument type="service" id="chamilo.core.user.storage.repository.user_repository" />
+            <argument type="service" id="chamilo.application.weblcms.storage.repository.course_repository"/>
+            <argument type="service" id="chamilo.application.weblcms.service.course_settings"/>
+            <argument type="service" id="chamilo.core.user.service.user_service"/>
             <call method="setRightsService">
-                <argument type="service" id="chamilo.application.weblcms.service.rights" />
+                <argument type="service" id="chamilo.application.weblcms.service.rights"/>
             </call>
         </service>
 
         <service id="chamilo.application.weblcms.service.course_settings"
                  class="Chamilo\Application\Weblcms\Service\CourseSettingsService">
-            <argument type="service" id="chamilo.application.weblcms.service.course_settings_controller" />
+            <argument type="service" id="chamilo.application.weblcms.service.course_settings_controller"/>
         </service>
 
         <service id="chamilo.application.weblcms.service.publication"
                  class="Chamilo\Application\Weblcms\Service\PublicationService">
-            <argument type="service" id="chamilo.application.weblcms.storage.repository.publication_repository" />
+            <argument type="service" id="chamilo.application.weblcms.storage.repository.publication_repository"/>
             <call method="setRightsService">
-                <argument type="service" id="chamilo.application.weblcms.service.rights" />
+                <argument type="service" id="chamilo.application.weblcms.service.rights"/>
             </call>
             <call method="setCourseService">
-                <argument type="service" id="chamilo.application.weblcms.service.course" />
+                <argument type="service" id="chamilo.application.weblcms.service.course"/>
             </call>
         </service>
 
         <service id="chamilo.application.weblcms.tool.service.category_breadcrumbs_generator"
                  class="Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator">
-            <argument type="service" id="chamilo.application.weblcms.service.publication" />
+            <argument type="service" id="chamilo.application.weblcms.service.publication"/>
         </service>
 
         <service id="chamilo.application.weblcms.service.rights"
                  class="Chamilo\Application\Weblcms\Service\RightsService">
-            <argument type="service" id="chamilo.application.weblcms.service.weblcms_rights" />
-            <argument type="service" id="chamilo.application.weblcms.service.course_settings" />
+            <argument type="service" id="chamilo.application.weblcms.service.weblcms_rights"/>
+            <argument type="service" id="chamilo.application.weblcms.service.course_settings"/>
             <call method="setCourseService">
-                <argument type="service" id="chamilo.application.weblcms.service.course" />
+                <argument type="service" id="chamilo.application.weblcms.service.course"/>
             </call>
             <call method="setPublicationService">
-                <argument type="service" id="chamilo.application.weblcms.service.publication" />
+                <argument type="service" id="chamilo.application.weblcms.service.publication"/>
             </call>
         </service>
 
         <service id="chamilo.application.weblcms.service.course_settings_controller"
-                 class="Chamilo\Application\Weblcms\CourseSettingsController" />
+                 class="Chamilo\Application\Weblcms\CourseSettingsController"/>
 
         <service id="chamilo.application.weblcms.service.weblcms_rights"
-                 class="Chamilo\Application\Weblcms\Rights\WeblcmsRights" />
+                 class="Chamilo\Application\Weblcms\Rights\WeblcmsRights"/>
 
         <service id="chamilo.application.weblcms.storage.repository.course_repository"
-                 class="Chamilo\Application\Weblcms\Storage\Repository\CourseRepository" />
+                 class="Chamilo\Application\Weblcms\Storage\Repository\CourseRepository"/>
 
         <service id="chamilo.application.weblcms.storage.repository.publication_repository"
-                 class="Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository" />
+                 class="Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository"/>
 
         <service id="chamilo.application.weblcms.storage.repository.rights_location_repository"
                  class="Chamilo\Application\Weblcms\Storage\Repository\RightsLocationRepository">
-            <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+            <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository"/>
         </service>
 
         <service id="chamilo.application.weblcms.service.rights_location_fixer.rights_location_fixer"
                  class="Chamilo\Application\Weblcms\Service\RightsLocationFixer\RightsLocationFixer">
-            <argument type="service" id="chamilo.application.weblcms.storage.repository.rights_location_repository" />
-            <argument type="service" id="chamilo.application.weblcms.storage.repository.course_repository" />
-            <argument type="service" id="chamilo.application.weblcms.storage.repository.publication_repository" />
+            <argument type="service" id="chamilo.application.weblcms.storage.repository.rights_location_repository"/>
+            <argument type="service" id="chamilo.application.weblcms.storage.repository.course_repository"/>
+            <argument type="service" id="chamilo.application.weblcms.storage.repository.publication_repository"/>
         </service>
 
         <service id="chamilo.application.weblcms.console.command.rights_location_fixer_command"
                  class="Chamilo\Application\Weblcms\Console\Command\RightsLocationFixerCommand">
-            <argument type="service" id="chamilo.application.weblcms.service.rights_location_fixer.rights_location_fixer" />
-            <tag name="chamilo.libraries.console.command" />
+            <argument type="service"
+                      id="chamilo.application.weblcms.service.rights_location_fixer.rights_location_fixer"/>
+            <tag name="chamilo.libraries.console.command"/>
         </service>
 
     </services>

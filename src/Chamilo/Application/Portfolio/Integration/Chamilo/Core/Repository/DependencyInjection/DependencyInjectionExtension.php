@@ -2,7 +2,10 @@
 
 namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\DependencyInjection;
 
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -24,12 +27,14 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function load(array $config, ContainerBuilder $container)
     {
+        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
+
         $loader = new XmlFileLoader(
-            $container, new FileLocator(
-                Path::getInstance()->namespaceToFullPath(
-                    'Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\DependencyInjection'
-                ) .
-                'Resources/Configuration/DependencyInjection'
+            $container,
+            new FileLocator(
+                $pathBuilder->getConfigurationPath(
+                    'Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository'
+                ) . 'DependencyInjection'
             )
         );
 

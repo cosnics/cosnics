@@ -4,10 +4,12 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Public
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
+use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Manages the communication between the repository and the publications of content objects. This service is used
@@ -78,5 +80,78 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
         }
 
         return true;
+    }
+
+    /**
+     * @param integer $type
+     * @param integer $objectIdentifier
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return integer
+     */
+    public function countPublicationAttributes(
+        int $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
+        Condition $condition = null
+    )
+    {
+        // TODO: Implement countPublicationAttributes() method.
+    }
+
+    /**
+     * @param integer $type
+     * @param integer $objectIdentifier
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $count
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
+     *
+     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
+     */
+    public function getContentObjectPublicationsAttributes(
+        int $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null,
+        int $count = null, int $offset = null, array $orderProperties = null
+    )
+    {
+        // TODO: Implement getContentObjectPublicationsAttributes() method.
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return boolean
+     */
+    public function deleteContentObjectPublications(ContentObject $contentObject)
+    {
+        // TODO: Implement deleteContentObjectPublications() method.
+    }
+
+    /**
+     * @param integer $contentObjectIdentifier
+     *
+     * @return boolean
+     */
+    public function isContentObjectPublished(int $contentObjectIdentifier)
+    {
+        // TODO: Implement isContentObjectPublished() method.
+    }
+
+    /**
+     * @param integer[] $contentObjectIdentifiers
+     *
+     * @return boolean
+     */
+    public function areContentObjectsPublished(array $contentObjectIdentifiers)
+    {
+        // TODO: Implement areContentObjectsPublished() method.
+    }
+
+    /**
+     * @param integer $contentObjectIdentifier
+     *
+     * @return boolean
+     */
+    public function canContentObjectBeEdited(int $contentObjectIdentifier)
+    {
+        // TODO: Implement canContentObjectBeEdited() method.
     }
 }

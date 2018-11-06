@@ -36,7 +36,7 @@ class ContentObjectPublicationManagerCompilerPass implements CompilerPassInterfa
             foreach ($taggedServices as $taggedServiceId => $tags)
             {
                 $definition->addMethodCall(
-                    'addContentObjectPublicationManager', array(new Reference($taggedServiceId))
+                    'addContentObjectPublicationManager', array($tags, new Reference($taggedServiceId))
                 );
             }
         }
