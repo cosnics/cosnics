@@ -239,7 +239,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
      */
     public function canViewUserPortfolio(User $user)
     {
-        $userPublication = $this->getPublicationService()->getPublicationForUserIdentifier($user->getId());
+        $userPublication = $this->getPublicationService()->findPublicationForUserIdentifier($user->getId());
 
         if (! $userPublication)
         {

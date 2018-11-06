@@ -56,7 +56,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
     {
         if (! isset($this->publication))
         {
-            $this->publication = $this->getPublicationService()->getPublicationForUserIdentifier(
+            $this->publication = $this->getPublicationService()->findPublicationForUserIdentifier(
                 $this->getCurrentUserId());
 
             if (! $this->publication instanceof Publication)

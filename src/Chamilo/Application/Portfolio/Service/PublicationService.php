@@ -109,13 +109,24 @@ class PublicationService
 
     /**
      *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
+     */
+    public function findPublicationForUser(User $user)
+    {
+        return $this->findPublicationForUserIdentifier($user->getId());
+    }
+
+    /**
+     *
      * @param integer $userIdentifier
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
-    public function getPublicationForUserIdentifier($userIdentifier)
+    public function findPublicationForUserIdentifier($userIdentifier)
     {
-        return $this->getPublicationRepository()->getPublicationForUserIdentifier($userIdentifier);
+        return $this->getPublicationRepository()->findPublicationForUserIdentifier($userIdentifier);
     }
 
     /**
@@ -243,7 +254,7 @@ class PublicationService
      * @return string[]
      */
     public function findPublicationRecordsForTypeAndIdentifier(
-        $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, $condition = null,
+        $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null,
         $count = null,
         $offset = null, $orderProperties = null
     )
@@ -296,5 +307,84 @@ class PublicationService
             );
         }
     }
-}
 
+    /**
+     * @param integer $contentObjectIdentifier
+     *
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication[]
+     */
+    public function findPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    {
+        return $this->getPublicationRepository()->findPublicationsForContentObjectIdentifier($contentObjectIdentifier);
+    }
+
+    /**
+     * @param integer $contentObjectIdentifier
+     *
+     * @return boolean
+     */
+    public function deletePublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    {
+        $publications = $this->findPublicationsForContentObjectIdentifier($contentObjectIdentifier);
+
+        foreach ($publications as $publication)
+        {
+            if (!$this->deletePublication($publication))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
+    public function deletePublication(Publication $publication)
+    {
+        // TODO: Delete dependencies: Feedback, Notifications, RightsLocation, RightsLocationEntityRight
+        return $this->getPublicationRepository()->deletePublication($publication);
+    }
+
+    /**
+     * @param integer $publicationIdentifier
+     *
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
+     */
+    public function findPublicationByIdentifier(int $publicationIdentifier)
+    {
+        return $this->getPublicationRepository()->findPublicationByIdentifier($publicationIdentifier);
+    }
+
+    /**
+     * @param integer $publicationIdentifier
+     *
+     * @return boolean
+     */
+    public function deletePublicationByIdentifier(int $publicationIdentifier)
+    {
+        $publication = $this->findPublicationByIdentifier($publicationIdentifier);
+
+        if ($publication instanceof Publication)
+        {
+            return $this->deletePublication($publication);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
+    public function updatePublication(Publication $publication)
+    {
+        return $this->getPublicationRepository()->updatePublication($publication);
+    }
+}

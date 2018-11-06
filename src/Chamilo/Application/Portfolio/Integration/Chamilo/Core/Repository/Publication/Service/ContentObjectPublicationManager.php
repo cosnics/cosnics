@@ -2,13 +2,26 @@
 
 namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service;
 
+use Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Location;
 use Chamilo\Application\Portfolio\Service\PublicationService;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\ComplexPortfolio;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
+use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Core\Repository\Publication\Location\Locations;
+use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface;
+use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Symfony\Component\Translation\Translator;
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service
@@ -56,22 +69,6 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
     ): void
     {
         $this->publicationService = $publicationService;
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
     }
 
     /**
@@ -123,8 +120,8 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
     }
 
     /**
-     * @param integer $objectIdentifier
      * @param integer $type
+     * @param integer $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
@@ -134,7 +131,7 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
      */
     public function getContentObjectPublicationsAttributes(
         int $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null,
-        int $count = null, int $offset = null, $orderProperties = null
+        int $count = null, int $offset = null, array $orderProperties = null
     )
     {
         $publicationRecords = $this->getPublicationService()->findPublicationRecordsForTypeAndIdentifier(
@@ -153,26 +150,13 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
     }
 
     /**
-     * @param integer $publicationIdentifier
-     *
-     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes
-     * @throws \Exception
-     */
-    public function getContentObjectPublicationAttributes(int $publicationIdentifier)
-    {
-        return $this->createContentObjectPublicationAttributesFromRecord(
-            $this->getPublicationService()->findPublicationRecordByIdentifier($publicationIdentifier)
-        );
-    }
-
-    /**
      * @param string[] $record
      *
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes
      */
     protected function createContentObjectPublicationAttributesFromRecord($record)
     {
-        $attributes = new \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes();
+        $attributes = new Attributes();
 
         $attributes->setId($record[Publication::PROPERTY_ID]);
         $attributes->set_publisher_id($record[Publication::PROPERTY_PUBLISHER_ID]);
@@ -183,16 +167,48 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
             $this->getTranslator()->trans('TypeName', [], \Chamilo\Application\Portfolio\Manager::context())
         );
 
-        // TODO: Fix this using a Redirect instance
-        $url =
-            'index.php?application=portfolio&amp;go=' . \Chamilo\Application\Portfolio\Manager::ACTION_HOME . '&amp;' .
-            \Chamilo\Application\Portfolio\Manager::PARAM_USER_ID . '=' . $record[Publication::PROPERTY_PUBLISHER_ID];
+        $redirect = new Redirect(
+            array(
+                Application::PARAM_CONTEXT => \Chamilo\Application\Portfolio\Manager::context(),
+                Application::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_HOME,
+                \Chamilo\Application\Portfolio\Manager::PARAM_USER_ID => $record[Publication::PROPERTY_PUBLISHER_ID]
+            )
+        );
 
-        $attributes->set_url($url);
+        $attributes->set_url($redirect->getUrl());
         $attributes->set_title($record[ContentObject::PROPERTY_TITLE]);
         $attributes->set_content_object_id($record[Publication::PROPERTY_CONTENT_OBJECT_ID]);
 
         return $attributes;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @param integer $publicationIdentifier
+     *
+     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes
+     * @throws \Exception
+     */
+    public function getContentObjectPublicationAttributes(int $publicationIdentifier)
+    {
+        return $this->createContentObjectPublicationAttributesFromRecord(
+            $this->getPublicationService()->findPublicationRecordByIdentifier($publicationIdentifier)
+        );
     }
 
     /**
@@ -212,64 +228,47 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
         );
     }
 
-    // TODO: CONTINUE HERE
-    public function deleteContentObjectPublications($object_id)
+    /**
+     * @param integer $contentObjectIdentifier
+     *
+     * @return boolean
+     */
+    public function deleteContentObjectPublications(int $contentObjectIdentifier)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($object_id)
-        );
-        $parameters = new DataClassRetrievesParameters($condition);
-
-        $publications = DataManager::retrieves(Publication::class_name(), $parameters);
-
-        while ($publication = $publications->next_result())
-        {
-            if (!$publication->delete())
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->getPublicationService()->deletePublicationsForContentObjectIdentifier($contentObjectIdentifier);
     }
 
-    public function deleteContentObjectPublication($publication_id)
+    /**
+     * @param $publicationIdentifier
+     *
+     * @return bool
+     */
+    public function deleteContentObjectPublication($publicationIdentifier)
     {
-        $publication = DataManager::retrieve_by_id(Publication::class_name(), $publication_id);
-
-        if ($publication instanceof Publication && $publication->delete())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return $this->getPublicationService()->deletePublicationByIdentifier($publicationIdentifier);
     }
 
-    public function getContentObjectPublicationLocations($content_object, $user = null)
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Core\Repository\Publication\Location\Locations
+     */
+    public function getContentObjectPublicationLocations(ContentObject $contentObject, User $user)
     {
-        $applicationContext = \Chamilo\Application\Portfolio\Manager::context();
-
         $locations = new Locations(__NAMESPACE__);
-        $allowed_types = Portfolio::get_allowed_types();
+        $allowedTypes = Portfolio::get_allowed_types();
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER_ID),
-            new StaticConditionVariable($user->get_id())
-        );
-        $userPublication =
-            DataManager::retrieve(Publication::class_name(), new DataClassRetrieveParameters($condition));
+        $userPublication = $this->getPublicationService()->findPublicationForUser($user);
 
-        $type = $content_object->get_type();
+        $type = $contentObject->get_type();
 
-        if (in_array($type, $allowed_types) && $userPublication instanceof Publication)
+        if (in_array($type, $allowedTypes) && $userPublication instanceof Publication)
         {
             $locations->add_location(
                 new Location(
                     __NAMESPACE__,
-                    Translation::get('TypeName', null, $applicationContext),
+                    $this->getTranslator()->trans('TypeName', [], \Chamilo\Application\Portfolio\Manager::context()),
                     $user->getId(),
                     $userPublication->getId()
                 )
@@ -279,14 +278,24 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
         return $locations;
     }
 
-    public function publishContentObject(
-        \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject, LocationSupport $location,
-        $options = array()
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param \Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Location $location
+     * @param array $options
+     *
+     * @return \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode
+     * @throws \Exception
+     */
+    public function publishContentObject(ContentObject $contentObject, LocationSupport $location, $options = array()
     )
     {
-        $publication = DataManager::retrieve_by_id(Publication::class_name(), $location->getPublicationIdentifier());
+        $publication =
+            $this->getPublicationService()->findPublicationByIdentifier($location->getPublicationIdentifier());
 
-        if ($publication instanceof Publication && $publication->get_publisher_id() == $location->getUserIdentifier())
+        $isPublication = $publication instanceof Publication;
+        $isPublisher = $publication->get_publisher_id() == $location->getUserIdentifier();
+
+        if ($isPublication && $isPublisher)
         {
             $portfolioContentObject = $publication->get_content_object();
             $portfolioPath = $portfolioContentObject->get_complex_content_object_path();
@@ -299,6 +308,9 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
 
             if (!$contentObject instanceof Portfolio)
             {
+                /**
+                 * @var \Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem $newObject
+                 */
                 $newObject = ContentObject::factory(PortfolioItem::class_name());
                 $newObject->set_owner_id($location->getUserIdentifier());
                 $newObject->set_title(PortfolioItem::get_type_name());
@@ -322,12 +334,12 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
                     new \Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\ComplexPortfolioItem();
             }
 
-            $wrapper->set_ref($newObject->get_id());
-            $wrapper->set_parent($portfolioContentObject->get_id());
+            $wrapper->set_ref($newObject->getId());
+            $wrapper->set_parent($portfolioContentObject->getId());
             $wrapper->set_user_id($location->getUserIdentifier());
             $wrapper->set_display_order(
                 \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order(
-                    $portfolioContentObject->get_id()
+                    $portfolioContentObject->getId()
                 )
             );
 
@@ -344,7 +356,7 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
                         Activity::PROPERTY_TYPE => Activity::ACTIVITY_ADD_ITEM,
                         Activity::PROPERTY_USER_ID => $location->getUserIdentifier(),
                         Activity::PROPERTY_DATE => time(),
-                        Activity::PROPERTY_CONTENT_OBJECT_ID => $portfolioContentObject->get_id(),
+                        Activity::PROPERTY_CONTENT_OBJECT_ID => $portfolioContentObject->getId(),
                         Activity::PROPERTY_CONTENT => $portfolioContentObject->get_title() . ' > ' .
                             $contentObject->get_title()
                     )
@@ -366,26 +378,32 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
         }
     }
 
-    public function addContentObjectPublicationAttributesElementsToForm($form)
+    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
+     */
+    public function addContentObjectPublicationAttributesElementsToForm(FormValidator $formValidator)
     {
         // TODO: Please implement me !
     }
 
-    public function updateContentObjectPublicationIdentifier($publication_attributes)
+    /**
+     * @param \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes $publicationAttributes
+     *
+     * @return boolean
+     */
+    public function updateContentObjectPublicationIdentifier(Attributes $publicationAttributes)
     {
-        $publication = DataManager::retrieve_by_id(Publication::class_name(), $publication_attributes->get_id());
+        $publication = $this->getPublicationService()->findPublicationByIdentifier($publicationAttributes->getId());
 
         if ($publication instanceof Publication)
         {
-            $publication->set_content_object_id($publication_attributes->get_content_object_id());
+            $publication->set_content_object_id($publicationAttributes->get_content_object_id());
 
-            return $publication->update();
+            return $this->getPublicationService()->updatePublication($publication);
         }
         else
         {
             return false;
         }
-
-        return DataManager::update_content_object_publication_id($publication_attributes);
     }
 }

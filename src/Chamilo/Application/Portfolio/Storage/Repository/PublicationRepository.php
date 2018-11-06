@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -57,7 +58,7 @@ class PublicationRepository
      *
      * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
      */
-    protected function setDataClassRepository($dataClassRepository)
+    protected function setDataClassRepository(DataClassRepository $dataClassRepository)
     {
         $this->dataClassRepository = $dataClassRepository;
     }
@@ -68,7 +69,7 @@ class PublicationRepository
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
-    public function getPublicationForUserIdentifier($userIdentifier)
+    public function findPublicationForUserIdentifier(int $userIdentifier)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER_ID),
@@ -118,9 +119,9 @@ class PublicationRepository
      * @return string[]
      */
     public function findPublicationRecordsForTypeAndIdentifier(
-        $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, $condition = null,
-        $count = null,
-        $offset = null, $orderProperties = null
+        $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null,
+        int $count = null,
+        int $offset = null, array $orderProperties = null
     )
     {
         switch ($type)
@@ -162,7 +163,9 @@ class PublicationRepository
      * @return string[]
      * @throws \Exception
      */
-    public function findPublicationRecords($condition = null, $count = null, $offset = null, $orderProperties = null)
+    public function findPublicationRecords(
+        Condition $condition = null, int $count = null, int $offset = null, array $orderProperties = null
+    )
     {
         $data_class_properties = array();
 
@@ -299,6 +302,69 @@ class PublicationRepository
         $parameters = new DataClassCountParameters($condition, $this->getContentObjectPublicationJoins());
 
         return $this->getDataClassRepository()->count(Publication::class, $parameters);
+    }
+
+    /**
+     * @param integer $contentObjectIdentifier
+     *
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication[]
+     */
+    public function findPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
+            new StaticConditionVariable($contentObjectIdentifier)
+        );
+
+        return $this->findPublications($condition);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $count
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
+     *
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication[]
+     * @throws \Exception
+     */
+    public function findPublications(
+        Condition $condition = null, int $count = null, int $offset = null, array $orderProperties = null
+    )
+    {
+        return $this->getDataClassRepository()->retrieves(
+            Publication::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderProperties)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
+    public function deletePublication(Publication $publication)
+    {
+        return $this->getDataClassRepository()->delete($publication);
+    }
+
+    /**
+     * @param integer $publicationIdentifier
+     *
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
+     */
+    public function findPublicationByIdentifier(int $publicationIdentifier)
+    {
+        return $this->getDataClassRepository()->retrieveById(Publication::class, $publicationIdentifier);
+    }
+
+    /**
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
+    public function updatePublication(Publication $publication)
+    {
+        return $this->getDataClassRepository()->update($publication);
     }
 }
 
