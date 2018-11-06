@@ -30,7 +30,7 @@ interface NotificationServiceBridgeInterface
      * @param int $offset
      * @param int $count
      *
-     * @return \Chamilo\Core\Notification\Storage\Entity\Notification[]
+     * @return \Chamilo\Core\Notification\Domain\NotificationDTO[]
      */
     public function getNotificationsForUserAndTreeNode(User $user, TreeNode $treeNode, $offset = null, $count = null);
 

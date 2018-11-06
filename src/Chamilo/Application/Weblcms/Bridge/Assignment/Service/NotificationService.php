@@ -54,7 +54,7 @@ class NotificationService
     )
     {
         return $this->notificationManager->countUnseenNotificationsByContextPathForUser(
-            'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $contentObjectPublication->getId(), $user
+            $this->getContextPath($contentObjectPublication), $user
         );
     }
 
@@ -64,16 +64,29 @@ class NotificationService
      * @param int $offset
      * @param int $count
      *
-     * @return \Chamilo\Core\Notification\Storage\Entity\Notification[]
+     * @return \Chamilo\Core\Notification\Domain\NotificationDTO[]
      */
     public function getNotificationsForUserAndPublication(
         User $user, ContentObjectPublication $contentObjectPublication, $offset = null, $count = null
     )
     {
-        return $this->notificationManager->getNotificationsByContextPathForUser(
-            'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $contentObjectPublication->getId(), $user,
-            $offset, $count
+        $contextPath = $this->getContextPath($contentObjectPublication);
+
+        $notifications = $this->notificationManager->getNotificationsByContextPathForUser(
+            $contextPath, $user, $offset, $count
         );
+
+        return $this->notificationManager->formatNotifications($notifications, $contextPath);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @return string
+     */
+    protected function getContextPath(ContentObjectPublication $contentObjectPublication)
+    {
+        return 'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $contentObjectPublication->getId();
     }
 
     /**

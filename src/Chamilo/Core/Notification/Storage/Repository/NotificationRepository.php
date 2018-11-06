@@ -2,10 +2,13 @@
 
 namespace Chamilo\Core\Notification\Storage\Repository;
 
+use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Notification\Storage\Entity\Notification;
 use Chamilo\Core\Notification\Storage\Entity\UserNotification;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 /**
  * @package Chamilo\Core\Notification\Storage\Repository
@@ -49,9 +52,9 @@ class NotificationRepository extends EntityRepository
      * @param int $offset
      * @param int $count
      *
-     * @return Notification[]
+     * @return UserNotification[]
      */
-    public function findNotificationsByContextsForUser(array $contexts, User $user, $offset = null, $count = null)
+    public function findUserNotificationsByContextsForUser(array $contexts, User $user, $offset = null, $count = null)
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder()
             ->select('notification')
@@ -89,10 +92,11 @@ class NotificationRepository extends EntityRepository
     public function countUnseenNotificationsByContextsForUser(array $contexts, User $user)
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder()
-            ->select('COUNT(user.notificationId)')
+            ->select('COUNT(user.notification)')
             ->from(UserNotification::class, 'user')
-            ->where('user.context IN (:contexts)')
+            ->where('user.notificationContext IN (:contexts)')
             ->andWhere('user.userId =:userId')
+            ->andWhere('user.viewed = false')
             ->setParameter('contexts', $contexts)
             ->setParameter('userId', $user->getId());
 

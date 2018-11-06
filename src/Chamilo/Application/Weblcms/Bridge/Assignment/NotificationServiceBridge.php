@@ -70,7 +70,7 @@ class NotificationServiceBridge implements NotificationServiceBridgeInterface
      * @param int $offset
      * @param int $count
      *
-     * @return \Chamilo\Core\Notification\Storage\Entity\Notification[]
+     * @return \Chamilo\Core\Notification\Domain\NotificationDTO[]
      */
     public function getNotificationsForUser(User $user, $offset = null, $count = null)
     {

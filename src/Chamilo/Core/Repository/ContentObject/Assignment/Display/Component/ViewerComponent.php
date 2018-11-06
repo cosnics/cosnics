@@ -95,6 +95,8 @@ class ViewerComponent extends Manager implements TableSupport
             ]
         );
 
+        $notificationsCount = $this->getNotificationServiceBridge()->countUnseenNotificationsForUser($this->getUser());
+
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
@@ -109,7 +111,8 @@ class ViewerComponent extends Manager implements TableSupport
             'ENTITY_TABLE' => $this->renderEntityTable(),
             'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
             'ADMINISTRATOR_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email']),
-            'NOTIFICATIONS_URL' => $notificationsUrl
+            'NOTIFICATIONS_URL' => $notificationsUrl,
+            'NOTIFICATIONS_COUNT' => $notificationsCount
         ];
     }
 

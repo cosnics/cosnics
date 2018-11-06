@@ -2,12 +2,16 @@
 
 namespace Chamilo\Core\Notification\Service;
 
+use Chamilo\Core\Notification\Domain\FilterDTO;
+use Chamilo\Core\Notification\Domain\NotificationDTO;
 use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Notification\Storage\Entity\Notification;
 use Chamilo\Core\Notification\Storage\Entity\UserNotification;
 use Chamilo\Core\Notification\Storage\Repository\NotificationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Faker\Provider\DateTime;
 
 /**
  * @package Chamilo\Core\Notification\Service
@@ -111,22 +115,31 @@ class NotificationManager
      * @param Notification[] $notifications
      * @param string $viewingContext
      *
-     * @return array
+     * @return \Chamilo\Core\Notification\Domain\NotificationDTO[]
      */
-    public function prepareNotificationsForAjax($notifications, $viewingContext)
+    public function formatNotifications($notifications, $viewingContext)
     {
         $notificationsData = [];
 
         foreach($notifications as $notification)
         {
-            $notificationsData[] = [
-                'message' => $this->notificationTranslator->getTranslationFromNotification($notification, $viewingContext),
-                'time' => $notification->getDate(),
-                'isRead' => $notification->getUsers()[0]->isRead(),
-                'isViewed' => $notification->getUsers()[0]->isViewed(),
-                'url' => '',
-                'filters' => []
-            ];
+            $filters = [];
+
+            foreach($notification->getFilters() as $filter)
+            {
+                $filters[] = new FilterDTO(
+                    $filter->getId(), $this->notificationTranslator->getTranslationFromFilter($filter)
+                );
+            }
+
+            $notificationsData[] = new NotificationDTO(
+                $notification->getId(),
+                $this->notificationTranslator->getTranslationFromNotification($notification, $viewingContext),
+                DatetimeUtilities::format_locale_date(null, $notification->getDate()->getTimestamp()),
+                $notification->getUsers()[0]->isRead(),
+                !$notification->getUsers()[0]->isViewed(),
+                $filters
+            );
         }
 
         return $notificationsData;
@@ -181,13 +194,30 @@ class NotificationManager
 
         foreach ($contextPaths as $contextPath)
         {
-            $contexts[] = $this->contextManager->getContextByPath($contextPath);
+            try
+            {
+                $contexts[] = $this->contextManager->getContextByPath($contextPath);
+            }
+            catch(\RuntimeException $ex)
+            {
+
+            }
         }
 
-        $notifications =
-            $this->notificationRepository->findNotificationsByContextsForUser($contexts, $user, $offset, $count);
+        if(empty($contexts))
+        {
+            return [];
+        }
 
-        $this->setNotificationsViewedForUserAndContextPaths($contextPaths, $user);
+        $userNotifications =
+            $this->notificationRepository->findUserNotificationsByContextsForUser($contexts, $user, $offset, $count);
+
+        $notifications = [];
+
+        foreach($userNotifications as $userNotification)
+        {
+            $notifications[] = $userNotification->getNotification();
+        }
 
         return $notifications;
     }
@@ -219,7 +249,19 @@ class NotificationManager
 
         foreach ($contextPaths as $contextPath)
         {
-            $contexts[] = $this->contextManager->getContextByPath($contextPath);
+            try
+            {
+                $contexts[] = $this->contextManager->getContextByPath($contextPath);
+            }
+            catch(\RuntimeException $ex)
+            {
+
+            }
+        }
+
+        if(empty($contexts))
+        {
+            return 0;
         }
 
         return $this->notificationRepository->countUnseenNotificationsByContextsForUser($contexts, $user);

@@ -56,9 +56,7 @@ class NotificationService
     )
     {
         return $this->notificationManager->countUnseenNotificationsByContextPathForUser(
-            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $contentObjectPublication->getId() .
-            '::TreeNodeData:' . $treeNode->getTreeNodeData()->getId(),
-            $user
+            $this->getContextPath($contentObjectPublication, $treeNode), $user
         );
     }
 
@@ -69,20 +67,31 @@ class NotificationService
      * @param int $offset
      * @param int $count
      *
-     * @return \Chamilo\Core\Notification\Storage\Entity\Notification[]
+     * @return \Chamilo\Core\Notification\Domain\NotificationDTO[]
      */
     public function getNotificationsForUserAndPublication(
         User $user, TreeNode $treeNode, ContentObjectPublication $contentObjectPublication, $offset = null, $count = null
     )
     {
-        $contextPath = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' .
-            $contentObjectPublication->getId() . '::TreeNodeData:' . $treeNode->getTreeNodeData()->getId();
+        $contextPath = $this->getContextPath($contentObjectPublication, $treeNode);
 
         $notifications = $this->notificationManager->getNotificationsByContextPathForUser(
             $contextPath, $user, $offset, $count
         );
 
-        return $this->notificationManager->prepareNotificationsForAjax($notifications, $contextPath);
+        return $this->notificationManager->formatNotifications($notifications, $contextPath);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     *
+     * @return string
+     */
+    protected function getContextPath(ContentObjectPublication $contentObjectPublication, TreeNode $treeNode)
+    {
+        return 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' .
+            $contentObjectPublication->getId() . '::TreeNodeData:' . $treeNode->getTreeNodeData()->getId();
     }
 
     /**

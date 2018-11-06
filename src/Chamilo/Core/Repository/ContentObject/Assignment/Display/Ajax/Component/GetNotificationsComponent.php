@@ -20,14 +20,10 @@ class GetNotificationsComponent extends Manager
      */
     function run()
     {
-        $jsonResponse = '[{"message":"<b>Kevin VAN EENOO</b> heeft een verbeterde versie opgeladen bij de inzending van <b>Sonia VANDERMEERSCH</b>","time":"4 uur geleden","url":"","isRead":false,"isNew":true,"filters":[]},' .
-            '{"message":"<b>Tom DEMETS</b> heeft nieuwe feedback geplaatst op de inzending van <b>Sonia VANDERMEERSCH</b>","time":"20 uur geleden","url":"","isRead":false,"isNew":true,"filters":[]},' .
-            '{"message":"<b>Sonia VANDERMEERSCH</b> heeft een nieuwe inzending geplaatst","time":"gisteren - 20u20","url":"","isRead":true,"isNew":false,"filters":[]}]';
-
         $notificationServiceBridge = $this->getNotificationServiceBridge();
         $notifications = $notificationServiceBridge->getNotificationsForUser($this->getUser());
 
-        return new JsonResponse($notifications, 200, [], true);
+        return new JsonResponse($this->getSerializer()->serialize($notifications, 'json'), 200, [], true);
     }
 
     /**
