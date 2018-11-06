@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\DependencyInjection;
 
-use Chamilo\Core\Repository\DependencyInjection\CompilerPass\ContentObjectPublicationAggregatorCompilerPass;
+use Chamilo\Core\Repository\DependencyInjection\CompilerPass\PublicationAggregatorCompilerPass;
 use Chamilo\Core\Repository\DependencyInjection\CompilerPass\WorkspaceExtensionCompilerPass;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
@@ -77,7 +77,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function registerCompilerPasses(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new ContentObjectPublicationAggregatorCompilerPass());
+        $container->addCompilerPass(new PublicationAggregatorCompilerPass());
         $container->addCompilerPass(new WorkspaceExtensionCompilerPass());
     }
 }

@@ -74,8 +74,8 @@
         </service>
 
         <service
-                id="chamilo.core.repository.publication.service.content_object_publication_aggregator"
-                class="Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregator">
+                id="chamilo.core.repository.publication.service.publication_aggregator"
+                class="Chamilo\Core\Repository\Publication\Service\PublicationAggregator">
         </service>
 
 

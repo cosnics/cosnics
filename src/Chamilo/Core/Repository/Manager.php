@@ -835,11 +835,11 @@ abstract class Manager extends Application
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface
+     * @return \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface
      */
-    public function getContentObjectPublicationAggregator()
+    public function getPublicationAggregator()
     {
-        return $this->getService('chamilo.core.repository.publication.service.content_object_publication_aggregator');
+        return $this->getService('chamilo.core.repository.publication.service.publication_aggregator');
     }
 
     /**

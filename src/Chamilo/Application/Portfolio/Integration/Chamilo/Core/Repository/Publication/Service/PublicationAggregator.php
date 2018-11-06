@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\
 use Chamilo\Core\Repository\Publication\Location\Locations;
 use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
-use Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -28,8 +28,12 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ContentObjectPublicationAggregator implements ContentObjectPublicationAggregatorInterface
+class PublicationAggregator implements PublicationAggregatorInterface
 {
+    /**
+     * @var \Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
+     */
+    private $publicationAttributesGenerator;
 
     /**
      * @var \Chamilo\Application\Portfolio\Service\PublicationService
@@ -43,15 +47,20 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
     private $translator;
 
     /**
-     * ContentObjectPublicationAggregator constructor.
+     * PublicationAggregator constructor.
      *
      * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
      */
-    public function __construct(PublicationService $publicationService, Translator $translator)
+    public function __construct(
+        PublicationService $publicationService, Translator $translator,
+        PublicationAttributesGenerator $publicationAttributesGenerator
+    )
     {
         $this->publicationService = $publicationService;
         $this->translator = $translator;
+        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
     }
 
     /**
@@ -115,44 +124,11 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
     }
 
     /**
-     * @param string[] $record
-     *
-     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes
-     */
-    protected function createContentObjectPublicationAttributesFromRecord($record)
-    {
-        $attributes = new Attributes();
-
-        $attributes->setId($record[Publication::PROPERTY_ID]);
-        $attributes->set_publisher_id($record[Publication::PROPERTY_PUBLISHER_ID]);
-        $attributes->set_date($record[Publication::PROPERTY_PUBLISHED]);
-        $attributes->set_application(\Chamilo\Application\Portfolio\Manager::context());
-
-        $attributes->set_location(
-            $this->getTranslator()->trans('TypeName', [], \Chamilo\Application\Portfolio\Manager::context())
-        );
-
-        $redirect = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Portfolio\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_HOME,
-                \Chamilo\Application\Portfolio\Manager::PARAM_USER_ID => $record[Publication::PROPERTY_PUBLISHER_ID]
-            )
-        );
-
-        $attributes->set_url($redirect->getUrl());
-        $attributes->set_title($record[ContentObject::PROPERTY_TITLE]);
-        $attributes->set_content_object_id($record[Publication::PROPERTY_CONTENT_OBJECT_ID]);
-
-        return $attributes;
-    }
-
-    /**
-     * @param $publicationIdentifier
+     * @param integer $publicationIdentifier
      *
      * @return bool
      */
-    public function deleteContentObjectPublication($publicationIdentifier)
+    public function deleteContentObjectPublication(int $publicationIdentifier)
     {
         return $this->getPublicationService()->deletePublicationByIdentifier($publicationIdentifier);
     }
@@ -175,7 +151,7 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
      */
     public function getContentObjectPublicationAttributes(int $publicationIdentifier)
     {
-        return $this->createContentObjectPublicationAttributesFromRecord(
+        return $this->getPublicationAttributesGenerator()->createAttributesFromRecord(
             $this->getPublicationService()->findPublicationRecordByIdentifier($publicationIdentifier)
         );
     }
@@ -238,6 +214,23 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
         }
 
         return $publicationAttributes;
+    }
+
+    /**
+     * @return \Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
+     */
+    public function getPublicationAttributesGenerator(): PublicationAttributesGenerator
+    {
+        return $this->publicationAttributesGenerator;
+    }
+
+    /**
+     * @param \Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
+     */
+    public function setPublicationAttributesGenerator(PublicationAttributesGenerator $publicationAttributesGenerator
+    ): void
+    {
+        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
     }
 
     /**
@@ -390,7 +383,7 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
      *
      * @return boolean
      */
-    public function updateContentObjectPublicationIdentifier(Attributes $publicationAttributes)
+    public function updateContentObjectPublicationContentObjectIdentifier(Attributes $publicationAttributes)
     {
         $publication = $this->getPublicationService()->findPublicationByIdentifier($publicationAttributes->getId());
 

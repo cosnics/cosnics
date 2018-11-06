@@ -5,7 +5,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Public
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
-use Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -19,7 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ContentObjectPublicationAggregator implements ContentObjectPublicationAggregatorInterface
+class PublicationAggregator implements PublicationAggregatorInterface
 {
     /**
      * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
@@ -37,7 +37,7 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
     protected $userService;
 
     /**
-     * ContentObjectPublicationAggregator constructor.
+     * PublicationAggregator constructor.
      *
      * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService
      * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService $learningPathAssignmentService

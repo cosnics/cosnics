@@ -204,7 +204,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $rightsService = RightsService::getInstance();
 
             $contentObjectUnlinkAllowed =
-                $this->getContentObjectPublicationAggregator()->canContentObjectBeUnlinked($contentObject);
+                $this->getPublicationAggregator()->canContentObjectBeUnlinked($contentObject);
             $contentObjectDeletionAllowed = DataManager::content_object_deletion_allowed($contentObject);
 
             $isRecycled = $contentObject->get_state() == ContentObject::STATE_RECYCLED;
@@ -485,7 +485,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             return false;
         }
 
-        return $this->getContentObjectPublicationAggregator()->canContentObjectBeUnlinked($contentObject);
+        return $this->getPublicationAggregator()->canContentObjectBeUnlinked($contentObject);
     }
 
     public function add_links_to_content_object_tabs($content_object)

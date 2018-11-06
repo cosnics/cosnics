@@ -16,29 +16,29 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ContentObjectPublicationAggregator implements ContentObjectPublicationAggregatorInterface
+class PublicationAggregator implements PublicationAggregatorInterface
 {
     /**
-     * @var \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface[]
+     * @var \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface[]
      */
-    protected $contentObjectPublicationAggregators;
+    protected $publicationAggregators;
 
     /**
-     * ContentObjectPublicationAggregator constructor.
+     * PublicationAggregator constructor.
      */
     public function __construct()
     {
-        $this->contentObjectPublicationAggregators = [];
+        $this->publicationAggregators = [];
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface $contentObjectPublicationAggregator
+     * @param \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface $publicationAggregator
      */
-    public function addContentObjectPublicationAggregator(
-        ContentObjectPublicationAggregatorInterface $contentObjectPublicationAggregator
+    public function addPublicationAggregator(
+        PublicationAggregatorInterface $publicationAggregator
     )
     {
-        $this->contentObjectPublicationAggregators[] = $contentObjectPublicationAggregator;
+        $this->publicationAggregators[] = $publicationAggregator;
     }
 
     /**
@@ -50,9 +50,9 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
      */
     public function canContentObjectBeUnlinked(ContentObject $contentObject)
     {
-        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
+        foreach ($this->publicationAggregators as $publicationAggregator)
         {
-            if (!$contentObjectPublicationAggregator->canContentObjectBeUnlinked($contentObject))
+            if (!$publicationAggregator->canContentObjectBeUnlinked($contentObject))
             {
                 return false;
             }
@@ -74,9 +74,9 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
     {
         $count = 0;
 
-        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
+        foreach ($this->publicationAggregators as $publicationAggregator)
         {
-            $count += $contentObjectPublicationAggregator->countPublicationAttributes(
+            $count += $publicationAggregator->countPublicationAttributes(
                 $type, $objectIdentifier, $condition
             );
         }
@@ -101,9 +101,9 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
     {
         $publicationAttributes = array();
 
-        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
+        foreach ($this->publicationAggregators as $publicationAggregator)
         {
-            $applicationAttributes = $contentObjectPublicationAggregator->getContentObjectPublicationsAttributes(
+            $applicationAttributes = $publicationAggregator->getContentObjectPublicationsAttributes(
                 $type, $objectIdentifier, $condition, $count, $offset, $orderProperties
             );
 
@@ -162,9 +162,9 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
      */
     public function deleteContentObjectPublications(ContentObject $contentObject)
     {
-        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
+        foreach ($this->publicationAggregators as $publicationAggregator)
         {
-            if (!$contentObjectPublicationAggregator->deleteContentObjectPublications($contentObject))
+            if (!$publicationAggregator->deleteContentObjectPublications($contentObject))
             {
                 return false;
             }
@@ -180,9 +180,9 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
      */
     public function isContentObjectPublished(int $contentObjectIdentifier)
     {
-        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
+        foreach ($this->publicationAggregators as $publicationAggregator)
         {
-            if ($contentObjectPublicationAggregator->isContentObjectPublished($contentObjectIdentifier))
+            if ($publicationAggregator->isContentObjectPublished($contentObjectIdentifier))
             {
                 return true;
             }
@@ -198,9 +198,9 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
      */
     public function areContentObjectsPublished(array $contentObjectIdentifiers)
     {
-        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
+        foreach ($this->publicationAggregators as $publicationAggregator)
         {
-            if ($contentObjectPublicationAggregator->areContentObjectsPublished($contentObjectIdentifiers))
+            if ($publicationAggregator->areContentObjectsPublished($contentObjectIdentifiers))
             {
                 return true;
             }
@@ -216,9 +216,9 @@ class ContentObjectPublicationAggregator implements ContentObjectPublicationAggr
      */
     public function canContentObjectBeEdited(int $contentObjectIdentifier)
     {
-        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
+        foreach ($this->publicationAggregators as $publicationAggregator)
         {
-            if (!$contentObjectPublicationAggregator->canContentObjectBeEdited($contentObjectIdentifier))
+            if (!$publicationAggregator->canContentObjectBeEdited($contentObjectIdentifier))
             {
                 return false;
             }

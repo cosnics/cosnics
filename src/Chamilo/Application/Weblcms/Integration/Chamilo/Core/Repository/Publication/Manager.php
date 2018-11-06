@@ -561,10 +561,10 @@ class Manager implements PublicationInterface
 
         return [
             $container->get(
-                'chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.content_object_publication_aggregator.assignment_publication_service'
+                'chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.publication_aggregator.assignment_publication_service'
             ),
             $container->get(
-                'chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.content_object_publication_aggregator.learning_path_assignment_publication_service'
+                'chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.publication_aggregator.learning_path_assignment_publication_service'
             ),
         ];
     }

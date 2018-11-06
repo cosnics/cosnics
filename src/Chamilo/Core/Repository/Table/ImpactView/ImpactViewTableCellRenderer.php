@@ -77,7 +77,7 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
         }
         else
         {
-            if($this->getContentObjectPublicationAggregator()->canContentObjectBeUnlinked($content_object))
+            if($this->getPublicationAggregator()->canContentObjectBeUnlinked($content_object))
             {
                 return '<img src="' . Theme::getInstance()->getCommonImagePath('Status/OkMini') . '" />';
             }
@@ -103,10 +103,10 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface
+     * @return \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface
      */
-    public function getContentObjectPublicationAggregator()
+    public function getPublicationAggregator()
     {
-        return $this->get_component()->getContentObjectPublicationAggregator();
+        return $this->get_component()->getPublicationAggregator();
     }
 }
