@@ -155,11 +155,11 @@ class ImpactViewRenderer implements TableSupport
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface
+     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface
      */
-    public function getContentObjectPublicationManager()
+    public function getContentObjectPublicationAggregator()
     {
-        return $this->parent->getContentObjectPublicationManager();
+        return $this->parent->getContentObjectPublicationAggregator();
     }
 }
 

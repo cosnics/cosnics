@@ -216,7 +216,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
                         $deleted_content_object->move(0);
                     }
 
-                    if (! DataManager::delete_category_recursive($this->getContentObjectPublicationManager(), $category))
+                    if (! DataManager::delete_category_recursive($this->getContentObjectPublicationAggregator(), $category))
                     {
                         $category->add_error(Translation::get('CouldNotDeleteCategoryInDatabase'));
                         return false;
@@ -229,14 +229,14 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface | object
+     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface | object
      */
-    public function getContentObjectPublicationManager()
+    public function getContentObjectPublicationAggregator()
     {
         $containerBuilder = DependencyInjectionContainerBuilder::getInstance();
         $container = $containerBuilder->createContainer();
 
-        return $container->get('chamilo.core.repository.publication.service.content_object_publication_manager');
+        return $container->get('chamilo.core.repository.publication.service.content_object_publication_aggregator');
     }
 
     /**

@@ -7,13 +7,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Compiler pass to collect the integration ContentObjectPublicationManager objects
+ * Compiler pass to collect the integration ContentObjectPublicationAggregator objects
  *
  * @package Chamilo\Core\Repository\DependencyInjection\CompilerPass
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ContentObjectPublicationManagerCompilerPass implements CompilerPassInterface
+class ContentObjectPublicationAggregatorCompilerPass implements CompilerPassInterface
 {
 
     /**
@@ -23,20 +23,22 @@ class ContentObjectPublicationManagerCompilerPass implements CompilerPassInterfa
      */
     public function process(ContainerBuilder $container)
     {
-        if ($container->hasDefinition('chamilo.core.repository.publication.service.content_object_publication_manager'))
+        if ($container->hasDefinition(
+            'chamilo.core.repository.publication.service.content_object_publication_aggregator'
+        ))
         {
             $taggedServices = $container->findTaggedServiceIds(
-                'chamilo.core.repository.publication.content_object_publication_manager'
+                'chamilo.core.repository.publication.content_object_publication_aggregator'
             );
 
-            $definition =  $container->getDefinition(
-                'chamilo.core.repository.publication.service.content_object_publication_manager'
+            $definition = $container->getDefinition(
+                'chamilo.core.repository.publication.service.content_object_publication_aggregator'
             );
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {
                 $definition->addMethodCall(
-                    'addContentObjectPublicationManager', array($tags, new Reference($taggedServiceId))
+                    'addContentObjectPublicationAggregator', array($tags, new Reference($taggedServiceId))
                 );
             }
         }

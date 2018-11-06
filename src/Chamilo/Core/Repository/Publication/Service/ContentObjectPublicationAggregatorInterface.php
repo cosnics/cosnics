@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-interface ContentObjectPublicationManagerInterface
+interface ContentObjectPublicationAggregatorInterface
 {
     /**
      * Returns whether or not a content object can be unlinked

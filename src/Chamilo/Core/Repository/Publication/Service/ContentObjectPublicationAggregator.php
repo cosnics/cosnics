@@ -16,29 +16,29 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ContentObjectPublicationManager implements ContentObjectPublicationManagerInterface
+class ContentObjectPublicationAggregator implements ContentObjectPublicationAggregatorInterface
 {
     /**
-     * @var \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface[]
+     * @var \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface[]
      */
-    protected $contentObjectPublicationManagers;
+    protected $contentObjectPublicationAggregators;
 
     /**
-     * ContentObjectPublicationManager constructor.
+     * ContentObjectPublicationAggregator constructor.
      */
     public function __construct()
     {
-        $this->contentObjectPublicationManagers = [];
+        $this->contentObjectPublicationAggregators = [];
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface $contentObjectPublicationManager
+     * @param \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface $contentObjectPublicationAggregator
      */
-    public function addContentObjectPublicationManager(
-        ContentObjectPublicationManagerInterface $contentObjectPublicationManager
+    public function addContentObjectPublicationAggregator(
+        ContentObjectPublicationAggregatorInterface $contentObjectPublicationAggregator
     )
     {
-        $this->contentObjectPublicationManagers[] = $contentObjectPublicationManager;
+        $this->contentObjectPublicationAggregators[] = $contentObjectPublicationAggregator;
     }
 
     /**
@@ -50,9 +50,9 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
      */
     public function canContentObjectBeUnlinked(ContentObject $contentObject)
     {
-        foreach ($this->contentObjectPublicationManagers as $contentObjectPublicationManager)
+        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
         {
-            if (!$contentObjectPublicationManager->canContentObjectBeUnlinked($contentObject))
+            if (!$contentObjectPublicationAggregator->canContentObjectBeUnlinked($contentObject))
             {
                 return false;
             }
@@ -74,9 +74,9 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
     {
         $count = 0;
 
-        foreach ($this->contentObjectPublicationManagers as $contentObjectPublicationManager)
+        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
         {
-            $count += $contentObjectPublicationManager->countPublicationAttributes(
+            $count += $contentObjectPublicationAggregator->countPublicationAttributes(
                 $type, $objectIdentifier, $condition
             );
         }
@@ -101,9 +101,9 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
     {
         $publicationAttributes = array();
 
-        foreach ($this->contentObjectPublicationManagers as $contentObjectPublicationManager)
+        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
         {
-            $applicationAttributes = $contentObjectPublicationManager->getContentObjectPublicationsAttributes(
+            $applicationAttributes = $contentObjectPublicationAggregator->getContentObjectPublicationsAttributes(
                 $type, $objectIdentifier, $condition, $count, $offset, $orderProperties
             );
 
@@ -162,9 +162,9 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
      */
     public function deleteContentObjectPublications(ContentObject $contentObject)
     {
-        foreach ($this->contentObjectPublicationManagers as $contentObjectPublicationManager)
+        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
         {
-            if (!$contentObjectPublicationManager->deleteContentObjectPublications($contentObject))
+            if (!$contentObjectPublicationAggregator->deleteContentObjectPublications($contentObject))
             {
                 return false;
             }
@@ -180,9 +180,9 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
      */
     public function isContentObjectPublished(int $contentObjectIdentifier)
     {
-        foreach ($this->contentObjectPublicationManagers as $contentObjectPublicationManager)
+        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
         {
-            if ($contentObjectPublicationManager->isContentObjectPublished($contentObjectIdentifier))
+            if ($contentObjectPublicationAggregator->isContentObjectPublished($contentObjectIdentifier))
             {
                 return true;
             }
@@ -198,9 +198,9 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
      */
     public function areContentObjectsPublished(array $contentObjectIdentifiers)
     {
-        foreach ($this->contentObjectPublicationManagers as $contentObjectPublicationManager)
+        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
         {
-            if ($contentObjectPublicationManager->areContentObjectsPublished($contentObjectIdentifiers))
+            if ($contentObjectPublicationAggregator->areContentObjectsPublished($contentObjectIdentifiers))
             {
                 return true;
             }
@@ -216,9 +216,9 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
      */
     public function canContentObjectBeEdited(int $contentObjectIdentifier)
     {
-        foreach ($this->contentObjectPublicationManagers as $contentObjectPublicationManager)
+        foreach ($this->contentObjectPublicationAggregators as $contentObjectPublicationAggregator)
         {
-            if (!$contentObjectPublicationManager->canContentObjectBeEdited($contentObjectIdentifier))
+            if (!$contentObjectPublicationAggregator->canContentObjectBeEdited($contentObjectIdentifier))
             {
                 return false;
             }

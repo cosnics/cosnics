@@ -1024,7 +1024,7 @@ class ContentObject extends CompositeDataClass
         $versions = $this->get_content_object_versions();
         foreach($versions as $version)
         {
-            if(!$this->getContentObjectPublicationManager()->canContentObjectBeUnlinked($version))
+            if(!$this->getContentObjectPublicationAggregator()->canContentObjectBeUnlinked($version))
             {
                 return false;
             }
@@ -1113,14 +1113,14 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface | object
+     * @return \Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface | object
      */
-    public function getContentObjectPublicationManager()
+    public function getContentObjectPublicationAggregator()
     {
         $containerBuilder = DependencyInjectionContainerBuilder::getInstance();
         $container = $containerBuilder->createContainer();
 
-        return $container->get('chamilo.core.repository.publication.service.content_object_publication_manager');
+        return $container->get('chamilo.core.repository.publication.service.content_object_publication_aggregator');
     }
 
     public function delete_links()
@@ -1128,7 +1128,7 @@ class ContentObject extends CompositeDataClass
         $versions = $this->get_content_object_versions();
         foreach($versions as $version)
         {
-            if(!$this->getContentObjectPublicationManager()->canContentObjectBeUnlinked($version))
+            if(!$this->getContentObjectPublicationAggregator()->canContentObjectBeUnlinked($version))
             {
                 return false;
             }

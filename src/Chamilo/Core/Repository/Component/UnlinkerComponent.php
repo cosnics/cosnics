@@ -37,7 +37,7 @@ class UnlinkerComponent extends Manager
             foreach ($ids as $object_id)
             {
                 $object = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
-                $unlinkAllowed = $this->getContentObjectPublicationManager()->canContentObjectBeUnlinked($object);
+                $unlinkAllowed = $this->getContentObjectPublicationAggregator()->canContentObjectBeUnlinked($object);
 
                 if(!$unlinkAllowed)
                 {

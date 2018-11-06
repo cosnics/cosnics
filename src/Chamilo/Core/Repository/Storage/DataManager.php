@@ -6,7 +6,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface;
+use Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
@@ -1211,7 +1211,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @return boolean
      */
     public static function delete_category_recursive(
-        ContentObjectPublicationManagerInterface $contentObjectPublicationManager, $category, $fix_display_order = true
+        ContentObjectPublicationAggregatorInterface $contentObjectPublicationAggregator, $category, $fix_display_order = true
     )
     {
         $repository_data_manager = self::getInstance();
@@ -1230,7 +1230,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $versions = $content_object->get_content_object_versions();
             foreach ($versions as $version)
             {
-                if (!$contentObjectPublicationManager->canContentObjectBeUnlinked($version))
+                if (!$contentObjectPublicationAggregator->canContentObjectBeUnlinked($version))
                 {
                     $canUnlinkVersions = false;
                     break;
@@ -1298,7 +1298,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         while ($categories && $category = $categories->next_result())
         {
-            if (!self::delete_category_recursive($contentObjectPublicationManager, $category, false))
+            if (!self::delete_category_recursive($contentObjectPublicationAggregator, $category, false))
             {
                 $success = false;
             }

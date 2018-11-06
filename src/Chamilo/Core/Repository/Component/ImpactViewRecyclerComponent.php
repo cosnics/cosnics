@@ -89,7 +89,7 @@ class ImpactViewRecyclerComponent extends Manager
         
         $objects = DataManager::retrieves(ContentObject::class_name(), $parameters);
 
-        $contentObjectPublicationManager = $this->getContentObjectPublicationManager();
+        $contentObjectPublicationAggregator = $this->getContentObjectPublicationAggregator();
 
         while ($content_object = $objects->next_result())
         {
@@ -98,7 +98,7 @@ class ImpactViewRecyclerComponent extends Manager
             $canUnlinkVersions = true;
             foreach($versions as $version)
             {
-                if(!$contentObjectPublicationManager->canContentObjectBeUnlinked($version))
+                if(!$contentObjectPublicationAggregator->canContentObjectBeUnlinked($version))
                 {
                     $canUnlinkVersions = false;
                     break;
@@ -209,7 +209,7 @@ class ImpactViewRecyclerComponent extends Manager
         
         $objects = DataManager::retrieves(ContentObject::class_name(), $parameters);
 
-        $contentObjectPublicationManager = $this->getContentObjectPublicationManager();
+        $contentObjectPublicationAggregator = $this->getContentObjectPublicationAggregator();
         
         $failed = 0;
         while ($content_object = $objects->next_result())
@@ -220,7 +220,7 @@ class ImpactViewRecyclerComponent extends Manager
                 continue;
             }
 
-            if(!$contentObjectPublicationManager->canContentObjectBeUnlinked($content_object))
+            if(!$contentObjectPublicationAggregator->canContentObjectBeUnlinked($content_object))
             {
                 $failed++;
             }

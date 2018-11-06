@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\
 use Chamilo\Core\Repository\Publication\Location\Locations;
 use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
-use Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface;
+use Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -28,7 +28,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ContentObjectPublicationManager implements ContentObjectPublicationManagerInterface
+class ContentObjectPublicationAggregator implements ContentObjectPublicationAggregatorInterface
 {
 
     /**
@@ -43,7 +43,7 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
     private $translator;
 
     /**
-     * ContentObjectPublicationManager constructor.
+     * ContentObjectPublicationAggregator constructor.
      *
      * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
      * @param \Symfony\Component\Translation\Translator $translator
