@@ -35,20 +35,32 @@ class NotificationRepository
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @param integer $publicationIdentifier
+     * @param integer $complexContentObjectIdentifier
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Notification[]
      */
-    protected function getDataClassRepository()
+    public function findPortfolioNotificationForPublicationIdentifierUserIdentifierAndComplexContentObjectIdentifier(
+        $publicationIdentifier, $userIdentifier, $complexContentObjectIdentifier)
     {
-        return $this->dataClassRepository;
-    }
+        $conditions = array();
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
-    protected function setDataClassRepository($dataClassRepository)
-    {
-        $this->dataClassRepository = $dataClassRepository;
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Notification::class, Notification::PROPERTY_PUBLICATION_ID),
+            new StaticConditionVariable($publicationIdentifier));
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Notification::class, Notification::PROPERTY_COMPLEX_CONTENT_OBJECT_ID),
+            new StaticConditionVariable($complexContentObjectIdentifier));
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Notification::class, Notification::PROPERTY_USER_ID),
+            new StaticConditionVariable($userIdentifier));
+
+        $condition = new AndCondition($conditions);
+
+        return $this->getDataClassRepository()->retrieve(
+            Notification::class,
+            new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -79,32 +91,20 @@ class NotificationRepository
 
     /**
      *
-     * @param integer $publicationIdentifier
-     * @param integer $complexContentObjectIdentifier
-     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Notification[]
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
-    public function findPortfolioNotificationForPublicationIdentifierUserIdentifierAndComplexContentObjectIdentifier(
-        $publicationIdentifier, $userIdentifier, $complexContentObjectIdentifier)
+    protected function getDataClassRepository()
     {
-        $conditions = array();
+        return $this->dataClassRepository;
+    }
 
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Notification::class, Notification::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($publicationIdentifier));
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Notification::class, Notification::PROPERTY_COMPLEX_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($complexContentObjectIdentifier));
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Notification::class, Notification::PROPERTY_USER_ID),
-            new StaticConditionVariable($userIdentifier));
-
-        $condition = new AndCondition($conditions);
-
-        return $this->getDataClassRepository()->retrieve(
-            Notification::class,
-            new DataClassRetrieveParameters($condition));
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     */
+    protected function setDataClassRepository($dataClassRepository)
+    {
+        $this->dataClassRepository = $dataClassRepository;
     }
 }
 

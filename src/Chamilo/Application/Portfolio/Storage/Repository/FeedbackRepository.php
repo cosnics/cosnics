@@ -36,20 +36,18 @@ class FeedbackRepository
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @param integer $publicationIdentifier
+     * @param integer $complexContentObjectIdentifier
+     * @param integer $userIdentifier
+     * @return integer
      */
-    protected function getDataClassRepository()
+    public function countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(int $publicationIdentifier,
+        int $complexContentObjectIdentifier = null, int $userIdentifier = null)
     {
-        return $this->dataClassRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
-    protected function setDataClassRepository($dataClassRepository)
-    {
-        $this->dataClassRepository = $dataClassRepository;
+        return $this->getDataClassRepository()->count(
+            Feedback::class,
+            new DataClassCountParameters(
+                $this->getFeedbackConditions($publicationIdentifier, $complexContentObjectIdentifier, $userIdentifier)));
     }
 
     /**
@@ -89,18 +87,20 @@ class FeedbackRepository
 
     /**
      *
-     * @param integer $publicationIdentifier
-     * @param integer $complexContentObjectIdentifier
-     * @param integer $userIdentifier
-     * @return integer
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
-    public function countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(int $publicationIdentifier,
-        int $complexContentObjectIdentifier = null, int $userIdentifier = null)
+    protected function getDataClassRepository()
     {
-        return $this->getDataClassRepository()->count(
-            Feedback::class,
-            new DataClassCountParameters(
-                $this->getFeedbackConditions($publicationIdentifier, $complexContentObjectIdentifier, $userIdentifier)));
+        return $this->dataClassRepository;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     */
+    protected function setDataClassRepository($dataClassRepository)
+    {
+        $this->dataClassRepository = $dataClassRepository;
     }
 
     /**

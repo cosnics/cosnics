@@ -32,33 +32,34 @@ class NotificationService
 
     /**
      *
-     * @return \Chamilo\Application\Portfolio\Storage\Repository\NotificationRepository
+     * @param integer $publicationIdentifier
+     * @param integer $userIdentifier
+     * @param integer $complexContentObjectIdentifier
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Notification
      */
-    public function getNotificationRepository()
+    public function findPortfolioNotificationForPublicationIdentifierUserIdentifierAndComplexContentObjectIdentifier(
+        $publicationIdentifier, $userIdentifier, $complexContentObjectIdentifier)
     {
-        return $this->notificationRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Portfolio\Storage\Repository\NotificationRepository $notificationRepository
-     */
-    public function setNotificationRepository(NotificationRepository $notificationRepository)
-    {
-        $this->notificationRepository = $notificationRepository;
+        return $this->getNotificationRepository()->findPortfolioNotificationForPublicationIdentifierUserIdentifierAndComplexContentObjectIdentifier(
+            $publicationIdentifier,
+            $userIdentifier,
+            $complexContentObjectIdentifier);
     }
 
     /**
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
-     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Feedback
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Notification
      */
-    public function getNotificationInstanceForPublication(Publication $publication)
+    public function findPortfolioNotificationForPublicationUserAndNode(Publication $publication, User $user,
+        ComplexContentObjectPathNode $node)
     {
-        $notification = new Notification();
-        $notification->set_publication_id($publication->getId());
-
-        return $notification;
+        return $this->findPortfolioNotificationForPublicationIdentifierUserIdentifierAndComplexContentObjectIdentifier(
+            $publication->getId(),
+            $user->getId(),
+            $this->getComplexContentObjectIdentifierForNode($node));
     }
 
     /**
@@ -91,43 +92,42 @@ class NotificationService
 
     /**
      *
-     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
-     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Notification
-     */
-    public function findPortfolioNotificationForPublicationUserAndNode(Publication $publication, User $user,
-        ComplexContentObjectPathNode $node)
-    {
-        return $this->findPortfolioNotificationForPublicationIdentifierUserIdentifierAndComplexContentObjectIdentifier(
-            $publication->getId(),
-            $user->getId(),
-            $this->getComplexContentObjectIdentifierForNode($node));
-    }
-
-    /**
-     *
-     * @param integer $publicationIdentifier
-     * @param integer $userIdentifier
-     * @param integer $complexContentObjectIdentifier
-     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Notification
-     */
-    public function findPortfolioNotificationForPublicationIdentifierUserIdentifierAndComplexContentObjectIdentifier(
-        $publicationIdentifier, $userIdentifier, $complexContentObjectIdentifier)
-    {
-        return $this->getNotificationRepository()->findPortfolioNotificationForPublicationIdentifierUserIdentifierAndComplexContentObjectIdentifier(
-            $publicationIdentifier,
-            $userIdentifier,
-            $complexContentObjectIdentifier);
-    }
-
-    /**
-     *
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      * @return integer
      */
     private function getComplexContentObjectIdentifierForNode(ComplexContentObjectPathNode $node)
     {
         return $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->getId() : 0;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Feedback
+     */
+    public function getNotificationInstanceForPublication(Publication $publication)
+    {
+        $notification = new Notification();
+        $notification->set_publication_id($publication->getId());
+
+        return $notification;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Portfolio\Storage\Repository\NotificationRepository
+     */
+    public function getNotificationRepository()
+    {
+        return $this->notificationRepository;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\Repository\NotificationRepository $notificationRepository
+     */
+    public function setNotificationRepository(NotificationRepository $notificationRepository)
+    {
+        $this->notificationRepository = $notificationRepository;
     }
 }

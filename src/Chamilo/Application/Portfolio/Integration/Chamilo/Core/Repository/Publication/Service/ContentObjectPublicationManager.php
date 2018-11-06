@@ -55,55 +55,11 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
     }
 
     /**
-     * @return \Chamilo\Application\Portfolio\Service\PublicationService
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
      */
-    public function getPublicationService(): PublicationService
+    public function addContentObjectPublicationAttributesElementsToForm(FormValidator $formValidator)
     {
-        return $this->publicationService;
-    }
-
-    /**
-     * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
-     */
-    public function setPublicationService(PublicationService $publicationService
-    ): void
-    {
-        $this->publicationService = $publicationService;
-    }
-
-    /**
-     * Returns whether or not a content object can be unlinked
-     *
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return bool
-     */
-    public function canContentObjectBeUnlinked(ContentObject $contentObject)
-    {
-        return true;
-    }
-
-    /**
-     * @param integer $contentObjectIdentifier
-     *
-     * @return boolean
-     */
-    public function canContentObjectBeEdited(int $contentObjectIdentifier)
-    {
-        return true;
-    }
-
-    /**
-     * @param integer $contentObjectIdentifier
-     *
-     * @return boolean
-     */
-    public function isContentObjectPublished(int $contentObjectIdentifier)
-    {
-        $publicationCount =
-            $this->getPublicationService()->countPublicationsForContentObjectIdentifier($contentObjectIdentifier);
-
-        return $publicationCount > 0;
+        // TODO: Please implement me !
     }
 
     /**
@@ -120,33 +76,42 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
     }
 
     /**
+     * @param integer $contentObjectIdentifier
+     *
+     * @return boolean
+     */
+    public function canContentObjectBeEdited(int $contentObjectIdentifier)
+    {
+        return true;
+    }
+
+    /**
+     * Returns whether or not a content object can be unlinked
+     *
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function canContentObjectBeUnlinked(ContentObject $contentObject)
+    {
+        return true;
+    }
+
+    /**
      * @param integer $type
      * @param integer $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
      *
-     * @return string[]
+     * @return integer
      */
-    public function getContentObjectPublicationsAttributes(
-        int $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null,
-        int $count = null, int $offset = null, array $orderProperties = null
+    public function countPublicationAttributes(
+        int $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier = null,
+        Condition $condition = null
     )
     {
-        $publicationRecords = $this->getPublicationService()->findPublicationRecordsForTypeAndIdentifier(
-            $objectIdentifier, $type, $condition, $count,
-            $offset, $orderProperties
+        return $this->getPublicationService()->countPublicationsForTypeAndIdentifier(
+            $type, $objectIdentifier, $condition
         );
-
-        $publicationAttributes = array();
-
-        foreach ($publicationRecords as $publicationRecord)
-        {
-            $publicationAttributes[] = $this->createContentObjectPublicationAttributesFromRecord($publicationRecord);
-        }
-
-        return $publicationAttributes;
     }
 
     /**
@@ -183,19 +148,23 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
     }
 
     /**
-     * @return \Symfony\Component\Translation\Translator
+     * @param $publicationIdentifier
+     *
+     * @return bool
      */
-    public function getTranslator(): Translator
+    public function deleteContentObjectPublication($publicationIdentifier)
     {
-        return $this->translator;
+        return $this->getPublicationService()->deletePublicationByIdentifier($publicationIdentifier);
     }
 
     /**
-     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return boolean
      */
-    public function setTranslator(Translator $translator): void
+    public function deleteContentObjectPublications(ContentObject $contentObject)
     {
-        $this->translator = $translator;
+        return $this->getPublicationService()->deletePublicationsForContentObject($contentObject);
     }
 
     /**
@@ -209,43 +178,6 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
         return $this->createContentObjectPublicationAttributesFromRecord(
             $this->getPublicationService()->findPublicationRecordByIdentifier($publicationIdentifier)
         );
-    }
-
-    /**
-     * @param integer $type
-     * @param integer $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return integer
-     */
-    public function countPublicationAttributes(
-        int $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier = null,
-        Condition $condition = null
-    )
-    {
-        return $this->getPublicationService()->countPublicationsForTypeAndIdentifier(
-            $type, $objectIdentifier, $condition
-        );
-    }
-
-    /**
-     * @param integer $contentObjectIdentifier
-     *
-     * @return boolean
-     */
-    public function deleteContentObjectPublications(int $contentObjectIdentifier)
-    {
-        return $this->getPublicationService()->deletePublicationsForContentObjectIdentifier($contentObjectIdentifier);
-    }
-
-    /**
-     * @param $publicationIdentifier
-     *
-     * @return bool
-     */
-    public function deleteContentObjectPublication($publicationIdentifier)
-    {
-        return $this->getPublicationService()->deletePublicationByIdentifier($publicationIdentifier);
     }
 
     /**
@@ -276,6 +208,82 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
         }
 
         return $locations;
+    }
+
+    /**
+     * @param integer $type
+     * @param integer $objectIdentifier
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $count
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
+     *
+     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
+     */
+    public function getContentObjectPublicationsAttributes(
+        int $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null,
+        int $count = null, int $offset = null, array $orderProperties = null
+    )
+    {
+        $publicationRecords = $this->getPublicationService()->findPublicationRecordsForTypeAndIdentifier(
+            $objectIdentifier, $type, $condition, $count,
+            $offset, $orderProperties
+        );
+
+        $publicationAttributes = array();
+
+        foreach ($publicationRecords as $publicationRecord)
+        {
+            $publicationAttributes[] = $this->createContentObjectPublicationAttributesFromRecord($publicationRecord);
+        }
+
+        return $publicationAttributes;
+    }
+
+    /**
+     * @return \Chamilo\Application\Portfolio\Service\PublicationService
+     */
+    public function getPublicationService(): PublicationService
+    {
+        return $this->publicationService;
+    }
+
+    /**
+     * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
+     */
+    public function setPublicationService(PublicationService $publicationService
+    ): void
+    {
+        $this->publicationService = $publicationService;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @param integer $contentObjectIdentifier
+     *
+     * @return boolean
+     */
+    public function isContentObjectPublished(int $contentObjectIdentifier)
+    {
+        $publicationCount =
+            $this->getPublicationService()->countPublicationsForContentObjectIdentifier($contentObjectIdentifier);
+
+        return $publicationCount > 0;
     }
 
     /**
@@ -372,18 +380,9 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
             }
         }
         else
-
         {
             return false;
         }
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
-     */
-    public function addContentObjectPublicationAttributesElementsToForm(FormValidator $formValidator)
-    {
-        // TODO: Please implement me !
     }
 
     /**

@@ -236,7 +236,7 @@ abstract class Table
             }
         }
 
-        if ($resultSet instanceof DataClassIterator)
+        if ($resultSet instanceof DataClassIterator || is_array($resultSet))
         {
             foreach ($resultSet as $result)
             {

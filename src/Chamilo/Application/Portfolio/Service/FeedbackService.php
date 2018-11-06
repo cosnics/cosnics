@@ -40,51 +40,34 @@ class FeedbackService
 
     /**
      *
-     * @return \Chamilo\Application\Portfolio\Storage\Repository\FeedbackRepository
+     * @param integer $publicationIdentifier
+     * @param integer $complexContentObjectIdentifier
+     * @param integer $userIdentifier
+     * @return integer
      */
-    public function getFeedbackRepository()
+    public function countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(int $publicationIdentifier,
+        int $complexContentObjectIdentifier = null, int $userIdentifier = null)
     {
-        return $this->feedbackRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Portfolio\Storage\Repository\FeedbackRepository $feedbackRepository
-     */
-    public function setFeedbackRepository(FeedbackRepository $feedbackRepository)
-    {
-        $this->feedbackRepository = $feedbackRepository;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Application\Portfolio\Service\RightsService
-     */
-    public function getRightsService()
-    {
-        return $this->rightsService;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
-     */
-    public function setRightsService(RightsService $rightsService)
-    {
-        $this->rightsService = $rightsService;
+        return $this->getFeedbackRepository()->countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(
+            $publicationIdentifier,
+            $complexContentObjectIdentifier,
+            $userIdentifier);
     }
 
     /**
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
-     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Feedback
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return integer
      */
-    public function getFeedbackInstanceForPublication(Publication $publication)
+    public function countFeedbackForPublicationNodeAndUser(Publication $publication, ComplexContentObjectPathNode $node,
+        User $user)
     {
-        $feedback = new Feedback();
-        $feedback->set_publication_id($publication->getId());
-
-        return $feedback;
+        return $this->countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(
+            $publication->getId(),
+            $this->getComplexContentObjectIdentifierForNode($node),
+            $this->getFeedbackUserIdentifier($publication, $user, $node));
     }
 
     /**
@@ -95,26 +78,6 @@ class FeedbackService
     public function findFeedbackByIdentfier(int $identifier)
     {
         return $this->getFeedbackRepository()->findFeedbackByIdentfier($identifier);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
-     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
-     * @param integer $userIdentifier
-     * @param integer $count
-     * @param integer $offset
-     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Feedback[]
-     */
-    public function findFeedbackForPublicationNodeUserIdentifierCountAndOffset(Publication $publication,
-        ComplexContentObjectPathNode $node, User $user, int $count = null, int $offset = null)
-    {
-        return $this->findFeedbackForPublicationComplexContentObjectUserIdentifiersCountAndOffset(
-            $publication->getId(),
-            $this->getComplexContentObjectIdentifierForNode($node),
-            $this->getFeedbackUserIdentifier($publication, $user, $node),
-            $count,
-            $offset);
     }
 
     /**
@@ -141,32 +104,20 @@ class FeedbackService
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @return integer
+     * @param integer $userIdentifier
+     * @param integer $count
+     * @param integer $offset
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Feedback[]
      */
-    public function countFeedbackForPublicationNodeAndUser(Publication $publication, ComplexContentObjectPathNode $node,
-        User $user)
+    public function findFeedbackForPublicationNodeUserIdentifierCountAndOffset(Publication $publication,
+        ComplexContentObjectPathNode $node, User $user, int $count = null, int $offset = null)
     {
-        return $this->countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(
+        return $this->findFeedbackForPublicationComplexContentObjectUserIdentifiersCountAndOffset(
             $publication->getId(),
             $this->getComplexContentObjectIdentifierForNode($node),
-            $this->getFeedbackUserIdentifier($publication, $user, $node));
-    }
-
-    /**
-     *
-     * @param integer $publicationIdentifier
-     * @param integer $complexContentObjectIdentifier
-     * @param integer $userIdentifier
-     * @return integer
-     */
-    public function countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(int $publicationIdentifier,
-        int $complexContentObjectIdentifier = null, int $userIdentifier = null)
-    {
-        return $this->getFeedbackRepository()->countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(
-            $publicationIdentifier,
-            $complexContentObjectIdentifier,
-            $userIdentifier);
+            $this->getFeedbackUserIdentifier($publication, $user, $node),
+            $count,
+            $offset);
     }
 
     /**
@@ -177,6 +128,37 @@ class FeedbackService
     private function getComplexContentObjectIdentifierForNode(ComplexContentObjectPathNode $node)
     {
         return $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->getId() : null;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Feedback
+     */
+    public function getFeedbackInstanceForPublication(Publication $publication)
+    {
+        $feedback = new Feedback();
+        $feedback->set_publication_id($publication->getId());
+
+        return $feedback;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Portfolio\Storage\Repository\FeedbackRepository
+     */
+    public function getFeedbackRepository()
+    {
+        return $this->feedbackRepository;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Storage\Repository\FeedbackRepository $feedbackRepository
+     */
+    public function setFeedbackRepository(FeedbackRepository $feedbackRepository)
+    {
+        $this->feedbackRepository = $feedbackRepository;
     }
 
     /**
@@ -195,5 +177,23 @@ class FeedbackService
         }
 
         return null;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Portfolio\Service\RightsService
+     */
+    public function getRightsService()
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService)
+    {
+        $this->rightsService = $rightsService;
     }
 }
