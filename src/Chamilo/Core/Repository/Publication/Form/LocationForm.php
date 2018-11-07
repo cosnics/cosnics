@@ -1,13 +1,16 @@
 <?php
+
 namespace Chamilo\Core\Repository\Publication\Form;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
@@ -59,6 +62,7 @@ class LocationForm extends FormValidator
     /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     *
      * @throws NoObjectSelectedException
      * @throws NotAllowedException
      * @throws \Exception
@@ -69,14 +73,15 @@ class LocationForm extends FormValidator
         parent::__construct('page_locations', 'post', $action);
 
         $this->contentObjectIdentifiers = $this->getApplication()->getRequest()->get(
-            \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
+            \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID
+        );
 
         if (empty($this->contentObjectIdentifiers))
         {
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
 
-        if (! is_array($this->contentObjectIdentifiers))
+        if (!is_array($this->contentObjectIdentifiers))
         {
             $this->contentObjectIdentifiers = array($this->contentObjectIdentifiers);
         }
@@ -88,19 +93,19 @@ class LocationForm extends FormValidator
         foreach ($this->contentObjectIdentifiers as $id)
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
-                $id);
+                ContentObject::class_name(), $id
+            );
 
             // fail if no object exists
-            if (! $content_object instanceof ContentObject)
+            if (!$content_object instanceof ContentObject)
             {
                 throw new NoObjectSelectedException(Translation::get('ContentObject'));
             }
 
             // Check the USE-right
-            if (! RightsService::getInstance()->canUseContentObject(
-                $this->getApplication()->get_user(),
-                $content_object))
+            if (!RightsService::getInstance()->canUseContentObject(
+                $this->getApplication()->get_user(), $content_object
+            ))
             {
                 throw new NotAllowedException();
             }
@@ -139,7 +144,8 @@ class LocationForm extends FormValidator
     public function add_selected_content_objects()
     {
         $category_title = htmlentities(
-            Translation::get(count($this->content_objects) > 1 ? 'LocationSelectionsInfo' : 'LocationSelectionInfo'));
+            Translation::get(count($this->content_objects) > 1 ? 'LocationSelectionsInfo' : 'LocationSelectionInfo')
+        );
 
         $this->addElement('category', $category_title, 'publication-location');
 
@@ -153,25 +159,18 @@ class LocationForm extends FormValidator
         }
 
         $type_image = Theme::getInstance()->getCommonImage(
-            'Action/Category',
-            'png',
-            Translation::get('Type'),
-            null,
-            ToolbarItem::DISPLAY_ICON);
+            'Action/Category', 'png', Translation::get('Type'), null, ToolbarItem::DISPLAY_ICON
+        );
 
         $header = array();
         $header[] = new StaticTableColumn('category', $type_image, 'cell-stat-x2');
         $header[] = new StaticTableColumn(
-            Translation::get('Title', null, \Chamilo\Core\Repository\Manager::context()));
+            Translation::get('Title', null, \Chamilo\Core\Repository\Manager::context())
+        );
 
         $table = new SortableTableFromArray(
-            $table_data,
-            $header,
-            array(),
-            1,
-            count($table_data),
-            SORT_ASC,
-            'selected-content-objects');
+            $table_data, $header, array(), 1, count($table_data), SORT_ASC, 'selected-content-objects'
+        );
         $this->addElement('html', $table->toHtml());
 
         $this->addElement('category');
@@ -189,15 +188,13 @@ class LocationForm extends FormValidator
 
         $total_locations = 0;
 
-        foreach ($registrations as $registration)
+        $contextLocations = $this->getPublicationAggregator()->getContentObjectPublicationLocations(
+            $this->content_objects[0], $this->getApplication()->getUser()
+        );
+
+        foreach ($contextLocations as $locations)
         {
-            $manager_class = $registration[Registration::PROPERTY_CONTEXT] . '\Publication\Manager';
-
-            $locations = $manager_class::get_content_object_publication_locations(
-                $this->content_objects[0],
-                $this->getApplication()->get_user());
-
-            if (! is_null($locations) && $locations->size() > 0)
+            if (!is_null($locations) && $locations->size() > 0)
             {
                 $total_locations += $locations->size();
                 $this->add_locations($locations);
@@ -222,25 +219,22 @@ class LocationForm extends FormValidator
             $this->addElement('html', '<br /><br />');
 
             $this->addElement(
-                'style_submit_button',
-                'publish',
-                Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
-                null,
-                null,
-                'ok-sign');
+                'style_submit_button', 'publish', Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), null,
+                null, 'ok-sign'
+            );
         }
         else
         {
             $this->addElement(
-                'html',
-                '<div class="warning-message">' . Translation::get('NoLocationsFound') . '</div>');
+                'html', '<div class="warning-message">' . Translation::get('NoLocationsFound') . '</div>'
+            );
         }
 
         $this->addElement(
-            'html',
-            '<script type="text/javascript" src="' .
-                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Publication', true) . 'Visibility.js' .
-                 '"></script>');
+            'html', '<script type="text/javascript" src="' .
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Publication', true) . 'Visibility.js' .
+            '"></script>'
+        );
     }
 
     /**
@@ -253,9 +247,8 @@ class LocationForm extends FormValidator
         $this->applications[] = $locations->get_context();
 
         $this->addElement(
-            'category',
-            Translation::get('TypeName', null, $locations->get_application()),
-            'publication-location');
+            'category', Translation::get('TypeName', null, $locations->get_application()), 'publication-location'
+        );
 
         $renderer_class = $locations->get_context() . '\LocationSelector';
         $renderer = new $renderer_class($this, $locations);
@@ -265,5 +258,15 @@ class LocationForm extends FormValidator
         $manager_class::add_publication_attributes_elements($this);
 
         $this->addElement('category');
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface
+     */
+    protected function getPublicationAggregator()
+    {
+        $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $dependencyInjectionContainer->get(PublicationAggregator::class);
     }
 }

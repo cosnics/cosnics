@@ -17,8 +17,6 @@ use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
@@ -177,13 +175,12 @@ class PublicationAggregator implements PublicationAggregatorInterface
                 new Location(
                     __NAMESPACE__,
                     $this->getTranslator()->trans('TypeName', [], \Chamilo\Application\Portfolio\Manager::context()),
-                    $user->getId(),
-                    $userPublication->getId()
+                    $user->getId(), $userPublication->getId()
                 )
             );
         }
 
-        return $locations;
+        return array($locations);
     }
 
     /**
@@ -202,8 +199,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
     )
     {
         $publicationRecords = $this->getPublicationService()->findPublicationRecordsForTypeAndIdentifier(
-            $objectIdentifier, $type, $condition, $count,
-            $offset, $orderProperties
+            $objectIdentifier, $type, $condition, $count, $offset, $orderProperties
         );
 
         $publicationAttributes = array();
@@ -244,8 +240,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
     /**
      * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
      */
-    public function setPublicationService(PublicationService $publicationService
-    ): void
+    public function setPublicationService(PublicationService $publicationService): void
     {
         $this->publicationService = $publicationService;
     }
@@ -287,8 +282,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      * @return \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode
      * @throws \Exception
      */
-    public function publishContentObject(ContentObject $contentObject, LocationSupport $location, $options = array()
-    )
+    public function publishContentObject(ContentObject $contentObject, LocationSupport $location, $options = array())
     {
         $publication =
             $this->getPublicationService()->findPublicationByIdentifier($location->getPublicationIdentifier());
@@ -351,12 +345,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
             else
             {
                 Event::trigger(
-                    'Activity',
-                    \Chamilo\Core\Repository\Manager::context(),
-                    array(
+                    'Activity', \Chamilo\Core\Repository\Manager::context(), array(
                         Activity::PROPERTY_TYPE => Activity::ACTIVITY_ADD_ITEM,
-                        Activity::PROPERTY_USER_ID => $location->getUserIdentifier(),
-                        Activity::PROPERTY_DATE => time(),
+                        Activity::PROPERTY_USER_ID => $location->getUserIdentifier(), Activity::PROPERTY_DATE => time(),
                         Activity::PROPERTY_CONTENT_OBJECT_ID => $portfolioContentObject->getId(),
                         Activity::PROPERTY_CONTENT => $portfolioContentObject->get_title() . ' > ' .
                             $contentObject->get_title()

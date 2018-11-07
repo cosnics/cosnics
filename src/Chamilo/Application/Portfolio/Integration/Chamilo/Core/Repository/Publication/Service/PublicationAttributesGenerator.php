@@ -75,6 +75,7 @@ class PublicationAttributesGenerator
         $attributes->set_url($redirect->getUrl());
         $attributes->set_title($record[ContentObject::PROPERTY_TITLE]);
         $attributes->set_content_object_id($record[Publication::PROPERTY_CONTENT_OBJECT_ID]);
+        $attributes->setModifierServiceIdentifier(PublicationModifier::class);
 
         return $attributes;
     }

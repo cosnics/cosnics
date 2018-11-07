@@ -215,6 +215,8 @@ class AssignmentPublicationService
         $attributes->set_url(null);
         $attributes->set_title($contentObject->get_title());
         $attributes->set_content_object_id($entryAttachment->getAttachmentId());
+        // TODO: These should be split off to their own service and the property set accordingly
+        $attributes->setModifierServiceIdentifier(PublicationModifier::class);
 
         return $attributes;
     }

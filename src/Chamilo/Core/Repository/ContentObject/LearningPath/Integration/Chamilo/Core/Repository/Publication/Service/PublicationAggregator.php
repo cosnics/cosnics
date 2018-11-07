@@ -1,58 +1,20 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Manager;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
- * Manages the communication between the repository and the publications of content objects. This service is used
- * to determine whether or not a content object can be deleted, can be edited, ...
+ * @package Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service
  *
- * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationAggregator implements PublicationAggregatorInterface
 {
-    /**
-     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
-     */
-    protected $assignmentService;
-
-    /**
-     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
-     */
-    protected $learningPathAssignmentService;
-
-    /**
-     * @var UserService
-     */
-    protected $userService;
-
-    /**
-     * PublicationAggregator constructor.
-     *
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService $learningPathAssignmentService
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     */
-    public function __construct(
-        AssignmentService $assignmentService, LearningPathAssignmentService $learningPathAssignmentService,
-        UserService $userService
-    )
-    {
-        $this->assignmentService = $assignmentService;
-        $this->learningPathAssignmentService = $learningPathAssignmentService;
-        $this->userService = $userService;
-    }
-
     /**
      * Returns whether or not a content object can be unlinked
      *
@@ -62,21 +24,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function canContentObjectBeUnlinked(ContentObject $contentObject)
     {
-        $user = $this->userService->findUserByIdentifier($contentObject->get_owner_id());
-        $isTeacher = ($user instanceof User && $user->get_status() == User::STATUS_TEACHER);
-
-        if ($this->assignmentService->isContentObjectUsedAsEntry($contentObject))
-        {
-            return ($isTeacher ? !$this->assignmentService->isContentObjectOwnerSameAsSubmitter($contentObject) :
-                false);
-        }
-
-        if ($this->learningPathAssignmentService->isContentObjectUsedAsEntry($contentObject))
-        {
-            return ($isTeacher ?
-                !$this->learningPathAssignmentService->isContentObjectOwnerSameAsSubmitter($contentObject) : false);
-        }
-
         return true;
     }
 
@@ -87,7 +34,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
      *
      * @return integer
      */
-    public function countPublicationAttributes(int $type, int $objectIdentifier, Condition $condition = null)
+    public function countPublicationAttributes(
+        int $type, int $objectIdentifier, Condition $condition = null
+    )
     {
         return Manager::count_publication_attributes($type, $objectIdentifier, $condition);
     }
@@ -151,7 +100,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
     {
         return Manager::is_content_object_editable($contentObjectIdentifier);
     }
-
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject

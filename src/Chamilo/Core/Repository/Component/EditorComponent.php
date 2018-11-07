@@ -76,9 +76,7 @@ class EditorComponent extends Manager implements DelegateComponent
                 $this->redirect(Translation::get('EditNotAllowed'), true, $parameters);
             }
 
-            if (!\Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::is_content_object_editable(
-                $object->get_id()
-            ))
+            if (!$this->getPublicationAggregator()->canContentObjectBeEdited($object->get_id()))
             {
                 $parameters = array();
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;

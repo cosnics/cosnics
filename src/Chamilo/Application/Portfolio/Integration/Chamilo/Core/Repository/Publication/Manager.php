@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication;
 
+use Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationModifier;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Application\Portfolio\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\ComplexPortfolio;
@@ -130,6 +131,7 @@ class Manager implements PublicationInterface
         $attributes->set_url($url);
         $attributes->set_title($record[ContentObject::PROPERTY_TITLE]);
         $attributes->set_content_object_id($record[Publication::PROPERTY_CONTENT_OBJECT_ID]);
+        $attributes->setModifierServiceIdentifier(PublicationModifier::class);
 
         return $attributes;
     }

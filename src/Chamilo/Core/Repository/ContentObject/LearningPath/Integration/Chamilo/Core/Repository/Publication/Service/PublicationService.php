@@ -347,6 +347,7 @@ class PublicationService
         $attributes->set_url(null);
         $attributes->set_title($contentObject->get_title());
         $attributes->set_content_object_id($treeNodeData->getContentObjectId());
+        $attributes->setModifierServiceIdentifier(PublicationModifier::class);
 
         return $attributes;
     }

@@ -41,8 +41,8 @@ class Manager implements PublicationInterface
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_attributes()
      */
     public static function get_content_object_publication_attributes(
-        $object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
-        $offset = null, $order_properties = null
+        $object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, $offset = null,
+        $order_properties = null
     )
     {
         if ($type == self::ATTRIBUTES_TYPE_OBJECT)
@@ -152,15 +152,14 @@ class Manager implements PublicationInterface
     {
         $locations = new Locations(__NAMESPACE__);
 
-        return $locations;
+        return array($locations);
     }
 
     /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::publish_content_object()
      */
     public static function publish_content_object(
-        ContentObject $content_object, LocationSupport $location,
-        $options = array()
+        ContentObject $content_object, LocationSupport $location, $options = array()
     )
     {
     }

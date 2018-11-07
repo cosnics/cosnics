@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication;
 
+use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationModifier;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataManager;
 use Chamilo\Configuration\Configuration;
@@ -208,6 +209,7 @@ class Manager implements PublicationInterface
         
         $attributes->set_title($record[ContentObject::PROPERTY_TITLE]);
         $attributes->set_content_object_id($record[Publication::PROPERTY_CONTENT_OBJECT_ID]);
+        $attributes->setModifierServiceIdentifier(PublicationModifier::class);
         
         return $attributes;
     }
@@ -289,7 +291,7 @@ class Manager implements PublicationInterface
                 new Location($applicationContext, Translation::get('TypeName', null, $applicationContext)));
         }
         
-        return $locations;
+        return array($locations);
     }
 
     public static function get_allowed_content_object_types()

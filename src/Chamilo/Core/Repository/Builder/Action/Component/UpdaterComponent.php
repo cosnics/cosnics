@@ -1,8 +1,10 @@
 <?php
+
 namespace Chamilo\Core\Repository\Builder\Action\Component;
 
 use Chamilo\Core\Repository\Builder\Action\Manager;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
@@ -32,38 +34,39 @@ class UpdaterComponent extends Manager implements DelegateComponent
         $trail = BreadcrumbTrail::getInstance();
 
         $complex_content_object_item_id = Request::get(
-            \Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+            \Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
+        );
         $parent_complex_content_object_item = Request::get(
-            \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+            \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID
+        );
 
         $parameters = array(
             \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $parent_complex_content_object_item,
-            \Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id);
+            \Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id
+        );
 
         $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(),
-            $complex_content_object_item_id);
+            ComplexContentObjectItem::class_name(), $complex_content_object_item_id
+        );
         $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(),
-            $complex_content_object_item->get_ref());
+            ContentObject::class_name(), $complex_content_object_item->get_ref()
+        );
 
-        if (! \Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::is_content_object_editable(
-            $content_object->get_id()))
+        if (!$this->getPublicationAggregator()->canContentObjectBeEdited($content_object->get_id()))
         {
             $parameters[\Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
             $this->redirect(
-                Translation::get('UpdateNotAllowed'),
-                false,
-                array_merge(
-                    $parameters,
-                    array(
-                        \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE)));
+                Translation::get('UpdateNotAllowed'), false, array_merge(
+                    $parameters, array(
+                        \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE
+                    )
+                )
+            );
         }
 
         $complex_content_object_item_form = \Chamilo\Core\Repository\Form\ComplexContentObjectItemForm::factory(
-            $content_object->context(),
-            $complex_content_object_item,
-            $this->get_url());
+            $content_object->context(), $complex_content_object_item, $this->get_url()
+        );
 
         if ($complex_content_object_item_form instanceof \Chamilo\Core\Repository\Form\ComplexContentObjectItemForm)
         {
@@ -72,14 +75,9 @@ class UpdaterComponent extends Manager implements DelegateComponent
         }
 
         $content_object_form = ContentObjectForm::factory(
-            ContentObjectForm::TYPE_EDIT,
-            new PersonalWorkspace($this->get_user()),
-            $content_object,
-            'edit',
-            'post',
-            $this->get_url($parameters),
-            null,
-            $elements);
+            ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit', 'post',
+            $this->get_url($parameters), null, $elements
+        );
         $content_object_form->setDefaults($defaults);
 
         if ($content_object_form->validate())
@@ -93,13 +91,14 @@ class UpdaterComponent extends Manager implements DelegateComponent
                 $complex_content_object_item->set_ref($new_id);
 
                 $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-                    ComplexContentObjectItem::class_name(),
-                    new DataClassRetrievesParameters(
+                    ComplexContentObjectItem::class_name(), new DataClassRetrievesParameters(
                         new EqualityCondition(
                             new PropertyConditionVariable(
-                                ComplexContentObjectItem::class_name(),
-                                ComplexContentObjectItem::PROPERTY_PARENT),
-                            new StaticConditionVariable($old_id))));
+                                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                            ), new StaticConditionVariable($old_id)
+                        )
+                    )
+                );
                 while ($child = $children->next_result())
                 {
                     $child->set_parent($new_id);
@@ -120,14 +119,13 @@ class UpdaterComponent extends Manager implements DelegateComponent
 
             $this->redirect(
                 Translation::get(
-                    'ObjectUpdated',
-                    array('OBJECT' => Translation::get('ContentObject')),
-                    Utilities::COMMON_LIBRARIES),
-                false,
-                array_merge(
-                    $parameters,
-                    array(
-                        \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE)));
+                    'ObjectUpdated', array('OBJECT' => Translation::get('ContentObject')), Utilities::COMMON_LIBRARIES
+                ), false, array_merge(
+                    $parameters, array(
+                        \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE
+                    )
+                )
+            );
         }
         else
         {
@@ -136,25 +134,22 @@ class UpdaterComponent extends Manager implements DelegateComponent
 
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
-                    null,
-                    Translation::get(
-                        'EditContentObject',
-                        array(
-                            'CONTENT_OBJECT' => $content_object->get_title(),
-                            'ICON' => Theme::getInstance()->getImage(
-                                'Logo/16',
-                                'png',
-                                Translation::get(
-                                    'TypeName',
-                                    null,
-                                    ClassnameUtilities::getInstance()->getNamespaceFromClassname(
-                                        $content_object->get_type())),
-                                null,
-                                ToolbarItem::DISPLAY_ICON,
-                                false,
-                                ClassnameUtilities::getInstance()->getNamespaceFromClassname(
-                                    $content_object->get_type()))),
-                        \Chamilo\Core\Repository\Manager::context())));
+                    null, Translation::get(
+                    'EditContentObject', array(
+                    'CONTENT_OBJECT' => $content_object->get_title(), 'ICON' => Theme::getInstance()->getImage(
+                        'Logo/16', 'png', Translation::get(
+                        'TypeName', null, ClassnameUtilities::getInstance()->getNamespaceFromClassname(
+                        $content_object->get_type()
+                    )
+                    ), null, ToolbarItem::DISPLAY_ICON, false,
+                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(
+                            $content_object->get_type()
+                        )
+                    )
+                ), \Chamilo\Core\Repository\Manager::context()
+                )
+                )
+            );
 
             $html = array();
 
@@ -164,5 +159,13 @@ class UpdaterComponent extends Manager implements DelegateComponent
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Service\PublicationAggregator
+     */
+    protected function getPublicationAggregator()
+    {
+        return $this->getService(PublicationAggregator::class);
     }
 }

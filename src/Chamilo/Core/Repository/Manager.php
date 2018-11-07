@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Filter\Renderer\HtmlFilterRenderer;
 use Chamilo\Core\Repository\Menu\ObjectTypeMenu;
 use Chamilo\Core\Repository\Menu\RepositoryCategoryTreeMenu;
 use Chamilo\Core\Repository\Menu\RepositoryMenu;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
@@ -839,7 +840,7 @@ abstract class Manager extends Application
      */
     public function getPublicationAggregator()
     {
-        return $this->getService('chamilo.core.repository.publication.service.publication_aggregator');
+        return $this->getService(PublicationAggregator::class);
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Storage;
 
+use Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationModifier;
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Rights;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
@@ -361,6 +362,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $attributes->set_url($url);
         $attributes->set_publication_object_id($record[Publication::PROPERTY_CONTENT_OBJECT_ID]);
+        $attributes->setModifierServiceIdentifier(PublicationModifier::class);
 
         return $attributes;
     }
