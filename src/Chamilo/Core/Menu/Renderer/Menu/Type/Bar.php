@@ -41,8 +41,8 @@ class Bar extends Renderer
         $html[] = '</button>';
         $html[] = '<ul class="nav" style="float: right;">';
 
-        $item = new NotificationWidgetItem($this, null);
-        $html[] = $item->render();
+//        $item = new NotificationWidgetItem($this, null);
+//        $html[] = $item->render();
 
         $html[] = '</ul>';
 
@@ -52,7 +52,7 @@ class Bar extends Renderer
 
         $html[] = '<div class="collapse navbar-collapse" id="menu-navbar-collapse">';
         $html[] = '<ul class="nav navbar-nav navbar-right">';
-        $html[] = $item->render();
+//        $html[] = $item->render();
         
         return implode(PHP_EOL, $html);
     }

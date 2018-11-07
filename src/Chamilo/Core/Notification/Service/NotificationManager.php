@@ -216,7 +216,9 @@ class NotificationManager
 
         foreach($userNotifications as $userNotification)
         {
-            $notifications[] = $userNotification->getNotification();
+            $notification = $userNotification->getNotification();
+            $notification->setUsers([$userNotification]);
+            $notifications[] = $notification;
         }
 
         return $notifications;

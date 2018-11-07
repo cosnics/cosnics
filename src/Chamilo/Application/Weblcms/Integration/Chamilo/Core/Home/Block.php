@@ -55,6 +55,9 @@ class Block extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
         return $tracker->get_date();
     }
 
+    /**
+     * @return \Chamilo\Core\Home\Renderer\User|\Chamilo\Core\User\Storage\DataClass\User
+     */
     public function get_user()
     {
         return $this->getUser();

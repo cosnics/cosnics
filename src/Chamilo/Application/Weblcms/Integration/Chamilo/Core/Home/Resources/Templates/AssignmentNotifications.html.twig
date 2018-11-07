@@ -1,0 +1,19 @@
+{{ getJavascript('VueCommon.js', 'Hogent\\Libraries') }}
+
+{% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
+
+<div id="notifications{{ BLOCK_ID }}" class="notifications-block">
+<notifications-list scroll-detector-element="#notifications{{ BLOCK_ID }}"
+    retrieve-notifications-url="{{ RETRIEVE_NOTIFICATIONS_URL }}"
+    view-notification-url="{{ VIEW_NOTIFICATION_URL }}">
+</notifications-list>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        new Vue({
+            el: '#notifications{{ BLOCK_ID }}',
+            data: {}
+        })
+    });
+</script>

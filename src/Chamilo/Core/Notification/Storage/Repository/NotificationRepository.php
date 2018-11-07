@@ -129,7 +129,7 @@ class NotificationRepository extends EntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'UPDATE ' . UserNotification::class .
-                ' UN SET UN.read = true WHERE UN.userId = :userId AND UN.notification = :notification AND UN.read = false'
+                ' UN SET UN.read = true, UN.viewed = true WHERE UN.userId = :userId AND UN.notification = :notification AND UN.read = false'
             )
             ->setParameter('userId', $user->getId())
             ->setParameter('notification', $notification);
@@ -147,7 +147,7 @@ class NotificationRepository extends EntityRepository
     public function countUserNotificationsByNotificationAndUser(Notification $notification, User $user)
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder()
-            ->select('count(user.id')
+            ->select('count(user.id)')
             ->from(UserNotification::class, 'user')
             ->where('user.notification = :notification')
             ->andWhere('user.userId = :userId')

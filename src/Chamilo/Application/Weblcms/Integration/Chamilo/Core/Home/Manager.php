@@ -7,8 +7,9 @@ class Manager
     public function getBlockTypes()
     {
         return array(
-            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\AssignmentSubmissions', 
-            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\CourseList', 
+            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\AssignmentNotifications',
+            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\AssignmentSubmissions',
+            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\CourseList',
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\CourseMenu', 
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\EndingAssignments', 
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\FilteredCourseList', 

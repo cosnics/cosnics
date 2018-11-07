@@ -33,12 +33,4 @@ class GetNotificationsComponent extends Manager
     {
         return $this->getBridgeManager()->getBridgeByInterface(NotificationServiceBridgeInterface::class);
     }
-
-    /**
-     * @return NotificationTranslator
-     */
-    protected function getNotificationTranslator()
-    {
-        return $this->getService(NotificationTranslator::class);
-    }
 }

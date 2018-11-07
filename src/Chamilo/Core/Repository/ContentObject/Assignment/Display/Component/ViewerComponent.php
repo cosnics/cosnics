@@ -6,7 +6,9 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -97,6 +99,16 @@ class ViewerComponent extends Manager implements TableSupport
 
         $notificationsCount = $this->getNotificationServiceBridge()->countUnseenNotificationsForUser($this->getUser());
 
+        $redirect = new Redirect(
+            [
+                Application::PARAM_CONTEXT => \Chamilo\Core\Notification\Manager::context(),
+                Application::PARAM_ACTION => \Chamilo\Core\Notification\Manager::ACTION_VIEW_NOTIFICATION,
+                \Chamilo\Core\Notification\Manager::PROPERTY_NOTIFICATION_ID => '__NOTIFICATION_ID__'
+            ]
+        );
+
+        $viewNotificationUrl = $redirect->getUrl();
+
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
@@ -112,7 +124,8 @@ class ViewerComponent extends Manager implements TableSupport
             'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
             'ADMINISTRATOR_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email']),
             'NOTIFICATIONS_URL' => $notificationsUrl,
-            'NOTIFICATIONS_COUNT' => $notificationsCount
+            'NOTIFICATIONS_COUNT' => $notificationsCount,
+            'VIEW_NOTIFICATION_URL' => $viewNotificationUrl
         ];
     }
 

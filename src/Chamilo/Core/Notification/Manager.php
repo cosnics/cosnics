@@ -15,6 +15,7 @@ abstract class Manager extends Application
 {
     const ACTION_VIEW = 'Viewer';
     const ACTION_MANAGE_FILTERS = 'FilterManager';
+    const ACTION_VIEW_NOTIFICATION = 'NotificationViewer';
 
     const DEFAULT_ACTION = self::ACTION_VIEW;
 
