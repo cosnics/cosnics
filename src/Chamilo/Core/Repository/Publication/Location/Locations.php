@@ -4,11 +4,9 @@ namespace Chamilo\Core\Repository\Publication\Location;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
+ * @package Chamilo\Core\Repository\Publication\Location
  *
- * @package core\repository\publication
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Locations
 {

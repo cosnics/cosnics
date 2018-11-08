@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\Publication\Service;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -23,7 +24,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
     protected $publicationAggregators;
 
     /**
-     * PublicationAggregator constructor.
+     * Constructor
      */
     public function __construct()
     {
@@ -38,6 +39,21 @@ class PublicationAggregator implements PublicationAggregatorInterface
     )
     {
         $this->publicationAggregators[] = $publicationAggregator;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function addPublicationTargetsToFormForContentObjectAndUser(
+        FormValidator $form, ContentObject $contentObject, User $user
+    )
+    {
+        foreach ($this->publicationAggregators as $publicationAggregator)
+        {
+            $publicationAggregator->addPublicationTargetsToFormForContentObjectAndUser($form, $contentObject, $user);
+        }
     }
 
     /**

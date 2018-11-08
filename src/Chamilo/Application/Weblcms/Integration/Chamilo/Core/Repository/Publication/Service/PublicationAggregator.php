@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -54,6 +55,26 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
+     * @param integer[] $contentObjectIdentifiers
+     *
+     * @return boolean
+     */
+    public function areContentObjectsPublished(array $contentObjectIdentifiers)
+    {
+        return Manager::areContentObjectsPublished($contentObjectIdentifiers);
+    }
+
+    /**
+     * @param integer $contentObjectIdentifier
+     *
+     * @return boolean
+     */
+    public function canContentObjectBeEdited(int $contentObjectIdentifier)
+    {
+        return Manager::canContentObjectBeEdited($contentObjectIdentifier);
+    }
+
+    /**
      * Returns whether or not a content object can be unlinked
      *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
@@ -93,6 +114,27 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return boolean
+     */
+    public function deleteContentObjectPublications(ContentObject $contentObject)
+    {
+        return Manager::deleteContentObjectPublications($contentObject->getId());
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Core\Repository\Publication\Location\Locations[]
+     */
+    public function getContentObjectPublicationLocations(ContentObject $contentObject, User $user)
+    {
+        return Manager::getContentObjectPublicationLocations($contentObject, $user);
+    }
+
+    /**
      * @param integer $type
      * @param integer $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
@@ -113,16 +155,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return boolean
-     */
-    public function deleteContentObjectPublications(ContentObject $contentObject)
-    {
-        return Manager::deleteContentObjectPublications($contentObject->getId());
-    }
-
-    /**
      * @param integer $contentObjectIdentifier
      *
      * @return boolean
@@ -133,34 +165,14 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param integer[] $contentObjectIdentifiers
-     *
-     * @return boolean
-     */
-    public function areContentObjectsPublished(array $contentObjectIdentifiers)
-    {
-        return Manager::areContentObjectsPublished($contentObjectIdentifiers);
-    }
-
-    /**
-     * @param integer $contentObjectIdentifier
-     *
-     * @return boolean
-     */
-    public function canContentObjectBeEdited(int $contentObjectIdentifier)
-    {
-        return Manager::canContentObjectBeEdited($contentObjectIdentifier);
-    }
-
-
-    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Core\Repository\Publication\Location\Locations[]
      */
-    public function getContentObjectPublicationLocations(ContentObject $contentObject, User $user)
+    public function addPublicationTargetsToFormForContentObjectAndUser(
+        FormValidator $form, ContentObject $contentObject, User $user
+    )
     {
-        return Manager::getContentObjectPublicationLocations($contentObject, $user);
+        // TODO: Implement addPublicationTargetsToFormForContentObjectAndUser() method.
     }
 }

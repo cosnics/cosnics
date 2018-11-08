@@ -1,15 +1,16 @@
 <?php
 namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Location;
 use Chamilo\Application\Portfolio\Service\PublicationService;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
-use Chamilo\Core\Repository\Publication\Location\Locations;
+use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
+use Chamilo\Core\Repository\Publication\Service\PublicationTargetService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
@@ -37,20 +38,51 @@ class PublicationAggregator implements PublicationAggregatorInterface
     private $translator;
 
     /**
+     * @var \Chamilo\Core\Repository\Publication\Service\PublicationTargetService
+     */
+    private $publicationTargetService;
+
+    /**
      * PublicationAggregator constructor.
      *
      * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
+     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
      */
     public function __construct(
         PublicationService $publicationService, Translator $translator,
-        PublicationAttributesGenerator $publicationAttributesGenerator
+        PublicationAttributesGenerator $publicationAttributesGenerator,
+        PublicationTargetService $publicationTargetService
     )
     {
         $this->publicationService = $publicationService;
         $this->translator = $translator;
         $this->publicationAttributesGenerator = $publicationAttributesGenerator;
+        $this->publicationTargetService = $publicationTargetService;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function addPublicationTargetsToFormForContentObjectAndUser(
+        FormValidator $form, ContentObject $contentObject, User $user
+    )
+    {
+        $userPublication = $this->getPublicationService()->findPublicationForUser($user);
+
+        $allowedTypes = Portfolio::get_allowed_types();
+        $type = $contentObject->get_type();
+
+        if (in_array($type, $allowedTypes) && $userPublication instanceof Publication)
+        {
+            $location = new PublicationTarget(
+                array(PublicationModifier::class, $user->getId(), $userPublication->getId()),
+                $this->getTranslator()->trans('TypeName', [], 'Chamilo\Application\Calendar\Extension\Personal')
+            );
+        }
     }
 
     /**
@@ -116,35 +148,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Core\Repository\Publication\Location\Locations
-     */
-    public function getContentObjectPublicationLocations(ContentObject $contentObject, User $user)
-    {
-        $locations = new Locations('Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication');
-        $allowedTypes = Portfolio::get_allowed_types();
-
-        $userPublication = $this->getPublicationService()->findPublicationForUser($user);
-
-        $type = $contentObject->get_type();
-
-        if (in_array($type, $allowedTypes) && $userPublication instanceof Publication)
-        {
-            $locations->add_location(
-                new Location(
-                    'Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication',
-                    $this->getTranslator()->trans('TypeName', [], \Chamilo\Application\Portfolio\Manager::context()),
-                    $user->getId(), $userPublication->getId()
-                )
-            );
-        }
-
-        return array($locations);
-    }
-
-    /**
      * @param integer $type
      * @param integer $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
@@ -204,6 +207,22 @@ class PublicationAggregator implements PublicationAggregatorInterface
     public function setPublicationService(PublicationService $publicationService): void
     {
         $this->publicationService = $publicationService;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Service\PublicationTargetService
+     */
+    public function getPublicationTargetService(): PublicationTargetService
+    {
+        return $this->publicationTargetService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
+     */
+    public function setPublicationTargetService(PublicationTargetService $publicationTargetService): void
+    {
+        $this->publicationTargetService = $publicationTargetService;
     }
 
     /**

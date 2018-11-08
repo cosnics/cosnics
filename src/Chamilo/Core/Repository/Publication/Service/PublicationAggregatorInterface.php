@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -19,6 +20,15 @@ interface PublicationAggregatorInterface
 {
     const ATTRIBUTES_TYPE_OBJECT = 2;
     const ATTRIBUTES_TYPE_USER = 1;
+
+    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function addPublicationTargetsToFormForContentObjectAndUser(
+        FormValidator $form, ContentObject $contentObject, User $user
+    );
 
     /**
      * @param integer[] $contentObjectIdentifiers
@@ -59,14 +69,6 @@ interface PublicationAggregatorInterface
      * @return boolean
      */
     public function deleteContentObjectPublications(ContentObject $contentObject);
-
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Core\Repository\Publication\Location\Locations[]
-     */
-    public function getContentObjectPublicationLocations(ContentObject $contentObject, User $user);
 
     /**
      * @param integer $type

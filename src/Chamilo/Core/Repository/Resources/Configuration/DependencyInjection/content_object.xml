@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container
-        xmlns="http://symfony.com/schema/dic/services"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://symfony.com/schema/dic/services"
         xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service
@@ -73,8 +73,26 @@
                     method="buildResourceFixerDirector"/>
         </service>
 
+        <service id="Chamilo\Core\Repository\Publication\Service\PublicationAggregator" autowire="true"/>
+
         <service
-                id="Chamilo\Core\Repository\Publication\Service\PublicationAggregator" autowire="true"/>
+                id="Chamilo\Core\Repository\Publication\Factory\PublicationTargetRepositoryCacheProviderFactory"
+                class="Chamilo\Core\Repository\Publication\Factory\PublicationTargetRepositoryCacheProviderFactory">
+        </service>
+
+        <service id="Chamilo\Core\Repository\Publication\Storage\PublicationTargetRepositoryCache">
+            <factory
+                    service="Chamilo\Core\Repository\Publication\Factory\PublicationTargetRepositoryCacheProviderFactory"
+                    method="getPublicationTargetRepositoryCacheProvider"/>
+        </service>
+
+        <service id="Chamilo\Core\Repository\Publication\Storage\Repository\PublicationTargetRepository">
+            <argument
+                    type="service"
+                    id="Chamilo\Core\Repository\Publication\Storage\PublicationTargetRepositoryCache"/>
+        </service>
+
+        <service id="Chamilo\Core\Repository\Publication\Service\PublicationTargetService" autowire="true"/>
 
     </services>
 </container>

@@ -182,53 +182,55 @@ class LocationForm extends FormValidator
 
         $this->add_selected_content_objects();
 
-        $registrations = Configuration::getInstance()->getIntegrationRegistrations('Chamilo\Core\Repository');
-
         $this->applications = array();
+
+        $this->getPublicationAggregator()->addPublicationTargetsToFormForContentObjectAndUser(
+            $this, $this->content_objects[0], $this->getApplication()->getUser()
+        );
 
         $total_locations = 0;
 
-        $contextLocations = $this->getPublicationAggregator()->getContentObjectPublicationLocations(
-            $this->content_objects[0], $this->getApplication()->getUser()
+        //        $contextLocations = $this->getPublicationAggregator()->getContentObjectPublicationLocations(
+        //            $this->content_objects[0], $this->getApplication()->getUser()
+        //        );
+        //
+        //        foreach ($contextLocations as $locations)
+        //        {
+        //            if (!is_null($locations) && $locations->size() > 0)
+        //            {
+        //                $total_locations += $locations->size();
+        //                $this->add_locations($locations);
+        //            }
+        //        }
+
+        //        if ($total_locations > 0)
+        //        {
+        $html = array();
+        $html[] = '<div style="padding: 5px 0px;">';
+        $html[] = '<a href="#" class="select-all-checkboxes">';
+        $html[] = Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES);
+        $html[] = '</a>';
+        $html[] = ' - ';
+        $html[] = '<a href="#" class="select-no-checkboxes">';
+        $html[] = Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES);
+        $html[] = '</a>';
+        $html[] = '</div>';
+
+        $this->addElement('html', implode('', $html));
+
+        $this->addElement('html', '<br /><br />');
+
+        $this->addElement(
+            'style_submit_button', 'publish', Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), null,
+            null, 'ok-sign'
         );
-
-        foreach ($contextLocations as $locations)
-        {
-            if (!is_null($locations) && $locations->size() > 0)
-            {
-                $total_locations += $locations->size();
-                $this->add_locations($locations);
-            }
-        }
-
-        if ($total_locations > 0)
-        {
-            $html = array();
-            $html[] = '<div style="padding: 5px 0px;">';
-            $html[] = '<a href="#" class="select-all-checkboxes">';
-            $html[] = Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES);
-            $html[] = '</a>';
-            $html[] = ' - ';
-            $html[] = '<a href="#" class="select-no-checkboxes">';
-            $html[] = Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES);
-            $html[] = '</a>';
-            $html[] = '</div>';
-
-            $this->addElement('html', implode('', $html));
-
-            $this->addElement('html', '<br /><br />');
-
-            $this->addElement(
-                'style_submit_button', 'publish', Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), null,
-                null, 'ok-sign'
-            );
-        }
-        else
-        {
-            $this->addElement(
-                'html', '<div class="warning-message">' . Translation::get('NoLocationsFound') . '</div>'
-            );
-        }
+        //        }
+        //        else
+        //        {
+        //            $this->addElement(
+        //                'html', '<div class="warning-message">' . Translation::get('NoLocationsFound') . '</div>'
+        //            );
+        //        }
 
         $this->addElement(
             'html', '<script type="text/javascript" src="' .
