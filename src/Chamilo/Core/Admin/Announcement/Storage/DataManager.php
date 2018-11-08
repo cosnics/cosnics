@@ -202,7 +202,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return new Joins($joins);
     }
 
-    public static function get_content_object_publication_attributes($object_id, $type = null, $condition = null, $count = null,
+    public static function getContentObjectPublicationsAttributes($object_id, $type = null, $condition = null, $count = null,
         $offset = null, $order_properties = null)
     {
         $order_by = array();
@@ -267,7 +267,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return bool
      */
-    public static function content_object_is_published($object_id)
+    public static function isContentObjectPublished($object_id)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
@@ -275,7 +275,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::count(Publication::class_name(), new DataClassCountParameters($condition)) >= 1;
     }
 
-    public static function any_content_object_is_published($object_ids)
+    public static function areContentObjectsPublished($object_ids)
     {
         $condition = new InCondition(
             new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
@@ -283,7 +283,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::count(Publication::class_name(), new DataClassCountParameters($condition)) >= 1;
     }
 
-    public static function count_publication_attributes($user = null, $object_id = null, $condition = null)
+    public static function countPublicationAttributes($user = null, $object_id = null, $condition = null)
     {
         $conditions = array();
 
@@ -311,7 +311,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::count(Publication::class_name(), $parameters);
     }
 
-    public static function delete_content_object_publications($object_id)
+    public static function deleteContentObjectPublications($object_id)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),

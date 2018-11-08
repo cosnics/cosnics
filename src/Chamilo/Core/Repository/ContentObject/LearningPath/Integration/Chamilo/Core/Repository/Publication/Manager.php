@@ -14,33 +14,33 @@ class Manager implements PublicationInterface
 {
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::is_content_object_editable()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::canContentObjectBeEdited()
      */
-    public static function is_content_object_editable($object_id)
+    public static function canContentObjectBeEdited($object_id)
     {
         return true;
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::content_object_is_published()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::isContentObjectPublished()
      */
-    public static function content_object_is_published($object_id)
+    public static function isContentObjectPublished($object_id)
     {
         return self::getPublicationService()->areContentObjectsPublished(array($object_id));
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::any_content_object_is_published()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::areContentObjectsPublished()
      */
-    public static function any_content_object_is_published($object_ids)
+    public static function areContentObjectsPublished($object_ids)
     {
         return self::getPublicationService()->areContentObjectsPublished($object_ids);
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_attributes()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationsAttributes()
      */
-    public static function get_content_object_publication_attributes(
+    public static function getContentObjectPublicationsAttributes(
         $object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, $offset = null,
         $order_properties = null
     )
@@ -70,9 +70,9 @@ class Manager implements PublicationInterface
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::count_publication_attributes()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::countPublicationAttributes()
      */
-    public static function count_publication_attributes($attributes_type = null, $identifier = null, $condition = null)
+    public static function countPublicationAttributes($attributes_type = null, $identifier = null, $condition = null)
     {
         if ($attributes_type == self::ATTRIBUTES_TYPE_OBJECT)
         {
@@ -89,9 +89,9 @@ class Manager implements PublicationInterface
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::delete_content_object_publications()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::deleteContentObjectPublications()
      */
-    public static function delete_content_object_publications($object_id)
+    public static function deleteContentObjectPublications($object_id)
     {
         try
         {
@@ -146,9 +146,9 @@ class Manager implements PublicationInterface
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_locations()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationLocations()
      */
-    public static function get_content_object_publication_locations($content_object, $user = null)
+    public static function getContentObjectPublicationLocations($content_object, $user = null)
     {
         $locations = new Locations(__NAMESPACE__);
 

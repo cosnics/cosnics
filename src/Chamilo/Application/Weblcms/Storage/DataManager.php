@@ -89,7 +89,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return bool
      */
-    public static function content_object_is_published($object_id)
+    public static function isContentObjectPublished($object_id)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -109,7 +109,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return bool
      */
-    public static function any_content_object_is_published($object_ids)
+    public static function areContentObjectsPublished($object_ids)
     {
         $condition = new InCondition(
             new PropertyConditionVariable(
@@ -131,7 +131,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return int
      */
-    public static function count_publication_attributes(
+    public static function countPublicationAttributes(
         $attributes_type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null
     )
     {
@@ -195,7 +195,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return bool
      */
-    public static function delete_content_object_publications($object_id)
+    public static function deleteContentObjectPublications($object_id)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -335,7 +335,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
      */
-    public static function get_content_object_publication_attributes(
+    public static function getContentObjectPublicationsAttributes(
         $identifier,
         $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, $offset = null,
         $order_properties = null

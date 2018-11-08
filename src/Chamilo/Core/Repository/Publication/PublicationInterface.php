@@ -20,7 +20,7 @@ interface PublicationInterface
      * @param int $object_id
      * @return boolean
      */
-    public static function is_content_object_editable($object_id);
+    public static function canContentObjectBeEdited($object_id);
 
     /**
      * Determines whether the given content object has been published in the implementing context
@@ -28,7 +28,7 @@ interface PublicationInterface
      * @param int $object_id
      * @return boolean
      */
-    public static function content_object_is_published($object_id);
+    public static function isContentObjectPublished($object_id);
 
     /**
      * Determines whether any of the given content objects have been published in the implementing context
@@ -36,7 +36,7 @@ interface PublicationInterface
      * @param multitype:int $object_ids
      * @return boolean
      */
-    public static function any_content_object_is_published($object_ids);
+    public static function areContentObjectsPublished($object_ids);
 
     /**
      * Returns attributes for content object publications in the implementing context
@@ -46,7 +46,7 @@ interface PublicationInterface
      * @param \libraries\storage\Condition $condition
      * @return multitype:mixed
      */
-    public static function get_content_object_publication_attributes($object_id, $type = self :: ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, 
+    public static function getContentObjectPublicationsAttributes($object_id, $type = self :: ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
         $offset = null, $order_properties = null);
 
     /**
@@ -65,7 +65,7 @@ interface PublicationInterface
      * @param \libraries\storage\Condition $condition
      * @return int
      */
-    public static function count_publication_attributes($attributes_type = self :: ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null);
+    public static function countPublicationAttributes($attributes_type = self :: ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null);
 
     /**
      * Deletes all publications of a given content object in the implementing context
@@ -73,7 +73,7 @@ interface PublicationInterface
      * @param int $object_id
      * @return boolean
      */
-    public static function delete_content_object_publications($object_id);
+    public static function deleteContentObjectPublications($object_id);
 
     /**
      *
@@ -87,7 +87,7 @@ interface PublicationInterface
      * @param \core\repository\ContentObject $content_object
      * @return multitype:mixed
      */
-    public static function get_content_object_publication_locations($content_object, $user = null);
+    public static function getContentObjectPublicationLocations($content_object, $user = null);
 
     /**
      *

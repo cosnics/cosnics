@@ -140,7 +140,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Core\Repository\Publication\Location\Locations[]
-     * @see PublicationInterface::get_content_object_publication_locations()
      */
     public function getContentObjectPublicationLocations(ContentObject $contentObject, User $user)
     {

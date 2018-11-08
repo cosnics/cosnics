@@ -24,7 +24,6 @@ interface PublicationAggregatorInterface
      * @param integer[] $contentObjectIdentifiers
      *
      * @return boolean
-     * @see PublicationInterface::any_content_object_is_published()
      */
     public function areContentObjectsPublished(array $contentObjectIdentifiers);
 
@@ -32,7 +31,6 @@ interface PublicationAggregatorInterface
      * @param integer $contentObjectIdentifier
      *
      * @return boolean
-     * @see PublicationInterface::is_content_object_editable()
      */
     public function canContentObjectBeEdited(int $contentObjectIdentifier);
 
@@ -52,7 +50,6 @@ interface PublicationAggregatorInterface
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return integer
-     * @see PublicationInterface::count_publication_attributes()
      */
     public function countPublicationAttributes(int $type, int $objectIdentifier, Condition $condition = null);
 
@@ -60,7 +57,6 @@ interface PublicationAggregatorInterface
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return boolean
-     * @see PublicationInterface::delete_content_object_publications()
      */
     public function deleteContentObjectPublications(ContentObject $contentObject);
 
@@ -69,7 +65,6 @@ interface PublicationAggregatorInterface
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Core\Repository\Publication\Location\Locations[]
-     * @see PublicationInterface::get_content_object_publication_locations()
      */
     public function getContentObjectPublicationLocations(ContentObject $contentObject, User $user);
 
@@ -82,7 +77,6 @@ interface PublicationAggregatorInterface
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
      *
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
-     * @see PublicationInterface::get_content_object_publication_attributes()
      */
     public function getContentObjectPublicationsAttributes(
         int $type, int $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
@@ -93,7 +87,7 @@ interface PublicationAggregatorInterface
      * @param integer $contentObjectIdentifier
      *
      * @return boolean
-     * @see PublicationInterface::content_object_is_published()
+     * @see PublicationInterface::isContentObjectPublished()
      */
     public function isContentObjectPublished(int $contentObjectIdentifier);
 }

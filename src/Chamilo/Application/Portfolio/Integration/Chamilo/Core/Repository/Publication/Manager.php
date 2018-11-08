@@ -38,19 +38,16 @@ use Chamilo\Libraries\Translation\Translation;
 class Manager implements PublicationInterface
 {
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::is_content_object_editable()
-     */
     public static function add_publication_attributes_elements($form)
     {
         // TODO: Please implement me !
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::content_object_is_published()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::isContentObjectPublished()
      */
 
-    public static function any_content_object_is_published($object_ids)
+    public static function areContentObjectsPublished($object_ids)
     {
         $condition = new InCondition(
             new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
@@ -60,10 +57,10 @@ class Manager implements PublicationInterface
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::any_content_object_is_published()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::areContentObjectsPublished()
      */
 
-    public static function content_object_is_published($object_id)
+    public static function isContentObjectPublished($object_id)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
@@ -73,10 +70,10 @@ class Manager implements PublicationInterface
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_attributes()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationsAttributes()
      */
 
-    public static function count_publication_attributes($attributes_type = self :: ATTRIBUTES_TYPE_OBJECT, $identifier = null, $condition = null)
+    public static function countPublicationAttributes($attributes_type = self :: ATTRIBUTES_TYPE_OBJECT, $identifier = null, $condition = null)
     {
         switch ($attributes_type)
         {
@@ -154,7 +151,7 @@ class Manager implements PublicationInterface
         }
     }
 
-    public static function delete_content_object_publications($object_id)
+    public static function deleteContentObjectPublications($object_id)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
@@ -174,10 +171,6 @@ class Manager implements PublicationInterface
         return true;
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::count_publication_attributes()
-     */
-
     public static function get_content_object_publication_attribute($publication_id)
     {
         $condition = new EqualityCondition(
@@ -192,7 +185,7 @@ class Manager implements PublicationInterface
         return self::create_publication_attributes_from_record($record);
     }
 
-    public static function get_content_object_publication_attributes($object_id, $type = self :: ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
+    public static function getContentObjectPublicationsAttributes($object_id, $type = self :: ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
         $offset = null, $order_properties = null)
     {
         switch ($type)
@@ -232,10 +225,6 @@ class Manager implements PublicationInterface
         return $publication_attributes;
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::delete_content_object_publications()
-     */
-
     /**
      * Returns the joins for the content object publication with the content object table
      *
@@ -254,11 +243,7 @@ class Manager implements PublicationInterface
         return new Joins($joins);
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::delete_content_object_publication()
-     */
-
-    public static function get_content_object_publication_locations($content_object, $user = null)
+    public static function getContentObjectPublicationLocations($content_object, $user = null)
     {
         $applicationContext = \Chamilo\Application\Portfolio\Manager::context();
 
@@ -285,11 +270,7 @@ class Manager implements PublicationInterface
         return $locations;
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_locations()
-     */
-
-    public static function is_content_object_editable($object_id)
+    public static function canContentObjectBeEdited($object_id)
     {
         return true;
     }

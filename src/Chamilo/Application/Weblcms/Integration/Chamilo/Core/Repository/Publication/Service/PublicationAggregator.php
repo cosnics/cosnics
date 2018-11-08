@@ -89,7 +89,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function countPublicationAttributes(int $type, int $objectIdentifier, Condition $condition = null)
     {
-        return Manager::count_publication_attributes($type, $objectIdentifier, $condition);
+        return Manager::countPublicationAttributes($type, $objectIdentifier, $condition);
     }
 
     /**
@@ -107,7 +107,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         array $orderProperties = null
     )
     {
-        return Manager::get_content_object_publication_attributes(
+        return Manager::getContentObjectPublicationsAttributes(
             $objectIdentifier, $type, $condition, $count, $offset, $orderProperties
         );
     }
@@ -119,7 +119,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function deleteContentObjectPublications(ContentObject $contentObject)
     {
-        return Manager::delete_content_object_publications($contentObject->getId());
+        return Manager::deleteContentObjectPublications($contentObject->getId());
     }
 
     /**
@@ -129,7 +129,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function isContentObjectPublished(int $contentObjectIdentifier)
     {
-        return Manager::content_object_is_published($contentObjectIdentifier);
+        return Manager::isContentObjectPublished($contentObjectIdentifier);
     }
 
     /**
@@ -139,7 +139,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function areContentObjectsPublished(array $contentObjectIdentifiers)
     {
-        return Manager::any_content_object_is_published($contentObjectIdentifiers);
+        return Manager::areContentObjectsPublished($contentObjectIdentifiers);
     }
 
     /**
@@ -149,7 +149,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function canContentObjectBeEdited(int $contentObjectIdentifier)
     {
-        return Manager::is_content_object_editable($contentObjectIdentifier);
+        return Manager::canContentObjectBeEdited($contentObjectIdentifier);
     }
 
 
@@ -158,10 +158,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Core\Repository\Publication\Location\Locations[]
-     * @see PublicationInterface::get_content_object_publication_locations()
      */
     public function getContentObjectPublicationLocations(ContentObject $contentObject, User $user)
     {
-        return Manager::get_content_object_publication_locations($contentObject, $user);
+        return Manager::getContentObjectPublicationLocations($contentObject, $user);
     }
 }
