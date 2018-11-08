@@ -69,7 +69,7 @@ class PublicationRepository
             $contentObjectIdentifiers
         );
 
-        return $this->getDataClassRepository()->count(Publication::class, new DataClassCountParameters($condition));
+        return $this->countPublications($condition);
     }
 
     /**
@@ -111,6 +111,11 @@ class PublicationRepository
         }
 
         return $this->countPublications($condition);
+    }
+
+    public function countPublications(Condition $condition)
+    {
+        return $this->getDataClassRepository()->count(Publication::class, new DataClassCountParameters($condition));
     }
 
     /**
@@ -158,8 +163,7 @@ class PublicationRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            Publication::class,
-            new DataClassRetrieveParameters($condition)
+            Publication::class, new DataClassRetrieveParameters($condition)
         );
     }
 
@@ -177,10 +181,8 @@ class PublicationRepository
         );
 
         return $this->getDataClassRepository()->record(
-            Publication::class,
-            new RecordRetrieveParameters(
-                new DataClassProperties(new PropertiesConditionVariable(Publication::class)),
-                $condition
+            Publication::class, new RecordRetrieveParameters(
+                new DataClassProperties(new PropertiesConditionVariable(Publication::class)), $condition
             )
         );
     }
@@ -203,39 +205,29 @@ class PublicationRepository
         $data_class_properties[] = new PropertiesConditionVariable(Publication::class);
 
         $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class,
-            ContentObject::PROPERTY_TITLE
+            ContentObject::class, ContentObject::PROPERTY_TITLE
         );
 
         $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class,
-            ContentObject::PROPERTY_DESCRIPTION
+            ContentObject::class, ContentObject::PROPERTY_DESCRIPTION
         );
 
         $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class,
-            ContentObject::PROPERTY_TYPE
+            ContentObject::class, ContentObject::PROPERTY_TYPE
         );
 
         $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class,
-            ContentObject::PROPERTY_CURRENT
+            ContentObject::class, ContentObject::PROPERTY_CURRENT
         );
 
         $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class,
-            ContentObject::PROPERTY_OWNER_ID
+            ContentObject::class, ContentObject::PROPERTY_OWNER_ID
         );
 
         $properties = new DataClassProperties($data_class_properties);
 
         $parameters = new RecordRetrievesParameters(
-            $properties,
-            $condition,
-            $count,
-            $offset,
-            $orderProperties,
-            $this->getContentObjectPublicationJoins()
+            $properties, $condition, $count, $offset, $orderProperties, $this->getContentObjectPublicationJoins()
         );
 
         return $this->getDataClassRepository()->records(Publication::class, $parameters);
@@ -253,8 +245,7 @@ class PublicationRepository
      */
     public function findPublicationRecordsForTypeAndIdentifier(
         $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null,
-        int $count = null,
-        int $offset = null, array $orderProperties = null
+        int $count = null, int $offset = null, array $orderProperties = null
     )
     {
         switch ($type)
@@ -328,9 +319,7 @@ class PublicationRepository
         $joins = array();
 
         $joins[] = new Join(
-            ContentObject::class
-            ,
-            new EqualityCondition(
+            ContentObject::class, new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
             )

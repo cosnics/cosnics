@@ -24,7 +24,7 @@ class PublicationAggregatorCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         if ($container->hasDefinition(
-            'chamilo.core.repository.publication.service.publication_aggregator'
+            'Chamilo\Core\Repository\Publication\Service\PublicationAggregator'
         ))
         {
             $taggedServices = $container->findTaggedServiceIds(
@@ -32,7 +32,7 @@ class PublicationAggregatorCompilerPass implements CompilerPassInterface
             );
 
             $definition = $container->getDefinition(
-                'chamilo.core.repository.publication.service.publication_aggregator'
+                'Chamilo\Core\Repository\Publication\Service\PublicationAggregator'
             );
 
             foreach ($taggedServices as $taggedServiceId => $tags)

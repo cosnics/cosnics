@@ -180,7 +180,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         foreach ($this->publicationAggregators as $publicationAggregator)
         {
             $applicationAttributes = $publicationAggregator->getContentObjectPublicationsAttributes(
-                $type, $objectIdentifier, $condition, $count, $offset, $orderProperties
+                $type, $objectIdentifier, $condition, $count, $offset
             );
 
             if (!is_null($applicationAttributes) && count($applicationAttributes) > 0)

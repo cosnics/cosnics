@@ -123,7 +123,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function getContentObjectPublicationLocations(ContentObject $contentObject, User $user)
     {
-        $locations = new Locations(__NAMESPACE__);
+        $locations = new Locations('Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication');
         $allowedTypes = Portfolio::get_allowed_types();
 
         $userPublication = $this->getPublicationService()->findPublicationForUser($user);
@@ -134,7 +134,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         {
             $locations->add_location(
                 new Location(
-                    __NAMESPACE__,
+                    'Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication',
                     $this->getTranslator()->trans('TypeName', [], \Chamilo\Application\Portfolio\Manager::context()),
                     $user->getId(), $userPublication->getId()
                 )
