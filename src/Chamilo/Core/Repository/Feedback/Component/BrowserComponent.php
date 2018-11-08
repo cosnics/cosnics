@@ -112,7 +112,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 foreach ($feedbacks as $feedback)
                 {
-                    $html[] = '<div class="list-group-item">';
+                    $html[] = '<div class="list-group-item" id="feedback' . $feedback->getId() . '">';
 
                     $html[] = '<div style="display:flex;">';
                     $profilePhotoUrl = new Redirect(

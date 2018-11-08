@@ -34,6 +34,11 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
     const PARAM_FEEDBACK_ID = 'feedback_id';
 
     /**
+     * @var Feedback
+     */
+    protected $feedback;
+
+    /**
      * @param \Chamilo\Core\Queue\Storage\Entity\Job $job
      *
      * @throws \Doctrine\ORM\ORMException
@@ -50,7 +55,34 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
             );
         }
 
+        $this->feedback = $feedback;
+
         $this->processForEntry($feedback->getEntryId());
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry $entry
+     *
+     * @return int
+     */
+    protected function getCreationDate(Entry $entry)
+    {
+        return $this->feedback->get_creation_date();
+    }
+
+    /**
+     * @param Course $course
+     * @param ContentObjectPublication $publication
+     * @param Entry $entry
+     *
+     * @return string
+     */
+    protected function getNotificationUrl($course, $publication, $entry): string
+    {
+        $notificationUrl = parent::getNotificationUrl($course, $publication, $entry);
+        $notificationUrl .= '#feedback' . $this->feedback->getId();
+
+        return $notificationUrl;
     }
 
     /**

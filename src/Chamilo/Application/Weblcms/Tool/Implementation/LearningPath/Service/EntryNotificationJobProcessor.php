@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Queue\Service\JobProcessorInterface;
 use Chamilo\Core\Queue\Storage\Entity\Job;
@@ -30,6 +31,16 @@ class EntryNotificationJobProcessor extends AssignmentJobProcessor implements Jo
         $entryId = $job->getParameter(self::PARAM_ENTRY_ID);
         $contentObjectPublicationId = $job->getParameter(self::PARAM_CONTENT_OBJECT_PUBLICATION_ID);
         $this->processForEntry($entryId, $contentObjectPublicationId);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry $entry
+     *
+     * @return int
+     */
+    protected function getCreationDate(Entry $entry)
+    {
+        return $entry->getSubmitted();
     }
 
     /**

@@ -58,11 +58,11 @@ class NotificationRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder()
             ->select('notification')
-            ->addSelect('filter')
+//            ->addSelect('filter')
             ->addSelect('user')
             ->from(UserNotification::class, 'user')
             ->join('user.notification', 'notification')
-            ->join('notification.filters', 'filter')
+//            ->join('notification.filters', 'filter')
             ->where('user.notificationContext IN (:contexts)')
             ->andWhere('user.userId =:userId')
             ->setParameter('contexts', $contexts)
@@ -116,6 +116,23 @@ class NotificationRepository extends EntityRepository
             )
             ->setParameter('userId', $user->getId())
             ->setParameter('contexts', $contexts);
+
+        $query->execute();
+    }
+
+    /**
+     * @param Notification[] $notifications
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function setNotificationsViewedForUser($notifications, User $user)
+    {
+        $query = $this->getEntityManager()
+            ->createQuery(
+                'UPDATE ' . UserNotification::class .
+                ' UN SET UN.viewed = true WHERE UN.userId = :userId AND UN.notification IN (:notifications) AND UN.viewed = false'
+            )
+            ->setParameter('userId', $user->getId())
+            ->setParameter('notifications', $notifications);
 
         $query->execute();
     }

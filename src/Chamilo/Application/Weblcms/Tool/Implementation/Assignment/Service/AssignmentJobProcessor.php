@@ -101,7 +101,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
     }
 
     /**
-     * @param $entryId
+     * @param int $entryId
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -155,7 +155,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $notificationContexts = $this->getNotificationContexts($publication, $course);
 
         $date = new \DateTime();
-        $date->setTimestamp($entry->getSubmitted());
+        $date->setTimestamp($this->getCreationDate($entry));
 
         $this->notificationManager->createNotificationForUsers(
             $url, $viewingContexts, $date, $targetUserIds, $filters, $notificationContexts
@@ -309,6 +309,13 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
 
         return $viewingContexts;
     }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry $entry
+     *
+     * @return int
+     */
+    abstract protected function getCreationDate(Entry $entry);
 
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course

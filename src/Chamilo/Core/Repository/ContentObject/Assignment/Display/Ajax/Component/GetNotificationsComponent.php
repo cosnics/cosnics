@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class GetNotificationsComponent extends Manager
 {
+    const PARAM_OFFSET = 'offset';
+    const PARAM_NOTIFICATIONS_PER_PAGE = 'notificationsPerPage';
+
     /**
      *
      * @return string
@@ -21,7 +24,11 @@ class GetNotificationsComponent extends Manager
     function run()
     {
         $notificationServiceBridge = $this->getNotificationServiceBridge();
-        $notifications = $notificationServiceBridge->getNotificationsForUser($this->getUser());
+
+        $notifications = $notificationServiceBridge->getNotificationsForUser(
+            $this->getUser(), $this->getRequest()->getFromPost(self::PARAM_OFFSET),
+            $this->getRequest()->getFromPost(self::PARAM_NOTIFICATIONS_PER_PAGE)
+        );
 
         return new JsonResponse($this->getSerializer()->serialize($notifications, 'json'), 200, [], true);
     }

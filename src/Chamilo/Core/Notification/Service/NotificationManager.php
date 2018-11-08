@@ -295,6 +295,15 @@ class NotificationManager
     }
 
     /**
+     * @param Notification[] $notifications
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function setNotificationsViewedForUser($notifications, User $user)
+    {
+        $this->notificationRepository->setNotificationsViewedForUser($notifications, $user);
+    }
+
+    /**
      * @param \Chamilo\Core\Notification\Storage\Entity\Notification $notification
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */

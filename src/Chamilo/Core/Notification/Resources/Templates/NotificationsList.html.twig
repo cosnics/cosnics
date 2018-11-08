@@ -174,12 +174,18 @@
                 showFilters: Boolean,
                 scrollDetectorElement: String,
                 retrieveNotificationsUrl: String,
-                viewNotificationUrl: String
+                viewNotificationUrl: String,
+                notificationsPerPage: {
+                    type: Number,
+                    default: 15
+                }
             },
             data: function () {
                 return {
                     notifications: [],
-                    isLoading: false
+                    isLoading: false,
+                    offset: 0,
+                    complete: false
                 };
             },
             computed: {
@@ -197,10 +203,18 @@
             },
             methods: {
                 loadData: function() {
+                    if(this.complete) {
+                        return;
+                    }
+
                     var vueInstance = this;
                     this.isLoading = true;
 
-                    this.$http.post(this.retrieveNotificationsUrl).then(function(result) {
+                    var parameters = new FormData();
+                    parameters.append('offset', this.offset);
+                    parameters.append('notificationsPerPage', this.notificationsPerPage);
+
+                    this.$http.post(this.retrieveNotificationsUrl, parameters).then(function(result) {
                         var newNotifications = result.body;
 
                         newNotifications.forEach(function(notification) {
@@ -208,6 +222,11 @@
                         });
 
                         vueInstance.isLoading = false;
+                        vueInstance.offset += vueInstance.notificationsPerPage;
+
+                        if(newNotifications.length < vueInstance.notificationsPerPage) {
+                            vueInstance.complete = true;
+                        }
                     })
                 }
             },

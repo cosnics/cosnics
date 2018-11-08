@@ -180,7 +180,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $notificationContexts = $this->getNotificationContexts($publication, $course, $treeNodeData);
 
         $date = new \DateTime();
-        $date->setTimestamp($entry->getSubmitted());
+        $date->setTimestamp($this->getCreationDate($entry));
 
         $this->notificationManager->createNotificationForUsers(
             $url, $viewingContexts, $date, $targetUserIds, $filters, $notificationContexts
@@ -383,6 +383,13 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      * @return array
      */
     abstract protected function getNotificationViewingContextVariables(Course $course, ContentObjectPublication $publication, TreeNodeData $treeNodeData);
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry $entry
+     *
+     * @return int
+     */
+    abstract protected function getCreationDate(Entry $entry);
 
     /**
      * @param Course $course

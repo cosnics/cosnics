@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class GetAssignmentNotificationsComponent extends Manager
 {
+    const PARAM_OFFSET = 'offset';
+    const PARAM_NOTIFICATIONS_PER_PAGE = 'notificationsPerPage';
+
     /**
      *
      * @return string
@@ -20,8 +23,11 @@ class GetAssignmentNotificationsComponent extends Manager
     function run()
     {
         $notifications = $this->getNotificationManager()->getNotificationsByContextPathForUser(
-            'Assignment', $this->getUser()
+            'Assignment', $this->getUser(), $this->getRequest()->getFromPost(self::PARAM_OFFSET),
+            $this->getRequest()->getFromPost(self::PARAM_NOTIFICATIONS_PER_PAGE)
         );
+
+        $this->getNotificationManager()->setNotificationsViewedForUser($notifications, $this->getUser());
 
         $notifications = $this->getNotificationManager()->formatNotifications($notifications, 'Chamilo');
 

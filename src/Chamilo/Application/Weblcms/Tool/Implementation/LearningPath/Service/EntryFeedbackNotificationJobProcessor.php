@@ -20,6 +20,10 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
     const PARAM_FEEDBACK_ID = 'feedback_id';
     const PARAM_CONTENT_OBJECT_PUBLICATION_ID = 'content_object_publication_id';
 
+    /**
+     * @var Feedback
+     */
+    protected $feedback;
 
     /**
      * @param \Chamilo\Core\Queue\Storage\Entity\Job $job
@@ -34,14 +38,44 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
         $contentObjectPublicationId = $job->getParameter(self::PARAM_CONTENT_OBJECT_PUBLICATION_ID);
 
         $feedback = $this->assignmentService->findFeedbackByIdentifier($feedbackId);
-        if(!$feedback instanceof Feedback)
+        if (!$feedback instanceof Feedback)
         {
             throw new \InvalidArgumentException(
                 sprintf('The given feedback with id %s could not be found', $feedbackId)
             );
         }
 
+        $this->feedback = $feedback;
+
         $this->processForEntry($feedback->getEntryId(), $contentObjectPublicationId);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry $entry
+     *
+     * @return int
+     */
+    protected function getCreationDate(Entry $entry)
+    {
+        return $this->feedback->get_creation_date();
+    }
+
+    /**
+     * @param Course $course
+     * @param ContentObjectPublication $publication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param Entry $entry
+     *
+     * @return string
+     */
+    protected function getNotificationUrl(
+        Course $course, ContentObjectPublication $publication, TreeNodeData $treeNodeData, Entry $entry
+    )
+    {
+        $notificationUrl = parent::getNotificationUrl($course, $publication, $treeNodeData, $entry);
+        $notificationUrl .= '#feedback' . $this->feedback->getId();
+
+        return $notificationUrl;
     }
 
     /**
@@ -55,7 +89,7 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
         $targetUserIds = parent::getTargetUserIds($course, $entry);
 
         $feedbacks = $this->assignmentService->findFeedbackByEntry($entry);
-        foreach($feedbacks as $feedback)
+        foreach ($feedbacks as $feedback)
         {
             $targetUserIds[] = $feedback->get_user_id();
         }
@@ -70,13 +104,17 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
      *
      * @return array
      */
-    protected function getNotificationViewingContextVariables(Course $course, ContentObjectPublication $publication, TreeNodeData $treeNodeData)
+    protected function getNotificationViewingContextVariables(
+        Course $course, ContentObjectPublication $publication, TreeNodeData $treeNodeData
+    )
     {
         return [
             'Chamilo' => 'NotificationNewAssignmentFeedback',
             'Chamilo\\Application\\Weblcms::Course:' . $course->getId() => 'NotificationNewAssignmentFeedbackCourse',
-            'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId() => 'NotificationNewAssignmentFeedbackPublication',
-            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() . '::TreeNodeData:' . $treeNodeData->getId() => 'NotificationNewAssignmentFeedbackAssignmentTreeNode'
+            'Chamilo\\Application\\Weblcms::ContentObjectPublication:' .
+            $publication->getId() => 'NotificationNewAssignmentFeedbackPublication',
+            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() .
+            '::TreeNodeData:' . $treeNodeData->getId() => 'NotificationNewAssignmentFeedbackAssignmentTreeNode'
         ];
     }
 }

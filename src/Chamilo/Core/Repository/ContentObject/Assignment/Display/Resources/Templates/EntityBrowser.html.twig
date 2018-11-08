@@ -21,6 +21,11 @@
         margin-left: 3px;
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
     }
+
+    #notifications {
+        max-height: 500px;
+        overflow-y: scroll;
+    }
 </style>
 {% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
 
@@ -47,7 +52,7 @@
 
 <div class="dynamic-visual-tab-content tab-content">
     <div role="tabpanel" class="tab-pane tab-pane-with-border" id="notifications">
-        <notifications-list scroll-detector-element="window"
+        <notifications-list scroll-detector-element="#notifications"
                 retrieve-notifications-url="{{ NOTIFICATIONS_URL }}"
                 view-notification-url="{{ VIEW_NOTIFICATION_URL }}">
         </notifications-list>
