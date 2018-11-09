@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\ComplexPor
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
-use Chamilo\Core\Repository\Publication\LocationSupport;
+use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationModifierInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
@@ -114,20 +114,22 @@ class PublicationModifier implements PublicationModifierInterface
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\Repository\Publication\LocationSupport $location
+     * @param \Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
      * @param array $options
      *
      * @return \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode
      * @throws \Exception
      * @see PublicationInterface::publish_content_object()
      */
-    public function publishContentObject(ContentObject $contentObject, LocationSupport $location, $options = array())
+    public function publishContentObject(
+        ContentObject $contentObject, PublicationTarget $publicationTarget, $options = array()
+    )
     {
         $publication =
-            $this->getPublicationService()->findPublicationByIdentifier($location->getPublicationIdentifier());
+            $this->getPublicationService()->findPublicationByIdentifier($publicationTarget->getPublicationIdentifier());
 
         $isPublication = $publication instanceof Publication;
-        $isPublisher = $publication->get_publisher_id() == $location->getUserIdentifier();
+        $isPublisher = $publication->get_publisher_id() == $publicationTarget->getUserIdentifier();
 
         if ($isPublication && $isPublisher)
         {
@@ -146,7 +148,7 @@ class PublicationModifier implements PublicationModifierInterface
                  * @var \Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem $newObject
                  */
                 $newObject = ContentObject::factory(PortfolioItem::class_name());
-                $newObject->set_owner_id($location->getUserIdentifier());
+                $newObject->set_owner_id($publicationTarget->getUserIdentifier());
                 $newObject->set_title(PortfolioItem::get_type_name());
                 $newObject->set_description(PortfolioItem::get_type_name());
                 $newObject->set_parent_id(0);
@@ -170,7 +172,7 @@ class PublicationModifier implements PublicationModifierInterface
 
             $wrapper->set_ref($newObject->getId());
             $wrapper->set_parent($portfolioContentObject->getId());
-            $wrapper->set_user_id($location->getUserIdentifier());
+            $wrapper->set_user_id($publicationTarget->getUserIdentifier());
             $wrapper->set_display_order(
                 \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order(
                     $portfolioContentObject->getId()
@@ -186,7 +188,8 @@ class PublicationModifier implements PublicationModifierInterface
                 Event::trigger(
                     'Activity', \Chamilo\Core\Repository\Manager::context(), array(
                         Activity::PROPERTY_TYPE => Activity::ACTIVITY_ADD_ITEM,
-                        Activity::PROPERTY_USER_ID => $location->getUserIdentifier(), Activity::PROPERTY_DATE => time(),
+                        Activity::PROPERTY_USER_ID => $publicationTarget->getUserIdentifier(),
+                        Activity::PROPERTY_DATE => time(),
                         Activity::PROPERTY_CONTENT_OBJECT_ID => $portfolioContentObject->getId(),
                         Activity::PROPERTY_CONTENT => $portfolioContentObject->get_title() . ' > ' .
                             $contentObject->get_title()

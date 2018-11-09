@@ -94,6 +94,7 @@
 
         <service id="Chamilo\Core\Repository\Publication\Service\PublicationTargetService" autowire="true"/>
         <service id="Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer" autowire="true"/>
+        <service id="Chamilo\Core\Repository\Publication\Service\PublicationTargetProcessor" autowire="true"/>
 
     </services>
 </container>

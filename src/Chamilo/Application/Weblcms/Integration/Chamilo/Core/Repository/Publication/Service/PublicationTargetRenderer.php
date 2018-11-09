@@ -57,8 +57,8 @@ class PublicationTargetRenderer extends \Chamilo\Core\Repository\Publication\Ser
         ), $labelEmail
         );
 
-        $defaults[Manager::WIZARD_TARGET][$publicationContext]['forever'] = 1;
-        $defaults[Manager::WIZARD_TARGET][$publicationContext][ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] =
+        $defaults[Manager::WIZARD_TARGET][$publicationContext][Manager::WIZARD_OPTION]['forever'] = 1;
+        $defaults[Manager::WIZARD_TARGET][$publicationContext][Manager::WIZARD_OPTION][ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] =
             1;
 
         $form->setDefaults($defaults);
@@ -72,7 +72,7 @@ class PublicationTargetRenderer extends \Chamilo\Core\Repository\Publication\Ser
      */
     protected function getPublicationAttributeElementName(string $publicationContext, string $property = null)
     {
-        $elementName = Manager::WIZARD_TARGET . '[' . $publicationContext . ']';
+        $elementName = Manager::WIZARD_TARGET . '[' . $publicationContext . '][' . Manager::WIZARD_OPTION . ']';
 
         if (!is_null($property))
         {

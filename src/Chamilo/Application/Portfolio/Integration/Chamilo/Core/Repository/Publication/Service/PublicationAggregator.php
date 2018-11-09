@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service;
 
+use Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Application\Portfolio\Service\PublicationService;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
-use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer;
@@ -87,7 +87,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         if (in_array($type, $allowedTypes) && $userPublication instanceof Publication)
         {
             $publicationTargetKey = $this->getPublicationTargetService()->addPublicationTargetAndGetKey(
-                new PublicationTarget(PublicationModifier::class)
+                new PublicationTarget(PublicationModifier::class, $user->getId(), $userPublication->getId())
             );
             $modifierServiceKey =
                 $this->getPublicationTargetService()->addModifierServiceIdentifierAndGetKey(PublicationModifier::class);

@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Core\Repository\Publication\LocationSupport;
+use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -40,14 +40,16 @@ interface PublicationModifierInterface
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\Repository\Publication\LocationSupport $location
+     * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
      * @param array $options
      *
      * @return \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode
      * @throws \Exception
      * @see PublicationInterface::publish_content_object()
      */
-    public function publishContentObject(ContentObject $contentObject, LocationSupport $location, $options = array());
+    public function publishContentObject(
+        ContentObject $contentObject, PublicationTarget $publicationTarget, $options = array()
+    );
 
     /**
      * @param \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes $publicationAttributes

@@ -133,7 +133,8 @@ class PublicationTargetRenderer
      */
     protected function getCheckboxName(string $publicationContext, string $targetKey)
     {
-        return Manager::WIZARD_TARGET . '[' . $publicationContext . '][' . $targetKey . ']';
+        return Manager::WIZARD_TARGET . '[' . $publicationContext . '][' . Manager::WIZARD_TARGET . '][' . $targetKey .
+            ']';
     }
 
     /**

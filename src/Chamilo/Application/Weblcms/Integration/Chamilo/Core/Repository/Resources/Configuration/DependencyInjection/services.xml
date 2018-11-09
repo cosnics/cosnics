@@ -9,6 +9,10 @@
         </service>
 
         <service
+                id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationModifier"
+                autowire="true"/>
+
+        <service
                 id="chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.publication_aggregator.assignment_publication_service"
                 class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationService">
             <argument type="service"

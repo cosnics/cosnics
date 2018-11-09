@@ -128,4 +128,15 @@ class PublicationTargetService
         $this->publicationTargetRepository = $publicationTargetRepository;
     }
 
+    /**
+     * @param string $key
+     *
+     * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function getModifierServiceIdentifier(string $key)
+    {
+        return $this->getPublicationTargetRepository()->getModifierServiceIdentifier($key);
+    }
+
 }
