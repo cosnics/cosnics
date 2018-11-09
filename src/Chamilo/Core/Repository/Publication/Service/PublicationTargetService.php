@@ -25,19 +25,46 @@ class PublicationTargetService
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Publication\Storage\Repository\PublicationTargetRepository
+     * @param string $modifierServiceIdentifier
+     *
+     * @return string
      */
-    public function getPublicationTargetRepository(): PublicationTargetRepository
+    public function addModifierServiceIdentifierAndGetKey(string $modifierServiceIdentifier)
     {
-        return $this->publicationTargetRepository;
+        $modifierServiceIdentifierKey = $this->determineModifierServiceIdentifierKey($modifierServiceIdentifier);
+        $this->addModifierServiceIdentifierForKey($modifierServiceIdentifierKey, $modifierServiceIdentifier);
+
+        return $modifierServiceIdentifierKey;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Publication\Storage\Repository\PublicationTargetRepository $publicationTargetRepository
+     * @param string $modifierServiceIdentifierKey
+     * @param string $modifierServiceIdentifier
+     *
+     * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function setPublicationTargetRepository(PublicationTargetRepository $publicationTargetRepository): void
+    public function addModifierServiceIdentifierForKey(
+        string $modifierServiceIdentifierKey, string $modifierServiceIdentifier
+    )
     {
-        $this->publicationTargetRepository = $publicationTargetRepository;
+        return $this->getPublicationTargetRepository()->addModifierServiceIdentifier(
+            $modifierServiceIdentifierKey, $modifierServiceIdentifier
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
+     *
+     * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function addPublicationTargetAndGetKey(PublicationTarget $publicationTarget)
+    {
+        $publicationTargetKey = $this->determinePublicationTargetKey($publicationTarget);
+        $this->addPublicationTargetForKey($publicationTargetKey, $publicationTarget);
+
+        return $publicationTargetKey;
     }
 
     /**
@@ -55,17 +82,13 @@ class PublicationTargetService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
+     * @param string $modifierServiceIdentifier
      *
      * @return string
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function addPublicationTargetAndGetKey(PublicationTarget $publicationTarget)
+    protected function determineModifierServiceIdentifierKey(string $modifierServiceIdentifier)
     {
-        $publicationTargetKey = $this->determinePublicationTargetKey($publicationTarget);
-        $this->addPublicationTargetForKey($publicationTargetKey, $publicationTarget);
-
-        return $publicationTargetKey;
+        return md5($modifierServiceIdentifier);
     }
 
     /**
@@ -87,6 +110,22 @@ class PublicationTargetService
     public function getPublicationTarget(string $key)
     {
         return $this->getPublicationTargetRepository()->getPublicationTarget($key);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Storage\Repository\PublicationTargetRepository
+     */
+    public function getPublicationTargetRepository(): PublicationTargetRepository
+    {
+        return $this->publicationTargetRepository;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Publication\Storage\Repository\PublicationTargetRepository $publicationTargetRepository
+     */
+    public function setPublicationTargetRepository(PublicationTargetRepository $publicationTargetRepository): void
+    {
+        $this->publicationTargetRepository = $publicationTargetRepository;
     }
 
 }

@@ -3,7 +3,6 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Manager;
-use Chamilo\Core\Repository\Publication\Domain\PublicationContext;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -17,6 +16,17 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  */
 class PublicationAggregator implements PublicationAggregatorInterface
 {
+    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function addPublicationTargetsToFormForContentObjectAndUser(
+        FormValidator $form, ContentObject $contentObject, User $user
+    )
+    {
+    }
+
     /**
      * @param integer[] $contentObjectIdentifiers
      *
@@ -74,17 +84,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Core\Repository\Publication\Location\Locations[]
-     */
-    public function getContentObjectPublicationLocations(ContentObject $contentObject, User $user)
-    {
-//        return new PublicationContext(PublicationModifier::class);
-    }
-
-    /**
      * @param integer $type
      * @param integer $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
@@ -112,17 +111,5 @@ class PublicationAggregator implements PublicationAggregatorInterface
     public function isContentObjectPublished(int $contentObjectIdentifier)
     {
         return Manager::isContentObjectPublished($contentObjectIdentifier);
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function addPublicationTargetsToFormForContentObjectAndUser(
-        FormValidator $form, ContentObject $contentObject, User $user
-    )
-    {
-        // TODO: Implement addPublicationTargetsToFormForContentObjectAndUser() method.
     }
 }

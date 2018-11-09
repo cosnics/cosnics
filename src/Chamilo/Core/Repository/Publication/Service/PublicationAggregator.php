@@ -152,31 +152,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Core\Repository\Publication\Location\Locations[]
-     */
-    public function getContentObjectPublicationLocations(ContentObject $contentObject, User $user)
-    {
-        $locations = array();
-
-        foreach ($this->publicationAggregators as $publicationAggregator)
-        {
-            $contextLocations = $publicationAggregator->getContentObjectPublicationLocations(
-                $contentObject, $user
-            );
-
-            if (!is_null($contextLocations) && count($contextLocations) > 0)
-            {
-                $locations = array_merge($locations, $contextLocations);
-            }
-        }
-
-        return $locations;
-    }
-
-    /**
      * @param integer $type
      * @param integer $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition

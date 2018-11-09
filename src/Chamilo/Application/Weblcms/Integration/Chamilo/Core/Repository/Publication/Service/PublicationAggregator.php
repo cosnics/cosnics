@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Public
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
@@ -14,9 +15,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
-use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Service\UserService;
@@ -178,6 +177,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
             $form, $this->getTranslator()->trans('TypeName', [], 'Chamilo\Application\Weblcms'), $columnNames
         );
 
+        $modifierServiceKey =
+            $this->getPublicationTargetService()->addModifierServiceIdentifierAndGetKey(PublicationModifier::class);
+
         foreach ($types as $tool_id => $allowed_types)
         {
             if (in_array($type, $allowed_types))
@@ -206,15 +208,10 @@ class PublicationAggregator implements PublicationAggregatorInterface
                         );
                         $tool_name = $this->getTranslator()->trans('TypeName', [], $tool_namespace);
 
-                        //                        $locations->add_location(
-                        //                            new Location(
-                        //                                $course->get_id(), $tool_names[$tool_id], $course->get_title(),
-                        //                                $course->get_visual_code(), $tool_name
-                        //                            )
-                        //                        );
-
                         $publicationTargetKey = $this->getPublicationTargetService()->addPublicationTargetAndGetKey(
-                            new PublicationTarget(PublicationModifier::class)
+                            new PublicationTarget(
+                                PublicationModifier::class, $course->get_id(), $tool_names[$tool_id]
+                            )
                         );
 
                         $targetNames = [];
@@ -222,7 +219,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
                         $targetNames[] = $tool_name;
 
                         $this->getPublicationTargetRenderer()->addPublicationTargetToForm(
-                            $form, PublicationModifier::class, $publicationTargetKey, $targetNames
+                            $form, $modifierServiceKey, $publicationTargetKey, $targetNames
                         );
                     }
                 }
@@ -230,7 +227,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         }
 
         $this->getPublicationTargetRenderer()->addFooterToForm($form);
-        $this->getPublicationTargetRenderer()->addPublicationAttributes($form, PublicationModifier::class);
+        $this->getPublicationTargetRenderer()->addPublicationAttributes($form, $modifierServiceKey);
     }
 
     /**

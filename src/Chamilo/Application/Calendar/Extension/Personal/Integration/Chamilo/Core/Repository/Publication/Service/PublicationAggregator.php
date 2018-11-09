@@ -70,12 +70,14 @@ class PublicationAggregator implements PublicationAggregatorInterface
             $publicationTargetKey = $this->getPublicationTargetService()->addPublicationTargetAndGetKey(
                 new PublicationTarget(PublicationModifier::class)
             );
+            $modifierServiceKey =
+                $this->getPublicationTargetService()->addModifierServiceIdentifierAndGetKey(PublicationModifier::class);
 
             $publicationTargetName =
                 $this->getTranslator()->trans('TypeName', [], 'Chamilo\Application\Calendar\Extension\Personal');
 
             $this->getPublicationTargetRenderer()->addSinglePublicationTargetToForm(
-                $form, PublicationModifier::class, $publicationTargetKey, $publicationTargetName
+                $form, $modifierServiceKey, $publicationTargetKey, $publicationTargetName
             );
         }
     }

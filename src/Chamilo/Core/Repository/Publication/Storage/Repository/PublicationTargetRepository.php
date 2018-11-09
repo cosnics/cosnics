@@ -25,6 +25,30 @@ class PublicationTargetRepository
     }
 
     /**
+     * @param string $key
+     * @param string $modifierServiceIdentifier
+     *
+     * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function addModifierServiceIdentifier(string $key, string $modifierServiceIdentifier)
+    {
+        return $this->getCacheProvider()->set($key, $modifierServiceIdentifier);
+    }
+
+    /**
+     * @param string $key
+     * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
+     *
+     * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function addPublicationTarget(string $key, PublicationTarget $publicationTarget)
+    {
+        return $this->getCacheProvider()->set($key, $publicationTarget);
+    }
+
+    /**
      * @return \Psr\SimpleCache\CacheInterface
      */
     public function getCacheProvider(): CacheInterface
@@ -42,14 +66,13 @@ class PublicationTargetRepository
 
     /**
      * @param string $key
-     * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
      *
-     * @return bool
+     * @return string
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function addPublicationTarget(string $key, PublicationTarget $publicationTarget)
+    public function getModifierServiceIdentifier(string $key)
     {
-        return $this->getCacheProvider()->set($key, $publicationTarget);
+        return $this->getCacheProvider()->get($key);
     }
 
     /**

@@ -23,43 +23,62 @@ class PublicationTargetRenderer extends \Chamilo\Core\Repository\Publication\Ser
     {
 
         $applicationContext = \Chamilo\Application\Weblcms\Manager::context();
+        $labelPublicationDetails = $this->getTranslator()->trans('PublicationDetails', [], $applicationContext);
+        $labelHidden = $this->getTranslator()->trans('Hidden', [], $applicationContext);
+        $labelCollaborate = $this->getTranslator()->trans('CourseAdminCollaborate', [], $applicationContext);
+        $labelEmail = $this->getTranslator()->trans('SendByEMail', [], $applicationContext);
 
         $splitterHtml = array();
-
-        $splitterHtml[] = '<div class="form_splitter" >';
-        $splitterHtml[] =
-            '<span class="category">' . $this->getTranslator()->trans('PublicationDetails', [], $applicationContext) .
-            '</span>';
-        $splitterHtml[] = '<div style="clear: both;"></div>';
+        $splitterHtml[] = '<div class="form_splitter clearfix" >';
+        $splitterHtml[] = '<span class="category">' . $labelPublicationDetails . '</span>';
         $splitterHtml[] = '</div>';
 
         $form->addElement('html', implode(PHP_EOL, $splitterHtml));
 
         $form->addElement(
             'checkbox',
-            Manager::WIZARD_TARGET . '[' . $publicationContext . '][' . ContentObjectPublication::PROPERTY_HIDDEN . ']',
-            $this->getTranslator()->trans('Hidden', [], $applicationContext)
+            $this->getPublicationAttributeElementName($publicationContext, ContentObjectPublication::PROPERTY_HIDDEN),
+            $labelHidden
         );
+
         $form->add_forever_or_timewindow(
-            'PublicationPeriod', Manager::WIZARD_TARGET . '[' . $publicationContext . ']', true
-        );
-        $form->addElement(
-            'checkbox', Manager::WIZARD_TARGET . '[' . $publicationContext . '][' .
-            ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION . ']',
-            $this->getTranslator()->trans('CourseAdminCollaborate', [], $applicationContext)
+            'PublicationPeriod', $this->getPublicationAttributeElementName($publicationContext), true
         );
 
         $form->addElement(
-            'checkbox',
-            Manager::WIZARD_TARGET . '[' . $publicationContext . '][' . ContentObjectPublication::PROPERTY_EMAIL_SENT .
-            ']', $this->getTranslator()->trans('SendByEMail', [], $applicationContext)
+            'checkbox', $this->getPublicationAttributeElementName(
+            $publicationContext, ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION
+        ), $labelCollaborate
+        );
+
+        $form->addElement(
+            'checkbox', $this->getPublicationAttributeElementName(
+            $publicationContext, ContentObjectPublication::PROPERTY_EMAIL_SENT
+        ), $labelEmail
         );
 
         $defaults[Manager::WIZARD_TARGET][$publicationContext]['forever'] = 1;
-
         $defaults[Manager::WIZARD_TARGET][$publicationContext][ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] =
             1;
 
         $form->setDefaults($defaults);
+    }
+
+    /**
+     * @param string $publicationContext
+     * @param string
+     *
+     * @return string
+     */
+    protected function getPublicationAttributeElementName(string $publicationContext, string $property = null)
+    {
+        $elementName = Manager::WIZARD_TARGET . '[' . $publicationContext . ']';
+
+        if (!is_null($property))
+        {
+            $elementName .= '[' . $property . ']';
+        }
+
+        return $elementName;
     }
 }

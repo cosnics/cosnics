@@ -2,24 +2,22 @@
 
 namespace Chamilo\Core\Repository\Publication\Form;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *
@@ -30,12 +28,12 @@ use Chamilo\Libraries\Architecture\Application\Application;
  * Class for application settings page Displays a form where the user can enter the installation settings regarding the
  * applications
  */
-class LocationForm extends FormValidator
+class PublicationTargetForm extends FormValidator
 {
 
     /**
      *
-     * @var \core\repository\ContentObject[]
+     * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     private $content_objects;
 
@@ -110,7 +108,7 @@ class LocationForm extends FormValidator
                 throw new NotAllowedException();
             }
 
-            // Don't allow publication is the content object is in the RECYCLED
+            // Don't allow publication if the content object is in the RECYCLED
             // state
             if ($content_object->get_state() == ContentObject::STATE_RECYCLED)
             {
@@ -130,11 +128,6 @@ class LocationForm extends FormValidator
         }
 
         $this->buildForm();
-    }
-
-    public function getApplication()
-    {
-        return $this->application;
     }
 
     /**
@@ -186,23 +179,6 @@ class LocationForm extends FormValidator
             $this, $this->content_objects[0], $this->getApplication()->getUser()
         );
 
-        $total_locations = 0;
-
-        //        $contextLocations = $this->getPublicationAggregator()->getContentObjectPublicationLocations(
-        //            $this->content_objects[0], $this->getApplication()->getUser()
-        //        );
-        //
-        //        foreach ($contextLocations as $locations)
-        //        {
-        //            if (!is_null($locations) && $locations->size() > 0)
-        //            {
-        //                $total_locations += $locations->size();
-        //                $this->add_locations($locations);
-        //            }
-        //        }
-
-        //        if ($total_locations > 0)
-        //        {
         $html = array();
         $html[] = '<div style="padding: 5px 0px;">';
         $html[] = '<a href="#" class="select-all-checkboxes">';
@@ -222,13 +198,6 @@ class LocationForm extends FormValidator
             'style_submit_button', 'publish', Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), null,
             null, 'ok-sign'
         );
-        //        }
-        //        else
-        //        {
-        //            $this->addElement(
-        //                'html', '<div class="warning-message">' . Translation::get('NoLocationsFound') . '</div>'
-        //            );
-        //        }
 
         $this->addElement(
             'html', '<script type="text/javascript" src="' .
@@ -237,27 +206,9 @@ class LocationForm extends FormValidator
         );
     }
 
-    /**
-     *
-     * @param string $application
-     * @param \core\repository\publication\Locations $locations
-     */
-    public function add_locations($locations)
+    public function getApplication()
     {
-        $this->applications[] = $locations->get_context();
-
-        $this->addElement(
-            'category', Translation::get('TypeName', null, $locations->get_application()), 'publication-location'
-        );
-
-        $renderer_class = $locations->get_context() . '\LocationSelector';
-        $renderer = new $renderer_class($this, $locations);
-        $renderer->run();
-
-        $manager_class = $locations->get_context() . '\Manager';
-        $manager_class::add_publication_attributes_elements($this);
-
-        $this->addElement('category');
+        return $this->application;
     }
 
     /**
