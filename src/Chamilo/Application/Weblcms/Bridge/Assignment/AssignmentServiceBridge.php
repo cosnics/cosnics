@@ -4,9 +4,9 @@ namespace Chamilo\Application\Weblcms\Bridge\Assignment;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Entry\EntryTable;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entry\EntryTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
@@ -30,7 +30,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     protected $assignmentService;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager
+     * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager
      */
     protected $entityServiceManager;
 
@@ -53,7 +53,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * AssignmentDataProvider constructor.
      *
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService $assignmentService
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager $entityServiceManager
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager $entityServiceManager
      */
     public function __construct(
         AssignmentService $assignmentService, EntityServiceManager $entityServiceManager

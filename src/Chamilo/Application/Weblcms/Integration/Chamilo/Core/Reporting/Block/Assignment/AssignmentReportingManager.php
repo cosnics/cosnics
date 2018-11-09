@@ -363,7 +363,7 @@ abstract class AssignmentReportingManager extends ToolBlock
     /**
      * @param int $entityType
      *
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceInterface
+     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceInterface
      */
     protected function getEntityServiceForEntityType($entityType)
     {
@@ -393,7 +393,7 @@ abstract class AssignmentReportingManager extends ToolBlock
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager
+     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager
      */
     protected function getEntityServiceManager()
     {

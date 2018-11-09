@@ -5,8 +5,8 @@ namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryFeedbackNotificationJobProcessor;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationJobProcessor;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationProcessor\EntryFeedbackNotificationJobProcessor;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\User\Storage\DataClass\User;
 

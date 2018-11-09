@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Notification\Test\Source;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationJobProcessor;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;
 

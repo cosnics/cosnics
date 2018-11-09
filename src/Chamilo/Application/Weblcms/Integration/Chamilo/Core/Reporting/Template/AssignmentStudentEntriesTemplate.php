@@ -119,7 +119,7 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager
+     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager
      */
     protected function getEntityServiceManager()
     {

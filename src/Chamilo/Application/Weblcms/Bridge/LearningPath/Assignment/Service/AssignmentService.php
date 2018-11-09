@@ -5,7 +5,7 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Service\EntryNotificationJobProcessor;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
 use Chamilo\Core\Queue\Service\JobProducer;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;

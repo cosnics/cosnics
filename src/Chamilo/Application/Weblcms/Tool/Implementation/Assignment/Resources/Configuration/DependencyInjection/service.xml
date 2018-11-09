@@ -15,14 +15,14 @@
 
         <service
                 id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.user_entity_service"
-                class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\UserEntityService">
+                class="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\UserEntityService">
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
             <argument type="service" id="symfony.component.translation.translator" />
         </service>
 
         <service
                 id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.course_group_entity_service"
-                class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\CourseGroupEntityService">
+                class="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\CourseGroupEntityService">
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
             <argument type="service" id="symfony.component.translation.translator" />
             <argument type="service" id="chamilo.core.user.service.user_service" />
@@ -30,7 +30,7 @@
 
         <service
                 id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.platform_group_entity_service"
-                class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\PlatformGroupEntityService">
+                class="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\PlatformGroupEntityService">
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
             <argument type="service" id="symfony.component.translation.translator" />
             <argument type="service" id="chamilo.core.user.service.user_service" />
@@ -38,7 +38,7 @@
 
         <service
             id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.entity_service_manager"
-            class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Entity\EntityServiceManager">
+            class="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager">
             <call method="addEntityService">
                 <argument type="constant">\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::ENTITY_TYPE_USER</argument>
                 <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.user_entity_service" />
@@ -69,30 +69,6 @@
                 class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentPublicationService">
             <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository" />
             <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
-        </service>
-
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationJobProcessor"
-                 class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationJobProcessor">
-            <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
-            <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.entity_service_manager" />
-            <argument type="service" id="chamilo.application.weblcms.service.publication" />
-            <argument type="service" id="chamilo.application.weblcms.service.course" />
-            <argument type="service" id="chamilo.core.user.service.user_service" />
-            <argument type="service" id="chamilo.core.repository.workspace.repository.content_object_repository" />
-            <argument type="service" id="Chamilo\Core\Notification\Service\FilterManager" />
-            <argument type="service" id="Chamilo\Core\Notification\Service\NotificationManager" />
-        </service>
-
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryFeedbackNotificationJobProcessor"
-                 class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryFeedbackNotificationJobProcessor">
-            <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
-            <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.service.entity.entity_service_manager" />
-            <argument type="service" id="chamilo.application.weblcms.service.publication" />
-            <argument type="service" id="chamilo.application.weblcms.service.course" />
-            <argument type="service" id="chamilo.core.user.service.user_service" />
-            <argument type="service" id="chamilo.core.repository.workspace.repository.content_object_repository" />
-            <argument type="service" id="Chamilo\Core\Notification\Service\FilterManager" />
-            <argument type="service" id="Chamilo\Core\Notification\Service\NotificationManager" />
         </service>
 
     </services>

@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachm
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntryNotificationJobProcessor;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
 use Chamilo\Core\Queue\Service\JobProducer;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;

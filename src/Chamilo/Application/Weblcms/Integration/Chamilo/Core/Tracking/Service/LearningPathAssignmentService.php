@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Reposi
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
-use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Service\EntryNotificationJobProcessor;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
 use Chamilo\Core\Queue\Service\JobProducer;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
