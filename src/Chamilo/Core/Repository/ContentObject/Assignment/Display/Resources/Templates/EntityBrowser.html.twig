@@ -40,7 +40,7 @@
 
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
     <li role="presentation">
-        <a href="#notifications" aria-controls="entities" role="tab" data-toggle="tab">
+        <a href="#notifications" aria-controls="entities" role="tab" data-toggle="tab" id="notifications-tab">
             {{ 'Notifications'|trans({}, appContext) }}
             {% if NOTIFICATIONS_COUNT > 0 %}<span class="new-notifications-label">{{ NOTIFICATIONS_COUNT }}</span>{% endif %}
         </a>
@@ -52,9 +52,10 @@
 
 <div class="dynamic-visual-tab-content tab-content">
     <div role="tabpanel" class="tab-pane tab-pane-with-border" id="notifications">
-        <notifications-list scroll-detector-element="#notifications"
+        <notifications-list ref="notifications" scroll-detector-element="#notifications"
                 retrieve-notifications-url="{{ NOTIFICATIONS_URL }}"
-                view-notification-url="{{ VIEW_NOTIFICATION_URL }}">
+                view-notification-url="{{ VIEW_NOTIFICATION_URL }}"
+                :load-on-startup="false">
         </notifications-list>
     </div>
     <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entities">
@@ -148,8 +149,20 @@
             el: '#notifications',
             data: {
 
+            },
+            mounted: function() {
+                var vueInstance = this;
+                var showedBefore = false;
+                $('#notifications-tab').on('shown.bs.tab', function() {
+                    if(!showedBefore) {
+                        showedBefore = true;
+                        vueInstance.$refs.notifications.loadData();
+                    }
+                });
             }
-        })
+        });
+
+
     });
 </script>
 

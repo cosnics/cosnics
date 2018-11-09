@@ -49,7 +49,8 @@ class AssignmentNotifications extends Block
             [
                 'RETRIEVE_NOTIFICATIONS_URL' => $retrieveNotificationsUrl,
                 'VIEW_NOTIFICATION_URL' => $viewNotificationUrl,
-                'BLOCK_ID' => $this->getBlock()->getId()
+                'BLOCK_ID' => $this->getBlock()->getId(),
+                'HIDDEN' => !$this->getBlock()->isVisible()
             ]
         );
     }

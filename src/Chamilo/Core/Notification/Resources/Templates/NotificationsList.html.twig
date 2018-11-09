@@ -178,6 +178,10 @@
                 notificationsPerPage: {
                     type: Number,
                     default: 15
+                },
+                loadOnStartup: {
+                    type: Boolean,
+                    default: true
                 }
             },
             data: function () {
@@ -231,7 +235,10 @@
                 }
             },
             mounted: function () {
-                this.loadData();
+
+                if(this.loadOnStartup) {
+                    this.loadData();
+                }
 
                 var vueInstance = this;
                 var isWindow = false;

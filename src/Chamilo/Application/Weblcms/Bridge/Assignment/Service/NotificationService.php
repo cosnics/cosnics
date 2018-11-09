@@ -76,6 +76,8 @@ class NotificationService
             $contextPath, $user, $offset, $count
         );
 
+        $this->notificationManager->setNotificationsViewedForUser($notifications, $user);
+
         return $this->notificationManager->formatNotifications($notifications, $contextPath);
     }
 

@@ -2,11 +2,13 @@
 
 {% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
 
-<div id="notifications{{ BLOCK_ID }}" class="notifications-block">
-<notifications-list scroll-detector-element="#notifications{{ BLOCK_ID }}"
-    retrieve-notifications-url="{{ RETRIEVE_NOTIFICATIONS_URL }}"
-    view-notification-url="{{ VIEW_NOTIFICATION_URL }}">
-</notifications-list>
+<div class="portal-block-content portal-block-new-list {% if HIDDEN %} hidden {% endif %}">
+    <div id="notifications{{ BLOCK_ID }}" class="notifications-block">
+        <notifications-list scroll-detector-element="#notifications{{ BLOCK_ID }}"
+            retrieve-notifications-url="{{ RETRIEVE_NOTIFICATIONS_URL }}"
+            view-notification-url="{{ VIEW_NOTIFICATION_URL }}">
+        </notifications-list>
+    </div>
 </div>
 
 <script type="text/javascript">
