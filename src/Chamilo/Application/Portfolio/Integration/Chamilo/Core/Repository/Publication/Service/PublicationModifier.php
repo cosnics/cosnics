@@ -3,17 +3,23 @@ namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publ
 
 use Chamilo\Application\Portfolio\Service\PublicationService;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager as PortfolioDisplayManager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\ComplexPortfolio;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Core\Repository\Publication\Domain\PublicationResult;
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationModifierInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service
@@ -34,17 +40,33 @@ class PublicationModifier implements PublicationModifierInterface
     private $publicationAttributesGenerator;
 
     /**
-     * PublicationAggregator constructor.
+     *
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     *
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    private $userService;
+
+    /**
      *
      * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
      * @param \Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\User\Service\UserService $userService
      */
     public function __construct(
-        PublicationService $publicationService, PublicationAttributesGenerator $publicationAttributesGenerator
+        PublicationService $publicationService, PublicationAttributesGenerator $publicationAttributesGenerator,
+        Translator $translator, UserService $userService
     )
     {
         $this->publicationService = $publicationService;
         $this->publicationAttributesGenerator = $publicationAttributesGenerator;
+        $this->translator = $translator;
+        $this->userService = $userService;
     }
 
     /**
@@ -113,11 +135,43 @@ class PublicationModifier implements PublicationModifierInterface
     }
 
     /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    public function getUserService(): UserService
+    {
+        return $this->userService;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     */
+    public function setUserService(UserService $userService): void
+    {
+        $this->userService = $userService;
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
      * @param array $options
      *
-     * @return \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode
+     * @return \Chamilo\Core\Repository\Publication\Domain\PublicationResult
      * @throws \Exception
      * @see PublicationInterface::publish_content_object()
      */
@@ -127,9 +181,16 @@ class PublicationModifier implements PublicationModifierInterface
     {
         $publication =
             $this->getPublicationService()->findPublicationByIdentifier($publicationTarget->getPublicationIdentifier());
+        $user = $this->getUserService()->findUserByIdentifier($publicationTarget->getUserIdentifier());
 
         $isPublication = $publication instanceof Publication;
         $isPublisher = $publication->get_publisher_id() == $publicationTarget->getUserIdentifier();
+
+        $failureMessage = $this->getTranslator()->trans(
+            'PublicationFailure', [
+            'CONTENT_OBJECT' => $contentObject->get_title(), 'USER' => $user->get_fullname()
+        ], 'Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository'
+        );
 
         if ($isPublication && $isPublisher)
         {
@@ -139,7 +200,7 @@ class PublicationModifier implements PublicationModifierInterface
 
             if ($rootNode->forms_cycle_with($contentObject->getId()))
             {
-                return false;
+                return new PublicationResult(PublicationResult::STATUS_FAILURE, $failureMessage);
             }
 
             if (!$contentObject instanceof Portfolio)
@@ -181,7 +242,7 @@ class PublicationModifier implements PublicationModifierInterface
 
             if (!$wrapper->create())
             {
-                return false;
+                return new PublicationResult(PublicationResult::STATUS_FAILURE, $failureMessage);
             }
             else
             {
@@ -202,12 +263,29 @@ class PublicationModifier implements PublicationModifierInterface
                 $portfolioPath->reset();
                 $portfolioPath = $portfolioContentObject->get_complex_content_object_path();
 
-                return $portfolioPath->follow_path_by_content_object_ids($currentParentsContentObjectIds);
+                $successMessage = $this->getTranslator()->trans(
+                    'PublicationSuccess', [
+                    'CONTENT_OBJECT' => $contentObject->get_title(), 'USER' => $user->get_fullname()
+                ], 'Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository'
+                );
+
+                $portfolioNode = $portfolioPath->follow_path_by_content_object_ids($currentParentsContentObjectIds);
+
+                $publicationUrl = new Redirect(
+                    array(
+                        Application::PARAM_CONTEXT => \Chamilo\Application\Portfolio\Manager::package(),
+                        PortfolioDisplayManager::PARAM_STEP => $portfolioNode->get_id()
+                    )
+                );
+
+                return new PublicationResult(
+                    PublicationResult::STATUS_SUCCESS, $successMessage, $publicationUrl->getUrl()
+                );
             }
         }
         else
         {
-            return false;
+            return new PublicationResult(PublicationResult::STATUS_FAILURE, $failureMessage);
         }
     }
 

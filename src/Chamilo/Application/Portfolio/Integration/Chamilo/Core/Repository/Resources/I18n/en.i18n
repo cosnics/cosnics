@@ -4,3 +4,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Repository"
+PublicationFailure = "Publication of {CONTENT_OBJECT} in the portfolio of {USER} has failed"
+PublicationSuccess = "{CONTENT_OBJECT} was successfully published in the portfolio of {USER}"

@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Manager;
-use Chamilo\Core\Repository\Publication\LocationSupport;
+use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\Service\PublicationModifierInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -49,16 +49,18 @@ class PublicationModifier implements PublicationModifierInterface
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\Repository\Publication\LocationSupport $location
+     * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
      * @param array $options
      *
-     * @return \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode
+     * @return \Chamilo\Core\Repository\Publication\Domain\PublicationResult
      * @throws \Exception
      * @see PublicationInterface::publish_content_object()
      */
-    public function publishContentObject(ContentObject $contentObject, LocationSupport $location, $options = array())
+    public function publishContentObject(
+        ContentObject $contentObject, PublicationTarget $publicationTarget, $options = array()
+    )
     {
-        return Manager::publish_content_object($contentObject, $location, $options);
+        return Manager::publish_content_object($contentObject, $publicationTarget, $options);
     }
 
     /**

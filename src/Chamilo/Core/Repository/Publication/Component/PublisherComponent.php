@@ -40,9 +40,11 @@ class PublisherComponent extends Manager implements DelegateComponent
         if ($publicationTargetForm->validate())
         {
             $exportValues = $publicationTargetForm->exportValues();
-            $this->getPublicationTargetProcessor()->processSelectedTargetsFromValues(
+            $publicationResults = $this->getPublicationTargetProcessor()->processSelectedTargetsFromValues(
                 $this->getContainer(), $this->getSelectedContentObjects(), $exportValues[self::WIZARD_TARGET]
             );
+
+            var_dump($publicationResults);
         }
         else
         {

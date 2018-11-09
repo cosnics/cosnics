@@ -43,7 +43,7 @@ interface PublicationModifierInterface
      * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
      * @param array $options
      *
-     * @return \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode
+     * @return \Chamilo\Core\Repository\Publication\Domain\PublicationResult
      * @throws \Exception
      * @see PublicationInterface::publish_content_object()
      */

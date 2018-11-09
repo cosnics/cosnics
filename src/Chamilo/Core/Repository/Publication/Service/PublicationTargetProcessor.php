@@ -62,6 +62,8 @@ class PublicationTargetProcessor
         ContainerInterface $container, array $contentObjects, array $selectedTargetValues
     )
     {
+        $publicationResults = [];
+
         foreach ($selectedTargetValues as $modifierServiceKey => $targetData)
         {
             $modifierServiceIdentifier =
@@ -76,9 +78,12 @@ class PublicationTargetProcessor
 
                 foreach ($contentObjects as $contentObject)
                 {
-                    $modifierService->publishContentObject($contentObject, $publicationTarget, $publicationOptions);
+                    $publicationResults[] =
+                        $modifierService->publishContentObject($contentObject, $publicationTarget, $publicationOptions);
                 }
             }
         }
+
+        return $publicationResults;
     }
 }

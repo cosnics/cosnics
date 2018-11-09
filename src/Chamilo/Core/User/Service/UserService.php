@@ -173,6 +173,7 @@ class UserService
     public function getUserFullNameByIdentifier($identifier)
     {
         $user = $this->findUserByIdentifier($identifier);
+
         if (! $user instanceof User)
         {
             return null;
