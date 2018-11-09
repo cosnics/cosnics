@@ -4,9 +4,9 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Co
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Core\Repository\Publication\Domain\PublicationContext;
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
-use Chamilo\Core\Repository\Publication\Location\Location;
-use Chamilo\Core\Repository\Publication\Location\Locations;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
+use Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer;
+use Chamilo\Core\Repository\Publication\Service\PublicationTargetService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -27,13 +27,57 @@ class PublicationAggregator implements PublicationAggregatorInterface
     private $translator;
 
     /**
-     * PublicationAggregator constructor.
-     *
-     * @param \Symfony\Component\Translation\Translator $translator
+     * @var \Chamilo\Core\Repository\Publication\Service\PublicationTargetService
      */
-    public function __construct(Translator $translator)
+    private $publicationTargetService;
+
+    /**
+     * @var \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer
+     */
+    private $publicationTargetRenderer;
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
+     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer $publicationTargetRenderer
+     */
+    public function __construct(
+        Translator $translator, PublicationTargetService $publicationTargetService,
+        PublicationTargetRenderer $publicationTargetRenderer
+    )
     {
         $this->translator = $translator;
+        $this->publicationTargetService = $publicationTargetService;
+        $this->publicationTargetRenderer = $publicationTargetRenderer;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function addPublicationTargetsToFormForContentObjectAndUser(
+        FormValidator $form, ContentObject $contentObject, User $user
+    )
+    {
+        $allowedTypes = Manager::get_allowed_content_object_types();
+        $type = $contentObject->get_type();
+
+        if (in_array($type, $allowedTypes))
+        {
+            $publicationTargetKey = $this->getPublicationTargetService()->addPublicationTargetAndGetKey(
+                new PublicationTarget(PublicationModifier::class)
+            );
+
+            $publicationTargetName =
+                $this->getTranslator()->trans('TypeName', [], 'Chamilo\Application\Calendar\Extension\Personal');
+
+            $this->getPublicationTargetRenderer()->addSinglePublicationTargetToForm(
+                $form, PublicationModifier::class, $publicationTargetKey, $publicationTargetName
+            );
+        }
     }
 
     /**
@@ -93,32 +137,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Core\Repository\Publication\Location\Locations[]
-     */
-    public function getContentObjectPublicationLocations(ContentObject $contentObject, User $user)
-    {
-//        $publicationContext = new PublicationContext(PublicationModifier::class);
-//
-//        $allowedTypes = Manager::get_allowed_content_object_types();
-//        $type = $contentObject->get_type();
-//
-//        if (in_array($type, $allowedTypes))
-//        {
-//            $publicationContext->append(
-//                new PublicationTarget(
-//                    PublicationModifier::class,
-//                    $this->getTranslator()->trans('TypeName', [], 'Chamilo\Application\Calendar\Extension\Personal')
-//                )
-//            );
-//        }
-//
-//        return array($publicationContext);
-    }
-
-    /**
      * @param integer $type
      * @param integer $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
@@ -136,6 +154,38 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return Manager::getContentObjectPublicationsAttributes(
             $objectIdentifier, $type, $condition, $count, $offset, $orderProperties
         );
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer
+     */
+    public function getPublicationTargetRenderer(): PublicationTargetRenderer
+    {
+        return $this->publicationTargetRenderer;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer $publicationTargetRenderer
+     */
+    public function setPublicationTargetRenderer(PublicationTargetRenderer $publicationTargetRenderer): void
+    {
+        $this->publicationTargetRenderer = $publicationTargetRenderer;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Service\PublicationTargetService
+     */
+    public function getPublicationTargetService(): PublicationTargetService
+    {
+        return $this->publicationTargetService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
+     */
+    public function setPublicationTargetService(PublicationTargetService $publicationTargetService): void
+    {
+        $this->publicationTargetService = $publicationTargetService;
     }
 
     /**
@@ -162,17 +212,5 @@ class PublicationAggregator implements PublicationAggregatorInterface
     public function isContentObjectPublished(int $contentObjectIdentifier)
     {
         return Manager::isContentObjectPublished($contentObjectIdentifier);
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function addPublicationTargetsToFormForContentObjectAndUser(
-        FormValidator $form, ContentObject $contentObject, User $user
-    )
-    {
-        // TODO: Implement addPublicationTargetsToFormForContentObjectAndUser() method.
     }
 }

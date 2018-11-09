@@ -28,6 +28,6 @@ abstract class Manager extends Application
     const DEFAULT_ACTION = self::ACTION_BROWSE;
     
     // Properties
-    const WIZARD_LOCATION = 'location';
+    const WIZARD_TARGET = 'target';
     const WIZARD_OPTION = 'option';
 }

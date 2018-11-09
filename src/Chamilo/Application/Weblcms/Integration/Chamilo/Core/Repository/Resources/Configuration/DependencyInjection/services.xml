@@ -3,14 +3,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service
-                id="chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.publication_aggregator"
-                class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator">
-            <argument type="service"
-                      id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service"/>
-            <argument type="service"
-                      id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service"/>
-            <argument type="service"
-                      id="chamilo.core.user.service.user_service"/>
+                id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator"
+                autowire="true">
             <tag name="chamilo.core.repository.publication.publication_aggregator"/>
         </service>
 

@@ -1,124 +1,154 @@
 <?php
 namespace Chamilo\Core\Repository\Publication\Service;
 
+use Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Symfony\Component\Translation\Translator;
 
+/**
+ * @package Chamilo\Core\Repository\Publication\Service
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class PublicationTargetRenderer
 {
-    public function addHeaderToForm(FormValidator $form)
-    {
 
+    /**
+     *
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function __construct(Translator $translator)
+    {
+        $this->translator = $translator;
     }
 
+    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     */
     public function addFooterToForm(FormValidator $form)
     {
+        $tableFooter = array();
 
-    }
+        $tableFooter[] = '</tbody>';
+        $tableFooter[] = '</table>';
 
-    public function addPublicationTargerToForm()
-    {
-
-    }
-
-    public function run()
-    {
-        $form_validator = $this->get_form_validator();
-        $locations = $this->get_locations();
-
-        $table_header = array();
-        $table_header[] = '<table class="table table-striped table-bordered table-hover table-responsive">';
-        $table_header[] = '<thead>';
-        $table_header[] = '<tr>';
-
-        if ($locations->size() > 1)
-        {
-            $table_header[] = '<th class="cell-stat-x2">';
-            $table_header[] = '<div class="checkbox no-toggle-style">';
-            $table_header[] = '<input class="select-all" type="checkbox" />';
-            $table_header[] = '<label></label>';
-            $table_header[] = '</div>';
-        }
-        else
-        {
-            $table_header[] = '<th class="cell-stat-x2"></th>';
-        }
-
-        $table_header[] = $this->get_header();
-        $table_header[] = '</tr>';
-        $table_header[] = '</thead>';
-        $table_header[] = '<tbody>';
-
-        $form_validator->addElement('html', implode(PHP_EOL, $table_header));
-
-        $renderer = $form_validator->defaultRenderer();
-
-        foreach ($locations->get_locations() as $key => $location)
-        {
-            $group = array();
-
-            $group[] = $form_validator->createElement(
-                'checkbox',
-                $this->get_checkbox_name($locations->get_package(), $location),
-                null,
-                null,
-                null,
-                $location->encode());
-
-            foreach ($this->get_group($location) as $group_element)
-            {
-                $group[] = $group_element;
-            }
-
-            $form_validator->addGroup($group, 'test_' . $key, null, '', false);
-
-            $renderer->setElementTemplate(
-                '<tr class="' . ($key % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>',
-                'test_' . $key);
-            $renderer->setGroupElementTemplate('<td>{element}</td>', 'test_' . $key);
-        }
-
-        $table_footer[] = '</tbody>';
-        $table_footer[] = '</table>';
-        $form_validator->addElement('html', implode(PHP_EOL, $table_footer));
+        $form->addElement('category');
+        $form->addElement('html', implode(PHP_EOL, $tableFooter));
     }
 
     /**
-     *
-     * @param string $context
-     * @return string
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     * @param string[] $columnNames
+     * @param boolean $hasOnlyOneLocation
      */
-    public function get_checkbox_name($context, $location)
+    public function addHeaderToForm(FormValidator $form, string $title, array $columnNames, $hasOnlyOneLocation = false)
     {
-        $registration = Configuration::registration($context);
-        return Manager::WIZARD_LOCATION . '[' . $registration[Registration::PROPERTY_ID] . '][' .
-            md5(serialize($location)) . ']';
+        $tableHeader = array();
+
+        $tableHeader[] = '<table class="table table-striped table-bordered table-hover table-responsive">';
+        $tableHeader[] = '<thead>';
+        $tableHeader[] = '<tr>';
+
+        $tableHeader[] = '<th class="cell-stat-x2">';
+
+        if (!$hasOnlyOneLocation)
+        {
+            $tableHeader[] = '<div class="checkbox no-toggle-style">';
+            $tableHeader[] = '<input class="select-all" type="checkbox" />';
+            $tableHeader[] = '<label></label>';
+            $tableHeader[] = '</div>';
+        }
+
+        $tableHeader[] = '</th>';
+
+        foreach ($columnNames as $columnName)
+        {
+            $tableHeader[] = '<th>' . $columnName . '</th>';
+        }
+
+        $tableHeader[] = '</th>';
+
+        $tableHeader[] = '</tr>';
+        $tableHeader[] = '</thead>';
+        $tableHeader[] = '<tbody>';
+
+        $form->addElement('category', $title, 'publication-location');
+        $form->addElement('html', implode(PHP_EOL, $tableHeader));
     }
 
     /**
-     *
-     * @see \core\repository\publication\LocationRenderer::get_header()
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     * @param string $publicationContext
+     * @param string $targetKey
+     * @param string[] $targetNames
      */
-    public function get_header()
+    public function addPublicationTargetToForm(
+        FormValidator $form, string $publicationContext, string $targetKey, array $targetNames
+    )
     {
-        $table_header = array();
-        $table_header[] = '<th>';
-        $table_header[] = Translation::get('Location', null, Manager::context());
-        $table_header[] = '</th>';
+        $renderer = $form->defaultRenderer();
 
-        return implode('', $table_header);
-    }
-
-    /**
-     *
-     * @see \core\repository\publication\LocationRenderer::get_group()
-     */
-    public function get_group(LocationSupport $location)
-    {
-        $form_validator = $this->get_form_validator();
         $group = array();
 
-        $group[] = $form_validator->createElement('static', null, null, $location->get_name());
+        $group[] = $form->createElement('checkbox', $this->getCheckboxName($publicationContext, $targetKey));
 
-        return $group;
+        foreach ($targetNames as $targetName)
+        {
+            $group[] = $form->createElement('static', null, null, $targetName);
+        }
+
+        $form->addGroup($group, 'target_' . $targetKey, null, '', false);
+
+        $renderer->setElementTemplate('<tr>{element}</tr>', 'target_' . $targetKey);
+        $renderer->setGroupElementTemplate('<td>{element}</td>', 'target_' . $targetKey);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     * @param string $publicationContext
+     * @param string $targetKey
+     * @param string $targetName
+     */
+    public function addSinglePublicationTargetToForm(
+        FormValidator $form, string $publicationContext, string $targetKey, string $targetName
+    )
+    {
+        $columnName = $this->getTranslator()->trans('Target', [], Manager::context());
+
+        $this->addHeaderToForm($form, $targetName, [$columnName], true);
+        $this->addPublicationTargetToForm($form, $publicationContext, $targetKey, [$targetName]);
+        $this->addFooterToForm($form);
+    }
+
+    /**
+     * @param string $publicationContext
+     * @param string $targetKey
+     *
+     * @return string
+     */
+    protected function getCheckboxName(string $publicationContext, string $targetKey)
+    {
+        return Manager::WIZARD_TARGET . '[' . $publicationContext . '][' . $targetKey . ']';
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 }

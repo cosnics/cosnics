@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
+use Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -43,29 +44,36 @@ class PublicationAggregator implements PublicationAggregatorInterface
     private $publicationTargetService;
 
     /**
-     * PublicationAggregator constructor.
-     *
+     * @var \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer
+     */
+    private $publicationTargetRenderer;
+
+    /**
      * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
      * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
+     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer $publicationTargetRenderer
      */
     public function __construct(
         PublicationService $publicationService, Translator $translator,
         PublicationAttributesGenerator $publicationAttributesGenerator,
-        PublicationTargetService $publicationTargetService
+        PublicationTargetService $publicationTargetService, PublicationTargetRenderer $publicationTargetRenderer
     )
     {
         $this->publicationService = $publicationService;
         $this->translator = $translator;
         $this->publicationAttributesGenerator = $publicationAttributesGenerator;
         $this->publicationTargetService = $publicationTargetService;
+        $this->publicationTargetRenderer = $publicationTargetRenderer;
     }
 
     /**
      * @param \Chamilo\Libraries\Format\Form\FormValidator $form
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function addPublicationTargetsToFormForContentObjectAndUser(
         FormValidator $form, ContentObject $contentObject, User $user
@@ -78,9 +86,14 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
         if (in_array($type, $allowedTypes) && $userPublication instanceof Publication)
         {
-            $location = new PublicationTarget(
-                array(PublicationModifier::class, $user->getId(), $userPublication->getId()),
-                $this->getTranslator()->trans('TypeName', [], 'Chamilo\Application\Calendar\Extension\Personal')
+            $publicationTargetKey = $this->getPublicationTargetService()->addPublicationTargetAndGetKey(
+                new PublicationTarget(PublicationModifier::class)
+            );
+
+            $publicationTargetName = $this->getTranslator()->trans('TypeName', [], 'Chamilo\Application\Portfolio');
+
+            $this->getPublicationTargetRenderer()->addSinglePublicationTargetToForm(
+                $form, PublicationModifier::class, $publicationTargetKey, $publicationTargetName
             );
         }
     }
@@ -207,6 +220,22 @@ class PublicationAggregator implements PublicationAggregatorInterface
     public function setPublicationService(PublicationService $publicationService): void
     {
         $this->publicationService = $publicationService;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer
+     */
+    public function getPublicationTargetRenderer(): PublicationTargetRenderer
+    {
+        return $this->publicationTargetRenderer;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer $publicationTargetRenderer
+     */
+    public function setPublicationTargetRenderer(PublicationTargetRenderer $publicationTargetRenderer): void
+    {
+        $this->publicationTargetRenderer = $publicationTargetRenderer;
     }
 
     /**

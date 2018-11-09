@@ -182,8 +182,6 @@ class LocationForm extends FormValidator
 
         $this->add_selected_content_objects();
 
-        $this->applications = array();
-
         $this->getPublicationAggregator()->addPublicationTargetsToFormForContentObjectAndUser(
             $this, $this->content_objects[0], $this->getApplication()->getUser()
         );

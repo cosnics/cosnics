@@ -41,15 +41,16 @@ class PublicationTargetService
     }
 
     /**
+     * @param string $publicationTargetKey
      * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
      *
      * @return bool
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function addPublicationTarget(PublicationTarget $publicationTarget)
+    public function addPublicationTargetForKey(string $publicationTargetKey, PublicationTarget $publicationTarget)
     {
         return $this->getPublicationTargetRepository()->addPublicationTarget(
-            $this->getPublicationTargetKey(), $publicationTarget
+            $publicationTargetKey, $publicationTarget
         );
     }
 
@@ -57,8 +58,22 @@ class PublicationTargetService
      * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
      *
      * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    protected function getPublicationTargetKey(PublicationTarget $publicationTarget)
+    public function addPublicationTargetAndGetKey(PublicationTarget $publicationTarget)
+    {
+        $publicationTargetKey = $this->determinePublicationTargetKey($publicationTarget);
+        $this->addPublicationTargetForKey($publicationTargetKey, $publicationTarget);
+
+        return $publicationTargetKey;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
+     *
+     * @return string
+     */
+    protected function determinePublicationTargetKey(PublicationTarget $publicationTarget)
     {
         return md5(serialize($publicationTarget));
     }
