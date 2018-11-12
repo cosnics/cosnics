@@ -73,7 +73,7 @@ class PublicationResult
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl()
     {
         return $this->url;
     }
@@ -81,7 +81,7 @@ class PublicationResult
     /**
      * @param string $url
      */
-    public function setUrl(string $url): void
+    public function setUrl(string $url)
     {
         $this->url = $url;
     }

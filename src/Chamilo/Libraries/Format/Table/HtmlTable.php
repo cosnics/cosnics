@@ -779,7 +779,7 @@ abstract class HtmlTable extends \HTML_Table
 
         for ($i = 0; $i < count($headerAttributes); $i ++)
         {
-            $header->setColAttributes($i, $headerAttributes[$i]);
+            $header->setColAttributes($i, $headerAttributes);
         }
 
         // TODO: Make sure the order column index and direction index match

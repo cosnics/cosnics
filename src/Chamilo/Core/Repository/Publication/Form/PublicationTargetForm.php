@@ -164,7 +164,7 @@ class PublicationTargetForm extends FormValidator
         $table = new SortableTableFromArray(
             $table_data, $header, array(), 1, count($table_data), SORT_ASC, 'selected-content-objects'
         );
-        $this->addElement('html', $table->toHtml());
+        $this->addElement('html', $table->render());
 
         $this->addElement('category');
     }

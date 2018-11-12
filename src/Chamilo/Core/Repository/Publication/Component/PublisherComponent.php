@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Publication\Component;
 
+use Chamilo\Core\Repository\Publication\Domain\PublicationResult;
 use Chamilo\Core\Repository\Publication\Form\PublicationTargetForm;
 use Chamilo\Core\Repository\Publication\Manager;
+use Chamilo\Core\Repository\Publication\Service\PublicationResultsRenderer;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetProcessor;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -44,7 +46,11 @@ class PublisherComponent extends Manager implements DelegateComponent
                 $this->getContainer(), $this->getSelectedContentObjects(), $exportValues[self::WIZARD_TARGET]
             );
 
-            var_dump($publicationResults);
+            $html[] = $this->render_header();
+            $html[] = $this->getPublicationResultsRenderer()->renderPublicationResults($publicationResults);
+            $html[] = $this->render_footer();
+
+            return implode(PHP_EOL, $html);
         }
         else
         {
@@ -82,6 +88,14 @@ class PublisherComponent extends Manager implements DelegateComponent
     public function getPublicationTargetProcessor()
     {
         return $this->getService(PublicationTargetProcessor::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Publication\Service\PublicationResultsRenderer
+     */
+    public function getPublicationResultsRenderer()
+    {
+        return $this->getService(PublicationResultsRenderer::class);
     }
 
     /**
