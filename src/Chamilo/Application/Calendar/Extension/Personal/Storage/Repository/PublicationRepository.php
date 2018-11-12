@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
@@ -243,6 +244,21 @@ class PublicationRepository
         );
 
         return new Joins($joins);
+    }
+
+    /**
+     * @param integer[] $contentObjectIdentifiers
+     *
+     * @return integer
+     */
+    public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers)
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
+            $contentObjectIdentifiers
+        );
+
+        return $this->countPublications($condition);
     }
 
 }

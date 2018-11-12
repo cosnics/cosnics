@@ -104,7 +104,10 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function areContentObjectsPublished(array $contentObjectIdentifiers)
     {
-        return Manager::areContentObjectsPublished($contentObjectIdentifiers);
+        $publicationCount =
+            $this->getPublicationService()->countPublicationsForContentObjectIdentifiers($contentObjectIdentifiers);
+
+        return $publicationCount > 0;
     }
 
     /**
@@ -273,6 +276,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function isContentObjectPublished(int $contentObjectIdentifier)
     {
-        return Manager::isContentObjectPublished($contentObjectIdentifier);
+        $publicationCount =
+            $this->getPublicationService()->countPublicationsForContentObjectIdentifier($contentObjectIdentifier);
+
+        return $publicationCount > 0;
     }
 }

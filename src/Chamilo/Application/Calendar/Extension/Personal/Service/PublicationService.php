@@ -143,4 +143,26 @@ class PublicationService
             );
         }
     }
+
+    /**
+     * @param $contentObjectIdentifier
+     *
+     * @return integer
+     */
+    public function countPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    {
+        return $this->countPublicationsForContentObjectIdentifiers([$contentObjectIdentifier]);
+    }
+
+    /**
+     * @param integer[] $contentObjectIdentifiers
+     *
+     * @return integer
+     */
+    public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers)
+    {
+        return $this->getPublicationRepository()->countPublicationsForContentObjectIdentifiers(
+            $contentObjectIdentifiers
+        );
+    }
 }

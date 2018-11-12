@@ -43,6 +43,22 @@ class Manager implements PublicationInterface
     }
 
     /*
+ * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::update_content_object_publication_id()
+ */
+
+    public static function isContentObjectPublished($object_id)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
+            new StaticConditionVariable($object_id)
+        );
+
+        $count = DataManager::count(Publication::class_name(), new DataClassCountParameters($condition));
+
+        return $count >= 1;
+    }
+
+    /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationsAttributes()
      */
 
@@ -153,43 +169,6 @@ class Manager implements PublicationInterface
         $order_properties = null
     )
     {
-        switch ($type)
-        {
-            case PublicationInterface::ATTRIBUTES_TYPE_OBJECT :
-                $publication_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
-                    new StaticConditionVariable($object_id)
-                );
-                break;
-            case PublicationInterface::ATTRIBUTES_TYPE_USER :
-                $publication_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER),
-                    new StaticConditionVariable($object_id)
-                );
-                break;
-            default :
-                return array();
-        }
-
-        if ($condition instanceof Condition)
-        {
-            $condition = new AndCondition(array($condition, $publication_condition));
-        }
-        else
-        {
-            $condition = $publication_condition;
-        }
-
-        $result = self::retrieve_content_object_publications($condition, $order_properties, $offset, $count);
-
-        $publication_attributes = array();
-
-        while ($record = $result->next_result())
-        {
-            $publication_attributes[] = self::create_publication_attributes_from_record($record);
-        }
-
-        return $publication_attributes;
     }
 
     public static function get_allowed_content_object_types()
@@ -250,21 +229,7 @@ class Manager implements PublicationInterface
         return new Joins($joins);
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::update_content_object_publication_id()
-     */
 
-    public static function isContentObjectPublished($object_id)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($object_id)
-        );
-
-        $count = DataManager::count(Publication::class_name(), new DataClassCountParameters($condition));
-
-        return $count >= 1;
-    }
 
     public static function publish_content_object(
         \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object, LocationSupport $location,
