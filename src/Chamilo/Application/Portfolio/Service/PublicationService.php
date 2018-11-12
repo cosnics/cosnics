@@ -5,12 +5,12 @@ namespace Chamilo\Application\Portfolio\Service;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
-use Chamilo\Core\Repository\Publication\PublicationInterface;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Symfony\Component\Translation\Translator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -45,8 +45,7 @@ class PublicationService
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(
-        PublicationRepository $publicationRepository, RightsService $rightsService,
-        Translator $translator
+        PublicationRepository $publicationRepository, RightsService $rightsService, Translator $translator
     )
     {
         $this->publicationRepository = $publicationRepository;
@@ -84,11 +83,12 @@ class PublicationService
      * @return integer
      */
     public function countPublicationsForTypeAndIdentifier(
-        $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null
+        $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
+        Condition $condition = null
     )
     {
-        if ($type !== PublicationInterface::ATTRIBUTES_TYPE_OBJECT &&
-            $type !== PublicationInterface::ATTRIBUTES_TYPE_USER)
+        if ($type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT &&
+            $type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER)
         {
             return 0;
         }
@@ -260,21 +260,19 @@ class PublicationService
      * @return string[]
      */
     public function findPublicationRecordsForTypeAndIdentifier(
-        $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null,
-        $count = null,
-        $offset = null, $orderProperties = null
+        $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
+        Condition $condition = null, $count = null, $offset = null, $orderProperties = null
     )
     {
-        if ($type !== PublicationInterface::ATTRIBUTES_TYPE_OBJECT &&
-            $type !== PublicationInterface::ATTRIBUTES_TYPE_USER)
+        if ($type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT &&
+            $type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER)
         {
             return [];
         }
         else
         {
             return $this->getPublicationRepository()->findPublicationRecordsForTypeAndIdentifier(
-                $type, $objectIdentifier, $condition, $count,
-                $offset, $orderProperties
+                $type, $objectIdentifier, $condition, $count, $offset, $orderProperties
             );
         }
     }
@@ -299,8 +297,7 @@ class PublicationService
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
     public function getPublicationInstanceForParameters(
-        $contentObjectIdentifier, $publisherIdentifier, $published,
-        $modified
+        $contentObjectIdentifier, $publisherIdentifier, $published, $modified
     )
     {
         $publication = new Publication();

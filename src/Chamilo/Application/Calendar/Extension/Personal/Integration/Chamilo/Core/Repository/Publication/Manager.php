@@ -9,6 +9,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Publication\Location\Location;
 use Chamilo\Core\Repository\Publication\Location\Locations;
 use Chamilo\Core\Repository\Publication\LocationSupport;
+use Chamilo\Core\Repository\Publication\multitype;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -28,17 +29,21 @@ use Chamilo\Libraries\Translation\Translation;
 
 class Manager implements PublicationInterface
 {
-
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::canContentObjectBeEdited()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::isContentObjectPublished()
+     */
+
+    /**
+     *
+     * @param \libraries\format\FormValidator $form
      */
     public static function add_publication_attributes_elements($form)
     {
-        // TODO: Please implement me !
+        // TODO: Implement add_publication_attributes_elements() method.
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::isContentObjectPublished()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationsAttributes()
      */
 
     public static function areContentObjectsPublished($object_ids)
@@ -53,54 +58,27 @@ class Manager implements PublicationInterface
         return $count >= 1;
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::areContentObjectsPublished()
+    /**
+     * Determines whether the given content object can be edited in the implementing context
+     *
+     * @param int $object_id
+     *
+     * @return boolean
      */
-
     public static function canContentObjectBeEdited($object_id)
     {
-        return true;
+        // TODO: Implement canContentObjectBeEdited() method.
     }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationsAttributes()
-     */
 
     public static function countPublicationAttributes(
         $attributes_type = self::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null
     )
     {
-        switch ($attributes_type)
-        {
-            case PublicationInterface::ATTRIBUTES_TYPE_OBJECT :
-                $publication_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
-                    new StaticConditionVariable($identifier)
-                );
-                break;
-            case PublicationInterface::ATTRIBUTES_TYPE_USER :
-                $publication_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER),
-                    new StaticConditionVariable($identifier)
-                );
-                break;
-            default :
-                return 0;
-        }
-
-        if ($condition instanceof Condition)
-        {
-            $condition = new AndCondition(array($condition, $publication_condition));
-        }
-        else
-        {
-            $condition = $publication_condition;
-        }
-
-        $parameters = new DataClassCountParameters($condition, self::get_content_object_publication_joins());
-
-        return DataManager::count(Publication::class_name(), $parameters);
     }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_attribute()
+     */
 
     /**
      * Creates a publication attributes object from a given record
@@ -119,7 +97,7 @@ class Manager implements PublicationInterface
         $attributes->set_application(\Chamilo\Application\Calendar\Extension\Personal\Manager::context());
         $attributes->set_location(Translation::get('TypeName', null, \Chamilo\Application\Calendar\Manager::context()));
         $attributes->set_url(
-            'index.php?application=Chamilo\Application\Calendar&amp;go=view&personal_calendar=' . $attributes->get_id()
+            'index.php?application=Chamilo\Application\Calendar\Extension\Personal&amp;go=view&publication_id=' . $attributes->get_id()
         );
 
         $attributes->set_title($record[ContentObject::PROPERTY_TITLE]);
@@ -129,18 +107,16 @@ class Manager implements PublicationInterface
         return $attributes;
     }
 
+    /*
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::countPublicationAttributes()
+     */
+
     public static function deleteContentObjectPublications($object_id)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($object_id)
-        );
-
-        return DataManager::deletes(Publication::class_name(), $condition);
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_attribute()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::deleteContentObjectPublications()
      */
 
     public static function delete_content_object_publication($publication_id)
@@ -153,27 +129,23 @@ class Manager implements PublicationInterface
         return DataManager::deletes(Publication::class_name(), $condition);
     }
 
+    /*
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::delete_content_object_publication()
+     */
+
+    /**
+     *
+     * @param \core\repository\ContentObject $content_object
+     *
+     * @return multitype:mixed
+     */
     public static function getContentObjectPublicationLocations($content_object, $user = null)
     {
-        $applicationContext = \Chamilo\Application\Calendar\Extension\Personal\Manager::context();
-
-        $locations = new Locations(__NAMESPACE__);
-        $allowed_types = self::get_allowed_content_object_types();
-
-        $type = $content_object->get_type();
-
-        if (in_array($type, $allowed_types))
-        {
-            $locations->add_location(
-                new Location($applicationContext, Translation::get('TypeName', null, $applicationContext))
-            );
-        }
-
-        return array($locations);
+        // TODO: Implement getContentObjectPublicationLocations() method.
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::countPublicationAttributes()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationLocations()
      */
 
     public static function getContentObjectPublicationsAttributes(
@@ -220,10 +192,6 @@ class Manager implements PublicationInterface
         return $publication_attributes;
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::deleteContentObjectPublications()
-     */
-
     public static function get_allowed_content_object_types()
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
@@ -245,7 +213,7 @@ class Manager implements PublicationInterface
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::delete_content_object_publication()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::publish_content_object()
      */
 
     public static function get_content_object_publication_attribute($publication_id)
@@ -260,7 +228,7 @@ class Manager implements PublicationInterface
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationLocations()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::add_publication_attributes_elements()
      */
 
     /**
@@ -282,6 +250,10 @@ class Manager implements PublicationInterface
         return new Joins($joins);
     }
 
+    /*
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::update_content_object_publication_id()
+     */
+
     public static function isContentObjectPublished($object_id)
     {
         $condition = new EqualityCondition(
@@ -293,10 +265,6 @@ class Manager implements PublicationInterface
 
         return $count >= 1;
     }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::publish_content_object()
-     */
 
     public static function publish_content_object(
         \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object, LocationSupport $location,
@@ -316,10 +284,6 @@ class Manager implements PublicationInterface
             return $publication;
         }
     }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::add_publication_attributes_elements()
-     */
 
     /**
      * Retrieves content object publications joined with the repository content object table
@@ -367,10 +331,6 @@ class Manager implements PublicationInterface
 
         return DataManager::records(Publication::class_name(), $parameters);
     }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::update_content_object_publication_id()
-     */
 
     public static function update_content_object_publication_id($publication_attributes)
     {

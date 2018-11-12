@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
+use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Manager;
+use Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetService;
@@ -20,6 +21,16 @@ use Symfony\Component\Translation\Translator;
 class PublicationAggregator implements PublicationAggregatorInterface
 {
     /**
+     * @var \Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
+     */
+    private $publicationAttributesGenerator;
+
+    /**
+     * @var \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService
+     */
+    private $publicationService;
+
+    /**
      *
      * @var \Symfony\Component\Translation\Translator
      */
@@ -36,15 +47,20 @@ class PublicationAggregator implements PublicationAggregatorInterface
     private $publicationTargetRenderer;
 
     /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService $publicationService
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
      * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
      * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer $publicationTargetRenderer
      */
     public function __construct(
-        Translator $translator, PublicationTargetService $publicationTargetService,
-        PublicationTargetRenderer $publicationTargetRenderer
+        PublicationService $publicationService, Translator $translator,
+        PublicationAttributesGenerator $publicationAttributesGenerator,
+        PublicationTargetService $publicationTargetService, PublicationTargetRenderer $publicationTargetRenderer
     )
     {
+        $this->publicationService = $publicationService;
+        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
         $this->translator = $translator;
         $this->publicationTargetService = $publicationTargetService;
         $this->publicationTargetRenderer = $publicationTargetRenderer;
@@ -98,7 +114,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function canContentObjectBeEdited(int $contentObjectIdentifier)
     {
-        return Manager::canContentObjectBeEdited($contentObjectIdentifier);
+        return true;
     }
 
     /**
@@ -124,7 +140,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
         int $type, int $objectIdentifier, Condition $condition = null
     )
     {
-        return Manager::countPublicationAttributes($type, $objectIdentifier, $condition);
+        return $this->getPublicationService()->countPublicationsForTypeAndIdentifier(
+            $type, $objectIdentifier, $condition
+        );
     }
 
     /**
@@ -134,7 +152,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function deleteContentObjectPublications(ContentObject $contentObject)
     {
-        return Manager::deleteContentObjectPublications($contentObject->getId());
+        return $this->getPublicationService()->deletePublicationsForContentObject($contentObject);
     }
 
     /**
@@ -152,9 +170,52 @@ class PublicationAggregator implements PublicationAggregatorInterface
         array $orderProperties = null
     )
     {
-        return Manager::getContentObjectPublicationsAttributes(
-            $objectIdentifier, $type, $condition, $count, $offset, $orderProperties
+        $publicationRecords = $this->getPublicationService()->findPublicationRecordsForTypeAndIdentifier(
+            $type, $objectIdentifier, $condition, $count, $offset, $orderProperties
         );
+
+        $publicationAttributes = array();
+
+        foreach ($publicationRecords as $publicationRecord)
+        {
+            $publicationAttributes[] =
+                $this->getPublicationAttributesGenerator()->createAttributesFromRecord($publicationRecord);
+        }
+
+        return $publicationAttributes;
+    }
+
+    /**
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
+     */
+    public function getPublicationAttributesGenerator(): PublicationAttributesGenerator
+    {
+        return $this->publicationAttributesGenerator;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
+     */
+    public function setPublicationAttributesGenerator(PublicationAttributesGenerator $publicationAttributesGenerator
+    ): void
+    {
+        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
+    }
+
+    /**
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService
+     */
+    public function getPublicationService(): PublicationService
+    {
+        return $this->publicationService;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService $publicationService
+     */
+    public function setPublicationService(PublicationService $publicationService): void
+    {
+        $this->publicationService = $publicationService;
     }
 
     /**

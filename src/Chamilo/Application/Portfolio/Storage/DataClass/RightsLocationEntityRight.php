@@ -1,4 +1,4 @@
-F<?php
+<?php
 namespace Chamilo\Application\Portfolio\Storage\DataClass;
 
 use Chamilo\Application\Portfolio\Storage\DataManager;

@@ -178,14 +178,15 @@ class PublicationAggregator implements PublicationAggregatorInterface
     )
     {
         $publicationRecords = $this->getPublicationService()->findPublicationRecordsForTypeAndIdentifier(
-            $objectIdentifier, $type, $condition, $count, $offset, $orderProperties
+            $type, $objectIdentifier, $condition, $count, $offset, $orderProperties
         );
 
         $publicationAttributes = array();
 
         foreach ($publicationRecords as $publicationRecord)
         {
-            $publicationAttributes[] = $this->createContentObjectPublicationAttributesFromRecord($publicationRecord);
+            $publicationAttributes[] =
+                $this->getPublicationAttributesGenerator()->createAttributesFromRecord($publicationRecord);
         }
 
         return $publicationAttributes;

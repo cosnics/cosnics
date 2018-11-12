@@ -10,5 +10,7 @@
         </service>
         <service
                 id="Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationModifier"/>
+        <service
+                id="Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator"/>
     </services>
 </container>

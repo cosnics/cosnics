@@ -3,7 +3,7 @@
 namespace Chamilo\Application\Portfolio\Storage\Repository;
 
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
-use Chamilo\Core\Repository\Publication\PublicationInterface;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
@@ -80,18 +80,19 @@ class PublicationRepository
      * @return integer
      */
     public function countPublicationsForTypeAndIdentifier(
-        int $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null
+        int $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
+        Condition $condition = null
     )
     {
         switch ($type)
         {
-            case PublicationInterface::ATTRIBUTES_TYPE_OBJECT :
+            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT :
                 $publicationCondition = new EqualityCondition(
                     new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
                     new StaticConditionVariable($objectIdentifier)
                 );
                 break;
-            case PublicationInterface::ATTRIBUTES_TYPE_USER :
+            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER :
                 $publicationCondition = new EqualityCondition(
                     new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER_ID),
                     new StaticConditionVariable($objectIdentifier)
@@ -244,19 +245,19 @@ class PublicationRepository
      * @return string[]
      */
     public function findPublicationRecordsForTypeAndIdentifier(
-        $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null,
-        int $count = null, int $offset = null, array $orderProperties = null
+        $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
+        Condition $condition = null, int $count = null, int $offset = null, array $orderProperties = null
     )
     {
         switch ($type)
         {
-            case PublicationInterface::ATTRIBUTES_TYPE_OBJECT :
+            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT :
                 $publicationCondition = new EqualityCondition(
                     new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
                     new StaticConditionVariable($objectIdentifier)
                 );
                 break;
-            case PublicationInterface::ATTRIBUTES_TYPE_USER :
+            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER :
                 $publicationCondition = new EqualityCondition(
                     new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER_ID),
                     new StaticConditionVariable($objectIdentifier)
