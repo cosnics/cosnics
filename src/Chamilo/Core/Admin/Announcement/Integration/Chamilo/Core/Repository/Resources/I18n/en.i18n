@@ -1,0 +1,8 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Repository"
+PublicationFailure = "Publication of %CONTENT_OBJECT% as a system announcement has failed"
+PublicationSuccess = "%CONTENT_OBJECT% was successfully published as a system announcement"

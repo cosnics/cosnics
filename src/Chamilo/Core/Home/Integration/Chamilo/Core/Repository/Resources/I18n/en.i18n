@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository
+; Package = application\weblcms\integration\repository
 ; Language = en
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Repository"
-PublicationImpossible = "Direct publication of <em>%CONTENT_OBJECT%</em> in a learning path is impossible"
+PublicationImpossible = "Direct publication of <em>%CONTENT_OBJECT%</em> on the homepage is impossible"

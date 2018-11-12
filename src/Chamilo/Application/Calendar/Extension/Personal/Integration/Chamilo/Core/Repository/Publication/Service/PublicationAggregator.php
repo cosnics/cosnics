@@ -2,8 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Manager;
-use Chamilo\Core\Repository\Publication\Domain\PublicationContext;
-use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
+use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetService;
@@ -68,7 +67,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         if (in_array($type, $allowedTypes))
         {
             $publicationTargetKey = $this->getPublicationTargetService()->addPublicationTargetAndGetKey(
-                new PublicationTarget(PublicationModifier::class)
+                new PublicationTarget(PublicationModifier::class, $user->getId())
             );
             $modifierServiceKey =
                 $this->getPublicationTargetService()->addModifierServiceIdentifierAndGetKey(PublicationModifier::class);

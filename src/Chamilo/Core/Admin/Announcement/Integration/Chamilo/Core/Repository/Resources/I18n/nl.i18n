@@ -1,0 +1,9 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Repository"
+PublicationFailure = "Publicatie van <em>%CONTENT_OBJECT%</em> als systeemmededeling is mislukt"
+PublicationSuccess = "<em>%CONTENT_OBJECT%</em> werd succesvol gepubliceerd als systeemmededeling"
+

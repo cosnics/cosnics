@@ -1,8 +1,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = application\portfolio\integration\repository
+; Package = Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository
 ; Language = nl
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Repository"
-PublicationFailure = "Publicatie van <em>{CONTENT_OBJECT}</em> in het portfolio van <em>{USER}</em> is mislukt"
-PublicationSuccess = "<em>{CONTENT_OBJECT}</em> werd succesvol gepubliceerd in het portfolio van <em>{USER}>/em>"
+PublicationFailure = "Publicatie van <em>%CONTENT_OBJECT%</em> in het portfolio van <em>%USER%</em> is mislukt"
+PublicationSuccess = "<em>%CONTENT_OBJECT%</em> werd succesvol gepubliceerd in het portfolio van <em>%USER%</em>"

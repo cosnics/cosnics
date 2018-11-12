@@ -3,11 +3,13 @@
 namespace Chamilo\Core\Home\Integration\Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Core\Home\Integration\Chamilo\Core\Repository\Publication\Manager;
+use Chamilo\Core\Repository\Publication\Domain\PublicationResult;
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\Service\PublicationModifierInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Home\Integration\Chamilo\Core\Repository\Publication\Service
@@ -16,6 +18,21 @@ use Chamilo\Libraries\Format\Form\FormValidator;
  */
 class PublicationModifier implements PublicationModifierInterface
 {
+    /**
+     *
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     *
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function __construct(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
      *
@@ -48,6 +65,22 @@ class PublicationModifier implements PublicationModifierInterface
     }
 
     /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
      * @param array $options
@@ -60,7 +93,12 @@ class PublicationModifier implements PublicationModifierInterface
         ContentObject $contentObject, PublicationTarget $publicationTarget, $options = array()
     )
     {
-        return Manager::publish_content_object($contentObject, $publicationTarget, $options);
+        return new PublicationResult(
+            PublicationResult::STATUS_FAILURE, $this->getTranslator()->trans(
+            'PublicationImpossible', ['%CONTENT_OBJECT%' => $contentObject->get_title()],
+            'Chamilo\Core\Home\Integration\Chamilo\Core\Repository'
+        )
+        );
     }
 
     /**

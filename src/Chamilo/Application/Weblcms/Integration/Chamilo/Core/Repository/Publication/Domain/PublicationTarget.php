@@ -19,16 +19,24 @@ class PublicationTarget extends \Chamilo\Core\Repository\Publication\Domain\Publ
     private $toolIdentifier;
 
     /**
+     *
+     * @var integer
+     */
+    private $userIdentifier;
+
+    /**
      * @param string $modifierServiceIdentifier
      * @param integer $courseIdentifier
      * @param string $toolIdentifier
+     * @param integer $userIdentifier
      */
-    public function __construct($modifierServiceIdentifier, $courseIdentifier, $toolIdentifier)
+    public function __construct($modifierServiceIdentifier, $courseIdentifier, $toolIdentifier, $userIdentifier)
     {
         parent:: __construct($modifierServiceIdentifier);
 
         $this->courseIdentifier = $courseIdentifier;
         $this->toolIdentifier = $toolIdentifier;
+        $this->userIdentifier = $userIdentifier;
     }
 
     /**
@@ -61,6 +69,24 @@ class PublicationTarget extends \Chamilo\Core\Repository\Publication\Domain\Publ
     public function setToolIdentifier(string $toolIdentifier): void
     {
         $this->toolIdentifier = $toolIdentifier;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getUserIdentifier()
+    {
+        return $this->userIdentifier;
+    }
+
+    /**
+     *
+     * @param integer $userIdentifier
+     */
+    public function setUserIdentifier($userIdentifier)
+    {
+        $this->userIdentifier = $userIdentifier;
     }
 
 }

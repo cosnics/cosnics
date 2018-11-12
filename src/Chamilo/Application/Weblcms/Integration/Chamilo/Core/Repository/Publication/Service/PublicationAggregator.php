@@ -210,7 +210,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
                         $publicationTargetKey = $this->getPublicationTargetService()->addPublicationTargetAndGetKey(
                             new PublicationTarget(
-                                PublicationModifier::class, $course->get_id(), $tool_names[$tool_id]
+                                PublicationModifier::class, $course->get_id(), $tool_names[$tool_id], $user->getId()
                             )
                         );
 

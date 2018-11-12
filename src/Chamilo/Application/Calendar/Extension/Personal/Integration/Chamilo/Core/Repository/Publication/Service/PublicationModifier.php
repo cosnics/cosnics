@@ -86,7 +86,7 @@ class PublicationModifier implements PublicationModifierInterface
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
      * @param array $options
      *
      * @return \Chamilo\Core\Repository\Publication\Domain\PublicationResult
@@ -98,13 +98,13 @@ class PublicationModifier implements PublicationModifierInterface
     )
     {
         $publication = new Publication();
-        $publication->set_content_object_id($contentObject->get_id());
-        $publication->set_publisher($contentObject->get_owner_id());
+        $publication->set_content_object_id($contentObject->getId());
+        $publication->set_publisher($publicationTarget->getUserIdentifier());
 
         if (!$publication->create())
         {
             $failureMessage = $this->getTranslator()->trans(
-                'PublicationFailure', ['CONTENT_OBJECT' => $contentObject->get_title()],
+                'PublicationFailure', ['%CONTENT_OBJECT%' => $contentObject->get_title()],
                 'Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository'
             );
 
@@ -113,13 +113,13 @@ class PublicationModifier implements PublicationModifierInterface
         else
         {
             $successMessage = $this->getTranslator()->trans(
-                'PublicationSuccess', ['CONTENT_OBJECT' => $contentObject->get_title()],
+                'PublicationSuccess', ['%CONTENT_OBJECT%' => $contentObject->get_title()],
                 'Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository'
             );
 
             $publicationUrl = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::package(),
+                    Application::PARAM_CONTEXT => PersonalCalendarManager::package(),
                     Application::PARAM_ACTION => PersonalCalendarManager::ACTION_VIEW,
                     PersonalCalendarManager::PARAM_PUBLICATION_ID => $publication->getId()
                 )

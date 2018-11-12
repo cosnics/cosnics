@@ -4,5 +4,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Repository"
-PublicationFailure = "Publicatie van <em>{CONTENT_OBJECT}</em> in je kalender is mislukt"
-PublicationSuccess = "<em>{CONTENT_OBJECT}</em> werd succesvol gepubliceerd in je kalender"
+PublicationFailure = "Publicatie van <em>%CONTENT_OBJECT%</em> in je kalender is mislukt"
+PublicationSuccess = "<em>%CONTENT_OBJECT%</em> werd succesvol gepubliceerd in je kalender"

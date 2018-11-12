@@ -188,7 +188,7 @@ class PublicationModifier implements PublicationModifierInterface
 
         $failureMessage = $this->getTranslator()->trans(
             'PublicationFailure', [
-            'CONTENT_OBJECT' => $contentObject->get_title(), 'USER' => $user->get_fullname()
+            '%CONTENT_OBJECT%' => $contentObject->get_title(), '%USER%' => $user->get_fullname()
         ], 'Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository'
         );
 
@@ -265,7 +265,7 @@ class PublicationModifier implements PublicationModifierInterface
 
                 $successMessage = $this->getTranslator()->trans(
                     'PublicationSuccess', [
-                    'CONTENT_OBJECT' => $contentObject->get_title(), 'USER' => $user->get_fullname()
+                    '%CONTENT_OBJECT%' => $contentObject->get_title(), '%USER%' => $user->get_fullname()
                 ], 'Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository'
                 );
 
