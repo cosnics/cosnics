@@ -4,14 +4,14 @@
     function selectAll(event, userInterface)
     {
         event.preventDefault();
-        $('input:checkbox[name^="location"]').prop('checked', true);
+        $('input:checkbox[name^="target"]').prop('checked', true);
         $('input:checkbox.select-all').prop('checked', true);
     }
     
     function selectNone(event, userInterface)
     {
         event.preventDefault();
-        $('input:checkbox[name^="location"]').prop('checked', false);
+        $('input:checkbox[name^="target"]').prop('checked', false);
         $('input:checkbox.select-all').prop('checked', false);
     }
     
@@ -22,11 +22,11 @@
         
         if ($(this).prop('checked'))
         {
-            $('input:checkbox[name^="location"]', tableElement).prop('checked', true);
+            $('input:checkbox[name^="target"]', tableElement).prop('checked', true);
         }
         else
         {
-            $('input:checkbox[name^="location"]', tableElement).prop('checked', false);
+            $('input:checkbox[name^="target"]', tableElement).prop('checked', false);
         }
     }
     
