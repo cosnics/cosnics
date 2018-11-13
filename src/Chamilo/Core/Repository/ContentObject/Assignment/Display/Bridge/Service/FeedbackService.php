@@ -67,7 +67,7 @@ abstract class FeedbackService
      *
      * @param Entry|\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Feedback[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback[]
      */
     public function findFeedbackByEntry(Entry $entry)
     {

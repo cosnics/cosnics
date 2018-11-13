@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Not
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -265,7 +265,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             $this->filterManager->getOrCreateFilterByContextPath(
                 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() . '::TreeNodeData:' . $treeNodeData->getId(),
                 new TranslationContext(
-                    'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', 'NotificationFilterLearningPathAssignment',
+                    'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', 'NotificationFilterLearningPathAssignment',
                     [
                         '{COURSE_TITLE}' => $course->get_title(), '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                         '{ASSIGNMENT_TITLE}' => $assignment->get_title()
@@ -320,7 +320,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $viewingContexts[] = new ViewingContext(
             $key,
             new TranslationContext(
-                'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', $translations[$key],
+                'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', $translations[$key],
                 [
                     '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
@@ -333,7 +333,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $viewingContexts[] = new ViewingContext(
             $key,
             new TranslationContext(
-                'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', $translations[$key],
+                'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', $translations[$key],
                 [
                     '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
@@ -346,7 +346,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $viewingContexts[] = new ViewingContext(
             $key,
             new TranslationContext(
-                'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', $translations[$key],
+                'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', $translations[$key],
                 [
                     '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
@@ -359,7 +359,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $viewingContexts[] = new ViewingContext(
             $key,
             new TranslationContext(
-                'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', $translations[$key],
+                'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', $translations[$key],
                 [
                     '{LEARNING_PATH_TITLE}' => $assignment->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
@@ -381,7 +381,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
     abstract protected function getNotificationViewingContextVariables(Course $course, ContentObjectPublication $publication, TreeNodeData $treeNodeData);
 
     /**
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry $entry
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
      *
      * @return int
      */

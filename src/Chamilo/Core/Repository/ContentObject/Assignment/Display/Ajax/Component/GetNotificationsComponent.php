@@ -32,12 +32,4 @@ class GetNotificationsComponent extends Manager
 
         return new JsonResponse($this->getSerializer()->serialize($notifications, 'json'), 200, [], true);
     }
-
-    /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface
-     */
-    protected function getNotificationServiceBridge()
-    {
-        return $this->getBridgeManager()->getBridgeByInterface(NotificationServiceBridgeInterface::class);
-    }
 }

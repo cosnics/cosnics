@@ -3,7 +3,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Configuration\Configuration;
@@ -398,7 +398,7 @@ abstract class AssignmentReportingManager extends ToolBlock
     protected function getEntityServiceManager()
     {
         return $this->getService(
-            'chamilo.application.weblcms.tool.implementation.assignment.service.entity.entity_service_manager'
+            'Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager'
         );
     }
 

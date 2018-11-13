@@ -4,7 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -92,5 +94,25 @@ class NotificationServiceBridge implements NotificationServiceBridgeInterface
     public function createNotificationForNewFeedback(User $user, Entry $entry, Feedback $feedback)
     {
         $this->notificationServiceBridgeInterface->createNotificationForNewFeedback($user, $this->treeNode, $entry, $feedback);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Score $score
+     */
+    public function createNotificationForNewScore(User $user, Entry $entry, Score $score)
+    {
+        $this->notificationServiceBridgeInterface->createNotificationForNewScore($user, $this->treeNode, $entry, $score);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\EntryAttachment $entryAttachment
+     */
+    public function createNotificationForNewEntryAttachment(User $user, Entry $entry, EntryAttachment $entryAttachment)
+    {
+        $this->notificationServiceBridgeInterface->createNotificationForNewEntryAttachment($user, $this->treeNode, $entry, $entryAttachment);
     }
 }

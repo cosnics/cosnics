@@ -484,3 +484,5 @@ SET LPAE.content_object_publication_id = TNA.publication_id;
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath\\Assignment', 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath', 'LearningPathBridge', 'AssignmentLearningPathBridge', '1', '1.0.0', '1');
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Bridge\\Assignment', 'Chamilo\\Application\\Weblcms\\Bridge', 'Bridge', 'AssignmentBridge', '1', '1.0.0', '1');
 
+ALTER TABLE `tracking_weblcms_assignment_entry_attachment` ADD `created` INT(10) UNSIGNED NOT NULL AFTER `attachment_id`;
+ALTER TABLE `tracking_weblcms_learning_path_assignment_entry_attachment` ADD `created` INT(10) UNSIGNED NOT NULL AFTER `attachment_id`;

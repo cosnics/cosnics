@@ -6,7 +6,9 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -103,6 +105,36 @@ class NotificationServiceBridge implements NotificationServiceBridgeInterface
     {
         $this->notificationService->createNotificationForNewFeedback(
             $user, $this->contentObjectPublication, $entry, $feedback
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score|\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score $score
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function createNotificationForNewScore(User $user, Entry $entry, Score $score)
+    {
+        $this->notificationService->createNotificationForNewScore(
+            $user, $this->contentObjectPublication, $entry, $score
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment|\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment $entryAttachment
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function createNotificationForNewEntryAttachment(User $user, Entry $entry, EntryAttachment $entryAttachment)
+    {
+        $this->notificationService->createNotificationForNewEntryAttachment(
+            $user, $this->contentObjectPublication, $entry, $entryAttachment
         );
     }
 }

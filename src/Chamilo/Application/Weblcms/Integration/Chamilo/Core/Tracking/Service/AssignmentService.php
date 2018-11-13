@@ -2,11 +2,11 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\EntryAttachment;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Score;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Feedback;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Note;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Note;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentEphorusRepository;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -716,7 +716,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\EntryAttachment|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment
+     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment
      */
     protected function createEntryAttachmentInstance()
     {

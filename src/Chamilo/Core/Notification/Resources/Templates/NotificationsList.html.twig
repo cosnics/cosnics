@@ -115,11 +115,11 @@
 
 <script type="text/x-template" id="notifications-template">
     <div class="list-group notifications-list">
-        <div v-if="newNotifications.length > 0" class="list-group-item notifications-list-title">
+        <div v-if="newNotifications.length > 0" class="list-group-item notifications-list-title text-muted">
             Nieuwe meldingen
         </div>
         <notification v-for="notification in newNotifications" :notification="notification" :show-filters="showFilters" :view-notification-url="viewNotificationUrl"></notification>
-        <div class="list-group-item notifications-list-title">
+        <div class="list-group-item notifications-list-title text-muted">
             Eerdere meldingen
         </div>
         <notification v-for="notification in previousNotifications" :notification="notification" :show-filters="showFilters" :view-notification-url="viewNotificationUrl"></notification>

@@ -6,8 +6,9 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Notificat
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Feedback;
-use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -85,7 +86,9 @@ class NotificationServiceBridge implements NotificationServiceBridgeInterface
      */
     public function createNotificationForNewEntry(User $user, TreeNode $treeNode, Entry $entry)
     {
-        $this->notificationService->createNotificationForNewEntry($user, $treeNode, $this->contentObjectPublication, $entry);
+        $this->notificationService->createNotificationForNewEntry(
+            $user, $treeNode, $this->contentObjectPublication, $entry
+        );
     }
 
     /**
@@ -101,6 +104,40 @@ class NotificationServiceBridge implements NotificationServiceBridgeInterface
     {
         $this->notificationService->createNotificationForNewFeedback(
             $user, $treeNode, $this->contentObjectPublication, $entry, $feedback
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry|\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Score|\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score $score
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function createNotificationForNewScore(User $user, TreeNode $treeNode, Entry $entry, Score $score)
+    {
+        $this->notificationService->createNotificationForNewScore(
+            $user, $treeNode, $this->contentObjectPublication, $entry, $score
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry|\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\EntryAttachment|\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment $entryAttachment
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function createNotificationForNewEntryAttachment(
+        User $user, TreeNode $treeNode, Entry $entry, EntryAttachment $entryAttachment
+    )
+    {
+        $this->notificationService->createNotificationForNewEntryAttachment(
+            $user, $treeNode, $this->contentObjectPublication, $entry, $entryAttachment
         );
     }
 }

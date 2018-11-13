@@ -18,7 +18,7 @@ class EntryTableColumnModel
      */
     function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::class;
+        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::class;
     }
 
     /**
@@ -26,6 +26,6 @@ class EntryTableColumnModel
      */
     function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Score::class;
+        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score::class;
     }
 }

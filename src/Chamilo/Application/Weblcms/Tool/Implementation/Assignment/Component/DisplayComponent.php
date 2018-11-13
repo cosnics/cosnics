@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 use Chamilo\Application\Weblcms\Bridge\Assignment\AssignmentServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\Assignment\EphorusServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\Assignment\FeedbackServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\Assignment\NotificationServiceBridge;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -100,10 +101,16 @@ class DisplayComponent extends Manager implements DelegateComponent
         /** @var EphorusServiceBridge $assignmentEphorusServiceBridge */
         $assignmentEphorusServiceBridge = $this->getService(EphorusServiceBridge::class);
         $assignmentEphorusServiceBridge->setEphorusEnabled($this->isEphorusEnabled());
+        $assignmentEphorusServiceBridge->setContentObjectPublication($contentObjectPublication);
+
+        /** @var NotificationServiceBridge $notificationServiceBridge */
+        $notificationServiceBridge = $this->getService(NotificationServiceBridge::class);
+        $notificationServiceBridge->setContentObjectPublication($contentObjectPublication);
 
         $this->getBridgeManager()->addBridge($assignmentServiceBridge);
         $this->getBridgeManager()->addBridge($assignmentEphorusServiceBridge);
         $this->getBridgeManager()->addBridge($assignmentFeedbackServiceBridge);
+        $this->getBridgeManager()->addBridge($notificationServiceBridge);
     }
 
     /**

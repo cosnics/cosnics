@@ -5,7 +5,7 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Not
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\FeedbackService;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -93,7 +93,7 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry $entry
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
      *
      * @return int
      */

@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
@@ -469,7 +469,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param int $entityType
      * @param int $entityIdentifier
      *
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function findLastEntryForEntityByContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $entityType, $entityIdentifier
@@ -610,7 +610,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      */
     protected function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry::class;
+        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::class;
     }
 
     /**
@@ -618,7 +618,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      */
     protected function getEntryAttachmentClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\EntryAttachment::class;
+        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment::class;
     }
 
     /**
@@ -626,6 +626,6 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      */
     protected function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Score::class;
+        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score::class;
     }
 }

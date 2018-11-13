@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment;
 
 /**
- * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment
+ * @package Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */

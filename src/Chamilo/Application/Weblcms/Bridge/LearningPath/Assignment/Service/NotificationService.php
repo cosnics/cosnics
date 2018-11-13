@@ -2,8 +2,12 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service;
 
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryAttachmentNotificationJobProcessor;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryScoreNotificationJobProcessor;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryFeedbackNotificationJobProcessor;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
@@ -70,7 +74,8 @@ class NotificationService
      * @return \Chamilo\Core\Notification\Domain\NotificationDTO[]
      */
     public function getNotificationsForUserAndPublication(
-        User $user, TreeNode $treeNode, ContentObjectPublication $contentObjectPublication, $offset = null, $count = null
+        User $user, TreeNode $treeNode, ContentObjectPublication $contentObjectPublication, $offset = null,
+        $count = null
     )
     {
         $contextPath = $this->getContextPath($contentObjectPublication, $treeNode);
@@ -112,7 +117,9 @@ class NotificationService
         $job = new Job();
         $job->setProcessorClass(EntryNotificationJobProcessor::class)
             ->setParameter(EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId())
-            ->setParameter(EntryNotificationJobProcessor::PARAM_CONTENT_OBJECT_PUBLICATION_ID, $contentObjectPublication->getId());
+            ->setParameter(
+                EntryNotificationJobProcessor::PARAM_CONTENT_OBJECT_PUBLICATION_ID, $contentObjectPublication->getId()
+            );
 
         $this->jobProducer->produceJob($job, 'notifications');
     }
@@ -128,13 +135,68 @@ class NotificationService
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createNotificationForNewFeedback(
-        User $user, TreeNode $treeNode, ContentObjectPublication $contentObjectPublication, Entry $entry, Feedback $feedback
+        User $user, TreeNode $treeNode, ContentObjectPublication $contentObjectPublication, Entry $entry,
+        Feedback $feedback
     )
     {
         $job = new Job();
         $job->setProcessorClass(EntryFeedbackNotificationJobProcessor::class)
-            ->setParameter(EntryFeedbackNotificationJobProcessor::PARAM_CONTENT_OBJECT_PUBLICATION_ID, $contentObjectPublication->getId())
+            ->setParameter(
+                EntryFeedbackNotificationJobProcessor::PARAM_CONTENT_OBJECT_PUBLICATION_ID,
+                $contentObjectPublication->getId()
+            )
             ->setParameter(EntryFeedbackNotificationJobProcessor::PARAM_FEEDBACK_ID, $feedback->getId());
+
+        $this->jobProducer->produceJob($job, 'notifications');
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score $score
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function createNotificationForNewScore(
+        User $user, TreeNode $treeNode, ContentObjectPublication $contentObjectPublication, Entry $entry, Score $score
+    )
+    {
+        $job = new Job();
+        $job->setProcessorClass(EntryScoreNotificationJobProcessor::class)
+            ->setParameter(
+                EntryScoreNotificationJobProcessor::PARAM_CONTENT_OBJECT_PUBLICATION_ID,
+                $contentObjectPublication->getId()
+            )
+            ->setParameter(EntryScoreNotificationJobProcessor::PARAM_SCORE_ID, $score->getId());
+
+        $this->jobProducer->produceJob($job, 'notifications');
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment $entryAttachment
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function createNotificationForNewEntryAttachment(
+        User $user, TreeNode $treeNode, ContentObjectPublication $contentObjectPublication, Entry $entry,
+        EntryAttachment $entryAttachment
+    )
+    {
+        $job = new Job();
+        $job->setProcessorClass(EntryAttachmentNotificationJobProcessor::class)
+            ->setParameter(
+                EntryAttachmentNotificationJobProcessor::PARAM_CONTENT_OBJECT_PUBLICATION_ID,
+                $contentObjectPublication->getId()
+            )
+            ->setParameter(EntryAttachmentNotificationJobProcessor::PARAM_ENTRY_ATTACHMENT_ID, $entryAttachment->getId());
 
         $this->jobProducer->produceJob($job, 'notifications');
     }

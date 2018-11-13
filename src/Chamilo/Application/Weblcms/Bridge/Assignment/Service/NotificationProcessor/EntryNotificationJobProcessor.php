@@ -3,7 +3,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationProcessor;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Queue\Service\JobProcessorInterface;
 use Chamilo\Core\Queue\Storage\Entity\Job;
@@ -30,7 +30,7 @@ class EntryNotificationJobProcessor extends AssignmentJobProcessor implements Jo
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry $entry
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry $entry
      *
      * @return int
      */

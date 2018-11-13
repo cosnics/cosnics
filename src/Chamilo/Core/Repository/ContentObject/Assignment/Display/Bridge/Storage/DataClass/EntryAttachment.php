@@ -13,6 +13,7 @@ abstract class EntryAttachment extends DataClass
 {
     const PROPERTY_ENTRY_ID = 'entry_id';
     const PROPERTY_ATTACHMENT_ID = 'attachment_id';
+    const PROPERTY_CREATED = 'created';
 
     /**
      * Get the default properties of all feedback
@@ -24,7 +25,8 @@ abstract class EntryAttachment extends DataClass
         return parent::get_default_property_names(
             array(
                 self::PROPERTY_ENTRY_ID,
-                self::PROPERTY_ATTACHMENT_ID
+                self::PROPERTY_ATTACHMENT_ID,
+                self::PROPERTY_CREATED
             )
         );
     }
@@ -59,6 +61,24 @@ abstract class EntryAttachment extends DataClass
     public function setAttachmentId($attachmentId)
     {
         $this->set_default_property(self::PROPERTY_ATTACHMENT_ID, $attachmentId);
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getCreated()
+    {
+        return $this->get_default_property(self::PROPERTY_CREATED);
+    }
+
+    /**
+     *
+     * @param integer $created
+     */
+    public function setCreated($created)
+    {
+        $this->set_default_property(self::PROPERTY_CREATED, $created);
     }
 
 }

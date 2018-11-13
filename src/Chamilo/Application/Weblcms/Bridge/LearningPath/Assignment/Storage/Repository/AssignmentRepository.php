@@ -295,7 +295,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param int $entityType
      * @param int $entityIdentifier
      *
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function findLastEntryForEntityByTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityIdentifier
@@ -311,7 +311,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      */
     protected function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::class;
     }
 
     /**
@@ -319,7 +319,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      */
     protected function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score::class;
     }
 
     /**
@@ -327,7 +327,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      */
     protected function getEntryAttachmentClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment::class;
     }
 
     /**

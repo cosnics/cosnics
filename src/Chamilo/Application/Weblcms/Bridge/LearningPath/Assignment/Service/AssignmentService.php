@@ -314,7 +314,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param int $entityType
      * @param int $entityIdentifier
      *
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry
      */
     public function findLastEntryForEntity(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityIdentifier)
     {
@@ -334,7 +334,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param integer $contentObjectId
      * @param string $ipAddress
      *
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -343,7 +343,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
         $ipAddress
     )
     {
-        /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry $entry */
+        /** @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry */
         $entry = $this->createEntryInstance();
 
         $entry->setTreeNodeDataId($treeNodeData->getId());
@@ -381,30 +381,30 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      * Creates a new instance for an entry
      *
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry
      */
     protected function createEntryInstance()
     {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry(
+        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry(
         );
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment
      */
     protected function createEntryAttachmentInstance()
     {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment();
+        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment();
     }
 
     /**
      * Creates a new instance for a score
      *
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score
      */
     protected function createScoreInstance()
     {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score(
+        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score(
         );
     }
 
@@ -413,7 +413,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      */
     public function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::class;
     }
 
     /**
@@ -421,7 +421,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      */
     public function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score::class;
     }
 
     /**
@@ -429,6 +429,6 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      */
     public function getFeedbackClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Feedback::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback::class;
     }
 }
