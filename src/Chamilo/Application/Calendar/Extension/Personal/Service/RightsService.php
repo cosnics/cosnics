@@ -5,14 +5,40 @@ use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publicatio
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationGroup;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationUser;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\RightsRepository;
+use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 class RightsService
 {
+
+    /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    private $userService;
+
+    /**
+     * @var \Chamilo\Core\Group\Service\GroupService
+     */
+    private $groupService;
+
     /**
      * @var \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\RightsRepository
      */
     private $rightsRepository;
+
+    /**
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     * @param \Chamilo\Core\Group\Service\GroupService $groupService
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\RightsRepository $rightsRepository
+     */
+    public function __construct(UserService $userService, GroupService $groupService, RightsRepository $rightsRepository
+    )
+    {
+        $this->userService = $userService;
+        $this->groupService = $groupService;
+        $this->rightsRepository = $rightsRepository;
+    }
 
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
@@ -35,6 +61,126 @@ class RightsService
     }
 
     /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationGroup $publicationGroup
+     *
+     * @return boolean
+     */
+    public function createPublicationGroup(PublicationGroup $publicationGroup)
+    {
+        return $this->getRightsRepository()->createPublicationGroup($publicationGroup);
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     * @param integer $groupIdentifier
+     *
+     * @return boolean
+     */
+    public function createPublicationGroupForPublicationAndGroupIdentifier(
+        Publication $publication, int $groupIdentifier
+    )
+    {
+        $publicationGroup = new PublicationGroup();
+        $publicationGroup->set_publication($publication->getId());
+        $publicationGroup->set_group_id($groupIdentifier);
+
+        return $this->createPublicationGroup($publicationGroup);
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     * @param integer[] $groupIdentifiers
+     *
+     * @return boolean
+     */
+    public function createPublicationGroupsForPublicationAndGroupIdentifiers(
+        Publication $publication, array $groupIdentifiers
+    )
+    {
+        foreach ($groupIdentifiers as $groupIdentifier)
+        {
+            if (!$this->createPublicationGroupForPublicationAndGroupIdentifier($publication, $groupIdentifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     * @param integer[] $userIdentifiers
+     * @param integer[] $groupIdentifiers
+     *
+     * @return boolean
+     */
+    public function createPublicationRightsForPublicationAndUserAndGroupIdentifiers(
+        Publication $publication, array $userIdentifiers, array $groupIdentifiers
+    )
+    {
+        if (!$this->createPublicationUsersForPublicationAndUserIdentifiers($publication, $userIdentifiers))
+        {
+            return false;
+        }
+
+        if (!$this->createPublicationGroupsForPublicationAndGroupIdentifiers($publication, $groupIdentifiers))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationUser $publicationUser
+     *
+     * @return boolean
+     */
+    public function createPublicationUser(PublicationUser $publicationUser)
+    {
+        return $this->getRightsRepository()->createPublicationUser($publicationUser);
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     * @param integer $userIdentifier
+     *
+     * @return boolean
+     */
+    public function createPublicationUserForPublicationAndUserIdentifier(
+        Publication $publication, int $userIdentifier
+    )
+    {
+        $publicationUser = new PublicationUser();
+        $publicationUser->set_publication($publication->getId());
+        $publicationUser->set_user($userIdentifier);
+
+        return $this->createPublicationUser($publicationUser);
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     * @param integer[] $userIdentifiers
+     *
+     * @return boolean
+     */
+    public function createPublicationUsersForPublicationAndUserIdentifiers(
+        Publication $publication, array $userIdentifiers
+    )
+    {
+        foreach ($userIdentifiers as $userIdentifier)
+        {
+            if (!$this->createPublicationUserForPublicationAndUserIdentifier($publication, $userIdentifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
      * @return boolean
@@ -42,6 +188,21 @@ class RightsService
     public function deletePublicationGroupsForPublication(Publication $publication)
     {
         return $this->getRightsRepository()->deletePublicationGroupsForPublication($publication);
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     * @param integer[] $groupIdentifiers
+     *
+     * @return boolean
+     */
+    public function deletePublicationGroupsForPublicationAndGroupIdentifiers(
+        Publication $publication, array $groupIdentifiers
+    )
+    {
+        return $this->getRightsRepository()->deletePublicationGroupsForPublicationAndGroupIdentifiers(
+            $publication, $groupIdentifiers
+        );
     }
 
     /**
@@ -72,6 +233,49 @@ class RightsService
     public function deletePublicationUsersForPublication(Publication $publication)
     {
         return $this->getRightsRepository()->deletePublicationUsersForPublication($publication);
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     * @param integer[] $userIdentifiers
+     *
+     * @return boolean
+     */
+    public function deletePublicationUsersForPublicationAndUserIdentifiers(
+        Publication $publication, array $userIdentifiers
+    )
+    {
+        return $this->getRightsRepository()->deletePublicationUsersForPublicationAndUserIdentifiers(
+            $publication, $userIdentifiers
+        );
+    }
+
+    /**
+     * @return \Chamilo\Core\Group\Service\GroupService
+     */
+    public function getGroupService(): GroupService
+    {
+        return $this->groupService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Service\GroupService $groupService
+     */
+    public function setGroupService(GroupService $groupService): void
+    {
+        $this->groupService = $groupService;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     *
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     */
+    public function getGroupsForPublication(Publication $publication)
+    {
+        return $this->getGroupService()->findGroupsByIdentifiers(
+            $this->getPublicationGroupIdentifiersForPublication($publication)
+        );
     }
 
     /**
@@ -131,13 +335,82 @@ class RightsService
     }
 
     /**
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    public function getUserService(): UserService
+    {
+        return $this->userService;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     */
+    public function setUserService(UserService $userService): void
+    {
+        $this->userService = $userService;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function getUsersForPublication(Publication $publication)
+    {
+        return $this->getUserService()->findUsersByIdentifiers(
+            $this->getPublicationUserIdentifiersForPublication($publication)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return boolean
+     */
+    public function isAllowedToEditPublication(Publication $publication, User $user)
+    {
+        return $user->is_platform_admin() || $publication->get_publisher() == $user->getId();
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return boolean
+     */
+    public function isAllowedToDeletePublication(Publication $publication, User $user)
+    {
+        return $user->is_platform_admin() || $publication->get_publisher() == $user->getId();
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return boolean
+     */
+    public function isAllowedToViewPublication(Publication $publication, User $user)
+    {
+        $isUserPlatformAdmin = $user->is_platform_admin();
+        $isUserPublisher = $publication->get_publisher() == $user->getId();
+
+        if ($isUserPlatformAdmin || $isUserPublisher)
+        {
+            return true;
+        }
+
+        return $this->isTargetUserForPublication($publication, $user);
+    }
+
+    /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
      * @return boolean
      */
-    public function isPublicationNotSharedWithAnyone(Publication $publication)
+    public function isPublicationSharedWithAnyone(Publication $publication)
     {
-        return $this->isPublicationSharedWithUsers() || $this->isPublicationSharedWithGroups();
+        return $this->isPublicationSharedWithUsers($publication) || $this->isPublicationSharedWithGroups($publication);
     }
 
     /**
@@ -173,7 +446,7 @@ class RightsService
             return false;
         }
 
-        if (in_array($user->getId(), $this->getPublicationUserIdentifiersForPublication()))
+        if (in_array($user->getId(), $this->getPublicationUserIdentifiersForPublication($publication)))
         {
             return true;
         }
@@ -196,65 +469,27 @@ class RightsService
 
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
-     * @param integer[] $userIdentifiers
      * @param integer[] $groupIdentifiers
      *
      * @return boolean
      */
-    public function createPublicationRightsForPublicationAndUserAndGroupIdentifiers(
-        Publication $publication, array $userIdentifiers, array $groupIdentifiers
-    )
-    {
-        if (!$this->createPublicationUserForPublicationAndUserIdentifiers($publication, $userIdentifiers))
-        {
-            return false;
-        }
-
-        if (!$this->createPublicationGroupForPublicationAndGroupIdentifiers($publication, $groupIdentifiers))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
-     * @param integer[] $userIdentifiers
-     *
-     * @return boolean
-     */
-    public function createPublicationUserForPublicationAndUserIdentifiers(
-        Publication $publication, array $userIdentifiers
-    )
-    {
-        foreach ($userIdentifiers as $userIdentifier)
-        {
-            if (!$this->createPublicationUserForPublicationAndUserIdentifier($publication, $userIdentifier))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
-     * @param integer[] $groupIdentifiers
-     *
-     * @return boolean
-     */
-    public function createPublicationGroupForPublicationAndGroupIdentifiers(
+    public function updatePublicationGroupsForPublicationAndGroupIdentifiers(
         Publication $publication, array $groupIdentifiers
     )
     {
-        foreach ($groupIdentifiers as $groupIdentifier)
+        $currentGroupIdentifiers = $this->getPublicationGroupIdentifiersForPublication($publication);
+
+        $newGroupIdentifiers = array_diff($groupIdentifiers, $currentGroupIdentifiers);
+        $oldGroupIdentifiers = array_diff($currentGroupIdentifiers, $groupIdentifiers);
+
+        if (!$this->createPublicationGroupsForPublicationAndGroupIdentifiers($publication, $newGroupIdentifiers))
         {
-            if (!$this->createPublicationGroupForPublicationAndGroupIdentifier($publication, $groupIdentifier))
-            {
-                return false;
-            }
+            return false;
+        }
+
+        if (!$this->deletePublicationGroupsForPublicationAndGroupIdentifiers($publication, $oldGroupIdentifiers))
+        {
+            return false;
         }
 
         return true;
@@ -262,56 +497,60 @@ class RightsService
 
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
-     * @param integer $userIdentifier
+     * @param integer[] $userIdentifiers
+     * @param integer[] $groupIdentifiers
      *
      * @return boolean
      */
-    public function createPublicationUserForPublicationAndUserIdentifier(
-        Publication $publication, int $userIdentifier
+    public function updatePublicationRightsForPublicationAndUserAndGroupIdentifiers(
+        Publication $publication, array $userIdentifiers, array $groupIdentifiers
     )
     {
-        $publicationUser = new PublicationUser();
-        $publicationUser->set_publication($publication->getId());
-        $publicationUser->set_user($userIdentifier);
+        if (!$this->updatePublicationUsersForPublicationAndUserIdentifiers($publication, $userIdentifiers))
+        {
+            return false;
+        }
 
-        return $this->createPublicationUser($publicationUser);
+        if (!$this->updatePublicationGroupsForPublicationAndGroupIdentifiers($publication, $groupIdentifiers))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
-     * @param integer $groupIdentifier
+     * @param integer[] $userIdentifiers
      *
      * @return boolean
      */
-    public function createPublicationGroupForPublicationAndGroupIdentifier(
-        Publication $publication, int $groupIdentifier
+    public function updatePublicationUsersForPublicationAndUserIdentifiers(
+        Publication $publication, array $userIdentifiers
     )
     {
-        $publicationGroup = new PublicationGroup();
-        $publicationGroup->set_publication($publication->getId());
-        $publicationGroup->set_group_id($groupIdentifier);
+        $currentUserIdentifiers = $this->getPublicationUserIdentifiersForPublication($publication);
 
-        return $this->createPublicationGroup($publicationGroup);
-    }
+        $newUserIdentifiers = array_diff($userIdentifiers, $currentUserIdentifiers);
+        $oldUserIdentifiers = array_diff($currentUserIdentifiers, $userIdentifiers);
 
-    /**
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationUser $publicationUser
-     *
-     * @return boolean
-     */
-    public function createPublicationUser(PublicationUser $publicationUser)
-    {
-        return $this->getRightsRepository()->createPublicationUser($publicationUser);
-    }
+        if (count($newUserIdentifiers) > 0)
+        {
+            if (!$this->createPublicationUsersForPublicationAndUserIdentifiers($publication, $newUserIdentifiers))
+            {
+                return false;
+            }
+        }
 
-    /**
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationGroup $publicationGroup
-     *
-     * @return boolean
-     */
-    public function createPublicationGroup(PublicationGroup $publicationGroup)
-    {
-        return $this->getRightsRepository()->createPublicationGroup($publicationGroup);
+        if (count($oldUserIdentifiers) > 0)
+        {
+            if (!$this->deletePublicationUsersForPublicationAndUserIdentifiers($publication, $oldUserIdentifiers))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

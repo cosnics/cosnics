@@ -54,6 +54,22 @@ class GroupService
     }
 
     /**
+     *
+     * @param integer[] $groupIdentifiers
+     *
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     */
+    public function findGroupsByIdentifiers($groupIdentifiers)
+    {
+        if (empty($groupIdentifiers))
+        {
+            return [];
+        }
+
+        return $this->groupRepository->findGroupsByIdentifiersOrderedByName($groupIdentifiers);
+    }
+
+    /**
      * @param int $groupIdentifier
      *
      * @return Group
@@ -68,16 +84,6 @@ class GroupService
         }
 
         return $group;
-    }
-
-    /**
-     * @param string $groupCode
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function subscribeUserToGroupByCode($groupCode, User $user)
-    {
-        $group = $this->findGroupByCode($groupCode);
-        $this->subscribeUserToGroup($group, $user);
     }
 
     /**
@@ -101,5 +107,15 @@ class GroupService
                 );
             }
         }
+    }
+
+    /**
+     * @param string $groupCode
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function subscribeUserToGroupByCode($groupCode, User $user)
+    {
+        $group = $this->findGroupByCode($groupCode);
+        $this->subscribeUserToGroup($group, $user);
     }
 }

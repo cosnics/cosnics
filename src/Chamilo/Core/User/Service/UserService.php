@@ -222,7 +222,7 @@ class UserService
 
     /**
      *
-     * @param int[] $userIdentifiers
+     * @param integer[] $userIdentifiers
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */

@@ -6,6 +6,8 @@
         <defaults autowire="true" public="true"/>
 
         <service id="Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService"/>
+        <service id="Chamilo\Application\Calendar\Extension\Personal\Service\RightsService"/>
         <service id="Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository"/>
+        <service id="Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\RightsRepository"/>
     </services>
 </container>

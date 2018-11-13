@@ -9,6 +9,8 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -25,8 +27,8 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
+ * @package Chamilo\Application\Calendar\Extension\Personal\Component
  *
- * @package application\calendar
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ViewerComponent extends Manager implements DelegateComponent
@@ -39,8 +41,7 @@ class ViewerComponent extends Manager implements DelegateComponent
     private $buttonToolbarRenderer;
 
     /**
-     *
-     * @var Publication
+     * @var \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
      */
     private $publication;
 
@@ -49,102 +50,90 @@ class ViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $id = $this->getRequest()->query->get(Manager::PARAM_PUBLICATION_ID);
-
-        if ($id)
+        if (!$this->getRightsService()->isAllowedToViewPublication($this->getPublication(), $this->getUser()))
         {
-            if (! $this->can_view())
-            {
-                throw new NotAllowedException();
-            }
-
-            $output = $this->get_publication_as_html();
-
-            $html = array();
-
-            $html[] = $this->render_header();
-            $html[] = $this->getButtonToolbarRenderer()->render() . '<br />';
-            $html[] = '<div id="action_bar_browser">';
-            $html[] = $output;
-            $html[] = '</div>';
-            $html[] = $this->render_footer();
-
-            return implode(PHP_EOL, $html);
+            throw new NotAllowedException();
         }
-        else
-        {
-            return $this->display_error_page(htmlentities(Translation::get('NoEventSelected')));
-        }
+
+        $html = array();
+
+        $html[] = $this->render_header();
+        $html[] = $this->getButtonToolbarRenderer()->render() . '<br />';
+        $html[] = '<div id="action_bar_browser">';
+        $html[] = $this->get_publication_as_html();
+        $html[] = '</div>';
+        $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     */
     public function getPublication()
     {
-        if (! isset($this->publication))
+        if (!isset($this->publication))
         {
-            $id = $this->getRequest()->query->get(Manager::PARAM_PUBLICATION_ID);
-            $this->publication = DataManager::retrieve_by_id(Publication::class_name(), $id);
+            $publicationIdentifier = $this->getRequest()->query->get(Manager::PARAM_PUBLICATION_ID);
+            if (is_null($publicationIdentifier))
+            {
+                throw new ParameterNotDefinedException(Manager::PARAM_PUBLICATION_ID);
+            }
+
+            $publication = $this->getPublicationService()->findPublicationByIdentifier($publicationIdentifier);
+            if (!$publication)
+            {
+                throw new ObjectNotExistException(Translation::get('Publication'), $publicationIdentifier);
+            }
+
+            $this->publication = $publication;
         }
 
         return $this->publication;
     }
 
     /**
-     *
-     * @return boolean
-     */
-    public function can_view()
-    {
-        $user = $this->get_user();
-
-        $is_target = $this->getPublication()->is_target($user);
-        $is_publisher = ($this->getPublication()->get_publisher() == $user->get_id());
-        $is_platform_admin = $user->is_platform_admin();
-
-        if (! $is_target && ! $is_publisher && ! $is_platform_admin)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    /**
-     *
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
      */
     public function get_publication_as_html()
     {
         $content_object = $this->getPublication()->get_publication_object();
         $content_object_properties = $content_object->get_properties();
         BreadcrumbTrail::getInstance()->add(
-            new Breadcrumb(null, $content_object_properties['default_properties']['title']));
+            new Breadcrumb(null, $content_object_properties['default_properties']['title'])
+        );
 
         $html = array();
 
         $html[] = ContentObjectRenditionImplementation::launch(
-            $content_object,
-            ContentObjectRendition::FORMAT_HTML,
-            ContentObjectRendition::VIEW_FULL,
-            $this);
+            $content_object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL, $this
+        );
 
         $html[] = $this->render_info();
 
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     */
     public function render_info()
     {
         $html = array();
 
         $html[] = '<div class="event_publication_info">';
         $html[] = htmlentities(Translation::get('PublishedOn', null, Utilities::COMMON_LIBRARIES)) . ' ' .
-             $this->render_publication_date();
+            $this->render_publication_date();
         $html[] = htmlentities(Translation::get('By', null, Utilities::COMMON_LIBRARIES)) . ' ' .
-             $this->getPublication()->get_publication_publisher()->get_fullname();
+            $this->getPublication()->get_publication_publisher()->get_fullname();
         $html[] = htmlentities(Translation::get('SharedWith', null, Utilities::COMMON_LIBRARIES)) . ' ' .
-             $this->render_publication_targets();
+            $this->render_publication_targets();
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -157,34 +146,40 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function render_publication_date()
     {
         $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+
         return DatetimeUtilities::format_locale_date($date_format, $this->getPublication()->get_published());
     }
 
     /**
-     *
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
      */
     public function render_publication_targets()
     {
-        if ($this->getPublication()->is_for_nobody())
+        $publication = $this->getPublication();
+
+        if (!$this->getRightsService()->isPublicationSharedWithAnyone($publication))
         {
             return htmlentities(Translation::get('Nobody', null, \Chamilo\Core\User\Manager::context()));
         }
         else
         {
-            $users = $this->getPublication()->get_target_users();
-            $group_ids = $this->getPublication()->get_target_groups();
+            $users = $this->getRightsService()->getUsersForPublication($publication);
+            $groups = $this->getRightsService()->getGroupsForPublication($publication);
 
-            if (count($users) + count($group_ids) == 1)
+            if (count($users) + count($groups) == 1)
             {
                 if (count($users) == 1)
                 {
-                    $user = $this->getUserService()->findUserByIdentifier((int) $users[0]);
+                    $user = array_pop($users);
+
                     return $user->get_firstname() . ' ' . $user->get_lastname();
                 }
                 else
                 {
-                    $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $group_ids[0]);
+                    $group = array_pop($groups);
+
                     return $group->get_name();
                 }
             }
@@ -192,76 +187,82 @@ class ViewerComponent extends Manager implements DelegateComponent
             $target_list = array();
             $target_list[] = '<select>';
 
-            foreach ($users as $index => $user_id)
+            foreach ($users as $user)
             {
-                $user = $this->getUserService()->findUserByIdentifier((int) $users[0]);
                 $target_list[] = '<option>' . $user->get_firstname() . ' ' . $user->get_lastname() . '</option>';
             }
 
-            $condition = new InCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
-                $group_ids);
-            $groups = \Chamilo\Core\Group\Storage\DataManager::retrieves(
-                Group::class_name(),
-                new DataClassRetrievesParameters($condition));
-
-            while ($group = $groups->next_result())
+            foreach ($groups as $group)
             {
                 $target_list[] = '<option>' . $group->get_name() . '</option>';
             }
 
             $target_list[] = '</select>';
+
             return implode(PHP_EOL, $target_list);
         }
     }
 
     /**
-     *
-     * @return ButtonToolBarRenderer
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
      */
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
-            $edit_url = $this->get_url(
-                array(
-                    self::PARAM_ACTION => self::ACTION_EDIT,
-                    self::PARAM_PUBLICATION_ID => $this->getPublication()->get_id()));
-
-            $delete_url = $this->get_url(
-                array(
-                    self::PARAM_ACTION => self::ACTION_DELETE,
-                    self::PARAM_PUBLICATION_ID => $this->getPublication()->get_id()));
-
             $ical_url = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_EXPORT,
-                    self::PARAM_PUBLICATION_ID => $this->getPublication()->get_id()));
+                    self::PARAM_PUBLICATION_ID => $this->getPublication()->get_id()
+                )
+            );
 
             $toolActions->addButton(
                 new Button(
-                    Translation::get('ExportIcal'),
-                    Theme::getInstance()->getCommonImagePath('Export/Csv'),
-                    $ical_url));
+                    Translation::get('ExportIcal'), Theme::getInstance()->getCommonImagePath('Export/Csv'), $ical_url
+                )
+            );
 
             $user = $this->get_user();
 
-            if ($user->is_platform_admin() || $this->getPublication()->get_publisher() == $user->get_id())
+            if ($this->getRightsService()->isAllowedToEditPublication($this->getPublication(), $this->getUser()))
             {
+                $editUrl = $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_EDIT,
+                        self::PARAM_PUBLICATION_ID => $this->getPublication()->get_id()
+                    )
+                );
+
                 $commonActions->addButton(
                     new Button(
                         Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Edit'),
-                        $edit_url));
+                        Theme::getInstance()->getCommonImagePath('Action/Edit'), $editUrl
+                    )
+                );
+            }
+
+            if ($this->getRightsService()->isAllowedToDeletePublication($this->getPublication(), $this->getUser()))
+            {
+                $deleteUrl = $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_DELETE,
+                        self::PARAM_PUBLICATION_ID => $this->getPublication()->getId()
+                    )
+                );
+
                 $commonActions->addButton(
                     new Button(
                         Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Delete'),
-                        $delete_url));
+                        Theme::getInstance()->getCommonImagePath('Action/Delete'), $deleteUrl
+                    )
+                );
             }
 
             $buttonToolbar->addButtonGroup($commonActions);
@@ -272,17 +273,29 @@ class ViewerComponent extends Manager implements DelegateComponent
         return $this->buttonToolbarRenderer;
     }
 
+    /**
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
+     */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('personal_calendar_viewer');
     }
 
+    /**
+     * @param $attachment
+     *
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     */
     public function get_content_object_display_attachment_url($attachment)
     {
         return $this->get_url(
             array(
                 Application::PARAM_ACTION => Manager::ACTION_VIEW_ATTACHMENT,
-                self::PARAM_PUBLICATION_ID => $this->getPublication()->get_id(),
-                self::PARAM_OBJECT => $attachment->get_id()));
+                self::PARAM_PUBLICATION_ID => $this->getPublication()->getId(),
+                self::PARAM_OBJECT => $attachment->get_id()
+            )
+        );
     }
 }

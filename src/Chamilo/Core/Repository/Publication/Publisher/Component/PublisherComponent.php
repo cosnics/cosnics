@@ -27,35 +27,38 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
      */
     public function run()
     {
-        if (! $this->getParentApplication() instanceof PublisherSupport)
+        if (!$this->getParentApplication() instanceof PublisherSupport)
         {
             throw new \RuntimeException(
                 'To use the publisher application the parent application must implement the ' .
-                     '"Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport" interface');
+                '"Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport" interface'
+            );
         }
 
-        if (! \Chamilo\Core\Repository\Viewer\Manager::any_object_selected())
+        if (!\Chamilo\Core\Repository\Viewer\Manager::any_object_selected())
         {
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
             $tabsSetting = $this->getApplicationConfiguration()->get(
-                \Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED);
+                \Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED
+            );
             if (isset($tabsSetting))
             {
                 $applicationConfiguration->set(
-                    \Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED,
-                    $tabsSetting);
+                    \Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, $tabsSetting
+                );
             }
 
             $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_BREADCRUMBS_DISABLED, true);
 
             return $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::context(),
-                $applicationConfiguration)->run();
+                \Chamilo\Core\Repository\Viewer\Manager::context(), $applicationConfiguration
+            )->run();
         }
 
         $selectedContentObjects = $this->getSelectedContentObjects();
         $form = $this->getPublicationForm($selectedContentObjects);
+
         if ($form instanceof FormValidator)
         {
             if ($form->validate())
@@ -86,7 +89,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
     {
         $selectedContentObjectIds = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
 
-        if (! empty($selectedContentObjectIds) && ! is_array($selectedContentObjectIds))
+        if (!empty($selectedContentObjectIds) && !is_array($selectedContentObjectIds))
         {
             $selectedContentObjectIds = array($selectedContentObjectIds);
         }
@@ -95,12 +98,13 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
         {
             $condition = new InCondition(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
-                $selectedContentObjectIds);
+                $selectedContentObjectIds
+            );
             $parameters = new DataClassRetrievesParameters($condition);
 
             return \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
-                ContentObject::class_name(),
-                $parameters)->as_array();
+                ContentObject::class_name(), $parameters
+            )->as_array();
         }
 
         return array();
@@ -118,7 +122,8 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
 
         $wizardHeader = new WizardHeader();
         $wizardHeader->setStepTitles(
-            array($this->getWizardFirstStepTitle(), $this->getTranslation('SecondStepPublish')));
+            array($this->getWizardFirstStepTitle(), $this->getTranslation('SecondStepPublish'))
+        );
 
         $selectedStepIndex = \Chamilo\Core\Repository\Viewer\Manager::any_object_selected() ? 1 : 0;
         $wizardHeader->setSelectedStepIndex($selectedStepIndex);

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal;
 
+use Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService;
+use Chamilo\Application\Calendar\Extension\Personal\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
@@ -14,7 +16,7 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'personal_action';
     const PARAM_PUBLICATION_ID = 'publication_id';
     const PARAM_OBJECT = 'object';
-    
+
     // Properties
     const ACTION_VIEW = 'Viewer';
     const ACTION_CREATE = 'Publisher';
@@ -22,7 +24,23 @@ abstract class Manager extends Application
     const ACTION_EDIT = 'Editor';
     const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     const ACTION_EXPORT = 'Exporter';
-    
+
     // Default action
     const DEFAULT_ACTION = self::ACTION_VIEW;
+
+    /**
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService
+     */
+    public function getPublicationService()
+    {
+        return $this->getService(PublicationService::class);
+    }
+
+    /**
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Service\RightsService
+     */
+    public function getRightsService()
+    {
+        return $this->getService(RightsService::class);
+    }
 }

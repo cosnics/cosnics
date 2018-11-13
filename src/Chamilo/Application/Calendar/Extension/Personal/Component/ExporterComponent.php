@@ -9,13 +9,15 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
+ * @package Chamilo\Application\Calendar\Extension\Personal\Component
  *
- * @package application\calendar
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ExporterComponent extends Manager
@@ -26,28 +28,28 @@ class ExporterComponent extends Manager
      */
     public function run()
     {
-        $objectTranslation = Translation::getInstance()->getTranslation(
-            'PersonalCalendarPublication', null, Manager::context()
-        );
-
-        $id = Request::get(self::PARAM_PUBLICATION_ID);
-        if (!$id)
+        $publicationIdentifier = $this->getRequest()->query->get(Manager::PARAM_PUBLICATION_ID);
+        if (is_null($publicationIdentifier))
         {
-            throw new NoObjectSelectedException($objectTranslation);
+            throw new ParameterNotDefinedException(Manager::PARAM_PUBLICATION_ID);
         }
 
-        $calendar_event_publication = DataManager::retrieve_by_id(Publication::class_name(), $id);
-
-        if (!$calendar_event_publication instanceof Publication)
+        $publication = $this->getPublicationService()->findPublicationByIdentifier($publicationIdentifier);
+        if (!$publication)
         {
-            throw new ObjectNotExistException($objectTranslation, $id);
+            throw new ObjectNotExistException(Translation::get('Publication'), $publicationIdentifier);
         }
+
+        if (!$this->getRightsService()->isAllowedToViewPublication($publication, $this->getUser()))
+        {
+            throw new NotAllowedException();
+        }
+
+        $publisher = $this->getUserService()->findUserByIdentifier($publication->get_publisher());
 
         $parameters = new ExportParameters(
-            new PersonalWorkspace($calendar_event_publication->get_publication_publisher()),
-            $this->getUser()->getId(),
-            ContentObjectExport::FORMAT_ICAL,
-            array($calendar_event_publication->get_content_object_id())
+            new PersonalWorkspace($publisher), $this->getUser()->getId(), ContentObjectExport::FORMAT_ICAL,
+            array($publication->get_content_object_id())
         );
 
         $exporter = ContentObjectExportController::factory($parameters);

@@ -28,9 +28,9 @@ class PublicationService
     private $rightsService;
 
     /**
-     *
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository $publicationRepository
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Service\RightsService $rightsService
      */
     public function __construct(
         PublicationRepository $publicationRepository, Translator $translator, RightsService $rightsService
@@ -93,6 +93,32 @@ class PublicationService
     public function createPublication(Publication $publication)
     {
         return $this->getPublicationRepository()->createPublication($publication);
+    }
+
+    /**
+     * @param integer $contentObjectIdentifier
+     * @param integer $userIdentifier
+     * @param integer[] $targetUserIdentifiers
+     * @param integer[] $targetGroupIdentifiers
+     *
+     * @return boolean
+     */
+    public function createPublicationWithRightsFromParameters(
+        int $contentObjectIdentifier, int $userIdentifier, array $targetUserIdentifiers, array $targetGroupIdentifiers
+    )
+    {
+        $publication = $this->getPublicationInstance();
+        $publication->set_content_object_id($contentObjectIdentifier);
+        $publication->set_publisher($userIdentifier);
+
+        if ($this->createPublication($publication))
+        {
+            return $this->getRightsService()->createPublicationRightsForPublicationAndUserAndGroupIdentifiers(
+                $publication, $targetUserIdentifiers, $targetGroupIdentifiers
+            );
+        }
+
+        return false;
     }
 
     /**
@@ -181,8 +207,8 @@ class PublicationService
      * @return string[]
      */
     public function findPublicationRecordsForTypeAndIdentifier(
-        $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
-        Condition $condition = null, $count = null, $offset = null, $orderProperties = null
+        int $type, int $objectIdentifier, Condition $condition = null, $count = null, $offset = null,
+        $orderProperties = null
     )
     {
         if ($type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT &&
@@ -277,21 +303,19 @@ class PublicationService
         return $this->getPublicationRepository()->updatePublication($publication);
     }
 
-    public function createPublicationWithRightsFromParameters(
-        $contentObjectIdentifier, $userIdentifier, $targetUserIdentifiers, $targetGroupIdentifiers
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     * @param integer[] $targetUserIdentifiers
+     * @param integer[] $targetGroupIdentifiers
+     *
+     * @return boolean
+     */
+    public function updatePublicationWithRightsFromParameters(
+        Publication $publication, array $targetUserIdentifiers, array $targetGroupIdentifiers
     )
     {
-        $publication = $this->getPublicationInstance();
-        $publication->set_content_object_id($contentObjectIdentifier);
-        $publication->set_publisher($userIdentifier);
-
-        if ($this->createPublication($publication))
-        {
-            return $this->getRightsService()->createPublicationRightsForPublicationAndUserAndGroupIdentifiers(
-                $publication, $targetUserIdentifiers, $targetGroupIdentifiers
-            );
-        }
-
-        return false;
+        return $this->getRightsService()->updatePublicationRightsForPublicationAndUserAndGroupIdentifiers(
+            $publication, $targetUserIdentifiers, $targetGroupIdentifiers
+        );
     }
 }

@@ -6,12 +6,10 @@ use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Application\Calendar\Extension\Personal\Publisher\PublicationHandler;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
@@ -25,21 +23,58 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     /**
      * The publication form
      *
-     * @var PublicationForm
+     * @var \Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm
      */
     protected $publicationForm;
 
     /**
-     * Runs this component and displays its output.
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
      */
-    public function run()
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
-        $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
+        $breadcrumbtrail->add_help('personal_calendar_publisher');
+    }
 
-        return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\Publication\Publisher\Manager::context(),
-            $applicationConfiguration)->run();
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $selectedContentObjects
+     *
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm
+     */
+    public function getPublicationForm($selectedContentObjects = array())
+    {
+        if (!isset($this->publicationForm))
+        {
+            $selectedContentObjectIdentifiers = array();
+            foreach ($selectedContentObjects as $selectedContentObject)
+            {
+                $selectedContentObjectIdentifiers[] = $selectedContentObject->getId();
+            }
+
+            $this->publicationForm = new PublicationForm(
+                $selectedContentObjectIdentifiers, $this->getUser(), $this->get_url(), $selectedContentObjects
+            );
+        }
+
+        return $this->publicationForm;
+    }
+
+    /**
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Publisher\PublicationHandler
+     */
+    public function getPublicationHandler()
+    {
+        return new PublicationHandler($this->publicationForm, $this, $this->getPublicationService());
+    }
+
+    /**
+     * @return string[]
+     */
+    public function get_additional_parameters()
+    {
+        return array(
+            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID, \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION
+        );
     }
 
     /**
@@ -49,70 +84,32 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     public function get_allowed_content_object_types()
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
-            Manager::package(),
-            \Chamilo\Core\Repository\Manager::package() . '\ContentObject');
+            Manager::package(), \Chamilo\Core\Repository\Manager::package() . '\ContentObject'
+        );
         $types = array();
 
         foreach ($registrations as $registration)
         {
             $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
-                $registration[Registration::PROPERTY_CONTEXT],
-                6);
+                $registration[Registration::PROPERTY_CONTEXT], 6
+            );
             $types[] = $namespace . '\Storage\DataClass\\' .
-                 ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
+                ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
         }
 
         return $types;
     }
 
     /**
-     * Returns the publication form
-     *
-     * @param ContentObject[] $selectedContentObjects
-     *
-     * @return FormValidator
+     * Runs this component and displays its output.
      */
-    public function getPublicationForm($selectedContentObjects = array())
+    public function run()
     {
-        $ids = array();
-        foreach ($selectedContentObjects as $selectedContentObject)
-        {
-            $ids[] = $selectedContentObject->getId();
-        }
+        $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
+        $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
 
-        $this->publicationForm = new PublicationForm(
-            PublicationForm::TYPE_MULTI,
-            $ids,
-            $this->getUser(),
-            $this->get_url(),
-            $selectedContentObjects);
-
-        return $this->publicationForm;
-    }
-
-    /**
-     * Returns the publication handler
-     *
-     * @return PublicationHandlerInterface
-     */
-    public function getPublicationHandler()
-    {
-        return new PublicationHandler($this->publicationForm, $this);
-    }
-
-    /**
-     *
-     * @see \libraries\architecture\application\Application::add_additional_breadcrumbs()
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('personal_calendar_publisher');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID,
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION);
+        return $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Repository\Publication\Publisher\Manager::context(), $applicationConfiguration
+        )->run();
     }
 }

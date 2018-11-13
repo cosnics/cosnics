@@ -37,70 +37,62 @@ class AttachmentViewerComponent extends Manager
         {
             throw new ParameterNotDefinedException(self::PARAM_OBJECT);
         }
-        
+
         // retrieve the calendar publication
-        $calendar_publication_id = Request::get(Manager::PARAM_PUBLICATION_ID);
-        if (is_null($calendar_publication_id))
+        $publicationIdentifier = $this->getRequest()->query->get(Manager::PARAM_PUBLICATION_ID);
+        if (is_null($publicationIdentifier))
         {
             throw new ParameterNotDefinedException(Manager::PARAM_PUBLICATION_ID);
         }
-        
-        $calendar_publication = DataManager::retrieve_by_id(Publication::class_name(), $calendar_publication_id);
-        if (! $calendar_publication)
+
+        $publication = $this->getPublicationService()->findPublicationByIdentifier($publicationIdentifier);
+        if (!$publication)
         {
-            throw new ObjectNotExistException(Translation::get('Publication'), $calendar_publication_id);
+            throw new ObjectNotExistException(Translation::get('Publication'), $publicationIdentifier);
         }
-        
-        /* are you allowed to view the publication? */
-        
-        $user = $this->get_user();
-        
-        $is_target = $calendar_publication->is_target($user);
-        $is_publisher = ($calendar_publication->get_publisher() == $user->get_id());
-        $is_platform_admin = $user->is_platform_admin();
-        
-        if (! $is_target && ! $is_publisher && ! $is_platform_admin)
+
+        if (!$this->getRightsService()->isAllowedToViewPublication($publication, $this->getUser()))
         {
             throw new NotAllowedException();
         }
-        
+
         // is the attachment actually attached to the publication
-        if (! $calendar_publication->get_publication_object()->is_attached_to_or_included_in($attachment_id))
+        if (!$publication->get_publication_object()->is_attached_to_or_included_in($attachment_id))
         {
             throw new NotAllowedException();
         }
-        
-        $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
-            $attachment_id);
-        if (! $object)
+
+        $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ContentObject::class_name(), $attachment_id
+        );
+        if (!$contentObject)
         {
             throw new ObjectNotExistException(Translation::get('ContentObject'), $attachment_id);
         }
-        
+
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = ContentObjectRenditionImplementation::launch(
-            $object, 
-            ContentObjectRendition::FORMAT_HTML, 
-            ContentObjectRendition::VIEW_FULL, 
-            $this);
+            $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL, $this
+        );
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      *
      * @param ContentObject $attachment
+     *
      * @return string>
      */
     public function get_content_object_display_attachment_url($attachment)
     {
         return $this->get_url(
-            array(Application::PARAM_ACTION => Manager::ACTION_VIEW_ATTACHMENT, 'object' => $attachment->get_id()));
+            array(Application::PARAM_ACTION => Manager::ACTION_VIEW_ATTACHMENT, 'object' => $attachment->get_id())
+        );
     }
 }
