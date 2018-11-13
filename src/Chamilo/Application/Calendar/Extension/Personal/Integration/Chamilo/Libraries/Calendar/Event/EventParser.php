@@ -2,7 +2,9 @@
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
 
 /**
@@ -47,8 +49,9 @@ class EventParser
      * @param integer $toDate
      */
     public function __construct(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, 
-        Publication $publication, $fromDate, $toDate)
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        Publication $publication, $fromDate, $toDate
+    )
     {
         $this->calendarRendererProvider = $calendarRendererProvider;
         $this->publication = $publication;
@@ -70,7 +73,8 @@ class EventParser
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      */
     public function setCalendarRendererProvider(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+    )
     {
         $this->calendarRendererProvider = $calendarRendererProvider;
     }
@@ -136,16 +140,15 @@ class EventParser
     public function getEvents()
     {
         $events = array();
-        
+
         $publisher = $this->getPublication()->get_publisher();
-        $publishingUser = $this->getPublication()->get_publication_publisher();
-        
+        $publishingUser = $this->getUserService()->findUserByIdentifier($this->getPublication()->get_publisher());
+
         $parser = \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\EventParser::factory(
-            $this->getPublication()->get_publication_object(), 
-            $this->getFromDate(), 
-            $this->getToDate(), 
-            Event::class_name());
-        
+            $this->getPublication()->get_publication_object(), $this->getFromDate(), $this->getToDate(),
+            Event::class_name()
+        );
+
         $parsedEvents = $parser->getEvents();
         foreach ($parsedEvents as &$parsedEvent)
         {
@@ -153,21 +156,34 @@ class EventParser
             {
                 $parsedEvent->setTitle($parsedEvent->getTitle() . ' [' . $publishingUser->get_fullname() . ']');
             }
-            
+
             $parsedEvent->setId($this->getPublication()->get_id());
             $parsedEvent->setContext(\Chamilo\Application\Calendar\Extension\Personal\Manager::context());
-            
+
             $parameters = array();
-            $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Calendar\Extension\Personal\Manager::context();
-            $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION] = \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_VIEW;
-            $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID] = $this->getPublication()->get_id();
-            
+            $parameters[Application::PARAM_CONTEXT] =
+                \Chamilo\Application\Calendar\Extension\Personal\Manager::context();
+            $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION] =
+                \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_VIEW;
+            $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID] =
+                $this->getPublication()->getId();
+
             $redirect = new Redirect($parameters);
             $parsedEvent->setUrl($redirect->getUrl());
-            
+
             $events[] = $parsedEvent;
         }
-        
+
         return $events;
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    private function getUserService()
+    {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $container->get(UserService::class);
     }
 }

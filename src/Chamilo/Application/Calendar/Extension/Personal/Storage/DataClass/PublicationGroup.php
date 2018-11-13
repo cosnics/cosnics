@@ -71,11 +71,10 @@ class PublicationGroup extends DataClass
     }
 
     /**
-     *
-     * @return \libraries\storage\data_manager\DataManager
+     * @return string
      */
-    public function get_data_manager()
+    public static function get_table_name()
     {
-        return DataManager::getInstance();
+        return 'calendar_personal_publication_group';
     }
 }

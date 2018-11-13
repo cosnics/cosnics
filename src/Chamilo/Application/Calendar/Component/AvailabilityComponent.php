@@ -37,11 +37,10 @@ class AvailabilityComponent extends Manager
         {
             $values = $form->exportValues();
             $result = $availabilityService->setAvailabilities(
-                $this->get_user(),
-                $values[AvailabilityService::PROPERTY_CALENDAR]);
+                $this->getUser(), $values[AvailabilityService::PROPERTY_CALENDAR]
+            );
 
-            $nextAction = new Redirect(
-                array(Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context()));
+            $nextAction = new Redirect(array(Application::PARAM_CONTEXT => Manager::context()));
             $nextAction->toUrl();
         }
         else
@@ -49,7 +48,7 @@ class AvailabilityComponent extends Manager
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $form->toHtml();
+            $html[] = $form->render();
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
@@ -59,10 +58,11 @@ class AvailabilityComponent extends Manager
     /**
      *
      * @param \Chamilo\Application\Calendar\Service\AvailabilityService $availabilityService
+     *
      * @return \Chamilo\Application\Calendar\Form\AvailabilityForm
      */
     public function getForm(AvailabilityService $availabilityService)
     {
-        return new AvailabilityForm($this->get_url(), $this->get_user(), $availabilityService);
+        return new AvailabilityForm($this->get_url(), $this->getUser(), $availabilityService);
     }
 }

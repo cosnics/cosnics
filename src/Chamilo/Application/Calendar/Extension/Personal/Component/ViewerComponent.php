@@ -125,13 +125,15 @@ class ViewerComponent extends Manager implements DelegateComponent
      */
     public function render_info()
     {
+        $publisher = $this->getUserService()->findUserByIdentifier($this->getPublication()->get_publisher());
+
         $html = array();
 
         $html[] = '<div class="event_publication_info">';
         $html[] = htmlentities(Translation::get('PublishedOn', null, Utilities::COMMON_LIBRARIES)) . ' ' .
             $this->render_publication_date();
-        $html[] = htmlentities(Translation::get('By', null, Utilities::COMMON_LIBRARIES)) . ' ' .
-            $this->getPublication()->get_publication_publisher()->get_fullname();
+        $html[] =
+            htmlentities(Translation::get('By', null, Utilities::COMMON_LIBRARIES)) . ' ' . $publisher->get_fullname();
         $html[] = htmlentities(Translation::get('SharedWith', null, Utilities::COMMON_LIBRARIES)) . ' ' .
             $this->render_publication_targets();
         $html[] = '</div>';

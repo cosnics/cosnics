@@ -70,8 +70,11 @@ class PublicationUser extends DataClass
         $this->set_default_property(self::PROPERTY_USER, $user);
     }
 
-    public function get_data_manager()
+    /**
+     * @return string
+     */
+    public static function get_table_name()
     {
-        return DataManager::getInstance();
+        return 'calendar_personal_publication_user';
     }
 }
