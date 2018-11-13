@@ -48,14 +48,6 @@ class Manager implements PublicationInterface
 
     public static function isContentObjectPublished($object_id)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($object_id)
-        );
-
-        $count = DataManager::count(Publication::class_name(), new DataClassCountParameters($condition));
-
-        return $count >= 1;
     }
 
     /*
@@ -64,14 +56,6 @@ class Manager implements PublicationInterface
 
     public static function areContentObjectsPublished($object_ids)
     {
-        $condition = new InCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
-            $object_ids
-        );
-
-        $count = DataManager::count(Publication::class_name(), new DataClassCountParameters($condition));
-
-        return $count >= 1;
     }
 
     /**
@@ -113,7 +97,8 @@ class Manager implements PublicationInterface
         $attributes->set_application(\Chamilo\Application\Calendar\Extension\Personal\Manager::context());
         $attributes->set_location(Translation::get('TypeName', null, \Chamilo\Application\Calendar\Manager::context()));
         $attributes->set_url(
-            'index.php?application=Chamilo\Application\Calendar\Extension\Personal&amp;go=view&publication_id=' . $attributes->get_id()
+            'index.php?application=Chamilo\Application\Calendar\Extension\Personal&amp;go=view&publication_id=' .
+            $attributes->get_id()
         );
 
         $attributes->set_title($record[ContentObject::PROPERTY_TITLE]);
@@ -229,8 +214,6 @@ class Manager implements PublicationInterface
         return new Joins($joins);
     }
 
-
-
     public static function publish_content_object(
         \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object, LocationSupport $location,
         $options = array()
@@ -299,17 +282,5 @@ class Manager implements PublicationInterface
 
     public static function update_content_object_publication_id($publication_attributes)
     {
-        $publication = DataManager::retrieve_by_id(Publication::class_name(), $publication_attributes->get_id());
-
-        if ($publication instanceof Publication)
-        {
-            $publication->set_content_object_id($publication_attributes->get_content_object_id());
-
-            return $publication->update();
-        }
-        else
-        {
-            return false;
-        }
     }
 }

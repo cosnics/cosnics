@@ -5,8 +5,8 @@ use Chamilo\Application\Calendar\Extension\Personal\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
+ * @package Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass
  *
- * @package application\calendar
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationUser extends DataClass
@@ -17,7 +17,7 @@ class PublicationUser extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())

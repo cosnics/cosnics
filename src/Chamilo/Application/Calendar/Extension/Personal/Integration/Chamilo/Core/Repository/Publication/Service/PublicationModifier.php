@@ -2,8 +2,8 @@
 
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Application\Calendar\Extension\Personal\Manager as PersonalCalendarManager;
+use Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Publication\Domain\PublicationResult;
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
@@ -22,6 +22,17 @@ use Symfony\Component\Translation\Translator;
  */
 class PublicationModifier implements PublicationModifierInterface
 {
+
+    /**
+     * @var \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService
+     */
+    private $publicationService;
+
+    /**
+     * @var \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
+     */
+    private $publicationAttributesGenerator;
+
     /**
      *
      * @var \Symfony\Component\Translation\Translator
@@ -29,22 +40,25 @@ class PublicationModifier implements PublicationModifierInterface
     private $translator;
 
     /**
-     *
+     * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
      * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function __construct(Translator $translator)
+    public function __construct(
+        PublicationService $publicationService, PublicationAttributesGenerator $publicationAttributesGenerator,
+        Translator $translator
+    )
     {
+        $this->publicationService = $publicationService;
+        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
         $this->translator = $translator;
     }
 
     /**
      * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
-     *
-     * @see PublicationInterface::add_publication_attributes_elements()
      */
     public function addContentObjectPublicationAttributesElementsToForm(FormValidator $formValidator)
     {
-        return Manager::add_publication_attributes_elements($formValidator);
     }
 
     /**
@@ -54,7 +68,7 @@ class PublicationModifier implements PublicationModifierInterface
      */
     public function deleteContentObjectPublication(int $publicationIdentifier)
     {
-        return Manager::delete_content_object_publication($publicationIdentifier);
+        return $this->getPublicationService()->deletePublicationByIdentifier($publicationIdentifier);
     }
 
     /**
@@ -65,7 +79,42 @@ class PublicationModifier implements PublicationModifierInterface
      */
     public function getContentObjectPublicationAttributes(int $publicationIdentifier)
     {
-        return Manager::get_content_object_publication_attribute($publicationIdentifier);
+        return $this->getPublicationAttributesGenerator()->createAttributesFromRecord(
+            $this->getPublicationService()->findPublicationRecordByIdentifier($publicationIdentifier)
+        );
+    }
+
+    /**
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
+     */
+    public function getPublicationAttributesGenerator(): PublicationAttributesGenerator
+    {
+        return $this->publicationAttributesGenerator;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
+     */
+    public function setPublicationAttributesGenerator(PublicationAttributesGenerator $publicationAttributesGenerator
+    ): void
+    {
+        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
+    }
+
+    /**
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService
+     */
+    public function getPublicationService(): PublicationService
+    {
+        return $this->publicationService;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService $publicationService
+     */
+    public function setPublicationService(PublicationService $publicationService): void
+    {
+        $this->publicationService = $publicationService;
     }
 
     /**
@@ -97,11 +146,11 @@ class PublicationModifier implements PublicationModifierInterface
         ContentObject $contentObject, PublicationTarget $publicationTarget, $options = array()
     )
     {
-        $publication = new Publication();
+        $publication = $this->getPublicationService()->getPublicationInstance();
         $publication->set_content_object_id($contentObject->getId());
         $publication->set_publisher($publicationTarget->getUserIdentifier());
 
-        if (!$publication->create())
+        if (!$this->getPublicationService()->createPublication($publication))
         {
             $failureMessage = $this->getTranslator()->trans(
                 'PublicationFailure', ['%CONTENT_OBJECT%' => $contentObject->get_title()],
@@ -138,6 +187,17 @@ class PublicationModifier implements PublicationModifierInterface
      */
     public function updateContentObjectPublicationContentObjectIdentifier(Attributes $publicationAttributes)
     {
-        return Manager::update_content_object_publication_id($publicationAttributes);
+        $publication = $this->getPublicationService()->findPublicationByIdentifier($publicationAttributes->getId());
+
+        if ($publication instanceof Publication)
+        {
+            $publication->set_content_object_id($publicationAttributes->get_content_object_id());
+
+            return $this->getPublicationService()->updatePublication($publication);
+        }
+        else
+        {
+            return false;
+        }
     }
 }

@@ -258,7 +258,7 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
 
     /**
      *
-     * @param \core\user\storage\data_class\User $user
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return boolean
      */
     public function is_target($user)

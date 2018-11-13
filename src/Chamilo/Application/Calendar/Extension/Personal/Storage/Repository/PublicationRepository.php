@@ -2,6 +2,8 @@
 namespace Chamilo\Application\Calendar\Extension\Personal\Storage\Repository;
 
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
+use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationGroup;
+use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationUser;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -9,6 +11,7 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -43,20 +46,24 @@ class PublicationRepository
         $this->dataClassRepository = $dataClassRepository;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    public function getDataClassRepository(): DataClassRepository
+    public function countPublications(Condition $condition)
     {
-        return $this->dataClassRepository;
+        return $this->getDataClassRepository()->count(Publication::class, new DataClassCountParameters($condition));
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param integer[] $contentObjectIdentifiers
+     *
+     * @return integer
      */
-    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
+    public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers)
     {
-        $this->dataClassRepository = $dataClassRepository;
+        $condition = new InCondition(
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
+            $contentObjectIdentifiers
+        );
+
+        return $this->countPublications($condition);
     }
 
     /**
@@ -100,24 +107,44 @@ class PublicationRepository
         return $this->countPublications($condition);
     }
 
-    public function countPublications(Condition $condition)
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
+    public function deletePublication(Publication $publication)
     {
-        return $this->getDataClassRepository()->count(Publication::class, new DataClassCountParameters($condition));
+        return $this->getDataClassRepository()->delete($publication);
     }
 
     /**
-     * @param integer $contentObjectIdentifier
+     * @param integer $publicationIdentifier
      *
-     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[]
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
      */
-    public function findPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    public function findPublicationByIdentifier(int $publicationIdentifier)
+    {
+        return $this->getDataClassRepository()->retrieveById(Publication::class, $publicationIdentifier);
+    }
+
+    /**
+     * @param integer $publicationIdentifier
+     *
+     * @return string[]
+     * @throws \Exception
+     */
+    public function findPublicationRecordByIdentifier(int $publicationIdentifier)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($contentObjectIdentifier)
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID),
+            new StaticConditionVariable($publicationIdentifier)
         );
 
-        return $this->findPublications($condition);
+        return $this->getDataClassRepository()->record(
+            Publication::class, new RecordRetrieveParameters(
+                new DataClassProperties(new PropertiesConditionVariable(Publication::class)), $condition
+            )
+        );
     }
 
     /**
@@ -126,16 +153,44 @@ class PublicationRepository
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
      *
-     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[]
+     * @return string[]
      * @throws \Exception
      */
-    public function findPublications(
+    public function findPublicationRecords(
         Condition $condition = null, int $count = null, int $offset = null, array $orderProperties = null
     )
     {
-        return $this->getDataClassRepository()->retrieves(
-            Publication::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderProperties)
+        $data_class_properties = array();
+
+        $data_class_properties[] = new PropertiesConditionVariable(Publication::class);
+
+        $data_class_properties[] = new PropertyConditionVariable(
+            ContentObject::class, ContentObject::PROPERTY_TITLE
         );
+
+        $data_class_properties[] = new PropertyConditionVariable(
+            ContentObject::class, ContentObject::PROPERTY_DESCRIPTION
+        );
+
+        $data_class_properties[] = new PropertyConditionVariable(
+            ContentObject::class, ContentObject::PROPERTY_TYPE
+        );
+
+        $data_class_properties[] = new PropertyConditionVariable(
+            ContentObject::class, ContentObject::PROPERTY_CURRENT
+        );
+
+        $data_class_properties[] = new PropertyConditionVariable(
+            ContentObject::class, ContentObject::PROPERTY_OWNER_ID
+        );
+
+        $properties = new DataClassProperties($data_class_properties);
+
+        $parameters = new RecordRetrievesParameters(
+            $properties, $condition, $count, $offset, $orderProperties, $this->getContentObjectPublicationJoins()
+        );
+
+        return $this->getDataClassRepository()->records(Publication::class, $parameters);
     }
 
     /**
@@ -189,44 +244,31 @@ class PublicationRepository
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
      *
-     * @return string[]
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[]
      * @throws \Exception
      */
-    public function findPublicationRecords(
+    public function findPublications(
         Condition $condition = null, int $count = null, int $offset = null, array $orderProperties = null
     )
     {
-        $data_class_properties = array();
+        return $this->getDataClassRepository()->retrieves(
+            Publication::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderProperties)
+        );
+    }
 
-        $data_class_properties[] = new PropertiesConditionVariable(Publication::class);
-
-        $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class, ContentObject::PROPERTY_TITLE
+    /**
+     * @param integer $contentObjectIdentifier
+     *
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[]
+     */
+    public function findPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
+            new StaticConditionVariable($contentObjectIdentifier)
         );
 
-        $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class, ContentObject::PROPERTY_DESCRIPTION
-        );
-
-        $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class, ContentObject::PROPERTY_TYPE
-        );
-
-        $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class, ContentObject::PROPERTY_CURRENT
-        );
-
-        $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class, ContentObject::PROPERTY_OWNER_ID
-        );
-
-        $properties = new DataClassProperties($data_class_properties);
-
-        $parameters = new RecordRetrievesParameters(
-            $properties, $condition, $count, $offset, $orderProperties, $this->getContentObjectPublicationJoins()
-        );
-
-        return $this->getDataClassRepository()->records(Publication::class, $parameters);
+        return $this->findPublications($condition);
     }
 
     /**
@@ -247,19 +289,39 @@ class PublicationRepository
     }
 
     /**
-     * @param integer[] $contentObjectIdentifiers
-     *
-     * @return integer
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
-    public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers)
+    public function getDataClassRepository(): DataClassRepository
     {
-        $condition = new InCondition(
-            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
-            $contentObjectIdentifiers
-        );
-
-        return $this->countPublications($condition);
+        return $this->dataClassRepository;
     }
 
+    /**
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     */
+    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
+    {
+        $this->dataClassRepository = $dataClassRepository;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
+    public function updatePublication(Publication $publication)
+    {
+        return $this->getDataClassRepository()->update($publication);
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
+    public function createPublication(Publication $publication)
+    {
+        return $this->getDataClassRepository()->create($publication);
+    }
 }
 

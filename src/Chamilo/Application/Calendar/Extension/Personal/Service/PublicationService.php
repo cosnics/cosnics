@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal\Service;
 
+use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -22,46 +23,44 @@ class PublicationService
     private $translator;
 
     /**
+     * @var \Chamilo\Application\Calendar\Extension\Personal\Service\RightsService
+     */
+    private $rightsService;
+
+    /**
      *
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository $publicationRepository
      * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function __construct(PublicationRepository $publicationRepository, Translator $translator)
+    public function __construct(
+        PublicationRepository $publicationRepository, Translator $translator, RightsService $rightsService
+    )
     {
         $this->publicationRepository = $publicationRepository;
         $this->translator = $translator;
+        $this->rightsService = $rightsService;
     }
 
     /**
-     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository
+     * @param $contentObjectIdentifier
+     *
+     * @return integer
      */
-    public function getPublicationRepository(): PublicationRepository
+    public function countPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
     {
-        return $this->publicationRepository;
+        return $this->countPublicationsForContentObjectIdentifiers([$contentObjectIdentifier]);
     }
 
     /**
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository $publicationRepository
+     * @param integer[] $contentObjectIdentifiers
+     *
+     * @return integer
      */
-    public function setPublicationRepository(PublicationRepository $publicationRepository): void
+    public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers)
     {
-        $this->publicationRepository = $publicationRepository;
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
+        return $this->getPublicationRepository()->countPublicationsForContentObjectIdentifiers(
+            $contentObjectIdentifiers
+        );
     }
 
     /**
@@ -87,6 +86,50 @@ class PublicationService
     }
 
     /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
+    public function createPublication(Publication $publication)
+    {
+        return $this->getPublicationRepository()->createPublication($publication);
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
+    public function deletePublication(Publication $publication)
+    {
+        if ($this->getRightsService()->deletePublicationRights($publication))
+        {
+            return false;
+        }
+
+        return $this->getPublicationRepository()->deletePublication($publication);
+    }
+
+    /**
+     * @param integer $publicationIdentifier
+     *
+     * @return boolean
+     */
+    public function deletePublicationByIdentifier(int $publicationIdentifier)
+    {
+        $publication = $this->findPublicationByIdentifier($publicationIdentifier);
+
+        if ($publication instanceof Publication)
+        {
+            return $this->deletePublication($publication);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return boolean
@@ -107,13 +150,24 @@ class PublicationService
     }
 
     /**
-     * @param integer $contentObjectIdentifier
+     * @param integer $publicationIdentifier
      *
-     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[]
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
      */
-    public function findPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    public function findPublicationByIdentifier(int $publicationIdentifier)
     {
-        return $this->getPublicationRepository()->findPublicationsForContentObjectIdentifier($contentObjectIdentifier);
+        return $this->getPublicationRepository()->findPublicationByIdentifier($publicationIdentifier);
+    }
+
+    /**
+     * @param integer $publicationIdentifier
+     *
+     * @return string[]
+     * @throws \Exception
+     */
+    public function findPublicationRecordByIdentifier(int $publicationIdentifier)
+    {
+        return $this->getPublicationRepository()->findPublicationRecordByIdentifier($publicationIdentifier);
     }
 
     /**
@@ -145,24 +199,99 @@ class PublicationService
     }
 
     /**
-     * @param $contentObjectIdentifier
+     * @param integer $contentObjectIdentifier
      *
-     * @return integer
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[]
      */
-    public function countPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    public function findPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
     {
-        return $this->countPublicationsForContentObjectIdentifiers([$contentObjectIdentifier]);
+        return $this->getPublicationRepository()->findPublicationsForContentObjectIdentifier($contentObjectIdentifier);
     }
 
     /**
-     * @param integer[] $contentObjectIdentifiers
-     *
-     * @return integer
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
      */
-    public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers)
+    public function getPublicationInstance()
     {
-        return $this->getPublicationRepository()->countPublicationsForContentObjectIdentifiers(
-            $contentObjectIdentifiers
-        );
+        $publication = new Publication();
+        $publication->set_published(time());
+
+        return $publication;
+    }
+
+    /**
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository
+     */
+    public function getPublicationRepository(): PublicationRepository
+    {
+        return $this->publicationRepository;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository $publicationRepository
+     */
+    public function setPublicationRepository(PublicationRepository $publicationRepository): void
+    {
+        $this->publicationRepository = $publicationRepository;
+    }
+
+    /**
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
+    public function updatePublication(Publication $publication)
+    {
+        return $this->getPublicationRepository()->updatePublication($publication);
+    }
+
+    public function createPublicationWithRightsFromParameters(
+        $contentObjectIdentifier, $userIdentifier, $targetUserIdentifiers, $targetGroupIdentifiers
+    )
+    {
+        $publication = $this->getPublicationInstance();
+        $publication->set_content_object_id($contentObjectIdentifier);
+        $publication->set_publisher($userIdentifier);
+
+        if ($this->createPublication($publication))
+        {
+            return $this->getRightsService()->createPublicationRightsForPublicationAndUserAndGroupIdentifiers(
+                $publication, $targetUserIdentifiers, $targetGroupIdentifiers
+            );
+        }
+
+        return false;
     }
 }
