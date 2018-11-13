@@ -4,14 +4,18 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Co
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService;
+use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
+use Chamilo\Configuration\Configuration;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service
@@ -47,16 +51,29 @@ class PublicationAggregator implements PublicationAggregatorInterface
     private $publicationTargetRenderer;
 
     /**
+     * @var \Chamilo\Configuration\Service\RegistrationConsulter
+     */
+    private $registrationConsulter;
+
+    /**
+     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    private $classnameUtilities;
+
+    /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService $publicationService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
      * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
      * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer $publicationTargetRenderer
+     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      */
     public function __construct(
         PublicationService $publicationService, Translator $translator,
         PublicationAttributesGenerator $publicationAttributesGenerator,
-        PublicationTargetService $publicationTargetService, PublicationTargetRenderer $publicationTargetRenderer
+        PublicationTargetService $publicationTargetService, PublicationTargetRenderer $publicationTargetRenderer,
+        RegistrationConsulter $registrationConsulter, ClassnameUtilities $classnameUtilities
     )
     {
         $this->publicationService = $publicationService;
@@ -64,6 +81,8 @@ class PublicationAggregator implements PublicationAggregatorInterface
         $this->translator = $translator;
         $this->publicationTargetService = $publicationTargetService;
         $this->publicationTargetRenderer = $publicationTargetRenderer;
+        $this->registrationConsulter = $registrationConsulter;
+        $this->classnameUtilities = $classnameUtilities;
     }
 
     /**
@@ -77,7 +96,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         FormValidator $form, ContentObject $contentObject, User $user
     )
     {
-        $allowedTypes = Manager::get_allowed_content_object_types();
+        $allowedTypes = $this->getAllowedContentObjectTypes();
         $type = $contentObject->get_type();
 
         if (in_array($type, $allowedTypes))
@@ -156,6 +175,48 @@ class PublicationAggregator implements PublicationAggregatorInterface
     public function deleteContentObjectPublications(ContentObject $contentObject)
     {
         return $this->getPublicationService()->deletePublicationsForContentObject($contentObject);
+    }
+
+    /**
+     * @todo Legacy code, should be replaced eventually
+     * @return string[]
+     */
+    private function getAllowedContentObjectTypes()
+    {
+        $registrations = $this->getRegistrationConsulter()->getIntegrationRegistrations(
+            \Chamilo\Application\Calendar\Extension\Personal\Manager::package(),
+            \Chamilo\Core\Repository\Manager::package() . '\ContentObject'
+        );
+
+        $types = array();
+
+        foreach ($registrations as $registration)
+        {
+            $namespace = $this->getClassnameUtilities()->getNamespaceParent(
+                $registration[Registration::PROPERTY_CONTEXT], 6
+            );
+
+            $packageName = $this->getClassnameUtilities()->getPackageNameFromNamespace($namespace);
+            $types[] = $namespace . '\Storage\DataClass\\' . $packageName;
+        }
+
+        return $types;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    public function getClassnameUtilities(): ClassnameUtilities
+    {
+        return $this->classnameUtilities;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
+     */
+    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities): void
+    {
+        $this->classnameUtilities = $classnameUtilities;
     }
 
     /**
@@ -251,6 +312,22 @@ class PublicationAggregator implements PublicationAggregatorInterface
     public function setPublicationTargetService(PublicationTargetService $publicationTargetService): void
     {
         $this->publicationTargetService = $publicationTargetService;
+    }
+
+    /**
+     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     */
+    public function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return $this->registrationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     */
+    public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
+    {
+        $this->registrationConsulter = $registrationConsulter;
     }
 
     /**

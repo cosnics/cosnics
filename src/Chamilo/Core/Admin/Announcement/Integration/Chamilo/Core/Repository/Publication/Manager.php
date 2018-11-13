@@ -17,6 +17,24 @@ class Manager implements PublicationInterface
     /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::canContentObjectBeEdited()
      */
+    public static function add_publication_attributes_elements($form)
+    {
+        // TODO: Please implement me !
+    }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::isContentObjectPublished()
+     */
+
+    public static function areContentObjectsPublished($object_ids)
+    {
+        return DataManager::areContentObjectsPublished($object_ids);
+    }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::areContentObjectsPublished()
+     */
+
     public static function canContentObjectBeEdited($object_id)
     {
         // TODO: Please implement me !
@@ -24,46 +42,9 @@ class Manager implements PublicationInterface
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::isContentObjectPublished()
-     */
-    public static function isContentObjectPublished($object_id)
-    {
-        // TODO: Please implement me !
-        return false;
-    }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::areContentObjectsPublished()
-     */
-    public static function areContentObjectsPublished($object_ids)
-    {
-        return DataManager::areContentObjectsPublished($object_ids);
-    }
-
-    /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationsAttributes()
      */
-    public static function getContentObjectPublicationsAttributes(
-        $object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, $offset = null,
-        $order_properties = null
-    )
-    {
-        return DataManager::getContentObjectPublicationsAttributes(
-            $object_id, $type, $type, $offset, $count, $order_properties
-        );
-    }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_attribute()
-     */
-    public static function get_content_object_publication_attribute($publication_id)
-    {
-        return DataManager::get_content_object_publication_attribute($publication_id);
-    }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::countPublicationAttributes()
-     */
     public static function countPublicationAttributes(
         $attributes_type = self::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null
     )
@@ -72,24 +53,27 @@ class Manager implements PublicationInterface
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::deleteContentObjectPublications()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_attribute()
      */
+
     public static function deleteContentObjectPublications($object_id)
     {
         return DataManager::deleteContentObjectPublications($object_id);
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::delete_content_object_publication()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::countPublicationAttributes()
      */
+
     public static function delete_content_object_publication($publication_id)
     {
         return DataManager::delete_content_object_publication($publication_id);
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationLocations()
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::deleteContentObjectPublications()
      */
+
     public static function getContentObjectPublicationLocations($content_object, $user = null)
     {
         $applicationContext = \Chamilo\Core\Admin\Announcement\Manager::context();
@@ -121,8 +105,42 @@ class Manager implements PublicationInterface
     }
 
     /*
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::delete_content_object_publication()
+     */
+
+    public static function getContentObjectPublicationsAttributes(
+        $object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, $offset = null,
+        $order_properties = null
+    )
+    {
+        return DataManager::getContentObjectPublicationsAttributes(
+            $object_id, $type, $type, $offset, $count, $order_properties
+        );
+    }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationLocations()
+     */
+
+    public static function get_content_object_publication_attribute($publication_id)
+    {
+        return DataManager::get_content_object_publication_attribute($publication_id);
+    }
+
+    /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::publish_content_object()
      */
+
+    public static function isContentObjectPublished($object_id)
+    {
+        // TODO: Please implement me !
+        return false;
+    }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::add_publication_attributes_elements()
+     */
+
     public static function publish_content_object(
         \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object, LocationSupport $location,
         $options = array()
@@ -143,16 +161,9 @@ class Manager implements PublicationInterface
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::add_publication_attributes_elements()
-     */
-    public static function add_publication_attributes_elements($form)
-    {
-        // TODO: Please implement me !
-    }
-
-    /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::update_content_object_publication_id()
      */
+
     public static function update_content_object_publication_id($publication_attributes)
     {
         // TODO: Please implement me !

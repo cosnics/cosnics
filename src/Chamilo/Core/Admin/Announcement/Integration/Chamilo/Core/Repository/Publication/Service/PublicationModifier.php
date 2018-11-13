@@ -1,8 +1,8 @@
 <?php
-
 namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Manager;
+use Chamilo\Core\Admin\Announcement\Service\PublicationService;
+use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Publication\Domain\PublicationResult;
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\Service\PublicationModifierInterface;
@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service
@@ -21,13 +21,42 @@ use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 class PublicationModifier implements PublicationModifierInterface
 {
     /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
+     * @var \Chamilo\Core\Admin\Announcement\Service\PublicationService
+     */
+    private $publicationService;
+
+    /**
+     * @var \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
+     */
+    private $publicationAttributesGenerator;
+
+    /**
      *
-     * @see PublicationInterface::add_publication_attributes_elements()
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     *
+     * @param \Chamilo\Core\Admin\Announcement\Service\PublicationService $publicationService
+     * @param \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function __construct(
+        PublicationService $publicationService, PublicationAttributesGenerator $publicationAttributesGenerator,
+        Translator $translator
+    )
+    {
+        $this->publicationService = $publicationService;
+        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
+        $this->translator = $translator;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
      */
     public function addContentObjectPublicationAttributesElementsToForm(FormValidator $formValidator)
     {
-        return Manager::add_publication_attributes_elements($formValidator);
     }
 
     /**
@@ -37,7 +66,7 @@ class PublicationModifier implements PublicationModifierInterface
      */
     public function deleteContentObjectPublication(int $publicationIdentifier)
     {
-        return Manager::delete_content_object_publication($publicationIdentifier);
+        return $this->getPublicationService()->deletePublicationByIdentifier($publicationIdentifier);
     }
 
     /**
@@ -48,12 +77,63 @@ class PublicationModifier implements PublicationModifierInterface
      */
     public function getContentObjectPublicationAttributes(int $publicationIdentifier)
     {
-        return Manager::get_content_object_publication_attribute($publicationIdentifier);
+        return $this->getPublicationAttributesGenerator()->createAttributesFromRecord(
+            $this->getPublicationService()->findPublicationRecordByIdentifier($publicationIdentifier)
+        );
+    }
+
+    /**
+     * @return \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
+     */
+    public function getPublicationAttributesGenerator(): PublicationAttributesGenerator
+    {
+        return $this->publicationAttributesGenerator;
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
+     */
+    public function setPublicationAttributesGenerator(PublicationAttributesGenerator $publicationAttributesGenerator
+    ): void
+    {
+        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
+    }
+
+    /**
+     * @return \Chamilo\Core\Admin\Announcement\Service\PublicationService
+     */
+    public function getPublicationService(): PublicationService
+    {
+        return $this->publicationService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Service\PublicationService $publicationService
+     */
+    public function setPublicationService(PublicationService $publicationService): void
+    {
+        $this->publicationService = $publicationService;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
+     * @param \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
      * @param array $options
      *
      * @return \Chamilo\Core\Repository\Publication\Domain\PublicationResult
@@ -64,16 +144,16 @@ class PublicationModifier implements PublicationModifierInterface
         ContentObject $contentObject, PublicationTarget $publicationTarget, $options = array()
     )
     {
-        $publication = new Publication();
-        $publication->set_content_object_id($contentObject->get_id());
-        $publication->set_publisher($contentObject->get_owner_id());
+        $publication = $this->getPublicationService()->getPublicationInstance();
+        $publication->set_content_object_id($contentObject->getId());
+        $publication->set_publisher_id($publicationTarget->getUserIdentifier());
 
-        if (!$publication->create())
+        if (!$this->getPublicationService()->createPublication($publication))
         {
             $failureMessage = $this->getTranslator()->trans(
                 'PublicationFailure', [
                 '%CONTENT_OBJECT%' => $contentObject->get_title()
-            ], 'Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository'
+            ], 'Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository'
             );
 
             return new PublicationResult(PublicationResult::STATUS_FAILURE, $failureMessage);
@@ -83,7 +163,7 @@ class PublicationModifier implements PublicationModifierInterface
             $successMessage = $this->getTranslator()->trans(
                 'PublicationSuccess', [
                 '%CONTENT_OBJECT%' => $contentObject->get_title()
-            ], 'Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository'
+            ], 'Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository'
             );
 
             $publicationUrl = new Redirect(
@@ -108,6 +188,17 @@ class PublicationModifier implements PublicationModifierInterface
      */
     public function updateContentObjectPublicationContentObjectIdentifier(Attributes $publicationAttributes)
     {
-        return Manager::update_content_object_publication_id($publicationAttributes);
+        $publication = $this->getPublicationService()->findPublicationByIdentifier($publicationAttributes->getId());
+
+        if ($publication instanceof Publication)
+        {
+            $publication->set_content_object_id($publicationAttributes->get_content_object_id());
+
+            return $this->getPublicationService()->updatePublication($publication);
+        }
+        else
+        {
+            return false;
+        }
     }
 }

@@ -89,22 +89,6 @@ class Manager implements PublicationInterface
 
     public static function get_allowed_content_object_types()
     {
-        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
-            \Chamilo\Application\Calendar\Extension\Personal\Manager::package(),
-            \Chamilo\Core\Repository\Manager::package() . '\ContentObject'
-        );
-        $types = array();
-
-        foreach ($registrations as $registration)
-        {
-            $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
-                $registration[Registration::PROPERTY_CONTEXT], 6
-            );
-            $types[] = $namespace . '\Storage\DataClass\\' .
-                ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
-        }
-
-        return $types;
     }
 
     public static function get_content_object_publication_attribute($publication_id)

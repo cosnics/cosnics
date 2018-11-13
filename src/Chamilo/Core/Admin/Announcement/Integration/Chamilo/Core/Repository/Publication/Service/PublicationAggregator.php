@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Manager;
+use Chamilo\Core\Admin\Announcement\Service\PublicationService;
 use Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataClass\SystemAnnouncement;
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
@@ -22,6 +23,16 @@ use Symfony\Component\Translation\Translator;
 class PublicationAggregator implements PublicationAggregatorInterface
 {
     /**
+     * @var \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
+     */
+    private $publicationAttributesGenerator;
+
+    /**
+     * @var \Chamilo\Core\Admin\Announcement\Service\PublicationService
+     */
+    private $publicationService;
+
+    /**
      *
      * @var \Symfony\Component\Translation\Translator
      */
@@ -38,18 +49,56 @@ class PublicationAggregator implements PublicationAggregatorInterface
     private $publicationTargetRenderer;
 
     /**
+     * @param \Chamilo\Core\Admin\Announcement\Service\PublicationService $publicationService
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
      * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
      * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer $publicationTargetRenderer
      */
     public function __construct(
-        Translator $translator, PublicationTargetService $publicationTargetService,
-        PublicationTargetRenderer $publicationTargetRenderer
+        PublicationService $publicationService, Translator $translator,
+        PublicationAttributesGenerator $publicationAttributesGenerator,
+        PublicationTargetService $publicationTargetService, PublicationTargetRenderer $publicationTargetRenderer
     )
     {
+        $this->publicationService = $publicationService;
         $this->translator = $translator;
+        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
         $this->publicationTargetService = $publicationTargetService;
         $this->publicationTargetRenderer = $publicationTargetRenderer;
+    }
+
+    /**
+     * @return \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
+     */
+    public function getPublicationAttributesGenerator(): PublicationAttributesGenerator
+    {
+        return $this->publicationAttributesGenerator;
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
+     */
+    public function setPublicationAttributesGenerator(PublicationAttributesGenerator $publicationAttributesGenerator
+    ): void
+    {
+        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
+    }
+
+    /**
+     * @return \Chamilo\Core\Admin\Announcement\Service\PublicationService
+     */
+    public function getPublicationService(): PublicationService
+    {
+        return $this->publicationService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Service\PublicationService $publicationService
+     */
+    public function setPublicationService(PublicationService $publicationService): void
+    {
+        $this->publicationService = $publicationService;
     }
 
     /**
@@ -86,7 +135,10 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function areContentObjectsPublished(array $contentObjectIdentifiers)
     {
-        return Manager::areContentObjectsPublished($contentObjectIdentifiers);
+        $publicationCount =
+            $this->getPublicationService()->countPublicationsForContentObjectIdentifiers($contentObjectIdentifiers);
+
+        return $publicationCount > 0;
     }
 
     /**
@@ -96,7 +148,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function canContentObjectBeEdited(int $contentObjectIdentifier)
     {
-        return Manager::canContentObjectBeEdited($contentObjectIdentifier);
+        return true;
     }
 
     /**
@@ -122,7 +174,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
         int $type, int $objectIdentifier, Condition $condition = null
     )
     {
-        return Manager::countPublicationAttributes($type, $objectIdentifier, $condition);
+        return $this->getPublicationService()->countPublicationsForTypeAndIdentifier(
+            $type, $objectIdentifier, $condition
+        );
     }
 
     /**
@@ -132,7 +186,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function deleteContentObjectPublications(ContentObject $contentObject)
     {
-        return Manager::deleteContentObjectPublications($contentObject->getId());
+        return $this->getPublicationService()->deletePublicationsForContentObject($contentObject);
     }
 
     /**
@@ -150,9 +204,19 @@ class PublicationAggregator implements PublicationAggregatorInterface
         array $orderProperties = null
     )
     {
-        return Manager::getContentObjectPublicationsAttributes(
-            $objectIdentifier, $type, $condition, $count, $offset, $orderProperties
+        $publicationRecords = $this->getPublicationService()->findPublicationRecordsForTypeAndIdentifier(
+            $type, $objectIdentifier, $condition, $count, $offset, $orderProperties
         );
+
+        $publicationAttributes = array();
+
+        foreach ($publicationRecords as $publicationRecord)
+        {
+            $publicationAttributes[] =
+                $this->getPublicationAttributesGenerator()->createAttributesFromRecord($publicationRecord);
+        }
+
+        return $publicationAttributes;
     }
 
     /**
@@ -210,6 +274,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function isContentObjectPublished(int $contentObjectIdentifier)
     {
-        return Manager::isContentObjectPublished($contentObjectIdentifier);
+        $publicationCount =
+            $this->getPublicationService()->countPublicationsForContentObjectIdentifier($contentObjectIdentifier);
+
+        return $publicationCount > 0;
     }
 }

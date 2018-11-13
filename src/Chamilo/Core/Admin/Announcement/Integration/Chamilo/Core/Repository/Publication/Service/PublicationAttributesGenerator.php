@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service;
+namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
+use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -42,18 +42,18 @@ class PublicationAttributesGenerator
 
         $attributes->setId($record[Publication::PROPERTY_ID]);
         $attributes->set_publisher_id($record[Publication::PROPERTY_PUBLISHER_ID]);
-        $attributes->set_date($record[Publication::PROPERTY_PUBLISHED]);
-        $attributes->set_application(\Chamilo\Application\Portfolio\Manager::context());
+        $attributes->set_date($record[Publication::PROPERTY_PUBLICATION_DATE]);
+        $attributes->set_application(\Chamilo\Core\Admin\Announcement\Manager::context());
 
         $attributes->set_location(
-            $this->getTranslator()->trans('TypeName', [], \Chamilo\Application\Portfolio\Manager::context())
+            $this->getTranslator()->trans('TypeName', [], \Chamilo\Core\Admin\Announcement\Manager::context())
         );
 
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Portfolio\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_HOME,
-                \Chamilo\Application\Portfolio\Manager::PARAM_USER_ID => $record[Publication::PROPERTY_PUBLISHER_ID]
+                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Announcement\Manager::context(),
+                Application::PARAM_ACTION => \Chamilo\Core\Admin\Announcement\Manager::ACTION_VIEW,
+                \Chamilo\Core\Admin\Announcement\Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $record[Publication::PROPERTY_ID]
             )
         );
 
