@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Traits;
 
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -26,7 +28,7 @@ trait DependencyInjectionContainerTrait
      */
     public function initializeContainer()
     {
-        if (! isset($this->container))
+        if (!isset($this->container))
         {
             $this->container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
         }
@@ -89,7 +91,16 @@ trait DependencyInjectionContainerTrait
      */
     public function getUserService()
     {
-        return $this->getService('chamilo.core.user.service.user_service');
+        return $this->getService(UserService::class);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Group\Service\GroupService
+     */
+    public function getGroupService()
+    {
+        return $this->getService(GroupService::class);
     }
 
     /**

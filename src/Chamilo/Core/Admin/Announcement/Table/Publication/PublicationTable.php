@@ -39,8 +39,10 @@ class PublicationTable extends RecordTable implements TableFormActionsSupport
     private $groupService;
 
     /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application $component
+     * @param $component
      * @param \Chamilo\Core\Admin\Announcement\Service\PublicationService $publicationService
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     * @param \Chamilo\Core\Group\Service\GroupService $groupService
      *
      * @throws \Exception
      */

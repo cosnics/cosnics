@@ -14,19 +14,12 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class Publication extends DataClass
 {
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
-
     const PROPERTY_EMAIL_SENT = 'email_sent';
-
     const PROPERTY_FROM_DATE = 'from_date';
-
     const PROPERTY_HIDDEN = 'hidden';
-
     const PROPERTY_MODIFICATION_DATE = 'modified';
-
     const PROPERTY_PUBLICATION_DATE = 'published';
-
     const PROPERTY_PUBLISHER_ID = 'publisher_id';
-
     const PROPERTY_TO_DATE = 'to_date';
 
     /**
@@ -35,43 +28,9 @@ class Publication extends DataClass
      */
     private $content_object;
 
-    public function create()
-    {
-        $this->set_publication_date(time());
-
-        if (!parent::create())
-        {
-            return false;
-        }
-
-        $parent = Rights::getInstance()->get_root_id(self::package());
-
-        return Rights::getInstance()->create_location(
-            self::package(), Rights::TYPE_PUBLICATION, $this->get_id(), false, $parent
-        );
-    }
-
-    public function delete()
-    {
-        $location = Rights::getInstance()->get_location_by_identifier(
-            self::package(), Rights::TYPE_PUBLICATION, $this->get_id()
-        );
-        if ($location)
-        {
-            if (!$location->delete())
-            {
-                return false;
-            }
-        }
-
-        if (!parent::delete())
-        {
-            return false;
-        }
-
-        return true;
-    }
-
+    /**
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
+     */
     public function get_content_object()
     {
         if (!isset($this->content_object))
@@ -84,6 +43,9 @@ class Publication extends DataClass
         return $this->content_object;
     }
 
+    /**
+     * @return integer
+     */
     public function get_content_object_id()
     {
         return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
@@ -156,6 +118,9 @@ class Publication extends DataClass
         return $this->get_default_property(self::PROPERTY_TO_DATE);
     }
 
+    /**
+     * @return boolean
+     */
     public function is_forever()
     {
         return $this->get_from_date() == 0 && $this->get_to_date() == 0;
