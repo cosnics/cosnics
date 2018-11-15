@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement;
 
+use Chamilo\Core\Admin\Announcement\Service\PublicationService;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 abstract class Manager extends Application
@@ -14,4 +15,12 @@ abstract class Manager extends Application
     const ACTION_VIEW = 'Viewer';
     const ACTION_HIDE = 'Hider';
     const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    /**
+     * @return \Chamilo\Core\Admin\Announcement\Service\PublicationService
+     */
+    public function getPublicationService()
+    {
+        return $this->getService(PublicationService::class);
+    }
 }

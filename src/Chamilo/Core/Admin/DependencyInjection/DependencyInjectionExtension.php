@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Admin\Announcement\DependencyInjection;
+namespace Chamilo\Core\Admin\DependencyInjection;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\PathBuilder;
@@ -11,6 +11,11 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
+/**
+ * @package Chamilo\Core\Admin\DependencyInjection
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class DependencyInjectionExtension extends Extension implements ExtensionInterface
 {
 
@@ -31,7 +36,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $loader = new XmlFileLoader(
             $container, new FileLocator(
                 $pathBuilder->getConfigurationPath(
-                    'Chamilo\Core\Admin\Announcement'
+                    'Chamilo\Core\Admin'
                 ) . 'DependencyInjection'
             )
         );
@@ -50,6 +55,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function getAlias()
     {
-        return 'chamilo.core.admin.announcement';
+        return 'chamilo.core.admin';
     }
 }

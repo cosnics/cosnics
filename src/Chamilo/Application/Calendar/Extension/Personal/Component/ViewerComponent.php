@@ -68,6 +68,84 @@ class ViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $breadcrumbtrail->add_help('personal_calendar_viewer');
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     */
+    public function getButtonToolbarRenderer()
+    {
+        if (!isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar();
+            $commonActions = new ButtonGroup();
+            $toolActions = new ButtonGroup();
+
+            $ical_url = $this->get_url(
+                array(
+                    self::PARAM_ACTION => self::ACTION_EXPORT,
+                    self::PARAM_PUBLICATION_ID => $this->getPublication()->get_id()
+                )
+            );
+
+            $toolActions->addButton(
+                new Button(
+                    Translation::get('ExportIcal'), Theme::getInstance()->getCommonImagePath('Export/Csv'), $ical_url
+                )
+            );
+
+            $user = $this->get_user();
+
+            if ($this->getRightsService()->isAllowedToEditPublication($this->getPublication(), $this->getUser()))
+            {
+                $editUrl = $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_EDIT,
+                        self::PARAM_PUBLICATION_ID => $this->getPublication()->get_id()
+                    )
+                );
+
+                $commonActions->addButton(
+                    new Button(
+                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
+                        Theme::getInstance()->getCommonImagePath('Action/Edit'), $editUrl
+                    )
+                );
+            }
+
+            if ($this->getRightsService()->isAllowedToDeletePublication($this->getPublication(), $this->getUser()))
+            {
+                $deleteUrl = $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_DELETE,
+                        self::PARAM_PUBLICATION_ID => $this->getPublication()->getId()
+                    )
+                );
+
+                $commonActions->addButton(
+                    new Button(
+                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
+                        Theme::getInstance()->getCommonImagePath('Action/Delete'), $deleteUrl
+                    )
+                );
+            }
+
+            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($toolActions);
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->buttonToolbarRenderer;
+    }
+
+    /**
      * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
@@ -92,6 +170,24 @@ class ViewerComponent extends Manager implements DelegateComponent
         }
 
         return $this->publication;
+    }
+
+    /**
+     * @param $attachment
+     *
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     */
+    public function get_content_object_display_attachment_url($attachment)
+    {
+        return $this->get_url(
+            array(
+                Application::PARAM_ACTION => Manager::ACTION_VIEW_ATTACHMENT,
+                self::PARAM_PUBLICATION_ID => $this->getPublication()->getId(),
+                self::PARAM_OBJECT => $attachment->get_id()
+            )
+        );
     }
 
     /**
@@ -203,101 +299,5 @@ class ViewerComponent extends Manager implements DelegateComponent
 
             return implode(PHP_EOL, $target_list);
         }
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
-     */
-    public function getButtonToolbarRenderer()
-    {
-        if (!isset($this->buttonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar();
-            $commonActions = new ButtonGroup();
-            $toolActions = new ButtonGroup();
-
-            $ical_url = $this->get_url(
-                array(
-                    self::PARAM_ACTION => self::ACTION_EXPORT,
-                    self::PARAM_PUBLICATION_ID => $this->getPublication()->get_id()
-                )
-            );
-
-            $toolActions->addButton(
-                new Button(
-                    Translation::get('ExportIcal'), Theme::getInstance()->getCommonImagePath('Export/Csv'), $ical_url
-                )
-            );
-
-            $user = $this->get_user();
-
-            if ($this->getRightsService()->isAllowedToEditPublication($this->getPublication(), $this->getUser()))
-            {
-                $editUrl = $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_EDIT,
-                        self::PARAM_PUBLICATION_ID => $this->getPublication()->get_id()
-                    )
-                );
-
-                $commonActions->addButton(
-                    new Button(
-                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Edit'), $editUrl
-                    )
-                );
-            }
-
-            if ($this->getRightsService()->isAllowedToDeletePublication($this->getPublication(), $this->getUser()))
-            {
-                $deleteUrl = $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_DELETE,
-                        self::PARAM_PUBLICATION_ID => $this->getPublication()->getId()
-                    )
-                );
-
-                $commonActions->addButton(
-                    new Button(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Delete'), $deleteUrl
-                    )
-                );
-            }
-
-            $buttonToolbar->addButtonGroup($commonActions);
-            $buttonToolbar->addButtonGroup($toolActions);
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
-
-        return $this->buttonToolbarRenderer;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('personal_calendar_viewer');
-    }
-
-    /**
-     * @param $attachment
-     *
-     * @return string
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
-     */
-    public function get_content_object_display_attachment_url($attachment)
-    {
-        return $this->get_url(
-            array(
-                Application::PARAM_ACTION => Manager::ACTION_VIEW_ATTACHMENT,
-                self::PARAM_PUBLICATION_ID => $this->getPublication()->getId(),
-                self::PARAM_OBJECT => $attachment->get_id()
-            )
-        );
     }
 }

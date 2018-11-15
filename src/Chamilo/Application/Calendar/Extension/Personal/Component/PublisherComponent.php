@@ -28,6 +28,19 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     protected $publicationForm;
 
     /**
+     * Runs this component and displays its output.
+     */
+    public function run()
+    {
+        $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
+        $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
+
+        return $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Repository\Publication\Publisher\Manager::context(), $applicationConfiguration
+        )->run();
+    }
+
+    /**
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
@@ -98,18 +111,5 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
         }
 
         return $types;
-    }
-
-    /**
-     * Runs this component and displays its output.
-     */
-    public function run()
-    {
-        $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
-        $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
-
-        return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\Publication\Publisher\Manager::context(), $applicationConfiguration
-        )->run();
     }
 }

@@ -3,8 +3,6 @@ namespace Chamilo\Core\Admin\Announcement\Component;
 
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Rights;
-use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
-use Chamilo\Core\Admin\Announcement\Storage\DataManager;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -39,7 +37,7 @@ class ViewerComponent extends Manager implements NoContextComponent
 
         if ($id)
         {
-            $publication = DataManager::retrieve_by_id(Publication::class_name(), (int) $id);
+            $publication = $this->getPublicationService()->findPublicationByIdentifier((int) $id);
             $object = $publication->get_content_object();
 
             $html = array();

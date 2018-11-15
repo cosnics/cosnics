@@ -2,11 +2,43 @@
 namespace Chamilo\Core\Admin\Announcement\Table\Publication;
 
 use Chamilo\Core\Admin\Announcement\Component\BrowserComponent;
-use Chamilo\Core\Admin\Announcement\Storage\DataManager;
+use Chamilo\Core\Admin\Announcement\Service\PublicationService;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 
 class PublicationTableDataProvider extends RecordTableDataProvider
 {
+    /**
+     * @var \Chamilo\Core\Admin\Announcement\Service\PublicationService
+     */
+    private $publicationService;
+
+    /**
+     * Constructor
+     *
+     * @param \Chamilo\Libraries\Format\Table\Table $table
+     * @param \Chamilo\Core\Admin\Announcement\Service\PublicationService $publicationService
+     */
+    public function __construct($table, PublicationService $publicationService)
+    {
+        parent::__construct($table);
+        $this->publicationService = $publicationService;
+    }
+
+    /**
+     * @return \Chamilo\Core\Admin\Announcement\Service\PublicationService
+     */
+    public function getPublicationService(): PublicationService
+    {
+        return $this->publicationService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Service\PublicationService $publicationService
+     */
+    public function setPublicationService(PublicationService $publicationService): void
+    {
+        $this->publicationService = $publicationService;
+    }
 
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
@@ -14,18 +46,15 @@ class PublicationTableDataProvider extends RecordTableDataProvider
         switch ($type)
         {
             case BrowserComponent::TYPE_FROM_ME :
-                return DataManager::retrieve_publications($condition);
-                break;
             case BrowserComponent::TYPE_ALL :
-                return DataManager::retrieve_publications($condition);
+                return $this->getPublicationService()->findPublicationRecords(
+                    $condition, $count, $offset, $order_property
+                );
                 break;
             default :
-                return DataManager::retrieve_publications_for_me(
-                    $condition, 
-                    $order_property, 
-                    $offset, 
-                    $count, 
-                    $this->get_component()->get_user()->get_id());
+                return $this->getPublicationService()->findVisiblePublicationRecordsForUserIdentifier(
+                    $this->get_component()->getUser()->getId(), $condition, $count, $offset, $order_property
+                );
                 break;
         }
     }
@@ -36,13 +65,13 @@ class PublicationTableDataProvider extends RecordTableDataProvider
         switch ($type)
         {
             case BrowserComponent::TYPE_FROM_ME :
-                return DataManager::count_publications($condition);
-                break;
             case BrowserComponent::TYPE_ALL :
-                return DataManager::count_publications($condition);
+                return $this->getPublicationService()->countPublications($condition);
                 break;
             default :
-                return DataManager::count_publications_for_me($condition, $this->get_component()->get_user()->get_id());
+                return $this->getPublicationService()->countVisiblePublicationsForUserIdentifier(
+                    $this->get_component()->getUser()->getId(), $condition
+                );
                 break;
         }
     }

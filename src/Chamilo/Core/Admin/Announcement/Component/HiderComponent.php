@@ -2,10 +2,7 @@
 namespace Chamilo\Core\Admin\Announcement\Component;
 
 use Chamilo\Core\Admin\Announcement\Manager;
-use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
-use Chamilo\Core\Admin\Announcement\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -19,24 +16,24 @@ class HiderComponent extends Manager
     {
         $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
-        $ids = Request::get(self::PARAM_SYSTEM_ANNOUNCEMENT_ID);
+        $ids = $this->getRequest()->query->get(self::PARAM_SYSTEM_ANNOUNCEMENT_ID);
         $this->set_parameter(self::PARAM_SYSTEM_ANNOUNCEMENT_ID, $ids);
 
         $failures = 0;
 
-        if (! empty($ids))
+        if (!empty($ids))
         {
-            if (! is_array($ids))
+            if (!is_array($ids))
             {
                 $ids = array($ids);
             }
 
             foreach ($ids as $id)
             {
-                $publication = DataManager::retrieve_by_id(Publication::class_name(), $id);
+                $publication = $this->getPublicationService()->findPublicationByIdentifier((int) $id);
                 $publication->toggle_visibility();
 
-                if (! $publication->update())
+                if (!$this->getPublicationService()->updatePublication($publication))
                 {
                     $failures ++;
                 }
@@ -70,25 +67,24 @@ class HiderComponent extends Manager
             }
 
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES),
-                ($failures ? true : false),
-                array(self::PARAM_ACTION => self::ACTION_BROWSE));
+                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), ($failures ? true : false),
+                array(self::PARAM_ACTION => self::ACTION_BROWSE)
+            );
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected',
-                        array('OBJECT' => 'Publication'),
-                        Utilities::COMMON_LIBRARIES)));
+                        'NoObjectSelected', array('OBJECT' => 'Publication'), Utilities::COMMON_LIBRARIES
+                    )
+                )
+            );
         }
     }
 
     /**
-     * Returns the admin breadcrumb generator
-     *
-     * @return \libraries\format\BreadcrumbGeneratorInterface
+     * @return \Chamilo\Core\Admin\Core\BreadcrumbGenerator
      */
     public function get_breadcrumb_generator()
     {

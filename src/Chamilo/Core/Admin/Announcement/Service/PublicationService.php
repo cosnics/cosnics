@@ -1,17 +1,27 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Service;
 
+use Chamilo\Core\Admin\Announcement\Form\PublicationForm;
 use Chamilo\Core\Admin\Announcement\Rights;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocation;
 use Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
+use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Symfony\Component\Translation\Translator;
 
 class PublicationService
 {
+    /**
+     * @var \Chamilo\Core\Admin\Announcement\Service\RightsService
+     */
+    private $rightsService;
+
     /**
      *
      * @var \Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository
@@ -29,11 +39,22 @@ class PublicationService
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(
-        PublicationRepository $publicationRepository, Translator $translator
+        PublicationRepository $publicationRepository, Translator $translator, RightsService $rightsService
     )
     {
         $this->publicationRepository = $publicationRepository;
         $this->translator = $translator;
+        $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
+     */
+    public function countPublications(Condition $condition = null)
+    {
+        return $this->getPublicationRepository()->countPublications($condition);
     }
 
     /**
@@ -81,12 +102,33 @@ class PublicationService
     }
 
     /**
+     * @param integer $userIdentifier
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return integer
+     */
+    public function countVisiblePublicationsForUserIdentifier(int $userIdentifier, Condition $condition = null)
+    {
+        $publicationIdentifiers =
+            $this->getRightsService()->findPublicationIdentifiersWithViewRightForEntitiesAndUserIdentifier(
+                $this->getEntities(), $userIdentifier
+            );
+
+        return $this->getPublicationRepository()->countVisiblePublicationsForPublicationIdentifiers(
+            $condition, $publicationIdentifiers
+        );
+    }
+
+    /**
      * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
      *
      * @return boolean
      */
     public function createPublication(Publication $publication)
     {
+        $publication->set_publication_date(time());
+        $publication->set_modification_date($publication->get_publication_date());
+
         if (!$this->getPublicationRepository()->createPublication($publication))
         {
             return false;
@@ -98,6 +140,57 @@ class PublicationService
             self::package(), Rights::TYPE_PUBLICATION, $publication->getId(), false,
             $rightsService->get_root_id(self::package())
         );
+    }
+
+    /**
+     * @param integer $userIdentifier
+     * @param integer $contentObjectIdentifier
+     * @param string[] $values
+     *
+     * @return \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication
+     * @throws \Exception
+     */
+    public function createPublicationForUserIdentifierAndContentObjectIdentifierFromValues(
+        int $userIdentifier, int $contentObjectIdentifier, array $values
+    )
+    {
+        $publication = new Publication();
+        $publication->set_content_object_id($contentObjectIdentifier);
+        $publication->set_publisher_id($userIdentifier);
+
+        if (!$this->savePublicationFromValues($publication, $userIdentifier, $values))
+        {
+            return false;
+        }
+
+        return $publication;
+    }
+
+    /**
+     * @param integer $userIdentifier
+     * @param integer[] $contentObjectIdentifiers
+     * @param string[] $values
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function createPublicationsForUserIdentifierAndContentObjectIdentifiersFromValues(
+        int $userIdentifier, array $contentObjectIdentifiers, array $values
+    )
+    {
+        foreach ($contentObjectIdentifiers as $contentObjectIdentifier)
+        {
+            $publication = $this->createPublicationForUserIdentifierAndContentObjectIdentifierFromValues(
+                $userIdentifier, $contentObjectIdentifier, $values
+            );
+
+            if (!$publication instanceof Publication)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -183,6 +276,22 @@ class PublicationService
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $count
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
+     *
+     * @return string[]
+     * @throws \Exception
+     */
+    public function findPublicationRecords(
+        Condition $condition = null, int $count = null, int $offset = null, array $orderProperties = null
+    )
+    {
+        return $this->getPublicationRepository()->findPublicationRecords($condition, $count, $offset, $orderProperties);
+    }
+
+    /**
      * @param integer $type
      * @param integer $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
@@ -221,14 +330,41 @@ class PublicationService
     }
 
     /**
-     * @return \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication
+     * @param integer $userIdentifier
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $count
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
+     *
+     * @return string[]
+     * @throws \Exception
      */
-    public function getPublicationInstance()
+    public function findVisiblePublicationRecordsForUserIdentifier(
+        int $userIdentifier, Condition $condition = null, int $count = null, int $offset = null,
+        array $orderProperties = null
+    )
     {
-        $publication = new Publication();
-        $publication->set_publication_date(time());
+        $publicationIdentifiers =
+            $this->getRightsService()->findPublicationIdentifiersWithViewRightForEntitiesAndUserIdentifier(
+                $this->getEntities(), $userIdentifier
+            );
 
-        return $publication;
+        return $this->getPublicationRepository()->findVisiblePublicationRecordsForPublicationIdentifiers(
+            $publicationIdentifiers, $condition, $count, $offset, $orderProperties
+        );
+    }
+
+    /**
+     * @return \Chamilo\Core\Rights\Entity\RightsEntity[]
+     */
+    protected function getEntities()
+    {
+        $entities = array();
+
+        $entities[UserEntity::ENTITY_TYPE] = UserEntity::getInstance();
+        $entities[PlatformGroupEntity::ENTITY_TYPE] = PlatformGroupEntity::getInstance();
+
+        return $entities;
     }
 
     /**
@@ -245,6 +381,22 @@ class PublicationService
     public function setPublicationRepository(PublicationRepository $publicationRepository): void
     {
         $this->publicationRepository = $publicationRepository;
+    }
+
+    /**
+     * @return \Chamilo\Core\Admin\Announcement\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
     }
 
     /**
@@ -268,8 +420,127 @@ class PublicationService
      *
      * @return boolean
      */
+    public function savePublication(Publication $publication)
+    {
+        if ($publication->isIdentified())
+        {
+            return $this->updatePublication($publication);
+        }
+        else
+        {
+            return $this->createPublication($publication);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
+     * @param integer $userIdentifier
+     * @param array $values
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function savePublicationFromValues(Publication $publication, int $userIdentifier, array $values)
+    {
+        if ($values[PublicationForm::PROPERTY_FOREVER] != 0)
+        {
+            $from = $to = 0;
+        }
+        else
+        {
+            $from = DatetimeUtilities::time_from_datepicker($values[PublicationForm::PROPERTY_FROM_DATE]);
+            $to = DatetimeUtilities::time_from_datepicker($values[PublicationForm::PROPERTY_TO_DATE]);
+        }
+
+        $publication->set_from_date($from);
+        $publication->set_to_date($to);
+        $publication->set_hidden($values[Publication::PROPERTY_HIDDEN] ? 1 : 0);
+
+        if (!$this->savePublication($publication))
+        {
+            return false;
+        }
+
+        return $this->updatePublicationRights($publication, $userIdentifier, $values);
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
     public function updatePublication(Publication $publication)
     {
+        $publication->set_modification_date(time());
+
         return $this->getPublicationRepository()->updatePublication($publication);
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
+     * @param integer $userIdentifier
+     * @param string[] $values
+     *
+     * @return boolean
+     * @throws \Exception
+     * @todo Needs to be split off to a seperate rights service
+     */
+    public function updatePublicationRights(Publication $publication, int $userIdentifier, $values)
+    {
+        $rightsContext = \Chamilo\Core\Admin\Announcement\Manager::context();
+
+        $location = Rights::getInstance()->get_location_by_identifier(
+            $rightsContext, Rights::TYPE_PUBLICATION, $publication->getId()
+        );
+
+        if (!$location->clear_right(Rights::VIEW_RIGHT))
+        {
+            return false;
+        }
+
+        if ($location->inherits())
+        {
+            $location->disinherit();
+            if (!$location->update())
+            {
+                return false;
+            }
+        }
+
+        $option = $values[PublicationForm::PROPERTY_RIGHT_OPTION];
+        $location_id = $location->getId();
+
+        $rights = Rights::getInstance();
+
+        switch ($option)
+        {
+            case PublicationForm::RIGHT_OPTION_ALL :
+                if (!$rights->invert_location_entity_right($rightsContext, Rights::VIEW_RIGHT, 0, 0, $location_id))
+                {
+                    return false;
+                }
+                break;
+            case PublicationForm::RIGHT_OPTION_ME :
+                if (!$rights->invert_location_entity_right(
+                    $rightsContext, Rights::VIEW_RIGHT, $userIdentifier, UserEntity::ENTITY_TYPE, $location_id
+                ))
+                {
+                    return false;
+                }
+                break;
+            case PublicationForm::RIGHT_OPTION_SELECT :
+                foreach ($values[PublicationForm::PROPERTY_TARGETS] as $entity_type => $target_ids)
+                {
+                    foreach ($target_ids as $target_id)
+                    {
+                        if (!$rights->invert_location_entity_right(
+                            $rightsContext, Rights::VIEW_RIGHT, $target_id, $entity_type, $location_id
+                        ))
+                        {
+                            return false;
+                        }
+                    }
+                }
+        }
     }
 }

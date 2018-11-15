@@ -144,11 +144,12 @@ class PublicationModifier implements PublicationModifierInterface
         ContentObject $contentObject, PublicationTarget $publicationTarget, $options = array()
     )
     {
-        $publication = $this->getPublicationService()->getPublicationInstance();
-        $publication->set_content_object_id($contentObject->getId());
-        $publication->set_publisher_id($publicationTarget->getUserIdentifier());
+        $publication =
+            $this->getPublicationService()->createPublicationForUserIdentifierAndContentObjectIdentifierFromValues(
+                $publicationTarget->getUserIdentifier(), $contentObject->getId(), []
+            );
 
-        if (!$this->getPublicationService()->createPublication($publication))
+        if (!$publication instanceof Publication)
         {
             $failureMessage = $this->getTranslator()->trans(
                 'PublicationFailure', [

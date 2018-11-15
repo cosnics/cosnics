@@ -1,10 +1,13 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Storage\Repository;
 
+use Chamilo\Core\Admin\Announcement\Rights;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
+use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -12,9 +15,11 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
@@ -44,7 +49,7 @@ class PublicationRepository
         $this->dataClassRepository = $dataClassRepository;
     }
 
-    public function countPublications(Condition $condition)
+    public function countPublications(Condition $condition = null)
     {
         return $this->getDataClassRepository()->count(Publication::class, new DataClassCountParameters($condition));
     }
@@ -62,6 +67,72 @@ class PublicationRepository
         );
 
         return $this->countPublications($condition);
+    }
+
+    /**
+     * @param $condition
+     * @param integer[] $publicationIdentifiers
+     *
+     * @return integer
+     */
+    public function countVisiblePublicationsForPublicationIdentifiers(
+        $condition, array $publicationIdentifiers
+    )
+    {
+        $conditions = array();
+
+        if ($condition instanceof Condition)
+        {
+            $conditions[] = $condition;
+        }
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID), $publicationIdentifiers
+        );
+
+        $conditions[] = $this->getTimeConditions();
+
+        return $this->getDataClassRepository()->count(
+            Publication::class_name(), new DataClassCountParameters(new AndCondition($conditions))
+        );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     */
+    protected function getTimeConditions()
+    {
+        $fromDateVariables = new PropertyConditionVariable(
+            Publication::class_name(), Publication::PROPERTY_FROM_DATE
+        );
+
+        $toDateVariable = new PropertyConditionVariable(
+            Publication::class_name(), Publication::PROPERTY_TO_DATE
+        );
+
+        $timeConditions = array();
+        $timeConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_HIDDEN),
+            new StaticConditionVariable(0)
+        );
+
+        $foreverConditions = array();
+        $foreverConditions[] = new EqualityCondition($fromDateVariables, new StaticConditionVariable(0));
+        $foreverConditions[] = new EqualityCondition($toDateVariable, new StaticConditionVariable(0));
+        $foreverCondition = new AndCondition($foreverConditions);
+
+        $betweenConditions = array();
+        $betweenConditions[] = new ComparisonCondition(
+            $fromDateVariables, ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable(time())
+        );
+        $betweenConditions[] = new ComparisonCondition(
+            $toDateVariable, ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(time())
+        );
+        $betweenCondition = new AndCondition($betweenConditions);
+
+        $timeConditions[] = new OrCondition(array($foreverCondition, $betweenCondition));
+
+        return new AndCondition($timeConditions);
     }
 
     /**
@@ -103,6 +174,16 @@ class PublicationRepository
         }
 
         return $this->countPublications($condition);
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
+    public function createPublication(Publication $publication)
+    {
+        return $this->getDataClassRepository()->create($publication);
     }
 
     /**
@@ -189,6 +270,33 @@ class PublicationRepository
         );
 
         return $this->getDataClassRepository()->records(Publication::class, $parameters);
+    }
+
+    /**
+     * @param integer[] $publicationIdentifiers
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $count
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
+     *
+     * @return string[]
+     * @throws \Exception
+     */
+    public function findVisiblePublicationRecordsForPublicationIdentifiers(
+        array $publicationIdentifiers, Condition $condition = null, int $count = null, int $offset = null,
+        array $orderProperties = null
+    )
+    {
+        $publicationIdentifierCondition = new InCondition(
+            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID), $publicationIdentifiers
+        );
+
+        if ($condition instanceof Condition)
+        {
+            $condition = new AndCondition([$condition, $publicationIdentifierCondition]);
+        }
+
+        return $this->findPublicationRecords($condition, $count, $offset, $orderProperties);
     }
 
     /**
@@ -310,16 +418,6 @@ class PublicationRepository
     public function updatePublication(Publication $publication)
     {
         return $this->getDataClassRepository()->update($publication);
-    }
-
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
-     *
-     * @return boolean
-     */
-    public function createPublication(Publication $publication)
-    {
-        return $this->getDataClassRepository()->create($publication);
     }
 }
 
