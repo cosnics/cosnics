@@ -37,6 +37,7 @@ class PublicationService
     /**
      * @param \Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository $publicationRepository
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\Admin\Announcement\Service\RightsService $rightsService
      */
     public function __construct(
         PublicationRepository $publicationRepository, Translator $translator, RightsService $rightsService
