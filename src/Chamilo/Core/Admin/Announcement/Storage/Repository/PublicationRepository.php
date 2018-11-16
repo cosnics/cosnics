@@ -287,16 +287,20 @@ class PublicationRepository
         array $orderProperties = null
     )
     {
-        $publicationIdentifierCondition = new InCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID), $publicationIdentifiers
-        );
+        $conditions = array();
 
         if ($condition instanceof Condition)
         {
-            $condition = new AndCondition([$condition, $publicationIdentifierCondition]);
+            $conditions[] = $condition;
         }
 
-        return $this->findPublicationRecords($condition, $count, $offset, $orderProperties);
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID), $publicationIdentifiers
+        );
+
+        $conditions[] = $this->getTimeConditions();
+
+        return $this->findPublicationRecords(new AndCondition($conditions), $count, $offset, $orderProperties);
     }
 
     /**

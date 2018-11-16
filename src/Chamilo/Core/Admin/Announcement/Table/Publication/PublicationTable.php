@@ -122,6 +122,22 @@ class PublicationTable extends RecordTable implements TableFormActionsSupport
     }
 
     /**
+     * Gets the table's cell renderer or builds one if it is not set
+     *
+     * @return \Chamilo\Libraries\Format\Table\TableCellRenderer
+     */
+    public function get_cell_renderer()
+    {
+        if (!isset($this->cellRenderer))
+        {
+            $this->cellRenderer =
+                new PublicationTableCellRenderer($this, $this->getUserService(), $this->getGroupService());
+        }
+
+        return $this->cellRenderer;
+    }
+
+    /**
      * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
      */
     public function get_implemented_form_actions()
