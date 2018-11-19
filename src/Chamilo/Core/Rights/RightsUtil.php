@@ -243,19 +243,6 @@ class RightsUtil
     /*
      * DONE
      */
-    /**
-     * Retrieves the identifiers where you have a certain right granted inside a location
-     *
-     * @param <type> $right_id
-     * @param <type> $context
-     * @param <type> $parent_location
-     * @param <type> $retrieve_type
-     * @param <type> $user_id
-     * @param <type> $entities
-     *
-     * @return <type>
-     *
-     */
     public function get_identifiers_with_right_granted(
         $right_id, $context, $parent_location, $retrieve_type, $user_id, $entities
     )
@@ -294,9 +281,8 @@ class RightsUtil
         return $this->location_ids_cache[$user_id][$right_id][$parent_location->get_id()];
     }
 
-    /**
-     * Retrieves the locations where a specific right entity is linked to Returns an array with for every retrieve type
-     * the identifiers
+    /*
+     * DONE
      */
     public function get_location_overview_with_rights_granted(
         $context, $user_id, $entities, $right_ids = array(), $retrieve_types = array(), $tree_type = null,
@@ -358,6 +344,9 @@ class RightsUtil
         return $overview;
     }
 
+    /*
+     * DONE
+     */
     public function count_location_overview_with_rights_granted(
         $context, $user_id, $entities, $right_ids = array(), $retrieve_types = array(), $tree_type = null,
         $tree_identifier = null
@@ -409,6 +398,9 @@ class RightsUtil
 
     // PERFORMANCE-TWEAKS-START
 
+    /*
+     * DONE
+     */
     /**
      * Filters given identifiers and returns those which the given user has access rights to.
      * Why this function?: This function is an accelerated version of is_allowed(...) when called many times after each
@@ -459,6 +451,9 @@ class RightsUtil
         return $identifiers_with_granted_right;
     }
 
+    /*
+     * DONE
+     */
     /**
      * Returns whether given location or any of its ancestors is in array $location_ids_with_granted_right.
      *
@@ -488,6 +483,9 @@ class RightsUtil
         );
     }
 
+    /*
+     * DONE
+     */
     /**
      * Returns an array mapping child location ID's onto parent location ID's.
      * Idea: Retrieve the child-parent relation of location with as few queries as possible and store them in the
@@ -545,6 +543,9 @@ class RightsUtil
     }
     // PERFORMANCE-TWEAKS-END
 
+    /*
+     * DONE
+     */
     /**
      *
      * @param integer $right_id
@@ -558,8 +559,8 @@ class RightsUtil
      * @return \Chamilo\Core\Rights\Storage\<array>
      */
     public function get_target_entities(
-        $right_id, $context, $identifier = 0, $type = self :: TYPE_ROOT, $tree_identifier = 0,
-        $tree_type = self :: TREE_TYPE_ROOT
+        $right_id, $context, $identifier = 0, $type = self::TYPE_ROOT, $tree_identifier = 0,
+        $tree_type = self::TREE_TYPE_ROOT
     )
     {
         $location = $this->get_location_by_identifier($context, $type, $identifier, $tree_identifier, $tree_type);
@@ -575,11 +576,17 @@ class RightsUtil
         return $this->get_target_entities_for_location($right_id, $context, $location);
     }
 
+    /*
+     * DONE
+     */
     public function get_target_entities_for_location($right_id, $context, $location)
     {
         return DataManager::retrieve_target_entities_array($right_id, $context, $location);
     }
 
+    /*
+     * DONE - No longer used?
+     */
     public function get_rights_for_location_and_entity($context, $location_id, $entity_id, $entity_type)
     {
         $conditions = array();
@@ -612,6 +619,9 @@ class RightsUtil
         return $right_ids;
     }
 
+    /*
+     * DONE
+     */
     public function get_location_by_identifier(
         $context, $type, $identifier, $tree_identifier = '0', $tree_type = self :: TREE_TYPE_ROOT
     )
@@ -621,6 +631,9 @@ class RightsUtil
         );
     }
 
+    /*
+     * DONE
+     */
     public function get_location_id_by_identifier(
         $context, $type, $identifier, $tree_identifier = '0', $tree_type = self :: TREE_TYPE_ROOT
     )

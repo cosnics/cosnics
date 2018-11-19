@@ -2,25 +2,30 @@
 namespace Chamilo\Core\Rights\Storage\Repository;
 
 use Chamilo\Core\Rights\Domain\RightsLocation;
+use Chamilo\Core\Rights\Domain\RightsLocationEntityRight;
 use Chamilo\Core\Rights\Service\RightsService;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * @package Chamilo\Core\Rights\Storage\Repository
  *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RightsRepository
 {
@@ -77,7 +82,7 @@ class RightsRepository
         $properties = new DataClassProperties(
             [
                 new PropertyConditionVariable(
-                    $rightsLocationEntityRightClassName, $rightsLocationEntityRightClassName::PROPERTY_RIGHT_ID
+                    $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_RIGHT_ID
                 )
             ]
         );
@@ -86,16 +91,15 @@ class RightsRepository
             $rightsLocationClassName, new AndCondition(
                 array(
                     new EqualityCondition(
-                        new PropertyConditionVariable($rightsLocationClassName, $rightsLocationClassName::PROPERTY_ID),
+                        new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_ID),
                         new StaticConditionVariable($location->getId())
                     ),
 
                     new EqualityCondition(
                         new PropertyConditionVariable(
-                            $rightsLocationEntityRightClassName,
-                            $rightsLocationEntityRightClassName::PROPERTY_LOCATION_ID
+                            $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_LOCATION_ID
                         ), new PropertyConditionVariable(
-                            $rightsLocationClassName, $rightsLocationClassName::PROPERTY_ID
+                            $rightsLocationClassName, RightsLocation::PROPERTY_ID
                         )
                     )
                 )
@@ -122,7 +126,7 @@ class RightsRepository
 
         $conditions[] = $condition;
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($rightsLocationClassName, $rightsLocationClassName::PROPERTY_INHERIT),
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_INHERIT),
             new StaticConditionVariable(1)
         );
 
@@ -132,7 +136,7 @@ class RightsRepository
             ), new DataClassProperties(
                 array(
                     new PropertyConditionVariable(
-                        $rightsLocationClassName, $rightsLocationClassName::PROPERTY_IDENTIFIER
+                        $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
                     )
                 )
             )
@@ -157,12 +161,12 @@ class RightsRepository
         $nonInheritingConditions[] = $condition;
         $nonInheritingConditions[] = $entitiesCondition;
         $nonInheritingConditions[] = new EqualityCondition(
-            new PropertyConditionVariable($rightsLocationClassName, $rightsLocationClassName::PROPERTY_INHERIT),
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_INHERIT),
             new StaticConditionVariable(0)
         );
         $nonInheritingConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                $rightsLocationEntityRightClassName, $rightsLocationEntityRightClassName::PROPERTY_RIGHT_ID
+                $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_RIGHT_ID
             ), new StaticConditionVariable($right)
         );
 
@@ -170,7 +174,7 @@ class RightsRepository
             new AndCondition($nonInheritingConditions), new DataClassProperties(
             array(
                 new PropertyConditionVariable(
-                    $rightsLocationClassName, $rightsLocationClassName::PROPERTY_IDENTIFIER
+                    $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
                 )
             )
         ), $this->getRightsLocationEntityRightJoins()
@@ -190,6 +194,34 @@ class RightsRepository
     }
 
     /**
+     * @param integer[] $identifiers
+     * @param integer $type
+     *
+     * @return string[]
+     */
+    public function findRightsLocationRecordsByIdentifiersAndType(array $identifiers, int $type)
+    {
+        $rightsLocationClassName = $this->getRightsLocationClassName();
+        $properties = new DataClassProperties();
+
+        $properties->add(new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER));
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER), $identifiers
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_TYPE),
+            new StaticConditionVariable($type)
+        );
+        $condition = new AndCondition($conditions);
+
+        $parameters = new RecordRetrievesParameters($properties, $condition);
+
+        return $this->getDataClassRepository()->records($rightsLocationClassName, $parameters);
+    }
+
+    /**
      * @param integer $identifier
      * @param integer $type
      * @param integer $treeIdentifier
@@ -206,24 +238,24 @@ class RightsRepository
 
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($rightsLocationClassName, $rightsLocationClassName::PROPERTY_TREE_TYPE),
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_TREE_TYPE),
             new StaticConditionVariable($treeType)
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($rightsLocationClassName, $rightsLocationClassName::PROPERTY_TREE_IDENTIFIER),
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_TREE_IDENTIFIER),
             new StaticConditionVariable($treeIdentifier)
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($rightsLocationClassName, $rightsLocationClassName::PROPERTY_IDENTIFIER),
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER),
             new StaticConditionVariable($identifier)
         );
 
         if ($type != null)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($rightsLocationClassName, $rightsLocationClassName::PROPERTY_TYPE),
+                new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_TYPE),
                 new StaticConditionVariable($type)
             );
         }
@@ -256,12 +288,12 @@ class RightsRepository
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($rightsLocationClassName, $rightsLocationClassName::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parentLocation->getId())
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($rightsLocationClassName, $rightsLocationClassName::PROPERTY_TYPE),
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_TYPE),
             new StaticConditionVariable($type)
         );
 
@@ -274,7 +306,7 @@ class RightsRepository
             $conditions[] = $condition;
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    $rightsLocationEntityRightClassName, $rightsLocationEntityRightClassName::PROPERTY_RIGHT_ID
+                    $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_RIGHT_ID
                 ), new StaticConditionVariable($right)
             );
 
@@ -287,7 +319,7 @@ class RightsRepository
                 new AndCondition($conditions), new DataClassProperties(
                 array(
                     new PropertyConditionVariable(
-                        $rightsLocationClassName, $rightsLocationClassName::PROPERTY_IDENTIFIER
+                        $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
                     )
                 )
             ), $this->getRightsLocationEntityRightJoins()
@@ -344,13 +376,12 @@ class RightsRepository
 
                     $andConditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            $rightsLocationEntityRightClassName,
-                            $rightsLocationEntityRightClassName::PROPERTY_ENTITY_TYPE
+                            $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
                         ), new StaticConditionVariable($entity->get_entity_type())
                     );
                     $andConditions[] = new InCondition(
                         new PropertyConditionVariable(
-                            $rightsLocationEntityRightClassName, $rightsLocationEntityRightClassName::PROPERTY_ENTITY_ID
+                            $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_ENTITY_ID
                         ), $entity->retrieve_entity_item_ids_linked_to_user($userIdentifier)
                     );
 
@@ -363,13 +394,13 @@ class RightsRepository
 
                 $andConditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        $rightsLocationEntityRightClassName, $rightsLocationEntityRightClassName::PROPERTY_ENTITY_TYPE
+                        $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
                     ), new StaticConditionVariable(0)
                 );
 
                 $andConditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        $rightsLocationEntityRightClassName, $rightsLocationEntityRightClassName::PROPERTY_ENTITY_ID
+                        $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_ENTITY_ID
                     ), new StaticConditionVariable(0)
                 );
 
@@ -382,6 +413,102 @@ class RightsRepository
 
             return $this->entitiesConditionCache[$userIdentifier][$entitiesHash];
         }
+    }
+
+    /**
+     * @param array $rights
+     * @param array $types
+     * @param $treeType
+     * @param $treeIdentifier
+     * @param $rightsLocationEntityRightClassName
+     * @param $rightsLocationClassName
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition|null
+     */
+    public function getLocationWithGrantedRightsCondition(
+        array $rights, array $types, $treeType, $treeIdentifier
+    )
+    {
+        $rightsLocationClassName = $this->getRightsLocationClassName();
+        $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
+
+        $conditions = array();
+
+        foreach ($rights as $right_id)
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_RIGHT_ID
+                ), new StaticConditionVariable($right_id)
+            );
+        }
+
+        foreach ($types as $type)
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_TYPE),
+                new StaticConditionVariable($type)
+            );
+        }
+
+        if (!is_null($treeType))
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_TREE_TYPE),
+                new StaticConditionVariable($treeType)
+            );
+        }
+
+        if (!is_null($treeIdentifier))
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    $rightsLocationClassName, RightsLocation::PROPERTY_TREE_IDENTIFIER
+                ), new StaticConditionVariable($treeIdentifier)
+            );
+        }
+
+        if (count($conditions) > 0)
+        {
+            $condition = new AndCondition($conditions);
+        }
+        else
+        {
+            $condition = null;
+        }
+
+        return $condition;
+    }
+
+    /**
+     * @param int $userIdentifier
+     * @param array $entities
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Joins
+     */
+    public function getLocationWithGrantedRightsJoins(int $userIdentifier, array $entities)
+    {
+        $rightsLocationClassName = $this->getRightsLocationClassName();
+        $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
+
+        $joinConditions = array();
+
+        $entitiesCondition = $this->getEntitiesCondition($userIdentifier, $entities);
+
+        if ($entitiesCondition)
+        {
+            $joinConditions[] = $entitiesCondition;
+        }
+
+        $joinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_LOCATION_ID
+            ), new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_ID)
+        );
+
+        return new Joins(
+            array(new Join($rightsLocationEntityRightClassName, new AndCondition(array($joinConditions))))
+        );
     }
 
     /**
@@ -426,9 +553,9 @@ class RightsRepository
 
         $join = new Join(
             $rightsLocationEntityRightClassName, new EqualityCondition(
-                new PropertyConditionVariable($rightsLocationClassName, $rightsLocationClassName::PROPERTY_ID),
+                new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_ID),
                 new PropertyConditionVariable(
-                    $rightsLocationEntityRightClassName, $rightsLocationEntityRightClassName::PROPERTY_LOCATION_ID
+                    $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_LOCATION_ID
                 )
             )
         );
@@ -436,4 +563,210 @@ class RightsRepository
         return new Joins(array($join));
     }
 
+    /**
+     * @param integer $userIdentifier
+     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param integer[] $rights
+     * @param integer[] $types
+     * @param integer $treeType
+     * @param integer $treeIdentifier
+     *
+     * @return \Chamilo\Core\Rights\Domain\RightsLocation[]
+     */
+    public function findLocationsWithGrantedRights(
+        int $userIdentifier, array $entities, array $rights = array(), array $types = array(), $treeType = null,
+        $treeIdentifier = null
+    )
+    {
+        $rightsLocationClassName = $this->getRightsLocationClassName();
+
+        $condition = $this->getLocationWithGrantedRightsCondition($rights, $types, $treeType, $treeIdentifier);
+
+        $properties = new DataClassProperties();
+
+        $properties->add(
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_TYPE)
+        );
+        $properties->add(
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER)
+        );
+
+        $joins = $this->getLocationWithGrantedRightsJoins($userIdentifier, $entities);
+
+        return $this->getDataClassRepository()->records(
+            $rightsLocationClassName, new RecordRetrievesParameters($properties, $condition, null, $joins)
+        );
+    }
+
+    /**
+     * @param integer $userIdentifier
+     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param integer[] $rights
+     * @param integer[] $types
+     * @param integer $treeType
+     * @param integer $treeIdentifier
+     *
+     * @return integer
+     */
+    public function countLocationOverviewWithGrantedRights(
+        int $userIdentifier, array $entities, array $rights = array(), array $types = array(), $treeType = null,
+        $treeIdentifier = null
+    )
+    {
+        $rightsLocationClassName = $this->getRightsLocationClassName();
+
+        $condition = $this->getLocationWithGrantedRightsCondition($rights, $types, $treeType, $treeIdentifier);
+
+        $joins = $this->getLocationWithGrantedRightsJoins($userIdentifier, $entities);
+
+        $parameters = new DataClassCountParameters(
+            $condition, $joins, new DataClassProperties(
+                array(
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
+                            $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
+                        )
+                    )
+                )
+            )
+        );
+
+        return $this->getDataClassRepository()->count($rightsLocationClassName, $parameters);
+    }
+
+    /**
+     * @param integer[] $locationIdentifiers
+     *
+     * @return string[]
+     */
+    public function findLocationParentIdentifierRecordsForLocationIdentifiers(array $locationIdentifiers)
+
+    {
+        $rightsLocationClassName = $this->getRightsLocationClassName();
+
+        $conditions = array();
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_ID),
+            array_unique($locationIdentifiers)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_INHERIT),
+            new StaticConditionVariable(1)
+        );
+
+        $conditions[] = new NotCondition(
+            new EqualityCondition(
+                new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_PARENT_ID),
+                new StaticConditionVariable(0)
+            )
+        );
+
+        $properties = new DataClassProperties();
+
+        $properties->add(new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_PARENT_ID));
+
+        $parameters = new RecordRetrievesParameters($properties, new AndCondition($conditions));
+
+        return $this->getDataClassRepository()->records($rightsLocationClassName, $parameters);
+    }
+
+    /**
+     * Returns those ID's from $location_ids which user ($entity_condition) has given right to.
+     *
+     * @param integer $userIdentifier
+     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param integer $right
+     * @param integer[] $locationIdentifiers
+     *
+     * @return string[] Keys: Those locations ID's from $location_ids which user has given right to. Values: True.
+     */
+    public function findLocationEntityRightRecordsByGrantedRight(
+        int $userIdentifier, array $entities, int $right, array $locationIdentifiers
+    )
+    {
+        $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
+
+        $properties = new DataClassProperties();
+        $properties->add(
+            new PropertyConditionVariable(
+                $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_LOCATION_ID
+            )
+        );
+
+        $conditions = array();
+
+        $conditions[] = $this->getEntitiesCondition($userIdentifier, $entities);
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(
+                $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_LOCATION_ID
+            ), $locationIdentifiers
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_RIGHT_ID
+            ), new StaticConditionVariable($right)
+        );
+
+        $parameters = new RecordRetrievesParameters($properties, new AndCondition($conditions));
+
+        return $this->getDataClassRepository()->records($rightsLocationEntityRightClassName, $parameters);
+    }
+
+    /**
+     * @param integer $right
+     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     *
+     * @return string[]
+     */
+    public function findRightsEntityRecordsForRightAndLocation(int $right, RightsLocation $location)
+    {
+        if (is_null($location) && !is_object($location))
+        {
+            return array();
+        }
+
+        $rightsLocationClassName = $this->getRightsLocationClassName();
+        $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
+
+        $properties = new DataClassProperties();
+        $properties->add(
+            new PropertyConditionVariable(
+                $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
+            )
+        );
+        $properties->add(
+            new PropertyConditionVariable(
+                $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_ENTITY_ID
+            )
+        );
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_ID),
+            new StaticConditionVariable($location->getId())
+        );
+
+        if (!is_null($right))
+        {
+            $conditions[] = $condition;
+
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_RIGHT_ID
+                ), new StaticConditionVariable($right)
+            );
+
+            $condition = new AndCondition($conditions);
+        }
+
+        $parameters = new RecordRetrievesParameters(
+            $properties, $condition, null, null, array(), $this->getRightsLocationEntityRightJoins()
+        );
+
+        return $this->getDataClassRepository()->records($rightsLocationClassName, $parameters);
+    }
 }
