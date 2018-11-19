@@ -457,11 +457,11 @@ class RightsUtil
     /**
      * Returns whether given location or any of its ancestors is in array $location_ids_with_granted_right.
      *
-     * @param int $location_id location we check whether user has access rigth to.
-     * @param array $location_parent_ids mapping of child location ID's onto parent location ID's. @see
-     *        get_location_parent_ids_recursive(...)
+     * @param int $location_id                       location we check whether user has access rigth to.
+     * @param array $location_parent_ids             mapping of child location ID's onto parent location ID's. @see
+     *                                               get_location_parent_ids_recursive(...)
      * @param array $location_ids_with_granted_right All location ID's which user has access rigth to. Keys: location
-     *        ID's Values: True.
+     *                                               ID's Values: True.
      *
      * @see DataManager :: filter_location_identifiers_by_granted_right.
      * @return boolean
@@ -649,6 +649,9 @@ class RightsUtil
         }
     }
 
+    /*
+     * DONE
+     */
     public function create_subtree_root_location($context, $tree_identifier, $tree_type, $return_location = false)
     {
         return $this->create_location(
@@ -656,6 +659,9 @@ class RightsUtil
         );
     }
 
+    /*
+     * DONE
+     */
     public function get_root_id($context, $tree_type = self :: TREE_TYPE_ROOT, $tree_identifier = 0)
     {
         $root = $this->get_root($context, $tree_type, $tree_identifier);
@@ -669,6 +675,9 @@ class RightsUtil
         }
     }
 
+    /*
+     * DONE
+     */
     public function get_root($context, $tree_type = self :: TREE_TYPE_ROOT, $tree_identifier = 0)
     {
         $class = $context . '\Storage\DataClass\RightsLocation';
@@ -702,6 +711,9 @@ class RightsUtil
         }
     }
 
+    /*
+     * DONE
+     */
     public function invert_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
     {
         if (!is_null($entity_id) && !is_null($entity_type) && !empty($right) && !empty($location_id))
@@ -730,6 +742,9 @@ class RightsUtil
         }
     }
 
+    /*
+     * DONE
+     */
     /**
      * Enables a right for a specific entity on a specific location
      *
@@ -766,6 +781,9 @@ class RightsUtil
         }
     }
 
+    /*
+     * DONE
+     */
     public function unset_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
     {
         if (!is_null($entity_id) && !is_null($entity_type) && !empty($right) && !empty($location_id))
@@ -789,6 +807,9 @@ class RightsUtil
         }
     }
 
+    /*
+     * DONE
+     */
     /**
      * Helper function to create a rights location entity right
      *
@@ -814,6 +835,9 @@ class RightsUtil
         return $location_entity_right->create();
     }
 
+    /*
+     * DONE - No longer used
+     */
     public function get_rights_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
     {
         $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
@@ -829,6 +853,10 @@ class RightsUtil
         return $location_entity_right;
     }
 
+
+    /*
+     * DONE
+     */
     /**
      * Helper function to delete all the location entity right records for a given entity on a given location
      *
@@ -842,6 +870,9 @@ class RightsUtil
     }
 
     /*
+     * DONE
+     */
+    /**
      * check the right for a specific entity type and id Caches other rights for future reference
      */
     public function is_allowed_for_rights_entity_item($context, $entity_type, $entity_id, $right, $location)
@@ -860,6 +891,9 @@ class RightsUtil
         }
     }
 
+    /*
+     * DONE
+     */
     public function get_granted_rights_for_rights_entity_item($context, $entity_type, $entity_id, $location)
     {
         if (!is_null($this->rights_cache_specific_entity[$context][$location->get_id()][$entity_id][$entity_type]))
@@ -879,6 +913,9 @@ class RightsUtil
         return $this->rights_cache_specific_entity[$context][$location->get_id()][$entity_id][$entity_type];
     }
 
+    /*
+     * DONE
+     */
     public function get_entity_item_condition($context, $type, $id, $location_id)
     {
         $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
