@@ -24,6 +24,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     const PREFIX = 'rights_';
 
     // TODO: Fix DataManager implementation (retrieve_granted_rights_array)
+    // DONE
     public static function retrieve_identifiers_with_right_granted($right_id, $context, $entities_condition, $condition,
         $parent_has_right, $offset = null, $max_objects = null)
     {
@@ -116,6 +117,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
     }
 
+    // DONE
     public static function retrieve_location_overview_with_rights_granted($context, $condition, $entities_condition,
         $offset = null, $max_objects = null)
     {
@@ -151,7 +153,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return $context_dm::records($context_location::class_name(), $parameters);
     }
-
+    // DONE
     public static function count_location_overview_with_rights_granted($context, $condition, $entities_condition)
     {
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
@@ -187,6 +189,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     // PERFORMANCE-TWEAKS-START
 
+    // DONE
     /**
      * Returns those ID's from $location_ids which user ($entity_condition) has given right to.
      *
@@ -223,6 +226,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return $location_ids;
     }
 
+    // DONE
     public static function retrieve_location_ids_by_identifiers($context, $identifiers, $type)
     {
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
@@ -253,7 +257,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return $location_ids;
     }
-
+    //DONE
     public static function retrieve_location_parent_ids($context, $condition)
     {
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
@@ -281,6 +285,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @deprecated Provided for backwards campatibility towards callers that use methods parametrized with a $context
      * This could be easily replaced with a generic retrieve, as is evidenced from the method body.
      */
+    // DONE
     public function retrieve_rights_location($context, $condition = null)
     {
         $context_class = ($context . '\Storage\DataClass\RightsLocation');
@@ -296,7 +301,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
         return $rights_location;
     }
-
+    // DONE
     public static function retrieve_rights_location_by_identifier($context, $type, $identifier, $tree_identifier = '0',
         $tree_type = RightsUtil :: TREE_TYPE_ROOT)
     {
@@ -339,6 +344,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @deprecated Provided for backwards campatibility towards callers that use methods parametrized with a $context
      * This could be easily replaced with a generic retrieve_by_id, as is evidenced from the method body.
      */
+    // DONE
     public static function retrieve_rights_location_by_id($context, $location_id)
     {
         $context_class = ($context . '\Storage\DataClass\RightsLocation');
@@ -353,7 +359,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return $location;
     }
-
+    // DONE
     public static function retrieve_rights_location_entity_right($context, $right, $entity_id, $entity_type,
         $location_id)
     {
@@ -388,6 +394,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Removes the entity rights linked to a location.
      */
+
+    // DONE
     public static function delete_rights_location_entity_rights($location, $entity_type = null, $entity_id = null,
         $right_id = null)
     {
@@ -432,6 +440,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @deprecated Provided for backwards campatibility for the migration package which post_processes locations from
      * different contexts. This could be easily replaced with a generic retrieves, as is evidenced from the method body.
      */
+    // DONE - No longer used?
     public static function retrieve_rights_locations($context, $condition = null, $offset = null, $max_objects = null,
         $order_by = null)
     {
@@ -447,6 +456,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @deprecated Provided for backwards campatibility towards callers that use methods parametrized with a $context
      * This could be easily replaced with a generic retrieves, as is evidenced from the method body.
      */
+    // DONE
     public static function retrieve_rights_location_rights($context, $condition = null, $offset = null, $max_objects = null,
         $order_by = null)
     {
@@ -463,6 +473,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * different contexts. This could be easily replaced with a generic retrieve_by_id, as is evidenced from the method
      * body.
      */
+    // DONE
     public static function retrieve_rights_location_entity_right_by_id($context, $id)
     {
         $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
@@ -476,7 +487,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
         return $rights_location_entity_right;
     }
-
+    // DONE
     public static function retrieve_granted_rights_array($location, $entities_condition)
     {
         $context = $location->get_context();
@@ -526,7 +537,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return $granted_rights;
     }
-
+    // DONE
     /**
      * Retrieves the entities (type and id) that have the given right granted
      *
@@ -610,7 +621,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
         return $target_entities;
     }
-
+    // DONE
     public static function retrieve_rights_location_rights_for_location($context, $location_id, $rights)
     {
         $class_name = $context . '\Storage\DataClass\\' . RightsLocationEntityRight::class_name(false);
