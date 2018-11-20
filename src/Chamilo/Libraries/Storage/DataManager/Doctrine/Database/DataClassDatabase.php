@@ -531,8 +531,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
                 $counts[$record[0]] = $record[1];
             }
 
-            $record = $statement->fetch(\PDO::FETCH_NUM);
-
             return $counts;
         }
         else

@@ -35,9 +35,9 @@ abstract class EntityTable extends RecordTable implements TableFormActionsSuppor
      */
     public function __construct($component, AssignmentDataProvider $assignmentDataProvider)
     {
-        parent::__construct($component);
-
         $this->assignmentDataProvider = $assignmentDataProvider;
+
+        parent::__construct($component);
     }
 
     /**
@@ -69,8 +69,14 @@ abstract class EntityTable extends RecordTable implements TableFormActionsSuppor
 
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD)),
-                Translation::get('DownloadSelected')
+                $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD,
+                        Manager::PARAM_ENTITY_TYPE => $this->getAssignmentDataProvider()->getCurrentEntityType()
+                    )
+                ),
+                Translation::get('DownloadSelected'),
+                false
             )
         );
 

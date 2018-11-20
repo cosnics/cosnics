@@ -4,6 +4,7 @@ namespace Chamilo\Core\Notification\Service;
 
 use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Domain\ViewingContext;
+use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Notification\Storage\Entity\Notification;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\Translation\Translator;
@@ -136,6 +137,31 @@ class NotificationTranslator
         }
 
         return $activeViewingContext[$userLocale];
+    }
+
+    /**
+     * @param \Chamilo\Core\Notification\Storage\Entity\Filter $filter
+     *
+     * @return string
+     */
+    public function getTranslationFromFilter(Filter $filter)
+    {
+        $userLocale = $this->translator->getLocale();
+        $descriptions = json_decode($filter->getDescriptionContext(), true);
+
+        if (!array_key_exists($userLocale, $descriptions))
+        {
+            $userLocale = 'en';
+        }
+
+        if (!array_key_exists($userLocale, $descriptions))
+        {
+            throw new \InvalidArgumentException(
+                'No valid translation has been found for the given locale nor for the english fallback'
+            );
+        }
+
+        return $descriptions[$userLocale];
     }
 
 }

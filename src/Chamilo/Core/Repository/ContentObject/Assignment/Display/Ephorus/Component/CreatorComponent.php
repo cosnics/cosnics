@@ -3,9 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
 
 /**

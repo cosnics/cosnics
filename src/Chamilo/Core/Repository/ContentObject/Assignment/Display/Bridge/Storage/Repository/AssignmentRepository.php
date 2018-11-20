@@ -184,6 +184,16 @@ abstract class AssignmentRepository
     }
 
     /**
+     * @param integer $scoreIdentifier
+     *
+     * @return Score|DataClass
+     */
+    public function findScoreByIdentifier($scoreIdentifier)
+    {
+        return $this->dataClassRepository->retrieveById($this->getScoreClassName(), $scoreIdentifier);
+    }
+
+    /**
      *
      * @param integer[] $entryIdentifiers []
      *

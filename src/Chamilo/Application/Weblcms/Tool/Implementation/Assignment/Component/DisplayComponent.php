@@ -2,10 +2,13 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\AssignmentServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\Assignment\EphorusServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\Assignment\FeedbackServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\Assignment\NotificationServiceBridge;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory;
@@ -46,6 +49,8 @@ class DisplayComponent extends Manager implements DelegateComponent
         $breadcrumbTrail = BreadcrumbTrail::getInstance();
         $breadcrumbTrail->add(new Breadcrumb($this->get_url(), $publication->getContentObject()->get_title()));
 
+        $this->buildBridges($publication);
+
         $assignmentDataProvider->setContentObjectPublication($publication);
         $assignmentDataProvider->setAssignmentPublication($this->getAssignmentPublication($publication));
         $assignmentDataProvider->setCanEditAssignment($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication));
@@ -68,6 +73,44 @@ class DisplayComponent extends Manager implements DelegateComponent
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(),
             $configuration
         )->run();
+
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    protected function buildBridges(ContentObjectPublication $contentObjectPublication)
+    {
+        /** @var AssignmentServiceBridge $assignmentServiceBridge */
+        $assignmentServiceBridge = $this->getService(AssignmentServiceBridge::class);
+
+        $assignmentServiceBridge->setCanEditAssignment(
+            $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $contentObjectPublication)
+        );
+
+        $assignmentServiceBridge->setContentObjectPublication($contentObjectPublication);
+        $assignmentServiceBridge->setAssignmentPublication($this->getAssignmentPublication($contentObjectPublication));
+
+        /** @var FeedbackServiceBridge $assignmentFeedbackServiceBridge */
+        $assignmentFeedbackServiceBridge = $this->getService(FeedbackServiceBridge::class);
+        $assignmentFeedbackServiceBridge->setContentObjectPublication($contentObjectPublication);
+
+        /** @var EphorusServiceBridge $assignmentEphorusServiceBridge */
+        $assignmentEphorusServiceBridge = $this->getService(EphorusServiceBridge::class);
+        $assignmentEphorusServiceBridge->setEphorusEnabled($this->isEphorusEnabled());
+        $assignmentEphorusServiceBridge->setContentObjectPublication($contentObjectPublication);
+
+        /** @var NotificationServiceBridge $notificationServiceBridge */
+        $notificationServiceBridge = $this->getService(NotificationServiceBridge::class);
+        $notificationServiceBridge->setContentObjectPublication($contentObjectPublication);
+
+        $this->getBridgeManager()->addBridge($assignmentServiceBridge);
+        $this->getBridgeManager()->addBridge($assignmentEphorusServiceBridge);
+        $this->getBridgeManager()->addBridge($assignmentFeedbackServiceBridge);
+        $this->getBridgeManager()->addBridge($notificationServiceBridge);
     }
 
     /**

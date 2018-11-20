@@ -77,6 +77,8 @@ abstract class AssignmentService
      */
     public function updateScore(Score $score)
     {
+        $score->setModified(time());
+
         if (!$this->assignmentRepository->updateScore($score))
         {
             throw new \RuntimeException('Could not update the score ' . $score->getId());
@@ -146,6 +148,16 @@ abstract class AssignmentService
     }
 
     /**
+     * @param integer $scoreIdentifier
+     *
+     * @return Score
+     */
+    public function findScoreByIdentifier($scoreIdentifier)
+    {
+        return $this->assignmentRepository->findScoreByIdentifier($scoreIdentifier);
+    }
+
+    /**
      * @return Score
      */
     public function initializeScore()
@@ -196,6 +208,7 @@ abstract class AssignmentService
 
         $entryAttachment->setEntryId($entry->getId());
         $entryAttachment->setAttachmentId($contentObject->getId());
+        $entryAttachment->setCreated(time());
 
         if (!$this->assignmentRepository->createEntryAttachment($entryAttachment))
         {

@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EphorusService;
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EphorusServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
@@ -27,6 +28,11 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     protected $ephorusEnabled;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
+     */
+    protected $contentObjectPublication;
+
+    /**
      * EphorusServiceBridge constructor.
      *
      * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EphorusService $ephorusService
@@ -37,9 +43,17 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     */
+    public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        $this->contentObjectPublication = $contentObjectPublication;
+    }
+
+    /**
      * @param bool $ephorusEnabled
      */
-    protected function setEphorusEnabled($ephorusEnabled)
+    public function setEphorusEnabled($ephorusEnabled)
     {
         $this->ephorusEnabled = $ephorusEnabled;
     }
@@ -55,7 +69,7 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     )
     {
         return $this->ephorusService->countAssignmentEntriesWithEphorusRequestsByTreeNodeData(
-            $treeNodeData, $condition
+            $this->contentObjectPublication, $treeNodeData, $condition
         );
     }
 
@@ -70,7 +84,7 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     )
     {
         return $this->ephorusService->findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
-            $treeNodeData, $recordRetrievesParameters
+            $this->contentObjectPublication, $treeNodeData, $recordRetrievesParameters
         );
     }
 
@@ -84,7 +98,9 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
         TreeNodeData $treeNodeData, array $entryIds = []
     )
     {
-        return $this->ephorusService->findEphorusRequestsForAssignmentEntriesByTreeNodeData($treeNodeData, $entryIds);
+        return $this->ephorusService->findEphorusRequestsForAssignmentEntriesByTreeNodeData(
+            $this->contentObjectPublication, $treeNodeData, $entryIds
+        );
     }
 
     /**

@@ -74,6 +74,8 @@ abstract class AssignmentService
      */
     public function updateScore(Score $score)
     {
+        $score->setModified(time());
+
         if (!$this->assignmentRepository->updateScore($score))
         {
             throw new \RuntimeException('Could not update the score ' . $score->getId());
@@ -141,7 +143,7 @@ abstract class AssignmentService
 
         if (!$this->assignmentRepository->createEntry($entry))
         {
-            throw new \RuntimeException('Could not create a new score for entry ' . $entry->getId());
+            throw new \RuntimeException('Could not create a new entry');
         }
 
         return $entry;
@@ -230,7 +232,7 @@ abstract class AssignmentService
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Feedback[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback[]
      */
     public function findFeedbackByEntry(
         \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry

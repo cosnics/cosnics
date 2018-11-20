@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Notification\Storage\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,7 +30,7 @@ class Notification
     /**
      * @var string
      *
-     * @ORM\Column(name="description_context", type="string", nullable=false, length=1024)
+     * @ORM\Column(name="description_context", type="text", nullable=false)
      */
     protected $descriptionContext;
 
@@ -57,6 +58,21 @@ class Notification
      *      )
      */
     protected $filters;
+
+    /**
+     * @var \Chamilo\Core\Notification\Storage\Entity\UserNotification[]
+     * @ORM\OneToMany(targetEntity="Chamilo\Core\Notification\Storage\Entity\UserNotification", mappedBy="notification")
+     */
+    protected $users;
+
+    /**
+     * Notification constructor.
+     */
+    public function __construct()
+    {
+        $this->filters = new ArrayCollection();
+        $this->users = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -136,10 +152,14 @@ class Notification
 
     /**
      * @param \Chamilo\Core\Notification\Storage\Entity\Filter[] $filters
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\Notification
      */
     public function setFilters(array $filters)
     {
         $this->filters = $filters;
+
+        return $this;
     }
 
     /**
@@ -150,6 +170,26 @@ class Notification
     public function addFilter(Filter $filter)
     {
         $this->filters[] = $filter;
+
+        return $this;
+    }
+
+    /**
+     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification[]
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * @param \Chamilo\Core\Notification\Storage\Entity\UserNotification[] $users
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\Notification
+     */
+    public function setUsers(array $users)
+    {
+        $this->users = $users;
 
         return $this;
     }

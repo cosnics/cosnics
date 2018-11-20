@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Theme;
 
 /**

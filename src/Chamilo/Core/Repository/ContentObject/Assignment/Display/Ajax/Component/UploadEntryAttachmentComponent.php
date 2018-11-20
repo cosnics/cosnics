@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\EntryAttachment;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
@@ -26,16 +26,18 @@ class UploadEntryAttachmentComponent extends Manager
      */
     function run()
     {
-        if(!$this->getDataProvider()->canEditAssignment())
+        if (!$this->getDataProvider()->canEditAssignment())
         {
-           throw new NotAllowedException();
+            throw new NotAllowedException();
         }
 
         $uploadedFile = $this->getRequest()->files->get('attachments');
 
         $file = new File();
         $file->set_parent_id(0);
-        $title = substr($uploadedFile->getClientOriginalName(), 0, - (strlen($uploadedFile->getClientOriginalExtension()) + 1));
+        $title = substr(
+            $uploadedFile->getClientOriginalName(), 0, - (strlen($uploadedFile->getClientOriginalExtension()) + 1)
+        );
 
         $file->set_title($title);
         $file->set_description($uploadedFile->getClientOriginalName());
@@ -55,7 +57,7 @@ class UploadEntryAttachmentComponent extends Manager
         }
 
         $entry = $this->ajaxComponent->getEntry();
-        if(!$entry instanceof Entry)
+        if (!$entry instanceof Entry)
         {
             throw new ObjectNotExistException(Translation::get('Entry'));
         }
@@ -69,6 +71,14 @@ class UploadEntryAttachmentComponent extends Manager
             'user' => $this->getUser()->get_fullname(),
             'date' => DatetimeUtilities::format_locale_date(null, $file->get_creation_date())
         ];
+
+        if ($entryAttachment instanceof
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment)
+        {
+            $this->getNotificationServiceBridge()->createNotificationForNewEntryAttachment(
+                $this->getUser(), $entry, $entryAttachment
+            );
+        }
 
         $jsonAjaxResult = new JsonAjaxResult();
         $jsonAjaxResult->set_properties($properties);

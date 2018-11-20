@@ -5,7 +5,6 @@ use Chamilo\Configuration\Package\Finder\PackageBundles;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
 use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -39,7 +38,7 @@ class PackageBundlesCacheService extends DoctrineFilesystemCacheService
         $packageList->get_all_packages(true);
         $packageList->get_list();
         $packageList->get_list(true);
-        
+
         return $this->getCacheProvider()->save($identifier, $packageList);
     }
 

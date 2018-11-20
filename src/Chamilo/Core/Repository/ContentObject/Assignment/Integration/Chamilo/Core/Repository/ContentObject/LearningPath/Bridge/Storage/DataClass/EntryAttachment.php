@@ -9,6 +9,6 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntryAttachment extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
+abstract class EntryAttachment extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment
 {
 }

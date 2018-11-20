@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
@@ -310,5 +311,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
     public function is_allowed_to_delete_feedback($feedback)
     {
         return $feedback->get_user_id() == $this->getUser()->getId();
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface
+     */
+    protected function getNotificationServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(NotificationServiceBridgeInterface::class);
     }
 }

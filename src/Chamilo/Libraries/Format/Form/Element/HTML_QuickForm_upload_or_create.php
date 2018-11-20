@@ -1,7 +1,6 @@
 <?php
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 /**
@@ -80,8 +79,8 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
         $html[] = $this->_elements[2]->toHtml();
         $html[] = '<div style="margin-left:20px;display:block;" id="editor_html_content">';
         // $html[] = $this->_elements[3]->toHtml();
-        $html_editor = FormValidatorHtmlEditor::factory(
-            LocalSetting::getInstance()->get('html_editor'),
+
+        $html_editor = new FormValidatorHtmlEditor(
             self::ELEMENT_EDITOR,
             '',
             false,

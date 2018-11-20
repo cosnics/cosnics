@@ -28,7 +28,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
 
 /**
  *

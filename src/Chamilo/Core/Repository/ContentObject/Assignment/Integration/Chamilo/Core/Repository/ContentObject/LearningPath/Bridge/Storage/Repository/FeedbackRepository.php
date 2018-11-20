@@ -23,53 +23,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 abstract class FeedbackRepository extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Repository\FeedbackRepository
 {
     /**
-     *
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return integer
-     */
-    public function countFeedbackForTreeNodeDataByEntityTypeAndEntityId(
-        TreeNodeData $treeNodeData,
-        $entityType, $entityId
-    )
-    {
-        return $this->countFeedbackByEntityTypeAndEntityId(
-            $entityType, $entityId, $this->getTreeNodeDataCondition($treeNodeData)
-        );
-    }
-
-    /**
-     *
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     *
-     * @return integer
-     */
-    public function countDistinctFeedbackByTreeNodeDataAndEntityType(TreeNodeData $treeNodeData, $entityType)
-    {
-        return $this->countDistinctFeedbackByEntityType($entityType, $this->getTreeNodeDataCondition($treeNodeData));
-    }
-
-    /**
-     *
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return integer
-     */
-    public function countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
-        TreeNodeData $treeNodeData, $entityType, $entityId
-    )
-    {
-        return parent::countDistinctFeedbackForEntityTypeAndId(
-            $entityType, $entityId, $this->getTreeNodeDataCondition($treeNodeData)
-        );
-    }
-
-    /**
      * @param TreeNodeData $treeNodeData
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *

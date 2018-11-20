@@ -26,7 +26,7 @@
     }
 
     .notifications-list .notifications-list-title {
-        background-color: #eeeeee;
+        background-color: #fcf4e5;
         padding: 5px 15px;
     }
 
@@ -115,21 +115,24 @@
 
 <script type="text/x-template" id="notifications-template">
     <div class="list-group notifications-list">
-        <div class="list-group-item notifications-list-title">
+        <div v-if="newNotifications.length > 0" class="list-group-item notifications-list-title text-muted">
             Nieuwe meldingen
         </div>
-        <notification v-for="notification in newNotifications" :notification="notification" :showFilters="showFilters"></notification>
-        <div class="list-group-item notifications-list-title">
+        <notification v-for="notification in newNotifications" :notification="notification" :show-filters="showFilters" :view-notification-url="viewNotificationUrl"></notification>
+        <div class="list-group-item notifications-list-title text-muted">
             Eerdere meldingen
         </div>
-        <notification v-for="notification in previousNotifications" :notification="notification" :showFilters="showFilters"></notification>
+        <notification v-for="notification in previousNotifications" :notification="notification" :show-filters="showFilters" :view-notification-url="viewNotificationUrl"></notification>
+        <div v-if="previousNotifications.length == 0" class="list-group-item text-center" style="display: block">
+            Geen meldingen
+        </div>
     </div>
 </script>
 
 <script type="text/x-template" id="notification-template">
     <div class="list-group-item"
          v-bind:class="{ 'unread-notification': !notification.isRead }">
-        <a class="notification-description">
+        <a class="notification-description" :href="getNotificationUrl(notification)" target="_blank">
             <div v-html="notification.message"></div>
             <div class="notification-timestamp"><span
                         class="fa fa-clock-o"></span> {{ '{{ notification.time }}' }}</div>
@@ -155,7 +158,13 @@
             template: '#notification-template',
             props: {
                 notification: Object,
-                showFilters: Boolean
+                showFilters: Boolean,
+                viewNotificationUrl: String
+            },
+            methods: {
+                getNotificationUrl: function(notification) {
+                    return this.viewNotificationUrl.replace('__NOTIFICATION_ID__', notification.id);
+                }
             }
         });
 
@@ -164,12 +173,23 @@
             props: {
                 showFilters: Boolean,
                 scrollDetectorElement: String,
-                retrieveNotificationsUrl: String
+                retrieveNotificationsUrl: String,
+                viewNotificationUrl: String,
+                notificationsPerPage: {
+                    type: Number,
+                    default: 15
+                },
+                loadOnStartup: {
+                    type: Boolean,
+                    default: true
+                }
             },
             data: function () {
                 return {
                     notifications: [],
-                    isLoading: false
+                    isLoading: false,
+                    offset: 0,
+                    complete: false
                 };
             },
             computed: {
@@ -187,10 +207,18 @@
             },
             methods: {
                 loadData: function() {
+                    if(this.complete) {
+                        return;
+                    }
+
                     var vueInstance = this;
                     this.isLoading = true;
 
-                    this.$http.post(this.retrieveNotificationsUrl).then(function(result) {
+                    var parameters = new FormData();
+                    parameters.append('offset', this.offset);
+                    parameters.append('notificationsPerPage', this.notificationsPerPage);
+
+                    this.$http.post(this.retrieveNotificationsUrl, parameters).then(function(result) {
                         var newNotifications = result.body;
 
                         newNotifications.forEach(function(notification) {
@@ -198,11 +226,19 @@
                         });
 
                         vueInstance.isLoading = false;
+                        vueInstance.offset += vueInstance.notificationsPerPage;
+
+                        if(newNotifications.length < vueInstance.notificationsPerPage) {
+                            vueInstance.complete = true;
+                        }
                     })
                 }
             },
             mounted: function () {
-                this.loadData();
+
+                if(this.loadOnStartup) {
+                    this.loadData();
+                }
 
                 var vueInstance = this;
                 var isWindow = false;

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Notification;
 
+use Chamilo\Core\Notification\Service\NotificationManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
@@ -14,8 +15,11 @@ abstract class Manager extends Application
 {
     const ACTION_VIEW = 'Viewer';
     const ACTION_MANAGE_FILTERS = 'FilterManager';
+    const ACTION_VIEW_NOTIFICATION = 'NotificationViewer';
 
     const DEFAULT_ACTION = self::ACTION_VIEW;
+
+    const PROPERTY_NOTIFICATION_ID = 'NotificationId';
 
     /**
      * Constructor
@@ -29,5 +33,13 @@ abstract class Manager extends Application
         parent::__construct($applicationConfiguration);
 
         $this->checkAuthorization(Manager::context());
+    }
+
+    /**
+     * @return NotificationManager
+     */
+    protected function getNotificationManager()
+    {
+        return $this->getService(NotificationManager::class);
     }
 }

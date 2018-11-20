@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Format\Form;
 
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -72,7 +73,7 @@ class FormValidatorHtmlEditor
         $this->name = $name;
         $this->label = $label;
         $this->required = $required;
-        $this->options = $options;
+        $this->options = new FormValidatorHtmlEditorOptions($options);
 
         if (! array_key_exists('class', $attributes))
         {
@@ -103,7 +104,22 @@ class FormValidatorHtmlEditor
     public function create()
     {
         $form = $this->get_form();
+
+        $form->addElement('html', implode(PHP_EOL, $this->add_pre_javascript_config()));
+
+        $scripts = $this->get_includes();
+
+        foreach ($scripts as $script)
+        {
+            if (! empty($script))
+            {
+                $form->addElement('html', $script);
+            }
+        }
+
+        $form->addElement('html', implode(PHP_EOL, $this->get_javascript()));
         $form->register_html_editor($this->name);
+
         return $form->createElement('textarea', $this->name, $this->label, $this->attributes);
     }
 
@@ -114,7 +130,83 @@ class FormValidatorHtmlEditor
     public function render()
     {
         $formValidator = new FormValidator('test');
-        return $formValidator->createElement('textarea', $this->name, $this->label, $this->attributes)->toHtml();
+
+        $html = array();
+
+        $html[] = $formValidator->createElement('textarea', $this->name, $this->label, $this->attributes)->toHtml();
+        $html[] = implode(PHP_EOL, $this->get_javascript());
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function add_pre_javascript_config()
+    {
+        $javascript = array();
+
+        $javascript[] = '<script type="text/javascript">';
+        $javascript[] = 'window.CKEDITOR_BASEPATH = "' .
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . '" + "HtmlEditor/Ckeditor/"';
+            $javascript[] = '</script>';
+
+            return $javascript;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function get_javascript()
+    {
+        $javascript = array();
+
+        $javascript[] = '<script type="text/javascript">';
+        $javascript[] = 'var web_path = \'' . Path::getInstance()->getBasePath(true) . '\'';
+        $javascript[] = '$(function ()';
+        $javascript[] = '{';
+        $javascript[] = '	$(document).ready(function ()';
+        $javascript[] = '	{';
+        $javascript[] = '         if(typeof $el == \'undefined\'){';
+        $javascript[] = '           $el = new Array()';
+        $javascript[] = '         }';
+        $javascript[] = '	  $el.push($("textarea.html_editor[name=\'' . $this->get_name() . '\']").ckeditor({';
+        $javascript[] = $this->get_options()->render_options();
+        $javascript[] = '		}, function(){ $(document).trigger(\'ckeditor_loaded\'); }));';
+        $javascript[] = '	}); ';
+        $javascript[] = '});';
+        $javascript[] = '</script>';
+
+        return $javascript;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function get_includes()
+    {
+        $configFile = Path::getInstance()->getBasePath() .
+        '../web/Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorInstanceConfig.js';
+
+        $timestamp = filemtime($configFile);
+
+        $scripts = array();
+
+        $scripts[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/ckeditor.js');
+        $scripts[] = '<script type="text/javascript">';
+        $scripts[] = 'CKEDITOR.timestamp = "' . $timestamp . '";';
+        $scripts[] = 'var web_path = \'' . Path::getInstance()->getBasePath(true) . '\';';
+        $scripts[] = '</script>';
+        $scripts[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/CkeditorGlobalConfig.js');
+        $scripts[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/adapters/jquery.js');
+
+        return $scripts;
     }
 
     /**
@@ -250,31 +342,5 @@ class FormValidatorHtmlEditor
     public function set_required($required)
     {
         $this->required = $required;
-    }
-
-    /**
-     *
-     * @param string $type
-     * @param string $name
-     * @param string $label
-     * @param boolean $required
-     * @param string[] $options
-     * @param string[] $attributes
-     * @return \Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor
-     */
-    public static function factory($type, $name, $label, $required = true, $options = array(), $attributes = array())
-    {
-        $class = __NAMESPACE__ . '\\' . 'FormValidator' .
-             StringUtilities::getInstance()->createString($type)->upperCamelize() . 'HtmlEditor';
-
-        if (class_exists($class))
-        {
-            $options = FormValidatorHtmlEditorOptions::factory($type, $options);
-
-            if ($options)
-            {
-                return new $class($name, $label, $required, $options, $attributes);
-            }
-        }
     }
 }

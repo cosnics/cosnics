@@ -5,8 +5,6 @@ namespace Chamilo\Core\Repository\ContentObject\File\Ajax\Component;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Class ClearParameterComponent

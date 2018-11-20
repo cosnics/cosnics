@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\AjaxComponent;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -53,6 +54,14 @@ abstract class Manager extends AjaxManager
     protected function getDataProvider()
     {
         return $this->ajaxComponent->getDataProvider();
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface
+     */
+    protected function getNotificationServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(NotificationServiceBridgeInterface::class);
     }
 
 }

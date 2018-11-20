@@ -5,10 +5,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Form;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Libraries\Format\Form\FormType\PercentInputFormType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\PercentType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Translation\Translator;
-use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 
 /**
  * Class AddFeedbackFormType

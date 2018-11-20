@@ -20,7 +20,7 @@
 
 <div class="list-group">
     {% for feedbackItem in feedback %}
-        <div class="list-group-item">
+        <div class="list-group-item" id="feedback{{ feedbackItem.id }}">';
             <div style="display:flex;">
                 <img class="profile-img" src="{{ feedbackItem.photoUrl|raw }}"/>
                 <h5 class="list-group-item-heading" style="flex-grow: 2;"> {{ feedbackItem.userFullname }}

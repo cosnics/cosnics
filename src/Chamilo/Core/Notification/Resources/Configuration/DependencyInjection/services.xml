@@ -14,16 +14,16 @@
             <argument>Chamilo\Core\Notification\Storage\Entity\Notification</argument>
         </service>
 
+        <service id="Chamilo\Core\Notification\Storage\Repository\NotificationContextRepository"
+                 class="Chamilo\Core\Notification\Storage\Repository\NotificationContextRepository">
+            <factory service="doctrine.orm.entity_manager" method="getRepository" />
+            <argument>Chamilo\Core\Notification\Storage\Entity\NotificationContext</argument>
+        </service>
+
         <service id="Chamilo\Core\Notification\Storage\Repository\FilterRepository"
                  class="Chamilo\Core\Notification\Storage\Repository\FilterRepository">
             <factory service="doctrine.orm.entity_manager" method="getRepository" />
             <argument>Chamilo\Core\Notification\Storage\Entity\Filter</argument>
-        </service>
-
-        <service id="Chamilo\Core\Notification\Storage\Repository\QueueNotificationTrigger\NotificationTriggerRepository"
-                 class="Chamilo\Core\Notification\Storage\Repository\QueueNotificationTrigger\NotificationTriggerRepository">
-            <factory service="doctrine.orm.entity_manager" method="getRepository" />
-            <argument>Chamilo\Core\Notification\Storage\Entity\NotificationTrigger</argument>
         </service>
 
     </services>
