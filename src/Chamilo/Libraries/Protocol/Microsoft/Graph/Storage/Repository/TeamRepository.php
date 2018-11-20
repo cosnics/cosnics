@@ -32,13 +32,14 @@ class TeamRepository
      */
     public function createTeam($groupId)
     {
-        $teamData = [
-
-        ];
-
-        return $this->graphRepository->executePostWithAccessTokenExpirationRetry(
+        return $this->graphRepository->executePutWithAccessTokenExpirationRetry(
             '/groups/' . $groupId . '/team',
-            $teamData,
+            [
+                "memberSettings" =>
+                    [
+                        "allowCreateUpdateChannels" => true
+                    ]
+            ],
             Team::class
         );
     }

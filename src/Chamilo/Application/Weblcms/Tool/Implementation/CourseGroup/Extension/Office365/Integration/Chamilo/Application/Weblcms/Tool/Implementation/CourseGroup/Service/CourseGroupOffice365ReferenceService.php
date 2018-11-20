@@ -248,4 +248,52 @@ class CourseGroupOffice365ReferenceService
 
         return !empty($courseGroupOffice365Reference->getOffice365PlanId());
     }
+
+    /**
+     * @param CourseGroup $courseGroup
+     */
+    public function addTeamToCourseGroupReference(CourseGroup $courseGroup)
+    {
+        $courseGroupOffice365Reference =
+            $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
+        if (!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference)
+        {
+            throw new \InvalidArgumentException('The given course group is not connected to an office365 group');
+        }
+
+        $courseGroupOffice365Reference->setHasTeam(true);
+
+        if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not update the CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
+                )
+            );
+        }
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     */
+    public function removeTeamToCourseGroupReference(CourseGroup $courseGroup)
+    {
+        $courseGroupOffice365Reference =
+            $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
+        if (!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference)
+        {
+            throw new \InvalidArgumentException('The given course group is not connected to an office365 group');
+        }
+
+        $courseGroupOffice365Reference->setHasTeam(false);
+
+        if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not update the CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
+                )
+            );
+        }
+    }
 }

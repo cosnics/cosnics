@@ -119,6 +119,7 @@ class CourseGroupOffice365Connector
     {
         $office365GroupId = $this->createGroupFromCourseGroup($courseGroup, $user);
         $this->teamService->addTeamToGroup($office365GroupId);
+        $this->courseGroupOffice365ReferenceService->addTeamToCourseGroupReference($courseGroup);
     }
 
     /**

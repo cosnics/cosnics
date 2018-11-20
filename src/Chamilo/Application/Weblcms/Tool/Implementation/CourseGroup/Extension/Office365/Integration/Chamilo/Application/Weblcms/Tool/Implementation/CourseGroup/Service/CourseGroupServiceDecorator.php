@@ -43,7 +43,9 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function createGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
-        if ($this->usesGroup($formValues))
+        if ($this->usesGroupAndTeam($formValues)) {
+            $this->courseGroupOffice365Connector->createGroupAndTeamFromCourseGroup($courseGroup, $user);
+        } elseif ($this->usesGroup($formValues))
         {
             $this->courseGroupOffice365Connector->createGroupFromCourseGroup($courseGroup, $user);
         }

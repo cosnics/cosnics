@@ -19,7 +19,7 @@ class GraphRepository
 {
     const RESPONSE_CODE_RESOURCE_NOT_FOUND = '404';
     const RESPONSE_CODE_ACCESS_TOKEN_EXPIRED = '401';
-    const API_VERSION_V1 = 'v1';
+    const API_VERSION_V1 = 'V1.0';
     const API_VERSION_BETA = 'beta';
 
     /**
@@ -297,8 +297,8 @@ class GraphRepository
      * @return \Microsoft\Graph\Http\GraphCollectionRequest|GraphRequest
      */
     protected function createRequest(
-        $requestType, $endpoint, $requestBody = [], $returnClass = null, $isCollectionRequest = false,
-        $apiVersion = self::API_VERSION_V1
+        $requestType, $endpoint, $requestBody = [], $returnClass = null, bool $isCollectionRequest = false,
+        string $apiVersion = self::API_VERSION_V1
     )
     {
         $this->getGraph()->setApiVersion($apiVersion);
@@ -363,7 +363,7 @@ class GraphRepository
      */
     protected function createAndExecuteRequestWithAccessTokenExpirationRetry(
         $requestType, $endpoint, $requestBody = [],
-        $returnClass = null, $isCollectionRequest = false,
+        $returnClass = null, bool $isCollectionRequest = false,
         $apiVersion = self::API_VERSION_V1
     )
     {
@@ -464,6 +464,28 @@ class GraphRepository
             $endpoint,
             $requestBody,
             $returnClass,
+            false,
+            $apiVersion
+        );
+    }
+
+    /**
+     *
+     * @param string $endpoint
+     * @param string[] $requestBody
+     * @param string $returnClass
+     *
+     * @param string $apiVersion
+     * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
+     */
+    public function executePutWithAccessTokenExpirationRetry($endpoint, $requestBody = [], $returnClass = null, $apiVersion = self::API_VERSION_V1)
+    {
+        return $this->createAndExecuteRequestWithAccessTokenExpirationRetry(
+            'PUT',
+            $endpoint,
+            $requestBody,
+            $returnClass,
+            false,
             $apiVersion
         );
     }
@@ -499,6 +521,7 @@ class GraphRepository
             $endpoint,
             $requestBody,
             $returnClass,
+            false,
             $apiVersion
         );
     }
@@ -528,7 +551,7 @@ class GraphRepository
      */
     public function executeDeleteWithAccessTokenExpirationRetry($endpoint, $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
-        return $this->createAndExecuteRequestWithAccessTokenExpirationRetry('DELETE', $endpoint, [], $returnClass, $apiVersion);
+        return $this->createAndExecuteRequestWithAccessTokenExpirationRetry('DELETE', $endpoint, [], $returnClass, false, $apiVersion);
     }
 
     /**

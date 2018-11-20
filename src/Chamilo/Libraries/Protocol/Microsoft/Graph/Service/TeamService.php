@@ -39,11 +39,11 @@ class TeamService
 
     /**
      * @param $groupId
+     * @return \Microsoft\Graph\Model\Entity
      */
     public function addTeamToGroup($groupId)
     {
-        $this->teamRepository->createTeam($groupId);
-        //todo: retry logic
+        return $this->teamRepository->createTeam($groupId);
     }
 
     /**
