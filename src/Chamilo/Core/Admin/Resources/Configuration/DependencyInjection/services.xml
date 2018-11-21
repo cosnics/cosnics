@@ -7,5 +7,6 @@
         <service id="Chamilo\Core\Admin\Announcement\Service\PublicationService"/>
         <service id="Chamilo\Core\Admin\Announcement\Service\RightsService"/>
         <service id="Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository"/>
+        <service id="Chamilo\Core\Admin\Announcement\Storage\Repository\RightsRepository"/>
     </services>
 </container>

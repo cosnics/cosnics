@@ -115,6 +115,17 @@ abstract class RightsRepository
     }
 
     /**
+     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function updateRightsLocation(RightsLocation $location)
+    {
+        return $location->update();
+    }
+
+    /**
      * @param \Chamilo\Core\Rights\Domain\RightsLocationEntityRight $rightsLocationEntityRight
      *
      * @return boolean
@@ -128,6 +139,16 @@ abstract class RightsRepository
         $this->getDataClassRepositoryCache()->truncate($this->getRightsLocationEntityRightClassName());
 
         return $rightsLocationEntityRight->create();
+    }
+
+    /**
+     * @param \Chamilo\Core\Rights\Domain\RightsLocation $rightsLocation
+     *
+     * @return boolean
+     */
+    public function deleteRightsLocation(RightsLocation $rightsLocation)
+    {
+        return $rightsLocation->delete();
     }
 
     /**
@@ -725,7 +746,7 @@ abstract class RightsRepository
             ), $this->getRightsLocationEntityRightJoins()
             );
 
-            return $this->getDataClassRepository()->distinct($rightsLocationEntityRightClassName, $parameters);
+            return $this->getDataClassRepository()->distinct($rightsLocationClassName, $parameters);
         }
         else
         {

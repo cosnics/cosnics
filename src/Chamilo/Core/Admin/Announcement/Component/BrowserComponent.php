@@ -93,7 +93,8 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         );
 
         $table = new PublicationTable(
-            $this, $this->getPublicationService(), $this->getUserService(), $this->getGroupService()
+            $this, $this->getPublicationService(), $this->getRightsService(), $this->getUserService(),
+            $this->getGroupService()
         );
         $tabs->set_content($table->as_html());
 

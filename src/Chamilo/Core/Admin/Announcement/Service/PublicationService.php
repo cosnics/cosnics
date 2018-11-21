@@ -135,12 +135,7 @@ class PublicationService
             return false;
         }
 
-        $rightsService = Rights::getInstance();
-
-        return $rightsService->create_location(
-            self::package(), Rights::TYPE_PUBLICATION, $publication->getId(), false,
-            $rightsService->get_root_id(self::package())
-        );
+        return $this->getRightsService()->createPublicationRightsLocation($publication);
     }
 
     /**
@@ -201,16 +196,9 @@ class PublicationService
      */
     public function deletePublication(Publication $publication)
     {
-        $rightsLocation = Rights::getInstance()->get_location_by_identifier(
-            'Chamilo\Core\Admin\Announcement', Rights::TYPE_PUBLICATION, $publication->getId()
-        );
-
-        if ($rightsLocation instanceof RightsLocation)
+        if (!$this->getRightsService()->deletePublicationRightsLocation($publication))
         {
-            if (!$rightsLocation->delete())
-            {
-                return false;
-            }
+            return false;
         }
 
         return $this->getPublicationRepository()->deletePublication($publication);
@@ -462,7 +450,7 @@ class PublicationService
             return false;
         }
 
-        return $this->updatePublicationRights($publication, $userIdentifier, $values);
+        return $this->getRightsService()->updatePublicationRights($publication, $userIdentifier, $values);
     }
 
     /**
@@ -475,73 +463,5 @@ class PublicationService
         $publication->set_modification_date(time());
 
         return $this->getPublicationRepository()->updatePublication($publication);
-    }
-
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
-     * @param integer $userIdentifier
-     * @param string[] $values
-     *
-     * @return boolean
-     * @throws \Exception
-     * @todo Needs to be split off to a seperate rights service
-     */
-    public function updatePublicationRights(Publication $publication, int $userIdentifier, $values)
-    {
-        $rightsContext = \Chamilo\Core\Admin\Announcement\Manager::context();
-
-        $location = Rights::getInstance()->get_location_by_identifier(
-            $rightsContext, Rights::TYPE_PUBLICATION, $publication->getId()
-        );
-
-        if (!$location->clear_right(Rights::VIEW_RIGHT))
-        {
-            return false;
-        }
-
-        if ($location->inherits())
-        {
-            $location->disinherit();
-            if (!$location->update())
-            {
-                return false;
-            }
-        }
-
-        $option = $values[PublicationForm::PROPERTY_RIGHT_OPTION];
-        $location_id = $location->getId();
-
-        $rights = Rights::getInstance();
-
-        switch ($option)
-        {
-            case PublicationForm::RIGHT_OPTION_ALL :
-                if (!$rights->invert_location_entity_right($rightsContext, Rights::VIEW_RIGHT, 0, 0, $location_id))
-                {
-                    return false;
-                }
-                break;
-            case PublicationForm::RIGHT_OPTION_ME :
-                if (!$rights->invert_location_entity_right(
-                    $rightsContext, Rights::VIEW_RIGHT, $userIdentifier, UserEntity::ENTITY_TYPE, $location_id
-                ))
-                {
-                    return false;
-                }
-                break;
-            case PublicationForm::RIGHT_OPTION_SELECT :
-                foreach ($values[PublicationForm::PROPERTY_TARGETS] as $entity_type => $target_ids)
-                {
-                    foreach ($target_ids as $target_id)
-                    {
-                        if (!$rights->invert_location_entity_right(
-                            $rightsContext, Rights::VIEW_RIGHT, $target_id, $entity_type, $location_id
-                        ))
-                        {
-                            return false;
-                        }
-                    }
-                }
-        }
     }
 }

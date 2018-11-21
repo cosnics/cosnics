@@ -3,6 +3,7 @@ namespace Chamilo\Core\Admin\Announcement\Table\Publication;
 
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Service\PublicationService;
+use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
@@ -27,6 +28,11 @@ class PublicationTable extends RecordTable implements TableFormActionsSupport
     private $publicationService;
 
     /**
+     * @var \Chamilo\Core\Admin\Announcement\Service\RightsService
+     */
+    private $rightsService;
+
+    /**
      *
      * @var \Chamilo\Core\User\Service\UserService
      */
@@ -41,18 +47,21 @@ class PublicationTable extends RecordTable implements TableFormActionsSupport
     /**
      * @param $component
      * @param \Chamilo\Core\Admin\Announcement\Service\PublicationService $publicationService
+     * @param \Chamilo\Core\Admin\Announcement\Service\RightsService $rightsService
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
      *
      * @throws \Exception
      */
     public function __construct(
-        $component, PublicationService $publicationService, UserService $userService, GroupService $groupService
+        $component, PublicationService $publicationService, RightsService $rightsService, UserService $userService,
+        GroupService $groupService
     )
     {
         parent::__construct($component);
 
         $this->publicationService = $publicationService;
+        $this->rightsService = $rightsService;
         $this->userService = $userService;
         $this->groupService = $groupService;
     }
@@ -90,6 +99,22 @@ class PublicationTable extends RecordTable implements TableFormActionsSupport
     }
 
     /**
+     * @return \Chamilo\Core\Admin\Announcement\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
+    }
+
+    /**
      *
      * @return \Chamilo\Core\User\Service\UserService
      */
@@ -108,6 +133,23 @@ class PublicationTable extends RecordTable implements TableFormActionsSupport
     }
 
     /**
+     * Gets the table's cell renderer or builds one if it is not set
+     *
+     * @return \Chamilo\Libraries\Format\Table\TableCellRenderer
+     */
+    public function get_cell_renderer()
+    {
+        if (!isset($this->cellRenderer))
+        {
+            $this->cellRenderer = new PublicationTableCellRenderer(
+                $this, $this->getRightsService(), $this->getUserService(), $this->getGroupService()
+            );
+        }
+
+        return $this->cellRenderer;
+    }
+
+    /**
      *
      * @see \Chamilo\Libraries\Format\Table\Table::get_data_provider()
      */
@@ -119,22 +161,6 @@ class PublicationTable extends RecordTable implements TableFormActionsSupport
         }
 
         return $this->dataProvider;
-    }
-
-    /**
-     * Gets the table's cell renderer or builds one if it is not set
-     *
-     * @return \Chamilo\Libraries\Format\Table\TableCellRenderer
-     */
-    public function get_cell_renderer()
-    {
-        if (!isset($this->cellRenderer))
-        {
-            $this->cellRenderer =
-                new PublicationTableCellRenderer($this, $this->getUserService(), $this->getGroupService());
-        }
-
-        return $this->cellRenderer;
     }
 
     /**

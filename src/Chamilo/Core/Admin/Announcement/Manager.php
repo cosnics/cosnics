@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Admin\Announcement;
 
 use Chamilo\Core\Admin\Announcement\Service\PublicationService;
+use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 abstract class Manager extends Application
@@ -22,5 +23,13 @@ abstract class Manager extends Application
     public function getPublicationService()
     {
         return $this->getService(PublicationService::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Admin\Announcement\Service\RightsService
+     */
+    public function getRightsService()
+    {
+        return $this->getService(RightsService::class);
     }
 }

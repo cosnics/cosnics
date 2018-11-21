@@ -3,6 +3,7 @@ namespace Chamilo\Core\Admin\Announcement\Table\Publication;
 
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Rights;
+use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -21,6 +22,12 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 class PublicationTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
+
+    /**
+     * @var \Chamilo\Core\Admin\Announcement\Service\RightsService
+     */
+    private $rightsService;
+
     /**
      *
      * @var \Chamilo\Core\User\Service\UserService
@@ -35,17 +42,37 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
 
     /**
      * @param $table
+     * @param \Chamilo\Core\Admin\Announcement\Service\RightsService $rightsService
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
      *
      * @throws \Exception
      */
-    public function __construct($table, UserService $userService, GroupService $groupService)
+    public function __construct(
+        $table, RightsService $rightsService, UserService $userService, GroupService $groupService
+    )
     {
         parent::__construct($table);
 
+        $this->rightsService = $rightsService;
         $this->userService = $userService;
         $this->groupService = $groupService;
+    }
+
+    /**
+     * @return \Chamilo\Core\Admin\Announcement\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
     }
 
     /**
@@ -231,13 +258,13 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
      */
     public function render_publication_targets($publication)
     {
-        $target_entities = Rights::getInstance()->get_target_entities(
-            Rights::VIEW_RIGHT, Manager::context(), $publication[Publication::PROPERTY_ID], Rights::TYPE_PUBLICATION
+        $targetEntities = $this->getRightsService()->getViewTargetUsersAndGroupsIdentifiersForPublicationIdentifier(
+            $publication[Publication::PROPERTY_ID]
         );
 
         $target_list = array();
 
-        if (array_key_exists(0, $target_entities[0]))
+        if (array_key_exists(0, $targetEntities[0]))
         {
             $target_list[] = Translation::get('Everybody', null, Utilities::COMMON_LIBRARIES);
         }
@@ -245,7 +272,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
         {
             $target_list[] = '<select>';
 
-            foreach ($target_entities as $entity_type => $entity_ids)
+            foreach ($targetEntities as $entity_type => $entity_ids)
             {
                 switch ($entity_type)
                 {
