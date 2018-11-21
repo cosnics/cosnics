@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Storage\Repository\Interfaces;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -48,7 +49,15 @@ interface CourseRepositoryInterface
      * @param int $courseTypeId
      * @return Course[]
      */
-    public function findCoursesByCourseTypeId(int $courseTypeId): array;
+    public function findCoursesByCourseTypeId(int $courseTypeId);
+
+    /**
+     * @param \Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType $courseType
+     * @param int[] $subscribedCourseIds
+     *
+     * @return Course[]
+     */
+    public function findCoursesByCourseTypeAndSubscribedCourseIds(CourseType $courseType, array $subscribedCourseIds = []);
 
     /**
      * Returns Courses with a given set of parameters
@@ -148,4 +157,11 @@ interface CourseRepositoryInterface
      * @return ResultSet
      */
     public function findDirectSubscribedGroupsByStatus($courseId, $status);
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return int[]
+     */
+    public function findSubscribedCourseIdsForUser(User $user);
 }

@@ -15,4 +15,7 @@ abstract class Manager extends AjaxManager
 
     const ACTION_GET_ASSIGNMENT_NOTIFICATIONS = 'GetAssignmentNotifications';
     const DEFAULT_ACTION = self::ACTION_GET_ASSIGNMENT_NOTIFICATIONS;
+
+    const PARAM_COURSE_TYPE_ID = 'course_type_id';
+    const PARAM_USER_COURSE_CATEGORY_ID = 'user_course_category_id';
 }

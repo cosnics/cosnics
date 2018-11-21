@@ -51,8 +51,7 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
                             Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
-                        ),
-                        [Manager::PARAM_ENTITY_TYPE, Manager::PARAM_ENTITY_ID]
+                        )
                     );
 
                     return '<a href="' . $url . '">' . $title . '</a>';
