@@ -72,7 +72,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
      * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
      * @param \Chamilo\Libraries\Storage\DataClass\DataClassFactory $dataClassFactory
-     * @param boolean $isQueryCacheEnabled
+     * @param boolean $queryCacheEnabled
      */
     public function __construct(DataClassRepositoryCache $dataClassRepositoryCache,
         DataClassDatabaseInterface $dataClassDatabase, DataClassFactory $dataClassFactory, $queryCacheEnabled = true)
