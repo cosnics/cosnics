@@ -474,15 +474,10 @@ INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Authentication\\Platform', 'Chamilo\\Libraries\\Authentication', 'Authentication', 'PlatformAuthentication', '1', '1.0.0', '1');
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Authentication\\SecurityToken', 'Chamilo\\Libraries\\Authentication', 'Authentication', 'SecurityTokenAuthentication', '1', '1.0.0', '1');
 
-ALTER TABLE `tracking_weblcms_learning_path_assignment_entry` ADD `content_object_publication_id` INT(10) NOT NULL AFTER `id`;
-ALTER TABLE `tracking_weblcms_learning_path_assignment_entry` ADD INDEX(`content_object_publication_id`);
-
-UPDATE tracking_weblcms_learning_path_assignment_entry LPAE
-  JOIN tracking_weblcms_learning_path_tree_node_attempt TNA on LPAE.tree_node_attempt_id = TNA.id
-SET LPAE.content_object_publication_id = TNA.publication_id;
-
-INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath\\Assignment', 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath', 'LearningPathBridge', 'AssignmentLearningPathBridge', '1', '1.0.0', '1');
-INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Bridge\\Assignment', 'Chamilo\\Application\\Weblcms\\Bridge', 'Bridge', 'AssignmentBridge', '1', '1.0.0', '1');
-
-ALTER TABLE `tracking_weblcms_assignment_entry_attachment` ADD `created` INT(10) UNSIGNED NOT NULL AFTER `attachment_id`;
-ALTER TABLE `tracking_weblcms_learning_path_assignment_entry_attachment` ADD `created` INT(10) UNSIGNED NOT NULL AFTER `attachment_id`;
+/** Notifications **/
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES
+(null, 'Chamilo\\Core\\Notification', 'Chamilo\\Core', NULL, 'Notification', 1, '1.0.0', 1);
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES
+(null, 'Chamilo\\Core\\Queue', 'Chamilo\\Core', NULL, 'Notification', 1, '1.0.0', 1);
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES
+(NULL, 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath\\Assignment', 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath', 'LearningPathBridge', 'AssignmentLearningPathBridge', '1', '1.0.0', '1');

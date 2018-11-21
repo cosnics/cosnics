@@ -57,6 +57,14 @@
         </service>
 
         <service
+                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.team_repository"
+                class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\TeamRepository">
+            <argument
+                    type="service"
+                    id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository" />
+        </service>
+
+        <service
             id="chamilo.libraries.protocol.microsoft.graph.storage.repository.group_repository"
             class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository">
             <factory
@@ -114,6 +122,16 @@
                     id="chamilo.configuration.service.configuration_consulter" />
         </service>
 
+        <service
+                id="chamilo.libraries.protocol.microsoft.graph.service.team_service"
+                class="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService">
+            <argument
+                    type="service"
+                    id="chamilo.libraries.protocol.microsoft.graph.service.group_service" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.protocol.microsoft.graph.storage.repository.team_repository" />
+        </service>
 
         <service
             id="chamilo.libraries.protocol.microsoft.graph.service.calendar_service"

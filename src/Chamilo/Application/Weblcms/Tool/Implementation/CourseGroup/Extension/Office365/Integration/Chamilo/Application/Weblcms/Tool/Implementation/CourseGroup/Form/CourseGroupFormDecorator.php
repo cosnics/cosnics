@@ -5,7 +5,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupFormDecoratorInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -17,7 +19,8 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 {
-    const PROPERTY_USE_PLANNER = 'use_planner';
+    const PROPERTY_USE_GROUP = 'use_group';
+    const PROPERTY_USE_GROUP_AND_TEAM = 'use_group_and_team';
 
     /**
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService
@@ -39,19 +42,32 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
      *
      * @param \Chamilo\Libraries\Format\Form\FormValidator $courseGroupForm
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     *
+     * @throws \Exception
      */
     public function decorateCourseGroupForm(FormValidator $courseGroupForm, CourseGroup $courseGroup)
     {
         $id = $courseGroup->getId() ? $courseGroup->getId() : 0;
 
-        // Creation form or editing form without linked forum category
         $courseGroupForm->addElement(
-            'checkbox', self::PROPERTY_USE_PLANNER . '[' . $id . ']',
+            'checkbox', self::PROPERTY_USE_GROUP . '[' . $id . ']',
             Translation::getInstance()->getTranslation('UseOffice365Group')
         );
 
+        $courseGroupForm->addElement(
+            'checkbox', self::PROPERTY_USE_GROUP_AND_TEAM . '[' . $id . ']',
+            Translation::getInstance()->getTranslation('UseOffice365GroupAndTeam')
+        );
+
+        $courseGroupForm->addElement(
+            'html',
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup', true) .
+                'TeamAndGroupFormSelection.js'));
+
+
         $defaults = [
-            self::PROPERTY_USE_PLANNER . '[' . $courseGroup->getId() . ']' =>
+            self::PROPERTY_USE_GROUP . '[' . $courseGroup->getId() . ']' =>
                 $this->courseGroupOffice365ReferenceService->courseGroupHasLinkedReference($courseGroup)
         ];
 
