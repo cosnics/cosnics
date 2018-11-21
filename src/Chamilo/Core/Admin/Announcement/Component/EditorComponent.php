@@ -55,7 +55,12 @@ class EditorComponent extends Manager
                 $publicationForm = new PublicationForm(
                     PublicationForm::TYPE_UPDATE, $this->get_url(array('validated' => 1))
                 );
-                $publicationForm->setPublicationDefaults($publication);
+                $publicationForm->setPublicationDefaults(
+                    $this->getUser(), $publication,
+                    $this->getRightsService()->getViewTargetUsersAndGroupsIdentifiersForPublicationIdentifier(
+                        $publication->getId()
+                    )
+                );
 
                 if ($publicationForm->validate())
                 {
@@ -76,7 +81,7 @@ class EditorComponent extends Manager
                     $html = array();
 
                     $html[] = $this->render_header();
-                    $html[] = $publicationForm->toHtml();
+                    $html[] = $publicationForm->render();
                     $html[] = $this->render_footer();
 
                     return implode(PHP_EOL, $html);

@@ -4,7 +4,9 @@ namespace Chamilo\Core\Admin\Announcement\Form;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -183,7 +185,7 @@ class PublicationForm extends FormValidator
         parent::setDefaults($defaults);
     }
 
-    public function setPublicationDefaults(Publication $publication)
+    public function setPublicationDefaults(User $user, Publication $publication, array $targetUsersAndGroups)
     {
         $defaults = array();
 
@@ -195,7 +197,44 @@ class PublicationForm extends FormValidator
         }
 
         $defaults[Publication::PROPERTY_HIDDEN] = $publication->is_hidden();
-        $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ALL;
+
+        if (key_exists(0, $targetUsersAndGroups))
+        {
+            $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ALL;
+        }
+        else
+        {
+            $hasUserEntities = key_exists(UserEntity::ENTITY_TYPE, $targetUsersAndGroups);
+            $hasGroupEntites = key_exists(PlatformGroupEntity::ENTITY_TYPE, $targetUsersAndGroups);
+            $hasOnlyOneUserEntity = count($targetUsersAndGroups[UserEntity::ENTITY_TYPE]) == 1;
+            $currentUserIsOnlyUserEntity = $targetUsersAndGroups[UserEntity::ENTITY_TYPE][0] == $user->getId();
+
+            if ($hasUserEntities && !$hasGroupEntites && $hasOnlyOneUserEntity && $currentUserIsOnlyUserEntity)
+            {
+                $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ME;
+            }
+            else
+            {
+                $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_SELECT;
+            }
+
+            $defaultElements = new AdvancedElementFinderElements();
+
+            foreach ($targetUsersAndGroups as $targetUsersAndGroupType => $targetUsersAndGroupIdentifiers)
+            {
+                $entity = $this->entities[$targetUsersAndGroupType];
+
+                foreach ($targetUsersAndGroupIdentifiers as $targetUsersAndGroupIdentifier)
+                {
+                    $defaultElements->add_element(
+                        $entity->get_element_finder_element($targetUsersAndGroupIdentifier)
+                    );
+                }
+            }
+
+            $element = $this->getElement(self::PROPERTY_TARGETS);
+            $element->setDefaultValues($defaultElements);
+        }
 
         parent::setDefaults($defaults);
     }
