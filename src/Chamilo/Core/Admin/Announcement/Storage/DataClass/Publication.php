@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Storage\DataClass;
 
-use Chamilo\Core\Admin\Announcement\Rights;
 use Chamilo\Core\Admin\Announcement\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;

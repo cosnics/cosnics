@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Core\Menu\Renderer\Menu;
 
-use Chamilo\Core\Menu\Repository\ItemRepository;
+use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Core\Menu\Service\ItemService;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -32,7 +33,7 @@ abstract class Renderer
 
     /**
      * The layout of the menubar
-     * 
+     *
      * @var String
      */
     protected $html;
@@ -96,11 +97,13 @@ abstract class Renderer
      *
      * @param $type string
      * @param $user User|null
+     *
      * @return Renderer
      */
     public static function factory($type, $containerMode, ChamiloRequest $request = null, $user = null)
     {
         $class = __NAMESPACE__ . '\Type\\' . $type;
+
         return new $class($containerMode, $request, $user);
     }
 
@@ -108,9 +111,12 @@ abstract class Renderer
      *
      * @param $type string
      * @param $user User|null
+     *
      * @return string
      */
-    public static function toHtml($type, $containerMode = 'container-fluid', ChamiloRequest $request = null, $user = null)
+    public static function toHtml(
+        $type, $containerMode = 'container-fluid', ChamiloRequest $request = null, $user = null
+    )
     {
         return self::factory($type, $containerMode, $request, $user)->render();
     }
@@ -121,12 +127,9 @@ abstract class Renderer
      */
     public function getItemService()
     {
-        if (! isset($this->itemService))
-        {
-            $this->itemService = new ItemService(new ItemRepository());
-        }
-        
-        return $this->itemService;
+        $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $dependencyInjectionContainer->get(ItemService::class);
     }
 
     public function getRootItems()
@@ -136,35 +139,35 @@ abstract class Renderer
 
     /**
      * Renders the menu
-     * 
+     *
      * @return string
      */
     public function render()
     {
         $user = $this->get_user();
-        
-        if (! $user instanceof User && ! $this->isMenuAvailableAnonymously())
+
+        if (!$user instanceof User && !$this->isMenuAvailableAnonymously())
         {
             return;
         }
-        
+
         $html = array();
-        
+
         $numberOfItems = 0;
         $itemRenditions = array();
-        
+
         if ($user)
         {
             $userRights = $this->getItemService()->determineRightsForUser($user);
-            
+
             foreach ($this->getRootItems() as $item)
             {
                 if ($userRights[$item->get_id()])
                 {
-                    if (! $item->is_hidden())
+                    if (!$item->is_hidden())
                     {
                         $itemRendition = \Chamilo\Core\Menu\Renderer\Item\Renderer::toHtml($this, $item);
-                        if (! empty($itemRendition))
+                        if (!empty($itemRendition))
                         {
                             $numberOfItems ++;
                             $itemRenditions[] = $itemRendition;
@@ -173,11 +176,11 @@ abstract class Renderer
                 }
             }
         }
-        
+
         $html[] = $this->display_menu_header($numberOfItems);
         $html[] = implode(PHP_EOL, $itemRenditions);
         $html[] = $this->display_menu_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 

@@ -45,6 +45,35 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
     }
 
     /**
+     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
+     *
+     * @return boolean
+     */
+    public function createPublicationRightsLocation(Publication $publication)
+    {
+        return $this->createRightsLocationFromParameters(
+            self::TYPE_PUBLICATION, $publication->getId(), false, $this->getRootLocationIdentifier()
+        );
+    }
+
+    /**
+     * @param bool $returnLocation
+     *
+     * @return \Chamilo\Core\Rights\Domain\RightsLocation
+     */
+    public function createRoot(bool $returnLocation = true)
+    {
+        return $this->createSubtreeRootLocation(0, self::TREE_TYPE_ROOT, $returnLocation);
+    }
+
+    public function deletePublicationRightsLocation(Publication $publication)
+    {
+        $rightsLocation = $this->findRightsLocationByParameters($publication->getId(), self::TYPE_PUBLICATION);
+
+        return $this->deleteRightsLocation($rightsLocation);
+    }
+
+    /**
      * @param integer $right
      * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
      * @param integer $userIdentifier
@@ -100,25 +129,6 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
     public function getViewTargetUsersAndGroupsIdentifiersForPublicationIdentifier(int $publicationIdentifier)
     {
         return $this->getTargetEntities(self::VIEW_RIGHT, $publicationIdentifier, self::TYPE_PUBLICATION);
-    }
-
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
-     *
-     * @return boolean
-     */
-    public function createPublicationRightsLocation(Publication $publication)
-    {
-        return $this->createRightsLocationFromParameters(
-            self::TYPE_PUBLICATION, $publication->getId(), false, $this->getRootLocationIdentifier()
-        );
-    }
-
-    public function deletePublicationRightsLocation(Publication $publication)
-    {
-        $rightsLocation = $this->findRightsLocationByParameters($publication->getId(), self::TYPE_PUBLICATION);
-
-        return $this->deleteRightsLocation($rightsLocation);
     }
 
     /**

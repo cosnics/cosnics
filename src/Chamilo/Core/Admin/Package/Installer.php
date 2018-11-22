@@ -2,16 +2,18 @@
 namespace Chamilo\Core\Admin\Package;
 
 use Chamilo\Configuration\Storage\DataManager;
-use Chamilo\Core\Admin\Announcement\Rights;
+use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocation;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
  * @package admin.install
  */
+
 /**
  * This installer can be used to create the storage structure for the users application.
  */
@@ -24,38 +26,45 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     public function extra()
     {
         // Update the default settings to the database
-        if (! $this->update_settings())
+        if (!$this->update_settings())
         {
             return false;
         }
         else
         {
             $this->add_message(
-                self::TYPE_NORMAL,
-                Translation::get(
-                    'ObjectsAdded',
-                    array('OBJECTS' => Translation::get('DefaultSettings')),
-                    Utilities::COMMON_LIBRARIES));
+                self::TYPE_NORMAL, Translation::get(
+                'ObjectsAdded', array('OBJECTS' => Translation::get('DefaultSettings')), Utilities::COMMON_LIBRARIES
+            )
+            );
         }
 
-        $rights_utilities = Rights::getInstance();
-        $location = $rights_utilities->create_subtree_root_location(__NAMESPACE__, 0, Rights::TREE_TYPE_ROOT, true);
+        $location = $this->getRightsService()->createRoot(true);
 
-        if (! $location instanceof RightsLocation)
+        if (!$location instanceof RightsLocation)
         {
             return false;
         }
         else
         {
             $this->add_message(
-                self::TYPE_NORMAL,
-                Translation::get(
-                    'ObjectCreated',
-                    array('OBJECT' => Translation::get('RightsTree')),
-                    Utilities::COMMON_LIBRARIES));
+                self::TYPE_NORMAL, Translation::get(
+                'ObjectCreated', array('OBJECT' => Translation::get('RightsTree')), Utilities::COMMON_LIBRARIES
+            )
+            );
         }
 
         return true;
+    }
+
+    /**
+     * @return \Chamilo\Core\Admin\Announcement\Service\RightsService
+     */
+    protected function getRightsService()
+    {
+        $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $dependencyInjectionContainer->get(RightsService::class);
     }
 
     public function update_settings()
@@ -86,7 +95,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             $setting_object->set_variable($setting[1]);
             $setting_object->set_value($setting[2]);
 
-            if (! $setting_object->update())
+            if (!$setting_object->update())
             {
                 return false;
             }

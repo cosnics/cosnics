@@ -4,7 +4,7 @@ namespace Chamilo\Core\Menu\Component;
 use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\ItemTitles;
 use Chamilo\Core\Menu\Manager;
-use Chamilo\Core\Menu\Repository\ItemRepository;
+use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;

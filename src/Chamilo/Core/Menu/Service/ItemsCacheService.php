@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Core\Menu\Service;
 
-use Chamilo\Core\Menu\Repository\ItemRepository;
+use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 
 /**
  *
@@ -17,13 +18,13 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
 
     /**
      *
-     * @var \Chamilo\Core\Menu\Repository\ItemRepository
+     * @var \Chamilo\Core\Menu\Storage\Repository\ItemRepository
      */
     private $itemRepository;
 
     /**
      *
-     * @param \Chamilo\Core\Menu\Repository\ItemRepository $itemRepository
+     * @param \Chamilo\Core\Menu\Storage\Repository\ItemRepository $itemRepository
      */
     public function __construct(ItemRepository $itemRepository)
     {
@@ -32,7 +33,7 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
 
     /**
      *
-     * @return \Chamilo\Core\Menu\Repository\ItemRepository
+     * @return \Chamilo\Core\Menu\Storage\Repository\ItemRepository
      */
     public function getItemRepository()
     {
@@ -41,7 +42,7 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
 
     /**
      *
-     * @param \Chamilo\Core\Menu\Service\ItemRepository $itemRepository
+     * @param \Chamilo\Core\Menu\Storage\Repository\ItemRepository $itemRepository
      */
     public function setItemRepository($itemRepository)
     {
@@ -55,29 +56,33 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
     public function warmUpForIdentifier($identifier)
     {
         $itemsByParentIdentifier = $this->processItemResultSet($this->getItemRepository()->findItems());
+
         return $this->getCacheProvider()->save($identifier, $itemsByParentIdentifier);
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\ResultSet\ResultSet $itemResultSet
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item[] $items
+     *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
-    private function processItemResultSet(\Chamilo\Libraries\Storage\ResultSet\ResultSet $itemResultSet)
+    private function processItemResultSet(DataClassIterator $items)
     {
-        while ($item = $itemResultSet->next_result())
+        $itemsByParentIdentifier = array();
+
+        foreach ($items as $item)
         {
             $item->get_additional_properties();
             $item->get_titles();
-            
-            if (! isset($itemsByParentIdentifier[$item->get_parent()]))
+
+            if (!isset($itemsByParentIdentifier[$item->get_parent()]))
             {
                 $itemsByParentIdentifier[$item->get_parent()] = array();
             }
-            
+
             $itemsByParentIdentifier[$item->get_parent()][] = $item;
         }
-        
+
         return $itemsByParentIdentifier;
     }
 
@@ -110,7 +115,7 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
 
     /**
      * Resets the cache
-     * 
+     *
      * @return bool
      */
     public function resetCache()

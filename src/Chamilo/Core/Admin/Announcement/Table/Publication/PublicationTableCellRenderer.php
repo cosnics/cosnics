@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Admin\Announcement\Table\Publication;
 
 use Chamilo\Core\Admin\Announcement\Manager;
-use Chamilo\Core\Admin\Announcement\Rights;
 use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Group\Service\GroupService;

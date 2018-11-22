@@ -14,7 +14,7 @@ use Chamilo\Configuration\Service\StorageConfigurationLoader;
 use Chamilo\Configuration\Storage\Repository\ConfigurationRepository;
 use Chamilo\Configuration\Storage\Repository\LanguageRepository;
 use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
-use Chamilo\Core\Menu\Repository\ItemRepository;
+use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Core\Menu\Service\ItemsCacheService;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsCacheService;

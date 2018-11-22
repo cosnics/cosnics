@@ -2,15 +2,12 @@
 namespace Chamilo\Core\Admin\Announcement\Service;
 
 use Chamilo\Core\Admin\Announcement\Form\PublicationForm;
-use Chamilo\Core\Admin\Announcement\Rights;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
-use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocation;
 use Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Symfony\Component\Translation\Translator;

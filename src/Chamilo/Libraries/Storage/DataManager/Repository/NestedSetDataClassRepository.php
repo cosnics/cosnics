@@ -52,7 +52,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @see NestedSet::count_children()
      * @see NestedSet::count_descendants()
      */
-    public function countDescendants(NestedSet $nestedSet, $recursive = true, $condition = null)
+    public function countDescendants(NestedSet $nestedSet, bool $recursive = true, Condition $condition = null)
     {
         return $this->count(
             get_class($nestedSet),
@@ -95,7 +95,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @see NestedSet::create()
      * @see NestedTreeNode::create()
      */
-    public function create(DataClass $nestedSet, $previousNestedSetIdentifier = 0)
+    public function create(DataClass $nestedSet, int $previousNestedSetIdentifier = 0)
     {
         if ($previousNestedSetIdentifier)
         {
@@ -172,7 +172,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]
      * @see NestedSet::delete()
      */
-    public function delete(DataClass $nestedSet, $condition = null)
+    public function delete(DataClass $nestedSet, Condition $condition = null)
     {
         // Deleting a node from a nested set requires multiple updates which have to be performed atomically and
         // consistently. Use a transaction to guarantee this.
@@ -438,7 +438,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
      * @see NestedSet::build_post_order_ordering()
      */
-    protected function getPostOrderBy(NestedSet $nestedSet, $sortOrder = SORT_ASC)
+    protected function getPostOrderBy(NestedSet $nestedSet, int $sortOrder = SORT_ASC)
     {
         return array(
             new OrderBy(
@@ -459,7 +459,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
      * @see NestedSet::build_pre_order_ordering()
      */
-    protected function getPreOrderBy(NestedSet $nestedSet, $sortOrder = SORT_ASC)
+    protected function getPreOrderBy(NestedSet $nestedSet, int $sortOrder = SORT_ASC)
     {
         return array(
             new OrderBy(
@@ -721,7 +721,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @return boolean
      * @see NestedSet::post_delete()
      */
-    protected function postDelete(NestedSet $nestedSet, $condition = null)
+    protected function postDelete(NestedSet $nestedSet, Condition $condition = null)
     {
         // This private function is only ever called from within a transaction.
         //
@@ -834,7 +834,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @see NestedSet::pre_insert()
      */
     protected function preInsert(
-        NestedSet $nestedSet, $insertAfter, int $numberOfElements = 1, Condition $condition = null
+        NestedSet $nestedSet, int $insertAfter, int $numberOfElements = 1, Condition $condition = null
     )
     {
         // This private function is only ever called from within a transaction.
@@ -933,7 +933,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @see NestedSet::validate_position()
      */
     protected function validatePosition(
-        NestedSet $nestedSet, $position = NestedSet::AS_LAST_CHILD_OF, NestedSet $referenceNode = null
+        NestedSet $nestedSet, int $position = NestedSet::AS_LAST_CHILD_OF, NestedSet $referenceNode = null
     )
     {
         if ($position == NestedSet::AS_PREVIOUS_SIBLING_OF || $position == NestedSet::AS_NEXT_SIBLING_OF)
