@@ -4,10 +4,11 @@ namespace Chamilo\Core\Rights\Storage\Repository;
 use Chamilo\Core\Rights\Domain\RightsLocation;
 use Chamilo\Core\Rights\Domain\RightsLocationEntityRight;
 use Chamilo\Core\Rights\Service\RightsService;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -35,6 +36,12 @@ abstract class RightsRepository
 {
     /**
      *
+     * @var \Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository
+     */
+    private $nestedSetDataClassRepository;
+
+    /**
+     *
      * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
     private $dataClassRepository;
@@ -56,13 +63,16 @@ abstract class RightsRepository
     private $entityItemConditionCache;
 
     /**
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository $nestedSetDataClassRepository
      * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
      * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
      */
     public function __construct(
-        DataClassRepository $dataClassRepository, DataClassRepositoryCache $dataClassRepositoryCache
+        NestedSetDataClassRepository $nestedSetDataClassRepository, DataClassRepository $dataClassRepository,
+        DataClassRepositoryCache $dataClassRepositoryCache
     )
     {
+        $this->nestedSetDataClassRepository = $nestedSetDataClassRepository;
         $this->dataClassRepository = $dataClassRepository;
         $this->dataClassRepositoryCache = $dataClassRepositoryCache;
     }
@@ -110,18 +120,7 @@ abstract class RightsRepository
      */
     public function createRightsLocation(RightsLocation $location)
     {
-        return $location->create(null);
-    }
-
-    /**
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public function updateRightsLocation(RightsLocation $location)
-    {
-        return $location->update();
+        return $this->getNestedSetDataClassRepository()->create($location);
     }
 
     /**
@@ -131,13 +130,10 @@ abstract class RightsRepository
      */
     public function createRightsLocationEntityRight(RightsLocationEntityRight $rightsLocationEntityRight)
     {
-        // TODO: Legacy code necessary as long as we call the create() method of the DataClass
-        DataClassCache::truncate($this->getRightsLocationEntityRightClassName());
-
         // Correct version
         $this->getDataClassRepositoryCache()->truncate($this->getRightsLocationEntityRightClassName());
 
-        return $rightsLocationEntityRight->create();
+        return $this->getDataClassRepository()->create($rightsLocationEntityRight);
     }
 
     /**
@@ -147,7 +143,22 @@ abstract class RightsRepository
      */
     public function deleteRightsLocation(RightsLocation $rightsLocation)
     {
-        return $rightsLocation->delete();
+        $deletedLocations = $this->getNestedSetDataClassRepository()->delete($rightsLocation);
+
+        if (!$deletedLocations instanceof DataClassIterator)
+        {
+            return false;
+        }
+
+        foreach ($deletedLocations as $deletedLocation)
+        {
+            if (!$this->deleteRightsLocationEntityRightsForLocationAndParameters($deletedLocation))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -1082,6 +1093,22 @@ abstract class RightsRepository
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository
+     */
+    public function getNestedSetDataClassRepository(): NestedSetDataClassRepository
+    {
+        return $this->nestedSetDataClassRepository;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository $nestedSetDataClassRepository
+     */
+    public function setNestedSetDataClassRepository(NestedSetDataClassRepository $nestedSetDataClassRepository): void
+    {
+        $this->nestedSetDataClassRepository = $nestedSetDataClassRepository;
+    }
+
+    /**
      * @return string
      */
     abstract public function getRightsLocationClassName(): string;
@@ -1109,5 +1136,16 @@ abstract class RightsRepository
         );
 
         return new Joins(array($join));
+    }
+
+    /**
+     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function updateRightsLocation(RightsLocation $location)
+    {
+        return $this->getNestedSetDataClassRepository()->update($location);
     }
 }

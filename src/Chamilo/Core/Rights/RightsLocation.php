@@ -38,7 +38,7 @@ class RightsLocation extends NestedTreeNode
     /**
      * @param integer $right_id
      *
-     * @deprecated Use RightsService::deleteRightsLocationEntityRightsForLocationAndRight() now
+     * @deprecated Use RightsService::deleteRightsLocationEntityRightsForLocationAndParameters() now
      *
      * @return mixed
      */
@@ -49,7 +49,7 @@ class RightsLocation extends NestedTreeNode
 
     /**
      * on this location
-     * @deprecated Use RightsService::deleteRightsLocationEntityRightsForLocation() now
+     * @deprecated Use RightsService::deleteRightsLocationEntityRightsForLocationAndParameters() now
      */
     public function clear_rights()
     {

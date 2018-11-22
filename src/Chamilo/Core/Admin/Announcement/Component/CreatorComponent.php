@@ -41,6 +41,11 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
         {
             $contentObjectIdentifiers = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
 
+            if (!is_array($contentObjectIdentifiers))
+            {
+                $contentObjectIdentifiers = array($contentObjectIdentifiers);
+            }
+
             $publicationForm = new PublicationForm(PublicationForm::TYPE_CREATE, $this->get_url());
 
             if ($publicationForm->validate())
@@ -99,11 +104,6 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
     private function renderContentObjects(array $contentObjectIdentifiers)
     {
         $html = array();
-
-        if (!is_array($contentObjectIdentifiers))
-        {
-            $contentObjectIdentifiers = array($contentObjectIdentifiers);
-        }
 
         $items_to_publish = count($contentObjectIdentifiers);
         $publications = array();

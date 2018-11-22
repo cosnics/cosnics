@@ -23,7 +23,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class NestedSetDataClassRepository extends DataClassRepository
+class NestedSetDataClassRepository extends DataClassRepository
 {
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
@@ -78,25 +78,34 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
 
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
-     * @param int $previousIdentifier
+     * @param int $nestedSetIdentifier
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet
+     */
+    public function findRelatedNestedSetByIdentifier(NestedSet $nestedSet, int $nestedSetIdentifier)
+    {
+        return $this->retrieveById(get_class($nestedSet), $nestedSetIdentifier);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
+     * @param int $previousNestedSetIdentifier
      *
      * @return bool
      * @see NestedSet::create()
      * @see NestedTreeNode::create()
      */
-    public function create(DataClass $nestedSet, $previousIdentifier = 0)
+    public function create(DataClass $nestedSet, $previousNestedSetIdentifier = 0)
     {
-        $parentIdentifier = $nestedSet->getParentId();
-
-        if ($previousIdentifier)
+        if ($previousNestedSetIdentifier)
         {
             $position = NestedSet::AS_NEXT_SIBLING_OF;
-            $referenceNode = $previousIdentifier;
+            $referenceNode = $this->findRelatedNestedSetByIdentifier($nestedSet, $previousNestedSetIdentifier);
         }
         else
         {
             $position = NestedSet::AS_LAST_CHILD_OF;
-            $referenceNode = $parentIdentifier;
+            $referenceNode = $this->getParent($nestedSet);
         }
 
         // This variable is used to identify the node after which the newly
@@ -173,7 +182,7 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
                 // Since we want to hold on to this information until after all nodes have been deleted
                 // We have to copy the content of this result set into a temporary array
 
-                $associatedNestedSets = $this->findDescendants($nestedSet, $condition);
+                $associatedNestedSets = $this->findDescendants($nestedSet, true, $condition);
                 $associatedNestedSets->append($nestedSet);
 
                 $deleteCondition = $this->getDescendantsCondition($nestedSet, true, true, $condition);
@@ -413,7 +422,7 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
      */
     public function getParent(NestedSet $nestedSet)
     {
-        return $this->retrieveById($nestedSet->getParentId());
+        return $this->retrieveById(get_class($nestedSet), $nestedSet->getParentId());
     }
 
     /**
@@ -531,17 +540,17 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
         if ($newPreviousId != 0)
         {
             $position = NestedSet::AS_NEXT_SIBLING_OF;
-            $referenceNode = $newPreviousId;
+            $referenceNode = $this->findRelatedNestedSetByIdentifier($nestedSet, $newPreviousId);
         }
         else
         {
             if ($newParentId == 0)
             {
-                $referenceNode = $nestedSet->getParentId();
+                $referenceNode = $this->getParent($nestedSet);
             }
             else
             {
-                $referenceNode = $newParentId;
+                $referenceNode = $this->findRelatedNestedSetByIdentifier($nestedSet, $newParentId);
             }
 
             $position = NestedSet::AS_LAST_CHILD_OF;
@@ -569,12 +578,12 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
 
             case NestedSet::AS_PREVIOUS_SIBLING_OF :
                 $insertAfter = $referenceNode->getLeftValue() - 1;
-                $nestedSet->setParentId($referenceNode);
+                $nestedSet->setParentId($referenceNode->getId());
                 break;
 
             case NestedSet::AS_NEXT_SIBLING_OF :
                 $insertAfter = $referenceNode->getRightValue();
-                $nestedSet->setParentId($referenceNode);
+                $nestedSet->setParentId($referenceNode->getId());
                 break;
         }
 
@@ -916,7 +925,7 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
      *
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
      * @param integer $position where to insert/move w.r.t. the reference node
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|integer $referenceNode null, an id or a node object that
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $referenceNode null, an id or a node object that
      *        identifies the postion in the nested set.
      *
      * @return \Chamilo\Libraries\Storage\DataClass\NestedSet the node that identifies the position where to insert a
@@ -924,7 +933,7 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
      * @see NestedSet::validate_position()
      */
     protected function validatePosition(
-        NestedSet $nestedSet, $position = NestedSet::AS_LAST_CHILD_OF, $referenceNode = null
+        NestedSet $nestedSet, $position = NestedSet::AS_LAST_CHILD_OF, NestedSet $referenceNode = null
     )
     {
         if ($position == NestedSet::AS_PREVIOUS_SIBLING_OF || $position == NestedSet::AS_NEXT_SIBLING_OF)
@@ -933,18 +942,6 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
             {
                 // TODO Report an error: must provide a relative position, when create a node as a sibling to another.
                 return null;
-            }
-
-            if (!is_object($referenceNode))
-            {
-                // The passed reference_node may be an id: try to fetch the corresponding node
-                $referenceNode = $this->retrieveById(get_class($nestedSet), $referenceNode);
-
-                // TODO Report an error if no such node could be found
-                if (!is_object($referenceNode))
-                {
-                    return null;
-                }
             }
 
             if ($nestedSet->getId() === $referenceNode->getId())
@@ -965,25 +962,7 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
             if ($referenceNode === null)
             {
                 // Use the parent of the node as a reference
-                $referenceNode = $this->retrieveById(get_class($nestedSet), $nestedSet->getParentId());
-
-                // TODO Report an error if no such node can be found
-                if (!is_object($referenceNode))
-                {
-                    return null;
-                }
-            }
-
-            if (!is_object($referenceNode))
-            {
-                // The passed reference_node may be an id: try to fetch the corresponding node
-                $referenceNode = $this->retrieveById(get_class($nestedSet), $referenceNode);
-
-                // TODO Report an error if no such node could be found
-                if (!is_object($referenceNode))
-                {
-                    return null;
-                }
+                $referenceNode = $this->getParent($nestedSet);
             }
 
             if ($nestedSet->getId() === $referenceNode->getId())

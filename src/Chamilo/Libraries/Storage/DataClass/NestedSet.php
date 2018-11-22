@@ -1282,9 +1282,6 @@ abstract class NestedSet extends DataClass
 
             if ($this->get_parent_id() == 0 || $this->get_parent_id() != $reference_node->get_parent_id())
             {
-                ;
-            }
-            {
                 // To be a sibling of the reference node, the parent should be the same
                 $this->set_parent_id($reference_node->get_parent_id());
             }
