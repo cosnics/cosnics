@@ -105,13 +105,12 @@ abstract class RightsRepository
 
     /**
      * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
-     * @param boolean $createInBatch
      *
      * @return boolean
      */
-    public function createRightsLocation(RightsLocation $location, bool $createInBatch = false)
+    public function createRightsLocation(RightsLocation $location)
     {
-        return $location->create(null, $createInBatch);
+        return $location->create(null);
     }
 
     /**

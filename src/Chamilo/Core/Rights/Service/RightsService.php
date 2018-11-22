@@ -92,13 +92,12 @@ abstract class RightsService
 
     /**
      * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
-     * @param boolean $createInBatch
      *
      * @return boolean
      */
-    protected function createRightsLocation(RightsLocation $location, bool $createInBatch = false)
+    protected function createRightsLocation(RightsLocation $location)
     {
-        return $this->getRightsRepository()->createRightsLocation($location, $createInBatch);
+        return $this->getRightsRepository()->createRightsLocation($location);
     }
 
     /**
@@ -143,15 +142,13 @@ abstract class RightsService
      * @param integer $treeIdentifier
      * @param integer $treeType
      * @param boolean $returnLocation
-     * @param boolean $createInBatch
      *
      * @return \Chamilo\Core\Rights\Domain\RightsLocation|boolean
      * @see RightsUtil::create_location()
      */
     protected function createRightsLocationFromParameters(
         int $type = self::TYPE_ROOT, int $identifier = 0, int $inherit = 0, int $parent = 0, int $locked = 0,
-        int $treeIdentifier = 0, int $treeType = self::TREE_TYPE_ROOT, bool $returnLocation = false,
-        bool $createInBatch = false
+        int $treeIdentifier = 0, int $treeType = self::TREE_TYPE_ROOT, bool $returnLocation = false
     )
     {
         $location = $this->getRightsLocationInstance();
@@ -163,7 +160,7 @@ abstract class RightsService
         $location->set_tree_identifier($treeIdentifier);
         $location->set_tree_type($treeType);
 
-        $success = $this->createRightsLocation($location, $createInBatch);
+        $success = $this->createRightsLocation($location);
 
         if ($returnLocation && $success)
         {
