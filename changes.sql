@@ -603,3 +603,9 @@ ALTER TABLE `notification_user_filter`
 ALTER TABLE `notification_user_notification`
   ADD CONSTRAINT `FK_FC1E8029EF1A9D84` FOREIGN KEY (`notification_id`) REFERENCES `notification_notification` (`id`),
   ADD CONSTRAINT `FK_FC1E8029F7430FC9` FOREIGN KEY (`notification_context`) REFERENCES `notification_context` (`id`);
+
+ALTER TABLE tracking_weblcms_assignment_entry_attachment
+    ADD COLUMN `created` int(11) NOT NULL;
+
+ALTER TABLE tracking_weblcms_learning_path_assignment_entry_attachment
+  ADD COLUMN `created` int(11) NOT NULL;
