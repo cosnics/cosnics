@@ -22,7 +22,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
         $html = array();
         $publications = $this->getPublications();
 
-        if ($publications->size() == 0)
+        if ($publications->count() == 0)
         {
             $html[] = '<div class="panel-body portal-block-content">';
             $html[] = htmlspecialchars(Translation::get('NoSystemAnnouncementsCurrently'));
@@ -128,7 +128,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
 
     public function isEmpty()
     {
-        return $this->getPublications()->size() == 0;
+        return $this->getPublications()->count() == 0;
     }
 
     public function isVisible()

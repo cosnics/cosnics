@@ -185,6 +185,13 @@ class PublicationForm extends FormValidator
         parent::setDefaults($defaults);
     }
 
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
+     * @param integer[][] $targetUsersAndGroups
+     *
+     * @throws \Exception
+     */
     public function setPublicationDefaults(User $user, Publication $publication, array $targetUsersAndGroups)
     {
         $defaults = array();
