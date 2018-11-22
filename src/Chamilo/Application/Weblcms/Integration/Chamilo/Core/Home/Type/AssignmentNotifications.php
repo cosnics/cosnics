@@ -79,7 +79,8 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
                 'RETRIEVE_NOTIFICATIONS_URL' => $retrieveNotificationsUrl,
                 'VIEW_NOTIFICATION_URL' => $viewNotificationUrl,
                 'BLOCK_ID' => $this->getBlock()->getId(),
-                'HIDDEN' => !$this->getBlock()->isVisible()
+                'HIDDEN' => !$this->getBlock()->isVisible(),
+                'ADMIN_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email'])
             ]
         );
     }
@@ -131,12 +132,13 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
                 return Translation::get('NoSuchCourseType');
             }
         }
-        elseif($course_type_id)
+        elseif($course_type_id === 0)
+        {
+            $course_type_title = Translation::get('NoCourseType');
+        }
+        else
         {
             $course_type_title = Translation::get('AllCourses');
-        }
-        else {
-            $course_type_title = Translation::get('NoCourseType');
         }
 
         $user_course_category_id = $this->getUserCourseCategoryId();

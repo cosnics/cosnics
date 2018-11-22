@@ -34,3 +34,4 @@ ClickForAnnouncements = "Klik <a href="{URL}">hier</a> voor een lijst van alle n
 CheckWhatsNew = "Klik <a href="{URL}">hier</a> om te controleren wat er nieuw is in deze cursussen."
 ShowContent = "Toon direct (ipv link naar)"
 AssignmentNotifications = "Meldingen over opdrachten"
+BETAWarning = "De meldingen zijn momenteel in BETA. Vragen of feedback kunnen naar ons gestuurd worden via <a href=\"mailto:{ADMIN_EMAIL}\">{ADMIN_EMAIL}</a>"

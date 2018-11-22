@@ -36,3 +36,4 @@ ClickForAnnouncements = "Click <a href="{URL}">here</a> to view a list of all ne
 CheckWhatsNew = "Click <a href="{URL}">here</a> to check what's new in these courses."
 ShowContent = "Show content"
 AssignmentNotifications = "Assignment notifications"
+BETAWarning = "The notifications are currently in BETA mode. Any questions or feedback can be sent to us via <a href=\"mailto:{ADMIN_EMAIL}\">{ADMIN_EMAIL}</a>"

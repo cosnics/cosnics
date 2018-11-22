@@ -44,6 +44,16 @@ class EntryNotificationJobProcessor extends AssignmentJobProcessor implements Jo
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    protected function getUserId(Entry $entry)
+    {
+        return $entry->getUserId();
+    }
+
+    /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $publication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData

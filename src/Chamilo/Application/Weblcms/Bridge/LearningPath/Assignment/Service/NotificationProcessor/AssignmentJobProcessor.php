@@ -324,7 +324,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 [
                     '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
                 ]
             )
         );
@@ -337,7 +337,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 [
                     '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
                 ]
             )
         );
@@ -350,7 +350,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 [
                     '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
                 ]
             )
         );
@@ -363,7 +363,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 [
                     '{LEARNING_PATH_TITLE}' => $assignment->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
                 ]
             )
         );
@@ -386,6 +386,13 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      * @return int
      */
     abstract protected function getCreationDate(Entry $entry);
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    abstract protected function getUserId(Entry $entry);
 
     /**
      * @param Course $course

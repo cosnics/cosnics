@@ -103,6 +103,16 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    protected function getUserId(Entry $entry)
+    {
+        return $this->feedback->get_user_id();
+    }
+
+    /**
      * @param Course $course
      * @param ContentObjectPublication $publication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData

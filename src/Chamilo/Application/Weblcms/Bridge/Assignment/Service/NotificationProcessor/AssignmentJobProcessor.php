@@ -275,7 +275,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 'Chamilo\Application\Weblcms\Bridge\Assignment', $translations[$key],
                 [
                     '{PUBLICATION_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
                 ]
             )
         );
@@ -287,7 +287,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 'Chamilo\Application\Weblcms\Bridge\Assignment', $translations[$key],
                 [
                     '{PUBLICATION_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
                 ]
             )
         );
@@ -299,7 +299,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 'Chamilo\Application\Weblcms\Bridge\Assignment', $translations[$key],
                 [
                     '{PUBLICATION_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
                 ]
             )
         );
@@ -313,6 +313,13 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      * @return int
      */
     abstract protected function getCreationDate(Entry $entry);
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    abstract protected function getUserId(Entry $entry);
 
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course

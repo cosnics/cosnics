@@ -17,11 +17,17 @@ use Chamilo\Core\Queue\Storage\Entity\Job;
 class EntryAttachmentNotificationJobProcessor extends AssignmentJobProcessor implements JobProcessorInterface
 {
     const PARAM_ENTRY_ATTACHMENT_ID = 'entry_attachment_id';
+    const PARAM_USER_ID = 'user_id';
 
     /**
      * @var EntryAttachment
      */
     protected $entryAttachment;
+
+    /**
+     * @var Job
+     */
+    protected $job;
 
     /**
      * @param \Chamilo\Core\Queue\Storage\Entity\Job $job
@@ -31,6 +37,8 @@ class EntryAttachmentNotificationJobProcessor extends AssignmentJobProcessor imp
      */
     public function processJob(Job $job)
     {
+        $this->job = $job;
+
         $entryAttachmentId = $job->getParameter(self::PARAM_ENTRY_ATTACHMENT_ID);
         $entryAttachment = $this->assignmentService->findEntryAttachmentById($entryAttachmentId);
         if (!$entryAttachment instanceof EntryAttachment)
@@ -53,6 +61,16 @@ class EntryAttachmentNotificationJobProcessor extends AssignmentJobProcessor imp
     protected function getCreationDate(Entry $entry)
     {
         return $this->entryAttachment->getCreated();
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    protected function getUserId(Entry $entry)
+    {
+        return $this->job->getParameter(self::PARAM_USER_ID);
     }
 
     /**

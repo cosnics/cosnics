@@ -481,3 +481,125 @@ INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `
 (null, 'Chamilo\\Core\\Queue', 'Chamilo\\Core', NULL, 'Notification', 1, '1.0.0', 1);
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES
 (NULL, 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath\\Assignment', 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath', 'LearningPathBridge', 'AssignmentLearningPathBridge', '1', '1.0.0', '1');
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES
+  (NULL, 'Chamilo\\Application\\Weblcms\\Bridge\\Assignment', 'Chamilo\\Application\\Weblcms\\Bridge', 'WeblcmsBridge', 'AssignmentBridge', '1', '1.0.0', '1');
+
+CREATE TABLE `queue_job` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` datetime NOT NULL,
+  `status` int(11) NOT NULL,
+  `processor_class` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `qn_date` (`date`),
+  KEY `qn_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE `queue_job_parameter` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `job_id` int(11) DEFAULT NULL,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_98B774A3BE04EA9` (`job_id`),
+  KEY `qjp_name` (`name`),
+  KEY `qjp_value` (`value`),
+  KEY `qjp_name_value` (`name`,`value`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `queue_queue` (
+  `id` char(36) COLLATE utf8_unicode_ci NOT NULL COMMENT '(DC2Type:guid)',
+  `published_at` bigint(20) NOT NULL,
+  `body` longtext COLLATE utf8_unicode_ci,
+  `headers` longtext COLLATE utf8_unicode_ci,
+  `properties` longtext COLLATE utf8_unicode_ci,
+  `redelivered` tinyint(1) DEFAULT NULL,
+  `queue` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `priority` smallint(6) NOT NULL,
+  `delayed_until` int(11) DEFAULT NULL,
+  `time_to_live` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `qq_published_at` (`published_at`),
+  KEY `qq_queue` (`queue`),
+  KEY `qq_priority` (`priority`),
+  KEY `qq_delayed_until` (`delayed_until`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `queue_job_parameter`
+  ADD CONSTRAINT `FK_98B774A3BE04EA9` FOREIGN KEY (`job_id`) REFERENCES `queue_job` (`id`);
+
+CREATE TABLE `notification_context` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `path` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `nc_path` (`path`(255))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `notification_filter` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description_context` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `notification_context` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_BB63A140F7430FC9` (`notification_context`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE `notification_filter_relation` (
+  `notification_id` int(11) NOT NULL ,
+  `filter_id` int(11) NOT NULL,
+  PRIMARY KEY (`notification_id`,`filter_id`),
+  KEY `IDX_3E6F53F2EF1A9D84` (`notification_id`),
+  KEY `IDX_3E6F53F2D395B25E` (`filter_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE `notification_notification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `date` datetime NOT NULL,
+  `description_context` longtext COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `nn_date` (`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE `notification_user_filter` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `filter_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_CF0D7761D395B25E` (`filter_id`),
+  KEY `nuf_user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `notification_user_notification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `notification_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `is_read` tinyint(1) NOT NULL,
+  `notification_context` int(11) NOT NULL,
+  `is_viewed` tinyint(1) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_FC1E8029EF1A9D84` (`notification_id`),
+  KEY `nun_read` (`is_read`),
+  KEY `nun_user_id` (`user_id`),
+  KEY `nun_user_read` (`user_id`,`is_read`),
+  KEY `IDX_FC1E8029F7430FC9` (`notification_context`),
+  KEY `nun_viewed` (`is_viewed`),
+  KEY `nun_date` (`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `notification_filter`
+  ADD CONSTRAINT `FK_BB63A140F7430FC9` FOREIGN KEY (`notification_context`) REFERENCES `notification_context` (`id`);
+
+ALTER TABLE `notification_filter_relation`
+  ADD CONSTRAINT `FK_3E6F53F2D395B25E` FOREIGN KEY (`filter_id`) REFERENCES `notification_filter` (`id`),
+  ADD CONSTRAINT `FK_3E6F53F2EF1A9D84` FOREIGN KEY (`notification_id`) REFERENCES `notification_notification` (`id`);
+
+ALTER TABLE `notification_user_filter`
+  ADD CONSTRAINT `FK_CF0D7761D395B25E` FOREIGN KEY (`filter_id`) REFERENCES `notification_filter` (`id`);
+
+ALTER TABLE `notification_user_notification`
+  ADD CONSTRAINT `FK_FC1E8029EF1A9D84` FOREIGN KEY (`notification_id`) REFERENCES `notification_notification` (`id`),
+  ADD CONSTRAINT `FK_FC1E8029F7430FC9` FOREIGN KEY (`notification_context`) REFERENCES `notification_context` (`id`);

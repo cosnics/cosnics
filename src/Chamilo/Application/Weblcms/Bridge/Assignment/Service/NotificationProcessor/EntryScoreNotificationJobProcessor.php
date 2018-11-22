@@ -57,6 +57,16 @@ class EntryScoreNotificationJobProcessor extends AssignmentJobProcessor implemen
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    protected function getUserId(Entry $entry)
+    {
+        return $this->score->getUserId();
+    }
+
+    /**
      * @param Course $course
      * @param ContentObjectPublication $publication
      * @param Entry $entry
