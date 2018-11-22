@@ -148,6 +148,14 @@ class RightsLocation extends NestedTreeNode
     }
 
     /**
+     * @return string[]
+     */
+    public function getSubTreePropertyNames()
+    {
+        return array(self::PROPERTY_TREE_TYPE, self::PROPERTY_TREE_IDENTIFIER);
+    }
+
+    /**
      * Inherited method which specifies how to identify the tree this location is situated in.
      * Should be used as the
      * basic set of condition whenever one makes a query.

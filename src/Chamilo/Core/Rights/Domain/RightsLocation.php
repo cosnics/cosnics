@@ -3,7 +3,7 @@ namespace Chamilo\Core\Rights\Domain;
 
 use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Storage\DataClass\NestedTreeNode;
+use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @package rights.lib
  * @author Hans de Bisschop
  */
-class RightsLocation extends NestedTreeNode
+class RightsLocation extends NestedSet
 {
     // Keep track of the context so we know which table to call
     const PROPERTY_IDENTIFIER = 'identifier';
@@ -35,6 +35,13 @@ class RightsLocation extends NestedTreeNode
 
     private $context;
 
+    /**
+     * @param integer $right_id
+     *
+     * @deprecated Use RightsService::deleteRightsLocationEntityRightsForLocationAndRight() now
+     *
+     * @return mixed
+     */
     public function clear_right($right_id)
     {
         return DataManager::delete_rights_location_entity_rights($this, null, null, $right_id);
@@ -42,6 +49,7 @@ class RightsLocation extends NestedTreeNode
 
     /**
      * on this location
+     * @deprecated Use RightsService::deleteRightsLocationEntityRightsForLocation() now
      */
     public function clear_rights()
     {

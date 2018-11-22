@@ -27,21 +27,28 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class CourseGroup extends NestedTreeNode
 {
     const PROPERTY_COURSE_CODE = 'course_id';
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_MAX_NUMBER_OF_MEMBERS = 'max_number_of_members';
+
     const PROPERTY_DESCRIPTION = 'description';
-    const PROPERTY_SELF_UNREG = 'self_unreg_allowed';
-    const PROPERTY_SELF_REG = 'self_reg_allowed';
+
     const PROPERTY_GROUP_ID = "group_id";
-    // random registration = randomly selects from the subscribed users of the
-    // course and registers for the course_group
-    const PROPERTY_RANDOM_REG = 'random_registration_allowed';
 
     /**
      * If this course group has child course groups, this setting determines to how many of its direct children members
      * can be subscribed to at any one time.
      */
     const PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER = 'max_number_of_course_group_per_member';
+
+    const PROPERTY_MAX_NUMBER_OF_MEMBERS = 'max_number_of_members';
+
+    const PROPERTY_NAME = 'name';
+
+    const PROPERTY_RANDOM_REG = 'random_registration_allowed';
+    // random registration = randomly selects from the subscribed users of the
+    // course and registers for the course_group
+
+    const PROPERTY_SELF_REG = 'self_reg_allowed';
+
+    const PROPERTY_SELF_UNREG = 'self_unreg_allowed';
 
     /**
      * Stores the members of this course group in a cache variable for multiple use
@@ -50,57 +57,47 @@ class CourseGroup extends NestedTreeNode
      */
     private $members_cache;
 
-    /**
-     * Get the default properties of all course_groups.
-     *
-     * @return array The property names.
-     */
-    public static function get_default_property_names($extended_property_names = array())
+    public function check_before_save()
     {
-        return parent::get_default_property_names(
-            array(
-                self::PROPERTY_ID,
-                self::PROPERTY_COURSE_CODE,
-                self::PROPERTY_NAME,
-                self::PROPERTY_DESCRIPTION,
-                self::PROPERTY_MAX_NUMBER_OF_MEMBERS,
-                self::PROPERTY_SELF_REG,
-                self::PROPERTY_SELF_UNREG,
-                self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
-                self::PROPERTY_RANDOM_REG
-            )
-        );
+        $children = DataManager::count_course_group_users($this->get_id());
+
+        if ($this->get_max_number_of_members() > 0 && $children > $this->get_max_number_of_members())
+        {
+            $this->add_error(Translation::get('MaximumMembersToSmall'));
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public function count_members()
+    {
+        $members = $this->get_members();
+
+        return count($members);
+    }
+
+    public function create()
+    {
+        if (!$this->get_parent_id())
+        {
+            $root_group = DataManager::retrieve_course_group_root($this->get_course_code());
+            if ($root_group)
+            {
+                $this->set_parent_id($root_group->get_id());
+            }
+        }
+
+        return parent::create();
     }
 
     /**
-     * Gets the id of this course_group
-     *
-     * @return int
+     * @return string[]
      */
-    public function get_id()
+    public function getSubTreePropertyNames()
     {
-        return $this->get_default_property(self::PROPERTY_ID);
-    }
-
-    public function set_id($id)
-    {
-        return $this->set_default_property(self::PROPERTY_ID, $id);
-    }
-
-    /**
-     * Gets the group_id of this course_group
-     *
-     * @return int
-     */
-    public function get_group_id()
-    {
-        // return $this->get_default_property(self :: PROPERTY_GROUP_ID);
-        return $this->get_optional_property(self::PROPERTY_GROUP_ID);
-    }
-
-    public function set_group_id($id)
-    {
-        return $this->set_default_property(self::PROPERTY_GROUP_ID, $id);
+        return array(CourseGroup::PROPERTY_COURSE_CODE);
     }
 
     /**
@@ -113,29 +110,43 @@ class CourseGroup extends NestedTreeNode
         return $this->get_default_property(self::PROPERTY_COURSE_CODE);
     }
 
-    public function set_course_code($code)
+    public function get_data_manager()
     {
-        $this->set_default_property(self::PROPERTY_COURSE_CODE, $code);
+        return DataManager::getInstance();
     }
 
     /**
-     * Gets the name of this course_group
+     * Get the default properties of all course_groups.
      *
-     * @return string
+     * @return array The property names.
      */
-    public function get_name()
+    public static function get_default_property_names($extended_property_names = array())
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return parent::get_default_property_names(
+            array(
+                self::PROPERTY_ID, self::PROPERTY_COURSE_CODE, self::PROPERTY_NAME, self::PROPERTY_DESCRIPTION,
+                self::PROPERTY_MAX_NUMBER_OF_MEMBERS, self::PROPERTY_SELF_REG, self::PROPERTY_SELF_UNREG,
+                self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER, self::PROPERTY_RANDOM_REG
+            )
+        );
     }
 
     /**
-     * Sets the name of this course_group
+     * Get the dependencies for this object
      *
-     * @param $name string
+     * @param array $dependencies
+     *
+     * @return bool
      */
-    public function set_name($name)
+    protected function get_dependencies($dependencies = array())
     {
-        return $this->set_default_property(self::PROPERTY_NAME, $name);
+        return array(
+            CourseGroupUserRelation::class_name() => new EqualityCondition(
+                new PropertyConditionVariable(
+                    CourseGroupUserRelation::class_name(), CourseGroupUserRelation::PROPERTY_COURSE_GROUP
+                ), new StaticConditionVariable($this->get_id())
+            )
+        );
     }
 
     /**
@@ -149,105 +160,24 @@ class CourseGroup extends NestedTreeNode
     }
 
     /**
-     * Sets the description of this course_group
+     * Gets the group_id of this course_group
      *
-     * @param $description string
+     * @return int
      */
-    public function set_description($description)
+    public function get_group_id()
     {
-        return $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+        // return $this->get_default_property(self :: PROPERTY_GROUP_ID);
+        return $this->get_optional_property(self::PROPERTY_GROUP_ID);
     }
 
     /**
-     * Gets the maximum number of members than can be subscribed to this course_group
+     * Gets the id of this course_group
      *
-     * @return int null null, no limit is set to the number of members
+     * @return int
      */
-    public function get_max_number_of_members()
+    public function get_id()
     {
-        return $this->get_default_property(self::PROPERTY_MAX_NUMBER_OF_MEMBERS);
-    }
-
-    /**
-     * Sets the maximum number of members of this course_group If the new value is smaller than the number of members
-     * currently subscribed, no changes are made.
-     *
-     * @param $max_number_of_members int|null If null, no limit is set to the number of members.
-     */
-    public function set_max_number_of_members($max_number_of_members)
-    {
-        // Todo: Check current number of members.
-        return $this->set_default_property(self::PROPERTY_MAX_NUMBER_OF_MEMBERS, $max_number_of_members);
-    }
-
-    /**
-     * Determines if self registration is allowed
-     *
-     * @return boolean
-     */
-    public function is_self_registration_allowed()
-    {
-        return $this->get_default_property(self::PROPERTY_SELF_REG);
-    }
-
-    /**
-     * Sets if self registration is allowed
-     *
-     * @param $self_reg boolean
-     */
-    public function set_self_registration_allowed($self_reg)
-    {
-        if (is_null($self_reg))
-        {
-            $self_reg = 0;
-        }
-
-        return $this->set_default_property(self::PROPERTY_SELF_REG, $self_reg);
-    }
-
-    /**
-     * Determines if self unregistration is allowed
-     *
-     * @return boolean
-     */
-    public function is_self_unregistration_allowed()
-    {
-        return $this->get_default_property(self::PROPERTY_SELF_UNREG);
-    }
-
-    /**
-     * Determines if the course group users were randomly subscribed
-     *
-     * @return boolean
-     */
-    public function is_random_registration_done()
-    {
-        return $this->get_default_property(self::PROPERTY_RANDOM_REG);
-    }
-
-    /**
-     * Sets if the course group users were randomly subscribed
-     *
-     * @param $self_reg boolean
-     */
-    public function set_random_registration_done($random_registration_done)
-    {
-        return $this->set_default_property(self::PROPERTY_RANDOM_REG, $random_registration_done);
-    }
-
-    /**
-     * Sets if self unregistration is allowed
-     *
-     * @param $self_unreg boolean
-     */
-    public function set_self_unregistration_allowed($self_unreg)
-    {
-        if (is_null($self_unreg))
-        {
-            $self_unreg = 0;
-        }
-
-        return $this->set_default_property(self::PROPERTY_SELF_UNREG, $self_unreg);
+        return $this->get_default_property(self::PROPERTY_ID);
     }
 
     /**
@@ -261,17 +191,13 @@ class CourseGroup extends NestedTreeNode
     }
 
     /**
-     * Sets the maximum number of child course groups that users can be subscribed to.
+     * Gets the maximum number of members than can be subscribed to this course_group
      *
-     * @param $max_number_of_course_group_per_member int|null If null, no limit is set to the number of child course
-     *        groups.
+     * @return int null null, no limit is set to the number of members
      */
-    public function set_max_number_of_course_group_per_member($max_number_of_course_group_per_member)
+    public function get_max_number_of_members()
     {
-        return $this->set_default_property(
-            self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
-            $max_number_of_course_group_per_member
-        );
+        return $this->get_default_property(self::PROPERTY_MAX_NUMBER_OF_MEMBERS);
     }
 
     /**
@@ -293,8 +219,7 @@ class CourseGroup extends NestedTreeNode
             $condition = $this->get_members_condition($include_subgroups, $recursive_subgroups);
 
             $course_group_user_relations = DataManager::retrieves(
-                CourseGroupUserRelation::class_name(),
-                new DataClassRetrievesParameters($condition)
+                CourseGroupUserRelation::class_name(), new DataClassRetrievesParameters($condition)
             );
 
             $users = array();
@@ -304,8 +229,7 @@ class CourseGroup extends NestedTreeNode
                 if ($include_users)
                 {
                     $users[$relation->get_user()] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                        $relation->get_user()
+                        \Chamilo\Core\User\Storage\DataClass\User::class_name(), $relation->get_user()
                     );
                 }
                 else
@@ -349,11 +273,35 @@ class CourseGroup extends NestedTreeNode
 
         return new InCondition(
             new PropertyConditionVariable(
-                CourseGroupUserRelation::class_name(),
-                CourseGroupUserRelation::PROPERTY_COURSE_GROUP
-            ),
-            $groups
+                CourseGroupUserRelation::class_name(), CourseGroupUserRelation::PROPERTY_COURSE_GROUP
+            ), $groups
         );
+    }
+
+    /**
+     * Gets the name of this course_group
+     *
+     * @return string
+     */
+    public function get_name()
+    {
+        return $this->get_default_property(self::PROPERTY_NAME);
+    }
+
+    /**
+     * Inherited method which specifies how to identify the tree this location is situated in.
+     * Should be used as the
+     * basic set of condition whenever one makes a query.
+     */
+    public function get_nested_set_condition_array()
+    {
+        $conditions = parent::get_nested_set_condition_array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+            new StaticConditionVariable($this->get_course_code())
+        );
+
+        return $conditions;
     }
 
     /**
@@ -368,11 +316,134 @@ class CourseGroup extends NestedTreeNode
         return DataManager::is_course_group_member($this->get_id(), $user->get_id());
     }
 
-    public function count_members()
+    /**
+     * Determines if the course group users were randomly subscribed
+     *
+     * @return boolean
+     */
+    public function is_random_registration_done()
     {
-        $members = $this->get_members();
+        return $this->get_default_property(self::PROPERTY_RANDOM_REG);
+    }
 
-        return count($members);
+    /**
+     * Determines if self registration is allowed
+     *
+     * @return boolean
+     */
+    public function is_self_registration_allowed()
+    {
+        return $this->get_default_property(self::PROPERTY_SELF_REG);
+    }
+
+    /**
+     * Determines if self unregistration is allowed
+     *
+     * @return boolean
+     */
+    public function is_self_unregistration_allowed()
+    {
+        return $this->get_default_property(self::PROPERTY_SELF_UNREG);
+    }
+
+    public function set_course_code($code)
+    {
+        $this->set_default_property(self::PROPERTY_COURSE_CODE, $code);
+    }
+
+    /**
+     * Sets the description of this course_group
+     *
+     * @param $description string
+     */
+    public function set_description($description)
+    {
+        return $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+    }
+
+    public function set_group_id($id)
+    {
+        return $this->set_default_property(self::PROPERTY_GROUP_ID, $id);
+    }
+
+    public function set_id($id)
+    {
+        return $this->set_default_property(self::PROPERTY_ID, $id);
+    }
+
+    /**
+     * Sets the maximum number of child course groups that users can be subscribed to.
+     *
+     * @param $max_number_of_course_group_per_member int|null If null, no limit is set to the number of child course
+     *        groups.
+     */
+    public function set_max_number_of_course_group_per_member($max_number_of_course_group_per_member)
+    {
+        return $this->set_default_property(
+            self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER, $max_number_of_course_group_per_member
+        );
+    }
+
+    /**
+     * Sets the maximum number of members of this course_group If the new value is smaller than the number of members
+     * currently subscribed, no changes are made.
+     *
+     * @param $max_number_of_members int|null If null, no limit is set to the number of members.
+     */
+    public function set_max_number_of_members($max_number_of_members)
+    {
+        // Todo: Check current number of members.
+        return $this->set_default_property(self::PROPERTY_MAX_NUMBER_OF_MEMBERS, $max_number_of_members);
+    }
+
+    /**
+     * Sets the name of this course_group
+     *
+     * @param $name string
+     */
+    public function set_name($name)
+    {
+        return $this->set_default_property(self::PROPERTY_NAME, $name);
+    }
+
+    /**
+     * Sets if the course group users were randomly subscribed
+     *
+     * @param $self_reg boolean
+     */
+    public function set_random_registration_done($random_registration_done)
+    {
+        return $this->set_default_property(self::PROPERTY_RANDOM_REG, $random_registration_done);
+    }
+
+    /**
+     * Sets if self registration is allowed
+     *
+     * @param $self_reg boolean
+     */
+    public function set_self_registration_allowed($self_reg)
+    {
+        if (is_null($self_reg))
+        {
+            $self_reg = 0;
+        }
+
+        return $this->set_default_property(self::PROPERTY_SELF_REG, $self_reg);
+    }
+
+    /**
+     * Sets if self unregistration is allowed
+     *
+     * @param $self_unreg boolean
+     */
+    public function set_self_unregistration_allowed($self_unreg)
+    {
+        if (is_null($self_unreg))
+        {
+            $self_unreg = 0;
+        }
+
+        return $this->set_default_property(self::PROPERTY_SELF_UNREG, $self_unreg);
     }
 
     /**
@@ -395,25 +466,6 @@ class CourseGroup extends NestedTreeNode
         return DataManager::unsubscribe_users_from_course_groups($users, $this->get_id());
     }
 
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    public function create()
-    {
-        if (!$this->get_parent_id())
-        {
-            $root_group = DataManager::retrieve_course_group_root($this->get_course_code());
-            if ($root_group)
-            {
-                $this->set_parent_id($root_group->get_id());
-            }
-        }
-
-        return parent::create();
-    }
-
     public function update()
     {
         if ($this->check_before_save())
@@ -422,55 +474,5 @@ class CourseGroup extends NestedTreeNode
         }
 
         return false;
-    }
-
-    /**
-     * Get the dependencies for this object
-     *
-     * @param array $dependencies
-     *
-     * @return bool
-     */
-    protected function get_dependencies($dependencies = array())
-    {
-        return array(
-            CourseGroupUserRelation::class_name() => new EqualityCondition(
-                new PropertyConditionVariable(
-                    CourseGroupUserRelation::class_name(),
-                    CourseGroupUserRelation::PROPERTY_COURSE_GROUP
-                ),
-                new StaticConditionVariable($this->get_id())
-            )
-        );
-    }
-
-    public function check_before_save()
-    {
-        $children = DataManager::count_course_group_users($this->get_id());
-
-        if ($this->get_max_number_of_members() > 0 && $children > $this->get_max_number_of_members())
-        {
-            $this->add_error(Translation::get('MaximumMembersToSmall'));
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Inherited method which specifies how to identify the tree this location is situated in.
-     * Should be used as the
-     * basic set of condition whenever one makes a query.
-     */
-    public function get_nested_set_condition_array()
-    {
-        $conditions = parent::get_nested_set_condition_array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
-            new StaticConditionVariable($this->get_course_code())
-        );
-
-        return $conditions;
     }
 }

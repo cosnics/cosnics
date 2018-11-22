@@ -635,7 +635,7 @@ abstract class NestedSet extends DataClass
      * the correct tree (root).
      *
      * @return string[]
-     * @deprecated Migrated to NestedSetDataClassRepository::getNestedSetCondition()
+     * @deprecated Migrated to NestedSetDataClassRepository::getSubTreeCondition()
      */
     public function get_nested_set_condition_array()
     {
@@ -1330,5 +1330,13 @@ abstract class NestedSet extends DataClass
         }
 
         return $reference_node;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSubTreePropertyNames()
+    {
+        return array();
     }
 }

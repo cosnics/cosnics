@@ -160,7 +160,7 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return boolean
+     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]
      * @see NestedSet::delete()
      */
     public function delete(DataClass $nestedSet, $condition = null)
@@ -173,7 +173,8 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
                 // Since we want to hold on to this information until after all nodes have been deleted
                 // We have to copy the content of this result set into a temporary array
 
-                $descendantNestedSets = $this->findDescendants($nestedSet, $condition);
+                $associatedNestedSets = $this->findDescendants($nestedSet, $condition);
+                $associatedNestedSets->append($nestedSet);
 
                 $deleteCondition = $this->getDescendantsCondition($nestedSet, true, true, $condition);
 
@@ -189,26 +190,10 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
                     return false;
                 }
 
-                // Clean up the related data associated with the deleted node and its descendants.
-                foreach ($descendantNestedSets as $descendantNestedSet)
-                {
-                    if (!$this->deleteNestedSetDependencies($descendantNestedSet))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
+                return $associatedNestedSets;
             }
         );
     }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
-     *
-     * @return boolean
-     */
-    abstract protected function deleteNestedSetDependencies(NestedSet $nestedSet);
 
     /**
      *
@@ -278,7 +263,13 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
     )
     {
         $conditions = array();
-        $conditions[] = $this->getNestedSetCondition($nestedSet);
+
+        $subtreeCondition = $this->getSubTreeCondition($nestedSet);
+
+        if ($subtreeCondition instanceof Condition)
+        {
+            $conditions[] = $subtreeCondition;
+        }
 
         if ($includeSelf)
         {
@@ -329,7 +320,13 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
     )
     {
         $conditions = array();
-        $conditions[] = $this->getNestedSetCondition($nestedSet);
+
+        $subtreeCondition = $this->getSubTreeCondition($nestedSet);
+
+        if ($subtreeCondition instanceof Condition)
+        {
+            $conditions[] = $subtreeCondition;
+        }
 
         if ($recursive)
         {
@@ -381,10 +378,32 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
      *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition|null
      * @see NestedSet::get_nested_set_condition_array()
      */
-    abstract protected function getNestedSetCondition(NestedSet $nestedSet);
+    protected function getSubTreeCondition(NestedSet $nestedSet)
+    {
+        $subTreePropertyNames = $nestedSet->getSubTreePropertyNames();
+
+        if (count($subTreePropertyNames) > 0)
+        {
+            $conditions = array();
+
+            foreach ($subTreePropertyNames as $subTreePropertyName)
+            {
+                $conditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(get_class($nestedSet), $subTreePropertyName),
+                    new StaticConditionVariable($nestedSet->get_default_property($subTreePropertyName))
+                );
+            }
+
+            return new AndCondition($conditions);
+        }
+        else
+        {
+            return null;
+        }
+    }
 
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
@@ -456,7 +475,12 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
     {
         $conditions = array();
 
-        $conditions[] = $this->getNestedSetCondition($nestedSet);
+        $subtreeCondition = $this->getSubTreeCondition($nestedSet);
+
+        if ($subtreeCondition instanceof Condition)
+        {
+            $conditions[] = $subtreeCondition;
+        }
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_PARENT_ID),
@@ -598,7 +622,14 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
 
                 // Step 2: Move the node and its offspring to fill the newly created gap
                 $conditions = array();
-                $conditions[] = $this->getNestedSetCondition($nestedSet);
+
+                $subtreeCondition = $this->getSubTreeCondition($nestedSet);
+
+                if ($subtreeCondition instanceof Condition)
+                {
+                    $conditions[] = $subtreeCondition;
+                }
+
                 $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable($nestedSet::class_name(), NestedSet::PROPERTY_LEFT_VALUE),
                     ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($afterPreInsertLeft)
@@ -694,7 +725,14 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
         // A successor has a left-value which is higher than the left-value of the deleted node.
 
         $conditions = array();
-        $conditions[] = $this->getNestedSetCondition($nestedSet);
+
+        $subtreeCondition = $this->getSubTreeCondition($nestedSet);
+
+        if ($subtreeCondition instanceof Condition)
+        {
+            $conditions[] = $subtreeCondition;
+        }
+
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
             ComparisonCondition::GREATER_THAN, new StaticConditionVariable($nestedSet->getLeftValue())
@@ -734,7 +772,14 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
         // and a right value greater than the right value of the deleted node
 
         $conditions = array();
-        $conditions[] = $this->getNestedSetCondition($nestedSet);
+
+        $subtreeCondition = $this->getSubTreeCondition($nestedSet);
+
+        if ($subtreeCondition instanceof Condition)
+        {
+            $conditions[] = $subtreeCondition;
+        }
+
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
             ComparisonCondition::LESS_THAN, new StaticConditionVariable($nestedSet->getLeftValue())
@@ -791,7 +836,14 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
 
         // Update all necessary left-values
         $conditions = array();
-        $conditions[] = $this->getNestedSetCondition($nestedSet);
+
+        $subtreeCondition = $this->getSubTreeCondition($nestedSet);
+
+        if ($subtreeCondition instanceof Condition)
+        {
+            $conditions[] = $subtreeCondition;
+        }
+
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
             ComparisonCondition::GREATER_THAN, new StaticConditionVariable($insertAfter)
@@ -821,7 +873,14 @@ abstract class NestedSetDataClassRepository extends DataClassRepository
 
         // Update all necessary right-values
         $conditions = array();
-        $conditions[] = $this->getNestedSetCondition($nestedSet);
+
+        $subtreeCondition = $this->getSubTreeCondition($nestedSet);
+
+        if ($subtreeCondition instanceof Condition)
+        {
+            $conditions[] = $subtreeCondition;
+        }
+
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE),
             ComparisonCondition::GREATER_THAN, new StaticConditionVariable($insertAfter)
