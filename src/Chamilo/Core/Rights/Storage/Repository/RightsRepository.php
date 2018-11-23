@@ -1140,6 +1140,17 @@ abstract class RightsRepository
 
     /**
      * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param integer $parentLocationIdentifier
+     *
+     * @return boolean
+     */
+    public function moveRightsLocation(RightsLocation $location, $parentLocationIdentifier)
+    {
+        return $this->getNestedSetDataClassRepository()->move($location, $parentLocationIdentifier);
+    }
+
+    /**
+     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
      *
      * @return boolean
      * @throws \Exception

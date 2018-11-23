@@ -655,12 +655,10 @@ class NestedSetDataClassRepository extends DataClassRepository
 
                 $updateCondition = new AndCondition($conditions);
 
-                $leftValueVariable = new PropertyConditionVariable(
-                    get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE
-                );
-                $rightValueVariable = new PropertyConditionVariable(
-                    get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE
-                );
+                $leftValueVariable =
+                    new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE);
+                $rightValueVariable =
+                    new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE);
 
                 $properties = array();
 

@@ -57,6 +57,19 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
+     * @return boolean
+     */
+    public function moveItemRightsLocation(Item $item)
+    {
+        $parentLocation = $this->determineParentRightsLocationForItem($item);
+        $itemLocation = $this->findRightsLocationByParameters($item->getId(), self::TYPE_ITEM);
+
+        return $this->getRightsRepository()->moveRightsLocation($itemLocation, $parentLocation->getId());
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
      * @return bool|\Chamilo\Core\Rights\Domain\RightsLocation
      */
     public function determineParentRightsLocationForItem(Item $item)
@@ -97,5 +110,12 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
     public function setRightsLocationViewRightForEveryone(RightsLocation $rightsLocation)
     {
         return $this->setRightsLocationEntityRight(self::VIEW_RIGHT, 0, 0, $rightsLocation->getId());
+    }
+
+    public function deleteItemRightsLocation(Item $item)
+    {
+        $rightsLocation = $this->findRightsLocationByParameters($item->getId(), self::TYPE_ITEM);
+
+        return $this->deleteRightsLocation($rightsLocation);
     }
 }

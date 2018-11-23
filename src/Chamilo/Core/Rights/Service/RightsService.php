@@ -194,7 +194,12 @@ abstract class RightsService
      */
     protected function deleteRightsLocation(RightsLocation $rightsLocation)
     {
-        return $this->getRightsRepository()->deleteRightsLocation($rightsLocation);
+        if(!$this->getRightsRepository()->deleteRightsLocation($rightsLocation))
+        {
+            return false;
+        }
+
+        return $this->deleteRightsLocationEntityRightsForLocation($rightsLocation);
     }
 
     /**

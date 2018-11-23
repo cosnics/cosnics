@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -46,13 +47,23 @@ class ItemRepository
     }
 
     /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
+     *
+     * @return boolean
+     */
+    public function createItemTitle(ItemTitle $itemTitle)
+    {
+        return $this->getDataClassRepository()->create($itemTitle);
+    }
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
      */
-    public function updateItem(Item $item)
+    public function deleteItem(Item $item)
     {
-        return $this->getDataClassRepository()->update($item);
+        return $this->getDataClassRepository()->delete($item);
     }
 
     /**
@@ -66,23 +77,59 @@ class ItemRepository
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
      */
-    public function updateItemTitle(ItemTitle $itemTitle)
+    public function deleteItemTitlesForItem(Item $item)
     {
-        return $this->getDataClassRepository()->update($itemTitle);
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(ItemTitle::class, ItemTitle::PROPERTY_ITEM_ID),
+            new StaticConditionVariable($item->getId())
+        );
+
+        return $this->getDataClassRepository()->deletes(ItemTitle::class, $condition);
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
+     * @param integer $identifier
      *
-     * @return boolean
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
      */
-    public function createItemTitle(ItemTitle $itemTitle)
+    public function findItemByIdentifier(int $identifier)
     {
-        return $this->getDataClassRepository()->create($itemTitle);
+        return $this->getDataClassRepository()->retrieveById(Item::class, $identifier);
+    }
+
+    /**
+     * @param integer[] $identifiers
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     */
+    public function findItemsByIdentifiers(array $identifiers)
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(Item::class, Item::PROPERTY_ID), $identifiers
+        );
+
+        return $this->getDataClassRepository()->retrieves(Item::class, new DataClassRetrievesParameters($condition));
+    }
+
+    /**
+     * @param integer $itemIdentifier
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     */
+    public function findItemTitlesByItemIdentifier(int $itemIdentifier)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(ItemTitle::class, ItemTitle::PROPERTY_ITEM_ID),
+            new StaticConditionVariable($itemIdentifier)
+        );
+
+        return $this->getDataClassRepository()->retrieves(
+            ItemTitle::class, new DataClassRetrievesParameters($condition)
+        );
     }
 
     /**
@@ -179,29 +226,22 @@ class ItemRepository
     }
 
     /**
-     * @param integer $identifier
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
+     * @return boolean
      */
-    public function findItemByIdentifier(int $identifier)
+    public function updateItem(Item $item)
     {
-        return $this->getDataClassRepository()->retrieveById(Item::class, $identifier);
+        return $this->getDataClassRepository()->update($item);
     }
 
     /**
-     * @param integer $itemIdentifier
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
      *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     * @return boolean
      */
-    public function findItemTitlesByItemIdentifier(int $itemIdentifier)
+    public function updateItemTitle(ItemTitle $itemTitle)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(ItemTitle::class, ItemTitle::PROPERTY_ITEM_ID),
-            new StaticConditionVariable($itemIdentifier)
-        );
-
-        return $this->getDataClassRepository()->retrieves(
-            ItemTitle::class, new DataClassRetrievesParameters($condition)
-        );
+        return $this->getDataClassRepository()->update($itemTitle);
     }
 }

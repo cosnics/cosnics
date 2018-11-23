@@ -73,39 +73,25 @@ class ItemService
     }
 
     /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
      */
     public function createItem(Item $item)
     {
-        return $this->getItemRepository()->createItem($item);
-    }
+        if (!$this->getItemRepository()->createItem($item))
+        {
+            return false;
+        }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return boolean
-     */
-    public function updateItem(Item $item)
-    {
-        return $this->getItemRepository()->updateItem($item);
+        if (!$this->getRightsService()->createItemRightsLocationWithViewRightForEveryone($item))
+        {
+            return false;
+        }
+
+        $this->getItemsCacheService()->resetCache();
+
+        return true;
     }
 
     /**
@@ -144,13 +130,6 @@ class ItemService
             return false;
         }
 
-        if (!$this->getRightsService()->createItemRightsLocationWithViewRightForEveryone($item))
-        {
-            return false;
-        }
-
-        $this->getItemsCacheService()->resetCache();
-
         return $item;
     }
 
@@ -162,6 +141,23 @@ class ItemService
     public function createItemTitle(ItemTitle $itemTitle)
     {
         return $this->getItemRepository()->createItemTitle($itemTitle);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param string $isocode
+     * @param string $title
+     *
+     * @return boolean
+     */
+    public function createItemTitleForItemFromParameters(Item $item, string $isocode, string $title)
+    {
+        $itemTitle = new ItemTitle();
+        $itemTitle->set_title($title);
+        $itemTitle->set_isocode($isocode);
+        $itemTitle->set_item_id($item->getId());
+
+        return $this->createItemTitle($itemTitle);
     }
 
     /**
@@ -187,23 +183,6 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param string $isocode
-     * @param string $title
-     *
-     * @return boolean
-     */
-    public function createItemTitleForItemFromParameters(Item $item, string $isocode, string $title)
-    {
-        $itemTitle = new ItemTitle();
-        $itemTitle->set_title($title);
-        $itemTitle->set_isocode($isocode);
-        $itemTitle->set_item_id($item->getId());
-
-        return $this->createItemTitle($itemTitle);
-    }
-
-    /**
      * @param string $itemType
      * @param string[] $values
      *
@@ -224,6 +203,106 @@ class ItemService
         }
 
         return $item;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return boolean
+     */
+    public function deleteItemChildren(Item $item)
+    {
+        $itemChildren = $this->findItemsByParentIdentifier($item->getId());
+
+        foreach ($itemChildren as $itemChild)
+        {
+            if (!$this->deleteItem($itemChild))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return bool
+     */
+    public function deleteItem(Item $item)
+    {
+        if (!$this->deleteItemChildren($item))
+        {
+            return false;
+        }
+
+        if (!$this->getItemRepository()->deleteItem($item))
+        {
+            return false;
+        }
+
+        if (!$this->deleteItemTitlesForItem($item))
+        {
+            return false;
+        }
+
+        if (!$this->getRightsService()->deleteItemRightsLocation($item))
+        {
+            return false;
+        }
+
+        $this->getItemsCacheService()->resetCache();
+
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
+     *
+     * @return boolean
+     */
+    public function deleteItemTitle(ItemTitle $itemTitle)
+    {
+        return $this->getItemRepository()->deleteItemTitle($itemTitle);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return boolean
+     */
+    public function deleteItemTitlesForItem(Item $item)
+    {
+        return $this->getItemRepository()->deleteItemTitlesForItem($item);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[] $itemTitles
+     *
+     * @return string
+     */
+    public function determineItemTitleForCurrentLanguage(array $itemTitles)
+    {
+        $isoCode = $this->getTranslator()->getLocale();
+        $fallbackIsoCodes = $this->getTranslator()->getFallbackLocales();
+
+        if (key_exists($isoCode, $itemTitles))
+        {
+            return $itemTitles[$isoCode]->get_title();
+        }
+        else
+        {
+            foreach ($fallbackIsoCodes as $fallbackIsoCode)
+            {
+                if (key_exists($fallbackIsoCode, $itemTitles))
+                {
+                    return $itemTitles[$fallbackIsoCode]->get_title();
+                }
+            }
+        }
+
+        return $this->getTranslator()->trans('MenuItem', [], 'Chamilo\Core\Menu');
     }
 
     /**
@@ -272,39 +351,21 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[] $itemTitles
-     *
-     * @return string
-     */
-    public function determineItemTitleForCurrentLanguage(array $itemTitles)
-    {
-        $isoCode = $this->getTranslator()->getLocale();
-        $fallbackIsoCodes = $this->getTranslator()->getFallbackLocales();
-
-        if (key_exists($isoCode, $itemTitles))
-        {
-            return $itemTitles[$isoCode]->get_title();
-        }
-        else
-        {
-            foreach ($fallbackIsoCodes as $fallbackIsoCode)
-            {
-                if (key_exists($fallbackIsoCode, $itemTitles))
-                {
-                    return $itemTitles[$fallbackIsoCode]->get_title();
-                }
-            }
-        }
-
-        return $this->getTranslator()->trans('MenuItem', [], 'Chamilo\Core\Menu');
-    }
-
-    /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
     public function findItems()
     {
         return $this->getItemRepository()->findItems();
+    }
+
+    /**
+     * @param integer[] $identifiers
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     */
+    public function findItemsByIdentifiers(array $identifiers)
+    {
+        return $this->getItemRepository()->findItemsByIdentifiers($identifiers);
     }
 
     /**
@@ -438,14 +499,47 @@ class ItemService
         $this->stringUtilities = $stringUtilities;
     }
 
-    public function saveItemWithTitlesFromValues(Item $item, array $values)
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
     {
-        if (!$this->saveItemFromValues($item, $values))
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param string[] $values
+     *
+     * @return boolean
+     */
+    public function saveItemFromValues(Item $item, array $values)
+    {
+        foreach ($item->get_default_property_names() as $property)
         {
-            return false;
+            if (isset($values[$property]))
+            {
+                $item->set_default_property($property, $values[$property]);
+            }
         }
 
-        if (!$this->saveItemTitlesForItemFromValues($item, $values))
+        foreach ($item->get_additional_property_names() as $property)
+        {
+            if (isset($values[$property]))
+            {
+                $item->set_additional_property($property, $values[$property]);
+            }
+        }
+
+        if (!$this->updateItem($item))
         {
             return false;
         }
@@ -501,14 +595,41 @@ class ItemService
         return true;
     }
 
+    public function saveItemWithTitlesFromValues(Item $item, array $values)
+    {
+        if (!$this->saveItemFromValues($item, $values))
+        {
+            return false;
+        }
+
+        if (!$this->saveItemTitlesForItemFromValues($item, $values))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
      */
-    public function deleteItemTitle(ItemTitle $itemTitle)
+    public function updateItem(Item $item)
     {
-        return $this->getItemRepository()->deleteItemTitle($itemTitle);
+        if (!$this->getItemRepository()->updateItem($item))
+        {
+            return false;
+        }
+
+        if (!$this->getRightsService()->moveItemRightsLocation($item))
+        {
+            return false;
+        }
+
+        $this->getItemsCacheService()->resetCache();
+
+        return true;
     }
 
     /**
@@ -519,37 +640,5 @@ class ItemService
     public function updateItemTitle(ItemTitle $itemTitle)
     {
         return $this->getItemRepository()->updateItemTitle($itemTitle);
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param string[] $values
-     *
-     * @return boolean
-     */
-    public function saveItemFromValues(Item $item, array $values)
-    {
-        foreach ($item->get_default_property_names() as $property)
-        {
-            if (isset($values[$property]))
-            {
-                $item->set_default_property($property, $values[$property]);
-            }
-        }
-
-        foreach ($item->get_additional_property_names() as $property)
-        {
-            if (isset($values[$property]))
-            {
-                $item->set_additional_property($property, $values[$property]);
-            }
-        }
-
-        if (!$this->updateItem($item))
-        {
-            return false;
-        }
-
-        return true;
     }
 }

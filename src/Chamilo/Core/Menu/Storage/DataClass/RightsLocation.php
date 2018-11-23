@@ -17,4 +17,12 @@ class RightsLocation extends \Chamilo\Core\Rights\Domain\RightsLocation
     {
         return DataManager::getInstance();
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'menu_rights_location';
+    }
 }

@@ -6,6 +6,7 @@ use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
@@ -25,77 +26,51 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class DeleterComponent extends Manager
 {
+    /**
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     */
+    protected function getItems()
+    {
+        $itemIdentifiers = $this->getRequest()->query->get(self::PARAM_ITEM);
+
+        if (is_null($itemIdentifiers))
+        {
+            throw new ParameterNotDefinedException(self::PARAM_ITEM);
+        }
+
+        if (!is_array($itemIdentifiers))
+        {
+            $itemIdentifiers = array($itemIdentifiers);
+        }
+
+        return $this->getItemService()->findItemsByIdentifiers($itemIdentifiers);
+    }
 
     public function run()
     {
         $this->check_allowed();
-        $items = $this->getRequest()->get(Manager::PARAM_ITEM);
-        
-        $parent_ids = array();
+
+        $items = $this->getItems();
         $failures = 0;
-        
-        if (! empty($items))
+
+        foreach ($items as $item)
         {
-            if (! is_array($items))
+            if (!$this->getItemService()->deleteItem($item))
             {
-                $items = array($items);
+                $failures ++;
             }
-            
-            foreach ($items as $id)
-            {
-                $item = DataManager::retrieve_by_id(Item::class_name(), intval($id));
-                $parent_ids[$item->get_parent()] = $item->get_parent();
-                
-                if (! $item->delete())
-                {
-                    $failures ++;
-                }
-            }
-            
-            // Reassign sorts to the remaining menu items
-            foreach ($parent_ids as $parent_id)
-            {
-                $condition = new EqualityCondition(
-                    new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT), 
-                    new StaticConditionVariable($parent_id));
-                $order_by = array();
-                $order_by[] = new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT));
-                $parameters = new DataClassRetrievesParameters($condition, null, null, $order_by);
-                
-                $remaining_items = DataManager::retrieves(Item::class_name(), $parameters);
-                $count = 1;
-                while ($remaining_item = $remaining_items->next_result())
-                {
-                    $remaining_item->set_sort($count);
-                    if (! $remaining_item->update())
-                    {
-                        break;
-                    }
-                    $count ++;
-                }
-            }
-            
-            $message = $this->get_result(
-                $failures, 
-                count($items), 
-                'SelectedItemNotDeleted', 
-                'SelectedItemsNotDeleted', 
-                'SelectedItemDeleted', 
-                'SelectedItemsDeleted');
-            
-            $itemService = new ItemService(new ItemRepository());
-            $itemService->resetCache();
-            
-            $this->redirect(
-                $message, 
-                ($failures ? true : false), 
-                array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $item->get_parent()));
         }
-        else
-        {
-            return $this->display_error_page(
-                Translation::get('NoObjectsSelected', null, Utilities::COMMON_LIBRARIES));
-        }
+
+        $message = $this->get_result(
+            $failures, count($items), 'SelectedItemNotDeleted', 'SelectedItemsNotDeleted', 'SelectedItemDeleted',
+            'SelectedItemsDeleted'
+        );
+
+        $this->redirect(
+            $message, ($failures ? true : false),
+            array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $item->get_parent())
+        );
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

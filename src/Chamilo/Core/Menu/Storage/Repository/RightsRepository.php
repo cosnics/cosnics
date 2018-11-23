@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\Repository;
 
-use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocation;
-use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocationEntityRight;
+use Chamilo\Core\Menu\Storage\DataClass\RightsLocation;
+use Chamilo\Core\Menu\Storage\DataClass\RightsLocationEntityRight;
 
 /**
  * @package Chamilo\Core\Menu\Storage\Repository

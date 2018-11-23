@@ -64,36 +64,6 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
         $this->add_listener(new DisplayOrderDataClassListener($this));
     }
 
-    public function delete()
-    {
-        $location = Rights::getInstance()->get_location_by_identifier(
-            \Chamilo\Core\Menu\Manager::context(), Rights::TYPE_ITEM, $this->get_id()
-        );
-
-        if ($location)
-        {
-            if (!$location->delete())
-            {
-                return false;
-            }
-        }
-        $success = parent::delete($this);
-        if (!$success)
-        {
-            return false;
-        }
-
-        foreach ($this->get_titles()->get_titles() as $title)
-        {
-            if (!$title->delete())
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public function getIconClass()
     {
         return $this->get_default_property(self::PROPERTY_ICON_CLASS);
@@ -309,64 +279,5 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
                 return 'LinkApplication';
                 break;
         }
-    }
-
-    /*
-     * (non-PHPdoc) @see \libraries\storage\DisplayOrderDataClassListenerSupport::get_display_order_context_properties()
-     */
-
-    public function update()
-    {
-        $success = parent::update($this);
-        if (!$success)
-        {
-            return false;
-        }
-
-        $parent = $this->get_parent();
-
-        if ($parent == 0)
-        {
-            $parent_id = Rights::getInstance()->get_root_id(\Chamilo\Core\Menu\Manager::context());
-        }
-        else
-        {
-            $parent_id = Rights::getInstance()->get_location_id_by_identifier(
-                \Chamilo\Core\Menu\Manager::context(), Rights::TYPE_ITEM, $parent
-            );
-        }
-
-        foreach ($this->get_titles()->get_titles() as $title)
-        {
-            if ($title->get_id())
-            {
-                if (!$title->update())
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if (!$title->create())
-                {
-                    return false;
-                }
-            }
-        }
-
-        $location = Rights::getInstance()->get_location_by_identifier(
-            \Chamilo\Core\Menu\Manager::context(), Rights::TYPE_ITEM, $this->get_id()
-        );
-
-        if ($location)
-        {
-            return $location->move($parent_id);
-        }
-        else
-        {
-            return false;
-        }
-
-        return true;
     }
 }

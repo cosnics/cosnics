@@ -75,8 +75,10 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\DataClass\DataClassFactory $dataClassFactory
      * @param boolean $queryCacheEnabled
      */
-    public function __construct(DataClassRepositoryCache $dataClassRepositoryCache,
-        DataClassDatabaseInterface $dataClassDatabase, DataClassFactory $dataClassFactory, $queryCacheEnabled = true)
+    public function __construct(
+        DataClassRepositoryCache $dataClassRepositoryCache, DataClassDatabaseInterface $dataClassDatabase,
+        DataClassFactory $dataClassFactory, $queryCacheEnabled = true
+    )
     {
         $this->dataClassRepositoryCache = $dataClassRepositoryCache;
         $this->dataClassDatabase = $dataClassDatabase;
@@ -160,11 +162,12 @@ class DataClassRepository
      * Write an instance of a DataClass object to the storage layer
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
      * @return boolean
      */
     public function create(DataClass $dataClass)
     {
-        if (! $this->getDataClassDatabase()->create($dataClass))
+        if (!$this->getDataClassDatabase()->create($dataClass))
         {
             return false;
         }
@@ -183,6 +186,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param string[] $record
+     *
      * @return boolean
      */
     public function createRecord($dataClassName, $record)
@@ -194,6 +198,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass
      */
     public function retrieve($dataClassName, DataClassRetrieveParameters $parameters = null)
@@ -213,6 +218,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param integer $identifier
+     *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function retrieveById($dataClassName, $identifier)
@@ -220,11 +226,13 @@ class DataClassRepository
         $parentDataClassName = $this->determineCompositeDataClassParentClassName($dataClassName);
 
         return $this->retrieve(
-            $dataClassName,
-            new DataClassRetrieveParameters(
+            $dataClassName, new DataClassRetrieveParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable($parentDataClassName, DataClass::PROPERTY_ID),
-                    new StaticConditionVariable($identifier))));
+                    new StaticConditionVariable($identifier)
+                )
+            )
+        );
     }
 
     /**
@@ -232,11 +240,12 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieves($dataClassName, DataClassRetrievesParameters $parameters = null)
     {
-        if (! $parameters instanceof DataClassRetrievesParameters)
+        if (!$parameters instanceof DataClassRetrievesParameters)
         {
             $parameters = DataClassRetrievesParameters::generate($parameters);
         }
@@ -255,6 +264,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
+     *
      * @return string[]
      */
     public function record($dataClassName, RecordRetrieveParameters $parameters = null)
@@ -263,20 +273,20 @@ class DataClassRepository
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataClassRepositoryCache->exists($dataClassName, $parameters))
+            if (!$dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
                 try
                 {
                     $record = $dataClassRepositoryCache->addForRecord(
-                        $dataClassName,
-                        $this->__record($dataClassName, $parameters),
-                        $parameters);
+                        $dataClassName, $this->__record($dataClassName, $parameters), $parameters
+                    );
                 }
                 catch (DataClassNoResultException $exception)
                 {
                     $dataClassRepositoryCache->addForNoResult($exception);
                 }
             }
+
             return $dataClassRepositoryCache->get($dataClassName, $parameters);
         }
         else
@@ -296,11 +306,12 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
+     *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters = null)
     {
-        if (! $parameters instanceof RecordRetrievesParameters)
+        if (!$parameters instanceof RecordRetrievesParameters)
         {
             $parameters = RecordRetrievesParameters::generate($parameters);
         }
@@ -309,11 +320,11 @@ class DataClassRepository
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataClassRepositoryCache->exists($dataClassName, $parameters))
+            if (!$dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
                 $dataClassRepositoryCache->addForDataClassIterator(
-                    $this->__records($dataClassName, $parameters),
-                    $parameters);
+                    $this->__records($dataClassName, $parameters), $parameters
+                );
             }
 
             $recordIterator = $dataClassRepositoryCache->get($dataClassName, $parameters);
@@ -331,6 +342,7 @@ class DataClassRepository
      * Update an instance of a DataClass object in the storage layer
      *
      * @param $object \Chamilo\Libraries\Storage\DataClass\DataClass
+     *
      * @return boolean
      */
     public function update(DataClass $dataClass)
@@ -348,23 +360,23 @@ class DataClassRepository
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($propertyConditionClass, DataClass::PROPERTY_ID),
-            new StaticConditionVariable($dataClass->getId()));
+            new StaticConditionVariable($dataClass->getId())
+        );
 
         $result = $this->getDataClassDatabase()->update(
-            $dataClassTableName,
-            $condition,
-            $dataClass->get_default_properties());
+            $dataClassTableName, $condition, $dataClass->get_default_properties()
+        );
 
         if ($dataClass instanceof CompositeDataClass && $dataClass::is_extended() && $result === true)
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable($propertyConditionClass, DataClass::PROPERTY_ID),
-                new StaticConditionVariable($dataClass->getId()));
+                new PropertyConditionVariable(get_class($dataClass), DataClass::PROPERTY_ID),
+                new StaticConditionVariable($dataClass->getId())
+            );
 
             $result = $this->getDataClassDatabase()->update(
-                $dataClass->get_table_name(),
-                $condition,
-                $dataClass->get_additional_properties());
+                $dataClass->get_table_name(), $condition, $dataClass->get_additional_properties()
+            );
         }
 
         return $result;
@@ -378,9 +390,12 @@ class DataClassRepository
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count $param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy[]
+     *
      * @return boolean
      */
-    public function updates($dataClassName, $properties, Condition $condition, $offset = null, $count = null, $orderBy = array())
+    public function updates(
+        $dataClassName, $properties, Condition $condition, $offset = null, $count = null, $orderBy = array()
+    )
     {
         if ($properties instanceof DataClassProperties)
         {
@@ -391,7 +406,7 @@ class DataClassRepository
             $propertiesClass = new DataClassProperties($properties);
         }
 
-        if (! $this->getDataClassDatabase()->updates($dataClassName, $propertiesClass, $condition))
+        if (!$this->getDataClassDatabase()->updates($dataClassName, $propertiesClass, $condition))
         {
             return false;
         }
@@ -410,17 +425,20 @@ class DataClassRepository
      * Delete an instance of a DataClass object from the storage layer
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
      * @return boolean
      */
     public function delete(DataClass $dataClass)
     {
-        $dataClassName = ($dataClass instanceof CompositeDataClass ? $dataClass::parent_class_name() : $dataClass::class_name());
+        $dataClassName =
+            ($dataClass instanceof CompositeDataClass ? $dataClass::parent_class_name() : $dataClass::class_name());
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($dataClassName, $dataClassName::PROPERTY_ID),
-            new StaticConditionVariable($dataClass->getId()));
+            new StaticConditionVariable($dataClass->getId())
+        );
 
-        if (! $this->getDataClassDatabase()->delete($dataClassName, $condition))
+        if (!$this->getDataClassDatabase()->delete($dataClassName, $condition))
         {
             return false;
         }
@@ -429,9 +447,10 @@ class DataClassRepository
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable($dataClass::class_name(), DataClass::PROPERTY_ID),
-                new StaticConditionVariable($dataClass->getId()));
+                new StaticConditionVariable($dataClass->getId())
+            );
 
-            if (! $this->getDataClassDatabase()->delete($dataClass::class_name(), $condition))
+            if (!$this->getDataClassDatabase()->delete($dataClass::class_name(), $condition))
             {
                 return false;
             }
@@ -452,11 +471,12 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
      * @return boolean
      */
     public function deletes($dataClassName, Condition $condition)
     {
-        if (! $this->getDataClassDatabase()->delete($dataClassName, $condition))
+        if (!$this->getDataClassDatabase()->delete($dataClassName, $condition))
         {
             return false;
         }
@@ -476,11 +496,12 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
+     *
      * @return integer
      */
     public function count($dataClassName, DataClassCountParameters $parameters = null)
     {
-        if (! $parameters instanceof DataClassCountParameters)
+        if (!$parameters instanceof DataClassCountParameters)
         {
             $parameters = DataClassCountParameters::generate($parameters);
         }
@@ -501,6 +522,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
+     *
      * @return integer[]
      */
     public function countGrouped($dataClassName, DataClassCountGroupedParameters $parameters)
@@ -509,12 +531,11 @@ class DataClassRepository
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataClassRepositoryCache->exists($dataClassName, $parameters))
+            if (!$dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
                 $dataClassRepositoryCache->addForDataClassCountGrouped(
-                    $dataClassName,
-                    $parameters,
-                    $this->__countGrouped($dataClassName, $parameters));
+                    $dataClassName, $parameters, $this->__countGrouped($dataClassName, $parameters)
+                );
             }
 
             return $dataClassRepositoryCache->get($dataClassName, $parameters);
@@ -530,11 +551,12 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
+     *
      * @return string[]
      */
     public function distinct($dataClassName, DataClassDistinctParameters $parameters)
     {
-        if (! $parameters instanceof DataClassDistinctParameters)
+        if (!$parameters instanceof DataClassDistinctParameters)
         {
             $parameters = DataClassDistinctParameters::generate($parameters);
         }
@@ -543,12 +565,11 @@ class DataClassRepository
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataClassRepositoryCache->exists($dataClassName, $parameters))
+            if (!$dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
                 $dataClassRepositoryCache->addForDataClassDistinct(
-                    $dataClassName,
-                    $parameters,
-                    $this->__distinct($dataClassName, $parameters));
+                    $dataClassName, $parameters, $this->__distinct($dataClassName, $parameters)
+                );
             }
 
             return $dataClassRepositoryCache->get($dataClassName, $parameters);
@@ -565,6 +586,7 @@ class DataClassRepository
      * @param string $dataClassName
      * @param string $property
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
      * @return integer
      */
     public function retrieveMaximumValue($dataClassName, $property, Condition $condition = null)
@@ -573,10 +595,12 @@ class DataClassRepository
             new DataClassProperties(
                 array(
                     new FunctionConditionVariable(
-                        FunctionConditionVariable::MAX,
-                        new PropertyConditionVariable($dataClassName, $property),
-                        self::ALIAS_MAX_SORT))),
-            $condition);
+                        FunctionConditionVariable::MAX, new PropertyConditionVariable($dataClassName, $property),
+                        self::ALIAS_MAX_SORT
+                    )
+                )
+            ), $condition
+        );
 
         $record = $this->getDataClassDatabase()->record($dataClassName, $parameters);
 
@@ -589,6 +613,7 @@ class DataClassRepository
      * @param string $dataClassName
      * @param string $property
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
      * @return integer
      */
     public function retrieveNextValue($dataClassName, $property, Condition $condition = null)
@@ -600,6 +625,7 @@ class DataClassRepository
      * Executes the function within the context of a transaction.
      *
      * @param mixed $function
+     *
      * @throws \Exception
      * @return mixed
      */
@@ -612,6 +638,7 @@ class DataClassRepository
      * Get the alias of a storage unit in the storage layer
      *
      * @param string $dataClassStorageUnitName
+     *
      * @return string
      */
     public function getAlias($dataClassStorageUnitName)
@@ -622,6 +649,7 @@ class DataClassRepository
     /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
      * @return string
      */
     public function translateCondition(Condition $condition = null)
@@ -633,6 +661,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param integer $identifier
+     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @return string
      */
@@ -642,12 +671,14 @@ class DataClassRepository
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($conditionDataClassName, DataClass::PROPERTY_ID),
-            new StaticConditionVariable($identifier));
+            new StaticConditionVariable($identifier)
+        );
 
         $parameters = new RecordRetrieveParameters(
             new DataClassProperties(
-                array(new PropertyConditionVariable($conditionDataClassName, CompositeDataClass::PROPERTY_TYPE))),
-            $condition);
+                array(new PropertyConditionVariable($conditionDataClassName, CompositeDataClass::PROPERTY_TYPE))
+            ), $condition
+        );
 
         $type = $this->record($conditionDataClassName, $parameters);
 
@@ -665,11 +696,12 @@ class DataClassRepository
      * Retrieve the additional properties for a specific CompositeDataClass instance
      *
      * @param \Chamilo\Libraries\Storage\DataClass\CompositeDataClass $compositeDataClass
+     *
      * @return string[]
      */
     public function retrieveCompositeDataClassAdditionalProperties(CompositeDataClass $compositeDataClass)
     {
-        if (! $compositeDataClass->is_extended())
+        if (!$compositeDataClass->is_extended())
         {
             return array();
         }
@@ -678,7 +710,9 @@ class DataClassRepository
             new DataClassProperties(array(new PropertiesConditionVariable($compositeDataClass::class_name()))),
             new EqualityCondition(
                 new PropertyConditionVariable($compositeDataClass::class_name(), $compositeDataClass::PROPERTY_ID),
-                new StaticConditionVariable($compositeDataClass->getId())));
+                new StaticConditionVariable($compositeDataClass->getId())
+            )
+        );
 
         return $this->getDataClassDatabase()->record($compositeDataClass, $parameters);
     }
@@ -687,11 +721,13 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass
      */
     protected function __retrieveClass($dataClassName, DataClassRetrieveParameters $parameters)
     {
         $record = $this->getDataClassDatabase()->retrieve($dataClassName, $parameters);
+
         return $this->getDataClassFactory()->getDataClass($dataClassName, $record);
     }
 
@@ -699,6 +735,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     protected function __retrievesClass($dataClassName, DataClassRetrievesParameters $parameters)
@@ -718,6 +755,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
+     *
      * @return string[]
      */
     protected function __record($dataClassName, $parameters)
@@ -729,17 +767,21 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
+     *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     protected function __records($dataClassName, RecordRetrievesParameters $parameters)
     {
-        return new DataClassIterator($dataClassName, $this->getDataClassDatabase()->records($dataClassName, $parameters));
+        return new DataClassIterator(
+            $dataClassName, $this->getDataClassDatabase()->records($dataClassName, $parameters)
+        );
     }
 
     /**
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
+     *
      * @return integer
      */
     protected function __countClass($dataClassName, DataClassCountParameters $parameters)
@@ -751,6 +793,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
+     *
      * @return integer[]
      */
     protected function __countGrouped($dataClassName, DataClassCountGroupedParameters $parameters)
@@ -762,6 +805,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
+     *
      * @return string[]
      */
     protected function __distinct($dataClassName, DataClassDistinctParameters $parameters)
@@ -774,6 +818,7 @@ class DataClassRepository
      * @param string $cacheDataClassName
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass
      */
     protected function retrieveClass($cacheDataClassName, $dataClassName, DataClassParameters $parameters)
@@ -783,13 +828,13 @@ class DataClassRepository
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
+            if (!$dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
             {
                 try
                 {
                     $dataClassRepositoryCache->addForDataClass(
-                        $this->__retrieveClass($dataClassName, $parameters),
-                        $parameters);
+                        $this->__retrieveClass($dataClassName, $parameters), $parameters
+                    );
                 }
                 catch (DataClassNoResultException $exception)
                 {
@@ -816,13 +861,14 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     *
      * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass
      */
     protected function retrieveCompositeDataClass($dataClassName, DataClassRetrieveParameters $parameters)
     {
         $parentClassName = $this->determineCompositeDataClassParentClassName($dataClassName);
 
-        if ($this->isCompositeDataClass($dataClassName) && ! $this->isExtensionClass($dataClassName))
+        if ($this->isCompositeDataClass($dataClassName) && !$this->isExtensionClass($dataClassName))
         {
             $dataClassName = $this->determineCompositeDataClassType($dataClassName, $parameters);
         }
@@ -837,20 +883,22 @@ class DataClassRepository
      * @param string $cacheClassName
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    protected function retrievesClass($cacheDataClassName, $dataClassName,
-        DataClassRetrievesParameters $parameters = null)
+    protected function retrievesClass(
+        $cacheDataClassName, $dataClassName, DataClassRetrievesParameters $parameters = null
+    )
     {
         if ($this->isQueryCacheEnabled())
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
+            if (!$dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
             {
                 $dataClassRepositoryCache->addForDataClassIterator(
-                    $this->__retrievesClass($dataClassName, $parameters),
-                    $parameters);
+                    $this->__retrievesClass($dataClassName, $parameters), $parameters
+                );
             }
 
             $dataClassIterator = $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
@@ -868,6 +916,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     protected function retrievesCompositeDataClass($dataClassName, DataClassRetrievesParameters $parameters)
@@ -883,6 +932,7 @@ class DataClassRepository
      * @param string $cacheDataClassName
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
+     *
      * @return integer
      */
     protected function countClass($cacheDataClassName, $dataClassName, DataClassCountParameters $parameters)
@@ -891,12 +941,11 @@ class DataClassRepository
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
+            if (!$dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
             {
                 $dataClassRepositoryCache->addForDataClassCount(
-                    $cacheDataClassName,
-                    $parameters,
-                    $this->__countClass($dataClassName, $parameters));
+                    $cacheDataClassName, $parameters, $this->__countClass($dataClassName, $parameters)
+                );
             }
 
             return $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
@@ -911,6 +960,7 @@ class DataClassRepository
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
+     *
      * @return integer
      */
     protected function countCompositeDataClass($dataClassName, DataClassCountParameters $parameters)
@@ -926,18 +976,21 @@ class DataClassRepository
      * @param string $parentDataClassName
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     *
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassParameters
      */
-    protected function setCompositeDataClassParameters($parentDataClassName, $dataClassName,
-        DataClassParameters $parameters)
+    protected function setCompositeDataClassParameters(
+        $parentDataClassName, $dataClassName, DataClassParameters $parameters
+    )
     {
         if ($dataClassName::is_extended())
         {
             $join = new Join(
-                $parentDataClassName,
-                new EqualityCondition(
+                $parentDataClassName, new EqualityCondition(
                     new PropertyConditionVariable($parentDataClassName, $parentDataClassName::PROPERTY_ID),
-                    new PropertyConditionVariable($dataClassName, $dataClassName::PROPERTY_ID)));
+                    new PropertyConditionVariable($dataClassName, $dataClassName::PROPERTY_ID)
+                )
+            );
 
             if ($parameters->getJoins() instanceof Joins)
             {
@@ -956,7 +1009,8 @@ class DataClassRepository
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable($parentDataClassName, $parentDataClassName::PROPERTY_TYPE),
-                new StaticConditionVariable($dataClassName));
+                new StaticConditionVariable($dataClassName)
+            );
 
             if ($parameters->getCondition() instanceof Condition)
             {
@@ -983,6 +1037,7 @@ class DataClassRepository
     /**
      *
      * @param string $dataClassName
+     *
      * @return boolean
      */
     protected function isCompositeDataClass($dataClassName)
@@ -993,28 +1048,29 @@ class DataClassRepository
     /**
      *
      * @param string $dataClassName
+     *
      * @return boolean
      */
     protected function isExtensionClass($dataClassName)
     {
         return $this->isCompositeDataClass($dataClassName) &&
-             get_parent_class($dataClassName) !== CompositeDataClass::class_name();
+            get_parent_class($dataClassName) !== CompositeDataClass::class_name();
     }
 
     /**
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     *
      * @return string
      */
     protected function determineCompositeDataClassType($dataClassName, DataClassRetrieveParameters $parameters)
     {
         $parameters = new RecordRetrieveParameters(
             new DataClassProperties(
-                array(new PropertyConditionVariable($dataClassName, CompositeDataClass::PROPERTY_TYPE))),
-            $parameters->getCondition(),
-            $parameters->getOrderBy(),
-            $parameters->getJoins());
+                array(new PropertyConditionVariable($dataClassName, CompositeDataClass::PROPERTY_TYPE))
+            ), $parameters->getCondition(), $parameters->getOrderBy(), $parameters->getJoins()
+        );
 
         $type = $this->record($dataClassName, $parameters);
 
@@ -1031,6 +1087,7 @@ class DataClassRepository
     /**
      *
      * @param string $dataClassName
+     *
      * @return string
      */
     protected function determineCompositeDataClassParentClassName($dataClassName)
@@ -1058,16 +1115,18 @@ class DataClassRepository
      * @param string $displayOrderProperty
      * @param integer[] $displayOrderMapping
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $displayOrderCondition
+     *
      * @return boolean
      *
      * @example $displayOrderMapping[$oldDisplayOrder] = $newDisplayOrder;
      */
-    public function changeDisplayOrdersByMappingArray($dataClassName, $displayOrderProperty,
-        $displayOrderMapping = array(), $displayOrderCondition = null)
+    public function changeDisplayOrdersByMappingArray(
+        $dataClassName, $displayOrderProperty, $displayOrderMapping = array(), $displayOrderCondition = null
+    )
     {
         foreach ($displayOrderMapping as $oldDisplayOrder => $newDisplayOrder)
         {
-            if (! $this->moveDisplayOrders($dataClassName, $oldDisplayOrder, $newDisplayOrder))
+            if (!$this->moveDisplayOrders($dataClassName, $oldDisplayOrder, $newDisplayOrder))
             {
                 return false;
             }
@@ -1077,7 +1136,8 @@ class DataClassRepository
             $properties = new DataClassProperties(array());
 
             $properties->add(
-                new DataClassProperty($displayOrderPropertyVariable, new StaticConditionVariable($newDisplayOrder)));
+                new DataClassProperty($displayOrderPropertyVariable, new StaticConditionVariable($newDisplayOrder))
+            );
 
             $conditions = array();
 
@@ -1087,8 +1147,8 @@ class DataClassRepository
             }
 
             $conditions[] = new EqualityCondition(
-                $displayOrderPropertyVariable,
-                new StaticConditionVariable($oldDisplayOrder));
+                $displayOrderPropertyVariable, new StaticConditionVariable($oldDisplayOrder)
+            );
 
             $condition = new AndCondition($conditions);
 
@@ -1107,10 +1167,12 @@ class DataClassRepository
      * @param integer $start
      * @param integer $end
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $displayOrderCondition
+     *
      * @return boolean
      */
-    public function moveDisplayOrders($dataClassName, $displayOrderProperty, $start = 1, $end = null,
-        $displayOrderCondition = null)
+    public function moveDisplayOrders(
+        $dataClassName, $displayOrderProperty, $start = 1, $end = null, $displayOrderCondition = null
+    )
     {
         if ($start == $end)
         {
@@ -1127,7 +1189,7 @@ class DataClassRepository
             $direction = - 1;
         }
 
-        if (! is_null($end))
+        if (!is_null($end))
         {
             if ($start < $end)
             {
@@ -1145,7 +1207,7 @@ class DataClassRepository
 
         $conditions[] = new ComparisonCondition($displayOrderPropertyVariable, $startOperator, $startVariable);
 
-        if (! is_null($end))
+        if (!is_null($end))
         {
             $endVariable = new StaticConditionVariable($end);
 
@@ -1160,9 +1222,8 @@ class DataClassRepository
         $condition = new AndCondition($conditions);
 
         $updateVariable = new OperationConditionVariable(
-            $displayOrderPropertyVariable,
-            OperationConditionVariable::ADDITION,
-            new StaticConditionVariable($direction));
+            $displayOrderPropertyVariable, OperationConditionVariable::ADDITION, new StaticConditionVariable($direction)
+        );
 
         $properties = new DataClassProperties(array());
 
