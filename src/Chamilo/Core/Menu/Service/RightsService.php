@@ -12,56 +12,9 @@ use Chamilo\Core\Menu\Storage\DataClass\RightsLocationEntityRight;
  */
 class RightsService extends \Chamilo\Core\Rights\Service\RightsService
 {
-    const VIEW_RIGHT = 1;
     const TYPE_ITEM = 1;
 
-    /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\RightsLocationEntityRight
-     */
-    protected function getRightsLocationEntityRightInstance()
-    {
-        return new RightsLocationEntityRight();
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\RightsLocation
-     */
-    protected function getRightsLocationInstance()
-    {
-        return new RightsLocation();
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return boolean
-     */
-    public function createItemRightsLocationWithViewRightForEveryone(Item $item)
-    {
-        $rightsLocation = $this->createItemRightsLocation($item);
-
-        if (!$rightsLocation instanceof RightsLocation)
-        {
-            return false;
-        }
-
-        if (!$this->setRightsLocationViewRightForEveryone($rightsLocation))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
-     *
-     * @return boolean
-     */
-    public function setRightsLocationViewRightForEveryone(RightsLocation $rightsLocation)
-    {
-        return $this->setRightsLocationEntityRight(self::VIEW_RIGHT, 0, 0, $rightsLocation->getId());
-    }
+    const VIEW_RIGHT = 1;
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
@@ -82,6 +35,28 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
+     * @return boolean
+     */
+    public function createItemRightsLocationWithViewRightForEveryone(Item $item)
+    {
+        $rightsLocation = $this->createItemRightsLocation($item, true);
+
+        if (!$rightsLocation instanceof RightsLocation)
+        {
+            return false;
+        }
+
+        if (!$this->setRightsLocationViewRightForEveryone($rightsLocation))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
      * @return bool|\Chamilo\Core\Rights\Domain\RightsLocation
      */
     public function determineParentRightsLocationForItem(Item $item)
@@ -96,5 +71,31 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
         {
             return $this->findRightsLocationByParameters($parentIdentifier, self::TYPE_ITEM);
         }
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Storage\DataClass\RightsLocationEntityRight
+     */
+    protected function getRightsLocationEntityRightInstance()
+    {
+        return new RightsLocationEntityRight();
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Storage\DataClass\RightsLocation
+     */
+    protected function getRightsLocationInstance()
+    {
+        return new RightsLocation();
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
+     *
+     * @return boolean
+     */
+    public function setRightsLocationViewRightForEveryone(RightsLocation $rightsLocation)
+    {
+        return $this->setRightsLocationEntityRight(self::VIEW_RIGHT, 0, 0, $rightsLocation->getId());
     }
 }

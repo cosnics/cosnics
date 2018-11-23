@@ -150,6 +150,6 @@ class CategoryItem extends Bar
 
     public function getChildren()
     {
-        return $this->getMenuRenderer()->getItemService()->getItemsByParentIdentifier($this->getItem()->get_id());
+        return $this->getMenuRenderer()->getItemService()->findItemsByParentIdentifier($this->getItem()->get_id());
     }
 }

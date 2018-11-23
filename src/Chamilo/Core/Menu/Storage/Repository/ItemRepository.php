@@ -1,14 +1,16 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\Repository;
 
-use Chamilo\Core\Menu\Service\ItemsCacheService;
+use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
-use Chamilo\Core\Menu\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * @package Chamilo\Core\Menu\Storage\Repository
@@ -44,6 +46,16 @@ class ItemRepository
     }
 
     /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return boolean
+     */
+    public function updateItem(Item $item)
+    {
+        return $this->getDataClassRepository()->update($item);
+    }
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
      *
      * @return boolean
@@ -73,12 +85,44 @@ class ItemRepository
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
-    public function findItemsByParentIdentifier($parentIdentifier)
+    public function findItemsByParentIdentifier(int $parentIdentifier)
     {
-        $itemsCacheService = new ItemsCacheService($this);
-        $items = $itemsCacheService->getItems();
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT),
+            new StaticConditionVariable($parentIdentifier)
+        );
 
-        return $items[$parentIdentifier];
+        $orderBy = array(new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT)));
+
+        return $this->getDataClassRepository()->retrieves(
+            Item::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
+        );
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\CategoryItem[]
+     */
+    public function findRootCategoryItems()
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT), new StaticConditionVariable(0)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_TYPE),
+            new StaticConditionVariable(CategoryItem::class)
+        );
+
+        $orderBy = array(new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT)));
+
+        return $this->getDataClassRepository()->retrieves(
+            Item::class, new DataClassRetrievesParameters(
+                new AndCondition($conditions), null, null, $orderBy
+            )
+        );
     }
 
     /**
@@ -97,5 +141,47 @@ class ItemRepository
     protected function setDataClassRepository(DataClassRepository $dataClassRepository)
     {
         $this->dataClassRepository = $dataClassRepository;
+    }
+
+    /**
+     * @param integer $parentIdentifier
+     *
+     * @return integer
+     */
+    public function getNextItemSortValueByParentIdentifier(int $parentIdentifier)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT),
+            new StaticConditionVariable($parentIdentifier)
+        );
+
+        return $this->getDataClassRepository()->retrieveMaximumValue(Item::class, Item::PROPERTY_SORT, $condition);
+    }
+
+    /**
+     * @param integer $identifier
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
+     */
+    public function findItemByIdentifier(int $identifier)
+    {
+        return $this->getDataClassRepository()->retrieveById(Item::class, $identifier);
+    }
+
+    /**
+     * @param integer $itemIdentifier
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     */
+    public function findItemTitlesByItemIdentifier(int $itemIdentifier)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(ItemTitle::class, ItemTitle::PROPERTY_ITEM_ID),
+            new StaticConditionVariable($itemIdentifier)
+        );
+
+        return $this->getDataClassRepository()->retrieves(
+            ItemTitle::class, new DataClassRetrievesParameters($condition)
+        );
     }
 }

@@ -5,6 +5,7 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -29,22 +30,37 @@ class ItemService
     private $rightsService;
 
     /**
+     * @var \Chamilo\Core\Menu\Service\ItemsCacheService
+     */
+    private $itemsCacheService;
+
+    /**
      * @var \Chamilo\Libraries\Utilities\StringUtilities
      */
     private $stringUtilities;
 
     /**
+     * @var \Chamilo\Libraries\Storage\DataClass\PropertyMapper
+     */
+    private $propertyMapper;
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\Repository\ItemRepository $itemRepository
      * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
+     * @param \Chamilo\Core\Menu\Service\ItemsCacheService $itemsCacheService
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
      */
     public function __construct(
-        ItemRepository $itemRepository, RightsService $rightsService, StringUtilities $stringUtilities
+        ItemRepository $itemRepository, RightsService $rightsService, ItemsCacheService $itemsCacheService,
+        StringUtilities $stringUtilities, PropertyMapper $propertyMapper
     )
     {
         $this->itemRepository = $itemRepository;
         $this->rightsService = $rightsService;
+        $this->itemsCacheService = $itemsCacheService;
         $this->stringUtilities = $stringUtilities;
+        $this->propertyMapper = $propertyMapper;
     }
 
     /**
@@ -55,6 +71,16 @@ class ItemService
     public function createItem(Item $item)
     {
         return $this->getItemRepository()->createItem($item);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return boolean
+     */
+    public function updateItem(Item $item)
+    {
+        return $this->getItemRepository()->updateItem($item);
     }
 
     /**
@@ -69,14 +95,21 @@ class ItemService
 
         foreach ($item->get_default_property_names() as $property)
         {
-            $item->set_default_property($property, $values[$property]);
+            if (isset($values[$property]))
+            {
+                $item->set_default_property($property, $values[$property]);
+            }
         }
 
         foreach ($item->get_additional_property_names() as $property)
         {
-            $item->set_additional_property($property, $values[$property]);
+            if (isset($values[$property]))
+            {
+                $item->set_additional_property($property, $values[$property]);
+            }
         }
 
+        $item->set_type($itemType);
         $item->set_display(Item::DISPLAY_BOTH);
         $item->set_hidden();
         $item->set_sort($this->getNextItemSortValueByParentIdentifier($item->get_parent()));
@@ -86,12 +119,12 @@ class ItemService
             return false;
         }
 
-        if (!$this->getRightsService()->createItemRightsLocationForItem($item))
+        if (!$this->getRightsService()->createItemRightsLocationWithViewRightForEveryone($item))
         {
             return false;
         }
 
-        $this->resetCache();
+        $this->getItemsCacheService()->resetCache();
 
         return $item;
     }
@@ -118,12 +151,7 @@ class ItemService
         {
             if (!$this->getStringUtilities()->isNullOrEmpty($title, true))
             {
-                $item_title = new ItemTitle();
-                $item_title->set_title($title);
-                $item_title->set_isocode($isocode);
-                $item_title->set_item_id($item->getId());
-
-                if (!$this->createItemTitle($item_title))
+                if (!$this->createItemTitleForItemFromParameters($item, $isocode, $title))
                 {
                     return false;
                 }
@@ -134,10 +162,27 @@ class ItemService
     }
 
     /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param string $isocode
+     * @param string $title
+     *
+     * @return boolean
+     */
+    public function createItemTitleForItemFromParameters(Item $item, string $isocode, string $title)
+    {
+        $itemTitle = new ItemTitle();
+        $itemTitle->set_title($title);
+        $itemTitle->set_isocode($isocode);
+        $itemTitle->set_item_id($item->getId());
+
+        return $this->createItemTitle($itemTitle);
+    }
+
+    /**
      * @param string $itemType
      * @param string[] $values
      *
-     * @return boolean
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
      */
     public function createItemWithTitlesForTypeFromValues(string $itemType, array $values)
     {
@@ -158,7 +203,6 @@ class ItemService
 
     /**
      *
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item[] $items
      * @param User $user
      *
      * @return boolean[]
@@ -168,6 +212,75 @@ class ItemService
         $rightsCacheService = new RightsCacheService($this);
 
         return $rightsCacheService->getForUser($user);
+    }
+
+    /**
+     * @param integer $identifier
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
+     */
+    public function findItemByIdentifier(int $identifier)
+    {
+        return $this->getItemRepository()->findItemByIdentifier($identifier);
+    }
+
+    /**
+     * @param integer $itemIdentifier
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     */
+    public function findItemTitlesByItemIdentifier(int $itemIdentifier)
+    {
+        return $this->getItemRepository()->findItemTitlesByItemIdentifier($itemIdentifier);
+    }
+
+    /**
+     * @param integer $itemIdentifier
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     */
+    public function findItemTitlesByItemIdentifierIndexedByIsoCode(int $itemIdentifier)
+    {
+        return $this->getPropertyMapper()->mapDataClassByProperty(
+            $this->findItemTitlesByItemIdentifier($itemIdentifier), ItemTitle::PROPERTY_ISOCODE
+        );
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     */
+    public function findItems()
+    {
+        return $this->getItemRepository()->findItems();
+    }
+
+    /**
+     *
+     * @param integer $parentIdentifier
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     */
+    public function findItemsByParentIdentifier(int $parentIdentifier)
+    {
+        return $this->getItemRepository()->findItemsByParentIdentifier($parentIdentifier);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\CategoryItem[]
+     */
+    public function findRootCategoryItems()
+    {
+        return $this->getItemRepository()->findRootCategoryItems();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     */
+    public function findRootItems()
+    {
+        return $this->findItemsByParentIdentifier(0);
     }
 
     /**
@@ -199,14 +312,19 @@ class ItemService
     }
 
     /**
-     *
-     * @param integer $parentIdentifier
-     *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Core\Menu\Service\ItemsCacheService
      */
-    public function getItemsByParentIdentifier($parentIdentifier)
+    public function getItemsCacheService(): ItemsCacheService
     {
-        return $this->getItemRepository()->findItemsByParentIdentifier($parentIdentifier);
+        return $this->itemsCacheService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Service\ItemsCacheService $itemsCacheService
+     */
+    public function setItemsCacheService(ItemsCacheService $itemsCacheService): void
+    {
+        $this->itemsCacheService = $itemsCacheService;
     }
 
     /**
@@ -217,6 +335,22 @@ class ItemService
     public function getNextItemSortValueByParentIdentifier(int $parentIdentifier)
     {
         return $this->getItemRepository()->getNextItemSortValueByParentIdentifier($parentIdentifier);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\PropertyMapper
+     */
+    public function getPropertyMapper(): PropertyMapper
+    {
+        return $this->propertyMapper;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
+     */
+    public function setPropertyMapper(PropertyMapper $propertyMapper): void
+    {
+        $this->propertyMapper = $propertyMapper;
     }
 
     /**
@@ -236,15 +370,6 @@ class ItemService
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
-     */
-    public function getRootItems()
-    {
-        return $this->getItemsByParentIdentifier(0);
-    }
-
-    /**
      * @return \Chamilo\Libraries\Utilities\StringUtilities
      */
     public function getStringUtilities(): StringUtilities
@@ -260,12 +385,78 @@ class ItemService
         $this->stringUtilities = $stringUtilities;
     }
 
-    /**
-     * Resets the cache for the menu items
-     */
-    public function resetCache()
+    public function saveItemWithTitlesFromValues(Item $item, array $values)
     {
-        $cacheService = new ItemsCacheService($this->itemRepository);
-        $cacheService->resetCache();
+        if (!$this->saveItemFromValues($item, $values))
+        {
+            return false;
+        }
+
+        if (!$this->saveItemTitlesForItemFromValues($item, $values))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function saveItemTitlesForItemFromValues(Item $item, array $values)
+    {
+        $existingItemTitles = $this->findItemTitlesByItemIdentifierIndexedByIsoCode($item->getId());
+        $valuesItemTitles = $values[ItemTitle::PROPERTY_TITLE];
+
+        $existingIsoCodes = array_keys($existingItemTitles);
+        $valuesIsoCodes = array_keys($valuesItemTitles);
+
+        $isoCodesToDelete = array_diff($existingIsoCodes, $valuesIsoCodes);
+        $isoCodesToAdd = array_diff($valuesIsoCodes, $existingIsoCodes);
+        $isoCodesToUpdate = array_intersect($existingIsoCodes, $valuesIsoCodes);
+
+        foreach ($isoCodesToDelete as $isoCodeToDelete)
+        {
+            // TODO: Delete ItemTitle
+        }
+
+        foreach ($isoCodesToAdd as $isoCodeToAdd)
+        {
+            // TODO: Add ItemTitle
+        }
+
+        foreach ($isoCodesToUpdate as $isoCodeToUpdate)
+        {
+            // TODO: Update ItemTitle
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param string[] $values
+     *
+     * @return boolean
+     */
+    public function saveItemFromValues(Item $item, array $values)
+    {
+        foreach ($item->get_default_property_names() as $property)
+        {
+            if (isset($values[$property]))
+            {
+                $item->set_default_property($property, $values[$property]);
+            }
+        }
+
+        foreach ($item->get_additional_property_names() as $property)
+        {
+            if (isset($values[$property]))
+            {
+                $item->set_additional_property($property, $values[$property]);
+            }
+        }
+
+        if (!$this->updateItem($item))
+        {
+            return false;
+        }
+
+        return true;
     }
 }

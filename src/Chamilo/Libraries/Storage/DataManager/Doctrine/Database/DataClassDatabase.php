@@ -224,7 +224,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         if ($dataClass instanceof CompositeDataClass)
         {
             $parentClass = $dataClass->parent_class_name();
-            $objectTableName = $dataClass->get_table_name();
+            $objectTableName = $parentClass::get_table_name();
         }
         else
         {

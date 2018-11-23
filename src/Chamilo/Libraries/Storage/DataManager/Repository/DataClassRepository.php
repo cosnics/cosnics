@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -42,6 +41,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class DataClassRepository
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+
+    const ALIAS_MAX_SORT = 'max_sort';
 
     /**
      *
@@ -599,7 +600,7 @@ class DataClassRepository
      * Executes the function within the context of a transaction.
      *
      * @param mixed $function
-     * @throws Exception
+     * @throws \Exception
      * @return mixed
      */
     public function transactional($function)
@@ -645,7 +646,7 @@ class DataClassRepository
 
         $parameters = new RecordRetrieveParameters(
             new DataClassProperties(
-                array(new PropertyConditionVariable($conditionDataClassName, $conditionClass::PROPERTY_TYPE))),
+                array(new PropertyConditionVariable($conditionDataClassName, CompositeDataClass::PROPERTY_TYPE))),
             $condition);
 
         $type = $this->record($conditionDataClassName, $parameters);
@@ -777,6 +778,7 @@ class DataClassRepository
      */
     protected function retrieveClass($cacheDataClassName, $dataClassName, DataClassParameters $parameters)
     {
+
         if ($this->isQueryCacheEnabled())
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
@@ -1002,10 +1004,10 @@ class DataClassRepository
     /**
      *
      * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      * @return string
      */
-    protected function determineCompositeDataClassType($dataClassName, RecordRetrieveParameters $parameters)
+    protected function determineCompositeDataClassType($dataClassName, DataClassRetrieveParameters $parameters)
     {
         $parameters = new RecordRetrieveParameters(
             new DataClassProperties(

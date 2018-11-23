@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Menu\Form\Item;
 
 use Chamilo\Core\Menu\Form\ItemForm;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -15,11 +14,11 @@ use Chamilo\Libraries\Utilities\Utilities;
 class CategoryItemForm extends ItemForm
 {
 
-    public function get_parents()
+    /**
+     * @return string[]
+     */
+    public function getParentItems()
     {
-        $item_options = array();
-        $item_options[0] = Translation::get('Root', null, Utilities::COMMON_LIBRARIES);
-        
-        return $item_options;
+        return $this->getRootParentItem();
     }
 }

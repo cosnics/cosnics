@@ -6,6 +6,7 @@
         <defaults autowire="true" public="true"/>
 
         <service id="Chamilo\Core\Menu\Service\ItemService"/>
+        <service id="Chamilo\Core\Menu\Service\ItemsCacheService"/>
         <service id="Chamilo\Core\Menu\Service\RightsService">
             <argument key="$rightsRepository" type="service"
                       id="Chamilo\Core\Menu\Storage\Repository\RightsRepository"/>
@@ -13,5 +14,7 @@
 
         <service id="Chamilo\Core\Menu\Storage\Repository\ItemRepository"/>
         <service id="Chamilo\Core\Menu\Storage\Repository\RightsRepository"/>
+
+        <service id="Chamilo\Core\Menu\Form\ItemFormFactory"/>
     </services>
 </container>

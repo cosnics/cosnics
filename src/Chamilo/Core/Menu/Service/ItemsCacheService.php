@@ -50,12 +50,13 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
     }
 
     /**
+     * @param string $identifier
      *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
+     * @return boolean
      */
     public function warmUpForIdentifier($identifier)
     {
-        $itemsByParentIdentifier = $this->processItemResultSet($this->getItemRepository()->findItems());
+        $itemsByParentIdentifier = $this->processItems($this->getItemRepository()->findItems());
 
         return $this->getCacheProvider()->save($identifier, $itemsByParentIdentifier);
     }
@@ -66,7 +67,7 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
-    private function processItemResultSet(DataClassIterator $items)
+    private function processItems(DataClassIterator $items)
     {
         $itemsByParentIdentifier = array();
 
@@ -105,8 +106,8 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
     }
 
     /**
-     *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     * @return false|mixed
+     * @throws \Exception
      */
     public function getItems()
     {

@@ -132,9 +132,9 @@ abstract class Renderer
         return $dependencyInjectionContainer->get(ItemService::class);
     }
 
-    public function getRootItems()
+    public function findRootItems()
     {
-        return $this->getItemService()->getItemsByParentIdentifier(0);
+        return $this->getItemService()->findItemsByParentIdentifier(0);
     }
 
     /**
@@ -160,7 +160,7 @@ abstract class Renderer
         {
             $userRights = $this->getItemService()->determineRightsForUser($user);
 
-            foreach ($this->getRootItems() as $item)
+            foreach ($this->findRootItems() as $item)
             {
                 if ($userRights[$item->get_id()])
                 {

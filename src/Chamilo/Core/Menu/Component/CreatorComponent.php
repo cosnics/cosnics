@@ -1,19 +1,13 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
-use Chamilo\Core\Menu\Form\ItemForm;
-use Chamilo\Core\Menu\ItemTitles;
+use Chamilo\Core\Menu\Form\ItemFormFactory;
 use Chamilo\Core\Menu\Manager;
-use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
-use Chamilo\Core\Menu\Service\ItemService;
-use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
+use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -36,32 +30,38 @@ class CreatorComponent extends Manager implements DelegateComponent
         {
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
-                    null,
-                    Translation::get('Add' . ClassnameUtilities::getInstance()->getPackageNameFromNamespace($itemType))
+                    null, $this->getTranslator()->trans(
+                    'Add' . ClassnameUtilities::getInstance()->getPackageNameFromNamespace($itemType), [],
+                    Manager::package()
+                )
                 )
             );
 
-            $item = new $type();
-            $itemForm = ItemForm::factory(
-                ItemForm::TYPE_CREATE, $item, $this->get_url(array(Manager::PARAM_TYPE => $type))
+            $itemForm = $this->getItemFormFactory()->getItemForm(
+                $itemType, $this->get_url(array(Manager::PARAM_TYPE => $itemType))
             );
 
             if ($itemForm->validate())
             {
-                $success = $this->getItemService()->createItemWithTitlesForTypeFromValues(
+                $item = $this->getItemService()->createItemWithTitlesForTypeFromValues(
                     $itemType, $itemForm->exportValues()
                 );
 
+                $success = $item instanceof Item;
+
                 if ($success)
                 {
-                    $message = Translation::get(
-                        'ObjectCreated', array('OBJECT' => Translation::get('ManagerItem')), Utilities::COMMON_LIBRARIES
+                    $message = $this->getTranslator()->trans(
+                        'ObjectCreated',
+                        array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::package())),
+                        Utilities::COMMON_LIBRARIES
                     );
                 }
                 else
                 {
-                    $message = Translation::get(
-                        'ObjectNotCreated', array('OBJECT' => Translation::get('ManagerItem')),
+                    $message = $this->getTranslator()->trans(
+                        'ObjectNotCreated',
+                        array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::package())),
                         Utilities::COMMON_LIBRARIES
                     );
                 }
@@ -83,5 +83,13 @@ class CreatorComponent extends Manager implements DelegateComponent
                 return implode(PHP_EOL, $html);
             }
         }
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Form\ItemFormFactory
+     */
+    public function getItemFormFactory()
+    {
+        return $this->getService(ItemFormFactory::class);
     }
 }

@@ -62,7 +62,7 @@ class RightsCacheService extends DoctrinePhpFileCacheService implements UserBase
     public function warmUpForIdentifier($identifier)
     {
         $itemRights = array();
-        $items = $this->getItemService()->getRootItems();
+        $items = $this->getItemService()->findRootItems();
 
         $entities = array();
         $entities[] = new UserEntity();
