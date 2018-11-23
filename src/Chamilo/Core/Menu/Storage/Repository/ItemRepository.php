@@ -60,6 +60,26 @@ class ItemRepository
      *
      * @return boolean
      */
+    public function deleteItemTitle(ItemTitle $itemTitle)
+    {
+        return $this->getDataClassRepository()->delete($itemTitle);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
+     *
+     * @return boolean
+     */
+    public function updateItemTitle(ItemTitle $itemTitle)
+    {
+        return $this->getDataClassRepository()->update($itemTitle);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
+     *
+     * @return boolean
+     */
     public function createItemTitle(ItemTitle $itemTitle)
     {
         return $this->getDataClassRepository()->create($itemTitle);

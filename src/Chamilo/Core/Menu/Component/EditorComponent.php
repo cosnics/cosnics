@@ -52,14 +52,20 @@ class EditorComponent extends Manager implements DelegateComponent
     {
         $this->check_allowed();
 
-        //        BreadcrumbTrail::getInstance()->add(
-        //            new Breadcrumb(
-        //                null, Translation::get('ManagerEditor', array('NAME' => $item->get_titles()->get_current_translation()))
-        //            )
-        //        );
-
         $item = $this->getItem();
         $itemTitles = $this->getItemService()->findItemTitlesByItemIdentifierIndexedByIsoCode($item->getId());
+
+        BreadcrumbTrail::getInstance()->add(
+            new Breadcrumb(
+                null, $this->getTranslator()->trans(
+                'MenuManagerEditor', array(
+                '{NAME}' => $this->getItemService()->determineItemTitleForCurrentLanguage(
+                    $itemTitles
+                )
+            ), 'Chamilo\Core\Menu'
+            )
+            )
+        );
 
         $itemForm = $this->getItemFormFactory()->getItemForm(
             $item->get_type(), $this->get_url(array(self::PARAM_ITEM => $item->getId()))
@@ -68,7 +74,7 @@ class EditorComponent extends Manager implements DelegateComponent
 
         if ($itemForm->validate())
         {
-            $success = $this->getItemService()->saveItemFromValues($item, $itemForm->exportValues());
+            $success = $this->getItemService()->saveItemTitlesForItemFromValues($item, $itemForm->exportValues());
 
             if ($success)
             {

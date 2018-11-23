@@ -7,6 +7,7 @@ use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -45,15 +46,22 @@ class ItemService
     private $propertyMapper;
 
     /**
+     *
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\Repository\ItemRepository $itemRepository
      * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
      * @param \Chamilo\Core\Menu\Service\ItemsCacheService $itemsCacheService
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
      * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
+     * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(
         ItemRepository $itemRepository, RightsService $rightsService, ItemsCacheService $itemsCacheService,
-        StringUtilities $stringUtilities, PropertyMapper $propertyMapper
+        StringUtilities $stringUtilities, PropertyMapper $propertyMapper, Translator $translator
     )
     {
         $this->itemRepository = $itemRepository;
@@ -61,6 +69,23 @@ class ItemService
         $this->itemsCacheService = $itemsCacheService;
         $this->stringUtilities = $stringUtilities;
         $this->propertyMapper = $propertyMapper;
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 
     /**
@@ -247,6 +272,34 @@ class ItemService
     }
 
     /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[] $itemTitles
+     *
+     * @return string
+     */
+    public function determineItemTitleForCurrentLanguage(array $itemTitles)
+    {
+        $isoCode = $this->getTranslator()->getLocale();
+        $fallbackIsoCodes = $this->getTranslator()->getFallbackLocales();
+
+        if (key_exists($isoCode, $itemTitles))
+        {
+            return $itemTitles[$isoCode]->get_title();
+        }
+        else
+        {
+            foreach ($fallbackIsoCodes as $fallbackIsoCode)
+            {
+                if (key_exists($fallbackIsoCode, $itemTitles))
+                {
+                    return $itemTitles[$fallbackIsoCode]->get_title();
+                }
+            }
+        }
+
+        return $this->getTranslator()->trans('MenuItem', [], 'Chamilo\Core\Menu');
+    }
+
+    /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
     public function findItems()
@@ -400,6 +453,12 @@ class ItemService
         return true;
     }
 
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param string[] $values
+     *
+     * @return boolean
+     */
     public function saveItemTitlesForItemFromValues(Item $item, array $values)
     {
         $existingItemTitles = $this->findItemTitlesByItemIdentifierIndexedByIsoCode($item->getId());
@@ -414,18 +473,52 @@ class ItemService
 
         foreach ($isoCodesToDelete as $isoCodeToDelete)
         {
-            // TODO: Delete ItemTitle
+            if (!$this->deleteItemTitle($existingItemTitles[$isoCodeToDelete]))
+            {
+                return false;
+            }
         }
 
         foreach ($isoCodesToAdd as $isoCodeToAdd)
         {
-            // TODO: Add ItemTitle
+            if (!$this->createItemTitleForItemFromParameters($item, $isoCodeToAdd, $valuesItemTitles[$isoCodeToAdd]))
+            {
+                return false;
+            }
         }
 
         foreach ($isoCodesToUpdate as $isoCodeToUpdate)
         {
-            // TODO: Update ItemTitle
+            $itemTitle = $existingItemTitles[$isoCodeToUpdate];
+            $itemTitle->set_title($valuesItemTitles[$isoCodeToUpdate]);
+
+            if (!$this->updateItemTitle($itemTitle))
+            {
+                return false;
+            }
         }
+
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
+     *
+     * @return boolean
+     */
+    public function deleteItemTitle(ItemTitle $itemTitle)
+    {
+        return $this->getItemRepository()->deleteItemTitle($itemTitle);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
+     *
+     * @return boolean
+     */
+    public function updateItemTitle(ItemTitle $itemTitle)
+    {
+        return $this->getItemRepository()->updateItemTitle($itemTitle);
     }
 
     /**
