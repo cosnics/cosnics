@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Menu\Renderer\NavigationBarRenderer;
 
-use Chamilo\Core\Menu\Renderer\Item\Bar\Item\LinkItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -47,12 +46,11 @@ class LanguageItemRenderer extends NavigationBarItemRenderer
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\LinkItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return boolean
      */
-    public function isItemVisibleForUser(LinkItem $item, User $user)
+    public function isItemVisibleForUser(User $user)
     {
         return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ChangeLanguage');
     }
@@ -65,7 +63,7 @@ class LanguageItemRenderer extends NavigationBarItemRenderer
      */
     public function render(Item $item, User $user)
     {
-        if (!$this->isItemVisibleForUser($item, $user))
+        if (!$this->isItemVisibleForUser($user))
         {
             return '';
         }
@@ -79,7 +77,7 @@ class LanguageItemRenderer extends NavigationBarItemRenderer
             )
         );
 
-        $html[] = array();
+        $html = array();
 
         $html[] = '<li>';
         $html[] = '<a href="' . $redirect->getUrl() . '">';

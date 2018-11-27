@@ -48,7 +48,7 @@ class ApplicationItemRenderer extends NavigationBarItemRenderer
     /**
      * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
-    private $chamiloRequest;
+    private $request;
 
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
@@ -56,11 +56,11 @@ class ApplicationItemRenderer extends NavigationBarItemRenderer
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $chamiloRequest
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, RegistrationConsulter $registrationConsulter,
-        Translator $translator, ItemService $itemService, Theme $themeUtilities, ChamiloRequest $chamiloRequest
+        Translator $translator, ItemService $itemService, Theme $themeUtilities, ChamiloRequest $request
     )
     {
         $this->authorizationChecker = $authorizationChecker;
@@ -68,7 +68,42 @@ class ApplicationItemRenderer extends NavigationBarItemRenderer
         $this->translator = $translator;
         $this->itemService = $itemService;
         $this->themeUtilities = $themeUtilities;
-        $this->chamiloRequest = $chamiloRequest;
+        $this->request = $request;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
+     *
+     * @return string
+     */
+    protected function getApplicationItemUrl(ApplicationItem $item)
+    {
+        $url = new Redirect();
+
+        if ($item->getApplication() == 'root')
+        {
+            return $url->getUrl();
+        }
+
+        $url->setParameter(Application::PARAM_CONTEXT, $item->getApplication());
+
+        if ($item->getComponent())
+        {
+            $url->setParameter(Application::PARAM_ACTION, $item->getComponent());
+        }
+
+        if ($item->getExtraParameters())
+        {
+            $extraParameters = parse_str($item->getExtraParameters());
+
+            foreach ($extraParameters as $key => $value)
+            {
+                $url->setParameter($key, $value);
+            }
+        }
+
+        return $url->getUrl();
     }
 
     /**
@@ -88,35 +123,19 @@ class ApplicationItemRenderer extends NavigationBarItemRenderer
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
-    public function getRegistrationConsulter(): RegistrationConsulter
+    public function getRequest(): ChamiloRequest
     {
-        return $this->registrationConsulter;
+        return $this->request;
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
+    public function setRequest(ChamiloRequest $request): void
     {
-        $this->registrationConsulter = $registrationConsulter;
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
+        $this->request = $request;
     }
 
     /**
@@ -136,6 +155,22 @@ class ApplicationItemRenderer extends NavigationBarItemRenderer
     }
 
     /**
+     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     */
+    public function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return $this->registrationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     */
+    public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
+    {
+        $this->registrationConsulter = $registrationConsulter;
+    }
+
+    /**
      * @return \Chamilo\Libraries\Format\Theme
      */
     public function getThemeUtilities(): Theme
@@ -152,19 +187,19 @@ class ApplicationItemRenderer extends NavigationBarItemRenderer
     }
 
     /**
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     * @return \Symfony\Component\Translation\Translator
      */
-    public function getChamiloRequest(): ChamiloRequest
+    public function getTranslator(): Translator
     {
-        return $this->chamiloRequest;
+        return $this->translator;
     }
 
     /**
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $chamiloRequest
+     * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function setChamiloRequest(ChamiloRequest $chamiloRequest): void
+    public function setTranslator(Translator $translator): void
     {
-        $this->chamiloRequest = $chamiloRequest;
+        $this->translator = $translator;
     }
 
     /**
@@ -188,7 +223,7 @@ class ApplicationItemRenderer extends NavigationBarItemRenderer
      */
     public function isSelected(Item $item)
     {
-        $request = $this->getChamiloRequest();
+        $request = $this->getRequest();
 
         $currentContext = $request->query->get(Application::PARAM_CONTEXT);
         $currentAction = $request->query->get(Application::PARAM_ACTION);
@@ -270,40 +305,5 @@ class ApplicationItemRenderer extends NavigationBarItemRenderer
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
-     *
-     * @return string
-     */
-    protected function getApplicationItemUrl(ApplicationItem $item)
-    {
-        $url = new Redirect();
-
-        if ($item->getApplication() == 'root')
-        {
-            return $url->getUrl();
-        }
-
-        $url->setParameter(Application::PARAM_CONTEXT, $item->getApplication());
-
-        if ($item->getComponent())
-        {
-            $url->setParameter(Application::PARAM_ACTION, $item->getComponent());
-        }
-
-        if ($item->getExtraParameters())
-        {
-            $extraParameters = parse_str($item->getExtraParameters());
-
-            foreach ($extraParameters as $key => $value)
-            {
-                $url->setParameter($key, $value);
-            }
-        }
-
-        return $url->getUrl();
     }
 }

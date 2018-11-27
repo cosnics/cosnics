@@ -54,6 +54,22 @@ class CategoryItemRenderer extends NavigationBarItemRenderer
     }
 
     /**
+     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     */
+    public function getItemRendererFactory(): ItemRendererFactory
+    {
+        return $this->itemRendererFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     */
+    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
+    {
+        $this->itemRendererFactory = $itemRendererFactory;
+    }
+
+    /**
      * @return \Chamilo\Core\Menu\Service\ItemService
      */
     public function getItemService(): ItemService
@@ -86,22 +102,6 @@ class CategoryItemRenderer extends NavigationBarItemRenderer
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
-     */
-    public function getItemRendererFactory(): ItemRendererFactory
-    {
-        return $this->itemRendererFactory;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
-     */
-    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
-    {
-        $this->itemRendererFactory = $itemRendererFactory;
-    }
-
-    /**
      * @return \Chamilo\Libraries\Format\Theme
      */
     public function getThemeUtilities(): Theme
@@ -115,6 +115,28 @@ class CategoryItemRenderer extends NavigationBarItemRenderer
     public function setThemeUtilities(Theme $themeUtilities): void
     {
         $this->themeUtilities = $themeUtilities;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return boolean
+     */
+    public function isSelected(Item $item)
+    {
+        $childItems = $this->getItemService()->findItemsByParentIdentifier($item->getId());
+
+        foreach ($childItems as $childItem)
+        {
+            $itemRenderer = $this->getItemRendererFactory()->getItemRenderer(NavigationBarRenderer::class, $childItem);
+
+            if ($itemRenderer->isSelected($childItem))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -204,28 +226,6 @@ class CategoryItemRenderer extends NavigationBarItemRenderer
         $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return boolean
-     */
-    public function isSelected(Item $item)
-    {
-        $childItems = $this->getItemService()->findItemsByParentIdentifier($item->getId());
-
-        foreach ($childItems as $childItem)
-        {
-            $itemRenderer = $this->getItemRendererFactory()->getItemRenderer(NavigationBarRenderer::class, $childItem);
-
-            if ($itemRenderer->isSelected($childItem))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
 }

@@ -4,6 +4,12 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Navigat
 use Chamilo\Core\Menu\Renderer\NavigationBarRenderer\NavigationBarItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Core\Repository\Workspace\Manager;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -14,6 +20,87 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class WorkspaceConfigureItemRenderer extends NavigationBarItemRenderer
 {
+    /**
+     * @var \Chamilo\Libraries\Format\Theme
+     */
+    private $themeUtilities;
+
+    /**
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
+     */
+    private $request;
+
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function __construct(Theme $themeUtilities, ChamiloRequest $request, Translator $translator)
+    {
+        $this->themeUtilities = $themeUtilities;
+        $this->request = $request;
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Theme
+     */
+    public function getThemeUtilities(): Theme
+    {
+        return $this->themeUtilities;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     */
+    public function setThemeUtilities(Theme $themeUtilities): void
+    {
+        $this->themeUtilities = $themeUtilities;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     */
+    public function getRequest(): ChamiloRequest
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     */
+    public function setRequest(ChamiloRequest $request): void
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    public function isSelected(Item $item)
+    {
+        $currentContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
+
+        return $currentContext == Manager::package();
+    }
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
@@ -23,6 +110,44 @@ class WorkspaceConfigureItemRenderer extends NavigationBarItemRenderer
      */
     public function render(Item $item, User $user)
     {
-        // TODO: Implement renderContent() method.
+        $selected = $this->isSelected($item);
+
+        if ($selected)
+        {
+            $class = 'class="chamilo-menu-item-current" ';
+        }
+        else
+        {
+            $class = '';
+        }
+
+        $urlRenderer = new Redirect(array(Application::PARAM_CONTEXT => Manager::context()));
+
+        $html[] = '<a ' . $class . 'href="' . $urlRenderer->getUrl() . '">';
+
+        $title = $this->getTranslator()->trans('ConfigureWorkspaces', [], 'Chamilo\Core\Repository\Workspace');
+
+        if ($item->showIcon())
+        {
+            $imagePath = $this->getThemeUtilities()->getImagePath(
+                'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu',
+                'ConfigureWorkspaces' . ($selected ? 'Selected' : '')
+            );
+
+            $html[] = '<img class="chamilo-menu-item-icon' .
+                ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '
+                " src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+        }
+
+        if ($item->showTitle())
+        {
+            $html[] = '<div class="chamilo-menu-item-label' .
+                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '"><em>' . $title . '</em></div>';
+        }
+
+        $html[] = '<div class="clearfix"></div>';
+        $html[] = '</a>';
+
+        return implode(PHP_EOL, $html);
     }
 }

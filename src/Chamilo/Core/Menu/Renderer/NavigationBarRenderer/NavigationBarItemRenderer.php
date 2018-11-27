@@ -3,7 +3,6 @@ namespace Chamilo\Core\Menu\Renderer\NavigationBarRenderer;
 
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\NavigationBarRenderer

@@ -6,7 +6,6 @@ use Chamilo\Core\Menu\Renderer\ItemRendererFactory;
 use Chamilo\Core\Menu\Renderer\NavigationBarRenderer;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Menu\Storage\DataClass\LanguageCategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\LanguageItem;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -90,6 +89,22 @@ class LanguageCategoryItemRenderer extends NavigationBarItemRenderer
     }
 
     /**
+     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     */
+    public function getItemRendererFactory(): ItemRendererFactory
+    {
+        return $this->itemRendererFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     */
+    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
+    {
+        $this->itemRendererFactory = $itemRendererFactory;
+    }
+
+    /**
      * @return \Chamilo\Core\Menu\Service\ItemService
      */
     public function getItemService(): ItemService
@@ -103,6 +118,22 @@ class LanguageCategoryItemRenderer extends NavigationBarItemRenderer
     public function setItemService(ItemService $itemService): void
     {
         $this->itemService = $itemService;
+    }
+
+    /**
+     * @return \Chamilo\Configuration\Service\LanguageConsulter
+     */
+    public function getLanguageConsulter(): LanguageConsulter
+    {
+        return $this->languageConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\LanguageConsulter $languageConsulter
+     */
+    public function setLanguageConsulter(LanguageConsulter $languageConsulter): void
+    {
+        $this->languageConsulter = $languageConsulter;
     }
 
     /**
@@ -138,35 +169,13 @@ class LanguageCategoryItemRenderer extends NavigationBarItemRenderer
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\LanguageConsulter
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return boolean
      */
-    public function getLanguageConsulter(): LanguageConsulter
+    public function isItemVisibleForUser(User $user)
     {
-        return $this->languageConsulter;
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Service\LanguageConsulter $languageConsulter
-     */
-    public function setLanguageConsulter(LanguageConsulter $languageConsulter): void
-    {
-        $this->languageConsulter = $languageConsulter;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
-     */
-    public function getItemRendererFactory(): ItemRendererFactory
-    {
-        return $this->itemRendererFactory;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
-     */
-    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
-    {
-        $this->itemRendererFactory = $itemRendererFactory;
+        return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ChangeLanguage');
     }
 
     /**
@@ -178,7 +187,7 @@ class LanguageCategoryItemRenderer extends NavigationBarItemRenderer
      */
     public function render(Item $item, User $user)
     {
-        if (!$this->isItemVisibleForUser($item, $user))
+        if (!$this->isItemVisibleForUser($user))
         {
             return '';
         }
@@ -202,22 +211,11 @@ class LanguageCategoryItemRenderer extends NavigationBarItemRenderer
         $html[] = '</div>';
         $html[] = '</a>';
 
-        $html[] = $this->renderLanguageItems($item);
+        $html[] = $this->renderLanguageItems($item, $user);
 
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\LanguageCategoryItem $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return boolean
-     */
-    public function isItemVisibleForUser(LanguageCategoryItem $item, User $user)
-    {
-        return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ChangeLanguage');
     }
 
     /**

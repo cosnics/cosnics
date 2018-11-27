@@ -1,26 +1,26 @@
 <?php
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\NavigationBarRenderer;
 
-use Chamilo\Core\Menu\Renderer\NavigationBarRenderer\NavigationBarItemRenderer;
-use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Manager;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\NavigationBarRenderer
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class LogoutItemRenderer extends NavigationBarItemRenderer
+class LogoutItemRenderer extends MenuItemRenderer
 {
-
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
      * @return string
      */
-    public function render(Item $item, User $user)
+    public function getUrl()
     {
-        // TODO: Implement renderContent() method.
+        $redirect = new Redirect(
+            array(Application::PARAM_CONTEXT => Manager::context(), Application::PARAM_ACTION => Manager::ACTION_LOGOUT)
+        );
+
+        return $redirect->getUrl();
     }
 }

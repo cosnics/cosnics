@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\NavigationBarRenderer;
 
-use Chamilo\Core\Menu\Renderer\NavigationBarRenderer\NavigationBarItemRenderer;
+use Chamilo\Core\Menu\Renderer\NavigationBarRenderer\ApplicationItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *
@@ -12,17 +12,24 @@ use Chamilo\Core\User\Storage\DataClass\User;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class RepositoryApplicationItemRenderer extends NavigationBarItemRenderer
+class RepositoryApplicationItemRenderer extends ApplicationItemRenderer
 {
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryApplicationItem $item
      *
-     * @return string
+     * @return boolean
      */
-    public function render(Item $item, User $user)
+    public function isSelected(Item $item)
     {
-        // TODO: Implement renderContent() method.
+        $request = $this->getRequest();
+
+        $currentWorkspace = $request->query->get(
+            \Chamilo\Core\Repository\Manager::PARAM_WORKSPACE_ID
+        );
+
+        $currentContext = $request->query->get(Application::PARAM_CONTEXT);
+
+        return ($currentContext == $item->getApplication() && !isset($currentWorkspace));
     }
 }
