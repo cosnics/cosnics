@@ -5,6 +5,7 @@ use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -149,10 +150,35 @@ class ItemRepository
     /**
      *
      * @param integer $parentIdentifier
+     * @param integer $count
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
-    public function findItemsByParentIdentifier(int $parentIdentifier)
+    public function findItemsByParentIdentifier(
+        int $parentIdentifier, int $count = null, int $offset = null, array $orderProperties = array()
+    )
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT),
+            new StaticConditionVariable($parentIdentifier)
+        );
+
+        $orderProperties[] = new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT));
+
+        return $this->getDataClassRepository()->retrieves(
+            Item::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderProperties)
+        );
+    }
+
+    /**
+     *
+     * @param integer $parentIdentifier
+     *
+     * @return integer
+     */
+    public function countItemsByParentIdentifier(int $parentIdentifier)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT),
@@ -161,8 +187,8 @@ class ItemRepository
 
         $orderBy = array(new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT)));
 
-        return $this->getDataClassRepository()->retrieves(
-            Item::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
+        return $this->getDataClassRepository()->count(
+            Item::class, new DataClassCountParameters($condition)
         );
     }
 

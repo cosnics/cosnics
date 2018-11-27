@@ -1,11 +1,9 @@
 <?php
 namespace Chamilo\Core\Menu\Table\Item;
 
+use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Menu\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -18,17 +16,86 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class ItemBrowserTableDataProvider extends DataClassTableDataProvider
 {
+    /**
+     * @var \Chamilo\Core\Menu\Service\ItemService
+     */
+    private $itemService;
 
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    /**
+     * @var integer
+     */
+    private $parentIdentifier;
+
+    /**
+     * Constructor
+     *
+     * @param \Chamilo\Libraries\Format\Table\Table $table
+     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
+     * @param integer $parentIdentifier
+     */
+    public function __construct($table, ItemService $itemService, int $parentIdentifier)
     {
-        $order_property[] = new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT));
-
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        return DataManager::retrieves(Item::class_name(), $parameters);
+        parent::__construct($table);
+        $this->itemService = $itemService;
+        $this->parentIdentifier = $parentIdentifier;
     }
 
+    /**
+     * @return integer
+     */
+    public function getParentIdentifier(): int
+    {
+        return $this->parentIdentifier;
+    }
+
+    /**
+     * @param integer $parentIdentifier
+     */
+    public function setParentIdentifier(int $parentIdentifier): void
+    {
+        $this->parentIdentifier = $parentIdentifier;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return integer
+     */
     public function count_data($condition)
     {
-        return DataManager::count(Item::class_name(), new DataClassCountParameters($condition));
+        return $this->getItemService()->countItemsByParentIdentifier($this->getParentIdentifier());
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Service\ItemService
+     */
+    public function getItemService(): ItemService
+    {
+        return $this->itemService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
+     */
+    public function setItemService(ItemService $itemService): void
+    {
+        $this->itemService = $itemService;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     */
+    public function retrieve_data($condition, $offset, $count, $orderProperties = null)
+    {
+        $orderProperties[] = new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT));
+
+        return $this->getItemService()->findItemsByParentIdentifier(
+            $this->getParentIdentifier(), $count, $offset, $orderProperties
+        );
     }
 }

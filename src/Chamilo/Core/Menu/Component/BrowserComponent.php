@@ -1,14 +1,15 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Menu\Manager;
+use Chamilo\Core\Menu\Menu\ItemMenu;
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\LinkItem;
 use Chamilo\Core\Menu\Table\Item\ItemBrowserTable;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -17,11 +18,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -40,120 +36,153 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
      */
     private $buttonToolbarRenderer;
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function run()
     {
-        $this->check_allowed();
-        return $this->show_navigation_item_list();
-    }
+        $this->getRightsService()->isUserAllowedToAccessComponent($this->getUser());
 
-    public function show_navigation_item_list()
-    {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        
-        $this->parent = Request::get(self::PARAM_PARENT);
-        
-        $parameters = $this->get_parameters(true);
-        
-        $table = new ItemBrowserTable($this, $parameters, $this->get_condition());
-        
+        $table = new ItemBrowserTable(
+            $this, $this->getTranslator(), $this->getItemService(), $this->getRightsService(),
+            $this->getParentIdentifier()
+        );
+
         $html = array();
-        
+
         $html[] = $this->render_header();
-        $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = '<div style="float: left; width: 12%; overflow:auto;">';
-        $html[] = $this->get_menu()->render_as_tree();
+
+        $html[] = $this->getButtonToolbarRenderer()->render();
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-12 col-lg-2">';
+        $html[] = $this->getMenu()->render_as_tree();
         $html[] = '</div>';
-        $html[] = '<div style="float: right; width: 85%;">';
-        $html[] = $table->as_html();
+
+        $html[] = '<div class="col-xs-12 col-lg-10">';
+        $html[] = $table->render();
         $html[] = '</div>';
+        $html[] = '</div>';
+
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
-    public function getButtonToolbarRenderer()
-    {
-        if (! isset($this->buttonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar();
-            $commonActions = new ButtonGroup();
-            $toolActions = new ButtonGroup();
-            
-            $commonActions->addButton(
-                new Button(
-                    Translation::get('AddApplicationItem'), 
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item::TYPE_APPLICATION), 
-                    $this->get_url(
-                        array(
-                            self::PARAM_ACTION => self::ACTION_CREATE, 
-                            self::PARAM_TYPE => ApplicationItem::class_name())), 
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
-            
-            $commonActions->addButton(
-                new Button(
-                    Translation::get('AddCategoryItem'), 
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item::TYPE_CATEGORY), 
-                    $this->get_url(
-                        array(
-                            self::PARAM_ACTION => self::ACTION_CREATE, 
-                            self::PARAM_TYPE => CategoryItem::class_name())), 
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
-            
-            $commonActions->addButton(
-                new Button(
-                    Translation::get('AddLinkItem'), 
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item::TYPE_LINK), 
-                    $this->get_url(
-                        array(self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => LinkItem::class_name())), 
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
-            
-            $setting = Configuration::getInstance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
-            
-            if ($setting == 1)
-            {
-                $toolActions->addButton(
-                    new Button(
-                        
-                        Translation::get('Rights', null, Utilities::COMMON_LIBRARIES), 
-                        Theme::getInstance()->getCommonImagePath('Action/Rights'), 
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS)), 
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
-            }
-            
-            $buttonToolbar->addButtonGroup($commonActions);
-            $buttonToolbar->addButtonGroup($toolActions);
-            
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
-        
-        return $this->buttonToolbarRenderer;
-    }
-
-    public function get_condition()
-    {
-        $condition = null;
-        $parent = (isset($this->parent) ? $this->parent : 0);
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT), 
-            new StaticConditionVariable($parent));
-        return $condition;
-    }
-
+    /**
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
+     */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('menu_browser');
     }
 
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
+     */
+    public function getButtonToolbarRenderer()
+    {
+        if (!isset($this->buttonToolbarRenderer))
+        {
+            $translator = $this->getTranslator();
+
+            $buttonToolbar = new ButtonToolBar();
+            $commonActions = new ButtonGroup();
+            $toolActions = new ButtonGroup();
+
+            $commonActions->addButton(
+                new Button(
+                    $translator->trans('AddApplicationItem', [], 'Chamilo\Core\Menu'),
+                    Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item::TYPE_APPLICATION),
+                    $this->get_url(
+                        array(
+                            self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => ApplicationItem::class_name()
+                        )
+                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
+
+            $commonActions->addButton(
+                new Button(
+                    $translator->trans('AddCategoryItem', [], 'Chamilo\Core\Menu'),
+                    Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item::TYPE_CATEGORY),
+                    $this->get_url(
+                        array(
+                            self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => CategoryItem::class_name()
+                        )
+                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
+
+            $commonActions->addButton(
+                new Button(
+                    $translator->trans('AddLinkItem', [], 'Chamilo\Core\Menu'),
+                    Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item::TYPE_LINK), $this->get_url(
+                    array(self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => LinkItem::class_name())
+                ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
+
+            if ($this->getRightsService()->areRightsEnabled())
+            {
+                $toolActions->addButton(
+                    new Button(
+
+                        $translator->trans('Rights', null, Utilities::COMMON_LIBRARIES),
+                        Theme::getInstance()->getCommonImagePath('Action/Rights'),
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS)),
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
+            }
+
+            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($toolActions);
+
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->buttonToolbarRenderer;
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Menu\ItemMenu
+     */
+    public function getMenu()
+    {
+        $urlFormat = new Redirect([self::PARAM_ACTION => self::ACTION_BROWSE, self::PARAM_PARENT => '__ITEM__']);
+
+        return new ItemMenu($this->getParentIdentifier(), $urlFormat->getUrl());
+    }
+
+    /**
+     * @return integer
+     */
+    public function getParentIdentifier()
+    {
+        if (!isset($this->parentIdentifier))
+        {
+            $this->parentIdentifier = $this->getRequest()->query->get(self::PARAM_PARENT, 0);
+        }
+
+        return $this->parentIdentifier;
+    }
+
+    /**
+     * @return string[]
+     */
     public function get_additional_parameters()
     {
         return array(Manager::PARAM_ITEM);
     }
 
-    /*
-     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
+    /**
+     * @param string $tableClassName
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
      */
-    public function get_table_condition($table_class_name)
+    public function get_table_condition($tableClassName)
     {
-        return $this->get_condition();
     }
 }

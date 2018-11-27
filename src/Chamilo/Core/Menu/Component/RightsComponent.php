@@ -19,20 +19,25 @@ use Chamilo\Libraries\Platform\Session\Request;
 class RightsComponent extends Manager implements DelegateComponent
 {
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function run()
     {
-        $this->check_allowed();
+        $this->getRightsService()->isUserAllowedToAccessComponent($this->getUser());
 
         $item_id = Request::get(self::PARAM_ITEM);
         $this->set_parameter(self::PARAM_ITEM, $item_id);
-        if (! $item_id)
+        if (!$item_id)
         {
             $location = array(Rights::getInstance()->get_root(self::package()));
         }
         else
         {
             $location = array(
-                Rights::getInstance()->get_location_by_identifier(self::package(), Rights::TYPE_ITEM, $item_id));
+                Rights::getInstance()->get_location_by_identifier(self::package(), Rights::TYPE_ITEM, $item_id)
+            );
         }
 
         $entities = array();
@@ -41,7 +46,8 @@ class RightsComponent extends Manager implements DelegateComponent
 
         $application = $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Rights\Editor\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
         $application->set_context(self::package());
         $application->set_locations($location);
         $application->set_entities($entities);

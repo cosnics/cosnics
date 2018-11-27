@@ -179,13 +179,14 @@ class ItemForm extends FormValidator
      */
     public function getParentItems()
     {
-        $items = $this->getItemService()->findRootCategoryItems();
+        $itemService = $this->getItemService();
+        $items = $itemService->findRootCategoryItems();
 
         $itemOptions = $this->getRootParentItem();
 
         foreach ($items as $item)
         {
-            $itemOptions[$item->getId()] = '-- ' . $item->get_titles()->get_current_translation();
+            $itemOptions[$item->getId()] = '-- ' . $itemService->getItemTitleForCurrentLanguage($item);
         }
 
         return $itemOptions;
@@ -241,9 +242,9 @@ class ItemForm extends FormValidator
     public function setItemDefaults(Item $item, array $itemTitles, array $defaults = array())
     {
         $defaults[Item::PROPERTY_ID] = $item->getId();
-        $defaults[Item::PROPERTY_PARENT] = $item->get_parent();
-        $defaults[Item::PROPERTY_HIDDEN] = $item->get_hidden();
-        $defaults[Item::PROPERTY_TYPE] = $item->get_type();
+        $defaults[Item::PROPERTY_PARENT] = $item->getParentId();
+        $defaults[Item::PROPERTY_HIDDEN] = $item->getHidden();
+        $defaults[Item::PROPERTY_TYPE] = $item->getType();
         $defaults[Item::PROPERTY_ICON_CLASS] = $item->getIconClass();
 
         $activeLanguages = $this->getLanguageConsulter()->getLanguages();
@@ -252,7 +253,7 @@ class ItemForm extends FormValidator
         {
             if (key_exists($isoCode, $itemTitles))
             {
-                $defaults[ItemTitle::PROPERTY_TITLE][$isoCode] = $itemTitles[$isoCode]->get_title();
+                $defaults[ItemTitle::PROPERTY_TITLE][$isoCode] = $itemTitles[$isoCode]->getTitle();
             }
         }
 

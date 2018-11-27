@@ -6,6 +6,7 @@ use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -26,61 +27,53 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 class MoverComponent extends Manager
 {
 
+    /**
+     * @return string|void
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     */
     public function run()
     {
-        $this->check_allowed();
-        $direction = Request::get(Manager::PARAM_DIRECTION);
-        $this->set_parameter(Manager::PARAM_DIRECTION, $direction);
-        $item = intval(Request::get(Manager::PARAM_ITEM));
-        $this->set_parameter(Manager::PARAM_ITEM, $item);
+        $this->getRightsService()->isUserAllowedToAccessComponent($this->getUser());
 
-        if (isset($direction) && isset($item))
+        $moveDirection = $this->getRequest()->query->get(self::PARAM_DIRECTION);
+
+        if (is_null($moveDirection))
         {
-            $move_item = DataManager::retrieve_by_id(Item::class_name(), (int) $item);
-
-            $max = DataManager::count(
-                Item::class_name(),
-                new DataClassCountParameters(
-                    new EqualityCondition(
-                        new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT),
-                        new StaticConditionVariable($move_item->get_parent()))));
-
-            $display_order = $move_item->get_sort();
-            $new_place = ($display_order + ($direction == Manager::PARAM_DIRECTION_UP ? - 1 : 1));
-
-            if ($new_place > 0 && $new_place <= $max)
-            {
-                $move_item->set_sort($new_place);
-                $success = $move_item->update();
-            }
-
-            $message = $success ? Translation::get(
-                'ObjectMoved',
-                array('OBJECT' => Translation::get('ManagerItem')),
-                Utilities::COMMON_LIBRARIES) : Translation::get(
-                'ObjectNotMoved',
-                array('OBJECT' => Translation::get('ManagerItem')),
-                Utilities::COMMON_LIBRARIES);
-
-            $itemService = new ItemService(new ItemRepository());
-            $itemService->resetCache();
-
-            $this->redirect(
-                $message,
-                ($success ? false : true),
-                array(
-                    Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
-                    Manager::PARAM_PARENT => $move_item->get_parent()));
+            throw new ParameterNotDefinedException(self::PARAM_DIRECTION);
         }
-        else
+
+        $itemIdentifier = $this->getRequest()->query->get(self::PARAM_ITEM);
+
+        if (is_null($itemIdentifier))
         {
-            return $this->display_error_page(Translation::get('NoObjectsSelected', null, Utilities::COMMON_LIBRARIES));
+            throw new ParameterNotDefinedException(self::PARAM_ITEM);
         }
+
+        $item = $this->getItemService()->findItemByIdentifier($itemIdentifier);
+
+        $success = $this->getItemService()->moveItemInDirection($item, $moveDirection);
+
+        $message = $this->getTranslator()->trans(
+            $success ? 'ObjectMoved' : 'ObjectNotMoved',
+            array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')),
+            Utilities::COMMON_LIBRARIES
+        );
+
+        $this->redirect(
+            $message, ($success ? false : true), array(
+                Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $item->getParentId()
+            )
+        );
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $breadcrumbtrail->add(new Breadcrumb($this->get_menu_home_url(), Translation::get('ManagerBrowserComponent')));
+        $breadcrumbtrail->add(
+            new Breadcrumb(
+                $this->getHomeUrl(), $this->getTranslator()->trans('ManagerBrowserComponent', [], 'Chamilo\Core\Menu')
+            )
+        );
         $breadcrumbtrail->add_help('menu_mover');
     }
 }

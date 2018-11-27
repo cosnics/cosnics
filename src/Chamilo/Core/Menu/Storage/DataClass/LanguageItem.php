@@ -14,10 +14,21 @@ class LanguageItem extends Item
 {
     const PROPERTY_LANGUAGE = 'language';
 
-    public function __construct($default_properties = array(), $additional_properties = null)
+    /**
+     * @var string
+     */
+    private $currentUrl;
+
+    /**
+     * @param string[] $defaultProperties
+     * @param string[] $additionalProperties
+     *
+     * @throws \Exception
+     */
+    public function __construct($defaultProperties = array(), $additionalProperties = null)
     {
-        parent::__construct($default_properties, $additional_properties);
-        $this->set_type(__CLASS__);
+        parent::__construct($defaultProperties, $additionalProperties);
+        $this->setType(__CLASS__);
     }
 
     public static function get_type_name()
@@ -25,27 +36,61 @@ class LanguageItem extends Item
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name());
     }
 
+    /**
+     * @return string
+     * @deprecated Use LanguageItem::getLanguage() now
+     */
     public function get_language()
+    {
+        return $this->getLanguage();
+    }
+
+    /**
+     * @param string $language
+     *
+     * @deprecated Use LanguageItem::setLanguage() now
+     */
+    public function set_language($language)
+    {
+        return $this->setLanguage($language);
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguage()
     {
         return $this->get_additional_property(self::PROPERTY_LANGUAGE);
     }
 
-    public function set_language($language)
+    /**
+     * @param string $language
+     */
+    public function setLanguage($language)
     {
         return $this->set_additional_property(self::PROPERTY_LANGUAGE, $language);
     }
 
+    /**
+     * @return string[]
+     */
     public static function get_additional_property_names()
     {
         return array(self::PROPERTY_LANGUAGE);
     }
 
+    /**
+     * @return string
+     */
     public function getCurrentUrl()
     {
         return $this->currentUrl;
     }
 
-    public function setCurrentUrl($currentUrl)
+    /**
+     * @param string $currentUrl
+     */
+    public function setCurrentUrl(string $currentUrl)
     {
         $this->currentUrl = $currentUrl;
     }

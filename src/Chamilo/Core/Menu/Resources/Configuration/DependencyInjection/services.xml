@@ -10,11 +10,24 @@
         <service id="Chamilo\Core\Menu\Service\RightsService">
             <argument key="$rightsRepository" type="service"
                       id="Chamilo\Core\Menu\Storage\Repository\RightsRepository"/>
+            <argument key="$configurationConsulter" type="service"
+                      id="Chamilo\Configuration\Service\ConfigurationConsulter"/>
         </service>
 
         <service id="Chamilo\Core\Menu\Storage\Repository\ItemRepository"/>
         <service id="Chamilo\Core\Menu\Storage\Repository\RightsRepository"/>
 
         <service id="Chamilo\Core\Menu\Form\ItemFormFactory"/>
+
+        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\SiteMapRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\ItemRendererFactory"/>
+
+        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer\ApplicationItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer\CategoryItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer\LanguageCategoryItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer\LanguageItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer\LinkApplicationItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer\LinkItemRenderer"/>
     </services>
 </container>

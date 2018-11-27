@@ -20,9 +20,13 @@ use Chamilo\Libraries\Utilities\Utilities;
 class CreatorComponent extends Manager implements DelegateComponent
 {
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function run()
     {
-        $this->check_allowed();
+        $this->getRightsService()->isUserAllowedToAccessComponent($this->getUser());
 
         $itemType = $this->getRequest()->query->get(Manager::PARAM_TYPE);
 
@@ -77,7 +81,7 @@ class CreatorComponent extends Manager implements DelegateComponent
                 $html = array();
 
                 $html[] = $this->render_header();
-                $html[] = $itemForm->toHtml();
+                $html[] = $itemForm->render();
                 $html[] = $this->render_footer();
 
                 return implode(PHP_EOL, $html);

@@ -9,7 +9,6 @@ use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -21,9 +20,15 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class EditorComponent extends Manager implements DelegateComponent
 {
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     */
     public function run()
     {
-        $this->check_allowed();
+        $this->getRightsService()->isUserAllowedToAccessComponent($this->getUser());
 
         $item = $this->getItem();
         $itemTitles = $this->getItemService()->findItemTitlesByItemIdentifierIndexedByIsoCode($item->getId());
@@ -41,7 +46,7 @@ class EditorComponent extends Manager implements DelegateComponent
         );
 
         $itemForm = $this->getItemFormFactory()->getItemForm(
-            $item->get_type(), $this->get_url(array(self::PARAM_ITEM => $item->getId()))
+            $item->getType(), $this->get_url(array(self::PARAM_ITEM => $item->getId()))
         );
         $itemForm->setItemDefaults($item, $itemTitles);
 
@@ -49,22 +54,15 @@ class EditorComponent extends Manager implements DelegateComponent
         {
             $success = $this->getItemService()->saveItemWithTitlesFromValues($item, $itemForm->exportValues());
 
-            if ($success)
-            {
-                $message = Translation::get(
-                    'ObjectCreated', array('OBJECT' => Translation::get('ManagerItem')), Utilities::COMMON_LIBRARIES
-                );
-            }
-            else
-            {
-                $message = Translation::get(
-                    'ObjectNotCreated', array('OBJECT' => Translation::get('ManagerItem')), Utilities::COMMON_LIBRARIES
-                );
-            }
+            $message = $this->getTranslator()->trans(
+                $success ? 'ObjectCreated' : 'ObjectNotCreated',
+                array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')),
+                Utilities::COMMON_LIBRARIES
+            );
 
             $this->redirect(
                 $message, ($success ? false : true),
-                array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_ITEM => $item->get_parent())
+                array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_ITEM => $item->getParentId())
             );
         }
         else

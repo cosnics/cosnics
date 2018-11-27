@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container
-    xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://symfony.com/schema/dic/services"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service
-            id="chamilo.libraries.file.path"
-            class="Chamilo\Libraries\File\Path">
+                id="chamilo.libraries.file.path"
+                class="Chamilo\Libraries\File\Path">
             <argument
-                type="service"
-                id="chamilo.libraries.architecture.classname_utilities" />
+                    type="service"
+                    id="chamilo.libraries.architecture.classname_utilities"/>
         </service>
 
         <service
-            id="chamilo.libraries.file.path_builder"
-            class="Chamilo\Libraries\File\PathBuilder">
+                id="chamilo.libraries.file.path_builder"
+                class="Chamilo\Libraries\File\PathBuilder">
             <argument
-                type="service"
-                id="chamilo.libraries.architecture.classname_utilities" />
+                    type="service"
+                    id="chamilo.libraries.architecture.classname_utilities"/>
         </service>
 
         <service
-            id="chamilo.libraries.file.configurable_path_builder"
-            class="Chamilo\Libraries\File\ConfigurablePathBuilder">
+                alias="chamilo.libraries.file.path_builder"
+                id="Chamilo\Libraries\File\PathBuilder"/>
+
+        <service
+                id="chamilo.libraries.file.configurable_path_builder"
+                class="Chamilo\Libraries\File\ConfigurablePathBuilder">
             <argument>%chamilo.configuration.storage%</argument>
         </service>
 
-        <service id="chamilo.libraries.file.compression.file_compression" class="Chamilo\Libraries\File\Compression\Filecompression">
-            <factory class="Chamilo\Libraries\File\Compression\Filecompression" method="factory" />
+        <service id="chamilo.libraries.file.compression.file_compression"
+                 class="Chamilo\Libraries\File\Compression\Filecompression">
+            <factory class="Chamilo\Libraries\File\Compression\Filecompression" method="factory"/>
         </service>
 
         <service id="chamilo.libraries.file.compression.archive_creator.archive_creator"
                  class="Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator">
-            <argument type="service" id="symfony.component.filesystem.filesystem" />
-            <argument type="service" id="chamilo.libraries.file.compression.file_compression" />
-            <argument type="service" id="chamilo.libraries.file.configurable_path_builder" />
+            <argument type="service" id="symfony.component.filesystem.filesystem"/>
+            <argument type="service" id="chamilo.libraries.file.compression.file_compression"/>
+            <argument type="service" id="chamilo.libraries.file.configurable_path_builder"/>
         </service>
     </services>
 </container>

@@ -5,6 +5,7 @@ use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\LinkItem;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -20,13 +21,19 @@ class LinkItemForm extends ItemForm
     {
         parent:: buildForm();
 
-        $this->addElement('category', Translation::get('Properties'));
-        $this->add_textfield(LinkItem::PROPERTY_URL, Translation::get('URL'), true, array('size' => '100'));
-        $this->addElement(
-            'select', LinkItem::PROPERTY_TARGET, Translation::get('Target'), LinkItem::get_target_types(),
-            array('class' => 'form-control')
+        $this->addElement('category', $this->getTranslator()->trans('Properties', [], 'Chamilo\Core\Menu'));
+        $this->add_textfield(
+            LinkItem::PROPERTY_URL, $this->getTranslator()->trans('URL', [], 'Chamilo\Core\Menu'), true,
+            array('size' => '100')
         );
-        $this->addRule(LinkItem::PROPERTY_TARGET, Translation::get('ThisFieldIsRequired'), 'required');
+        $this->addElement(
+            'select', LinkItem::PROPERTY_TARGET, $this->getTranslator()->trans('Target', [], 'Chamilo\Core\Menu'),
+            LinkItem::getTargetTypes(), array('class' => 'form-control')
+        );
+        $this->addRule(
+            LinkItem::PROPERTY_TARGET,
+            $this->getTranslator()->trans('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
+        );
         $this->addElement('category');
     }
 

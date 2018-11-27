@@ -45,7 +45,9 @@ class Redirect
      * @param boolean $encodeEntities
      * @param string $anchor
      */
-    public function __construct($parameters = array (), $filterParameters = array(), $encodeEntities = false, $anchor = null)
+    public function __construct(
+        $parameters = array(), $filterParameters = array(), $encodeEntities = false, $anchor = null
+    )
     {
         $this->parameters = $parameters;
         $this->filterParameters = $filterParameters;
@@ -72,21 +74,65 @@ class Redirect
     }
 
     /**
+     * Returns the full URL of the current page, based upon env variables Env variables used: $_SERVER['HTTPS'] =
+     * (on|off|) $_SERVER['HTTP_HOST'] = value of the Host: header $_SERVER['SERVER_PORT'] = port number (only used if
+     * not http/80,https/443) $_SERVER['REQUEST_URI'] = the URI after the method of the HTTP request
      *
-     * @return string[]
+     * @param boolean $includeRequest
+     *
+     * @return string
      */
-    private function getParameters()
+    public function getCurrentUrl($includeRequest = true)
     {
-        return $this->parameters;
+        if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on')
+        {
+            $protocol = 'https://';
+        }
+        else
+        {
+            $protocol = 'http://';
+        }
+        $host = $_SERVER['HTTP_HOST'];
+
+        $parts = array();
+
+        $parts[] = $protocol;
+        $parts[] = $host;
+
+        if ($includeRequest)
+        {
+            /**
+             * Filter php_self to avoid a security vulnerability.
+             */
+            $requestUri = substr($_SERVER['REQUEST_URI'], 0, strcspn($_SERVER['REQUEST_URI'], "\n\r"));
+
+            if ($this->getEncodeEntities())
+            {
+                $requestUri = htmlentities($requestUri, ENT_QUOTES);
+            }
+
+            $parts[] = $requestUri;
+        }
+
+        return implode('', $parts);
     }
 
     /**
      *
-     * @param string[] $parameters
+     * @return boolean
      */
-    public function setParameters($parameters)
+    public function getEncodeEntities()
     {
-        $this->parameters = $parameters;
+        return $this->encodeEntities;
+    }
+
+    /**
+     *
+     * @param boolean $encodeEntities
+     */
+    public function setEncodeEntities($encodeEntities)
+    {
+        $this->encodeEntities = $encodeEntities;
     }
 
     /**
@@ -109,42 +155,6 @@ class Redirect
 
     /**
      *
-     * @return boolean
-     */
-    public function getEncodeEntities()
-    {
-        return $this->encodeEntities;
-    }
-
-    /**
-     *
-     * @param boolean $encodeEntities
-     */
-    public function setEncodeEntities($encodeEntities)
-    {
-        $this->encodeEntities = $encodeEntities;
-    }
-
-    /**
-     * Redirect to the Url
-     */
-    public function toUrl()
-    {
-        $this->writeHeader($this->getUrl());
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getUrl()
-    {
-        $baseUrl = $this->getCurrentUrl(false, false) . $_SERVER['PHP_SELF'];
-        return $this->getWebLink($baseUrl);
-    }
-
-    /**
-     *
      * @return string[]
      */
     private function getFilteredParameters()
@@ -162,7 +172,7 @@ class Redirect
 
         foreach ($parameters as $key => $value)
         {
-            if (! in_array($key, $filterParameters))
+            if (!in_array($key, $filterParameters))
             {
                 $filteredParameters[$key] = $value;
             }
@@ -173,11 +183,32 @@ class Redirect
 
     /**
      *
-     * @param string $url
-     * @param string[] $parameters
+     * @return string[]
+     */
+    private function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
+     *
      * @return string
      */
-    private function getWebLink($url, $parameters = array ())
+    public function getUrl()
+    {
+        $baseUrl = $this->getCurrentUrl(false, false) . $_SERVER['PHP_SELF'];
+
+        return $this->getWebLink($baseUrl);
+    }
+
+    /**
+     *
+     * @param string $url
+     * @param string[] $parameters
+     *
+     * @return string
+     */
+    private function getWebLink($url, $parameters = array())
     {
         $parameters = $this->getFilteredParameters();
 
@@ -220,6 +251,41 @@ class Redirect
     }
 
     /**
+     * @param string $key
+     * @param string $value
+     */
+    public function setFilterParameter($key, $value)
+    {
+        $this->filterParameters[$key] = $value;
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     */
+    public function setParameter($key, $value)
+    {
+        $this->parameters[$key] = $value;
+    }
+
+    /**
+     *
+     * @param string[] $parameters
+     */
+    public function setParameters($parameters)
+    {
+        $this->parameters = $parameters;
+    }
+
+    /**
+     * Redirect to the Url
+     */
+    public function toUrl()
+    {
+        $this->writeHeader($this->getUrl());
+    }
+
+    /**
      *
      * @param string $url
      */
@@ -234,48 +300,5 @@ class Redirect
         $response->send();
 
         exit();
-    }
-
-    /**
-     * Returns the full URL of the current page, based upon env variables Env variables used: $_SERVER['HTTPS'] =
-     * (on|off|) $_SERVER['HTTP_HOST'] = value of the Host: header $_SERVER['SERVER_PORT'] = port number (only used if
-     * not http/80,https/443) $_SERVER['REQUEST_URI'] = the URI after the method of the HTTP request
-     *
-     * @param boolean $includeRequest
-     * @return string
-     */
-    public function getCurrentUrl($includeRequest = true)
-    {
-        if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on')
-        {
-            $protocol = 'https://';
-        }
-        else
-        {
-            $protocol = 'http://';
-        }
-        $host = $_SERVER['HTTP_HOST'];
-
-        $parts = array();
-
-        $parts[] = $protocol;
-        $parts[] = $host;
-
-        if ($includeRequest)
-        {
-            /**
-             * Filter php_self to avoid a security vulnerability.
-             */
-            $requestUri = substr($_SERVER['REQUEST_URI'], 0, strcspn($_SERVER['REQUEST_URI'], "\n\r"));
-
-            if ($this->getEncodeEntities())
-            {
-                $requestUri = htmlentities($requestUri, ENT_QUOTES);
-            }
-
-            $parts[] = $requestUri;
-        }
-
-        return implode('', $parts);
     }
 }

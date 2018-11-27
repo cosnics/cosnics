@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container
-    xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <!-- SYMFONY -->
         <service
-            id="symfony.component.http_foundation.request"
-            class="Chamilo\Libraries\Platform\ChamiloRequest">
+                id="symfony.component.http_foundation.request"
+                class="Chamilo\Libraries\Platform\ChamiloRequest">
             <factory
-                class="Chamilo\Libraries\Platform\ChamiloRequest"
-                method="createFromGlobals" />
+                    class="Chamilo\Libraries\Platform\ChamiloRequest"
+                    method="createFromGlobals"/>
         </service>
 
         <service
-            id="symfony.component.translation.translator"
-            class="Symfony\Component\Translation\Translator">
+                alias="symfony.component.http_foundation.request"
+                id="Chamilo\Libraries\Platform\ChamiloRequest"/>
+
+        <service
+                id="symfony.component.translation.translator"
+                class="Symfony\Component\Translation\Translator">
             <factory
-                service="chamilo.libraries.translation.translator_factory"
-                method="createTranslator" />
+                    service="chamilo.libraries.translation.translator_factory"
+                    method="createTranslator"/>
             <argument>%chamilo.configuration.general.language%</argument>
         </service>
 
@@ -28,110 +32,110 @@
         </service>
 
         <service
-            id="chamilo.libraries.format.twig.twig_factory"
-            class="Chamilo\Libraries\Format\Twig\TwigEnvironmentFactory" />
+                id="chamilo.libraries.format.twig.twig_factory"
+                class="Chamilo\Libraries\Format\Twig\TwigEnvironmentFactory"/>
 
         <service
-            id="twig.environment"
-            class="Twig_Environment">
+                id="twig.environment"
+                class="Twig_Environment">
             <factory
-                method="createEnvironment"
-                service="chamilo.libraries.format.twig.twig_factory" />
+                    method="createEnvironment"
+                    service="chamilo.libraries.format.twig.twig_factory"/>
             <argument
-                type="service"
-                id="symfony.component.translation.translator" />
+                    type="service"
+                    id="symfony.component.translation.translator"/>
             <argument
-                type="service"
-                id="chamilo.libraries.architecture.application.routing.url_generator" />
+                    type="service"
+                    id="chamilo.libraries.architecture.application.routing.url_generator"/>
         </service>
 
         <service
-            id="symfony.component.forms.form"
-            class="Symfony\Component\Form\FormFactory">
+                id="symfony.component.forms.form"
+                class="Symfony\Component\Form\FormFactory">
             <factory
-                method="buildFormFactory"
-                service="chamilo.libraries.format.form.form_factory_builder" />
+                    method="buildFormFactory"
+                    service="chamilo.libraries.format.form.form_factory_builder"/>
             <argument
-                type="service"
-                id="twig.environment" />
+                    type="service"
+                    id="twig.environment"/>
             <argument
-                type="service"
-                id="symfony.component.validator.validator" />
+                    type="service"
+                    id="symfony.component.validator.validator"/>
         </service>
 
         <service
-            id="chamilo.libraries.format.form.form_factory_builder"
-            class="Chamilo\Libraries\Format\Form\SymfonyFormFactoryBuilder" />
+                id="chamilo.libraries.format.form.form_factory_builder"
+                class="Chamilo\Libraries\Format\Form\SymfonyFormFactoryBuilder"/>
 
         <service
-            id="symfony.component.validator.validator"
-            class="Symfony\Component\Validator\Validator">
+                id="symfony.component.validator.validator"
+                class="Symfony\Component\Validator\Validator">
             <factory
-                method="createValidator"
-                service="chamilo.libraries.format.validator.validator_factory" />
+                    method="createValidator"
+                    service="chamilo.libraries.format.validator.validator_factory"/>
         </service>
 
         <service
-            id="chamilo.libraries.format.validator.validator_factory"
-            class="Chamilo\Libraries\Format\Validator\ValidatorFactory">
+                id="chamilo.libraries.format.validator.validator_factory"
+                class="Chamilo\Libraries\Format\Validator\ValidatorFactory">
             <argument
                     type="service"
-                    id="symfony.component.translation.translator" />
+                    id="symfony.component.translation.translator"/>
             <argument
                     type="service"
-                    id="symfony.component.validator.validator_builder" />
+                    id="symfony.component.validator.validator_builder"/>
             <argument
                     type="service"
-                    id="chamilo.libraries.file.configurable_path_builder" />
+                    id="chamilo.libraries.file.configurable_path_builder"/>
             <argument>%chamilo.configuration.debug.show_errors%</argument>
         </service>
 
         <service
                 id="symfony.component.validator.validator_builder"
-                class="Symfony\Component\Validator\ValidatorBuilder" />
+                class="Symfony\Component\Validator\ValidatorBuilder"/>
 
         <service
-            id="jms.serializer"
-            class="JMS\Serializer\Serializer">
+                id="jms.serializer"
+                class="JMS\Serializer\Serializer">
             <factory
-                method="createSerializer"
-                service="jms.serializer.serializer_factory" />
+                    method="createSerializer"
+                    service="jms.serializer.serializer_factory"/>
         </service>
 
         <service
-            id="jms.serializer.serializer_builder"
-            class="JMS\Serializer\SerializerBuilder" />
+                id="jms.serializer.serializer_builder"
+                class="JMS\Serializer\SerializerBuilder"/>
 
         <service
-            id="jms.serializer.serializer_factory"
-            class="Chamilo\Libraries\Format\Serializer\SerializerFactory">
+                id="jms.serializer.serializer_factory"
+                class="Chamilo\Libraries\Format\Serializer\SerializerFactory">
             <argument
-                type="service"
-                id="jms.serializer.serializer_builder" />
+                    type="service"
+                    id="jms.serializer.serializer_builder"/>
         </service>
 
         <service
-            id="monolog.logger"
-            class="Monolog\Logger">
+                id="monolog.logger"
+                class="Monolog\Logger">
             <argument>Chamilo</argument>
         </service>
 
         <service
-            id="symfony.component.event_dispatcher"
-            class="Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher">
+                id="symfony.component.event_dispatcher"
+                class="Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher">
             <argument
-                type="service"
-                id="service_container" />
+                    type="service"
+                    id="service_container"/>
         </service>
 
         <service
-            id="symfony.config.processor"
-            class="Symfony\Component\Config\Definition\Processor" />
+                id="symfony.config.processor"
+                class="Symfony\Component\Config\Definition\Processor"/>
         <service
-            id="symfony.yaml.parser"
-            class="Symfony\Component\Yaml\Parser" />
+                id="symfony.yaml.parser"
+                class="Symfony\Component\Yaml\Parser"/>
 
-        <service id="symfony.component.filesystem.filesystem" class="Symfony\Component\Filesystem\Filesystem" />
+        <service id="symfony.component.filesystem.filesystem" class="Symfony\Component\Filesystem\Filesystem"/>
 
     </services>
 </container>

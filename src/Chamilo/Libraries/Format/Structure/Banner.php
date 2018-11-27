@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Format\Structure;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -43,7 +44,9 @@ class Banner
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param integer $viewMode
      */
-    public function __construct(Application $application = null, $viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid')
+    public function __construct(
+        Application $application = null, $viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid'
+    )
     {
         $this->application = $application;
         $this->viewMode = $viewMode;
@@ -123,14 +126,16 @@ class Banner
         }
 
         $showMaintenanceWarning = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'maintenance_warning_show'));
+            array('Chamilo\Core\Admin', 'maintenance_warning_show')
+        );
 
         if ($showMaintenanceWarning)
         {
             $maintenanceWarning = Configuration::getInstance()->get_setting(
-                array('Chamilo\Core\Admin', 'maintenance_warning_message'));
+                array('Chamilo\Core\Admin', 'maintenance_warning_message')
+            );
 
-            if (! empty($maintenanceWarning))
+            if (!empty($maintenanceWarning))
             {
                 $html[] = '<div class="warning-banner bg-warning text-warning text-maintenance">';
                 $html[] = $maintenanceWarning;
@@ -138,33 +143,25 @@ class Banner
             }
         }
 
-        if (! is_null(Session::get('_as_admin')))
+        if (!is_null(Session::get('_as_admin')))
         {
             $redirect = new Redirect(
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
-                    Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_ADMIN_USER));
+                    Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_ADMIN_USER
+                )
+            );
             $link = $redirect->getUrl();
 
             $html[] = '<div class="warning-banner bg-warning text-warning">' .
-                 Translation::get('LoggedInAsUser', null, \Chamilo\Core\User\Manager::context()) . ' ' . $userFullName .
-                 ' <a href="' . $link . '">' . Translation::get('Back', null, Utilities::COMMON_LIBRARIES) . '</a></div>';
+                Translation::get('LoggedInAsUser', null, \Chamilo\Core\User\Manager::context()) . ' ' . $userFullName .
+                ' <a href="' . $link . '">' . Translation::get('Back', null, Utilities::COMMON_LIBRARIES) .
+                '</a></div>';
         }
 
         $html[] = '<a name="top"></a>';
 
-        if ($this->getApplication() instanceof Application)
-        {
-            $request = $this->getApplication()->getRequest();
-        }
-
-        $menuRenderer = Configuration::getInstance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
-
-        $html[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer::toHtml(
-            $menuRenderer,
-            $this->getContainerMode(),
-            $request,
-            $user);
+        $html[] = $this->getMenuRenderer()->render($this->getContainerMode(), $user);
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
@@ -181,5 +178,16 @@ class Banner
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Renderer\MenuRenderer
+     */
+    public function getMenuRenderer()
+    {
+        $menuRendererClass = Configuration::getInstance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
+        $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $dependencyInjectionContainer->get($menuRendererClass);
     }
 }

@@ -18,6 +18,9 @@ use Symfony\Component\Translation\Translator;
  */
 class ItemService
 {
+    const PARAM_DIRECTION_DOWN = 2;
+
+    const PARAM_DIRECTION_UP = 1;
 
     /**
      *
@@ -73,6 +76,17 @@ class ItemService
     }
 
     /**
+     *
+     * @param integer $parentIdentifier
+     *
+     * @return integer
+     */
+    public function countItemsByParentIdentifier(int $parentIdentifier)
+    {
+        return $this->getItemRepository()->countItemsByParentIdentifier($parentIdentifier);
+    }
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
@@ -120,10 +134,10 @@ class ItemService
             }
         }
 
-        $item->set_type($itemType);
-        $item->set_display(Item::DISPLAY_BOTH);
-        $item->set_hidden();
-        $item->set_sort($this->getNextItemSortValueByParentIdentifier($item->get_parent()));
+        $item->setType($itemType);
+        $item->setDisplay(Item::DISPLAY_BOTH);
+        $item->setHidden();
+        $item->setSort($this->getNextItemSortValueByParentIdentifier($item->getParent()));
 
         if (!$this->createItem($item))
         {
@@ -153,9 +167,9 @@ class ItemService
     public function createItemTitleForItemFromParameters(Item $item, string $isocode, string $title)
     {
         $itemTitle = new ItemTitle();
-        $itemTitle->set_title($title);
-        $itemTitle->set_isocode($isocode);
-        $itemTitle->set_item_id($item->getId());
+        $itemTitle->setTitle($title);
+        $itemTitle->setIsocode($isocode);
+        $itemTitle->setItemId($item->getId());
 
         return $this->createItemTitle($itemTitle);
     }
@@ -208,26 +222,6 @@ class ItemService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
-     */
-    public function deleteItemChildren(Item $item)
-    {
-        $itemChildren = $this->findItemsByParentIdentifier($item->getId());
-
-        foreach ($itemChildren as $itemChild)
-        {
-            if (!$this->deleteItem($itemChild))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
      * @return bool
      */
     public function deleteItem(Item $item)
@@ -253,6 +247,26 @@ class ItemService
         }
 
         $this->getItemsCacheService()->resetCache();
+
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return boolean
+     */
+    public function deleteItemChildren(Item $item)
+    {
+        $itemChildren = $this->findItemsByParentIdentifier($item->getId());
+
+        foreach ($itemChildren as $itemChild)
+        {
+            if (!$this->deleteItem($itemChild))
+            {
+                return false;
+            }
+        }
 
         return true;
     }
@@ -284,20 +298,30 @@ class ItemService
      */
     public function determineItemTitleForCurrentLanguage(array $itemTitles)
     {
-        $isoCode = $this->getTranslator()->getLocale();
-        $fallbackIsoCodes = $this->getTranslator()->getFallbackLocales();
+        return $this->determineItemTitleForIsoCode($itemTitles, $this->getTranslator()->getLocale());
+    }
 
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[] $itemTitles
+     * @param string $isoCode
+     *
+     * @return string
+     */
+    public function determineItemTitleForIsoCode(array $itemTitles, string $isoCode)
+    {
         if (key_exists($isoCode, $itemTitles))
         {
-            return $itemTitles[$isoCode]->get_title();
+            return $itemTitles[$isoCode]->getTitle();
         }
         else
         {
+            $fallbackIsoCodes = $this->getTranslator()->getFallbackLocales();
+
             foreach ($fallbackIsoCodes as $fallbackIsoCode)
             {
                 if (key_exists($fallbackIsoCode, $itemTitles))
                 {
-                    return $itemTitles[$fallbackIsoCode]->get_title();
+                    return $itemTitles[$fallbackIsoCode]->getTitle();
                 }
             }
         }
@@ -316,6 +340,16 @@ class ItemService
         $rightsCacheService = new RightsCacheService($this);
 
         return $rightsCacheService->getForUser($user);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return boolean
+     */
+    public function doesItemHaveChildren(Item $item)
+    {
+        return $this->countItemsByParentIdentifier($item->getId()) > 0;
     }
 
     /**
@@ -371,12 +405,19 @@ class ItemService
     /**
      *
      * @param integer $parentIdentifier
+     * @param integer $count
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
-    public function findItemsByParentIdentifier(int $parentIdentifier)
+    public function findItemsByParentIdentifier(
+        int $parentIdentifier, int $count = null, int $offset = null, array $orderProperties = array()
+    )
     {
-        return $this->getItemRepository()->findItemsByParentIdentifier($parentIdentifier);
+        return $this->getItemRepository()->findItemsByParentIdentifier(
+            $parentIdentifier, $count, $offset, $orderProperties
+        );
     }
 
     /**
@@ -413,6 +454,31 @@ class ItemService
     public function setItemRepository(ItemRepository $itemRepository)
     {
         $this->itemRepository = $itemRepository;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function getItemTitleForCurrentLanguage(Item $item)
+    {
+        return $this->determineItemTitleForCurrentLanguage(
+            $this->findItemTitlesByItemIdentifierIndexedByIsoCode($item->getId())
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param string $isoCode
+     *
+     * @return string
+     */
+    public function getItemTitleForIsoCode(Item $item, string $isoCode)
+    {
+        return $this->determineItemTitleForIsoCode(
+            $this->findItemTitlesByItemIdentifierIndexedByIsoCode($item->getId()), $isoCode
+        );
     }
 
     /**
@@ -517,6 +583,29 @@ class ItemService
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param integer $moveDirection
+     *
+     * @return boolean
+     */
+    public function moveItemInDirection(Item $item, int $moveDirection)
+    {
+        $numberOfSiblings = $this->countItemsByParentIdentifier($item->getParentId());
+        $newDisplayOrder = $item->getSort() + ($moveDirection == self::PARAM_DIRECTION_UP ? - 1 : 1);
+
+        if ($newDisplayOrder > 0 && $newDisplayOrder <= $numberOfSiblings)
+        {
+            $item->setSort($newDisplayOrder);
+
+            return $this->updateItem($item);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param string[] $values
      *
      * @return boolean
@@ -584,7 +673,7 @@ class ItemService
         foreach ($isoCodesToUpdate as $isoCodeToUpdate)
         {
             $itemTitle = $existingItemTitles[$isoCodeToUpdate];
-            $itemTitle->set_title($valuesItemTitles[$isoCodeToUpdate]);
+            $itemTitle->setTitle($valuesItemTitles[$isoCodeToUpdate]);
 
             if (!$this->updateItemTitle($itemTitle))
             {
@@ -595,6 +684,12 @@ class ItemService
         return true;
     }
 
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param string[] $values
+     *
+     * @return boolean
+     */
     public function saveItemWithTitlesFromValues(Item $item, array $values)
     {
         if (!$this->saveItemFromValues($item, $values))

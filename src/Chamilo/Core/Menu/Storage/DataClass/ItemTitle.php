@@ -1,11 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
-use Chamilo\Core\Menu\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *
@@ -16,87 +12,165 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class ItemTitle extends DataClass
 {
-    const PROPERTY_ITEM_ID = 'item_id';
-    const PROPERTY_TITLE = 'title';
-    const PROPERTY_SORT = 'sort';
     const PROPERTY_ISOCODE = 'isocode';
 
-    private $titles;
+    const PROPERTY_ITEM_ID = 'item_id';
+
+    const PROPERTY_SORT = 'sort';
+
+    const PROPERTY_TITLE = 'title';
 
     /**
-     * Get the default properties of all items.
-     * 
-     * @return array The property names.
+     * @return string
      */
-    public static function get_default_property_names($extended_property_names = array())
-    {
-        return parent::get_default_property_names(
-            array(self::PROPERTY_ITEM_ID, self::PROPERTY_TITLE, self::PROPERTY_SORT, self::PROPERTY_ISOCODE));
-    }
-
-    /**
-     * inherited
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    public function get_item_id()
-    {
-        return $this->get_default_property(self::PROPERTY_ITEM_ID);
-    }
-
-    public function set_item_id($item_id)
-    {
-        $this->set_default_property(self::PROPERTY_ITEM_ID, $item_id);
-    }
-
-    public function get_sort()
-    {
-        return $this->get_default_property(self::PROPERTY_SORT);
-    }
-
-    public function set_sort($sort)
-    {
-        $this->set_default_property(self::PROPERTY_SORT, $sort);
-    }
-
-    public function get_title()
-    {
-        return $this->get_default_property(self::PROPERTY_TITLE);
-    }
-
-    public function set_title($title)
-    {
-        $this->set_default_property(self::PROPERTY_TITLE, $title);
-    }
-
-    public function get_isocode()
+    public function getIsocode()
     {
         return $this->get_default_property(self::PROPERTY_ISOCODE);
     }
 
-    public function set_isocode($isocode)
+    /**
+     * @return integer
+     */
+    public function getItemId()
+    {
+        return $this->get_default_property(self::PROPERTY_ITEM_ID);
+    }
+
+    /**
+     * @return integer
+     */
+    public function getSort()
+    {
+        return $this->get_default_property(self::PROPERTY_SORT);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->get_default_property(self::PROPERTY_TITLE);
+    }
+
+    /**
+     * Get the default properties of all items.
+     *
+     * @param string[] $extendedPropertyNames
+     *
+     * @return array The property names.
+     */
+    public static function get_default_property_names($extendedPropertyNames = array())
+    {
+        return parent::get_default_property_names(
+            array(self::PROPERTY_ITEM_ID, self::PROPERTY_TITLE, self::PROPERTY_SORT, self::PROPERTY_ISOCODE)
+        );
+    }
+
+    /**
+     * @return string
+     * @deprecated Use ItemTitle::getIsocode() now
+     */
+    public function get_isocode()
+    {
+        return $this->getIsocode();
+    }
+
+    /**
+     * @return integer
+     * @deprecated Use ItemTitle::getItemId() now
+     */
+    public function get_item_id()
+    {
+        return $this->getItemId();
+    }
+
+    /**
+     * @return integer
+     * @deprecated Use ItemTitle::getSort() now
+     */
+    public function get_sort()
+    {
+        return $this->getSort();
+    }
+
+    /**
+     * @return string
+     * @deprecated Use ItemTitle::getTitle() now
+     */
+    public function get_title()
+    {
+        return $this->getTitle();
+    }
+
+    /**
+     * @param string $isocode
+     */
+    public function setIsocode($isocode)
     {
         $this->set_default_property(self::PROPERTY_ISOCODE, $isocode);
     }
 
-    public function create()
+    /**
+     * @param integer $itemIdentifier
+     */
+    public function setItemId($itemIdentifier)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_ITEM_ID), 
-            new StaticConditionVariable($this->get_item_id()));
-        $sort = DataManager::retrieve_next_value(self::class_name(), self::PROPERTY_SORT, $condition);
-        
-        $this->set_sort($sort);
-        
-        $success = parent::create($this);
-        if (! $success)
-        {
-            return false;
-        }
-        
-        return true;
+        $this->set_default_property(self::PROPERTY_ITEM_ID, $itemIdentifier);
+    }
+
+    /**
+     * @param integer $sort
+     */
+    public function setSort($sort)
+    {
+        $this->set_default_property(self::PROPERTY_SORT, $sort);
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->set_default_property(self::PROPERTY_TITLE, $title);
+    }
+
+    /**
+     * @param string $isocode
+     *
+     * @deprecated Use ItemTitle::setIsocode() now
+     */
+    public function set_isocode($isocode)
+    {
+        $this->setIsocode($isocode);
+    }
+
+    /**
+     * @param integer $itemIdentifier
+     *
+     * @deprecated Use ItemTitle::setItemId() now
+     */
+    public function set_item_id($itemIdentifier)
+    {
+        $this->setItemId($itemIdentifier);
+    }
+
+    /**
+     * @param integer $sort
+     *
+     * @deprecated Use ItemTitle::setSort() now
+     */
+    public function set_sort($sort)
+    {
+        $this->setSort($sort);
+    }
+
+    /**
+     * @param string $title
+     *
+     * @deprecated Use ItemTitle::setTitle() now
+     */
+    public function set_title($title)
+    {
+        $this->setTitle($title);
     }
 }

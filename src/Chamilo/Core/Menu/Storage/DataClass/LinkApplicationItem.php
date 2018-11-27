@@ -20,48 +20,135 @@ class LinkApplicationItem extends Item
     const TARGET_PARENT = 2;
     const TARGET_TOP = 3;
 
-    public function __construct($default_properties = array(), $additional_properties = null)
+    /**
+     * @param string[] $defaultProperties
+     * @param string[] $additionalProperties
+     *
+     * @throws \Exception
+     */
+    public function __construct($defaultProperties = array(), $additionalProperties = null)
     {
-        parent::__construct($default_properties, $additional_properties);
-        $this->set_type(__CLASS__);
+        parent::__construct($defaultProperties, $additionalProperties);
+        $this->setType(__CLASS__);
     }
 
+    /**
+     * @return string
+     */
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name());
     }
 
+    /**
+     * @return string
+     * @deprecated Use LinkApplicationItem::getSection()
+     */
     public function get_section()
+    {
+        return $this->getSection();
+    }
+
+    /**
+     * @param string $section
+     *
+     * @deprecated Use LinkApplicationItem::setSection()
+     */
+    public function set_section($section)
+    {
+        return $this->setSection($section);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSection()
     {
         return $this->get_additional_property(self::PROPERTY_SECTION);
     }
 
-    public function set_section($section)
+    /**
+     * @param string $section
+     */
+    public function setSection($section)
     {
         return $this->set_additional_property(self::PROPERTY_SECTION, $section);
     }
 
+    /**
+     * @return string[]
+     */
     public static function get_additional_property_names()
     {
         return array(self::PROPERTY_SECTION, self::PROPERTY_URL, self::PROPERTY_TARGET);
     }
 
+    /**
+     * @return string
+     * @deprecated Use LinkApplicationItem::getUrl()
+     */
     public function get_url()
+    {
+        return $this->getUrl();
+    }
+
+    /**
+     * @param string $url
+     *
+     * @deprecated Use LinkApplicationItem::setUrl()
+     */
+    public function set_url($url)
+    {
+        return $this->setUrl($url);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
     {
         return $this->get_additional_property(self::PROPERTY_URL);
     }
 
-    public function set_url($url)
+    /**
+     * @param string $url
+     */
+    public function setUrl($url)
     {
         return $this->set_additional_property(self::PROPERTY_URL, $url);
     }
 
+    /**
+     * @return string
+     * @deprecated Use LinkApplicationItem::getTarget()
+     */
     public function get_target()
+    {
+        return $this->getTarget();
+    }
+
+    /**
+     * @param string $target
+     *
+     * @deprecated Use LinkApplicationItem::setTarget()
+     */
+    public function set_target($target)
+    {
+        return $this->setTarget($target);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTarget()
     {
         return $this->get_additional_property(self::PROPERTY_TARGET);
     }
 
-    public function set_target($target)
+    /**
+     * @param string $target
+     */
+    public function setTarget($target)
     {
         return $this->set_additional_property(self::PROPERTY_TARGET, $target);
     }
@@ -70,16 +157,17 @@ class LinkApplicationItem extends Item
      *
      * @return string
      */
-    public function get_target_string()
+    public function getTargetString()
     {
-        return self::target_string($this->get_target());
+        return self::targetString($this->getTarget());
     }
 
     /**
+     * @param integer $target
      *
      * @return string
      */
-    public static function target_string($target)
+    public static function targetString(int $target)
     {
         switch ($target)
         {
@@ -95,18 +183,25 @@ class LinkApplicationItem extends Item
             case self::TARGET_TOP :
                 return '_top';
                 break;
+            default:
+                return '_blank';
         }
     }
 
-    public function get_target_types($types_only = false)
+    /**
+     * @param boolean $typesOnly
+     *
+     * @return string[]
+     */
+    public function getTargetTypes($typesOnly = false)
     {
         $types = array();
-        
-        $types[self::TARGET_BLANK] = self::target_string(self::TARGET_BLANK);
-        $types[self::TARGET_SELF] = self::target_string(self::TARGET_SELF);
-        $types[self::TARGET_PARENT] = self::target_string(self::TARGET_PARENT);
-        $types[self::TARGET_TOP] = self::target_string(self::TARGET_TOP);
-        
-        return ($types_only ? array_keys($types) : $types);
+
+        $types[self::TARGET_BLANK] = self::targetString(self::TARGET_BLANK);
+        $types[self::TARGET_SELF] = self::targetString(self::TARGET_SELF);
+        $types[self::TARGET_PARENT] = self::targetString(self::TARGET_PARENT);
+        $types[self::TARGET_TOP] = self::targetString(self::TARGET_TOP);
+
+        return ($typesOnly ? array_keys($types) : $types);
     }
 }

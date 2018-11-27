@@ -28,6 +28,7 @@ abstract class CompositeDataClass extends DataClass
      *
      * @param string $class
      * @param string[] $record
+     *
      * @throws \Exception
      * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass
      */
@@ -49,6 +50,7 @@ abstract class CompositeDataClass extends DataClass
                 $object->set_optional_property($optional_property_name, $optional_property_value);
             }
         }
+
         return $object;
     }
 
@@ -70,6 +72,7 @@ abstract class CompositeDataClass extends DataClass
     public function get_additional_property($name)
     {
         $this->check_for_additional_properties();
+
         return $this->get_specific_property(self::PROPERTIES_ADDITIONAL, $name);
     }
 
@@ -92,6 +95,7 @@ abstract class CompositeDataClass extends DataClass
     public function get_additional_properties()
     {
         $this->check_for_additional_properties();
+
         return $this->get_specific_properties(self::PROPERTIES_ADDITIONAL);
     }
 
@@ -108,6 +112,7 @@ abstract class CompositeDataClass extends DataClass
     /**
      *
      * @param string $name
+     *
      * @return boolean
      */
     static public function is_additional_property_name($name)
@@ -127,8 +132,18 @@ abstract class CompositeDataClass extends DataClass
     /**
      *
      * @return string
+     * @deprecated User CompositeDataClass::getType() now
      */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getType()
     {
         return $this->get_default_property(self::PROPERTY_TYPE);
     }
@@ -136,8 +151,18 @@ abstract class CompositeDataClass extends DataClass
     /**
      *
      * @param string $type
+     *
+     * @deprecated Use CompositeDataClass::setType() now
      */
     public function set_type($type)
+    {
+        $this->setType($type);
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
     {
         $this->set_default_property(self::PROPERTY_TYPE, $type);
     }
@@ -146,7 +171,7 @@ abstract class CompositeDataClass extends DataClass
     {
         $additional_properties = $this->get_specific_properties(self::PROPERTIES_ADDITIONAL);
 
-        if (isset($additional_properties) && ! empty($additional_properties))
+        if (isset($additional_properties) && !empty($additional_properties))
         {
             return;
         }

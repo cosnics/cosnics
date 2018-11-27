@@ -1,18 +1,20 @@
 <?php
 namespace Chamilo\Core\Menu\Table\Item;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Menu\Manager;
+use Chamilo\Core\Menu\Service\ItemService;
+use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
-use Chamilo\Core\Menu\Storage\DataManager;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -24,118 +26,254 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
-    public function render_cell($column, $item)
-    {
-        switch ($column->get_name())
-        {
-            case ItemTitle::PROPERTY_TITLE :
-                return $item->get_titles()->get_current_translation();
-            case 'Type' :
-                return '<img src="' . Theme::getInstance()->getImagePath(
-                    'Chamilo\Core\Menu',
-                    'Types/' . Item::type_integer($item->get_type())) . '" />';
-        }
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
 
-        return parent::render_cell($column, $item);
+    /**
+     * @var \Chamilo\Core\Menu\Service\ItemService
+     */
+    private $itemService;
+
+    /**
+     * @var \Chamilo\Core\Menu\Service\RightsService
+     */
+    private $rightsService;
+
+    /**
+     * @param $table
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
+     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
+     *
+     * @throws \Exception
+     */
+    public function __construct($table, Translator $translator, ItemService $itemService, RightsService $rightsService)
+    {
+        parent::__construct($table);
+
+        $this->translator = $translator;
+        $this->itemService = $itemService;
+        $this->rightsService = $rightsService;
     }
 
-    public function get_actions($menu)
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function getItemDeletingUrl(Item $item)
     {
-        $order = $menu->get_sort();
-        $max = DataManager::count(
-            Item::class_name(),
-            new DataClassCountParameters($this->get_component()->get_condition()));
+        return $this->getItemUrl($item, [Manager::PARAM_ACTION => Manager::ACTION_DELETE]);
+    }
 
-        if ($max == 1)
-        {
-            $index = 'single';
-        }
-        else
-        {
-            if ($order == 1)
-            {
-                $index = 'first';
-            }
-            else
-            {
-                if ($order == $max)
-                {
-                    $index = 'last';
-                }
-                else
-                {
-                    $index = 'middle';
-                }
-            }
-        }
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function getItemEditingUrl(Item $item)
+    {
+        return $this->getItemUrl($item, [Manager::PARAM_ACTION => Manager::ACTION_EDIT]);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param integer $sortDirection
+     *
+     * @return string
+     */
+    public function getItemMovingUrl(Item $item, int $sortDirection)
+    {
+        return $this->getItemUrl(
+            $item, [Manager::PARAM_ACTION => Manager::ACTION_MOVE, Manager::PARAM_DIRECTION => $sortDirection]
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function getItemRightsUrl(Item $item)
+    {
+        return $this->getItemUrl($item, [Manager::PARAM_ACTION => Manager::ACTION_RIGHTS]);
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Service\ItemService
+     */
+    public function getItemService(): ItemService
+    {
+        return $this->itemService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
+     */
+    public function setItemService(ItemService $itemService): void
+    {
+        $this->itemService = $itemService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param string[] $parameters
+     *
+     * @return string
+     */
+    public function getItemUrl(Item $item, array $parameters = array())
+    {
+        $parameters[Manager::PARAM_ITEM] = $item->getId();
+        $redirect = new Redirect();
+
+        return $redirect->getUrl();
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function get_actions($item)
+    {
+        $numberOfSiblings = $this->getItemService()->countItemsByParentIdentifier($item->getParentId());
+        $areRightsEnabled = $this->getRightsService()->areRightsEnabled();
+
+        $isFirstItem = $item->getSort() == 0;
+        $isOnlyItem = $numberOfSiblings == 1;
+        $isLastItem = ($item->getSort() + 1) == $numberOfSiblings;
+
+        $translator = $this->getTranslator();
 
         $toolbar = new Toolbar();
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Edit'),
-                $this->get_component()->get_item_editing_url($menu),
-                ToolbarItem::DISPLAY_ICON));
+                $translator->trans('Edit', [], Utilities::COMMON_LIBRARIES),
+                Theme::getInstance()->getCommonImagePath('Action/Edit'), $this->getItemEditingUrl($item),
+                ToolbarItem::DISPLAY_ICON
+            )
+        );
 
-        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
-
-        if ($setting == 1)
+        if ($areRightsEnabled)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Rights', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Rights'),
-                    $this->get_component()->get_item_rights_url($menu),
-                    ToolbarItem::DISPLAY_ICON));
+                    $translator->trans('Rights', [], Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Rights'), $this->getItemRightsUrl($item),
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
-        if ($index == 'first' || $index == 'single')
+        if ($isFirstItem || $isOnlyItem)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUpNA', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/UpNa'),
-                    null,
-                    ToolbarItem::DISPLAY_ICON));
+                    $translator->trans('MoveUpNA', [], Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/UpNa'), null, ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES),
+                    $translator->trans('MoveUp', [], Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Up'),
-                    $this->get_component()->get_item_moving_url($menu, 'up'),
-                    ToolbarItem::DISPLAY_ICON));
+                    $this->getItemMovingUrl($item, ItemService::PARAM_DIRECTION_UP), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
-        if ($index == 'last' || $index == 'single')
+        if ($isLastItem || $isOnlyItem)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDownNA', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/DownNa'),
-                    null,
-                    ToolbarItem::DISPLAY_ICON));
+                    $translator->trans('MoveDownNA', [], Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/DownNa'), null, ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES),
+                    $translator->trans('MoveDown', [], Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Down'),
-                    $this->get_component()->get_item_moving_url($menu, 'down'),
-                    ToolbarItem::DISPLAY_ICON));
+                    $this->getItemMovingUrl($item, ItemService::PARAM_DIRECTION_DOWN), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Delete'),
-                $this->get_component()->get_item_deleting_url($menu),
-                ToolbarItem::DISPLAY_ICON,
-                true));
+                $translator->trans('Delete', [], Utilities::COMMON_LIBRARIES),
+                Theme::getInstance()->getCommonImagePath('Action/Delete'), $this->getItemDeletingUrl($item),
+                ToolbarItem::DISPLAY_ICON, true
+            )
+        );
 
-        return $toolbar->as_html();
+        return $toolbar->render();
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function render_cell($column, $item)
+    {
+        switch ($column->get_name())
+        {
+            case ItemTitle::PROPERTY_TITLE :
+                return $this->getItemService()->getItemTitleForCurrentLanguage($item);
+            case ItemBrowserTableColumnModel::PROPERTY_TYPE :
+
+                $type = $item->getType();
+
+                $typeName = ClassnameUtilities::getInstance()->getClassnameFromNamespace($type);
+                $package = ClassnameUtilities::getInstance()->getNamespaceFromObject($item);
+                $package = ClassnameUtilities::getInstance()->getNamespaceParent($package, 2);
+
+                return '<img src="' . Theme::getInstance()->getImagePath($package, 'Types/' . $typeName) . '" />';
+        }
+
+        return parent::render_cell($column, $item);
     }
 }

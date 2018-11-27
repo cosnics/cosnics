@@ -16,12 +16,13 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
  */
 class ItemBrowserTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
-    const TYPE = 'Type';
+    const PROPERTY_TYPE = 'Type';
 
     public function initialize_columns()
     {
-        $this->add_column(new StaticTableColumn(self::TYPE));
+        $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE));
         $this->add_column(
-            new DataClassPropertyTableColumn(ItemTitle::class_name(), ItemTitle::PROPERTY_TITLE, false));
+            new DataClassPropertyTableColumn(ItemTitle::class, ItemTitle::PROPERTY_TITLE, false)
+        );
     }
 }
