@@ -24,29 +24,9 @@ use Symfony\Component\Translation\Translator;
 class RepositoryImplementationCategoryItemRenderer extends NavigationBarItemRenderer
 {
     /**
-     * @var \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-
-    /**
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    private $request;
-
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
-
-    /**
      * @var \Chamilo\Core\Menu\Renderer\ItemRendererFactory
      */
     private $itemRendererFactory;
-
-    /**
-     * @var \Chamilo\Libraries\Format\Theme
-     */
-    private $themeUtilities;
 
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
@@ -60,11 +40,7 @@ class RepositoryImplementationCategoryItemRenderer extends NavigationBarItemRend
         ItemRendererFactory $itemRendererFactory, Theme $themeUtilities
     )
     {
-        $this->authorizationChecker = $authorizationChecker;
-        $this->request = $request;
-        $this->translator = $translator;
         $this->itemRendererFactory = $itemRendererFactory;
-        $this->themeUtilities = $themeUtilities;
     }
 
     /**
@@ -81,70 +57,6 @@ class RepositoryImplementationCategoryItemRenderer extends NavigationBarItemRend
     public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
     {
         $this->itemRendererFactory = $itemRendererFactory;
-    }
-
-    /**
-     * @return \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface
-     */
-    public function getAuthorizationChecker(): AuthorizationCheckerInterface
-    {
-        return $this->authorizationChecker;
-    }
-
-    /**
-     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     */
-    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): void
-    {
-        $this->authorizationChecker = $authorizationChecker;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
-    public function setRequest(ChamiloRequest $request): void
-    {
-        $this->request = $request;
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Theme
-     */
-    public function getThemeUtilities(): Theme
-    {
-        return $this->themeUtilities;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     */
-    public function setThemeUtilities(Theme $themeUtilities): void
-    {
-        $this->themeUtilities = $themeUtilities;
     }
 
     /**

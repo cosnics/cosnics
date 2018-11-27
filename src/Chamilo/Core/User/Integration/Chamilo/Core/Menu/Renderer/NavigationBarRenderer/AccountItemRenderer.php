@@ -18,42 +18,6 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 class AccountItemRenderer extends MenuItemRenderer
 {
     /**
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    private $request;
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
-    public function __construct(
-        ItemService $itemService, ClassnameUtilities $classnameUtilities, Theme $themeUtilities, ChamiloRequest $request
-    )
-    {
-        parent::__construct($itemService, $classnameUtilities, $themeUtilities);
-
-        $this->request = $request;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
-    public function setRequest(ChamiloRequest $request): void
-    {
-        $this->request = $request;
-    }
-
-    /**
      * @return string
      */
     public function getUrl()

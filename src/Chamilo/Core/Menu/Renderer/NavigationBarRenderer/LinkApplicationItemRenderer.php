@@ -12,34 +12,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class LinkApplicationItemRenderer extends NavigationBarItemRenderer
 {
-    /**
-     * @var \Chamilo\Core\Menu\Service\ItemService
-     */
-    private $itemService;
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     */
-    public function __construct(ItemService $itemService)
-    {
-        $this->itemService = $itemService;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Service\ItemService
-     */
-    public function getItemService(): ItemService
-    {
-        return $this->itemService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     */
-    public function setItemService(ItemService $itemService): void
-    {
-        $this->itemService = $itemService;
-    }
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\LinkApplicationItem $item

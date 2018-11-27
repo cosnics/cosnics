@@ -16,10 +16,6 @@ use Chamilo\Libraries\Format\Theme;
  */
 class CategoryItemRenderer extends NavigationBarItemRenderer
 {
-    /**
-     * @var \Chamilo\Core\Menu\Service\ItemService
-     */
-    private $itemService;
 
     /**
      * @var \Chamilo\Core\Menu\Service\RightsService
@@ -32,11 +28,6 @@ class CategoryItemRenderer extends NavigationBarItemRenderer
     private $itemRendererFactory;
 
     /**
-     * @var \Chamilo\Libraries\Format\Theme
-     */
-    private $themeUtilities;
-
-    /**
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
      * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
@@ -47,10 +38,8 @@ class CategoryItemRenderer extends NavigationBarItemRenderer
         Theme $themeUtilities
     )
     {
-        $this->itemService = $itemService;
         $this->rightsService = $rightsService;
         $this->itemRendererFactory = $itemRendererFactory;
-        $this->themeUtilities = $themeUtilities;
     }
 
     /**
@@ -70,22 +59,6 @@ class CategoryItemRenderer extends NavigationBarItemRenderer
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Service\ItemService
-     */
-    public function getItemService(): ItemService
-    {
-        return $this->itemService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     */
-    public function setItemService(ItemService $itemService): void
-    {
-        $this->itemService = $itemService;
-    }
-
-    /**
      * @return \Chamilo\Core\Menu\Service\RightsService
      */
     public function getRightsService(): RightsService
@@ -99,22 +72,6 @@ class CategoryItemRenderer extends NavigationBarItemRenderer
     public function setRightsService(RightsService $rightsService): void
     {
         $this->rightsService = $rightsService;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Theme
-     */
-    public function getThemeUtilities(): Theme
-    {
-        return $this->themeUtilities;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     */
-    public function setThemeUtilities(Theme $themeUtilities): void
-    {
-        $this->themeUtilities = $themeUtilities;
     }
 
     /**

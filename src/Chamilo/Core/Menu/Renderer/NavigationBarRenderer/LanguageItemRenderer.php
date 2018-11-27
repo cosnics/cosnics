@@ -14,36 +14,6 @@ use Chamilo\Libraries\File\Redirect;
  */
 class LanguageItemRenderer extends NavigationBarItemRenderer
 {
-    /**
-     * @var \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-
-    /**
-     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     */
-    public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker
-    )
-    {
-        $this->authorizationChecker = $authorizationChecker;
-    }
-
-    /**
-     * @return \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface
-     */
-    public function getAuthorizationChecker(): AuthorizationCheckerInterface
-    {
-        return $this->authorizationChecker;
-    }
-
-    /**
-     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     */
-    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): void
-    {
-        $this->authorizationChecker = $authorizationChecker;
-    }
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user

@@ -19,57 +19,6 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
  */
 class RepositoryImplementationItemRenderer extends NavigationBarItemRenderer
 {
-    /**
-     * @var \Chamilo\Libraries\Format\Theme
-     */
-    private $themeUtilities;
-
-    /**
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    private $request;
-
-    /**
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
-    public function __construct(Theme $themeUtilities, ChamiloRequest $request)
-    {
-        $this->themeUtilities = $themeUtilities;
-        $this->request = $request;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Theme
-     */
-    public function getThemeUtilities(): Theme
-    {
-        return $this->themeUtilities;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     */
-    public function setThemeUtilities(Theme $themeUtilities): void
-    {
-        $this->themeUtilities = $themeUtilities;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
-    public function setRequest(ChamiloRequest $request): void
-    {
-        $this->request = $request;
-    }
 
     /**
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationItem $item

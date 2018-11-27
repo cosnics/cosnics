@@ -16,19 +16,9 @@ class LinkItemRenderer extends NavigationBarItemRenderer
 {
 
     /**
-     * @var \Chamilo\Core\Menu\Service\ItemService
-     */
-    private $itemService;
-
-    /**
      * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
      */
     private $classnameUtilities;
-
-    /**
-     * @var \Chamilo\Libraries\Format\Theme
-     */
-    private $themeUtilities;
 
     /**
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
@@ -37,9 +27,7 @@ class LinkItemRenderer extends NavigationBarItemRenderer
      */
     public function __construct(ItemService $itemService, ClassnameUtilities $classnameUtilities, Theme $themeUtilities)
     {
-        $this->itemService = $itemService;
         $this->classnameUtilities = $classnameUtilities;
-        $this->themeUtilities = $themeUtilities;
     }
 
     /**
@@ -56,38 +44,6 @@ class LinkItemRenderer extends NavigationBarItemRenderer
     public function setClassnameUtilities(ClassnameUtilities $classnameUtilities): void
     {
         $this->classnameUtilities = $classnameUtilities;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Service\ItemService
-     */
-    public function getItemService(): ItemService
-    {
-        return $this->itemService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     */
-    public function setItemService(ItemService $itemService): void
-    {
-        $this->itemService = $itemService;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Theme
-     */
-    public function getThemeUtilities(): Theme
-    {
-        return $this->themeUtilities;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     */
-    public function setThemeUtilities(Theme $themeUtilities): void
-    {
-        $this->themeUtilities = $themeUtilities;
     }
 
     /**
