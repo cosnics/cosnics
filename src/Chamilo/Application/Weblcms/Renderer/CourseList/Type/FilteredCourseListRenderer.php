@@ -109,7 +109,7 @@ class FilteredCourseListRenderer extends CourseListRenderer
                 );
             }
 
-            return $this->courseService->getCoursesInCourseTypeForUser($this->get_parent()->getUser(), $courseType);
+            return new ArrayResultSet($this->courseService->getCoursesInCourseTypeForUser($this->get_parent()->getUser(), $courseType));
         }
 
         return new ArrayResultSet($this->courseService->getAllCoursesForUser($this->get_parent()->getUser()));
