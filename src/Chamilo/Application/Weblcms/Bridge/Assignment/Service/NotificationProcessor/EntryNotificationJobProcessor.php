@@ -22,6 +22,7 @@ class EntryNotificationJobProcessor extends AssignmentJobProcessor implements Jo
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Chamilo\Core\Queue\Exceptions\JobNoLongerValidException
      */
     public function processJob(Job $job)
     {

@@ -25,8 +25,8 @@ class Job
     const STATUS_SENT_TO_QUEUE = 2;
     const STATUS_IN_PROGRESS = 3;
     const STATUS_SUCCESS = 4;
-    const STATUS_FAILED = 5;
-    const STATUS_RETRY = 6;
+    const STATUS_FAILED_NO_LONGER_VALID = 5;
+    const STATUS_FAILED_RETRY = 6;
 
     /**
      * @var int

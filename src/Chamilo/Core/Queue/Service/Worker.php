@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Queue\Service;
 
+use Chamilo\Core\Queue\Exceptions\JobNoLongerValidException;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Interop\Queue\PsrContext;
 
@@ -45,6 +46,8 @@ class Worker
 
     /**
      * @param string $queueName
+     *
+     * @throws \Throwable
      */
     public function waitForJobAndExecute($queueName)
     {
@@ -56,20 +59,34 @@ class Worker
         {
             $jobEntityId = $message->getBody();
             $job = $this->jobEntityManager->findJob($jobEntityId);
-            $this->jobEntityManager->changeJobStatus($job, Job::STATUS_IN_PROGRESS);
 
-            $processor = $this->jobProcessorFactory->createJobProcessor($job);
-            $processor->processJob($job);
+            try
+            {
+                $this->jobEntityManager->changeJobStatus($job, Job::STATUS_IN_PROGRESS);
 
-            $consumer->acknowledge($message);
+                $processor = $this->jobProcessorFactory->createJobProcessor($job);
+                $processor->processJob($job);
 
-            $this->jobEntityManager->changeJobStatus($job, Job::STATUS_SUCCESS);
+                $consumer->acknowledge($message);
+
+                $this->jobEntityManager->changeJobStatus($job, Job::STATUS_SUCCESS);
+            }
+            catch(JobNoLongerValidException $ex)
+            {
+                $consumer->acknowledge($message);
+                $this->jobEntityManager->changeJobStatus($job, Job::STATUS_FAILED_NO_LONGER_VALID);
+            }
+            catch (\Throwable $ex)
+            {
+                $this->jobEntityManager->changeJobStatus($job, Job::STATUS_FAILED_RETRY);
+                throw $ex;
+            }
+
         }
         catch(\Throwable $ex)
         {
             $consumer->reject($message);
-            echo $ex->getMessage();
-            echo $ex->getTraceAsString();
+            throw $ex;
         }
     }
 }

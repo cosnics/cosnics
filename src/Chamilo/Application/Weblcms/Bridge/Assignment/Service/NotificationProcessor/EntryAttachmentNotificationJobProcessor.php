@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Queue\Exceptions\JobNoLongerValidException;
 use Chamilo\Core\Queue\Service\JobProcessorInterface;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 
@@ -34,6 +35,7 @@ class EntryAttachmentNotificationJobProcessor extends AssignmentJobProcessor imp
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Chamilo\Core\Queue\Exceptions\JobNoLongerValidException
      */
     public function processJob(Job $job)
     {
@@ -43,7 +45,7 @@ class EntryAttachmentNotificationJobProcessor extends AssignmentJobProcessor imp
         $entryAttachment = $this->assignmentService->findEntryAttachmentById($entryAttachmentId);
         if (!$entryAttachment instanceof EntryAttachment)
         {
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf('The given entryAttachment with id %s could not be found', $entryAttachmentId)
             );
         }

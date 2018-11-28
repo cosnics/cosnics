@@ -14,6 +14,7 @@ use Chamilo\Core\Notification\Domain\ViewingContext;
 use Chamilo\Core\Notification\Service\FilterManager;
 use Chamilo\Core\Notification\Service\NotificationManager;
 use Chamilo\Core\Notification\Storage\Entity\Filter;
+use Chamilo\Core\Queue\Exceptions\JobNoLongerValidException;
 use Chamilo\Core\Queue\Service\JobProcessorInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
@@ -102,13 +103,14 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Chamilo\Core\Queue\Exceptions\JobNoLongerValidException
      */
     protected function processForEntry($entryId)
     {
         $entry = $this->assignmentService->findEntryByIdentifier($entryId);
         if (!$entry instanceof Entry)
         {
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf('The given entry with id %s could not be found', $entryId)
             );
         }
@@ -117,7 +119,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         if (!$publication instanceof ContentObjectPublication)
         {
 
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf(
                     'The given content object publication with id %s could not be found',
                     $entry->getContentObjectPublicationId()
@@ -128,7 +130,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $course = $this->courseService->getCourseById($publication->get_course_id());
         if (!$course instanceof Course)
         {
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf(
                     'The given course with id %s could not be found', $publication->get_course_id()
                 )
@@ -138,7 +140,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $assignment = $this->contentObjectRepository->findById($publication->get_content_object_id());
         if (!$assignment instanceof Assignment)
         {
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf(
                     'The given assignment with id %s could not be found', $publication->get_content_object_id()
                 )

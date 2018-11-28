@@ -19,20 +19,13 @@ class JobEntityManager
     protected $jobEntityRepository;
 
     /**
-     * @var \JMS\Serializer\Serializer
-     */
-    protected $serializer;
-
-    /**
      * JobEntityManager constructor.
      *
      * @param \Chamilo\Core\Queue\Storage\Repository\JobEntityRepository $jobEntityRepository
-     * @param \JMS\Serializer\Serializer $serializer
      */
-    public function __construct(JobEntityRepository $jobEntityRepository, Serializer $serializer)
+    public function __construct(JobEntityRepository $jobEntityRepository)
     {
         $this->jobEntityRepository = $jobEntityRepository;
-        $this->serializer = $serializer;
     }
 
     /**
