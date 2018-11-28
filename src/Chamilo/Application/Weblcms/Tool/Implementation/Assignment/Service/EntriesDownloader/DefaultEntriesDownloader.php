@@ -35,7 +35,7 @@ class DefaultEntriesDownloader extends EntriesDownloader
 
             if (!$file instanceof File)
             {
-                return;
+                continue;
             }
 
             $entityFolder = $this->getOrCreateFolderByEntity(
