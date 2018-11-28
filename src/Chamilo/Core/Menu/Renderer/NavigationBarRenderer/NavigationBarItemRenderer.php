@@ -77,22 +77,6 @@ abstract class NavigationBarItemRenderer extends ItemRenderer
     }
 
     /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
      * @return \Chamilo\Core\Menu\Service\ItemService
      */
     public function getItemService(): ItemService
@@ -106,6 +90,22 @@ abstract class NavigationBarItemRenderer extends ItemRenderer
     public function setItemService(ItemService $itemService): void
     {
         $this->itemService = $itemService;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     */
+    public function getRequest(): ChamiloRequest
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     */
+    public function setRequest(ChamiloRequest $request): void
+    {
+        $this->request = $request;
     }
 
     /**
@@ -125,19 +125,19 @@ abstract class NavigationBarItemRenderer extends ItemRenderer
     }
 
     /**
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     * @return \Symfony\Component\Translation\Translator
      */
-    public function getRequest(): ChamiloRequest
+    public function getTranslator(): Translator
     {
-        return $this->request;
+        return $this->translator;
     }
 
     /**
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function setRequest(ChamiloRequest $request): void
+    public function setTranslator(Translator $translator): void
     {
-        $this->request = $request;
+        $this->translator = $translator;
     }
 
     /**

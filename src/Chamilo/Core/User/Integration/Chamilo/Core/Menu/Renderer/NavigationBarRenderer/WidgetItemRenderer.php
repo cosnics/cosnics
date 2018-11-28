@@ -11,6 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -28,94 +29,20 @@ class WidgetItemRenderer extends NavigationBarItemRenderer
 
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, ItemService $itemService,
-        ConfigurationConsulter $configurationConsulter, Translator $translator, Theme $themeUtilities
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemService $itemService,
+        Theme $themeUtilities, ChamiloRequest $request, ConfigurationConsulter $configurationConsulter
     )
     {
+        parent::__construct($authorizationChecker, $translator, $itemService, $themeUtilities, $request);
+
         $this->configurationConsulter = $configurationConsulter;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getAccountUrl()
-    {
-        return $this->getUserUrl(Manager::ACTION_VIEW_ACCOUNT);
-    }
-
-    /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
-    {
-        $this->configurationConsulter = $configurationConsulter;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getLogoutUrl()
-    {
-        return $this->getUserUrl(Manager::ACTION_LOGOUT);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getPictureUrl()
-    {
-        return $this->getUserUrl(Manager::ACTION_CHANGE_PICTURE);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getSettingsUrl()
-    {
-        return $this->getUserUrl(Manager::ACTION_USER_SETTINGS);
-    }
-
-    /**
-     *
-     * @param string $action
-     *
-     * @return string
-     */
-    public function getUserUrl($action)
-    {
-        $redirect = new Redirect(
-            array(Application::PARAM_CONTEXT => Manager::context(), Application::PARAM_ACTION => $action)
-        );
-
-        return $redirect->getUrl();
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return boolean
-     */
-    public function isItemVisibleForUser(User $user)
-    {
-        return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ManageAccount');
     }
 
     /**
@@ -242,5 +169,82 @@ class WidgetItemRenderer extends NavigationBarItemRenderer
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getAccountUrl()
+    {
+        return $this->getUserUrl(Manager::ACTION_VIEW_ACCOUNT);
+    }
+
+    /**
+     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     */
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     */
+    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
+    {
+        $this->configurationConsulter = $configurationConsulter;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getLogoutUrl()
+    {
+        return $this->getUserUrl(Manager::ACTION_LOGOUT);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getPictureUrl()
+    {
+        return $this->getUserUrl(Manager::ACTION_CHANGE_PICTURE);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getSettingsUrl()
+    {
+        return $this->getUserUrl(Manager::ACTION_USER_SETTINGS);
+    }
+
+    /**
+     *
+     * @param string $action
+     *
+     * @return string
+     */
+    public function getUserUrl($action)
+    {
+        $redirect = new Redirect(
+            array(Application::PARAM_CONTEXT => Manager::context(), Application::PARAM_ACTION => $action)
+        );
+
+        return $redirect->getUrl();
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return boolean
+     */
+    public function isItemVisibleForUser(User $user)
+    {
+        return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ManageAccount');
     }
 }

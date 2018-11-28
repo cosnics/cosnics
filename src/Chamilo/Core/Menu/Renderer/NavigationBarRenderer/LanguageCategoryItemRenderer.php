@@ -12,6 +12,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -33,19 +34,63 @@ class LanguageCategoryItemRenderer extends NavigationBarItemRenderer
 
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
+     * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\LanguageConsulter $languageConsulter
      * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, ItemService $itemService, Theme $themeUtilities,
-        Translator $translator, LanguageConsulter $languageConsulter, ItemRendererFactory $itemRendererFactory
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemService $itemService,
+        Theme $themeUtilities, ChamiloRequest $request, LanguageConsulter $languageConsulter,
+        ItemRendererFactory $itemRendererFactory
     )
     {
+        parent::__construct($authorizationChecker, $translator, $itemService, $themeUtilities, $request);
+
         $this->languageConsulter = $languageConsulter;
         $this->itemRendererFactory = $itemRendererFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function render(Item $item, User $user)
+    {
+        if (!$this->isItemVisibleForUser($user))
+        {
+            return '';
+        }
+
+        $html = array();
+
+        $html[] = '<li class="dropdown">';
+        $html[] =
+            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+
+        $imagePath = $this->getThemeUtilities()->getImagePath('Chamilo\Core\Menu', 'Language');
+        $title = $this->getItemService()->getItemTitleForCurrentLanguage($item);
+
+        $html[] =
+            '<img class="chamilo-menu-item-icon' . ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') .
+            '" src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+
+        $html[] = '<div class="chamilo-menu-item-label-with-image">';
+        $html[] = strtoupper($this->getTranslator()->getLocale());
+        $html[] = '<span class="caret"></span>';
+        $html[] = '</div>';
+        $html[] = '</a>';
+
+        $html[] = $this->renderLanguageItems($item, $user);
+
+        $html[] = '</li>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -88,46 +133,6 @@ class LanguageCategoryItemRenderer extends NavigationBarItemRenderer
     public function isItemVisibleForUser(User $user)
     {
         return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ChangeLanguage');
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     * @throws \Exception
-     */
-    public function render(Item $item, User $user)
-    {
-        if (!$this->isItemVisibleForUser($user))
-        {
-            return '';
-        }
-
-        $html = array();
-
-        $html[] = '<li class="dropdown">';
-        $html[] =
-            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
-
-        $imagePath = $this->getThemeUtilities()->getImagePath('Chamilo\Core\Menu', 'Language');
-        $title = $this->getItemService()->getItemTitleForCurrentLanguage($item);
-
-        $html[] =
-            '<img class="chamilo-menu-item-icon' . ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') .
-            '" src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
-
-        $html[] = '<div class="chamilo-menu-item-label-with-image">';
-        $html[] = strtoupper($this->getTranslator()->getLocale());
-        $html[] = '<span class="caret"></span>';
-        $html[] = '</div>';
-        $html[] = '</a>';
-
-        $html[] = $this->renderLanguageItems($item, $user);
-
-        $html[] = '</li>';
-
-        return implode(PHP_EOL, $html);
     }
 
     /**

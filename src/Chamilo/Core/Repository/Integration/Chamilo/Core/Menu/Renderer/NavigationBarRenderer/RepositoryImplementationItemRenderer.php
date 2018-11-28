@@ -22,20 +22,6 @@ class RepositoryImplementationItemRenderer extends NavigationBarItemRenderer
 
     /**
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationItem $item
-     *
-     * @return bool
-     */
-    public function isSelected(Item $item)
-    {
-        $request = $this->getRequest();
-        $currentContext = $request->query->get(Application::PARAM_CONTEXT);
-        $currentInstance = $request->query->get(Manager::PARAM_EXTERNAL_REPOSITORY);
-
-        return ($currentContext == $item->get_implementation() && $currentInstance == $item->get_instance_id());
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
@@ -86,5 +72,19 @@ class RepositoryImplementationItemRenderer extends NavigationBarItemRenderer
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationItem $item
+     *
+     * @return bool
+     */
+    public function isSelected(Item $item)
+    {
+        $request = $this->getRequest();
+        $currentContext = $request->query->get(Application::PARAM_CONTEXT);
+        $currentInstance = $request->query->get(Manager::PARAM_EXTERNAL_REPOSITORY);
+
+        return ($currentContext == $item->get_implementation() && $currentInstance == $item->get_instance_id());
     }
 }

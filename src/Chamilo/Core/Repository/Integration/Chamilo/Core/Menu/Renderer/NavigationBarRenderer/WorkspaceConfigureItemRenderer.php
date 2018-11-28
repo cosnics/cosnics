@@ -21,13 +21,6 @@ use Symfony\Component\Translation\Translator;
 class WorkspaceConfigureItemRenderer extends NavigationBarItemRenderer
 {
 
-    public function isSelected(Item $item)
-    {
-        $currentContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
-
-        return $currentContext == Manager::package();
-    }
-
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -75,5 +68,12 @@ class WorkspaceConfigureItemRenderer extends NavigationBarItemRenderer
         $html[] = '</a>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function isSelected(Item $item)
+    {
+        $currentContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
+
+        return $currentContext == Manager::package();
     }
 }

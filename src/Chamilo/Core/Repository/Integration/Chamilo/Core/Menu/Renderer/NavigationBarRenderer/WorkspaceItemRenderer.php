@@ -20,21 +20,6 @@ class WorkspaceItemRenderer extends NavigationBarItemRenderer
 
     /**
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
-     *
-     * @return boolean
-     */
-    public function isSelected(Item $item)
-    {
-        $request = $this->getRequest();
-
-        $currentContext = $request->query->get(Application::PARAM_CONTEXT);
-        $currentWorkspace = $request->query->get(Manager::PARAM_WORKSPACE_ID);
-
-        return $currentContext == Manager::package() && $currentWorkspace == $item->getWorkspaceId();
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
@@ -84,5 +69,20 @@ class WorkspaceItemRenderer extends NavigationBarItemRenderer
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
+     *
+     * @return boolean
+     */
+    public function isSelected(Item $item)
+    {
+        $request = $this->getRequest();
+
+        $currentContext = $request->query->get(Application::PARAM_CONTEXT);
+        $currentWorkspace = $request->query->get(Manager::PARAM_WORKSPACE_ID);
+
+        return $currentContext == Manager::package() && $currentWorkspace == $item->getWorkspaceId();
     }
 }

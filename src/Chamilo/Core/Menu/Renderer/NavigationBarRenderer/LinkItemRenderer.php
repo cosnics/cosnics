@@ -3,9 +3,12 @@ namespace Chamilo\Core\Menu\Renderer\NavigationBarRenderer;
 
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\NavigationBarRenderer
@@ -21,28 +24,20 @@ class LinkItemRenderer extends NavigationBarItemRenderer
     private $classnameUtilities;
 
     /**
+     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
+     * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     */
-    public function __construct(ItemService $itemService, ClassnameUtilities $classnameUtilities, Theme $themeUtilities)
-    {
-        $this->classnameUtilities = $classnameUtilities;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    public function getClassnameUtilities(): ClassnameUtilities
-    {
-        return $this->classnameUtilities;
-    }
-
-    /**
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      */
-    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities): void
+    public function __construct(
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemService $itemService,
+        Theme $themeUtilities, ChamiloRequest $request, ClassnameUtilities $classnameUtilities
+    )
     {
+        parent::__construct($authorizationChecker, $translator, $itemService, $themeUtilities, $request);
+
         $this->classnameUtilities = $classnameUtilities;
     }
 
@@ -93,5 +88,21 @@ class LinkItemRenderer extends NavigationBarItemRenderer
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    public function getClassnameUtilities(): ClassnameUtilities
+    {
+        return $this->classnameUtilities;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
+     */
+    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities): void
+    {
+        $this->classnameUtilities = $classnameUtilities;
     }
 }

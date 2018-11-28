@@ -6,8 +6,11 @@ use Chamilo\Core\Menu\Renderer\NavigationBarRenderer;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\NavigationBarRenderer
@@ -28,72 +31,24 @@ class CategoryItemRenderer extends NavigationBarItemRenderer
     private $itemRendererFactory;
 
     /**
+     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
+     * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
+     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
      * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      */
     public function __construct(
-        ItemService $itemService, RightsService $rightsService, ItemRendererFactory $itemRendererFactory,
-        Theme $themeUtilities
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemService $itemService,
+        Theme $themeUtilities, ChamiloRequest $request, RightsService $rightsService,
+        ItemRendererFactory $itemRendererFactory
     )
     {
+        parent::__construct($authorizationChecker, $translator, $itemService, $themeUtilities, $request);
+
         $this->rightsService = $rightsService;
         $this->itemRendererFactory = $itemRendererFactory;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
-     */
-    public function getItemRendererFactory(): ItemRendererFactory
-    {
-        return $this->itemRendererFactory;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
-     */
-    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
-    {
-        $this->itemRendererFactory = $itemRendererFactory;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Service\RightsService
-     */
-    public function getRightsService(): RightsService
-    {
-        return $this->rightsService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
-     */
-    public function setRightsService(RightsService $rightsService): void
-    {
-        $this->rightsService = $rightsService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return boolean
-     */
-    public function isSelected(Item $item)
-    {
-        $childItems = $this->getItemService()->findItemsByParentIdentifier($item->getId());
-
-        foreach ($childItems as $childItem)
-        {
-            $itemRenderer = $this->getItemRendererFactory()->getItemRenderer(NavigationBarRenderer::class, $childItem);
-
-            if ($itemRenderer->isSelected($childItem))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -149,6 +104,60 @@ class CategoryItemRenderer extends NavigationBarItemRenderer
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     */
+    public function getItemRendererFactory(): ItemRendererFactory
+    {
+        return $this->itemRendererFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     */
+    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
+    {
+        $this->itemRendererFactory = $itemRendererFactory;
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return boolean
+     */
+    public function isSelected(Item $item)
+    {
+        $childItems = $this->getItemService()->findItemsByParentIdentifier($item->getId());
+
+        foreach ($childItems as $childItem)
+        {
+            $itemRenderer = $this->getItemRendererFactory()->getItemRenderer(NavigationBarRenderer::class, $childItem);
+
+            if ($itemRenderer->isSelected($childItem))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -4,12 +4,13 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Navigat
 use Chamilo\Core\Menu\Renderer\ItemRendererFactory;
 use Chamilo\Core\Menu\Renderer\NavigationBarRenderer;
 use Chamilo\Core\Menu\Renderer\NavigationBarRenderer\NavigationBarItemRenderer;
+use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceCategoryItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceConfigureItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem;
-use Chamilo\Core\Repository\Workspace\Manager as WorkspaceManager;
 use Chamilo\Core\Repository\Manager as RepositoryManager;
+use Chamilo\Core\Repository\Workspace\Manager as WorkspaceManager;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\EntityService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
@@ -37,63 +38,20 @@ class WorkspaceCategoryItemRenderer extends NavigationBarItemRenderer
 
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, ChamiloRequest $request, Translator $translator,
-        ItemRendererFactory $itemRendererFactory, Theme $themeUtilities
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemService $itemService,
+        Theme $themeUtilities, ChamiloRequest $request, ItemRendererFactory $itemRendererFactory
     )
     {
+        parent::__construct($authorizationChecker, $translator, $itemService, $themeUtilities, $request);
+
         $this->itemRendererFactory = $itemRendererFactory;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
-     */
-    public function getItemRendererFactory(): ItemRendererFactory
-    {
-        return $this->itemRendererFactory;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
-     */
-    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
-    {
-        $this->itemRendererFactory = $itemRendererFactory;
-    }
-
-    public function isSelected(Item $item)
-    {
-        $request = $this->getRequest();
-
-        $currentContext = $request->query->get(Application::PARAM_CONTEXT);
-
-        if ($currentContext == WorkspaceManager::package())
-        {
-            return true;
-        }
-
-        $currentWorkspace = $request->query->get(RepositoryManager::PARAM_WORKSPACE_ID);
-
-        return isset($currentWorkspace);
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
-     * @todo This shouldn't really be here like this
-     */
-    protected function findWorkspaces(User $user)
-    {
-        $workspaceService = new WorkspaceService(new WorkspaceRepository());
-        $entityService = new EntityService();
-
-        return $workspaceService->getWorkspaceFavouritesByUser($entityService, $user);
     }
 
     /**
@@ -149,6 +107,63 @@ class WorkspaceCategoryItemRenderer extends NavigationBarItemRenderer
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     * @todo This shouldn't really be here like this
+     */
+    protected function findWorkspaces(User $user)
+    {
+        $workspaceService = new WorkspaceService(new WorkspaceRepository());
+        $entityService = new EntityService();
+
+        return $workspaceService->getWorkspaceFavouritesByUser($entityService, $user);
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     */
+    public function getItemRendererFactory(): ItemRendererFactory
+    {
+        return $this->itemRendererFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     */
+    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
+    {
+        $this->itemRendererFactory = $itemRendererFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceCategoryItem $item
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return boolean
+     */
+    public function isItemVisibleForUser(WorkspaceCategoryItem $item, User $user)
+    {
+        return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\Repository');
+    }
+
+    public function isSelected(Item $item)
+    {
+        $request = $this->getRequest();
+
+        $currentContext = $request->query->get(Application::PARAM_CONTEXT);
+
+        if ($currentContext == WorkspaceManager::package())
+        {
+            return true;
+        }
+
+        $currentWorkspace = $request->query->get(RepositoryManager::PARAM_WORKSPACE_ID);
+
+        return isset($currentWorkspace);
+    }
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
@@ -191,16 +206,5 @@ class WorkspaceCategoryItemRenderer extends NavigationBarItemRenderer
         $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceCategoryItem $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return boolean
-     */
-    public function isItemVisibleForUser(WorkspaceCategoryItem $item, User $user)
-    {
-        return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\Repository');
     }
 }

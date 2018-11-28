@@ -16,16 +16,6 @@ class LanguageItemRenderer extends NavigationBarItemRenderer
 {
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return boolean
-     */
-    public function isItemVisibleForUser(User $user)
-    {
-        return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ChangeLanguage');
-    }
-
-    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\LanguageItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
@@ -58,5 +48,15 @@ class LanguageItemRenderer extends NavigationBarItemRenderer
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return boolean
+     */
+    public function isItemVisibleForUser(User $user)
+    {
+        return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ChangeLanguage');
     }
 }

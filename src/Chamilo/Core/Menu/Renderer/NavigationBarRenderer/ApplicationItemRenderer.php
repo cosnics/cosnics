@@ -27,18 +27,86 @@ class ApplicationItemRenderer extends NavigationBarItemRenderer
 
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, RegistrationConsulter $registrationConsulter,
-        Translator $translator, ItemService $itemService, Theme $themeUtilities, ChamiloRequest $request
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemService $itemService,
+        Theme $themeUtilities, ChamiloRequest $request, RegistrationConsulter $registrationConsulter
     )
     {
+        parent::__construct($authorizationChecker, $translator, $itemService, $themeUtilities, $request);
+
         $this->registrationConsulter = $registrationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return string
+     */
+    public function render(Item $item, User $user)
+    {
+        if (!$this->isItemVisibleForUser($item, $user))
+        {
+            return '';
+        }
+
+        $translator = $this->getTranslator();
+
+        $url = $this->getApplicationItemUrl($item);
+
+        $html = array();
+
+        $isSelected = $this->isSelected($item);
+
+        $html[] = '<li' . ($isSelected ? ' class="active"' : '') . '>';
+
+        if ($item->getUseTranslation())
+        {
+            $title = $translator->trans('TypeName', [], $item->getApplication());
+        }
+        else
+        {
+            $title = $this->getItemService()->getItemTitleForCurrentLanguage($item);
+        }
+
+        $html[] = '<a href="' . $url . '">';
+
+        if ($item->showIcon())
+        {
+            if (!empty($item->getIconClass()))
+            {
+                $html[] = $this->renderCssIcon($item);
+            }
+            else
+            {
+                $integrationNamespace = $item->getApplication() . '\Integration\Chamilo\Core\Menu';
+                $imagePath = $this->getThemeUtilities()->getImagePath(
+                    $integrationNamespace, 'Menu' . ($isSelected ? 'Selected' : '')
+                );
+
+                $html[] = '<img class="chamilo-menu-item-icon' .
+                    ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' . $imagePath .
+                    '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+            }
+        }
+
+        if ($item->showTitle())
+        {
+            $html[] = '<div class="chamilo-menu-item-label' .
+                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
+        }
+
+        $html[] = '<div class="clearfix"></div>';
+        $html[] = '</a>';
+        $html[] = '</li>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -129,71 +197,5 @@ class ApplicationItemRenderer extends NavigationBarItemRenderer
         }
 
         return true;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     */
-    public function render(Item $item, User $user)
-    {
-        if (!$this->isItemVisibleForUser($item, $user))
-        {
-            return '';
-        }
-
-        $translator = $this->getTranslator();
-
-        $url = $this->getApplicationItemUrl($item);
-
-        $html = array();
-
-        $isSelected = $this->isSelected($item);
-
-        $html[] = '<li' . ($isSelected ? ' class="active"' : '') . '>';
-
-        if ($item->getUseTranslation())
-        {
-            $title = $translator->trans('TypeName', [], $item->getApplication());
-        }
-        else
-        {
-            $title = $this->getItemService()->getItemTitleForCurrentLanguage($item);
-        }
-
-        $html[] = '<a href="' . $url . '">';
-
-        if ($item->showIcon())
-        {
-            if (!empty($item->getIconClass()))
-            {
-                $html[] = $this->renderCssIcon($item);
-            }
-            else
-            {
-                $integrationNamespace = $item->getApplication() . '\Integration\Chamilo\Core\Menu';
-                $imagePath = $this->getThemeUtilities()->getImagePath(
-                    $integrationNamespace, 'Menu' . ($isSelected ? 'Selected' : '')
-                );
-
-                $html[] = '<img class="chamilo-menu-item-icon' .
-                    ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' . $imagePath .
-                    '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
-            }
-        }
-
-        if ($item->showTitle())
-        {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
-        }
-
-        $html[] = '<div class="clearfix"></div>';
-        $html[] = '</a>';
-        $html[] = '</li>';
-
-        return implode(PHP_EOL, $html);
     }
 }

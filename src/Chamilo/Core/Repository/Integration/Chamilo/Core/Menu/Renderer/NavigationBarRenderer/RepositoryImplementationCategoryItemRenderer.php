@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Navigat
 use Chamilo\Core\Menu\Renderer\ItemRendererFactory;
 use Chamilo\Core\Menu\Renderer\NavigationBarRenderer;
 use Chamilo\Core\Menu\Renderer\NavigationBarRenderer\NavigationBarItemRenderer;
+use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationItem;
@@ -30,44 +31,20 @@ class RepositoryImplementationCategoryItemRenderer extends NavigationBarItemRend
 
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, ChamiloRequest $request, Translator $translator,
-        ItemRendererFactory $itemRendererFactory, Theme $themeUtilities
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemService $itemService,
+        Theme $themeUtilities, ChamiloRequest $request, ItemRendererFactory $itemRendererFactory
     )
     {
+        parent::__construct($authorizationChecker, $translator, $itemService, $themeUtilities, $request);
+
         $this->itemRendererFactory = $itemRendererFactory;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
-     */
-    public function getItemRendererFactory(): ItemRendererFactory
-    {
-        return $this->itemRendererFactory;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
-     */
-    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
-    {
-        $this->itemRendererFactory = $itemRendererFactory;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationCategoryItem $item
-     *
-     * @return boolean
-     */
-    public function isSelected(Item $item)
-    {
-        // TODO;
-        return false;
     }
 
     /**
@@ -132,6 +109,44 @@ class RepositoryImplementationCategoryItemRenderer extends NavigationBarItemRend
     }
 
     /**
+     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     */
+    public function getItemRendererFactory(): ItemRendererFactory
+    {
+        return $this->itemRendererFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     */
+    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
+    {
+        $this->itemRendererFactory = $itemRendererFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationCategoryItem $item
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return mixed
+     */
+    public function isItemVisibleForUser(Item $item, User $user)
+    {
+        return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\Repository');
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationCategoryItem $item
+     *
+     * @return boolean
+     */
+    public function isSelected(Item $item)
+    {
+        // TODO;
+        return false;
+    }
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
@@ -171,16 +186,5 @@ class RepositoryImplementationCategoryItemRenderer extends NavigationBarItemRend
         }
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationCategoryItem $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return mixed
-     */
-    public function isItemVisibleForUser(Item $item, User $user)
-    {
-        return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\Repository');
     }
 }
