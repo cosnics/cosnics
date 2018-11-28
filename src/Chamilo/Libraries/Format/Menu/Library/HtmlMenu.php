@@ -119,9 +119,10 @@ class HtmlMenu
     }
 
     /**
+     * @param \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuRenderer $renderer
+     * @param string string $menuType
      *
-     * @param HtmlMenuRenderer $renderer Renderer to use
-     * @param string $menuType Type of the menu
+     * @return mixed
      */
     public function render($renderer, $menuType = '')
     {

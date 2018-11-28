@@ -57,7 +57,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12 col-lg-2">';
-        $html[] = $this->getMenu()->render_as_tree();
+        $html[] = $this->getMenu()->renderAsTree();
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-12 col-lg-10">';
@@ -129,7 +129,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                 $toolActions->addButton(
                     new Button(
 
-                        $translator->trans('Rights', null, Utilities::COMMON_LIBRARIES),
+                        $translator->trans('Rights', [], Utilities::COMMON_LIBRARIES),
                         Theme::getInstance()->getCommonImagePath('Action/Rights'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS)),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -153,7 +153,9 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
     {
         $urlFormat = new Redirect([self::PARAM_ACTION => self::ACTION_BROWSE, self::PARAM_PARENT => '__ITEM__']);
 
-        return new ItemMenu($this->getParentIdentifier(), $urlFormat->getUrl());
+        return new ItemMenu(
+            $this->getItemService(), $this->getTranslator(), $urlFormat->getUrl(), $this->getParentIdentifier()
+        );
     }
 
     /**

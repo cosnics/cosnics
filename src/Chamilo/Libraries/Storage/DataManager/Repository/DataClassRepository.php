@@ -160,10 +160,10 @@ class DataClassRepository
 
     /**
      * Write an instance of a DataClass object to the storage layer
-     *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
      *
      * @return boolean
+     * @throws \Exception
      */
     public function create(DataClass $dataClass)
     {
@@ -266,6 +266,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
      *
      * @return string[]
+     * @throws \Exception
      */
     public function record($dataClassName, RecordRetrieveParameters $parameters = null)
     {
@@ -308,6 +309,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @throws \Exception
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters = null)
     {
@@ -341,7 +343,7 @@ class DataClassRepository
     /**
      * Update an instance of a DataClass object in the storage layer
      *
-     * @param $object \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
      *
      * @return boolean
      */
@@ -524,6 +526,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function countGrouped($dataClassName, DataClassCountGroupedParameters $parameters)
     {
@@ -553,6 +556,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
      *
      * @return string[]
+     * @throws \Exception
      */
     public function distinct($dataClassName, DataClassDistinctParameters $parameters)
     {
@@ -698,6 +702,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\DataClass\CompositeDataClass $compositeDataClass
      *
      * @return string[]
+     * @throws \Exception
      */
     public function retrieveCompositeDataClassAdditionalProperties(CompositeDataClass $compositeDataClass)
     {
@@ -820,6 +825,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass
+     * @throws \Exception
      */
     protected function retrieveClass($cacheDataClassName, $dataClassName, DataClassParameters $parameters)
     {
@@ -863,6 +869,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      *
      * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass
+     * @throws \Exception
      */
     protected function retrieveCompositeDataClass($dataClassName, DataClassRetrieveParameters $parameters)
     {
@@ -880,11 +887,12 @@ class DataClassRepository
 
     /**
      *
-     * @param string $cacheClassName
+     * @param string $cacheDataClassName
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @throws \Exception
      */
     protected function retrievesClass(
         $cacheDataClassName, $dataClassName, DataClassRetrievesParameters $parameters = null
@@ -918,6 +926,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @throws \Exception
      */
     protected function retrievesCompositeDataClass($dataClassName, DataClassRetrievesParameters $parameters)
     {
@@ -934,6 +943,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
      *
      * @return integer
+     * @throws \Exception
      */
     protected function countClass($cacheDataClassName, $dataClassName, DataClassCountParameters $parameters)
     {
@@ -962,6 +972,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
      *
      * @return integer
+     * @throws \Exception
      */
     protected function countCompositeDataClass($dataClassName, DataClassCountParameters $parameters)
     {
@@ -1014,7 +1025,7 @@ class DataClassRepository
 
             if ($parameters->getCondition() instanceof Condition)
             {
-                $parameters->setCondition(new AndCondition($parameters->getCondition(), $condition));
+                $parameters->setCondition(new AndCondition([$parameters->getCondition(), $condition]));
             }
             else
             {
@@ -1063,6 +1074,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      *
      * @return string
+     * @throws \Exception
      */
     protected function determineCompositeDataClassType($dataClassName, DataClassRetrieveParameters $parameters)
     {

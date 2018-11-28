@@ -6,6 +6,7 @@ use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -125,8 +126,9 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
      */
     public function getItemUrl(Item $item, array $parameters = array())
     {
+        $parameters[Application::PARAM_CONTEXT] = Manager::package();
         $parameters[Manager::PARAM_ITEM] = $item->getId();
-        $redirect = new Redirect();
+        $redirect = new Redirect($parameters);
 
         return $redirect->getUrl();
     }

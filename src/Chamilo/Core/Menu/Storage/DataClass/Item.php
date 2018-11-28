@@ -2,9 +2,7 @@
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
-use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
-use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DisplayOrderSupport;
 
 /**
  *
@@ -13,7 +11,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
+class Item extends CompositeDataClass implements DisplayOrderSupport
 {
     /**
      * Display options
@@ -40,23 +38,27 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
     const TYPE_LINK_APPLICATION = 4;
 
     /**
-     * @param string[] $defaultProperties
-     * @param string[] $additionalProperties
-     *
-     * @throws \Exception
-     */
-    public function __construct($defaultProperties = array(), $additionalProperties = null)
-    {
-        parent::__construct($defaultProperties, $additionalProperties);
-        $this->add_listener(new DisplayOrderDataClassListener($this));
-    }
-
-    /**
      * @return integer
      */
     public function getDisplay()
     {
         return $this->get_default_property(self::PROPERTY_DISPLAY);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getDisplayOrderContextPropertyNames()
+    {
+        return array(self::PROPERTY_PARENT);
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayOrderPropertyName()
+    {
+        return self::PROPERTY_SORT;
     }
 
     /**
@@ -115,22 +117,6 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
     public function get_display()
     {
         return $this->getDisplay();
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
-     */
-    public function get_display_order_context_properties()
-    {
-        return array(new PropertyConditionVariable(Item::class_name(), self::PROPERTY_PARENT));
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
-     */
-    public function get_display_order_property()
-    {
-        return new PropertyConditionVariable(Item::class_name(), self::PROPERTY_SORT);
     }
 
     /**

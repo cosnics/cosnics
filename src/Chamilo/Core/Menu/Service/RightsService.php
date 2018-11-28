@@ -5,11 +5,14 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocation;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocationEntityRight;
+use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Core\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Symfony\Component\Translation\Translator;
+use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
+use Chamilo\Core\Rights\Entity\UserEntity;
 
 /**
  * @package Chamilo\Core\Menu\Service
@@ -44,19 +47,42 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return boolean
      */
-    public function getConfigurationConsulter(): ConfigurationConsulter
+    public function areRightsEnabled()
     {
-        return $this->configurationConsulter;
+        $setting = $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Menu', 'enable_rights'));
+
+        return $setting == 1;
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return boolean
      */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
+    public function canUserViewItem(User $user, Item $item)
     {
-        $this->configurationConsulter = $configurationConsulter;
+        if (!$item->isIdentified())
+        {
+            return true;
+        }
+
+        $entities = array();
+        $entities[] = UserEntity::getInstance();
+        $entities[] = PlatformGroupEntity::getInstance();
+
+        try
+        {
+            return $this->doesUserIdentifierHaveRightForEntitiesAndLocationIdentifier(
+                $user->getId(), self::VIEW_RIGHT, $entities, $item->getId(), self::TYPE_ITEM
+            );
+        }
+        catch (RightsLocationNotFoundException $exception)
+        {
+            return false;
+        }
     }
 
     /**
@@ -98,16 +124,25 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
     }
 
     /**
+     * @param bool $returnLocation
+     *
+     * @return \Chamilo\Core\Rights\Domain\RightsLocation
+     */
+    public function createRoot(bool $returnLocation = true)
+    {
+        return $this->createSubtreeRootLocation(0, self::TREE_TYPE_ROOT, $returnLocation);
+    }
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
      */
-    public function moveItemRightsLocation(Item $item)
+    public function deleteItemRightsLocation(Item $item)
     {
-        $parentLocation = $this->determineParentRightsLocationForItem($item);
-        $itemLocation = $this->findRightsLocationByParameters($item->getId(), self::TYPE_ITEM);
+        $rightsLocation = $this->findRightsLocationByParameters($item->getId(), self::TYPE_ITEM);
 
-        return $this->getRightsRepository()->moveRightsLocation($itemLocation, $parentLocation->getId());
+        return $this->deleteRightsLocation($rightsLocation);
     }
 
     /**
@@ -130,6 +165,32 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
     }
 
     /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return \Chamilo\Core\Rights\Domain\RightsLocation
+     */
+    public function findRightsLocationForItem(Item $item)
+    {
+        return $this->findRightsLocationByParameters($item->getId(), self::TYPE_ITEM);
+    }
+
+    /**
+     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     */
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     */
+    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
+    {
+        $this->configurationConsulter = $configurationConsulter;
+    }
+
+    /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\RightsLocationEntityRight
      */
     protected function getRightsLocationEntityRightInstance()
@@ -143,33 +204,6 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
     protected function getRightsLocationInstance()
     {
         return new RightsLocation();
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
-     *
-     * @return boolean
-     */
-    public function setRightsLocationViewRightForEveryone(RightsLocation $rightsLocation)
-    {
-        return $this->setRightsLocationEntityRight(self::VIEW_RIGHT, 0, 0, $rightsLocation->getId());
-    }
-
-    public function deleteItemRightsLocation(Item $item)
-    {
-        $rightsLocation = $this->findRightsLocationByParameters($item->getId(), self::TYPE_ITEM);
-
-        return $this->deleteRightsLocation($rightsLocation);
-    }
-
-    /**
-     * @return boolean
-     */
-    public function areRightsEnabled()
-    {
-        $setting = $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Menu', 'enable_rights'));
-
-        return $setting == 1;
     }
 
     /**
@@ -193,20 +227,37 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
      */
-    public function canUserViewItem(User $user, Item $item)
+    public function moveItemRightsLocation(Item $item)
     {
-        if (!$item->isIdentified())
-        {
-            return true;
-        }
+        $parentLocation = $this->determineParentRightsLocationForItem($item);
+        $itemLocation = $this->findRightsLocationByParameters($item->getId(), self::TYPE_ITEM);
 
-        //TODO: Add the actual rights check here
+        return $this->getRightsRepository()->moveRightsLocation($itemLocation, $parentLocation->getId());
+    }
 
-        return true;
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
+     *
+     * @return boolean
+     */
+    public function setRightsLocationViewRightForEveryone(RightsLocation $rightsLocation)
+    {
+        return $this->setRightsLocationEntityRight(self::VIEW_RIGHT, 0, 0, $rightsLocation->getId());
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
+     *
+     * @return boolean
+     */
+    public function deleteViewRightForRightsLocationForEveryone(RightsLocation $rightsLocation)
+    {
+        return $this->getRightsRepository()->deleteRightsLocationEntityRightsForLocationAndParameters(
+            $rightsLocation, 0, 0, self::VIEW_RIGHT
+        );
     }
 }

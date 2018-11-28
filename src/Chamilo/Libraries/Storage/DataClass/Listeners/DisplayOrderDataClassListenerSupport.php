@@ -12,16 +12,16 @@ interface DisplayOrderDataClassListenerSupport
 {
 
     /**
-     * Returns the property for the display order
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
-     */
-    public function get_display_order_property();
-
-    /**
      * Returns the properties that define the context for the display order (the properties on which has to be limited)
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
      */
     public function get_display_order_context_properties();
+
+    /**
+     * Returns the property for the display order
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
+     */
+    public function get_display_order_property();
 }

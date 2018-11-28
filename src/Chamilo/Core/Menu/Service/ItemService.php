@@ -6,6 +6,7 @@ use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
+use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -55,16 +56,23 @@ class ItemService
     private $translator;
 
     /**
+     * @var \Chamilo\Libraries\Storage\Service\DisplayOrderHandler
+     */
+    private $displayOrderHandler;
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\Repository\ItemRepository $itemRepository
      * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
      * @param \Chamilo\Core\Menu\Service\ItemsCacheService $itemsCacheService
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
      * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Storage\Service\DisplayOrderHandler $displayOrderHandler
      */
     public function __construct(
         ItemRepository $itemRepository, RightsService $rightsService, ItemsCacheService $itemsCacheService,
-        StringUtilities $stringUtilities, PropertyMapper $propertyMapper, Translator $translator
+        StringUtilities $stringUtilities, PropertyMapper $propertyMapper, Translator $translator,
+        DisplayOrderHandler $displayOrderHandler
     )
     {
         $this->itemRepository = $itemRepository;
@@ -73,6 +81,23 @@ class ItemService
         $this->stringUtilities = $stringUtilities;
         $this->propertyMapper = $propertyMapper;
         $this->translator = $translator;
+        $this->displayOrderHandler = $displayOrderHandler;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Service\DisplayOrderHandler
+     */
+    public function getDisplayOrderHandler(): DisplayOrderHandler
+    {
+        return $this->displayOrderHandler;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Service\DisplayOrderHandler $displayOrderHandler
+     */
+    public function setDisplayOrderHandler(DisplayOrderHandler $displayOrderHandler): void
+    {
+        $this->displayOrderHandler = $displayOrderHandler;
     }
 
     /**
@@ -110,9 +135,10 @@ class ItemService
 
     /**
      * @param string $itemType
-     * @param array $values
+     * @param string[] $values
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item
+     * @throws \Exception
      */
     public function createItemForTypeFromValues(string $itemType, array $values)
     {
@@ -137,7 +163,8 @@ class ItemService
         $item->setType($itemType);
         $item->setDisplay(Item::DISPLAY_BOTH);
         $item->setHidden();
-        $item->setSort($this->getNextItemSortValueByParentIdentifier($item->getParent()));
+
+        $this->getDisplayOrderHandler()->prepareCreate($item);
 
         if (!$this->createItem($item))
         {
@@ -222,7 +249,7 @@ class ItemService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return bool
+     * @return boolean
      */
     public function deleteItem(Item $item)
     {
@@ -232,6 +259,11 @@ class ItemService
         }
 
         if (!$this->getItemRepository()->deleteItem($item))
+        {
+            return false;
+        }
+
+        if (!$this->getDisplayOrderHandler()->handleDelete($item))
         {
             return false;
         }

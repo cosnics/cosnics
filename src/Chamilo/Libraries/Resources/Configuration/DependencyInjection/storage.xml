@@ -27,5 +27,13 @@
         <service
                 id="Chamilo\Libraries\Storage\DataClass\PropertyMapper"
                 autowire="true"/>
+
+        <service
+                id="Chamilo\Libraries\Storage\Service\DisplayOrderHandler"
+                autowire="true"/>
+
+        <service
+                id="Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository"
+                autowire="true"/>
     </services>
 </container>

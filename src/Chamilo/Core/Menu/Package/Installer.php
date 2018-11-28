@@ -1,13 +1,15 @@
 <?php
 namespace Chamilo\Core\Menu\Package;
 
-use Chamilo\Core\Menu\Rights;
+use Chamilo\Core\Menu\Service\ItemService;
+use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\DataClass\LanguageCategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocation;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Utilities\Utilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -24,43 +26,75 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      */
     public function extra()
     {
-        $rights_utilities = Rights::getInstance();
-        $location = $rights_utilities->create_subtree_root_location(static::package(), 0, Rights::TREE_TYPE_ROOT, true);
-        
-        if (! $location instanceof RightsLocation)
+        $location = $this->getRightsService()->createRoot(true);
+
+        if (!$location instanceof RightsLocation)
         {
             return false;
         }
         else
         {
             $this->add_message(
-                self::TYPE_NORMAL, 
-                Translation::get(
-                    'ObjectCreated', 
-                    array('OBJECT' => Translation::get('RightsTree')), 
-                    Utilities::COMMON_LIBRARIES));
+                self::TYPE_NORMAL, $this->getTranslator()->trans(
+                'ObjectCreated',
+                array('OBJECT' => $this->getTranslator()->trans('RightsTree', [], 'Chamilo\Core\Menu')),
+                Utilities::COMMON_LIBRARIES
+            )
+            );
         }
-        
+
         $languageItem = new LanguageCategoryItem();
-        $languageItem->set_display(Item::DISPLAY_BOTH);
-        
-        if (! $languageItem->create())
+        $languageItem->setDisplay(Item::DISPLAY_BOTH);
+
+        if (!$this->getItemService()->createItem($languageItem))
         {
             return false;
         }
         else
         {
             $itemTitle = new ItemTitle();
-            $itemTitle->set_title(Translation::get('ChangeLanguage'));
-            $itemTitle->set_isocode(Translation::getInstance()->getLanguageIsocode());
-            $itemTitle->set_item_id($languageItem->get_id());
-            
-            if (! $itemTitle->create())
+            $itemTitle->setTitle($this->getTranslator()->trans('ChangeLanguage', [], 'Chamilo\Core\Menu'));
+            $itemTitle->setIsocode($this->getTranslator()->getLocale());
+            $itemTitle->setItemId($languageItem->getId());
+
+            if (!$this->getItemService()->createItemTitle($itemTitle))
             {
                 return false;
             }
         }
-        
+
         return true;
+    }
+
+    /**
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected function getContainer()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer();
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Service\RightsService
+     */
+    protected function getRightsService()
+    {
+        return $this->getContainer()->get(RightsService::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Service\ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->getContainer()->get(ItemService::class);
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    protected function getTranslator()
+    {
+        return $this->getContainer()->get(Translator::class);
     }
 }

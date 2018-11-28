@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -44,6 +45,9 @@ class EditorComponent extends Manager implements DelegateComponent
             )
             )
         );
+
+//        $this->getService(DisplayOrderHandler::class)->prepareUpdate($item);
+//        exit;
 
         $itemForm = $this->getItemFormFactory()->getItemForm(
             $item->getType(), $this->get_url(array(self::PARAM_ITEM => $item->getId()))

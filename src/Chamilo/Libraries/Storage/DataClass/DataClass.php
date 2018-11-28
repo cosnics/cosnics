@@ -193,8 +193,21 @@ abstract class DataClass
      * @param string $name The name of the property
      *
      * @return mixed
+     * @deprecated Use DataClass::getDefaultProperty() now
      */
     public function get_default_property($name)
+    {
+        return $this->getDefaultProperty($name);
+    }
+
+    /**
+     * Gets a default property of this data class object by name.
+     *
+     * @param string $name The name of the property
+     *
+     * @return mixed
+     */
+    public function getDefaultProperty($name)
     {
         return $this->get_specific_property(self::PROPERTIES_DEFAULT, $name);
     }
@@ -204,8 +217,24 @@ abstract class DataClass
      *
      * @param string $name The name of the property.
      * @param mixed $value The new value for the property.
+     *
+     * @throws \Exception
+     * @deprecated Use DataClass::setDefaultProperty() now
      */
     public function set_default_property($name, $value)
+    {
+        $this->setDefaultProperty($name, $value);
+    }
+
+    /**
+     * Sets a default property of this data class by name.
+     *
+     * @param string $name The name of the property.
+     * @param mixed $value The new value for the property.
+     *
+     * @throws \Exception
+     */
+    public function setDefaultProperty($name, $value)
     {
         $this->notify(DataClassListener::BEFORE_SET_PROPERTY, array($name, $value));
         $this->set_specific_property(self::PROPERTIES_DEFAULT, $name, $value);
