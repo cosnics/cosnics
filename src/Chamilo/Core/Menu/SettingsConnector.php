@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu;
 
-use Chamilo\Core\Menu\Renderer\Menu\Renderer;
+use Chamilo\Core\Menu\Renderer\Item;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -12,9 +12,10 @@ class SettingsConnector
 
     public function get_renderers()
     {
-        $translator = Translation::getInstance();
-        
         return array(
-            Renderer::TYPE_BAR => $translator->getTranslation('MenuBootstrapBar', null, Manager::context()));
+            ItemRenderer::class => Translation::getInstance()->getTranslation(
+                'MenuBootstrapBar', null, Manager::context()
+            )
+        );
     }
 }

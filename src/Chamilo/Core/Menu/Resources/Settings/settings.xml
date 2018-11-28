@@ -3,24 +3,6 @@
     <settings>
         <category name="visual">
             <setting
-                name="show_sitemap"
-                field="toggle"
-                default="0">
-                <options type="static">
-                    <option
-                        name="show_sitemap"
-                        value="1" />
-                </options>
-            </setting>
-            <setting
-                name="menu_renderer"
-                field="select"
-                default="Bar">
-                <options
-                    type="dynamic"
-                    source="get_renderers" />
-            </setting>
-            <setting
                 name="brand_image"
                 field="image_uploader" />
         </category>

@@ -2,11 +2,11 @@
 namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Menu\Renderer\MenuRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -40,9 +40,9 @@ class Banner
     private $containerMode;
 
     /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Libraries\Architecture\Application\Application|null $application
      * @param integer $viewMode
+     * @param string $containerMode
      */
     public function __construct(
         Application $application = null, $viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid'
@@ -185,9 +185,8 @@ class Banner
      */
     public function getMenuRenderer()
     {
-        $menuRendererClass = Configuration::getInstance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
         $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
-        return $dependencyInjectionContainer->get($menuRendererClass);
+        return $dependencyInjectionContainer->get(MenuRenderer::class);
     }
 }

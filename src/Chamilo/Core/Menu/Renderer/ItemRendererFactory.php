@@ -46,30 +46,26 @@ class ItemRendererFactory
     }
 
     /**
-     * @param string $menuRendererClassname
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return \Chamilo\Core\Menu\Renderer\ItemRenderer
      */
-    public function getItemRenderer(string $menuRendererClassname, Item $item)
+    public function getItemRenderer(Item $item)
     {
-        return $this->getService($this->determineItemRendererServiceName($menuRendererClassname, $item));
+        return $this->getService($this->determineItemRendererServiceName($item));
     }
 
     /**
-     * @param string $menuRendererClassname
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return string
      */
-    public function determineItemRendererServiceName(string $menuRendererClassname, Item $item)
+    public function determineItemRendererServiceName(Item $item)
     {
-        $menuRendererType = $this->getClassnameUtilities()->getClassnameFromNamespace($menuRendererClassname);
-
         $itemNamespace = $this->getClassnameUtilities()->getNamespaceFromObject($item);
         $itemPackage = $this->getClassnameUtilities()->getNamespaceParent($itemNamespace, 2);
         $itemType = $this->getClassnameUtilities()->getClassnameFromObject($item);
 
-        return $itemPackage . '\Renderer\\' . $menuRendererType . '\\' . $itemType . 'Renderer';
+        return $itemPackage . '\Renderer\Item\\' . $itemType . 'Renderer';
     }
 }

@@ -19,15 +19,14 @@
 
         <service id="Chamilo\Core\Menu\Form\ItemFormFactory"/>
 
-        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer"/>
-        <service id="Chamilo\Core\Menu\Renderer\SiteMapRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\MenuRenderer"/>
         <service id="Chamilo\Core\Menu\Renderer\ItemRendererFactory"/>
 
-        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer\ApplicationItemRenderer"/>
-        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer\CategoryItemRenderer"/>
-        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer\LanguageCategoryItemRenderer"/>
-        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer\LanguageItemRenderer"/>
-        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer\LinkApplicationItemRenderer"/>
-        <service id="Chamilo\Core\Menu\Renderer\NavigationBarRenderer\LinkItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\Item\ApplicationItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\Item\CategoryItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\Item\LanguageCategoryItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\Item\LanguageItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\Item\LinkApplicationItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\Item\LinkItemRenderer"/>
     </services>
 </container>

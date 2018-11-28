@@ -6,16 +6,15 @@
         <defaults autowire="true" public="true"/>
 
         <service
-                id="Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\NavigationBarRenderer\RepositoryApplicationItemRenderer"/>
+                id="Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\RepositoryApplicationItemRenderer"/>
         <service
-                id="Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\NavigationBarRenderer\RepositoryImplementationCategoryItemRenderer"/>
+                id="Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\RepositoryImplementationCategoryItemRenderer"/>
         <service
-                id="Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\NavigationBarRenderer\RepositoryImplementationItemRenderer"/>
+                id="Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\RepositoryImplementationItemRenderer"/>
         <service
-                id="Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\NavigationBarRenderer\WorkspaceCategoryItemRenderer"/>
+                id="Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\WorkspaceCategoryItemRenderer"/>
         <service
-                id="Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\NavigationBarRenderer\WorkspaceConfigureItemRenderer"/>
-        <service
-                id="Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\NavigationBarRenderer\WorkspaceItemRenderer"/>
+                id="Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\WorkspaceConfigureItemRenderer"/>
+        <service id="Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\WorkspaceItemRenderer"/>
     </services>
 </container>
