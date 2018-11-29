@@ -14,6 +14,7 @@ Class DisplayOrderDataClassStub implements DataClassDisplayOrderSupport
     const PROPERTY_ID = 'id';
     const PROPERTY_SORT = 'sort';
     const PROPERTY_PARENT_ID = 'parent_id';
+    const NO_UID = - 1;
 
     /**
      * @var int
@@ -146,5 +147,15 @@ Class DisplayOrderDataClassStub implements DataClassDisplayOrderSupport
             self::PROPERTY_ID => $this->getId(), self::PROPERTY_SORT => $this->getSort(),
             self::PROPERTY_PARENT_ID => $this->getParentId()
         );
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIdentified()
+    {
+        $id = $this->getId();
+
+        return isset($id) && strlen($id) > 0 && $id != self::NO_UID;
     }
 }

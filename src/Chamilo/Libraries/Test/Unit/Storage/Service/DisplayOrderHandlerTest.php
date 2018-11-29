@@ -74,7 +74,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $displayOrderDataClass->setSort(5);
 
         $this->displayOrderRepositoryMock->expects($this->once())
-            ->method('countDisplayOrdersInContext')
+            ->method('countOtherDisplayOrdersInContext')
             ->with($displayOrderDataClass)
             ->will($this->returnValue(15));
 
@@ -93,7 +93,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $displayOrderDataClass->setSort(5);
 
         $this->displayOrderRepositoryMock->expects($this->once())
-            ->method('countDisplayOrdersInContext')
+            ->method('countOtherDisplayOrdersInContext')
             ->with($displayOrderDataClass)
             ->will($this->returnValue(15));
 
@@ -116,7 +116,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $displayOrderDataClass->setSort(5);
 
         $this->displayOrderRepositoryMock->expects($this->once())
-            ->method('countDisplayOrdersInContext')
+            ->method('countOtherDisplayOrdersInContext')
             ->with($displayOrderDataClass)
             ->will($this->returnValue(4));
 
@@ -144,7 +144,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $displayOrderDataClass->setParentId(0);
 
         $this->displayOrderRepositoryMock->expects($this->once())
-            ->method('countDisplayOrdersInContext')
+            ->method('countOtherDisplayOrdersInContext')
             ->with($displayOrderDataClass)
             ->will($this->returnValue(15));
 
@@ -177,7 +177,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $displayOrderDataClass->setParentId(0);
 
         $this->displayOrderRepositoryMock->expects($this->once())
-            ->method('countDisplayOrdersInContext')
+            ->method('countOtherDisplayOrdersInContext')
             ->with($displayOrderDataClass)
             ->will($this->returnValue(15));
 
@@ -209,7 +209,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $displayOrderDataClass->setParentId(0);
 
         $this->displayOrderRepositoryMock->expects($this->once())
-            ->method('countDisplayOrdersInContext')
+            ->method('countOtherDisplayOrdersInContext')
             ->with($displayOrderDataClass)
             ->will($this->returnValue(15));
 
@@ -250,7 +250,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
             );
 
         $this->displayOrderRepositoryMock->expects($this->once())
-            ->method('countDisplayOrdersInContext')
+            ->method('countOtherDisplayOrdersInContext')
             ->with($displayOrderDataClass)
             ->will($this->returnValue(15));
 
@@ -307,7 +307,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
             );
 
         $this->displayOrderRepositoryMock->expects($this->once())
-            ->method('countDisplayOrdersInContext')
+            ->method('countOtherDisplayOrdersInContext')
             ->with($displayOrderDataClass)
             ->will($this->returnValue(15));
 
