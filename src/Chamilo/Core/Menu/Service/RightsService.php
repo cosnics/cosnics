@@ -152,7 +152,7 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
      */
     public function determineParentRightsLocationForItem(Item $item)
     {
-        $parentIdentifier = $item->get_parent();
+        $parentIdentifier = $item->getParentId();
 
         if (!$parentIdentifier)
         {

@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -138,6 +139,18 @@ class DisplayOrderRepository
         return $this->getDataClassRepository()->retrieveNextValue(
             get_class($dataClass), $this->getDisplayOrderPropertyConditionVariable($dataClass),
             $this->getDisplayOrderCondition($dataClass)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
+     *
+     * @return integer
+     */
+    public function countDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass)
+    {
+        return $this->getDataClassRepository()->count(
+            get_class($dataClass), new DataClassCountParameters($this->getDisplayOrderCondition($dataClass))
         );
     }
 

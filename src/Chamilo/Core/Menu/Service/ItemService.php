@@ -114,7 +114,8 @@ class ItemService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function createItem(Item $item)
     {
@@ -143,7 +144,7 @@ class ItemService
      * @param string[] $values
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function createItemForTypeFromValues(string $itemType, array $values)
     {
@@ -231,7 +232,7 @@ class ItemService
      * @param string[] $values
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function createItemWithTitlesForTypeFromValues(string $itemType, array $values)
     {
@@ -624,7 +625,7 @@ class ItemService
      * @param integer $moveDirection
      *
      * @return boolean
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function moveItemInDirection(Item $item, int $moveDirection)
     {
@@ -639,7 +640,7 @@ class ItemService
      * @param string[] $values
      *
      * @return boolean
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function saveItemFromValues(Item $item, array $values)
     {
@@ -740,8 +741,8 @@ class ItemService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
-     * @throws \Exception
+     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function updateItem(Item $item)
     {

@@ -16,9 +16,10 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 class DeleterComponent extends Manager
 {
     /**
-     * @return string|void
+     * @return void
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     * @throws \Exception
      */
     public function run()
     {
@@ -26,6 +27,7 @@ class DeleterComponent extends Manager
 
         $items = $this->getItems();
         $failures = 0;
+        $parentIdentifier = 0;
 
         foreach ($items as $item)
         {
@@ -33,6 +35,8 @@ class DeleterComponent extends Manager
             {
                 $failures ++;
             }
+
+            $parentIdentifier = $item->getParentId();
         }
 
         $message = $this->get_result(
@@ -42,7 +46,7 @@ class DeleterComponent extends Manager
 
         $this->redirect(
             $message, ($failures ? true : false),
-            array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $item->get_parent())
+            array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $parentIdentifier)
         );
     }
 

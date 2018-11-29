@@ -13,11 +13,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class ItemTitle extends DataClass
 {
     const PROPERTY_ISOCODE = 'isocode';
-
     const PROPERTY_ITEM_ID = 'item_id';
-
     const PROPERTY_SORT = 'sort';
-
     const PROPERTY_TITLE = 'title';
 
     /**
@@ -25,7 +22,7 @@ class ItemTitle extends DataClass
      */
     public function getIsocode()
     {
-        return $this->get_default_property(self::PROPERTY_ISOCODE);
+        return $this->getDefaultProperty(self::PROPERTY_ISOCODE);
     }
 
     /**
@@ -33,7 +30,7 @@ class ItemTitle extends DataClass
      */
     public function getItemId()
     {
-        return $this->get_default_property(self::PROPERTY_ITEM_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ITEM_ID);
     }
 
     /**
@@ -41,7 +38,7 @@ class ItemTitle extends DataClass
      */
     public function getSort()
     {
-        return $this->get_default_property(self::PROPERTY_SORT);
+        return $this->getDefaultProperty(self::PROPERTY_SORT);
     }
 
     /**
@@ -49,7 +46,7 @@ class ItemTitle extends DataClass
      */
     public function getTitle()
     {
-        return $this->get_default_property(self::PROPERTY_TITLE);
+        return $this->getDefaultProperty(self::PROPERTY_TITLE);
     }
 
     /**
@@ -104,39 +101,48 @@ class ItemTitle extends DataClass
 
     /**
      * @param string $isocode
+     *
+     * @throws \Exception
      */
     public function setIsocode($isocode)
     {
-        $this->set_default_property(self::PROPERTY_ISOCODE, $isocode);
+        $this->setDefaultProperty(self::PROPERTY_ISOCODE, $isocode);
     }
 
     /**
-     * @param integer $itemIdentifier
+     * @param $itemIdentifier
+     *
+     * @throws \Exception
      */
     public function setItemId($itemIdentifier)
     {
-        $this->set_default_property(self::PROPERTY_ITEM_ID, $itemIdentifier);
+        $this->setDefaultProperty(self::PROPERTY_ITEM_ID, $itemIdentifier);
     }
 
     /**
      * @param integer $sort
+     *
+     * @throws \Exception
      */
     public function setSort($sort)
     {
-        $this->set_default_property(self::PROPERTY_SORT, $sort);
+        $this->setDefaultProperty(self::PROPERTY_SORT, $sort);
     }
 
     /**
      * @param string $title
+     *
+     * @throws \Exception
      */
     public function setTitle($title)
     {
-        $this->set_default_property(self::PROPERTY_TITLE, $title);
+        $this->setDefaultProperty(self::PROPERTY_TITLE, $title);
     }
 
     /**
      * @param string $isocode
      *
+     * @throws \Exception
      * @deprecated Use ItemTitle::setIsocode() now
      */
     public function set_isocode($isocode)
@@ -147,6 +153,7 @@ class ItemTitle extends DataClass
     /**
      * @param integer $itemIdentifier
      *
+     * @throws \Exception
      * @deprecated Use ItemTitle::setItemId() now
      */
     public function set_item_id($itemIdentifier)
@@ -157,6 +164,7 @@ class ItemTitle extends DataClass
     /**
      * @param integer $sort
      *
+     * @throws \Exception
      * @deprecated Use ItemTitle::setSort() now
      */
     public function set_sort($sort)
@@ -167,6 +175,7 @@ class ItemTitle extends DataClass
     /**
      * @param string $title
      *
+     * @throws \Exception
      * @deprecated Use ItemTitle::setTitle() now
      */
     public function set_title($title)
