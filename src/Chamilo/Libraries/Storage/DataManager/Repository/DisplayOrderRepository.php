@@ -152,7 +152,7 @@ class DisplayOrderRepository
     public function countDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass)
     {
         return $this->getDataClassRepository()->count(
-            get_class($dataClass), new DataClassCountParameters($this->getDisplayOrderCondition($dataClass))
+            $this->determinePropertyDataClassName($dataClass), new DataClassCountParameters($this->getDisplayOrderCondition($dataClass))
         );
     }
 

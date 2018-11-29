@@ -388,7 +388,8 @@ class DisplayOrderHandler
                 $this->getTranslator()->trans(
                     'InvalidDisplayOrderExceptionMessage', [
                     '{TYPE}' => get_class($dataClass), '{ID}' => $dataClass->getId(),
-                    '{CONTEXT}' => $this->getDisplayOrderContextAsString($dataClass), '{DISPLAY_ORDER}' => $displayOrder
+                    '{CONTEXT}' => $this->getDisplayOrderContextAsString($dataClass),
+                    '{DISPLAY_ORDER}' => $displayOrder, '{COUNT}' => $numberOfDataClassesInContext
                 ], Utilities::COMMON_LIBRARIES
                 )
             );
