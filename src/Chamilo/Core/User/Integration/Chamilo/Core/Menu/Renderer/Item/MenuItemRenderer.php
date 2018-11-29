@@ -57,7 +57,7 @@ abstract class MenuItemRenderer extends ItemRenderer
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a' . ($selected ? ' class="chamilo-menu-item-current"' : '') . ' href="' . $this->getUrl() . '">';
 
-        $title = htmlentities($this->getItemService()->getItemTitleForCurrentLanguage($item));
+        $title = $this->renderTitle($item);
 
         if ($item->showIcon())
         {

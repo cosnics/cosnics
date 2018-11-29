@@ -55,6 +55,16 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $this->getTranslator()->trans('Workspaces', [], 'Chamilo\Core\Repository');
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
@@ -75,7 +85,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
         $html[] =
             '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
-        $title = $this->getTranslator()->trans('Workspaces', [], 'Chamilo\Core\Repository');
+        $title = $this->renderTitle($item);
 
         if ($item->showIcon())
         {

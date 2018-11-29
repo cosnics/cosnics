@@ -26,9 +26,7 @@ class LinkApplicationItemRenderer extends ItemRenderer
         $html[] = '<li>';
         $html[] = '<a href="' . $item->getUrl() . '" target="' . $item->getTargetString() . '">';
 
-        $html[] =
-            '<div class="chamilo-menu-item-label">' . $this->getItemService()->getItemTitleForCurrentLanguage($item) .
-            '</div>';
+        $html[] = '<div class="chamilo-menu-item-label">' . $this->renderTitle($item) . '</div>';
 
         $html[] = '</a>';
         $html[] = '</li>';

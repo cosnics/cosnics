@@ -3,6 +3,7 @@ namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Menu\ItemMenu;
+use Chamilo\Core\Menu\Renderer\ItemRendererFactory;
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -47,7 +48,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
 
         $table = new ItemBrowserTable(
             $this, $this->getTranslator(), $this->getItemService(), $this->getRightsService(),
-            $this->getParentIdentifier()
+            $this->getItemRendererFactory(), $this->getParentIdentifier()
         );
 
         $html = array();
@@ -152,7 +153,12 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
      */
     public function getMenu()
     {
-        $urlFormat = new Redirect([self::PARAM_ACTION => self::ACTION_BROWSE, self::PARAM_PARENT => '__ITEM__']);
+        $urlFormat = new Redirect(
+            [
+                self::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => self::ACTION_BROWSE,
+                self::PARAM_PARENT => '__ITEM__'
+            ]
+        );
 
         return new ItemMenu(
             $this->getItemService(), $this->getTranslator(), $urlFormat->getUrl(), $this->getParentIdentifier()
@@ -187,5 +193,13 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
      */
     public function get_table_condition($tableClassName)
     {
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     */
+    public function getItemRendererFactory()
+    {
+        return $this->getService(ItemRendererFactory::class);
     }
 }

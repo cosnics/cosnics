@@ -69,6 +69,16 @@ abstract class ItemRenderer
     abstract public function render(Item $item, User $user);
 
     /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $this->getItemService()->getItemTitleForCurrentLanguage($item);
+    }
+
+    /**
      * @return \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface
      */
     public function getAuthorizationChecker(): AuthorizationCheckerInterface

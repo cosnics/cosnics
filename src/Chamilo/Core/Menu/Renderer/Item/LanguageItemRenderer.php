@@ -42,7 +42,7 @@ class LanguageItemRenderer extends ItemRenderer
         $html[] = '<li>';
         $html[] = '<a href="' . $redirect->getUrl() . '">';
         $html[] = '<div class="chamilo-menu-item-label">';
-        $html[] = $item->getLanguage();
+        $html[] = $this->renderTitle($item);
         $html[] = '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
@@ -58,5 +58,15 @@ class LanguageItemRenderer extends ItemRenderer
     public function isItemVisibleForUser(User $user)
     {
         return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ChangeLanguage');
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\LanguageItem $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $item->getLanguage();
     }
 }

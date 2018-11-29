@@ -55,6 +55,16 @@ class LanguageCategoryItemRenderer extends ItemRenderer
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return strtoupper($this->getTranslator()->getLocale());
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
@@ -81,7 +91,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
             '" src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
 
         $html[] = '<div class="chamilo-menu-item-label-with-image">';
-        $html[] = strtoupper($this->getTranslator()->getLocale());
+        $html[] = $this->renderTitle($item);
         $html[] = '<span class="caret"></span>';
         $html[] = '</div>';
         $html[] = '</a>';

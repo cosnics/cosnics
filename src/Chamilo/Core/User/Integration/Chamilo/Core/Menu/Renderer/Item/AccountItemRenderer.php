@@ -14,6 +14,16 @@ use Chamilo\Libraries\File\Redirect;
 class AccountItemRenderer extends MenuItemRenderer
 {
     /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
+    }
+
+    /**
      * @return string
      */
     public function getUrl()

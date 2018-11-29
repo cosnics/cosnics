@@ -17,6 +17,15 @@ use Chamilo\Libraries\File\Redirect;
  */
 class WorkspaceConfigureItemRenderer extends ItemRenderer
 {
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $this->getTranslator()->trans('ConfigureWorkspaces', [], 'Chamilo\Core\Repository\Workspace');
+    }
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
@@ -41,7 +50,7 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
 
         $html[] = '<a ' . $class . 'href="' . $urlRenderer->getUrl() . '">';
 
-        $title = $this->getTranslator()->trans('ConfigureWorkspaces', [], 'Chamilo\Core\Repository\Workspace');
+        $title = $this->renderTitle($item);
 
         if ($item->showIcon())
         {

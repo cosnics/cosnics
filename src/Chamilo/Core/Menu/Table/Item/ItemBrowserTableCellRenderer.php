@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Table\Item;
 
 use Chamilo\Core\Menu\Manager;
+use Chamilo\Core\Menu\Renderer\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -43,20 +44,46 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
     private $rightsService;
 
     /**
+     * @var \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     */
+    private $itemRendererFactory;
+
+    /**
      * @param $table
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
+     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
      *
      * @throws \Exception
      */
-    public function __construct($table, Translator $translator, ItemService $itemService, RightsService $rightsService)
+    public function __construct(
+        $table, Translator $translator, ItemService $itemService, RightsService $rightsService,
+        ItemRendererFactory $itemRendererFactory
+    )
     {
         parent::__construct($table);
 
         $this->translator = $translator;
         $this->itemService = $itemService;
         $this->rightsService = $rightsService;
+        $this->itemRendererFactory = $itemRendererFactory;
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     */
+    public function getItemRendererFactory(): ItemRendererFactory
+    {
+        return $this->itemRendererFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     */
+    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
+    {
+        $this->itemRendererFactory = $itemRendererFactory;
     }
 
     /**
@@ -175,9 +202,9 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         $numberOfSiblings = $this->getItemService()->countItemsByParentIdentifier($item->getParentId());
         $areRightsEnabled = $this->getRightsService()->areRightsEnabled();
 
-        $isFirstItem = $item->getSort() == 0;
+        $isFirstItem = $item->getSort() == 1;
         $isOnlyItem = $numberOfSiblings == 1;
-        $isLastItem = ($item->getSort() + 1) == $numberOfSiblings;
+        $isLastItem = $item->getSort() == $numberOfSiblings;
 
         $translator = $this->getTranslator();
 
@@ -264,7 +291,9 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         switch ($column->get_name())
         {
             case ItemTitle::PROPERTY_TITLE :
-                return $this->getItemService()->getItemTitleForCurrentLanguage($item);
+                $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($item);
+
+                return $itemRenderer->renderTitle($item);
             case ItemBrowserTableColumnModel::PROPERTY_TYPE :
 
                 $type = $item->getType();

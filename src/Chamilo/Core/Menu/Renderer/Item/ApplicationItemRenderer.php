@@ -46,6 +46,21 @@ class ApplicationItemRenderer extends ItemRenderer
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        if ($item->getUseTranslation())
+        {
+            return $this->getTranslator()->trans('TypeName', [], $item->getApplication());
+        }
+
+        return parent::renderTitle($item);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
@@ -67,14 +82,7 @@ class ApplicationItemRenderer extends ItemRenderer
 
         $html[] = '<li' . ($isSelected ? ' class="active"' : '') . '>';
 
-        if ($item->getUseTranslation())
-        {
-            $title = $translator->trans('TypeName', [], $item->getApplication());
-        }
-        else
-        {
-            $title = $this->getItemService()->getItemTitleForCurrentLanguage($item);
-        }
+        $title = $this->renderTitle($item);
 
         $html[] = '<a href="' . $url . '">';
 

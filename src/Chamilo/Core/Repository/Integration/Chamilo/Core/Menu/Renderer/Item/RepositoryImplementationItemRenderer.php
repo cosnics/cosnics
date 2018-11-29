@@ -17,6 +17,15 @@ use Chamilo\Libraries\File\Redirect;
  */
 class RepositoryImplementationItemRenderer extends ItemRenderer
 {
+    /**
+     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationItem $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $item->get_name();
+    }
 
     /**
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationItem $item
@@ -48,7 +57,7 @@ class RepositoryImplementationItemRenderer extends ItemRenderer
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a ' . $class . 'href="' . $redirect->getUrl() . '">';
-        $title = htmlentities($item->get_name());
+        $title = $this->renderTitle($item);
 
         if ($item->showIcon())
         {

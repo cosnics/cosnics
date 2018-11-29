@@ -15,6 +15,15 @@ use Chamilo\Libraries\File\Redirect;
  */
 class WorkspaceItemRenderer extends ItemRenderer
 {
+    /**
+     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $item->getName();
+    }
 
     /**
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
@@ -45,7 +54,7 @@ class WorkspaceItemRenderer extends ItemRenderer
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a ' . $class . 'href="' . $redirect->getUrl() . '">';
-        $title = $item->getName();
+        $title = $this->renderTitle($item);
 
         if ($item->showIcon())
         {

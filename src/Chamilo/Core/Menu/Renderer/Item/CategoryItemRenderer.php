@@ -63,7 +63,7 @@ class CategoryItemRenderer extends ItemRenderer
 
         $selected = $this->isSelected($item);
 
-        $title = $this->getItemService()->getItemTitleForCurrentLanguage($item);
+        $title = $this->renderTitle($item);
 
         $html[] = '<li class="dropdown' . ($selected ? ' active' : '') . '">';
         $html[] =

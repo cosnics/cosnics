@@ -57,7 +57,7 @@ class LinkItemRenderer extends ItemRenderer
         $itemType = $classnameUtilities->getClassnameFromNamespace($item->getType());
         $imagePath = $this->getThemeUtilities()->getImagePath($itemNamespace, $itemType);
 
-        $title = $this->getItemService()->getItemTitleForCurrentLanguage($item);
+        $title = $this->renderTitle($item);
 
         $html = array();
 

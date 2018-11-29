@@ -46,6 +46,16 @@ class WidgetItemRenderer extends ItemRenderer
     }
 
     /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
+    }
+
+    /**
      * @param \Chamilo\Core\User\Integration\Chamilo\Core\Menu\Storage\DataClass\WidgetItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
@@ -63,7 +73,7 @@ class WidgetItemRenderer extends ItemRenderer
 
         $html = array();
 
-        $title = htmlentities($this->getItemService()->getItemTitleForCurrentLanguage($item));
+        $title = $this->renderTitle($item);
 
         $html[] = '<li class="dropdown chamilo-account-menu-item">';
         $html[] = '<a href="' . $this->getAccountUrl() .

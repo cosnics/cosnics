@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Table\Item;
 
 use Chamilo\Core\Menu\Manager;
+use Chamilo\Core\Menu\Renderer\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
@@ -38,6 +39,11 @@ class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
     private $rightsService;
 
     /**
+     * @var \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     */
+    private $itemRendererFactory;
+
+    /**
      * @var integer
      */
     private $parentIdentifier;
@@ -53,15 +59,32 @@ class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
      */
     public function __construct(
         $component, Translator $translator, ItemService $itemService, RightsService $rightsService,
-        int $parentIdentifier
+        ItemRendererFactory $itemRendererFactory, int $parentIdentifier
     )
     {
         $this->translator = $translator;
         $this->itemService = $itemService;
         $this->rightsService = $rightsService;
+        $this->itemRendererFactory = $itemRendererFactory;
         $this->parentIdentifier = $parentIdentifier;
 
         parent::__construct($component);
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     */
+    public function getItemRendererFactory(): ItemRendererFactory
+    {
+        return $this->itemRendererFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     */
+    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
+    {
+        $this->itemRendererFactory = $itemRendererFactory;
     }
 
     /**
@@ -137,7 +160,8 @@ class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
         if (!isset($this->cellRenderer))
         {
             $this->cellRenderer = new ItemBrowserTableCellRenderer(
-                $this, $this->getTranslator(), $this->getItemService(), $this->getRightsService()
+                $this, $this->getTranslator(), $this->getItemService(), $this->getRightsService(),
+                $this->getItemRendererFactory()
             );
         }
 

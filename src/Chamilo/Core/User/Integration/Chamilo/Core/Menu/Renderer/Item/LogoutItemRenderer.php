@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item;
 
+use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
@@ -12,6 +13,16 @@ use Chamilo\Libraries\File\Redirect;
  */
 class LogoutItemRenderer extends MenuItemRenderer
 {
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $this->getTranslator()->trans('Logout', [], 'Chamilo\Core\User');
+    }
+
     /**
      * @return string
      */
