@@ -2,10 +2,10 @@
 namespace Chamilo\Libraries\Storage\DataClass\Interfaces;
 
 /**
- * Interface DisplayOrderSupport
+ * Interface DisplayOrderDataClassSupport
  * @package Chamilo\Libraries\Storage\DataClass\Interfaces
  */
-interface DisplayOrderSupport
+interface DataClassDisplayOrderSupport
 {
 
     /**
@@ -30,6 +30,11 @@ interface DisplayOrderSupport
      * @param string $propertyvalue
      */
     public function setDefaultProperty($propertyName, $propertyvalue);
+
+    /**
+     * @return string[]
+     */
+    public function getDefaultProperties();
 
     /**
      * @return integer

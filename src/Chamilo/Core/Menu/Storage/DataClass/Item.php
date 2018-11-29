@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DisplayOrderSupport;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 
 /**
  *
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\DisplayOrderSupport;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Item extends CompositeDataClass implements DisplayOrderSupport
+class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
 {
     /**
      * Display options

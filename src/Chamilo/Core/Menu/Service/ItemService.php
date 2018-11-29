@@ -13,9 +13,9 @@ use Symfony\Component\Translation\Translator;
 /**
  *
  * @package Chamilo\Core\Menu\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ItemService
 {
@@ -118,6 +118,11 @@ class ItemService
      */
     public function createItem(Item $item)
     {
+        if (!$this->getDisplayOrderHandler()->prepareCreate($item))
+        {
+            return false;
+        }
+
         if (!$this->getItemRepository()->createItem($item))
         {
             return false;
@@ -148,7 +153,7 @@ class ItemService
         {
             if (isset($values[$property]))
             {
-                $item->set_default_property($property, $values[$property]);
+                $item->setDefaultProperty($property, $values[$property]);
             }
         }
 
@@ -228,6 +233,7 @@ class ItemService
      * @param string[] $values
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item
+     * @throws \Exception
      */
     public function createItemWithTitlesForTypeFromValues(string $itemType, array $values)
     {
@@ -250,6 +256,7 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
+     * @throws \Exception
      */
     public function deleteItem(Item $item)
     {
@@ -641,6 +648,7 @@ class ItemService
      * @param string[] $values
      *
      * @return boolean
+     * @throws \Exception
      */
     public function saveItemFromValues(Item $item, array $values)
     {
@@ -648,7 +656,7 @@ class ItemService
         {
             if (isset($values[$property]))
             {
-                $item->set_default_property($property, $values[$property]);
+                $item->setDefaultProperty($property, $values[$property]);
             }
         }
 
@@ -721,6 +729,7 @@ class ItemService
      * @param string[] $values
      *
      * @return boolean
+     * @throws \Exception
      */
     public function saveItemWithTitlesFromValues(Item $item, array $values)
     {
@@ -741,9 +750,15 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
+     * @throws \Exception
      */
     public function updateItem(Item $item)
     {
+        if (!$this->getDisplayOrderHandler()->prepareUpdate($item))
+        {
+            return false;
+        }
+
         if (!$this->getItemRepository()->updateItem($item))
         {
             return false;
