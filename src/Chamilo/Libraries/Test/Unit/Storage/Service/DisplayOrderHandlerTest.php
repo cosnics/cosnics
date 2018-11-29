@@ -118,7 +118,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $this->displayOrderRepositoryMock->expects($this->once())
             ->method('countOtherDisplayOrdersInContext')
             ->with($displayOrderDataClass)
-            ->will($this->returnValue(4));
+            ->will($this->returnValue(2));
 
         $this->displayOrderHandler->handleDisplayOrderBeforeCreate($displayOrderDataClass);
         $this->assertEquals(5, $displayOrderDataClass->getSort());

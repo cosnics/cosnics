@@ -73,7 +73,6 @@ class DisplayOrderHandler
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
      * @param string[] $displayOrderPropertiesRecord
-     * @param string[] $properties
      *
      * @return boolean
      * @throws \Exception
@@ -173,7 +172,6 @@ class DisplayOrderHandler
      * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
      *
      * @return boolean
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     protected function handleAddedDataClassInContext(DataClassDisplayOrderSupport $dataClass)
     {
