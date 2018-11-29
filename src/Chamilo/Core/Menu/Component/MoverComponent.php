@@ -47,7 +47,7 @@ class MoverComponent extends Manager
 
         $message = $this->getTranslator()->trans(
             $success ? 'ObjectMoved' : 'ObjectNotMoved',
-            array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')),
+            array('{OBJECT}' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')),
             Utilities::COMMON_LIBRARIES
         );
 
