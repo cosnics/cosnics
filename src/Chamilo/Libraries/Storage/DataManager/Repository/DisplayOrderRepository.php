@@ -139,7 +139,7 @@ class DisplayOrderRepository
     public function findNextDisplayOrderValue(DataClassDisplayOrderSupport $dataClass)
     {
         return $this->getDataClassRepository()->retrieveNextValue(
-            $this->determinePropertyDataClassName($dataClass), $this->getDisplayOrderPropertyConditionVariable($dataClass),
+            $this->determinePropertyDataClassName($dataClass), $dataClass->getDisplayOrderPropertyName(),
             $this->getDisplayOrderCondition($dataClass)
         );
     }
