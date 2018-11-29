@@ -21,7 +21,7 @@ class DisplayOrderHandler
      */
     public function __construct(DisplayOrderRepository $displayOrderRepository)
     {
-        $this->displayOrderRepository = $displayOrderRepository;
+        $this->setDisplayOrderRepository($displayOrderRepository);
     }
 
     /**
