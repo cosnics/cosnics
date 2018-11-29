@@ -193,7 +193,7 @@ class DisplayOrderHandler
      * @return boolean
      * @throws \Exception
      */
-    public function handleDelete(DataClassDisplayOrderSupport $dataClass)
+    public function handleDisplayOrderAfterDelete(DataClassDisplayOrderSupport $dataClass)
     {
         return $this->deleteDisplayOrderFromContext($dataClass);
     }
@@ -249,7 +249,7 @@ class DisplayOrderHandler
      *
      * @return boolean
      */
-    public function prepareCreate(DataClassDisplayOrderSupport $dataClass)
+    public function handleDisplayOrderBeforeCreate(DataClassDisplayOrderSupport $dataClass)
     {
         return $this->handleAddedDataClassInContext($dataClass);
     }
@@ -260,7 +260,7 @@ class DisplayOrderHandler
      * @return boolean
      * @throws \Exception
      */
-    public function prepareUpdate(DataClassDisplayOrderSupport $dataClass)
+    public function handleDisplayOrderBeforeUpdate(DataClassDisplayOrderSupport $dataClass)
     {
         $displayOrderPropertiesRecord = $this->findPreviousDisplayOrderPropertiesRecord($dataClass);
 

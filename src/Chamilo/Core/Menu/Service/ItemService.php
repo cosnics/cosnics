@@ -118,7 +118,7 @@ class ItemService
      */
     public function createItem(Item $item)
     {
-        if (!$this->getDisplayOrderHandler()->prepareCreate($item))
+        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeCreate($item))
         {
             return false;
         }
@@ -168,8 +168,6 @@ class ItemService
         $item->setType($itemType);
         $item->setDisplay(Item::DISPLAY_BOTH);
         $item->setHidden();
-
-        $this->getDisplayOrderHandler()->prepareCreate($item);
 
         if (!$this->createItem($item))
         {
@@ -270,7 +268,7 @@ class ItemService
             return false;
         }
 
-        if (!$this->getDisplayOrderHandler()->handleDelete($item))
+        if (!$this->getDisplayOrderHandler()->handleDisplayOrderAfterDelete($item))
         {
             return false;
         }
@@ -294,6 +292,7 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
+     * @throws \Exception
      */
     public function deleteItemChildren(Item $item)
     {
@@ -625,22 +624,14 @@ class ItemService
      * @param integer $moveDirection
      *
      * @return boolean
+     * @throws \Exception
      */
     public function moveItemInDirection(Item $item, int $moveDirection)
     {
-        $numberOfSiblings = $this->countItemsByParentIdentifier($item->getParentId());
         $newDisplayOrder = $item->getSort() + ($moveDirection == self::PARAM_DIRECTION_UP ? - 1 : 1);
+        $item->setSort($newDisplayOrder);
 
-        if ($newDisplayOrder > 0 && $newDisplayOrder <= $numberOfSiblings)
-        {
-            $item->setSort($newDisplayOrder);
-
-            return $this->updateItem($item);
-        }
-        else
-        {
-            return false;
-        }
+        return $this->updateItem($item);
     }
 
     /**
@@ -754,7 +745,7 @@ class ItemService
      */
     public function updateItem(Item $item)
     {
-        if (!$this->getDisplayOrderHandler()->prepareUpdate($item))
+        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeUpdate($item))
         {
             return false;
         }
