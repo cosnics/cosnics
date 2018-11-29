@@ -644,6 +644,13 @@ class ItemService
      */
     public function saveItemFromValues(Item $item, array $values)
     {
+        $parentHasChanged = $item->getParentId() != $values[Item::PROPERTY_PARENT];
+
+        if ($parentHasChanged && !isset($values[Item::PROPERTY_SORT]))
+        {
+            $item->setSort(null);
+        }
+
         foreach ($item->get_default_property_names() as $property)
         {
             if (isset($values[$property]))

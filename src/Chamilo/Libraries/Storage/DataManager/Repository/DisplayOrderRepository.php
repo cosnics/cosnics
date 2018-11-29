@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -149,10 +150,31 @@ class DisplayOrderRepository
      *
      * @return integer
      */
-    public function countDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass)
+    public function countOtherDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass)
     {
+        $conditions = array();
+
+        $displayOrderCondition = $this->getDisplayOrderCondition($dataClass);
+
+        if ($displayOrderCondition instanceof AndCondition)
+        {
+            $conditions[] = $displayOrderCondition;
+        }
+
+        if ($dataClass->isIdentified())
+        {
+            $conditions[] = new NotCondition(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        $this->determinePropertyDataClassName($dataClass), DataClass::PROPERTY_ID
+                    ), new StaticConditionVariable($dataClass->getId())
+                )
+            );
+        }
+
         return $this->getDataClassRepository()->count(
-            $this->determinePropertyDataClassName($dataClass), new DataClassCountParameters($this->getDisplayOrderCondition($dataClass))
+            $this->determinePropertyDataClassName($dataClass),
+            new DataClassCountParameters(new AndCondition($conditions))
         );
     }
 

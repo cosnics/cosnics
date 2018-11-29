@@ -44,9 +44,14 @@ class DisplayOrderHandler
         return $this->getDisplayOrderRepository()->addDisplayOrderToContext($dataClass);
     }
 
-    protected function countDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass)
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
+     *
+     * @return int
+     */
+    protected function countOtherDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass)
     {
-        return $this->getDisplayOrderRepository()->countDisplayOrdersInContext($dataClass);
+        return $this->getDisplayOrderRepository()->countOtherDisplayOrdersInContext($dataClass);
     }
 
     /**
@@ -174,8 +179,6 @@ class DisplayOrderHandler
     {
         if ($this->hasDisplayOrder($dataClass))
         {
-            $this->validateDisplayOrder($dataClass);
-
             if (!$this->addDisplayOrderToContext($dataClass))
             {
                 return false;
@@ -208,6 +211,8 @@ class DisplayOrderHandler
      */
     public function handleDisplayOrderBeforeCreate(DataClassDisplayOrderSupport $dataClass)
     {
+        $this->validateDisplayOrder($dataClass);
+
         return $this->handleAddedDataClassInContext($dataClass);
     }
 
@@ -226,8 +231,10 @@ class DisplayOrderHandler
             $this->hasDisplayOrderContextChanged($dataClass, $displayOrderPropertiesRecord);
         $hasDisplayOrderChanged = $this->hasDisplayOrderChanged($dataClass, $displayOrderPropertiesRecord);
 
-        if ($hasDisplayOrderContextChanged)
+        if ($hasDisplayOrderContextChanged || $hasDisplayOrderChanged)
         {
+            $this->validateDisplayOrder($dataClass);
+
             if (!$this->deletePreviousDisplayOrderFromPreviousContext(
                 $dataClass, $displayOrderPropertiesRecord
             ))
@@ -238,25 +245,6 @@ class DisplayOrderHandler
             if (!$this->handleAddedDataClassInContext($dataClass))
             {
                 return false;
-            }
-        }
-        else
-        {
-            if ($hasDisplayOrderChanged)
-            {
-                $this->validateDisplayOrder($dataClass);
-
-                if (!$this->deletePreviousDisplayOrderFromPreviousContext(
-                    $dataClass, $displayOrderPropertiesRecord
-                ))
-                {
-                    return false;
-                }
-
-                if (!$this->addDisplayOrderToContext($dataClass))
-                {
-                    return false;
-                }
             }
         }
 
@@ -349,16 +337,20 @@ class DisplayOrderHandler
     protected function validateDisplayOrder(DataClassDisplayOrderSupport $dataClass)
     {
         $displayOrder = $this->getDisplayOrderValue($dataClass);
-        $numberOfDataClassesInContext = $this->countDisplayOrdersInContext($dataClass);
+        $numberOfOtherDisplayOrdersInContext = $this->countOtherDisplayOrdersInContext($dataClass);
 
-        if ($displayOrder < 1 || $displayOrder > $numberOfDataClassesInContext)
+        $hasDisplayOrder = $this->hasDisplayOrder($dataClass);
+        $displayOrderTooLow = $displayOrder < 1;
+        $displayOrderTooHigh = $displayOrder > ($numberOfOtherDisplayOrdersInContext + 1);
+
+        if ($hasDisplayOrder && ($displayOrderTooLow || $displayOrderTooHigh))
         {
             throw new DisplayOrderException(
                 $this->getTranslator()->trans(
                     'InvalidDisplayOrderExceptionMessage', [
                     '{TYPE}' => get_class($dataClass), '{ID}' => $dataClass->getId(),
                     '{CONTEXT}' => $this->getDisplayOrderContextAsString($dataClass),
-                    '{DISPLAY_ORDER}' => $displayOrder, '{COUNT}' => $numberOfDataClassesInContext
+                    '{DISPLAY_ORDER}' => $displayOrder, '{COUNT}' => $numberOfOtherDisplayOrdersInContext
                 ], Utilities::COMMON_LIBRARIES
                 )
             );

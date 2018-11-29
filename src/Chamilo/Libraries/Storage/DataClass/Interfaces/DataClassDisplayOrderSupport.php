@@ -40,4 +40,9 @@ interface DataClassDisplayOrderSupport
      * @return integer
      */
     public function getId();
+
+    /**
+     * @return boolean
+     */
+    public function isIdentified();
 }
