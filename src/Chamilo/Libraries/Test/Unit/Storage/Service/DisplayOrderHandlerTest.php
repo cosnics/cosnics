@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Chamilo\Libraries\Test\Stub\DisplayOrderDataClassStub;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Tests the DisplayOrderHandler
@@ -21,6 +22,11 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
     protected $displayOrderRepositoryMock;
 
     /**
+     * @var \Symfony\Component\Translation\Translator|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $translatorMock;
+
+    /**
      * @var DisplayOrderHandler
      */
     protected $displayOrderHandler;
@@ -33,7 +39,10 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $this->displayOrderRepositoryMock = $this->getMockBuilder(DisplayOrderRepository::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->displayOrderHandler = new DisplayOrderHandler($this->displayOrderRepositoryMock);
+        $this->translatorMock = $this->getMockBuilder(Translator::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->displayOrderHandler = new DisplayOrderHandler($this->displayOrderRepositoryMock, $this->translatorMock);
     }
 
     /**
@@ -41,6 +50,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
      */
     public function tearDown()
     {
+        unset($this->translatorMock);
         unset($this->displayOrderRepositoryMock);
         unset($this->displayOrderHandler);
     }
@@ -54,7 +64,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
             ->with($displayOrderDataClass)
             ->will($this->returnValue(10));
 
-        $this->assertEquals(true, $this->displayOrderHandler->prepareCreate($displayOrderDataClass));
+        $this->assertEquals(true, $this->displayOrderHandler->handleDisplayOrderBeforeCreate($displayOrderDataClass));
         $this->assertEquals(10, $displayOrderDataClass->getSort());
     }
 
@@ -64,11 +74,16 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $displayOrderDataClass->setSort(5);
 
         $this->displayOrderRepositoryMock->expects($this->once())
+            ->method('countDisplayOrdersInContext')
+            ->with($displayOrderDataClass)
+            ->will($this->returnValue(15));
+
+        $this->displayOrderRepositoryMock->expects($this->once())
             ->method('addDisplayOrderToContext')
             ->with($displayOrderDataClass)
             ->will($this->returnValue(true));
 
-        $this->assertEquals(true, $this->displayOrderHandler->prepareCreate($displayOrderDataClass));
+        $this->assertEquals(true, $this->displayOrderHandler->handleDisplayOrderBeforeCreate($displayOrderDataClass));
         $this->assertEquals(5, $displayOrderDataClass->getSort());
     }
 
@@ -78,11 +93,34 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $displayOrderDataClass->setSort(5);
 
         $this->displayOrderRepositoryMock->expects($this->once())
+            ->method('countDisplayOrdersInContext')
+            ->with($displayOrderDataClass)
+            ->will($this->returnValue(15));
+
+        $this->displayOrderRepositoryMock->expects($this->once())
             ->method('addDisplayOrderToContext')
             ->with($displayOrderDataClass)
             ->will($this->returnValue(false));
 
-        $this->assertEquals(false, $this->displayOrderHandler->prepareCreate($displayOrderDataClass));
+        $this->assertEquals(false, $this->displayOrderHandler->handleDisplayOrderBeforeCreate($displayOrderDataClass));
+        $this->assertEquals(5, $displayOrderDataClass->getSort());
+    }
+
+    /**
+     * @expectedException \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     */
+    public function testWithInvalidDisplayOrder()
+    {
+        $displayOrderDataClass = new DisplayOrderDataClassStub();
+        $displayOrderDataClass->setSort(5);
+
+        $this->displayOrderRepositoryMock->expects($this->once())
+            ->method('countDisplayOrdersInContext')
+            ->with($displayOrderDataClass)
+            ->will($this->returnValue(4));
+
+        $this->displayOrderHandler->handleDisplayOrderBeforeCreate($displayOrderDataClass);
         $this->assertEquals(5, $displayOrderDataClass->getSort());
     }
 
@@ -96,7 +134,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
             ->with($displayOrderDataClass, [DisplayOrderDataClassStub::PROPERTY_PARENT_ID => 0], 5)
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->displayOrderHandler->handleDelete($displayOrderDataClass));
+        $this->assertTrue($this->displayOrderHandler->handleDisplayOrderAfterDelete($displayOrderDataClass));
     }
 
     public function testUpdateWithDisplayOrderChanged()
@@ -104,6 +142,11 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $displayOrderDataClass = new DisplayOrderDataClassStub();
         $displayOrderDataClass->setSort(5);
         $displayOrderDataClass->setParentId(0);
+
+        $this->displayOrderRepositoryMock->expects($this->once())
+            ->method('countDisplayOrdersInContext')
+            ->with($displayOrderDataClass)
+            ->will($this->returnValue(15));
 
         $this->displayOrderRepositoryMock->expects($this->once())
             ->method('findDisplayOrderPropertiesRecord')
@@ -123,7 +166,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
             ->with($displayOrderDataClass)
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->displayOrderHandler->prepareUpdate($displayOrderDataClass));
+        $this->assertTrue($this->displayOrderHandler->handleDisplayOrderBeforeUpdate($displayOrderDataClass));
 
     }
 
@@ -132,6 +175,11 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $displayOrderDataClass = new DisplayOrderDataClassStub();
         $displayOrderDataClass->setSort(5);
         $displayOrderDataClass->setParentId(0);
+
+        $this->displayOrderRepositoryMock->expects($this->once())
+            ->method('countDisplayOrdersInContext')
+            ->with($displayOrderDataClass)
+            ->will($this->returnValue(15));
 
         $this->displayOrderRepositoryMock->expects($this->once())
             ->method('findDisplayOrderPropertiesRecord')
@@ -150,7 +198,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
             ->method('addDisplayOrderToContext')
             ->with($displayOrderDataClass);
 
-        $this->assertFalse($this->displayOrderHandler->prepareUpdate($displayOrderDataClass));
+        $this->assertFalse($this->displayOrderHandler->handleDisplayOrderBeforeUpdate($displayOrderDataClass));
 
     }
 
@@ -159,6 +207,11 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $displayOrderDataClass = new DisplayOrderDataClassStub();
         $displayOrderDataClass->setSort(5);
         $displayOrderDataClass->setParentId(0);
+
+        $this->displayOrderRepositoryMock->expects($this->once())
+            ->method('countDisplayOrdersInContext')
+            ->with($displayOrderDataClass)
+            ->will($this->returnValue(15));
 
         $this->displayOrderRepositoryMock->expects($this->once())
             ->method('findDisplayOrderPropertiesRecord')
@@ -178,14 +231,14 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
             ->with($displayOrderDataClass)
             ->will($this->returnValue(false));
 
-        $this->assertFalse($this->displayOrderHandler->prepareUpdate($displayOrderDataClass));
+        $this->assertFalse($this->displayOrderHandler->handleDisplayOrderBeforeUpdate($displayOrderDataClass));
 
     }
 
     public function testUpdateWithContextChanged()
     {
         $displayOrderDataClass = new DisplayOrderDataClassStub();
-        $displayOrderDataClass->setSort(5);
+        $displayOrderDataClass->setSort(3);
         $displayOrderDataClass->setParentId(1);
 
         $this->displayOrderRepositoryMock->expects($this->once())
@@ -197,6 +250,11 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
             );
 
         $this->displayOrderRepositoryMock->expects($this->once())
+            ->method('countDisplayOrdersInContext')
+            ->with($displayOrderDataClass)
+            ->will($this->returnValue(15));
+
+        $this->displayOrderRepositoryMock->expects($this->once())
             ->method('deleteDisplayOrderFromContext')
             ->with($displayOrderDataClass, [DisplayOrderDataClassStub::PROPERTY_PARENT_ID => 0], 3)
             ->will($this->returnValue(true));
@@ -206,7 +264,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
             ->with($displayOrderDataClass)
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->displayOrderHandler->prepareUpdate($displayOrderDataClass));
+        $this->assertTrue($this->displayOrderHandler->handleDisplayOrderBeforeUpdate($displayOrderDataClass));
     }
 
     public function testUpdateWithContextChangedFailsToDecrementPreviousDisplayOrders()
@@ -231,7 +289,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
         $this->displayOrderRepositoryMock->expects($this->never())
             ->method('addDisplayOrderToContext');
 
-        $this->assertFalse($this->displayOrderHandler->prepareUpdate($displayOrderDataClass));
+        $this->assertFalse($this->displayOrderHandler->handleDisplayOrderBeforeUpdate($displayOrderDataClass));
     }
 
     public function testUpdateWithContextChangedFailsToIncrementNextDisplayOrders()
@@ -249,6 +307,11 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
             );
 
         $this->displayOrderRepositoryMock->expects($this->once())
+            ->method('countDisplayOrdersInContext')
+            ->with($displayOrderDataClass)
+            ->will($this->returnValue(15));
+
+        $this->displayOrderRepositoryMock->expects($this->once())
             ->method('deleteDisplayOrderFromContext')
             ->with($displayOrderDataClass, [DisplayOrderDataClassStub::PROPERTY_PARENT_ID => 0], 3)
             ->will($this->returnValue(true));
@@ -258,7 +321,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
             ->with($displayOrderDataClass)
             ->will($this->returnValue(false));
 
-        $this->assertFalse($this->displayOrderHandler->prepareUpdate($displayOrderDataClass));
+        $this->assertFalse($this->displayOrderHandler->handleDisplayOrderBeforeUpdate($displayOrderDataClass));
     }
 }
 
