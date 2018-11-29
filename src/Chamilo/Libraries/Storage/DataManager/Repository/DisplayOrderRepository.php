@@ -118,15 +118,17 @@ class DisplayOrderRepository
      */
     public function findDisplayOrderPropertiesRecord(DataClassDisplayOrderSupport $dataClass)
     {
+        $dataClassName = $this->determinePropertyDataClassName($dataClass);
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                $this->determinePropertyDataClassName($dataClass), DataClass::PROPERTY_ID
+                $dataClassName, DataClass::PROPERTY_ID
             ), new StaticConditionVariable($dataClass->getId())
         );
 
         $parameters = new RecordRetrieveParameters($this->getDisplayOrderDataClassProperties($dataClass), $condition);
 
-        return $this->getDataClassRepository()->record(get_class($dataClass), $parameters);
+        return $this->getDataClassRepository()->record($dataClassName, $parameters);
     }
 
     /**
@@ -137,7 +139,7 @@ class DisplayOrderRepository
     public function findNextDisplayOrderValue(DataClassDisplayOrderSupport $dataClass)
     {
         return $this->getDataClassRepository()->retrieveNextValue(
-            get_class($dataClass), $this->getDisplayOrderPropertyConditionVariable($dataClass),
+            $this->determinePropertyDataClassName($dataClass), $this->getDisplayOrderPropertyConditionVariable($dataClass),
             $this->getDisplayOrderCondition($dataClass)
         );
     }

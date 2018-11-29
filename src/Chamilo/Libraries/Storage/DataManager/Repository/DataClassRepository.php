@@ -160,6 +160,7 @@ class DataClassRepository
 
     /**
      * Write an instance of a DataClass object to the storage layer
+     *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
      *
      * @return boolean
