@@ -31,6 +31,9 @@ class LanguageItem extends Item
         $this->setType(__CLASS__);
     }
 
+    /**
+     * @return string
+     */
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name());

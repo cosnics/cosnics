@@ -42,7 +42,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      */
     public function getDisplay()
     {
-        return $this->get_default_property(self::PROPERTY_DISPLAY);
+        return $this->getDefaultProperty(self::PROPERTY_DISPLAY);
     }
 
     /**
@@ -66,7 +66,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      */
     public function getHidden()
     {
-        return $this->get_default_property(self::PROPERTY_HIDDEN);
+        return $this->getDefaultProperty(self::PROPERTY_HIDDEN);
     }
 
     /**
@@ -74,7 +74,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      */
     public function getIconClass()
     {
-        return $this->get_default_property(self::PROPERTY_ICON_CLASS);
+        return $this->getDefaultProperty(self::PROPERTY_ICON_CLASS);
     }
 
     /**
@@ -82,7 +82,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      */
     public function getParentId()
     {
-        return $this->get_default_property(self::PROPERTY_PARENT);
+        return $this->getDefaultProperty(self::PROPERTY_PARENT);
     }
 
     /**
@@ -90,7 +90,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      */
     public function getSort()
     {
-        return $this->get_default_property(self::PROPERTY_SORT);
+        return $this->getDefaultProperty(self::PROPERTY_SORT);
     }
 
     /**
@@ -178,7 +178,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      */
     public function setDisplay($display = self::DISPLAY_ICON)
     {
-        $this->set_default_property(self::PROPERTY_DISPLAY, $display);
+        $this->setDefaultProperty(self::PROPERTY_DISPLAY, $display);
     }
 
     /**
@@ -186,7 +186,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      */
     public function setHidden($hidden = 0)
     {
-        $this->set_default_property(self::PROPERTY_HIDDEN, $hidden);
+        $this->setDefaultProperty(self::PROPERTY_HIDDEN, $hidden);
     }
 
     /**
@@ -194,7 +194,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      */
     public function setIconClass($iconClass = '')
     {
-        $this->set_default_property(self::PROPERTY_ICON_CLASS, $iconClass);
+        $this->setDefaultProperty(self::PROPERTY_ICON_CLASS, $iconClass);
     }
 
     /**
@@ -202,7 +202,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      */
     public function setParentId($parent)
     {
-        $this->set_default_property(self::PROPERTY_PARENT, $parent);
+        $this->setDefaultProperty(self::PROPERTY_PARENT, $parent);
     }
 
     /**
@@ -210,7 +210,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      */
     public function setSort($sort)
     {
-        $this->set_default_property(self::PROPERTY_SORT, $sort);
+        $this->setDefaultProperty(self::PROPERTY_SORT, $sort);
     }
 
     /**

@@ -158,6 +158,9 @@ class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
         return $this->dataProvider;
     }
 
+    /**
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
+     */
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);

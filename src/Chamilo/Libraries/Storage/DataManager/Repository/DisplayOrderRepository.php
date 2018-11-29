@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -117,15 +118,17 @@ class DisplayOrderRepository
      */
     public function findDisplayOrderPropertiesRecord(DataClassDisplayOrderSupport $dataClass)
     {
+        $dataClassName = $this->determinePropertyDataClassName($dataClass);
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                $this->determinePropertyDataClassName($dataClass), DataClass::PROPERTY_ID
+                $dataClassName, DataClass::PROPERTY_ID
             ), new StaticConditionVariable($dataClass->getId())
         );
 
         $parameters = new RecordRetrieveParameters($this->getDisplayOrderDataClassProperties($dataClass), $condition);
 
-        return $this->getDataClassRepository()->record(get_class($dataClass), $parameters);
+        return $this->getDataClassRepository()->record($dataClassName, $parameters);
     }
 
     /**
@@ -136,8 +139,20 @@ class DisplayOrderRepository
     public function findNextDisplayOrderValue(DataClassDisplayOrderSupport $dataClass)
     {
         return $this->getDataClassRepository()->retrieveNextValue(
-            get_class($dataClass), $this->getDisplayOrderPropertyConditionVariable($dataClass),
+            $this->determinePropertyDataClassName($dataClass), $dataClass->getDisplayOrderPropertyName(),
             $this->getDisplayOrderCondition($dataClass)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
+     *
+     * @return integer
+     */
+    public function countDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass)
+    {
+        return $this->getDataClassRepository()->count(
+            $this->determinePropertyDataClassName($dataClass), new DataClassCountParameters($this->getDisplayOrderCondition($dataClass))
         );
     }
 

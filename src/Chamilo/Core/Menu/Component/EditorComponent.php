@@ -9,7 +9,6 @@ use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -26,6 +25,7 @@ class EditorComponent extends Manager implements DelegateComponent
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     * @throws \Exception
      */
     public function run()
     {
@@ -45,9 +45,6 @@ class EditorComponent extends Manager implements DelegateComponent
             )
             )
         );
-
-//        $this->getService(DisplayOrderHandler::class)->prepareUpdate($item);
-//        exit;
 
         $itemForm = $this->getItemFormFactory()->getItemForm(
             $item->getType(), $this->get_url(array(self::PARAM_ITEM => $item->getId()))
@@ -69,16 +66,14 @@ class EditorComponent extends Manager implements DelegateComponent
                 array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_ITEM => $item->getParentId())
             );
         }
-        else
-        {
-            $html = array();
 
-            $html[] = $this->render_header();
-            $html[] = $itemForm->render();
-            $html[] = $this->render_footer();
+        $html = array();
 
-            return implode(PHP_EOL, $html);
-        }
+        $html[] = $this->render_header();
+        $html[] = $itemForm->render();
+        $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 
     /**

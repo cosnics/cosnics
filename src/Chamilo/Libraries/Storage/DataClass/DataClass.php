@@ -245,8 +245,19 @@ abstract class DataClass
      * Gets the default properties of this data class.
      *
      * @return string[] An associative array containing the properties.
+     * @deprecated Use DataClass::getDefaultProperties() now
      */
     public function get_default_properties()
+    {
+        return $this->getDefaultProperties();
+    }
+
+    /**
+     * Gets the default properties of this data class.
+     *
+     * @return string[] An associative array containing the properties.
+     */
+    public function getDefaultProperties()
     {
         return $this->get_specific_properties(self::PROPERTIES_DEFAULT);
     }

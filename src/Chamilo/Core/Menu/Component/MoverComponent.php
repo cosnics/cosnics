@@ -2,20 +2,10 @@
 namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Manager;
-use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
-use Chamilo\Core\Menu\Service\ItemService;
-use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Menu\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  *
@@ -31,6 +21,7 @@ class MoverComponent extends Manager
      * @return string|void
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function run()
     {
@@ -67,6 +58,9 @@ class MoverComponent extends Manager
         );
     }
 
+    /**
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
+     */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add(

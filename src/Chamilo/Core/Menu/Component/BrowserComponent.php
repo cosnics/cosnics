@@ -39,6 +39,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
     /**
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Exception
      */
     public function run()
     {
@@ -182,7 +183,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
     /**
      * @param string $tableClassName
      *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
+     * @return void
      */
     public function get_table_condition($tableClassName)
     {

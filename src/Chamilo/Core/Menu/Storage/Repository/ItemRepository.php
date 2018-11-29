@@ -41,6 +41,7 @@ class ItemRepository
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
+     * @throws \Exception
      */
     public function createItem(Item $item)
     {
@@ -51,6 +52,7 @@ class ItemRepository
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
      *
      * @return boolean
+     * @throws \Exception
      */
     public function createItemTitle(ItemTitle $itemTitle)
     {
