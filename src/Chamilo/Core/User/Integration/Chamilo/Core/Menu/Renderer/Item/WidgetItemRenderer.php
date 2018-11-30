@@ -3,7 +3,7 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
-use Chamilo\Core\Menu\Service\ItemService;
+use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Manager;
@@ -30,17 +30,17 @@ class WidgetItemRenderer extends ItemRenderer
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
+     * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemService $itemService,
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
         Theme $themeUtilities, ChamiloRequest $request, ConfigurationConsulter $configurationConsulter
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemService, $themeUtilities, $request);
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themeUtilities, $request);
 
         $this->configurationConsulter = $configurationConsulter;
     }

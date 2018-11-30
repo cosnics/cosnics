@@ -3,7 +3,7 @@ namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Menu\ItemMenu;
-use Chamilo\Core\Menu\Renderer\ItemRendererFactory;
+use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -196,7 +196,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     * @return \Chamilo\Core\Menu\Factory\ItemRendererFactory
      */
     public function getItemRendererFactory()
     {

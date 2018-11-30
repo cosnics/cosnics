@@ -150,6 +150,14 @@ class ItemRepository
     }
 
     /**
+     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     */
+    public function findItemTitles()
+    {
+        return $this->getDataClassRepository()->retrieves(ItemTitle::class, new DataClassRetrievesParameters());
+    }
+
+    /**
      *
      * @param integer $parentIdentifier
      * @param integer $count
@@ -186,8 +194,6 @@ class ItemRepository
             new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT),
             new StaticConditionVariable($parentIdentifier)
         );
-
-        $orderBy = array(new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT)));
 
         return $this->getDataClassRepository()->count(
             Item::class, new DataClassCountParameters($condition)

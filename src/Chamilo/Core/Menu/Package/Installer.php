@@ -22,7 +22,9 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
 
     /**
-     * Runs the install-script.
+     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Exception
      */
     public function extra()
     {

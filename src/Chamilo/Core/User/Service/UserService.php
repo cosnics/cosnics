@@ -41,8 +41,9 @@ class UserService
      * @param \Chamilo\Libraries\Hashing\HashingUtilities $hashingUtilities
      * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
      */
-    public function __construct(UserRepository $userRepository, HashingUtilities $hashingUtilities,
-        ConfigurationService $configurationService)
+    public function __construct(
+        UserRepository $userRepository, HashingUtilities $hashingUtilities, ConfigurationService $configurationService
+    )
     {
         $this->userRepository = $userRepository;
         $this->hashingUtilities = $hashingUtilities;
@@ -60,7 +61,7 @@ class UserService
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\Repository\UserRepository $archiveRepository
+     * @param \Chamilo\Core\User\Storage\Repository\UserRepository $userRepository
      */
     protected function setUserRepository(UserRepository $userRepository)
     {
@@ -117,6 +118,7 @@ class UserService
     /**
      *
      * @param string $securityToken
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function findUserBySecurityToken($securityToken)
@@ -127,6 +129,7 @@ class UserService
     /**
      *
      * @param string $officialCode
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function findUserByOfficialCode($officialCode)
@@ -137,6 +140,7 @@ class UserService
     /**
      *
      * @param integer[] $userIdentifiers
+     *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findUsersByIdentifiersOrderedByName($userIdentifiers)
@@ -147,6 +151,7 @@ class UserService
     /**
      *
      * @param string $email
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function findUserByEmail($email)
@@ -157,6 +162,7 @@ class UserService
     /**
      *
      * @param string $usernameOrEmail
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function findUserByUsernameOrEmail($usernameOrEmail)
@@ -174,7 +180,7 @@ class UserService
     {
         $user = $this->findUserByIdentifier($identifier);
 
-        if (! $user instanceof User)
+        if (!$user instanceof User)
         {
             return null;
         }
@@ -221,6 +227,15 @@ class UserService
     }
 
     /**
+     * @return integer[]
+     * @throws \Exception
+     */
+    public function findUserIdentifiers()
+    {
+        return $this->getUserRepository()->findUserIdentifiers();
+    }
+
+    /**
      *
      * @param integer[] $userIdentifiers
      *
@@ -250,6 +265,7 @@ class UserService
     /**
      *
      * @param $usernameOrEmail
+     *
      * @return User
      */
     public function getUserByUsernameOrEmail($usernameOrEmail)
@@ -261,11 +277,11 @@ class UserService
      *
      * @param string $username
      *
-     * @return bool
+     * @return boolean
      */
     public function isUsernameAvailable($username)
     {
-        return ! $this->findUserByUsername($username) instanceof User;
+        return !$this->findUserByUsername($username) instanceof User;
     }
 
     /**
@@ -279,17 +295,16 @@ class UserService
      * @param string $authSource
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @throws \Exception
      */
-    public function createUserFromParameters($firstName, $lastName, $username, $officialCode, $emailAddress, $password,
-        $authSource = 'Platform')
+    public function createUserFromParameters(
+        $firstName, $lastName, $username, $officialCode, $emailAddress, $password, $authSource = 'Platform'
+    )
     {
         $requiredParameters = [
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-            'username' => $username,
-            'officialCode' => $officialCode,
-            'emailAddress' => $emailAddress,
-            'password' => $password];
+            'firstName' => $firstName, 'lastName' => $lastName, 'username' => $username,
+            'officialCode' => $officialCode, 'emailAddress' => $emailAddress, 'password' => $password
+        ];
 
         foreach ($requiredParameters as $parameterName => $parameterValue)
         {
@@ -299,7 +314,7 @@ class UserService
             }
         }
 
-        if (! $this->isUsernameAvailable($username))
+        if (!$this->isUsernameAvailable($username))
         {
             throw new \RuntimeException('The given username is already taken');
         }
@@ -315,7 +330,7 @@ class UserService
 
         $user->set_password($this->getHashingUtilities()->hashString($password));
 
-        if (! $this->createUser($user))
+        if (!$this->createUser($user))
         {
             throw new \RuntimeException('Could not create the user');
         }
@@ -339,13 +354,14 @@ class UserService
      * @param string $context
      * @param string $variable
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\UserSetting
      */
     public function getUserSettingForSettingContextVariableAndUser($context, $variable, User $user)
     {
         return $this->getUserRepository()->getUserSettingForSettingAndUser(
-            $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable),
-            $user);
+            $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable), $user
+        );
     }
 
     /**
@@ -354,13 +370,15 @@ class UserService
      * @param string $variable
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $value
+     *
      * @return boolean
+     * @throws \Exception
      */
     public function createUserSettingForSettingAndUser($context, $variable, User $user, $value = null)
     {
         $userSetting = $this->getUserSettingForSettingContextVariableAndUser($context, $variable, $user);
 
-        if (! $userSetting instanceof UserSetting)
+        if (!$userSetting instanceof UserSetting)
         {
             $setting = $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable);
 
@@ -400,6 +418,7 @@ class UserService
     /**
      *
      * @param integer $status
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
     public function findActiveUsersByStatus($status)
@@ -415,15 +434,16 @@ class UserService
     public function triggerImportEvent(User $actionUser, User $targetUser)
     {
         event::trigger(
-            'Import',
-            'Chamilo\Core\User',
-            ['target_user_id' => $targetUser->getId(), 'action_user_id' => $actionUser->getId()]);
+            'Import', 'Chamilo\Core\User',
+            ['target_user_id' => $targetUser->getId(), 'action_user_id' => $actionUser->getId()]
+        );
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return boolean
+     * @throws \Exception
      */
     public function createUser(User $user)
     {
@@ -436,6 +456,7 @@ class UserService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return boolean
      */
     public function updateUser(User $user)

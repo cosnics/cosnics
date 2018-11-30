@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Renderer;
 
-use Chamilo\Core\Menu\Service\ItemService;
+use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -27,9 +27,9 @@ abstract class ItemRenderer
     private $translator;
 
     /**
-     * @var \Chamilo\Core\Menu\Service\ItemService
+     * @var \Chamilo\Core\Menu\Service\ItemCacheService
      */
-    private $itemService;
+    private $itemCacheService;
 
     /**
      * @var \Chamilo\Libraries\Format\Theme
@@ -44,18 +44,18 @@ abstract class ItemRenderer
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
+     * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemService $itemService,
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
         Theme $themeUtilities, ChamiloRequest $request
     )
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->translator = $translator;
-        $this->itemService = $itemService;
+        $this->itemCacheService = $itemCacheService;
         $this->themeUtilities = $themeUtilities;
         $this->request = $request;
     }
@@ -75,7 +75,7 @@ abstract class ItemRenderer
      */
     public function renderTitle(Item $item)
     {
-        return $this->getItemService()->getItemTitleForCurrentLanguage($item);
+        return $this->getItemCacheService()->getItemTitleForCurrentLanguage($item);
     }
 
     /**
@@ -95,19 +95,19 @@ abstract class ItemRenderer
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Service\ItemService
+     * @return \Chamilo\Core\Menu\Service\ItemCacheService
      */
-    public function getItemService(): ItemService
+    public function getItemCacheService(): ItemCacheService
     {
-        return $this->itemService;
+        return $this->itemCacheService;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
+     * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
      */
-    public function setItemService(ItemService $itemService): void
+    public function setItemCacheService(ItemCacheService $itemCacheService): void
     {
-        $this->itemService = $itemService;
+        $this->itemCacheService = $itemCacheService;
     }
 
     /**

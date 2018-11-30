@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Menu\Table\Item;
 
 use Chamilo\Core\Menu\Manager;
-use Chamilo\Core\Menu\Renderer\ItemRendererFactory;
+use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
@@ -39,7 +39,7 @@ class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
     private $rightsService;
 
     /**
-     * @var \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     * @var \Chamilo\Core\Menu\Factory\ItemRendererFactory
      */
     private $itemRendererFactory;
 
@@ -53,6 +53,7 @@ class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
+     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      * @param integer $parentIdentifier
      *
      * @throws \Exception
@@ -72,7 +73,7 @@ class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     * @return \Chamilo\Core\Menu\Factory\ItemRendererFactory
      */
     public function getItemRendererFactory(): ItemRendererFactory
     {
@@ -80,7 +81,7 @@ class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      */
     public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
     {

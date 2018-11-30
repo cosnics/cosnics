@@ -3,8 +3,8 @@ namespace Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Configuration\Service\LanguageConsulter;
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
-use Chamilo\Core\Menu\Renderer\ItemRendererFactory;
-use Chamilo\Core\Menu\Service\ItemService;
+use Chamilo\Core\Menu\Factory\ItemRendererFactory;
+use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\LanguageItem;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
@@ -28,26 +28,26 @@ class LanguageCategoryItemRenderer extends ItemRenderer
     private $languageConsulter;
 
     /**
-     * @var \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     * @var \Chamilo\Core\Menu\Factory\ItemRendererFactory
      */
     private $itemRendererFactory;
 
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
+     * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\LanguageConsulter $languageConsulter
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemService $itemService,
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
         Theme $themeUtilities, ChamiloRequest $request, LanguageConsulter $languageConsulter,
         ItemRendererFactory $itemRendererFactory
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemService, $themeUtilities, $request);
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themeUtilities, $request);
 
         $this->languageConsulter = $languageConsulter;
         $this->itemRendererFactory = $itemRendererFactory;
@@ -84,7 +84,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
             '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
         $imagePath = $this->getThemeUtilities()->getImagePath('Chamilo\Core\Menu', 'Language');
-        $title = $this->getItemService()->getItemTitleForCurrentLanguage($item);
+        $title = $this->getItemCacheService()->getItemTitleForCurrentLanguage($item);
 
         $html[] =
             '<img class="chamilo-menu-item-icon' . ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') .
@@ -104,7 +104,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     * @return \Chamilo\Core\Menu\Factory\ItemRendererFactory
      */
     public function getItemRendererFactory(): ItemRendererFactory
     {
@@ -112,7 +112,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      */
     public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
     {
@@ -168,15 +168,6 @@ class LanguageCategoryItemRenderer extends ItemRenderer
 
             foreach ($languages as $isocode => $language)
             {
-                $redirect = new Redirect(
-                    array(
-                        Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
-                        Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_QUICK_LANG,
-                        \Chamilo\Core\User\Manager::PARAM_CHOICE => $isocode,
-                        \Chamilo\Core\User\Manager::PARAM_REFER => $currentUrl
-                    )
-                );
-
                 $languageItem = new LanguageItem();
                 $languageItem->setLanguage($isocode);
                 $languageItem->setCurrentUrl($currentUrl);

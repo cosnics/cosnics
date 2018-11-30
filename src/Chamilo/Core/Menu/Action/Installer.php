@@ -182,7 +182,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     }
 
     /**
-     * @return \Symfony\Component\Translation\Translator
+     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
      */
     protected function getClassnameUtilities()
     {

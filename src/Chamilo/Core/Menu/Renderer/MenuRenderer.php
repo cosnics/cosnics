@@ -2,8 +2,9 @@
 namespace Chamilo\Core\Menu\Renderer;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Core\Menu\Service\ItemService;
-use Chamilo\Core\Menu\Service\RightsService;
+use Chamilo\Core\Menu\Factory\ItemRendererFactory;
+use Chamilo\Core\Menu\Service\ItemCacheService;
+use Chamilo\Core\Menu\Service\RightsCacheService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Theme;
@@ -17,17 +18,17 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 class MenuRenderer
 {
     /**
-     * @var \Chamilo\Core\Menu\Service\ItemService
+     * @var \Chamilo\Core\Menu\Service\ItemCacheService
      */
-    private $itemService;
+    private $itemCacheService;
 
     /**
-     * @var \Chamilo\Core\Menu\Service\RightsService
+     * @var \Chamilo\Core\Menu\Service\RightsCacheService
      */
-    private $rightsService;
+    private $rightsCacheService;
 
     /**
-     * @var \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     * @var \Chamilo\Core\Menu\Factory\ItemRendererFactory
      */
     private $itemRendererFactory;
 
@@ -52,22 +53,22 @@ class MenuRenderer
     private $themeUtilities;
 
     /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
+     * @param \Chamilo\Core\Menu\Service\RightsCacheService $rightsCacheService
+     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $chamiloRequest
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      */
     public function __construct(
-        ItemService $itemService, RightsService $rightsService, ItemRendererFactory $itemRendererFactory,
+        ItemCacheService $itemCacheService, RightsCacheService $rightsCacheService, ItemRendererFactory $itemRendererFactory,
         ChamiloRequest $chamiloRequest, ConfigurationConsulter $configurationConsulter, PathBuilder $pathBuilder,
         Theme $themeUtilities
     )
     {
-        $this->itemService = $itemService;
-        $this->rightsService = $rightsService;
+        $this->itemCacheService = $itemCacheService;
+        $this->rightsCacheService = $rightsCacheService;
         $this->itemRendererFactory = $itemRendererFactory;
         $this->chamiloRequest = $chamiloRequest;
         $this->configurationConsulter = $configurationConsulter;
@@ -77,7 +78,6 @@ class MenuRenderer
 
     /**
      * @param string $containerMode
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
@@ -91,12 +91,11 @@ class MenuRenderer
 
         if ($user instanceof User)
         {
-            //TODO: This should move to the RightsService
-            $userRights = $this->getItemService()->determineRightsForUser($user);
-
             foreach ($this->findRootItems() as $item)
             {
-                if ($userRights[$item->getId()])
+                $userCanViewItem = $this->getRightsCacheService()->canUserViewItem($user, $item);
+
+                if ($userCanViewItem)
                 {
                     if (!$item->isHidden())
                     {
@@ -125,7 +124,7 @@ class MenuRenderer
      */
     public function findRootItems()
     {
-        return $this->getItemService()->findItemsByParentIdentifier(0);
+        return $this->getItemCacheService()->findItemsByParentIdentifier(0);
     }
 
     /**
@@ -161,7 +160,7 @@ class MenuRenderer
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     * @return \Chamilo\Core\Menu\Factory\ItemRendererFactory
      */
     public function getItemRendererFactory(): ItemRendererFactory
     {
@@ -169,7 +168,7 @@ class MenuRenderer
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      */
     public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
     {
@@ -177,19 +176,19 @@ class MenuRenderer
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Service\ItemService
+     * @return \Chamilo\Core\Menu\Service\ItemCacheService
      */
-    public function getItemService(): ItemService
+    public function getItemCacheService(): ItemCacheService
     {
-        return $this->itemService;
+        return $this->itemCacheService;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
+     * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
      */
-    public function setItemService(ItemService $itemService): void
+    public function setItemCacheService(ItemCacheService $itemCacheService): void
     {
-        $this->itemService = $itemService;
+        $this->itemCacheService = $itemCacheService;
     }
 
     /**
@@ -209,19 +208,19 @@ class MenuRenderer
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Service\RightsService
+     * @return \Chamilo\Core\Menu\Service\RightsCacheService
      */
-    public function getRightsService(): RightsService
+    public function getRightsCacheService(): RightsCacheService
     {
-        return $this->rightsService;
+        return $this->rightsCacheService;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
+     * @param \Chamilo\Core\Menu\Service\RightsCacheService $rightsCacheService
      */
-    public function setRightsService(RightsService $rightsService): void
+    public function setRightsCacheService(RightsCacheService $rightsCacheService): void
     {
-        $this->rightsService = $rightsService;
+        $this->rightsCacheService = $rightsCacheService;
     }
 
     /**

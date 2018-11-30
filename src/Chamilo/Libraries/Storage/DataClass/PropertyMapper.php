@@ -45,7 +45,7 @@ class PropertyMapper
 
         foreach ($dataClasses as $dataClass)
         {
-            $propertyValue = $dataClass->get_default_property($propertyName);
+            $propertyValue = $dataClass->getDefaultProperty($propertyName);
 
             if (isset($propertyValue))
             {
@@ -61,7 +61,7 @@ class PropertyMapper
      * @param string[][] $records
      * @param string $propertyName
      *
-     * @return string[]
+     * @return string[][]
      */
     public function groupRecordsByProperty($records, $propertyName)
     {
@@ -88,7 +88,7 @@ class PropertyMapper
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
      * @param string $propertyName
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]
      */
     public function groupDataClassByProperty($dataClasses, $propertyName)
     {
@@ -98,12 +98,12 @@ class PropertyMapper
         {
             if (in_array($propertyName, $dataClass->get_default_property_names()))
             {
-                if (!array_key_exists($dataClass->get_default_property($propertyName), $mappedDataClasses))
+                if (!array_key_exists($dataClass->getDefaultProperty($propertyName), $mappedDataClasses))
                 {
-                    $mappedDataClasses[$dataClass->get_default_property($propertyName)] = array();
+                    $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)] = array();
                 }
 
-                $mappedDataClasses[$dataClass->get_default_property($propertyName)][] = $dataClass;
+                $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)][] = $dataClass;
             }
         }
 

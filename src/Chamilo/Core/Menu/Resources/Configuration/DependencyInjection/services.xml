@@ -5,8 +5,17 @@
     <services>
         <defaults autowire="true" public="true"/>
 
+        <service id="Chamilo\Core\Menu\Factory\ItemFormFactory"/>
+        <service id="Chamilo\Core\Menu\Factory\ItemRendererFactory"/>
+        <service id="Chamilo\Core\Menu\Factory\MenuCacheProviderFactory"/>
+
         <service id="Chamilo\Core\Menu\Service\ItemService"/>
-        <service id="Chamilo\Core\Menu\Service\ItemsCacheService"/>
+        <service id="Chamilo\Core\Menu\Service\ItemCacheService">
+            <argument key="$cacheProvider" type="service" id="Chamilo\Core\Menu\Cache\ItemCacheProvider"/>
+        </service>
+        <service id="Chamilo\Core\Menu\Service\RightsCacheService">
+            <argument key="$cacheProvider" type="service" id="Chamilo\Core\Menu\Cache\RightsCacheProvider"/>
+        </service>
         <service id="Chamilo\Core\Menu\Service\RightsService">
             <argument key="$rightsRepository" type="service"
                       id="Chamilo\Core\Menu\Storage\Repository\RightsRepository"/>
@@ -14,14 +23,21 @@
                       id="Chamilo\Configuration\Service\ConfigurationConsulter"/>
         </service>
 
+        <service id="Chamilo\Core\Menu\Cache\RightsCacheProvider">
+            <factory
+                    service="Chamilo\Core\Menu\Factory\MenuCacheProviderFactory"
+                    method="getRightsCacheProvider"/>
+        </service>
+        <service id="Chamilo\Core\Menu\Cache\ItemCacheProvider">
+            <factory
+                    service="Chamilo\Core\Menu\Factory\MenuCacheProviderFactory"
+                    method="getItemCacheProvider"/>
+        </service>
+
         <service id="Chamilo\Core\Menu\Storage\Repository\ItemRepository"/>
         <service id="Chamilo\Core\Menu\Storage\Repository\RightsRepository"/>
 
-        <service id="Chamilo\Core\Menu\Form\ItemFormFactory"/>
-
         <service id="Chamilo\Core\Menu\Renderer\MenuRenderer"/>
-        <service id="Chamilo\Core\Menu\Renderer\ItemRendererFactory"/>
-
         <service id="Chamilo\Core\Menu\Renderer\Item\ApplicationItemRenderer"/>
         <service id="Chamilo\Core\Menu\Renderer\Item\CategoryItemRenderer"/>
         <service id="Chamilo\Core\Menu\Renderer\Item\LanguageCategoryItemRenderer"/>

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer;
+namespace Chamilo\Core\Menu\Factory;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
-use Chamilo\Core\Menu\Form\ItemFormFactory;
+use Chamilo\Core\Menu\Factory\ItemFormFactory;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -101,7 +101,7 @@ class EditorComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Form\ItemFormFactory
+     * @return \Chamilo\Core\Menu\Factory\ItemFormFactory
      */
     public function getItemFormFactory()
     {

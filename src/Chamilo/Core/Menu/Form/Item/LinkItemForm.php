@@ -4,7 +4,6 @@ namespace Chamilo\Core\Menu\Form\Item;
 use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\LinkItem;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -46,8 +45,8 @@ class LinkItemForm extends ItemForm
      */
     public function setItemDefaults(Item $item, array $itemTitles, array $defaults = array())
     {
-        $defaults[LinkItem::PROPERTY_URL] = $item->get_url();
-        $defaults[LinkItem::PROPERTY_TARGET] = $item->get_target();
+        $defaults[LinkItem::PROPERTY_URL] = $item->getUrl();
+        $defaults[LinkItem::PROPERTY_TARGET] = $item->getTarget();
 
         parent::setItemDefaults($item, $itemTitles, $defaults);
     }

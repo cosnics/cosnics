@@ -1,119 +1,134 @@
 <?php
 namespace Chamilo\Core\Menu\Service;
 
-use Chamilo\Core\Menu\Manager;
-use Chamilo\Core\Menu\Rights;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
-use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Psr\SimpleCache\CacheInterface;
 
 /**
- *
  * @package Chamilo\Core\Menu\Service
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class RightsCacheService extends DoctrinePhpFileCacheService implements UserBasedCacheInterface
+class RightsCacheService
 {
 
     /**
-     *
-     * @var ItemService
+     * @var \Chamilo\Core\Menu\Service\RightsService
+     */
+    private $rightsService;
+
+    /**
+     * @var \Chamilo\Core\Menu\Service\ItemService
      */
     private $itemService;
 
     /**
-     *
-     * @param ItemService $itemService
+     * @var \Psr\SimpleCache\CacheInterface
      */
-    public function __construct(ItemService $itemService)
+    private $cacheProvider;
+
+    /**
+     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
+     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
+     * @param \Psr\SimpleCache\CacheInterface $cacheProvider
+     */
+    public function __construct(RightsService $rightsService, ItemService $itemService, CacheInterface $cacheProvider)
     {
+        $this->rightsService = $rightsService;
         $this->itemService = $itemService;
+        $this->cacheProvider = $cacheProvider;
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
+     * @return boolean
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function canUserViewItem(User $user, Item $item)
+    {
+        if (!$item->isIdentified())
+        {
+            return true;
+        }
+
+        $cacheProvider = $this->getCacheProvider();
+
+        if (!$cacheProvider->has($user->getId()))
+        {
+            $cacheProvider->set($user->getId(), $this->getUserRightsForAllItems($user));
+        }
+
+        $userRights = $cacheProvider->get($user->getId());
+
+        return $userRights[$item->getId()];
+    }
+
+    /**
+     * @return \Psr\SimpleCache\CacheInterface
+     */
+    public function getCacheProvider(): CacheInterface
+    {
+        return $this->cacheProvider;
+    }
+
+    /**
+     * @param \Psr\SimpleCache\CacheInterface $cacheProvider
+     */
+    public function setCacheProvider(CacheInterface $cacheProvider): void
+    {
+        $this->cacheProvider = $cacheProvider;
+    }
+
+    /**
      * @return \Chamilo\Core\Menu\Service\ItemService
      */
-    public function getItemService()
+    public function getItemService(): ItemService
     {
         return $this->itemService;
     }
 
     /**
-     *
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      */
-    public function setItemService($itemService)
+    public function setItemService(ItemService $itemService): void
     {
         $this->itemService = $itemService;
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
+     * @return \Chamilo\Core\Menu\Service\RightsService
      */
-    public function warmUpForIdentifier($identifier)
+    public function getRightsService(): RightsService
     {
-        $itemRights = array();
-        $items = $this->getItemService()->findRootItems();
+        return $this->rightsService;
+    }
 
-        $entities = array();
-        $entities[] = new UserEntity();
-        $entities[] = new PlatformGroupEntity();
+    /**
+     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return boolean[]
+     */
+    protected function getUserRightsForAllItems(User $user)
+    {
+        $items = $this->getItemService()->findItems();
+        $itemRights = array();
 
         foreach ($items as $item)
         {
-            if (Rights::getInstance()->is_allowed(
-                Rights::VIEW_RIGHT,
-                Manager::context(),
-                null,
-                $entities,
-                $item->get_id(),
-                Rights::TYPE_ITEM))
-            {
-                $itemRights[$item->get_id()] = true;
-            }
+            $itemRights[$item->getId()] = $this->getRightsService()->canUserViewItem($user, $item);
         }
 
-        return $this->getCacheProvider()->save($identifier, $itemRights);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCachePathNamespace()
-     */
-    public function getCachePathNamespace()
-    {
-        return __NAMESPACE__;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
-     */
-    public function getIdentifiers()
-    {
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::distinct(
-            User::class_name(),
-            new DataClassDistinctParameters(
-                null,
-                new DataClassProperties(array(new PropertyConditionVariable(User::class, User::PROPERTY_ID)))));
-    }
-
-    /**
-     *
-     * @param User $user
-     * @return boolean[]
-     */
-    public function getForUser(User $user)
-    {
-        return $this->getForIdentifier($user->get_id());
+        return $itemRights;
     }
 }

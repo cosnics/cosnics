@@ -84,10 +84,10 @@ class ApplicationItemForm extends ItemForm
      */
     public function setItemDefaults(Item $item, array $itemTitles, array $defaults = array())
     {
-        $defaults[ApplicationItem::PROPERTY_APPLICATION] = $item->get_application();
+        $defaults[ApplicationItem::PROPERTY_APPLICATION] = $item->getApplication();
         $defaults[ApplicationItem::PROPERTY_COMPONENT] = $item->getComponent();
         $defaults[ApplicationItem::PROPERTY_EXTRA_PARAMETERS] = $item->getExtraParameters();
-        $defaults[ApplicationItem::PROPERTY_USE_TRANSLATION] = $item->get_use_translation();
+        $defaults[ApplicationItem::PROPERTY_USE_TRANSLATION] = $item->getUseTranslation();
 
         parent::setItemDefaults($item, $itemTitles, $defaults);
     }

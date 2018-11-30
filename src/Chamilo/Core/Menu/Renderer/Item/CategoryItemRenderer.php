@@ -2,8 +2,9 @@
 namespace Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
-use Chamilo\Core\Menu\Renderer\ItemRendererFactory;
-use Chamilo\Core\Menu\Service\ItemService;
+use Chamilo\Core\Menu\Factory\ItemRendererFactory;
+use Chamilo\Core\Menu\Service\ItemCacheService;
+use Chamilo\Core\Menu\Service\RightsCacheService;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
@@ -23,31 +24,31 @@ class CategoryItemRenderer extends ItemRenderer
     /**
      * @var \Chamilo\Core\Menu\Service\RightsService
      */
-    private $rightsService;
+    private $rightsCacheService;
 
     /**
-     * @var \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     * @var \Chamilo\Core\Menu\Factory\ItemRendererFactory
      */
     private $itemRendererFactory;
 
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
+     * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     * @param \Chamilo\Core\Menu\Service\RightsCacheService $rightsCacheService
+     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemService $itemService,
-        Theme $themeUtilities, ChamiloRequest $request, RightsService $rightsService,
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
+        Theme $themeUtilities, ChamiloRequest $request, RightsCacheService $rightsCacheService,
         ItemRendererFactory $itemRendererFactory
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemService, $themeUtilities, $request);
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themeUtilities, $request);
 
-        $this->rightsService = $rightsService;
+        $this->rightsCacheService = $rightsCacheService;
         $this->itemRendererFactory = $itemRendererFactory;
     }
 
@@ -96,7 +97,7 @@ class CategoryItemRenderer extends ItemRenderer
         $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
 
-        if ($this->getItemService()->doesItemHaveChildren($item))
+        if ($this->getItemCacheService()->doesItemHaveChildren($item))
         {
             $html[] = $this->renderChildren($item, $user);
         }
@@ -107,7 +108,7 @@ class CategoryItemRenderer extends ItemRenderer
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Renderer\ItemRendererFactory
+     * @return \Chamilo\Core\Menu\Factory\ItemRendererFactory
      */
     public function getItemRendererFactory(): ItemRendererFactory
     {
@@ -115,7 +116,7 @@ class CategoryItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Renderer\ItemRendererFactory $itemRendererFactory
+     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      */
     public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
     {
@@ -123,19 +124,19 @@ class CategoryItemRenderer extends ItemRenderer
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Service\RightsService
+     * @return \Chamilo\Core\Menu\Service\RightsCacheService
      */
-    public function getRightsService(): RightsService
+    public function getRightsCacheService(): RightsCacheService
     {
-        return $this->rightsService;
+        return $this->rightsCacheService;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
+     * @param \Chamilo\Core\Menu\Service\RightsCacheService $rightsCacheService
      */
-    public function setRightsService(RightsService $rightsService): void
+    public function setRightsService(RightsCacheService $rightsCacheService): void
     {
-        $this->rightsService = $rightsService;
+        $this->rightsCacheService = $rightsCacheService;
     }
 
     /**
@@ -145,7 +146,7 @@ class CategoryItemRenderer extends ItemRenderer
      */
     public function isSelected(Item $item)
     {
-        $childItems = $this->getItemService()->findItemsByParentIdentifier($item->getId());
+        $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());
 
         foreach ($childItems as $childItem)
         {
@@ -168,7 +169,7 @@ class CategoryItemRenderer extends ItemRenderer
      */
     public function renderChildren(Item $item, User $user)
     {
-        $childItems = $this->getItemService()->findItemsByParentIdentifier($item->getId());
+        $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());
 
         $html = array();
 
@@ -176,7 +177,7 @@ class CategoryItemRenderer extends ItemRenderer
 
         foreach ($childItems as $childItem)
         {
-            $userCanViewItem = $this->getRightsService()->canUserViewItem($user, $item);
+            $userCanViewItem = $this->getRightsCacheService()->canUserViewItem($user, $item);
 
             if ($userCanViewItem)
             {

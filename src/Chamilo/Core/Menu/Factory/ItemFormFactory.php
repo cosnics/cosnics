@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Menu\Form;
+namespace Chamilo\Core\Menu\Factory;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\LanguageConsulter;

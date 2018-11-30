@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Menu\Form\Item;
 
 use Chamilo\Core\Menu\Form\ItemForm;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
