@@ -83,7 +83,7 @@ class CacheManager
 
         foreach ($cacheServices as $cacheService)
         {
-            if (! $cacheService instanceof UserBasedCacheInterface)
+            if (!$cacheService instanceof UserBasedCacheInterface)
             {
                 $cacheService->warmUp();
             }
@@ -95,6 +95,7 @@ class CacheManager
      * exist
      *
      * @param string[] $cacheServiceAliases
+     *
      * @return \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface[]
      */
     protected function getCacheServicesByAliases($cacheServiceAliases = array())
@@ -108,10 +109,11 @@ class CacheManager
 
         foreach ($cacheServiceAliases as $cacheServiceAlias)
         {
-            if (! array_key_exists($cacheServiceAlias, $this->cacheServices))
+            if (!array_key_exists($cacheServiceAlias, $this->cacheServices))
             {
                 throw new \InvalidArgumentException(
-                    sprintf('The given cache service alias %s does not exist', $cacheServiceAlias));
+                    sprintf('The given cache service alias %s does not exist', $cacheServiceAlias)
+                );
             }
 
             $cacheServices[$cacheServiceAlias] = $this->cacheServices[$cacheServiceAlias];

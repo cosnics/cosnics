@@ -67,6 +67,14 @@ class RightsCacheService
     }
 
     /**
+     * @return boolean
+     */
+    public function clear()
+    {
+        return $this->getCacheProvider()->clear();
+    }
+
+    /**
      * @return \Psr\SimpleCache\CacheInterface
      */
     public function getCacheProvider(): CacheInterface

@@ -5,21 +5,22 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocation;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocationEntityRight;
+use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
+use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Core\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 use Symfony\Component\Translation\Translator;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
 
 /**
  * @package Chamilo\Core\Menu\Service
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class RightsService extends \Chamilo\Core\Rights\Service\RightsService
+class RightsService extends \Chamilo\Core\Rights\Service\RightsService implements UserBasedCacheInterface
 {
     const TYPE_ITEM = 1;
 
@@ -146,6 +147,18 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
     }
 
     /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
+     *
+     * @return boolean
+     */
+    public function deleteViewRightForRightsLocationForEveryone(RightsLocation $rightsLocation)
+    {
+        return $this->getRightsRepository()->deleteRightsLocationEntityRightsForLocationAndParameters(
+            $rightsLocation, 0, 0, self::VIEW_RIGHT
+        );
+    }
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return bool|\Chamilo\Core\Rights\Domain\RightsLocation
@@ -247,17 +260,5 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService
     public function setRightsLocationViewRightForEveryone(RightsLocation $rightsLocation)
     {
         return $this->setRightsLocationEntityRight(self::VIEW_RIGHT, 0, 0, $rightsLocation->getId());
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
-     *
-     * @return boolean
-     */
-    public function deleteViewRightForRightsLocationForEveryone(RightsLocation $rightsLocation)
-    {
-        return $this->getRightsRepository()->deleteRightsLocationEntityRightsForLocationAndParameters(
-            $rightsLocation, 0, 0, self::VIEW_RIGHT
-        );
     }
 }

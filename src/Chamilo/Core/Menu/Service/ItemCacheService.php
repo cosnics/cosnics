@@ -212,4 +212,20 @@ class ItemCacheService
     {
         return $this->getItemService()->determineItemTitleForCurrentLanguage($this->getItemTitles($item));
     }
+
+    /**
+     * @return boolean
+     */
+    public function clear()
+    {
+        return $this->getCacheProvider()->clear();
+    }
+
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function warmUp()
+    {
+        $this->getItemTitlesGroupedByItemIdentifierAndIsocode();
+    }
 }
