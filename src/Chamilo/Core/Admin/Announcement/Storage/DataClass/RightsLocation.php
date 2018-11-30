@@ -8,7 +8,7 @@ use Chamilo\Core\Admin\Announcement\Storage\DataManager;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class RightsLocation extends \Chamilo\Core\Rights\Domain\RightsLocation
+class RightsLocation extends \Chamilo\Libraries\Rights\Domain\RightsLocation
 {
 
     public function get_data_manager()

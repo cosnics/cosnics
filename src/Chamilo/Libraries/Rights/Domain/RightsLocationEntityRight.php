@@ -1,11 +1,11 @@
 <?php
-namespace Chamilo\Core\Rights\Domain;
+namespace Chamilo\Libraries\Rights\Domain;
 
 use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * @package Chamilo\Core\Rights\Domain
+ * @package Chamilo\Libraries\Rights\Domain
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

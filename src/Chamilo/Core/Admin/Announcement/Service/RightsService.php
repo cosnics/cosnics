@@ -59,7 +59,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     /**
      * @param bool $returnLocation
      *
-     * @return \Chamilo\Core\Rights\Domain\RightsLocation
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
      */
     public function createRoot(bool $returnLocation = true)
     {

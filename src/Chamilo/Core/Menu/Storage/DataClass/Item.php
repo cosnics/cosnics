@@ -148,8 +148,17 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
 
     /**
      * @return boolean
+     * @deprecated Use Item::hadParentId() now
      */
     public function hasParent()
+    {
+        return $this->hasParentId();
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasParentId()
     {
         return $this->getParentId() != 0;
     }

@@ -127,7 +127,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     /**
      * @param bool $returnLocation
      *
-     * @return \Chamilo\Core\Rights\Domain\RightsLocation
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
      */
     public function createRoot(bool $returnLocation = true)
     {
@@ -161,7 +161,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return bool|\Chamilo\Core\Rights\Domain\RightsLocation
+     * @return bool|\Chamilo\Libraries\Rights\Domain\RightsLocation
      */
     public function determineParentRightsLocationForItem(Item $item)
     {
@@ -180,11 +180,19 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return \Chamilo\Core\Rights\Domain\RightsLocation
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
      */
     public function findRightsLocationForItem(Item $item)
     {
         return $this->findRightsLocationByParameters($item->getId(), self::TYPE_ITEM);
+    }
+
+    /**
+     * @return integer[]
+     */
+    public function getAvailableRights()
+    {
+        return array('View' => self::VIEW_RIGHT);
     }
 
     /**

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Rights\Domain;
+namespace Chamilo\Libraries\Rights\Domain;
 
 use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;

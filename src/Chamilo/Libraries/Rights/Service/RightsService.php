@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Rights\Service;
 
-use Chamilo\Core\Rights\Domain\RightsLocation;
-use Chamilo\Core\Rights\Domain\RightsLocationEntityRight;
+use Chamilo\Libraries\Rights\Domain\RightsLocation;
+use Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight;
 use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\User\Service\UserService;
@@ -91,7 +91,7 @@ abstract class RightsService
     }
 
     /**
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
      * @return boolean
      */
@@ -101,9 +101,10 @@ abstract class RightsService
     }
 
     /**
-     * @param \Chamilo\Core\Rights\Domain\RightsLocationEntityRight $rightsLocationEntityRight
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight $rightsLocationEntityRight
      *
      * @return boolean
+     * @throws \Exception
      */
     protected function createRightsLocationEntityRight(RightsLocationEntityRight $rightsLocationEntityRight)
     {
@@ -118,6 +119,7 @@ abstract class RightsService
      *
      * @return boolean
      * @see RightsUtil::create_rights_location_entity_right()
+     * @throws \Exception
      */
     protected function createRightsLocationEntityRightFromParameters(
         int $right, int $entityIdentifier, int $entityType, int $locationIdentifier
@@ -143,7 +145,7 @@ abstract class RightsService
      * @param integer $treeType
      * @param boolean $returnLocation
      *
-     * @return \Chamilo\Core\Rights\Domain\RightsLocation|boolean
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocation|boolean
      * @see RightsUtil::create_location()
      */
     protected function createRightsLocationFromParameters(
@@ -177,7 +179,7 @@ abstract class RightsService
      * @param integer $treeType
      * @param boolean $returnLocation
      *
-     * @return \Chamilo\Core\Rights\Domain\RightsLocation
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
      * @see RightsUtil::create_subtree_root_location()
      */
     protected function createSubtreeRootLocation(int $treeIdentifier, int $treeType, bool $returnLocation = false)
@@ -188,13 +190,13 @@ abstract class RightsService
     }
 
     /**
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $rightsLocation
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $rightsLocation
      *
      * @return boolean
      */
     protected function deleteRightsLocation(RightsLocation $rightsLocation)
     {
-        if(!$this->getRightsRepository()->deleteRightsLocation($rightsLocation))
+        if (!$this->getRightsRepository()->deleteRightsLocation($rightsLocation))
         {
             return false;
         }
@@ -203,7 +205,7 @@ abstract class RightsService
     }
 
     /**
-     * @param \Chamilo\Core\Rights\Domain\RightsLocationEntityRight $rightsLocationEntityRight
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight $rightsLocationEntityRight
      *
      * @return boolean
      */
@@ -214,7 +216,7 @@ abstract class RightsService
 
     /**
      *
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
      * @return boolean
      * @see RightsLocation::clear_rights()
@@ -229,7 +231,7 @@ abstract class RightsService
     /**
      * Helper function to delete all the location entity right records for a given entity on a given location
      *
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      * @param integer $entityIdentifier
      * @param integer $entityType
      *
@@ -247,7 +249,7 @@ abstract class RightsService
 
     /**
      *
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      * @param integer $right
      *
      * @return boolean
@@ -264,10 +266,11 @@ abstract class RightsService
      * @param integer $entityIdentifier
      * @param integer $entityType
      * @param integer $right
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
      * @return boolean
      * @see RightsUtil::is_allowed_for_rights_entity_item()
+     * @throws \Exception
      */
     protected function doesEntityHaveRightForLocation(
         int $entityIdentifier, int $entityType, int $right, RightsLocation $location
@@ -284,7 +287,7 @@ abstract class RightsService
      * @param integer $entityIdentifier
      * @param integer $entityType
      * @param integer $right
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
      * @return boolean
      * @see RightsUtil::is_allowed_for_rights_entity_item_no_inherit()
@@ -353,11 +356,12 @@ abstract class RightsService
     /**
      * @param integer $userIdentifier
      * @param integer $right
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
      *
      * @return boolean
      * @see RightsUtil::is_allowed_on_location()
+     * @throws \Exception
      */
     protected function doesUserIdentifierHaveRightForLocationAndEntities(
         int $userIdentifier, int $right, RightsLocation $location, array $entities
@@ -394,6 +398,7 @@ abstract class RightsService
      * @param integer $type
      *
      * @return array of identifiers.
+     * @throws \Exception
      */
     protected function filterLocationIdentifiersByGrantedRight(
         User $user, array $entities, int $right, array $identifiers, int $type
@@ -430,10 +435,11 @@ abstract class RightsService
     /**
      * @param integer $entityIdentifier
      * @param integer $entityType
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
      * @return integer[]
      * @see RightsUtil::get_granted_rights_for_rights_entity_item()
+     * @throws \Exception
      */
     protected function findGrantedRightsForEntityAndLocation(
         int $entityIdentifier, int $entityType, RightsLocation $location
@@ -470,11 +476,12 @@ abstract class RightsService
     }
 
     /**
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return integer[]
      * @see DataManager::retrieve_granted_rights_array()
+     * @throws \Exception
      */
     protected function findGrantedRightsForLocationAndCondition(
         RightsLocation $location, Condition $condition
@@ -500,11 +507,12 @@ abstract class RightsService
 
     /**
      * @param integer $userIdentifier
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
      *
      * @return integer[]
      * @see DataManager::retrieve_granted_rights_array()
+     * @throws \Exception
      */
     protected function findGrantedRightsForUserIdentifierLocationAndEntities(
         int $userIdentifier, RightsLocation $location, array $entities
@@ -551,6 +559,7 @@ abstract class RightsService
      * @param integer $treeIdentifier
      *
      * @return string[][]
+     * @throws \Exception
      */
     protected function findLocationsWithGrantedRights(
         int $userIdentifier, array $entities, array $rights = array(), array $types = array(), $treeType = null,
@@ -568,7 +577,7 @@ abstract class RightsService
      * @param integer $treeIdentifier
      * @param integer $treeType
      *
-     * @return \Chamilo\Core\Rights\Domain\RightsLocation
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
      */
     protected function findRightsLocationByParameters(
         int $identifier = 0, int $type = RightsService::TYPE_ROOT, int $treeIdentifier = 0,
@@ -586,7 +595,7 @@ abstract class RightsService
      * @param integer $entityType
      * @param integer $locationIdentifier
      *
-     * @return \Chamilo\Core\Rights\Domain\RightsLocationEntityRight
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight
      */
     protected function findRightsLocationEntityRightByParameters(
         int $right, int $entityIdentifier, int $entityType, int $locationIdentifier
@@ -603,6 +612,7 @@ abstract class RightsService
      *
      * @return integer[]
      * @see DataManager::retrieve_location_ids_by_identifiers()
+     * @throws \Exception
      */
     protected function findRightsLocationIdentifiersByIdentifiersAndType(array $identifiers, int $type)
     {
@@ -621,13 +631,14 @@ abstract class RightsService
 
     /**
      * @param integer $right
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $parentLocation
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $parentLocation
      * @param integer $type
      * @param integer $userIdentifier
      * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
      *
      * @return integer[]
      * @see RightsUtil::get_identifiers_with_right_granted()
+     * @throws \Exception
      */
     protected function findRightsLocationIdentifiersWithGrantedRight(
         int $right, RightsLocation $parentLocation, int $type, int $userIdentifier, array $entities
@@ -655,6 +666,7 @@ abstract class RightsService
      * @param integer $type
      *
      * @return string[][]
+     * @throws \Exception
      */
     protected function findRightsLocationRecordsByIdentifiersAndType(array $identifiers, int $type)
     {
@@ -662,10 +674,10 @@ abstract class RightsService
     }
 
     /**
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      * @param integer $right
      *
-     * @return \Chamilo\Core\Rights\Domain\RightsLocationEntityRight[]
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[]
      */
     protected function findRightsLocationRightsEntitiesForLocationAndRight(RightsLocation $location, int $right = null)
     {
@@ -678,7 +690,7 @@ abstract class RightsService
      * @param integer $locationIdentifier
      * @param integer[] $rights
      *
-     * @return \Chamilo\Core\Rights\Domain\RightsLocationEntityRight[]
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[]
      */
     protected function findRightsLocationRightsForLocationIdentifierAndRights(int $locationIdentifier, array $rights)
     {
@@ -695,6 +707,7 @@ abstract class RightsService
      *
      * @return integer[]
      * @see DataMananager::filter_location_identifiers_by_granted_right()
+     * @throws \Exception
      */
     protected function getLocationIdentifiersByGrantedRight(
         int $userIdentifier, array $entities, int $right, array $locationIdentifiers
@@ -724,6 +737,7 @@ abstract class RightsService
      *
      * @return integer[][]
      * @see RightsUtil::get_location_overview_with_rights_granted()
+     * @throws \Exception
      */
     protected function getLocationOverviewWithGrantedRights(
         int $userIdentifier, array $entities, array $rights = array(), array $types = array(), $treeType = null,
@@ -836,7 +850,7 @@ abstract class RightsService
     }
 
     /**
-     * @return \Chamilo\Core\Rights\Domain\RightsLocationEntityRight
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight
      */
     abstract protected function getRightsLocationEntityRightInstance();
 
@@ -866,7 +880,7 @@ abstract class RightsService
     }
 
     /**
-     * @return \Chamilo\Core\Rights\Domain\RightsLocation
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
      */
     abstract protected function getRightsLocationInstance();
 
@@ -890,7 +904,7 @@ abstract class RightsService
      * @param integer $treeType
      * @param integer $treeIdentifier
      *
-     * @return \Chamilo\Core\Rights\Domain\RightsLocation|boolean
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocation|boolean
      * @see RightsUtil::get_root()
      */
     protected function getRootLocation(int $treeType = self::TREE_TYPE_ROOT, int $treeIdentifier = 0)
@@ -958,11 +972,12 @@ abstract class RightsService
 
     /**
      * @param integer $right
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
      * @return integer[][]
      * @see RightsUtil::get_target_entities_for_location()
      * @see DataManager:: retrieve_target_entities_array()
+     * @throws \Exception
      */
     protected function getTargetEntitiesForLocation(int $right, RightsLocation $location)
     {
@@ -1098,6 +1113,7 @@ abstract class RightsService
      *
      * @return boolean
      * @see RightsUtil::set_location_entity_right()
+     * @throws \Exception
      */
     protected function setRightsLocationEntityRight($right, $entityIdentifier, $entityType, $locationIdentifier)
     {
@@ -1159,7 +1175,7 @@ abstract class RightsService
     }
 
     /**
-     * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
      * @return boolean
      * @throws \Exception
