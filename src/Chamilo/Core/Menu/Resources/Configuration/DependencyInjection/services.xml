@@ -9,7 +9,9 @@
         <service id="Chamilo\Core\Menu\Factory\ItemRendererFactory"/>
         <service id="Chamilo\Core\Menu\Factory\MenuCacheProviderFactory"/>
 
-        <service id="Chamilo\Core\Menu\Service\ItemService"/>
+        <service id="Chamilo\Core\Menu\Service\ItemService">
+            <argument key="$itemCacheProvider" type="service" id="Chamilo\Core\Menu\Cache\ItemCacheProvider"/>
+        </service>
         <service id="Chamilo\Core\Menu\Service\ItemCacheService">
             <argument key="$cacheProvider" type="service" id="Chamilo\Core\Menu\Cache\ItemCacheProvider"/>
         </service>
