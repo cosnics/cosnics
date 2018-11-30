@@ -673,6 +673,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 new FontAwesomeGlyph('user')
             );
 
+            $selectEntityButton->setDropdownClasses('dropdown-entities');
+
             $selectEntityButton->addSubButton(
                 new SubButtonHeader(
                     $translator->getTranslation('SelectOtherEntity', ['ENTITY_TYPE' => strtolower($entityName)])

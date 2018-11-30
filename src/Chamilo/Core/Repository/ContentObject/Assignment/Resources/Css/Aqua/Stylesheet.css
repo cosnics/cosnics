@@ -107,3 +107,8 @@ ul.tree-menu li div a.assignment.type_completed, ul.tree-menu li div a.type_assi
 .btn-score {
     background-color: white;
 }
+
+.dropdown-entities {
+    max-height: 300px;
+    overflow-y: scroll;
+}
