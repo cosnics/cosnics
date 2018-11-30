@@ -1,10 +1,10 @@
 <?php
-namespace Chamilo\Core\Rights\Service;
+namespace Chamilo\Libraries\Rights\Service;
 
 use Chamilo\Core\Rights\Domain\RightsLocation;
 use Chamilo\Core\Rights\Domain\RightsLocationEntityRight;
 use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
-use Chamilo\Core\Rights\Storage\Repository\RightsRepository;
+use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -21,7 +21,7 @@ abstract class RightsService
     const TYPE_ROOT = 0;
 
     /**
-     * @var \Chamilo\Core\Rights\Storage\Repository\RightsRepository
+     * @var \Chamilo\Libraries\Rights\Storage\Repository\RightsRepository
      */
     private $rightsRepository;
 
@@ -56,7 +56,7 @@ abstract class RightsService
     private $rightsLocationEntityRightClassName;
 
     /**
-     * @param \Chamilo\Core\Rights\Storage\Repository\RightsRepository $rightsRepository
+     * @param \Chamilo\Libraries\Rights\Storage\Repository\RightsRepository $rightsRepository
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Symfony\Component\Translation\Translator $translator
      */
@@ -871,7 +871,7 @@ abstract class RightsService
     abstract protected function getRightsLocationInstance();
 
     /**
-     * @return \Chamilo\Core\Rights\Storage\Repository\RightsRepository
+     * @return \Chamilo\Libraries\Rights\Storage\Repository\RightsRepository
      */
     protected function getRightsRepository(): RightsRepository
     {
@@ -879,7 +879,7 @@ abstract class RightsService
     }
 
     /**
-     * @param \Chamilo\Core\Rights\Storage\Repository\RightsRepository $rightsRepository
+     * @param \Chamilo\Libraries\Rights\Storage\Repository\RightsRepository $rightsRepository
      */
     protected function setRightsRepository(RightsRepository $rightsRepository): void
     {

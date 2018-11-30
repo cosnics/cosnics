@@ -8,7 +8,7 @@ use Chamilo\Core\Menu\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
-use Chamilo\Core\Rights\Storage\Repository\RightsRepository;
+use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -20,7 +20,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class RightsService extends \Chamilo\Core\Rights\Service\RightsService implements UserBasedCacheInterface
+class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService implements UserBasedCacheInterface
 {
     const TYPE_ITEM = 1;
 
@@ -32,7 +32,7 @@ class RightsService extends \Chamilo\Core\Rights\Service\RightsService implement
     private $configurationConsulter;
 
     /**
-     * @param \Chamilo\Core\Rights\Storage\Repository\RightsRepository $rightsRepository
+     * @param \Chamilo\Libraries\Rights\Storage\Repository\RightsRepository $rightsRepository
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter

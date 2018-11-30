@@ -9,7 +9,7 @@ use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocationEntityRight;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class RightsRepository extends \Chamilo\Core\Rights\Storage\Repository\RightsRepository
+class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\RightsRepository
 {
     /**
      * @return string

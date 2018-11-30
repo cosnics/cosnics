@@ -14,7 +14,7 @@ use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class RightsService extends \Chamilo\Core\Rights\Service\RightsService
+class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
 {
     const TYPE_PUBLICATION = 1;
 

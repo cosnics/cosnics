@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Core\Rights\Storage\Repository;
+namespace Chamilo\Libraries\Rights\Storage\Repository;
 
 use Chamilo\Core\Rights\Domain\RightsLocation;
 use Chamilo\Core\Rights\Domain\RightsLocationEntityRight;
-use Chamilo\Core\Rights\Service\RightsService;
+use Chamilo\Libraries\Rights\Service\RightsService;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
@@ -127,6 +127,7 @@ abstract class RightsRepository
      * @param \Chamilo\Core\Rights\Domain\RightsLocationEntityRight $rightsLocationEntityRight
      *
      * @return boolean
+     * @throws \Exception
      */
     public function createRightsLocationEntityRight(RightsLocationEntityRight $rightsLocationEntityRight)
     {
@@ -232,6 +233,7 @@ abstract class RightsRepository
      * @param \Chamilo\Core\Rights\Domain\RightsLocation $location
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function findGrantedRightsForEntityAndLocation(
         int $entityIdentifier, int $entityType, RightsLocation $location
@@ -247,6 +249,7 @@ abstract class RightsRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function findGrantedRightsForLocationAndCondition(
         RightsLocation $location, Condition $condition
@@ -295,6 +298,7 @@ abstract class RightsRepository
      * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function findGrantedRightsForUserIdentifierLocationAndEntities(
         int $userIdentifier, RightsLocation $location, array $entities
@@ -309,6 +313,7 @@ abstract class RightsRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function findInheritingIdentifiers(Condition $condition)
     {
@@ -346,6 +351,7 @@ abstract class RightsRepository
      * @param integer[] $locationIdentifiers
      *
      * @return string[][] Keys: Those locations ID's from $location_ids which user has given right to. Values: True.
+     * @throws \Exception
      */
     public function findLocationEntityRightRecordsByGrantedRight(
         int $userIdentifier, array $entities, int $right, array $locationIdentifiers
@@ -429,6 +435,7 @@ abstract class RightsRepository
      * @param integer $treeIdentifier
      *
      * @return string[][]
+     * @throws \Exception
      */
     public function findLocationsWithGrantedRights(
         int $userIdentifier, array $entities, array $rights = array(), array $types = array(), $treeType = null,
@@ -461,6 +468,7 @@ abstract class RightsRepository
      * @param integer $right
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function findNonInheritingIdentifiers(Condition $condition, Condition $entitiesCondition, int $right)
     {
@@ -499,6 +507,7 @@ abstract class RightsRepository
      *
      * @return string[]
      * @see DataManager:: retrieve_target_entities_array()
+     * @throws \Exception
      */
     public function findRightsEntityRecordsForRightAndLocation(int $right, RightsLocation $location)
     {
@@ -705,6 +714,7 @@ abstract class RightsRepository
      * @param boolean $parentHasRight
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function findRightsLocationIdentifiersWithGrantedRight(
         int $right, RightsLocation $parentLocation, int $type, int $userIdentifier, array $entities,
@@ -772,6 +782,7 @@ abstract class RightsRepository
      * @param integer $type
      *
      * @return string[][]
+     * @throws \Exception
      */
     public function findRightsLocationRecordsByIdentifiersAndType(array $identifiers, int $type)
     {
