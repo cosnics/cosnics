@@ -1,0 +1,41 @@
+{
+    "name": "cosnics/libraries-rights",
+    "version": "1.0.0",
+    "description": "Libraries Rights",
+    "keywords": [
+        "Libraries",
+        "Calendar"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Rights",
+            "context": "Chamilo\\Libraries\\Rights",
+            "type": "Chamilo\\Libraries",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Libraries",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}

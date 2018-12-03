@@ -2,17 +2,10 @@
 namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Manager;
-use Chamilo\Core\Menu\Rights;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Rights\Form\RightsForm;
 
 /**
@@ -37,39 +30,14 @@ class RightsComponent extends Manager implements DelegateComponent
     /**
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Exception
      */
     public function run()
     {
         $rightsService = $this->getRightsService();
 
         $rightsService->isUserAllowedToAccessComponent($this->getUser());
-
-        //        $item_id = Request::get(self::PARAM_ITEM);
-        //        $this->set_parameter(self::PARAM_ITEM, $item_id);
-        //        if (!$item_id)
-        //        {
-        //            $location = array(Rights::getInstance()->get_root(self::package()));
-        //        }
-        //        else
-        //        {
-        //            $location = array(
-        //                Rights::getInstance()->get_location_by_identifier(self::package(), Rights::TYPE_ITEM, $item_id)
-        //            );
-        //        }
-
-        $entities = array();
-        $entities[UserEntity::ENTITY_TYPE] = new UserEntity();
-        $entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
-
-        //        $application = $this->getApplicationFactory()->getApplication(
-        //            \Chamilo\Core\Rights\Editor\Manager::context(),
-        //            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
-        //        );
-        //        $application->set_context(self::package());
-        //        $application->set_locations($location);
-        //        $application->set_entities($entities);
-        //
-        //        return $application->run();
 
         $itemIdentifier = $this->getItemIdentifier();
 
@@ -80,10 +48,37 @@ class RightsComponent extends Manager implements DelegateComponent
             )
         );
 
+        $rightsLocation = $this->getRightsLocation();
+
         $rightsForm = new RightsForm(
             $postBackUrl->getUrl(), $this->getTranslator(), $itemIdentifier != 0, $rightsService->getAvailableRights(),
-            $entities
+            $rightsService->getAvailableEntities()
         );
+
+        $rightsForm->setRightsDefaults(
+            $this->getUser(), $rightsLocation->inherits(),
+            $rightsService->getTargetUsersAndGroupsForRightsLocationAndAvailableRights($rightsLocation)
+        );
+
+        if ($rightsForm->validate())
+        {
+            $success = $rightsService->saveRightsConfigurationForRightsLocationAndUserFromValues(
+                $rightsLocation, $this->getUser(), $rightsForm->exportValues()
+            );
+
+            $message = $this->getTranslator()->trans(
+                $success ? 'RightsConfigured' : 'RightsNotConfigured',
+                array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')),
+                'Chamilo\Core\Menu'
+            );
+
+            $this->redirect(
+                $message, ($success ? false : true), array(
+                    Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
+                    Manager::PARAM_PARENT => $this->getItemParentIdentifier()
+                )
+            );
+        }
 
         $html = array();
 
@@ -92,25 +87,6 @@ class RightsComponent extends Manager implements DelegateComponent
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @return integer
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     */
-    protected function getItemIdentifier()
-    {
-        if (!isset($this->itemIdentifier))
-        {
-            $this->itemIdentifier = $this->getRequest()->query->get(self::PARAM_ITEM, 0);
-
-            if ($this->itemIdentifier != 0)
-            {
-                $this->getItem();
-            }
-        }
-
-        return $this->itemIdentifier;
     }
 
     /**
@@ -135,5 +111,53 @@ class RightsComponent extends Manager implements DelegateComponent
         }
 
         return $this->item;
+    }
+
+    /**
+     * @return integer
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    protected function getItemIdentifier()
+    {
+        if (!isset($this->itemIdentifier))
+        {
+            $this->itemIdentifier = $this->getRequest()->query->get(self::PARAM_ITEM, 0);
+
+            if ($this->itemIdentifier != 0)
+            {
+                $this->getItem();
+            }
+        }
+
+        return $this->itemIdentifier;
+    }
+
+    /**
+     * @return int
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    protected function getItemParentIdentifier()
+    {
+        $item = $this->getItem();
+
+        return $item instanceof Item ? $item->getParentId() : 0;
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Storage\DataClass\RightsLocation
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    protected function getRightsLocation()
+    {
+        $rightsService = $this->getRightsService();
+
+        if ($this->getItemIdentifier())
+        {
+            return $rightsService->findRightsLocationForItem($this->getItem());
+        }
+        else
+        {
+            return $rightsService->findRoot();
+        }
     }
 }

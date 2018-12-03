@@ -1,7 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Rights\Form;
 
+use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -33,9 +36,9 @@ class RightsForm extends FormValidator
 
     const RIGHT_OPTION_ALL = 0;
 
-    const RIGHT_OPTION_SELECT = 2;
+    const RIGHT_OPTION_ME = 1;
 
-    const RIGHT_OTPION_ME = 1;
+    const RIGHT_OPTION_SELECT = 2;
 
     /**
      * @var \Symfony\Component\Translation\Translator
@@ -77,26 +80,6 @@ class RightsForm extends FormValidator
 
         $this->buildForm();
         $this->setDefaults();
-    }
-
-    /**
-     * @param string[] $defaultValues
-     * @param string[] $filter
-     *
-     * @throws \Exception
-     */
-    public function setDefaults($defaultValues = null, $filter = null)
-    {
-        if ($this->isAllowedToInherit())
-        {
-            $defaultValues[self::PROPERTY_INHERIT] = self::INHERIT_TRUE;
-        }
-        else
-        {
-            $defaultValues[self::PROPERTY_INHERIT] = self::INHERIT_FALSE;
-        }
-
-        parent::setDefaults($defaultValues, $filter);
     }
 
     /**
@@ -203,7 +186,7 @@ class RightsForm extends FormValidator
             array('class' => 'other_option_selected')
         );
         $group[] = &$this->createElement(
-            'radio', null, null, $translator->trans('OnlyForMe', [], 'Chamilo\Libraries\Rights'), self::RIGHT_OTPION_ME,
+            'radio', null, null, $translator->trans('OnlyForMe', [], 'Chamilo\Libraries\Rights'), self::RIGHT_OPTION_ME,
             array('class' => 'other_option_selected')
         );
         $group[] = &$this->createElement(
@@ -222,7 +205,9 @@ class RightsForm extends FormValidator
         }
 
         $this->addElement('html', '<div style="margin-left:25px; display:none;" class="entity_selector_box">');
-        $this->addElement('advanced_element_finder', self::PROPERTY_TARGETS . '_' . $rightIdentifier, null, $types);
+        $this->addElement(
+            'advanced_element_finder', self::PROPERTY_TARGETS . '[' . $rightIdentifier . ']', null, $types
+        );
 
         $this->addElement('html', '</div></div>');
 
@@ -246,6 +231,18 @@ class RightsForm extends FormValidator
     }
 
     /**
+     * @param integer $entityType
+     *
+     * @return \Chamilo\Core\Rights\Entity\RightsEntity
+     */
+    public function getEntityByType(int $entityType)
+    {
+        $entities = $this->getEntities();
+
+        return $entities[$entityType];
+    }
+
+    /**
      * @return \Symfony\Component\Translation\Translator
      */
     public function getTranslator(): Translator
@@ -259,5 +256,104 @@ class RightsForm extends FormValidator
     public function isAllowedToInherit(): bool
     {
         return $this->isAllowedToInherit;
+    }
+
+    /**
+     * @param string[] $defaultValues
+     * @param string[] $filter
+     *
+     * @throws \Exception
+     */
+    public function setDefaults($defaultValues = null, $filter = null)
+    {
+        if ($this->isAllowedToInherit())
+        {
+            $defaultValues[self::PROPERTY_INHERIT] = self::INHERIT_TRUE;
+        }
+        else
+        {
+            $defaultValues[self::PROPERTY_INHERIT] = self::INHERIT_FALSE;
+        }
+
+        parent::setDefaults($defaultValues, $filter);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param boolean $rightsLocationInherits
+     * @param integer[][][] $targetEntities
+     *
+     * @throws \Exception
+     */
+    public function setRightsDefaults(User $user, bool $rightsLocationInherits, array $targetEntities)
+    {
+        $defaults = array();
+
+        if ($rightsLocationInherits)
+        {
+            $defaults[self::PROPERTY_INHERIT] = self::INHERIT_TRUE;
+
+            foreach ($this->getAvailableRights() as $rightIdentifier)
+            {
+                $defaults[self::PROPERTY_RIGHT_OPTION][$rightIdentifier] = self::RIGHT_OPTION_ALL;
+            }
+        }
+        else
+        {
+            $defaults[self::PROPERTY_INHERIT] = self::INHERIT_FALSE;
+        }
+
+        parent::setDefaults($defaults);
+
+        foreach ($this->getAvailableRights() as $rightIdentifier)
+        {
+            $this->setRightDefaults($user, $rightIdentifier, $targetEntities[$rightIdentifier]);
+        }
+    }
+
+    public function setRightDefaults(User $user, int $rightIdentifier, array $targetEntities = array())
+    {
+        $defaults = array();
+
+        if (key_exists(0, $targetEntities))
+        {
+            $defaults[self::PROPERTY_RIGHT_OPTION][$rightIdentifier] = self::RIGHT_OPTION_ALL;
+        }
+        else
+        {
+            $hasUserTargets = key_exists(UserEntity::ENTITY_TYPE, $targetEntities);
+            $hasOnlyOneTargetEntityType = count($targetEntities) == 1;
+            $hasOnlyOneTargetUserEntity = count($targetEntities[UserEntity::ENTITY_TYPE]) == 1;
+            $currentUserIsOnlyTargetUserEntity = $targetEntities[UserEntity::ENTITY_TYPE][0] == $user->getId();
+
+            if ($hasUserTargets && $hasOnlyOneTargetEntityType && $hasOnlyOneTargetUserEntity &&
+                $currentUserIsOnlyTargetUserEntity)
+            {
+                $defaults[self::PROPERTY_RIGHT_OPTION][$rightIdentifier] = self::RIGHT_OPTION_ME;
+            }
+            else
+            {
+                $defaults[self::PROPERTY_RIGHT_OPTION][$rightIdentifier] = self::RIGHT_OPTION_SELECT;
+            }
+
+            $defaultElements = new AdvancedElementFinderElements();
+
+            foreach ($targetEntities as $rightTargetEntityType => $rightTargetEntityIdentifiers)
+            {
+                $entity = $this->getEntityByType($rightTargetEntityType);
+
+                foreach ($rightTargetEntityIdentifiers as $rightTargetEntityIdentifier)
+                {
+                    $defaultElements->add_element(
+                        $entity->get_element_finder_element($rightTargetEntityIdentifier)
+                    );
+                }
+            }
+
+            $element = $this->getElement(self::PROPERTY_TARGETS . '[' . $rightIdentifier . ']');
+            $element->setDefaultValues($defaultElements);
+        }
+
+        parent::setDefaults($defaults);
     }
 }

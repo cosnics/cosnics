@@ -8,11 +8,11 @@ use Chamilo\Core\Menu\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
-use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
+use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -70,14 +70,10 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
             return true;
         }
 
-        $entities = array();
-        $entities[] = UserEntity::getInstance();
-        $entities[] = PlatformGroupEntity::getInstance();
-
         try
         {
             return $this->doesUserIdentifierHaveRightForEntitiesAndLocationIdentifier(
-                $user->getId(), self::VIEW_RIGHT, $entities, $item->getId(), self::TYPE_ITEM
+                $user->getId(), self::VIEW_RIGHT, $this->getAvailableEntities(), $item->getId(), self::TYPE_ITEM
             );
         }
         catch (RightsLocationNotFoundException $exception)
@@ -106,6 +102,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
+     * @throws \Exception
      */
     public function createItemRightsLocationWithViewRightForEveryone(Item $item)
     {
@@ -188,6 +185,26 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     }
 
     /**
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
+     */
+    public function findRoot()
+    {
+        return $this->getRootLocation();
+    }
+
+    /**
+     * @return \Chamilo\Core\Rights\Entity\RightsEntity[]
+     */
+    public function getAvailableEntities()
+    {
+        $entities = array();
+        $entities[UserEntity::ENTITY_TYPE] = UserEntity::getInstance();
+        $entities[PlatformGroupEntity::ENTITY_TYPE] = PlatformGroupEntity::getInstance();
+
+        return $entities;
+    }
+
+    /**
      * @return integer[]
      */
     public function getAvailableRights()
@@ -228,6 +245,17 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     }
 
     /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
+     *
+     * @return integer[][][]
+     * @throws \Exception
+     */
+    public function getTargetUsersAndGroupsForRightsLocationAndAvailableRights(RightsLocation $rightsLocation)
+    {
+        return $this->getTargetEntitiesForRightsAndLocation($this->getAvailableRights(), $rightsLocation);
+    }
+
+    /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
@@ -264,6 +292,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
      * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
      *
      * @return boolean
+     * @throws \Exception
      */
     public function setRightsLocationViewRightForEveryone(RightsLocation $rightsLocation)
     {

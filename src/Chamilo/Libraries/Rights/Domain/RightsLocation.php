@@ -82,9 +82,9 @@ class RightsLocation extends NestedSet
     }
 
     /**
-     * Get the default properties of all users.
+     * @param array $extended_property_names
      *
-     * @return array The property names.
+     * @return string[]
      */
     public static function get_default_property_names($extended_property_names = array())
     {
@@ -98,17 +98,17 @@ class RightsLocation extends NestedSet
 
     public function get_identifier()
     {
-        return $this->get_default_property(self::PROPERTY_IDENTIFIER);
+        return $this->getDefaultProperty(self::PROPERTY_IDENTIFIER);
     }
 
     public function get_inherit()
     {
-        return $this->get_default_property(self::PROPERTY_INHERIT);
+        return $this->getDefaultProperty(self::PROPERTY_INHERIT);
     }
 
     public function get_locked()
     {
-        return $this->get_default_property(self::PROPERTY_LOCKED);
+        return $this->getDefaultProperty(self::PROPERTY_LOCKED);
     }
 
     public function get_locked_parent()
@@ -121,12 +121,12 @@ class RightsLocation extends NestedSet
 
         $locked_parent_conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE),
-            ComparisonCondition::LESS_THAN, new StaticConditionVariable($this->get_left_value())
+            ComparisonCondition::LESS_THAN, new StaticConditionVariable($this->getLeftValue())
         );
 
         $locked_parent_conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE),
-            ComparisonCondition::GREATER_THAN, new StaticConditionVariable($this->get_right_value())
+            ComparisonCondition::GREATER_THAN, new StaticConditionVariable($this->getRightValue())
         );
 
         $locked_parent_condition = new AndCondition($locked_parent_conditions);
@@ -162,11 +162,10 @@ class RightsLocation extends NestedSet
     }
 
     /**
-     * Retrieves the rights entities linked to this location
+     * @param int $right_id
      *
-     * @param int $right_id - [OPTIONAL] default null
-     *
-     * @return ResultSet
+     * @return mixed
+     * @throws \Exception
      */
     public function get_rights_entities($right_id = null)
     {
@@ -202,17 +201,17 @@ class RightsLocation extends NestedSet
 
     public function get_tree_identifier()
     {
-        return $this->get_default_property(self::PROPERTY_TREE_IDENTIFIER);
+        return $this->getDefaultProperty(self::PROPERTY_TREE_IDENTIFIER);
     }
 
     public function get_tree_type()
     {
-        return $this->get_default_property(self::PROPERTY_TREE_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TREE_TYPE);
     }
 
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     public function inherit()
@@ -244,32 +243,32 @@ class RightsLocation extends NestedSet
 
     public function set_identifier($identifier)
     {
-        $this->set_default_property(self::PROPERTY_IDENTIFIER, $identifier);
+        $this->setDefaultProperty(self::PROPERTY_IDENTIFIER, $identifier);
     }
 
     public function set_inherit($inherit)
     {
-        $this->set_default_property(self::PROPERTY_INHERIT, $inherit);
+        $this->setDefaultProperty(self::PROPERTY_INHERIT, $inherit);
     }
 
     public function set_locked($locked)
     {
-        $this->set_default_property(self::PROPERTY_LOCKED, $locked);
+        $this->setDefaultProperty(self::PROPERTY_LOCKED, $locked);
     }
 
     public function set_tree_identifier($tree_identifier)
     {
-        $this->set_default_property(self::PROPERTY_TREE_IDENTIFIER, $tree_identifier);
+        $this->setDefaultProperty(self::PROPERTY_TREE_IDENTIFIER, $tree_identifier);
     }
 
     public function set_tree_type($tree_type)
     {
-        $this->set_default_property(self::PROPERTY_TREE_TYPE, $tree_type);
+        $this->setDefaultProperty(self::PROPERTY_TREE_TYPE, $tree_type);
     }
 
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     public function set_type_from_object($object)
