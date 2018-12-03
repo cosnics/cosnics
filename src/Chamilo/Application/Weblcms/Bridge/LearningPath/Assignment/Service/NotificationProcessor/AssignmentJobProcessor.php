@@ -13,6 +13,7 @@ use Chamilo\Core\Notification\Domain\ViewingContext;
 use Chamilo\Core\Notification\Service\FilterManager;
 use Chamilo\Core\Notification\Service\NotificationManager;
 use Chamilo\Core\Notification\Storage\Entity\Filter;
+use Chamilo\Core\Queue\Exceptions\JobNoLongerValidException;
 use Chamilo\Core\Queue\Service\JobProcessorInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
@@ -105,13 +106,14 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Chamilo\Core\Queue\Exceptions\JobNoLongerValidException
      */
     protected function processForEntry($entryId, $contentObjectPublicationID)
     {
         $entry = $this->assignmentService->findEntryByIdentifier($entryId);
         if (!$entry instanceof Entry)
         {
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf('The given entry with id %s could not be found', $entryId)
             );
         }
@@ -119,7 +121,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $treeNodeData = $this->treeNodeDataService->getTreeNodeDataById($entry->getTreeNodeDataId());
         if(!$treeNodeData instanceof TreeNodeData)
         {
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf(
                     'The given tree node with id %s could not be found',
                     $entry->getTreeNodeDataId()
@@ -130,7 +132,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $assignment = $this->contentObjectRepository->findById($treeNodeData->getContentObjectId());
         if (!$assignment instanceof Assignment)
         {
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf(
                     'The given assignment with id %s could not be found', $treeNodeData->getContentObjectId()
                 )
@@ -141,7 +143,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         if (!$publication instanceof ContentObjectPublication)
         {
 
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf(
                     'The given content object publication with id %s could not be found',
                     $contentObjectPublicationID
@@ -152,7 +154,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $course = $this->courseService->getCourseById($publication->get_course_id());
         if (!$course instanceof Course)
         {
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf(
                     'The given course with id %s could not be found', $publication->get_course_id()
                 )
@@ -162,7 +164,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $learningPath = $this->contentObjectRepository->findById($publication->get_content_object_id());
         if (!$learningPath instanceof LearningPath)
         {
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf(
                     'The given learning path with id %s could not be found', $publication->get_content_object_id()
                 )
@@ -324,7 +326,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 [
                     '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
                 ]
             )
         );
@@ -337,7 +339,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 [
                     '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
                 ]
             )
         );
@@ -350,7 +352,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 [
                     '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
                 ]
             )
         );
@@ -363,7 +365,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
                 [
                     '{LEARNING_PATH_TITLE}' => $assignment->get_title(),
                     '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($entry->getUserId())
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
                 ]
             )
         );
@@ -386,6 +388,13 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      * @return int
      */
     abstract protected function getCreationDate(Entry $entry);
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    abstract protected function getUserId(Entry $entry);
 
     /**
      * @param Course $course

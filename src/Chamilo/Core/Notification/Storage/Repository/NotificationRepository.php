@@ -58,11 +58,9 @@ class NotificationRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder()
             ->select('notification')
-//            ->addSelect('filter')
             ->addSelect('user')
             ->from(UserNotification::class, 'user')
             ->join('user.notification', 'notification')
-//            ->join('notification.filters', 'filter')
             ->where('user.notificationContext IN (:contexts)')
             ->andWhere('user.userId =:userId')
             ->setParameter('contexts', $contexts)

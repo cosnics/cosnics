@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Not
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Queue\Exceptions\JobNoLongerValidException;
 use Chamilo\Core\Queue\Service\JobProcessorInterface;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Score;
@@ -25,13 +26,13 @@ class EntryScoreNotificationJobProcessor extends AssignmentJobProcessor implemen
      */
     protected $score;
 
-
     /**
      * @param \Chamilo\Core\Queue\Storage\Entity\Job $job
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
+     * @throws \Chamilo\Core\Queue\Exceptions\JobNoLongerValidException
      */
     public function processJob(Job $job)
     {
@@ -41,7 +42,7 @@ class EntryScoreNotificationJobProcessor extends AssignmentJobProcessor implemen
         $score = $this->assignmentService->findScoreByIdentifier($scoreId);
         if (!$score instanceof Score)
         {
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf('The given score with id %s could not be found', $scoreId)
             );
         }
@@ -59,6 +60,16 @@ class EntryScoreNotificationJobProcessor extends AssignmentJobProcessor implemen
     protected function getCreationDate(Entry $entry)
     {
         return $this->score->getModified();
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    protected function getUserId(Entry $entry)
+    {
+        return $this->score->getUserId();
     }
 
     /**

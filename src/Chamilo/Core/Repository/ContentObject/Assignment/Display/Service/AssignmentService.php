@@ -301,6 +301,7 @@ abstract class AssignmentService
 
         $entryAttachment->setEntryId($entry->getId());
         $entryAttachment->setAttachmentId($contentObject->getId());
+        $entryAttachment->setCreated(time());
 
         if (!$this->assignmentRepository->createEntryAttachment($entryAttachment))
         {

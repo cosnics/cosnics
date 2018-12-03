@@ -43,8 +43,9 @@ span.badge-date {
 	background-color: red;
 	color: white !important;
 	border-radius: 20px;
-	padding: 2px 5px;
+	padding: 5px 8px;
 	font-size: 10px;
 	margin-left: 5px;
+	margin-right: 5px;
 	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 }

@@ -4,6 +4,8 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
+use Chamilo\Application\Weblcms\Service\CourseService;
+use Chamilo\Application\Weblcms\Service\CourseUserCategoryService;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -62,7 +64,10 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
                 $this, 
                 $this->getLinkTarget(), 
                 $this->getCourseTypeId(), 
-                $this->getUserCourseCategoryId());
+                $this->getUserCourseCategoryId(),
+                $this->getCourseService(),
+                $this->getCourseUserCategoryService()
+            );
         }
         
         return $this->courseListRenderer;
@@ -133,7 +138,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
         $this->loadSettings();
         
         $course_type_id = $this->getCourseTypeId();
-        
+
         if ($course_type_id > 0)
         {
             $course_type = CourseTypeDataManager::retrieve_by_id(CourseType::class_name(), $course_type_id);
@@ -147,8 +152,11 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
                 return Translation::get('NoSuchCourseType');
             }
         }
-        else
+        elseif($course_type_id)
         {
+            $course_type_title = Translation::get('AllCourses');
+        }
+        else {
             $course_type_title = Translation::get('NoCourseType');
         }
         
@@ -202,7 +210,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
     private function loadSettings()
     {
         $courseTypeIds = json_decode($this->getBlock()->getSetting(self::CONFIGURATION_COURSE_TYPE));
-        
+
         if (! is_array($courseTypeIds))
         {
             $courseTypeIds = array($courseTypeIds);
@@ -221,5 +229,21 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
     public function getConfigurationVariables()
     {
         return array(self::CONFIGURATION_SHOW_NEW_ICONS, self::CONFIGURATION_COURSE_TYPE);
+    }
+
+    /**
+     * @return CourseUserCategoryService
+     */
+    protected function getCourseUserCategoryService()
+    {
+        return $this->getService(CourseUserCategoryService::class);
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getService(CourseService::class);
     }
 }

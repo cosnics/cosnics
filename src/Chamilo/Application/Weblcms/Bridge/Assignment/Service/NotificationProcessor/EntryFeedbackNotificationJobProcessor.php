@@ -13,6 +13,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Core\Notification\Service\FilterManager;
 use Chamilo\Core\Notification\Service\NotificationManager;
+use Chamilo\Core\Queue\Exceptions\JobNoLongerValidException;
 use Chamilo\Core\Queue\Service\JobProcessorInterface;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
@@ -71,6 +72,7 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Chamilo\Core\Queue\Exceptions\JobNoLongerValidException
      */
     public function processJob(Job $job)
     {
@@ -78,7 +80,7 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
         $feedback = $this->feedbackService->findFeedbackByIdentifier($feedbackId);
         if (!$feedback instanceof Feedback)
         {
-            throw new \InvalidArgumentException(
+            throw new JobNoLongerValidException(
                 sprintf('The given feedback with id %s could not be found', $feedbackId)
             );
         }
@@ -96,6 +98,16 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
     protected function getCreationDate(Entry $entry)
     {
         return $this->feedback->get_creation_date();
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    protected function getUserId(Entry $entry)
+    {
+        return $this->feedback->get_user_id();
     }
 
     /**

@@ -25,6 +25,7 @@ class EntryNotificationJobProcessor extends AssignmentJobProcessor implements Jo
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
+     * @throws \Chamilo\Core\Queue\Exceptions\JobNoLongerValidException
      */
     public function processJob(Job $job)
     {
@@ -41,6 +42,16 @@ class EntryNotificationJobProcessor extends AssignmentJobProcessor implements Jo
     protected function getCreationDate(Entry $entry)
     {
         return $entry->getSubmitted();
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    protected function getUserId(Entry $entry)
+    {
+        return $entry->getUserId();
     }
 
     /**

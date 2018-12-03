@@ -506,7 +506,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         return new AndCondition($conditions);
     }
 
-    protected static function getSubscribedCourseIdentifiersByRelation($user, $userStatus = null)
+    public static function getSubscribedCourseIdentifiersByRelation($user, $userStatus = null)
     {
         $conditions = array();
 

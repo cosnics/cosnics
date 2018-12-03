@@ -8,10 +8,15 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Queue\Service\JobProducer;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  *
@@ -215,6 +220,9 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
         $count = null, $orderProperty = []
     )
     {
+        $orderProperty[] = new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+        $orderProperty[] = new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+
         return $this->assignmentRepository->findTargetUsersWithEntriesForContentObjectPublication(
             $contentObjectPublication, $userIds, $condition, $offset, $count, $orderProperty
         );
@@ -293,6 +301,8 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
         $count = null, $orderProperty = []
     )
     {
+        $orderProperty[] = new OrderBy(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME));
+
         return $this->assignmentRepository->findTargetCourseGroupsWithEntriesForContentObjectPublication(
             $contentObjectPublication, $courseGroupIds, $condition, $offset, $count, $orderProperty
         );
@@ -371,6 +381,8 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
         $count = null, $orderProperty = []
     )
     {
+        $orderProperty[] = new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
+
         return $this->assignmentRepository->findTargetPlatformGroupsWithEntriesForContentObjectPublication(
             $contentObjectPublication, $platformGroupIds, $condition, $offset, $count, $orderProperty
         );

@@ -52,7 +52,7 @@ class JobProducer
         }
         catch(\Exception $ex)
         {
-            $this->jobEntityManager->changeJobStatus($job, Job::STATUS_RETRY);
+            $this->jobEntityManager->changeJobStatus($job, Job::STATUS_FAILED_RETRY);
         }
     }
 

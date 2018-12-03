@@ -172,7 +172,8 @@ class NotificationService
         $job->setProcessorClass(EntryAttachmentNotificationJobProcessor::class)
             ->setParameter(
                 EntryAttachmentNotificationJobProcessor::PARAM_ENTRY_ATTACHMENT_ID, $entryAttachment->getId()
-            );
+            )
+            ->setParameter(EntryAttachmentNotificationJobProcessor::PARAM_USER_ID, $user->getId());
 
         $this->jobProducer->produceJob($job, 'notifications');
     }

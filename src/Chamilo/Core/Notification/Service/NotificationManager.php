@@ -288,7 +288,19 @@ class NotificationManager
 
         foreach ($contextPaths as $contextPath)
         {
-            $contexts[] = $this->contextManager->getContextByPath($contextPath);
+            try
+            {
+                $contexts[] = $this->contextManager->getContextByPath($contextPath);
+            }
+            catch(\RuntimeException $ex)
+            {
+
+            }
+        }
+
+        if(empty($contextPaths))
+        {
+            return;
         }
 
         $this->notificationRepository->setNotificationsViewedForUserAndContexts($contexts, $user);
