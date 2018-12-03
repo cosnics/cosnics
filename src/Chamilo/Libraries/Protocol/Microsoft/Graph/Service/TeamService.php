@@ -6,6 +6,7 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\TeamRepository;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  * Class TeamService
@@ -38,12 +39,22 @@ class TeamService
     }
 
     /**
-     * @param $groupId
-     * @return \Microsoft\Graph\Model\Entity
+     * @param string $groupId
+     * @param int $retryCounter
      */
-    public function addTeamToGroup($groupId)
-    {
-        return $this->teamRepository->createTeam($groupId);
+    public function addTeamToGroup(string $groupId, int $retryCounter = 0)
+    { //todo queue implementation
+        try {
+            $this->teamRepository->createTeam($groupId);
+        } catch (ClientException $exception) {
+            if ($exception->getCode() == 404 && $retryCounter < 3) {//group maybe not created due to replication delay
+                $retryCounter++;
+                sleep(10);
+                $this->addTeamToGroup($groupId, $retryCounter);
+            } else {
+                throw $exception;
+            }
+        }
     }
 
     /**

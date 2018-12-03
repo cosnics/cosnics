@@ -125,7 +125,7 @@ class GroupService
         }
 
         $group = $this->getGroupRepository()->createGroup($groupName);
-        $this->getGroupRepository()->subscribeMemberInGroup($group->getId(), $azureUserIdentifier);
+        $this->getGroupRepository()->subscribeOwnerInGroup($group->getId(), $azureUserIdentifier);
 
         return $group->getId();
     }

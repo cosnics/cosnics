@@ -481,3 +481,6 @@ INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `
 (null, 'Chamilo\\Core\\Queue', 'Chamilo\\Core', NULL, 'Notification', 1, '1.0.0', 1);
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES
 (NULL, 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath\\Assignment', 'Chamilo\\Application\\Weblcms\\Bridge\\LearningPath', 'LearningPathBridge', 'AssignmentLearningPathBridge', '1', '1.0.0', '1');
+
+/** Teams */
+ALTER TABLE `weblcms_course_group_office365_reference` ADD `office365_has_team` TINYINT(1) NOT NULL AFTER `linked`;

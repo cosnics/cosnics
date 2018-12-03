@@ -44,7 +44,10 @@ class CourseGroupOffice365ReferenceRepository extends CommonDataClassRepository
      */
     public function createReference(CourseGroupOffice365Reference $courseGroupOffice365Reference)
     {
-        return $this->dataClassRepository->create($courseGroupOffice365Reference);
+        $reference = $this->dataClassRepository->create($courseGroupOffice365Reference);
+        $this->dataClassRepository->getDataClassRepositoryCache()->truncate(CourseGroupOffice365Reference::class);
+
+        return $reference;
     }
 
     /**
