@@ -48,7 +48,7 @@ class RightsComponent extends Manager implements DelegateComponent
             )
         );
 
-        $rightsLocation = $this->getRightsLocation();
+        $rightsLocation = $rightsService->findRightsLocationForItemIdentifier($itemIdentifier);
 
         $rightsForm = new RightsForm(
             $postBackUrl->getUrl(), $this->getTranslator(), $itemIdentifier != 0, $rightsService->getAvailableRights(),
@@ -62,8 +62,8 @@ class RightsComponent extends Manager implements DelegateComponent
 
         if ($rightsForm->validate())
         {
-            $success = $rightsService->saveRightsConfigurationForRightsLocationAndUserFromValues(
-                $rightsLocation, $this->getUser(), $rightsForm->exportValues()
+            $success = $rightsService->saveRightsConfigurationForItemIdentifierAndUserFromValues(
+                $this->getItemIdentifier(), $this->getUser(), $rightsForm->exportValues()
             );
 
             $message = $this->getTranslator()->trans(
@@ -141,23 +141,5 @@ class RightsComponent extends Manager implements DelegateComponent
         $item = $this->getItem();
 
         return $item instanceof Item ? $item->getParentId() : 0;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\RightsLocation
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     */
-    protected function getRightsLocation()
-    {
-        $rightsService = $this->getRightsService();
-
-        if ($this->getItemIdentifier())
-        {
-            return $rightsService->findRightsLocationForItem($this->getItem());
-        }
-        else
-        {
-            return $rightsService->findRoot();
-        }
     }
 }

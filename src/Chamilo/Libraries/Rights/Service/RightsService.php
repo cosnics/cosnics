@@ -1222,7 +1222,7 @@ abstract class RightsService
      * @return boolean
      * @throws \Exception
      */
-    public function saveRightsConfigurationForRightsLocationsAndUserFromValues(
+    protected function saveRightsConfigurationForRightsLocationsAndUserFromValues(
         array $locations, User $user, array $values
     )
     {
@@ -1245,7 +1245,7 @@ abstract class RightsService
      * @return boolean
      * @throws \Exception
      */
-    public function saveRightsConfigurationForRightsLocationAndUserFromValues(
+    protected function saveRightsConfigurationForRightsLocationAndUserFromValues(
         RightsLocation $location, User $user, array $values
     )
     {

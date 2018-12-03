@@ -311,6 +311,13 @@ class RightsForm extends FormValidator
         }
     }
 
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer $rightIdentifier
+     * @param integer[][] $targetEntities
+     *
+     * @throws \Exception
+     */
     public function setRightDefaults(User $user, int $rightIdentifier, array $targetEntities = array())
     {
         $defaults = array();

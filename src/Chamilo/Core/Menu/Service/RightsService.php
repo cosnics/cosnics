@@ -185,11 +185,20 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     }
 
     /**
-     * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
+     * @param integer $itemIdentifier
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\RightsLocation
      */
-    public function findRoot()
+    public function findRightsLocationForItemIdentifier(int $itemIdentifier)
     {
-        return $this->getRootLocation();
+        if ($itemIdentifier != 0)
+        {
+            return $this->findRightsLocationByParameters($itemIdentifier, self::TYPE_ITEM);
+        }
+        else
+        {
+            return $this->getRootLocation();
+        }
     }
 
     /**
@@ -286,6 +295,23 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
         $itemLocation = $this->findRightsLocationByParameters($item->getId(), self::TYPE_ITEM);
 
         return $this->getRightsRepository()->moveRightsLocation($itemLocation, $parentLocation->getId());
+    }
+
+    /**
+     * @param integer $itemIdentifier
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[][][] $values
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function saveRightsConfigurationForItemIdentifierAndUserFromValues(
+        int $itemIdentifier, User $user, array $values
+    )
+    {
+        $rightsLocation = $this->findRightsLocationForItemIdentifier($itemIdentifier);
+
+        return $this->saveRightsConfigurationForRightsLocationAndUserFromValues($rightsLocation, $user, $values);
     }
 
     /**
