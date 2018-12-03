@@ -5,5 +5,6 @@ CourseGroupSyncSuccessful = "Successfully synced the course group and teacher su
 CourseGroupSyncFailed= "Failed to sync the course group and teacher subscriptions to the Office365 group"
 VisitPlanner = "Go to planner (Office365)"
 VisitGroup = "Go to Office365 group"
+VisitTeam = "Go to Team"
 SynchronizeUsersToPlanner = "Synchronize the group users"
 CouldNotVisitPlaner = "The system was unable to generate the planner URL. Please try again in a few minutes."

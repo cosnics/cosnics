@@ -314,6 +314,29 @@ class CourseGroupOffice365Connector
     }
 
     /**
+     * @param CourseGroup $courseGroup
+     * @param User $user
+     * @return string
+     * @throws AzureUserNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
+     */
+    public function getTeamUrlForVisit(CourseGroup $courseGroup, User $user)
+    {
+        $office365ReferenceService = $this->courseGroupOffice365ReferenceService;
+        if (!$office365ReferenceService->courseGroupHasLinkedReference($courseGroup))
+        {
+            throw new \RuntimeException();
+        }
+
+        $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
+        $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+
+        $group = $this->groupService->getGroup($reference->getOffice365GroupId());
+
+        return $this->teamService->getTeamUrl($group);
+    }
+
+    /**
      * Returns the link for the group space and makes sure that the user has access to it
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
@@ -339,13 +362,7 @@ class CourseGroupOffice365Connector
             ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri']
         );
 
-        $group = $this->groupRepository->getGroup($reference->getOffice365GroupId());
-        if (!$group instanceof Group)
-        {
-            throw new \RuntimeException(
-                'The group with identifier ' . $reference->getOffice365GroupId() . ' could not be found'
-            );
-        }
+        $group = $this->groupService->getGroup($reference->getOffice365GroupId());
 
         return str_replace('{GROUP_ID}', $group->getMailNickname(), $groupUrl);
 

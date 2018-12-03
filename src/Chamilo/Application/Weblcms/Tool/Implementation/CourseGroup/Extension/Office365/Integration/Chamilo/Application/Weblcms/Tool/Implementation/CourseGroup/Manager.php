@@ -16,6 +16,7 @@ abstract class Manager extends Application
 
     const ACTION_VISIT_PLANNER = 'VisitPlanner';
     const ACTION_VISIT_GROUP = 'VisitGroup';
+    const ACTION_VISIT_TEAM = 'VisitTeam';
     const ACTION_SYNC_COURSE_GROUP = 'SyncCourseGroup';
 
     const DEFAULT_ACTION = self::ACTION_VISIT_GROUP;

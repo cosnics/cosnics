@@ -5,6 +5,7 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
 use Microsoft\Graph\Model\Group;
 
@@ -493,5 +494,20 @@ class GroupService
         {
             $this->groupRepository->removeMemberFromGroup($groupId, $userToRemove);
         }
+    }
+
+    /**
+     * @param string $groupId
+     * @return Group
+     * @throws GroupNotExistsException
+     */
+    public function getGroup(string $groupId): Group
+    {
+        $group = $this->groupRepository->getGroup($groupId);
+        if(!$group instanceof Group) {
+            throw new GroupNotExistsException($groupId);
+        }
+
+        return $group;
     }
 }

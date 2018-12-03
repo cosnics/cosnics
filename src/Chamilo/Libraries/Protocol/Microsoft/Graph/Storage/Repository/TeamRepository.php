@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Model\Team;
+use Microsoft\Graph\Model\Group;
 
 /**
  * Class TeamRepository
@@ -47,16 +48,23 @@ class TeamRepository
     /**
      *
      */
-    public function updateTeam()
+    public function getTeam(string $groupId)
     {
-
+        return $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
+            '/teams/' . $groupId,
+            Team::class
+        );
     }
 
     /**
-     * @param $teamIdentifier
+     * @param string $groupId
+     * @return \Microsoft\Graph\Model\Entity|\Microsoft\Graph\Model\Entity[]
      */
-    public function getTeam($teamIdentifier)
+    public function getUrl(string $groupId)
     {
+        $team = $this->getTeam($groupId);
 
+        return $team->getProperties()['webUrl'];
     }
+
 }

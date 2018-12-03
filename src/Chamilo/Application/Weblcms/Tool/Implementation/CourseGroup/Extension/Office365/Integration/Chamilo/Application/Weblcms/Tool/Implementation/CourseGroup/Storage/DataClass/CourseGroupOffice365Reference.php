@@ -119,6 +119,17 @@ class CourseGroupOffice365Reference extends DataClass
         return $this;
     }
 
+    /**
+     *
+     */
+    public function hasTeam():bool
+    {
+        return !empty($this->get_default_property(self::PROPERTY_OFFICE365_HAS_TEAM));
+    }
+
+    /**
+     * @param bool $hasTeam
+     */
     public function setHasTeam(bool $hasTeam)
     {
         $this->set_default_property(self::PROPERTY_OFFICE365_HAS_TEAM, $hasTeam);
