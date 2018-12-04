@@ -58,6 +58,15 @@ class TeamService
         }
     }
 
+    public function getTeam(string $groupId)
+    {
+        try {
+            return $this->teamRepository->getTeam($groupId);
+        } catch (\Exception $exception) {
+            return null;
+        }
+    }
+
     /**
      * @param Group $group
      * @return string

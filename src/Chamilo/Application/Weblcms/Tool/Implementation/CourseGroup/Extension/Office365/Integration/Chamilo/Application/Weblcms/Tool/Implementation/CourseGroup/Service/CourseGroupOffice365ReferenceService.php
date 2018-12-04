@@ -141,6 +141,20 @@ class CourseGroupOffice365ReferenceService
         }
     }
 
+    public function unlinkTeamFromCourseGroupReference(CourseGroupOffice365Reference $courseGroupOffice365Reference)
+    {
+        $courseGroupOffice365Reference->setHasTeam(false);
+        if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not unlink team for course group %s',
+                    $courseGroupOffice365Reference->getCourseGroupId()
+                )
+            );
+        }
+    }
+
     /**
      * Links the course group from the office365 group. The reference object is never removed but
      * only flagged as unlinked so it can be retrieved in the future to reactivate the connection
@@ -158,6 +172,29 @@ class CourseGroupOffice365ReferenceService
             throw new \RuntimeException(
                 sprintf(
                     'Could not update the CourseGroupOffice365Reference for course group %s',
+                    $courseGroupOffice365Reference->getCourseGroupId()
+                )
+            );
+        }
+    }
+
+    /**
+     * Links the course group from the office365 group. The reference object is never removed but
+     * only flagged as unlinked so it can be retrieved in the future to reactivate the connection
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference $courseGroupOffice365Reference
+     *
+     * @throws \RuntimeException
+     */
+    public function linkTeam(CourseGroupOffice365Reference $courseGroupOffice365Reference)
+    {
+        $courseGroupOffice365Reference->setHasTeam(true);
+
+        if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not link team for course group %s',
                     $courseGroupOffice365Reference->getCourseGroupId()
                 )
             );

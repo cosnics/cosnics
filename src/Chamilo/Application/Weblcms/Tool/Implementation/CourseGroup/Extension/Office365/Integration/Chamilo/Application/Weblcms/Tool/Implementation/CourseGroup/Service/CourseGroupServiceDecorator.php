@@ -52,22 +52,6 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
     }
 
     /**
-     * Decorates the create functionality of a course group. Handing over the created course group and the form
-     * values for further processing of the custom form
-     *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param array $formValues
-     */
-    public function createGroupAndTeam(CourseGroup $courseGroup, User $user, $formValues = [])
-    {
-        if ($this->usesGroupAndTeam($formValues))
-        {
-            $this->courseGroupOffice365Connector->createGroupAndTeamFromCourseGroup($courseGroup, $user);
-        }
-    }
-
-    /**
      * Decorates the update functionality of a course group. Handing over the created course group and the form
      * values for further processing of the custom form
      *
@@ -85,6 +69,14 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
         {
             $this->courseGroupOffice365Connector->unlinkOffice365GroupFromCourseGroup($courseGroup, $user);
         }
+
+        if ($this->usesGroupAndTeam($formValues)) {
+            $this->courseGroupOffice365Connector->createOrUpdateTeamFromCourseGroup($courseGroup, $user);
+        } else {
+            $this->courseGroupOffice365Connector->unlinkTeamFromOffice365Group($courseGroup, $user);
+        }
+
+
     }
 
     /**

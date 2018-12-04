@@ -171,9 +171,21 @@ class CourseGroupOffice365Connector
      */
     public function createOrUpdateTeamFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
-        $this->teamService->addTeamToGroup( //todo check if team already exists... or do we do this in the service?
-            $this->createOrUpdateGroupFromCourseGroup($courseGroup, $user)
-        );
+        $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
+
+        if(!$reference->isLinked()) { //there is no course group
+            $office365GroupId = $this->createOrUpdateGroupFromCourseGroup($courseGroup, $user);
+        } else {
+            $office365GroupId = $reference->getOffice365GroupId();
+        }
+
+        if(!$reference->hasTeam()) {
+            if($this->teamService->getTeam($office365GroupId)) { //team already exists, just link it
+                $this->courseGroupOffice365ReferenceService->linkTeam($reference);
+            } else {
+                $this->teamService->addTeamToGroup($office365GroupId);
+            }
+        }
     }
 
     /**
@@ -202,6 +214,24 @@ class CourseGroupOffice365Connector
         }
 
         $this->courseGroupOffice365ReferenceService->unlinkCourseGroupReference($reference);
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     * @param User $user
+     */
+    public function unlinkTeamFromOffice365Group(CourseGroup $courseGroup, User $user)
+    {
+        $office365Reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
+        if(!$office365Reference) {
+            return;
+        }
+
+        if(!$office365Reference->hasTeam()) {
+            return;
+        }
+
+        $this->courseGroupOffice365ReferenceService->unlinkTeamFromCourseGroupReference($office365Reference);
     }
 
     /**
