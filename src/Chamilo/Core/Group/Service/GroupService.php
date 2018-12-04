@@ -61,6 +61,7 @@ class GroupService
             $directlySubscribedGroupNestingValues =
                 $this->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
 
+
             if (count($directlySubscribedGroupNestingValues) > 0)
             {
                 $this->userSubscribedGroupIdentifiers[$userIdentifier] =

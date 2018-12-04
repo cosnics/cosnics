@@ -79,7 +79,7 @@ abstract class RightsRepository
 
     /**
      * @param integer $userIdentifier
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      * @param integer[] $rights
      * @param integer[] $types
      * @param integer $treeType
@@ -295,7 +295,7 @@ abstract class RightsRepository
     /**
      * @param integer $userIdentifier
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      *
      * @return integer[]
      * @throws \Exception
@@ -346,7 +346,7 @@ abstract class RightsRepository
      * Returns those ID's from $location_ids which user ($entity_condition) has given right to.
      *
      * @param integer $userIdentifier
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      * @param integer $right
      * @param integer[] $locationIdentifiers
      *
@@ -428,7 +428,7 @@ abstract class RightsRepository
 
     /**
      * @param integer $userIdentifier
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      * @param integer[] $rights
      * @param integer[] $types
      * @param integer $treeType
@@ -710,7 +710,7 @@ abstract class RightsRepository
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $parentLocation
      * @param integer $type
      * @param integer $userIdentifier
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      * @param boolean $parentHasRight
      *
      * @return integer[]
@@ -909,8 +909,25 @@ abstract class RightsRepository
     }
 
     /**
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
+     *
+     * @return string
+     */
+    private function getEntitiesHash(array $entities)
+    {
+        $entitiesIdentifiers = array();
+
+        foreach ($entities as $entityType => $entityProvider)
+        {
+            $entitiesIdentifiers[] = array($entityType, get_class($entityProvider));
+        }
+
+        return md5(serialize($entitiesIdentifiers));
+    }
+
+    /**
      * @param integer $userIdentifier
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
@@ -918,7 +935,7 @@ abstract class RightsRepository
     {
         if (!empty($entities))
         {
-            $entitiesHash = md5(serialize($entities));
+            $entitiesHash = $this->getEntitiesHash($entities);
 
             if (is_null($this->entitiesConditionCache[$userIdentifier][$entitiesHash]))
             {
@@ -933,12 +950,12 @@ abstract class RightsRepository
                     $andConditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
                             $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
-                        ), new StaticConditionVariable($entity->get_entity_type())
+                        ), new StaticConditionVariable($entity->getEntityType())
                     );
                     $andConditions[] = new InCondition(
                         new PropertyConditionVariable(
                             $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_ENTITY_ID
-                        ), $entity->retrieve_entity_item_ids_linked_to_user($userIdentifier)
+                        ), $entity->getEntityItemIdentifiersForUserIdentifier($userIdentifier)
                     );
 
                     $orConditions[] = new AndCondition($andConditions);

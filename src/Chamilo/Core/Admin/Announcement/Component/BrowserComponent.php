@@ -129,7 +129,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             {
                 $commonActions->addButton(
                     new Button(
-                        $translator->trans('Publish', array(), Utilities::COMMON_LIBRARIES),
+                        $translator->trans('Publish', [], Utilities::COMMON_LIBRARIES),
                         Theme::getInstance()->getCommonImagePath('Action/Publish'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -139,7 +139,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $commonActions->addButton(
                 new Button(
-                    $translator->trans('ShowAll', array(), Utilities::COMMON_LIBRARIES),
+                    $translator->trans('ShowAll', [], Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Browser'), $this->get_url(),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -147,7 +147,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $toolActions->addButton(
                 new Button(
-                    $translator->trans('ShowToday', null, Utilities::COMMON_LIBRARIES),
+                    $translator->trans('ShowToday', [], Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/Day'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_TODAY)), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -155,7 +155,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $toolActions->addButton(
                 new Button(
-                    $translator->trans('ShowThisWeek', null, Utilities::COMMON_LIBRARIES),
+                    $translator->trans('ShowThisWeek', [], Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/Week'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_THIS_WEEK)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -164,7 +164,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $toolActions->addButton(
                 new Button(
-                    $translator->trans('ShowThisMonth', null, Utilities::COMMON_LIBRARIES),
+                    $translator->trans('ShowThisMonth', [], Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/Month'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_THIS_MONTH)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL

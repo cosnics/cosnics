@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Common
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -128,7 +129,7 @@ class GroupRepository extends CommonDataClassRepository
      * @throws \Exception
      */
     public function findGroupIdentifiersForDirectlySubscribedGroupNestingValues(
-        array $directlySubscribedGroupNestingValues = array()
+        DataClassIterator $directlySubscribedGroupNestingValues
     )
     {
         $parameters = new DataClassDistinctParameters(
@@ -328,7 +329,7 @@ class GroupRepository extends CommonDataClassRepository
      * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
      */
     protected function getDirectlySubscribedGroupNestingValuesConditions(
-        array $directlySubscribedGroupNestingValues = array()
+        DataClassIterator $directlySubscribedGroupNestingValues
     )
     {
         $treeConditions = array();

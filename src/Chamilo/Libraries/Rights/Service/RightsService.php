@@ -72,7 +72,7 @@ abstract class RightsService
 
     /**
      * @param integer $userIdentifier
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      * @param integer[] $rights
      * @param integer[] $types
      * @param integer $treeType
@@ -147,6 +147,7 @@ abstract class RightsService
      * @param boolean $returnLocation
      *
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocation|boolean
+     * @throws \Exception
      * @see RightsUtil::create_location()
      */
     protected function createRightsLocationFromParameters(
@@ -155,7 +156,7 @@ abstract class RightsService
     )
     {
         $location = $this->getRightsLocationInstance();
-        $location->set_parent_id($parent);
+        $location->setParentId($parent);
         $location->set_type($type);
         $location->set_identifier($identifier);
         $location->set_inherit($inherit);
@@ -181,6 +182,7 @@ abstract class RightsService
      * @param boolean $returnLocation
      *
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
+     * @throws \Exception
      * @see RightsUtil::create_subtree_root_location()
      */
     protected function createSubtreeRootLocation(int $treeIdentifier, int $treeType, bool $returnLocation = false)
@@ -314,7 +316,7 @@ abstract class RightsService
     /**
      * @param integer $userIdentifier
      * @param integer $right
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      * @param integer $identifier
      * @param integer $type
      * @param integer $treeIdentifier
@@ -322,6 +324,7 @@ abstract class RightsService
      *
      * @return boolean
      * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
+     * @throws \Exception
      * @see RightsUtil::is_allowed()
      */
     protected function doesUserIdentifierHaveRightForEntitiesAndLocationIdentifier(
@@ -358,7 +361,7 @@ abstract class RightsService
      * @param integer $userIdentifier
      * @param integer $right
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      *
      * @return boolean
      * @see RightsUtil::is_allowed_on_location()
@@ -393,7 +396,7 @@ abstract class RightsService
      * -# Return collected identifiers.
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      * @param integer $right
      * @param integer[] $identifiers
      * @param integer $type
@@ -457,7 +460,7 @@ abstract class RightsService
             if ($location->inherits())
             {
                 $parentLocation =
-                    $this->getRightsRepository()->findRightsLocationByIdentifier($location->get_parent_id());
+                    $this->getRightsRepository()->findRightsLocationByIdentifier($location->getParentId());
 
                 if ($parentLocation instanceof RightsLocation)
                 {
@@ -494,7 +497,7 @@ abstract class RightsService
 
         if ($location->inherits())
         {
-            $parentLocation = $this->getRightsRepository()->findRightsLocationByIdentifier($location->get_parent_id());
+            $parentLocation = $this->getRightsRepository()->findRightsLocationByIdentifier($location->getParentId());
 
             if ($parentLocation instanceof RightsLocation)
             {
@@ -509,7 +512,7 @@ abstract class RightsService
     /**
      * @param integer $userIdentifier
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      *
      * @return integer[]
      * @see DataManager::retrieve_granted_rights_array()
@@ -525,7 +528,7 @@ abstract class RightsService
 
         if ($location->inherits())
         {
-            $parentLocation = $this->getRightsRepository()->findRightsLocationByIdentifier($location->get_parent_id());
+            $parentLocation = $this->getRightsRepository()->findRightsLocationByIdentifier($location->getParentId());
 
             if ($parentLocation instanceof RightsLocation)
             {
@@ -553,7 +556,7 @@ abstract class RightsService
 
     /**
      * @param integer $userIdentifier
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      * @param integer[] $rights
      * @param integer[] $types
      * @param integer $treeType
@@ -635,7 +638,7 @@ abstract class RightsService
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $parentLocation
      * @param integer $type
      * @param integer $userIdentifier
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      *
      * @return integer[]
      * @see RightsUtil::get_identifiers_with_right_granted()
@@ -702,7 +705,7 @@ abstract class RightsService
 
     /**
      * @param integer $userIdentifier
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      * @param integer $right
      * @param integer[] $locationIdentifiers
      *
@@ -730,7 +733,7 @@ abstract class RightsService
 
     /**
      * @param integer $userIdentifier
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      * @param integer[] $rights
      * @param integer[] $types
      * @param integer $treeType
@@ -1013,7 +1016,7 @@ abstract class RightsService
 
         if ($location->inherits())
         {
-            $parentLocation = $this->getRightsRepository()->findRightsLocationByIdentifier($location->get_parent_id());
+            $parentLocation = $this->getRightsRepository()->findRightsLocationByIdentifier($location->getParentId());
             $parentEntities = $this->getTargetEntitiesForLocation($right, $parentLocation);
 
             foreach ($parentEntities as $type => $id_array)

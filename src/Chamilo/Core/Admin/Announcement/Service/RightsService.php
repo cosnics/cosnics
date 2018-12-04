@@ -126,7 +126,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     }
 
     /**
-     * @return \Chamilo\Core\Rights\Entity\RightsEntity[]
+     * @return \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[]
      */
     public function getEntities()
     {
