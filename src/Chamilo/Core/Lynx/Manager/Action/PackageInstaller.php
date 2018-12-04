@@ -152,7 +152,6 @@ class PackageInstaller extends Action
     /**
      * Installs an additional package
      * 
-     * @param $package_installer \configuration\package\action\Installer
      */
     private function install_additional_package($context)
     {
@@ -183,7 +182,7 @@ class PackageInstaller extends Action
     /**
      * Returns the additional packages
      * 
-     * @return multitype:string
+     * @return string[]
      */
     public static function get_additional_packages()
     {
@@ -193,7 +192,7 @@ class PackageInstaller extends Action
     /**
      * Sets the additional packages
      * 
-     * @param multitype:string
+     * @param string[]
      */
     public function set_additional_packages($additional_packages)
     {
@@ -213,7 +212,7 @@ class PackageInstaller extends Action
     /**
      * Adds multiple additional packages to the list of additional packages
      * 
-     * @param multitype:string
+     * @param string[]
      */
     public function add_additional_packages($additional_packages)
     {

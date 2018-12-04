@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Admin\Announcement\Form;
 
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
+use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
@@ -20,19 +20,27 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class PublicationForm extends FormValidator
 {
-    const TYPE_CREATE = 1;
-    const TYPE_UPDATE = 2;
-    const PROPERTY_TARGETS = 'targets';
     const PROPERTY_FOREVER = 'forever';
+
     const PROPERTY_FROM_DATE = 'from_date';
-    const PROPERTY_TO_DATE = 'to_date';
+
     const PROPERTY_PUBLISH_AND_BUILD = 'publish_and_build';
 
-    // Rights
     const PROPERTY_RIGHT_OPTION = 'right_option';
+
+    const PROPERTY_TARGETS = 'targets';
+
+    const PROPERTY_TO_DATE = 'to_date';
+
     const RIGHT_OPTION_ALL = 0;
+
     const RIGHT_OPTION_ME = 1;
+
     const RIGHT_OPTION_SELECT = 2;
+
+    const TYPE_CREATE = 1;
+
+    const TYPE_UPDATE = 2;
 
     /**
      * The type of the form (create or edit)
@@ -44,23 +52,22 @@ class PublicationForm extends FormValidator
     /**
      * Available entities for the view rights
      *
-     * @var \Chamilo\Core\Rights\Entity\RightsEntity[]
+     * @var \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[]
      */
     private $entities;
 
     /**
      * @param int $formType
      * @param string $action
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      */
-    public function __construct($formType, $action)
+    public function __construct($formType, $action, array $entities)
     {
         parent::__construct('publish', 'post', $action);
 
         $this->form_type = $formType;
 
-        $this->entities = array();
-        $this->entities[UserEntity::ENTITY_TYPE] = new UserEntity();
-        $this->entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
+        $this->entities = $entities;
 
         switch ($formType)
         {
@@ -137,7 +144,7 @@ class PublicationForm extends FormValidator
 
         foreach ($this->entities as $entity)
         {
-            $types->add_element_type($entity->get_element_finder_type());
+            $types->add_element_type($entity->getEntityElementFinderType());
         }
 
         $this->addElement('html', '<div style="margin-left:25px; display:none;" class="entity_selector_box">');
@@ -211,10 +218,10 @@ class PublicationForm extends FormValidator
         }
         else
         {
-            $hasUserEntities = key_exists(UserEntity::ENTITY_TYPE, $targetUsersAndGroups);
-            $hasGroupEntites = key_exists(PlatformGroupEntity::ENTITY_TYPE, $targetUsersAndGroups);
-            $hasOnlyOneUserEntity = count($targetUsersAndGroups[UserEntity::ENTITY_TYPE]) == 1;
-            $currentUserIsOnlyUserEntity = $targetUsersAndGroups[UserEntity::ENTITY_TYPE][0] == $user->getId();
+            $hasUserEntities = key_exists(UserEntityProvider::ENTITY_TYPE, $targetUsersAndGroups);
+            $hasGroupEntites = key_exists(GroupEntityProvider::ENTITY_TYPE, $targetUsersAndGroups);
+            $hasOnlyOneUserEntity = count($targetUsersAndGroups[UserEntityProvider::ENTITY_TYPE]) == 1;
+            $currentUserIsOnlyUserEntity = $targetUsersAndGroups[UserEntityProvider::ENTITY_TYPE][0] == $user->getId();
 
             if ($hasUserEntities && !$hasGroupEntites && $hasOnlyOneUserEntity && $currentUserIsOnlyUserEntity)
             {
@@ -234,7 +241,7 @@ class PublicationForm extends FormValidator
                 foreach ($targetUsersAndGroupIdentifiers as $targetUsersAndGroupIdentifier)
                 {
                     $defaultElements->add_element(
-                        $entity->get_element_finder_element($targetUsersAndGroupIdentifier)
+                        $entity->getEntityElementFinderElement($targetUsersAndGroupIdentifier)
                     );
                 }
             }

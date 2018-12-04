@@ -24,7 +24,8 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 {
 
     /**
-     * Runs this component and displays its output.
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
@@ -46,7 +47,9 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                 $contentObjectIdentifiers = array($contentObjectIdentifiers);
             }
 
-            $publicationForm = new PublicationForm(PublicationForm::TYPE_CREATE, $this->get_url());
+            $publicationForm = new PublicationForm(
+                PublicationForm::TYPE_CREATE, $this->get_url(), $this->getRightsService()->getEntities()
+            );
 
             if ($publicationForm->validate())
             {

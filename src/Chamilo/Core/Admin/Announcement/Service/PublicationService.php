@@ -122,10 +122,9 @@ class PublicationService
      */
     public function countVisiblePublicationsForUserIdentifier(int $userIdentifier, Condition $condition = null)
     {
-        $publicationIdentifiers =
-            $this->getRightsService()->findPublicationIdentifiersWithViewRightForEntitiesAndUserIdentifier(
-                $this->getEntities(), $userIdentifier
-            );
+        $publicationIdentifiers = $this->getRightsService()->findPublicationIdentifiersWithViewRightForUserIdentifier(
+            $this->getEntities(), $userIdentifier
+        );
 
         return $this->getPublicationRepository()->countVisiblePublicationsForPublicationIdentifiers(
             $condition, $publicationIdentifiers
@@ -346,26 +345,11 @@ class PublicationService
     )
     {
         $publicationIdentifiers =
-            $this->getRightsService()->findPublicationIdentifiersWithViewRightForEntitiesAndUserIdentifier(
-                $this->getEntities(), $userIdentifier
-            );
+            $this->getRightsService()->findPublicationIdentifiersWithViewRightForUserIdentifier($userIdentifier);
 
         return $this->getPublicationRepository()->findVisiblePublicationRecordsForPublicationIdentifiers(
             $publicationIdentifiers, $condition, $count, $offset, $orderProperties
         );
-    }
-
-    /**
-     * @return \Chamilo\Core\Rights\Entity\RightsEntity[]
-     */
-    protected function getEntities()
-    {
-        $entities = array();
-
-        $entities[UserEntityProvider::ENTITY_TYPE] = $this->getUserEntityProvider();
-        $entities[GroupEntityProvider::ENTITY_TYPE] = $this->getGroupEntityProvider();
-
-        return $entities;
     }
 
     /**

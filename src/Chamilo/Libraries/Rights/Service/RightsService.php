@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Rights\Service;
 
 use Chamilo\Libraries\Rights\Domain\RightsLocation;
 use Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight;
-use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
+use Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Libraries\Rights\Form\RightsForm;
 use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\User\Service\UserService;
@@ -321,7 +321,7 @@ abstract class RightsService
      * @param integer $treeType
      *
      * @return boolean
-     * @throws \Chamilo\Core\Rights\Exception\RightsLocationNotFoundException
+     * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
      * @see RightsUtil::is_allowed()
      */
     protected function doesUserIdentifierHaveRightForEntitiesAndLocationIdentifier(

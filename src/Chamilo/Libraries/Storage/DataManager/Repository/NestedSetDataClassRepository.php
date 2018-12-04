@@ -56,7 +56,7 @@ class NestedSetDataClassRepository extends DataClassRepository
     {
         return $this->count(
             get_class($nestedSet),
-            new DataClassCountParameters($this->getDescendantsCondition($nestedSet, $recursive, $condition))
+            new DataClassCountParameters($this->getDescendantsCondition($nestedSet, $recursive, false, $condition))
         );
     }
 
@@ -92,6 +92,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @param int $previousNestedSetIdentifier
      *
      * @return bool
+     * @throws \Exception
      * @see NestedSet::create()
      * @see NestedTreeNode::create()
      */
@@ -170,6 +171,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]
+     * @throws \Exception
      * @see NestedSet::delete()
      */
     public function delete(DataClass $nestedSet, Condition $condition = null)
@@ -532,10 +534,11 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return bool|mixed
+     * @throws \Exception
      * @see NestedSet::move()
      * @see NestedTreeNode::move()
      */
-    public function move(DataClass $nestedSet, $newParentId = 0, $newPreviousId = 0, $condition = null)
+    public function move(NestedSet $nestedSet, $newParentId = 0, $newPreviousId = 0, $condition = null)
     {
         if ($newPreviousId != 0)
         {

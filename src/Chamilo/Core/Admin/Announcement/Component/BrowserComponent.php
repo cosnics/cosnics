@@ -23,7 +23,6 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class BrowserComponent extends Manager implements TableSupport, DelegateComponent
@@ -37,8 +36,15 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     const FILTER_THIS_WEEK = 'week';
     const FILTER_THIS_MONTH = 'month';
 
+    /**
+     * @var \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
+     */
     private $buttonToolbarRenderer;
 
+    /**
+     * @return string
+     * @throws \Exception
+     */
     public function run()
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
@@ -55,9 +61,14 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @return string
+     * @throws \Exception
+     */
     private function get_publications_html()
     {
-        $parameters = $this->get_parameters(true);
+        $translator = $this->getTranslator();
+        $parameters = $this->get_parameters();
         $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
             $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
@@ -69,7 +80,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         {
             $tabs->add_tab(
                 new DynamicVisualTab(
-                    self::TYPE_ALL, Translation::get('AllPublications'),
+                    self::TYPE_ALL, $translator->trans('AllPublications'),
                     Theme::getInstance()->getCommonImagePath('Treemenu/SharedObjects'),
                     $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_ALL)), $type == self::TYPE_ALL
                 )
@@ -78,7 +89,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
         $tabs->add_tab(
             new DynamicVisualTab(
-                self::TYPE_FROM_ME, Translation::get('PublishedForMe'),
+                self::TYPE_FROM_ME, $translator->trans('PublishedForMe'),
                 Theme::getInstance()->getCommonImagePath('Treemenu/SharedObjects'),
                 $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FOR_ME)), $type == self::TYPE_FOR_ME
             )
@@ -86,7 +97,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
         $tabs->add_tab(
             new DynamicVisualTab(
-                self::TYPE_FROM_ME, Translation::get('MyPublications'),
+                self::TYPE_FROM_ME, $translator->trans('MyPublications'),
                 Theme::getInstance()->getCommonImagePath('Treemenu/Publication'),
                 $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FROM_ME)), $type == self::TYPE_FROM_ME
             )
@@ -96,29 +107,29 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $this, $this->getPublicationService(), $this->getRightsService(), $this->getUserService(),
             $this->getGroupService()
         );
-        $tabs->set_content($table->as_html());
+        $tabs->set_content($table->render());
 
         return $tabs->render();
     }
 
-    public function add_actionbar_item($item)
-    {
-        $this->buttonToolbarRenderer->add_tool_action($item);
-    }
-
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
+     */
     public function getButtonToolbarRenderer()
     {
         if (!isset($this->buttonToolbarRenderer))
         {
+            $translator = $this->getTranslator();
+
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
-            if ($this->get_user()->get_platformadmin())
+            if ($this->getUser()->get_platformadmin())
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Publish', array(), Utilities::COMMON_LIBRARIES),
+                        $translator->trans('Publish', array(), Utilities::COMMON_LIBRARIES),
                         Theme::getInstance()->getCommonImagePath('Action/Publish'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -128,7 +139,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', array(), Utilities::COMMON_LIBRARIES),
+                    $translator->trans('ShowAll', array(), Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Browser'), $this->get_url(),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -136,7 +147,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $toolActions->addButton(
                 new Button(
-                    Translation::get('ShowToday', null, Utilities::COMMON_LIBRARIES),
+                    $translator->trans('ShowToday', null, Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/Day'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_TODAY)), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -144,7 +155,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $toolActions->addButton(
                 new Button(
-                    Translation::get('ShowThisWeek', null, Utilities::COMMON_LIBRARIES),
+                    $translator->trans('ShowThisWeek', null, Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/Week'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_THIS_WEEK)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -153,7 +164,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $toolActions->addButton(
                 new Button(
-                    Translation::get('ShowThisMonth', null, Utilities::COMMON_LIBRARIES),
+                    $translator->trans('ShowThisMonth', null, Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/Month'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_THIS_MONTH)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -172,23 +183,14 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     {
         $conditions = array();
 
-        $type = $this->get_type();
-        switch ($type)
+        if ($this->get_type() != self::TYPE_ALL)
         {
-            // Begin with the publisher condition when FROM_ME and add the
-            // remaining conditions. Skip the publisher
-            // condition when ALL.
-            case self::TYPE_FROM_ME :
-                $publisher_id = $this->getUser()->getId();
+            $publisher_id = $this->getUser()->getId();
 
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER_ID),
-                    new StaticConditionVariable($publisher_id)
-                );
-            case self::TYPE_ALL :
-                break;
-            default :
-                break;
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER_ID),
+                new StaticConditionVariable($publisher_id)
+            );
         }
 
         if ($this->get_search_condition())

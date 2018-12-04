@@ -4,89 +4,37 @@ namespace Chamilo\Libraries\Rights\Domain;
 use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
+ * @package Chamilo\Libraries\Rights\Domain
  *
- * @package rights.lib
- * @author Hans de Bisschop
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RightsLocation extends NestedSet
 {
-    // Keep track of the context so we know which table to call
     const PROPERTY_IDENTIFIER = 'identifier';
-
     const PROPERTY_INHERIT = 'inherit';
-
     const PROPERTY_LOCKED = 'locked';
-
     const PROPERTY_TREE_IDENTIFIER = 'tree_identifier';
-
     const PROPERTY_TREE_TYPE = 'tree_type';
-
     const PROPERTY_TYPE = 'type';
-
-    private $context;
-
-    /**
-     * @param integer $right_id
-     *
-     * @deprecated Use RightsService::deleteRightsLocationEntityRightsForLocationAndRight() now
-     *
-     * @return mixed
-     */
-    public function clear_right($right_id)
-    {
-        return DataManager::delete_rights_location_entity_rights($this, null, null, $right_id);
-    }
-
-    /**
-     * on this location
-     * @deprecated Use RightsService::deleteRightsLocationEntityRightsForLocation() now
-     */
-    public function clear_rights()
-    {
-        return DataManager::delete_rights_location_entity_rights($this);
-    }
-
-    public function delete_related_content()
-    {
-        return $this->clear_rights();
-    }
 
     public function disinherit()
     {
         $this->set_inherit(0);
     }
 
-    public function get_context()
-    {
-        if (!isset($this->context))
-        {
-            $this->context = $this->package();
-        }
-
-        return $this->context;
-    }
-
-    public function set_context($context)
-    {
-        $this->context = $context;
-    }
-
     /**
-     * @param array $extended_property_names
+     * @param string[] $extendedPropertyNames
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extendedPropertyNames = array())
     {
         return parent::get_default_property_names(
             array(
@@ -96,69 +44,28 @@ class RightsLocation extends NestedSet
         );
     }
 
+    /**
+     * @return integer
+     */
     public function get_identifier()
     {
         return $this->getDefaultProperty(self::PROPERTY_IDENTIFIER);
     }
 
+    /**
+     * @return boolean
+     */
     public function get_inherit()
     {
         return $this->getDefaultProperty(self::PROPERTY_INHERIT);
     }
 
+    /**
+     * @return boolean
+     */
     public function get_locked()
     {
         return $this->getDefaultProperty(self::PROPERTY_LOCKED);
-    }
-
-    public function get_locked_parent()
-    {
-        $locked_parent_conditions = $this->get_nested_set_condition_array();
-
-        $locked_parent_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LOCKED), new StaticConditionVariable(true)
-        );
-
-        $locked_parent_conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE),
-            ComparisonCondition::LESS_THAN, new StaticConditionVariable($this->getLeftValue())
-        );
-
-        $locked_parent_conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE),
-            ComparisonCondition::GREATER_THAN, new StaticConditionVariable($this->getRightValue())
-        );
-
-        $locked_parent_condition = new AndCondition($locked_parent_conditions);
-        $order = array(new OrderBy(new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE)));
-
-        $datamanager = self::package() . '\Storage\DataManager';
-
-        return $datamanager::retrieve(
-            self::class_name(), new DataClassRetrieveParameters($locked_parent_condition, $order)
-        );
-    }
-
-    /**
-     * Inherited method which specifies how to identify the tree this location is situated in.
-     * Should be used as the
-     * basic set of condition whenever one makes a query.
-     */
-    public function get_nested_set_condition_array()
-    {
-        $conditions = parent::get_nested_set_condition_array();
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TREE_TYPE),
-            new StaticConditionVariable($this->get_tree_type())
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TREE_IDENTIFIER),
-            new StaticConditionVariable($this->get_tree_identifier())
-        );
-
-        return $conditions;
     }
 
     /**
@@ -199,16 +106,25 @@ class RightsLocation extends NestedSet
         }
     }
 
+    /**
+     * @return integer
+     */
     public function get_tree_identifier()
     {
         return $this->getDefaultProperty(self::PROPERTY_TREE_IDENTIFIER);
     }
 
+    /**
+     * @return integer
+     */
     public function get_tree_type()
     {
         return $this->getDefaultProperty(self::PROPERTY_TREE_TYPE);
     }
 
+    /**
+     * @return integer
+     */
     public function get_type()
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
@@ -219,19 +135,28 @@ class RightsLocation extends NestedSet
         $this->set_inherit(1);
     }
 
+    /**
+     * @return boolean
+     */
     public function inherits()
     {
         return $this->get_inherit();
     }
 
+    /**
+     * @return boolean
+     */
     public function is_locked()
     {
         return $this->get_locked();
     }
 
+    /**
+     * @return bool
+     */
     public function is_root()
     {
-        $parent = $this->get_parent();
+        $parent = $this->getParentId();
 
         return ($parent == 0);
     }
@@ -241,31 +166,61 @@ class RightsLocation extends NestedSet
         $this->set_locked(true);
     }
 
+    /**
+     * @param integer $identifier
+     *
+     * @throws \Exception
+     */
     public function set_identifier($identifier)
     {
         $this->setDefaultProperty(self::PROPERTY_IDENTIFIER, $identifier);
     }
 
+    /**
+     * @param integer $inherit
+     *
+     * @throws \Exception
+     */
     public function set_inherit($inherit)
     {
         $this->setDefaultProperty(self::PROPERTY_INHERIT, $inherit);
     }
 
+    /**
+     * @param integer $locked
+     *
+     * @throws \Exception
+     */
     public function set_locked($locked)
     {
         $this->setDefaultProperty(self::PROPERTY_LOCKED, $locked);
     }
 
+    /**
+     * @param integer $tree_identifier
+     *
+     * @throws \Exception
+     */
     public function set_tree_identifier($tree_identifier)
     {
         $this->setDefaultProperty(self::PROPERTY_TREE_IDENTIFIER, $tree_identifier);
     }
 
+    /**
+     * @param integer $tree_type
+     *
+     * @throws \Exception
+     */
     public function set_tree_type($tree_type)
     {
         $this->setDefaultProperty(self::PROPERTY_TREE_TYPE, $tree_type);
     }
 
+    /**
+     * @param string $type
+     *
+     * @throws \Exception
+     */
     public function set_type($type)
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);

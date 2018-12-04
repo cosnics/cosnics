@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Rights\Domain;
 
-use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -11,33 +10,17 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class RightsLocationEntityRight extends DataClass
 {
-    // Keep track of the context so we know which table to call
     const PROPERTY_ENTITY_ID = 'entity_id';
-
     const PROPERTY_ENTITY_TYPE = 'entity_type';
-
     const PROPERTY_LOCATION_ID = 'location_id';
-
     const PROPERTY_RIGHT_ID = 'right_id';
 
-    private $context;
-
-    public function get_context()
-    {
-        return $this->context;
-    }
-
-    public function set_context($context)
-    {
-        $this->context = $context;
-    }
-
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    public static function get_default_property_names($extended_property_names = array())
+    /**
+     * @param array $extendedPropertyNames
+     *
+     * @return string[]
+     */
+    public static function get_default_property_names($extendedPropertyNames = array())
     {
         return parent::get_default_property_names(
             array(
@@ -47,43 +30,67 @@ class RightsLocationEntityRight extends DataClass
         );
     }
 
+    /**
+     * @return integer
+     */
     public function get_entity_id()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_ID);
     }
 
+    /**
+     * @return integer
+     */
     public function get_entity_type()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_TYPE);
     }
 
+    /**
+     * @return integer
+     */
     public function get_location_id()
     {
-        return $this->get_default_property(self::PROPERTY_LOCATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_LOCATION_ID);
     }
 
+    /**
+     * @return integer
+     */
     public function get_right_id()
     {
-        return $this->get_default_property(self::PROPERTY_RIGHT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_RIGHT_ID);
     }
 
-    public function set_entity_id($entity_id)
+    /**
+     * @param integer $entityIdentifier
+     */
+    public function set_entity_id($entityIdentifier)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entity_id);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_ID, $entityIdentifier);
     }
 
-    public function set_entity_type($entity_type)
+    /**
+     * @param integer $entityType
+     */
+    public function set_entity_type($entityType)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entity_type);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
 
-    public function set_location_id($location_id)
+    /**
+     * @param integer $locationIdentifier
+     */
+    public function set_location_id($locationIdentifier)
     {
-        $this->set_default_property(self::PROPERTY_LOCATION_ID, $location_id);
+        $this->setDefaultProperty(self::PROPERTY_LOCATION_ID, $locationIdentifier);
     }
 
-    public function set_right_id($right_id)
+    /**
+     * @param integer $rightIdentifier
+     */
+    public function set_right_id($rightIdentifier)
     {
-        $this->set_default_property(self::PROPERTY_RIGHT_ID, $right_id);
+        $this->setDefaultProperty(self::PROPERTY_RIGHT_ID, $rightIdentifier);
     }
 }

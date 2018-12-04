@@ -5,9 +5,12 @@ use Chamilo\Core\Admin\Announcement\Form\PublicationForm;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocation;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocationEntityRight;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
-use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
+use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
+use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException;
+use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Admin\Announcement\Service
@@ -21,6 +24,27 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     const VIEW_RIGHT = 1;
 
     /**
+     * @var \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
+     */
+    private $userEntityProvider;
+
+    /**
+     * @var \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
+     */
+    private $groupEntityProvider;
+
+    public function __construct(
+        RightsRepository $rightsRepository, UserService $userService, Translator $translator,
+        UserEntityProvider $userEntityProvider, GroupEntityProvider $groupEntityProvider
+    )
+    {
+        parent::__construct($rightsRepository, $userService, $translator);
+
+        $this->userEntityProvider = $userEntityProvider;
+        $this->groupEntityProvider = $groupEntityProvider;
+    }
+
+    /**
      * @param integer $userIdentifier
      * @param integer $publicationIdentifier
      *
@@ -28,14 +52,10 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      */
     public function canUserIdentifierViewPublication(int $userIdentifier, int $publicationIdentifier)
     {
-        $entities = array();
-        $entities[] = UserEntity::getInstance();
-        $entities[] = PlatformGroupEntity::getInstance();
-
         try
         {
             return $this->doesUserIdentifierHaveRightForEntitiesAndLocationIdentifier(
-                $userIdentifier, self::VIEW_RIGHT, $entities, $publicationIdentifier, self::TYPE_PUBLICATION
+                $userIdentifier, self::VIEW_RIGHT, $this->getEntities(), $publicationIdentifier, self::TYPE_PUBLICATION
             );
         }
         catch (RightsLocationNotFoundException $exception)
@@ -75,33 +95,63 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
 
     /**
      * @param integer $right
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
      * @param integer $userIdentifier
      *
      * @return integer[]
+     * @throws \Exception
+     *
      */
-    public function findPublicationIdentifiersWithRightForEntitiesAndUserIdentifier(
-        int $right, array $entities, int $userIdentifier
+    public function findPublicationIdentifiersWithRightForUserIdentifier(
+        int $right, int $userIdentifier
     )
     {
         return $this->findRightsLocationIdentifiersWithGrantedRight(
-            $right, $this->getRootLocation(), self::TYPE_PUBLICATION, $userIdentifier, $entities
+            $right, $this->getRootLocation(), self::TYPE_PUBLICATION, $userIdentifier, $this->getEntities()
         );
     }
 
     /**
-     * @param \Chamilo\Core\Rights\Entity\RightsEntity[] $entities
      * @param integer $userIdentifier
      *
      * @return integer[]
+     * @throws \Exception
      */
-    public function findPublicationIdentifiersWithViewRightForEntitiesAndUserIdentifier(
-        $entities, $userIdentifier
+    public function findPublicationIdentifiersWithViewRightForUserIdentifier(
+        $userIdentifier
     )
     {
-        return $this->findPublicationIdentifiersWithRightForEntitiesAndUserIdentifier(
-            self::VIEW_RIGHT, $entities, $userIdentifier
+        return $this->findPublicationIdentifiersWithRightForUserIdentifier(
+            self::VIEW_RIGHT, $userIdentifier
         );
+    }
+
+    /**
+     * @return \Chamilo\Core\Rights\Entity\RightsEntity[]
+     */
+    public function getEntities()
+    {
+        $entities = array();
+
+        $entities[UserEntityProvider::ENTITY_TYPE] = $this->getUserEntityProvider();
+        $entities[GroupEntityProvider::ENTITY_TYPE] = $this->getGroupEntityProvider();
+
+        return $entities;
+    }
+
+    /**
+     * @return \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
+     */
+    public function getGroupEntityProvider(): GroupEntityProvider
+    {
+        return $this->groupEntityProvider;
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
+     */
+    public function setGroupEntityProvider(GroupEntityProvider $groupEntityProvider): void
+    {
+        $this->groupEntityProvider = $groupEntityProvider;
     }
 
     /**
@@ -118,6 +168,22 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     protected function getRightsLocationInstance()
     {
         return new RightsLocation();
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
+     */
+    public function getUserEntityProvider(): UserEntityProvider
+    {
+        return $this->userEntityProvider;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
+     */
+    public function setUserEntityProvider(UserEntityProvider $userEntityProvider): void
+    {
+        $this->userEntityProvider = $userEntityProvider;
     }
 
     /**
@@ -170,7 +236,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
                 break;
             case PublicationForm::RIGHT_OPTION_ME :
                 if (!$this->invertLocationEntityRight(
-                    self::VIEW_RIGHT, $userIdentifier, UserEntity::ENTITY_TYPE, $locationIdentifier
+                    self::VIEW_RIGHT, $userIdentifier, UserEntityProvider::ENTITY_TYPE, $locationIdentifier
                 ))
                 {
                     return false;
