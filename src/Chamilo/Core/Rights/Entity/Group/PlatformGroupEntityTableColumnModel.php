@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
  * Cell renderer for the platform group entity browser
  * 
  * @author Sven Vanpoucke
+ * @deprecated Should not be needed anymore
  */
 class PlatformGroupEntityTableColumnModel extends LocationEntityTableColumnModel
 {

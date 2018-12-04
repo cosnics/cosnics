@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
  * Cell renderer for the user entity browser
  * 
  * @author Sven Vanpoucke
+ * @deprecated Should not be needed anymore
  */
 class UserEntityTableColumnModel extends LocationEntityTableColumnModel
 {

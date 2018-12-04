@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\AjaxManager;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Should not be needed anymore
  */
 abstract class Manager extends AjaxManager
 {

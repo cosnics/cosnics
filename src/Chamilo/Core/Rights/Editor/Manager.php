@@ -11,6 +11,7 @@ use Exception;
  * 
  * @package application.common.rights_editor_manager
  * @author Sven Vanpoucke
+ * @deprecated Should not be needed anymore
  */
 abstract class Manager extends Application
 {

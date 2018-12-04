@@ -19,6 +19,7 @@ use Exception;
  * New version of rights utilities to work with entities and the application specific location tables
  *
  * @author Pieterjan Broekaert
+ * @deprecated Use the \Chamilo\Libraries\Rights\Service\RightsService now to extend contextual implementations from now
  */
 class RightsUtil
 {

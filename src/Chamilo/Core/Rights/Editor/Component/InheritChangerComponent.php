@@ -8,6 +8,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @author Sven Vanpoucke
  * @package rights.lib.location_manager.component
+ * @deprecated Should not be needed anymore
  */
 class InheritChangerComponent extends Manager
 {

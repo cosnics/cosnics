@@ -18,6 +18,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * 
  * @author Sven Vanpoucke
  * @package application.common.rights_editor_manager.component
+ * @deprecated Use \Chamilo\Libraries\Rights\Form\RightsForm now
  */
 class SimpleRightsEditorForm extends FormValidator
 {

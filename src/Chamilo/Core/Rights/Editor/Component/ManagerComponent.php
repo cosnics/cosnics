@@ -13,6 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Interface to manage rights
+ * @deprecated Should not be needed anymore
  */
 class ManagerComponent extends Manager
 {

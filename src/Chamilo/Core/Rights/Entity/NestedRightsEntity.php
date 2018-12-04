@@ -1,6 +1,11 @@
 <?php
 namespace Chamilo\Core\Rights\Entity;
 
+/**
+ * @package Chamilo\Core\Rights\Entity
+ *
+ * @deprecated Should not be needed anymore
+ */
 interface NestedRightsEntity extends RightsEntity
 {
 

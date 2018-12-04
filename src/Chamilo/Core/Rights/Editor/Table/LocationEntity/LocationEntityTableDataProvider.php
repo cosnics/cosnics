@@ -3,6 +3,11 @@ namespace Chamilo\Core\Rights\Editor\Table\LocationEntity;
 
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 
+/**
+ * @package Chamilo\Core\Rights\Editor\Table\LocationEntity
+ *
+ * @deprecated Should not be needed anymore
+ */
 abstract class LocationEntityTableDataProvider extends DataClassTableDataProvider
 {
 

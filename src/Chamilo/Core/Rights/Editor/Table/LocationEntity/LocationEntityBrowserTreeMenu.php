@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * 
  * @author Sven Vanpoucke
  * @package application\weblcms
+ * @deprecated Should not be needed anymore
  */
 class LocationEntityBrowserTreeMenu extends GenericTree
 {

@@ -63,38 +63,6 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     }
 
     /**
-     * @return \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
-     */
-    public function getGroupEntityProvider(): GroupEntityProvider
-    {
-        return $this->groupEntityProvider;
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
-     */
-    public function setGroupEntityProvider(GroupEntityProvider $groupEntityProvider): void
-    {
-        $this->groupEntityProvider = $groupEntityProvider;
-    }
-
-    /**
-     * @return \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
-     */
-    public function getUserEntityProvider(): UserEntityProvider
-    {
-        return $this->userEntityProvider;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
-     */
-    public function setUserEntityProvider(UserEntityProvider $userEntityProvider): void
-    {
-        $this->userEntityProvider = $userEntityProvider;
-    }
-
-    /**
      * @return boolean
      */
     public function areRightsEnabled()
@@ -254,7 +222,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     public function getAvailableEntities()
     {
         $entities = array();
-        
+
         $entities[UserEntityProvider::ENTITY_TYPE] = $this->getUserEntityProvider();
         $entities[GroupEntityProvider::ENTITY_TYPE] = $this->getGroupEntityProvider();
 
@@ -286,6 +254,22 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     }
 
     /**
+     * @return \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
+     */
+    public function getGroupEntityProvider(): GroupEntityProvider
+    {
+        return $this->groupEntityProvider;
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
+     */
+    public function setGroupEntityProvider(GroupEntityProvider $groupEntityProvider): void
+    {
+        $this->groupEntityProvider = $groupEntityProvider;
+    }
+
+    /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\RightsLocationEntityRight
      */
     protected function getRightsLocationEntityRightInstance()
@@ -310,6 +294,22 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     public function getTargetUsersAndGroupsForRightsLocationAndAvailableRights(RightsLocation $rightsLocation)
     {
         return $this->getTargetEntitiesForRightsAndLocation($this->getAvailableRights(), $rightsLocation);
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
+     */
+    public function getUserEntityProvider(): UserEntityProvider
+    {
+        return $this->userEntityProvider;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
+     */
+    public function setUserEntityProvider(UserEntityProvider $userEntityProvider): void
+    {
+        $this->userEntityProvider = $userEntityProvider;
     }
 
     /**

@@ -5,14 +5,9 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
+ * @package Chamilo\Core\Rights
  *
- * @package rights.lib.rights_manager
- */
-
-/**
- * A user manager provides some functionalities to the admin to manage his users.
- * For each functionality a component is
- * available.
+ * @deprecated Should be removed eventually in favour of \Chamilo\Libraries\Rights
  */
 abstract class Manager extends Application
 {

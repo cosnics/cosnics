@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
  *
  * @author Sven Vanpoucke
  * @package rights.ajax
+ * @deprecated Should not be needed anymore
  */
 class EntityRightLocationComponent extends \Chamilo\Core\Rights\Editor\Ajax\Manager
 {

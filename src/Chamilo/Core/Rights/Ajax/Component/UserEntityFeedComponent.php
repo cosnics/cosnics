@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
  * 
  * @package rights
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @deprecated Should not be needed anymore
  */
 class UserEntityFeedComponent extends UsersFeedComponent
 {

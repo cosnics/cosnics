@@ -16,6 +16,7 @@ use Chamilo\Libraries\Translation\Translation;
  * 
  * @author Sven Vanpoucke
  * @package application.common.rights_editor_manager.component
+ * @deprecated Should not be needed anymore
  */
 class SimpleRightsEditorComponent extends RightsEditorComponent implements DelegateComponent
 {

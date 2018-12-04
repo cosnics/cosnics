@@ -5,6 +5,11 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\ObjectTableColumn;
 
+/**
+ * @package Chamilo\Core\Rights\Editor\Table\LocationEntity
+ *
+ * @deprecated Should not be needed anymore
+ */
 abstract class LocationEntityTableColumnModel extends DataClassTableColumnModel
 {
 

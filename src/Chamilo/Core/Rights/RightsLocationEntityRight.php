@@ -4,6 +4,11 @@ namespace Chamilo\Core\Rights;
 use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
+/**
+ * @package Chamilo\Core\Rights
+ *
+ * @deprecated Use \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight now
+ */
 class RightsLocationEntityRight extends DataClass
 {
     // Keep track of the context so we know which table to call

@@ -4,10 +4,10 @@ namespace Chamilo\Core\Admin\Announcement\Service;
 use Chamilo\Core\Admin\Announcement\Form\PublicationForm;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository;
+use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Symfony\Component\Translation\Translator;
@@ -32,17 +32,32 @@ class PublicationService
     private $translator;
 
     /**
+     * @var \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
+     */
+    private $userEntityProvider;
+
+    /**
+     * @var \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
+     */
+    private $groupEntityProvider;
+
+    /**
      * @param \Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository $publicationRepository
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Admin\Announcement\Service\RightsService $rightsService
+     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
+     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
      */
     public function __construct(
-        PublicationRepository $publicationRepository, Translator $translator, RightsService $rightsService
+        PublicationRepository $publicationRepository, Translator $translator, RightsService $rightsService,
+        UserEntityProvider $userEntityProvider, GroupEntityProvider $groupEntityProvider
     )
     {
         $this->publicationRepository = $publicationRepository;
         $this->translator = $translator;
         $this->rightsService = $rightsService;
+        $this->userEntityProvider = $userEntityProvider;
+        $this->groupEntityProvider = $groupEntityProvider;
     }
 
     /**
@@ -347,10 +362,26 @@ class PublicationService
     {
         $entities = array();
 
-        $entities[UserEntity::ENTITY_TYPE] = UserEntity::getInstance();
-        $entities[PlatformGroupEntity::ENTITY_TYPE] = PlatformGroupEntity::getInstance();
+        $entities[UserEntityProvider::ENTITY_TYPE] = $this->getUserEntityProvider();
+        $entities[GroupEntityProvider::ENTITY_TYPE] = $this->getGroupEntityProvider();
 
         return $entities;
+    }
+
+    /**
+     * @return \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
+     */
+    public function getGroupEntityProvider(): GroupEntityProvider
+    {
+        return $this->groupEntityProvider;
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
+     */
+    public function setGroupEntityProvider(GroupEntityProvider $groupEntityProvider): void
+    {
+        $this->groupEntityProvider = $groupEntityProvider;
     }
 
     /**
@@ -399,6 +430,22 @@ class PublicationService
     public function setTranslator(Translator $translator): void
     {
         $this->translator = $translator;
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
+     */
+    public function getUserEntityProvider(): UserEntityProvider
+    {
+        return $this->userEntityProvider;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
+     */
+    public function setUserEntityProvider(UserEntityProvider $userEntityProvider): void
+    {
+        $this->userEntityProvider = $userEntityProvider;
     }
 
     /**

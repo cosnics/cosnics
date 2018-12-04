@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
  * 
  * @package roup
  * @author Sven Vanpoucke
+ * @deprecated Should not be needed anymore
  */
 class PlatformGroupEntityFeedComponent extends PlatformGroupsFeedComponent
 {

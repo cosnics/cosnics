@@ -17,6 +17,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * Class that describes the platform groups for the rights editor
  *
  * @author Sven Vanpoucke
+ * @deprecated Use the \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider service now
  */
 class PlatformGroupEntity implements NestedRightsEntity
 {

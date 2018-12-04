@@ -8,6 +8,7 @@ use Chamilo\Core\Rights\Editor\Manager;
  * 
  * @author Sven Vanpoucke
  * @package application.common.rights_editor_manager.component
+ * @deprecated Should not be needed anymore
  */
 abstract class RightsEditorComponent extends Manager
 {

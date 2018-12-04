@@ -14,9 +14,9 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
+ * @package Chamilo\Core\Rights
  *
- * @package rights.lib
- * @author  Hans de Bisschop
+ * @deprecated Use \Chamilo\Libraries\Rights\Domain\RightsLocation now
  */
 class RightsLocation extends NestedTreeNode
 {

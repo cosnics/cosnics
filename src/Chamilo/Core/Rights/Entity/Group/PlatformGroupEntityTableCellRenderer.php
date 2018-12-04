@@ -9,6 +9,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * Cell renderer for the platform group entity browser
  * 
  * @author Sven Vanpoucke
+ * @deprecated Should not be needed anymore
  */
 class PlatformGroupEntityTableCellRenderer extends LocationEntityTableCellRenderer
 {

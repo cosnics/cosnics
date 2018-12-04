@@ -30,6 +30,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * 
  * @author Sven Vanpoucke
  * @package application.common.rights_editor_manager.component
+ * @deprecated Should not be needed anymore
  */
 class AdvancedRightsEditorComponent extends RightsEditorComponent implements TableSupport
 {

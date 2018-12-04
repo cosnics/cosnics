@@ -6,6 +6,11 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRe
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
+/**
+ * @package Chamilo\Core\Rights\Editor\Table\LocationEntity
+ *
+ * @deprecated Should not be needed anymore
+ */
 abstract class LocationEntityTableCellRenderer extends DataClassTableCellRenderer
 {
 

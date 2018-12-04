@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
  * Class that describes the users for the rights editor
  *
  * @author Sven Vanpoucke
+ * @deprecated Use the \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider service now
  */
 class UserEntity implements RightsEntity
 {

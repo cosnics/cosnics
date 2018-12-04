@@ -1,6 +1,11 @@
 <?php
 namespace Chamilo\Core\Rights\Entity;
 
+/**
+ * @package Chamilo\Core\Rights\Entity
+ *
+ * @deprecated Use \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider now
+ */
 interface RightsEntity
 {
 
