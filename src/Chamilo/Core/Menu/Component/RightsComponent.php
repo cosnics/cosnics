@@ -69,7 +69,7 @@ class RightsComponent extends Manager implements DelegateComponent
             $message = $this->getTranslator()->trans(
                 $success ? 'RightsConfigured' : 'RightsNotConfigured',
                 array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')),
-                'Chamilo\Core\Menu'
+                'Chamilo\Libraries\Rights'
             );
 
             $this->redirect(

@@ -158,13 +158,18 @@ class ItemCacheService
         $groupedItemTitles = array();
 
         $itemTitlesGroupedByIdentifiers =
-            $this->getPropertyMapper()->groupDataClassByProperty($itemTitles, ItemTitle::PROPERTY_ID);
+            $this->getPropertyMapper()->groupDataClassByProperty($itemTitles, ItemTitle::PROPERTY_ITEM_ID);
 
         foreach ($itemTitlesGroupedByIdentifiers as $itemIdentifier => $itemTitlesGroupedByIdentifier)
         {
             foreach ($itemTitlesGroupedByIdentifier as $itemTitle)
 
             {
+                if(!array_key_exists($itemIdentifier, $groupedItemTitles))
+                {
+                    $groupedItemTitles[$itemIdentifier] = array();
+                }
+
                 $groupedItemTitles[$itemIdentifier][$itemTitle->getIsocode()] = $itemTitle;
             }
         }
@@ -197,6 +202,7 @@ class ItemCacheService
     protected function getItemTitles(Item $item)
     {
         $groupedItemTitles = $this->getItemTitlesGroupedByItemIdentifierAndIsocode();
+
         $itemKeyExists = array_key_exists($item->getId(), $groupedItemTitles);
 
         return $itemKeyExists ? $groupedItemTitles[$item->getId()] : [];

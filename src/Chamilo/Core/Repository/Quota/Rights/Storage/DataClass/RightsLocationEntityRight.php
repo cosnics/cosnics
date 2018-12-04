@@ -1,13 +1,18 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Rights\Storage\DataClass;
 
-use Chamilo\Core\Repository\Quota\Rights\Storage\DataManager;
-
-class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntityRight
+/**
+ * @package Chamilo\Core\Repository\Quota\Rights\Storage\DataClass
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
+class RightsLocationEntityRight extends \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight
 {
-
-    public function get_data_manager()
+    /**
+     * @return string
+     */
+    public static function get_table_name()
     {
-        return DataManager::getInstance();
+        return 'repository_quota_rights_location_entity_right';
     }
 }

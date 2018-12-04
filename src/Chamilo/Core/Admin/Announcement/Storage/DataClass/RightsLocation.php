@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Storage\DataClass;
 
-use Chamilo\Core\Admin\Announcement\Storage\DataManager;
-
 /**
  * @package Chamilo\Core\Admin\Announcement\Storage\DataClass
  *
@@ -10,11 +8,6 @@ use Chamilo\Core\Admin\Announcement\Storage\DataManager;
  */
 class RightsLocation extends \Chamilo\Libraries\Rights\Domain\RightsLocation
 {
-
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
 
     /**
      * @return string

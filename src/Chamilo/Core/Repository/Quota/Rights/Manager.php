@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Rights;
 
+use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
@@ -20,29 +21,42 @@ abstract class Manager extends Application
 
     public function get_tabs($current_tab, $content)
     {
-        $tabs = new DynamicVisualTabsRenderer(ClassnameUtilities::getInstance()->getNamespaceId(__NAMESPACE__), $content);
-        
+        $tabs =
+            new DynamicVisualTabsRenderer(ClassnameUtilities::getInstance()->getNamespaceId(__NAMESPACE__), $content);
+
         $tabs->add_tab(
             new DynamicVisualTab(
-                self::ACTION_CREATE, 
-                Translation::get('Add'), 
-                Theme::getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . self::ACTION_CREATE), 
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)), 
-                ($current_tab == self::ACTION_CREATE ? true : false)));
+                self::ACTION_CREATE, Translation::get('Add'),
+                Theme::getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . self::ACTION_CREATE),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
+                ($current_tab == self::ACTION_CREATE ? true : false)
+            )
+        );
         $tabs->add_tab(
             new DynamicVisualTab(
-                self::ACTION_ACCESS, 
-                Translation::get('GeneralAccess'), 
-                Theme::getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . self::ACTION_ACCESS), 
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_ACCESS)), 
-                ($current_tab == self::ACTION_ACCESS ? true : false)));
+                self::ACTION_ACCESS, Translation::get('GeneralAccess'),
+                Theme::getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . self::ACTION_ACCESS),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_ACCESS)),
+                ($current_tab == self::ACTION_ACCESS ? true : false)
+            )
+        );
         $tabs->add_tab(
             new DynamicVisualTab(
-                self::ACTION_BROWSE, 
-                Translation::get('Targets'), 
-                Theme::getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . self::ACTION_BROWSE), 
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)), 
-                ($current_tab == self::ACTION_BROWSE ? true : false)));
+                self::ACTION_BROWSE, Translation::get('Targets'),
+                Theme::getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . self::ACTION_BROWSE),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
+                ($current_tab == self::ACTION_BROWSE ? true : false)
+            )
+        );
+
         return $tabs;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
+     */
+    public function getRightsService()
+    {
+        return $this->getService(RightsService::class);
     }
 }
