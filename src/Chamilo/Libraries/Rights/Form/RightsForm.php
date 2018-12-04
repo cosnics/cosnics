@@ -87,7 +87,7 @@ class RightsForm extends FormValidator
     /**
      * Builds the form
      */
-    public function buildForm()
+    protected function buildForm()
     {
         $this->buildInheritanceForm();
 
@@ -106,7 +106,7 @@ class RightsForm extends FormValidator
     /**
      * Builds the form footer
      */
-    private function buildFormFooter()
+    protected function buildFormFooter()
     {
         $translator = $this->getTranslator();
 
@@ -133,7 +133,7 @@ class RightsForm extends FormValidator
     /**
      * Builds the inheritance form (wheter to inherit the rights from parent location or not)
      */
-    private function buildInheritanceForm()
+    protected function buildInheritanceForm()
     {
         $translator = $this->getTranslator();
 
@@ -172,7 +172,7 @@ class RightsForm extends FormValidator
      * @param string $rightName
      * @param integer $rightIdentifier
      */
-    private function buildRightForm($rightName, $rightIdentifier)
+    protected function buildRightForm($rightName, $rightIdentifier)
     {
         $translator = $this->getTranslator();
 

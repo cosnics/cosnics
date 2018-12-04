@@ -18,12 +18,12 @@ class AccessorComponent extends Manager
      */
     public function run()
     {
-        $rightsService = $this->getRightsService();
-
         if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
+
+        $rightsService = $this->getRightsService();
 
         $postBackUrl = new Redirect(
             array(
