@@ -12,13 +12,13 @@ class AdvancedElementFinderElementTypes
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinderElementType[]
+     * @var \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[]
      */
     private $types;
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinderElementType[] $types
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[] $types
      */
     public function __construct($types = array())
     {
@@ -27,7 +27,7 @@ class AdvancedElementFinderElementTypes
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinderElementType[] $types
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[] $types
      */
     public function set_types($types)
     {
@@ -36,7 +36,7 @@ class AdvancedElementFinderElementTypes
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinderElementType[]
+     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[]
      */
     public function get_types()
     {
@@ -46,11 +46,11 @@ class AdvancedElementFinderElementTypes
     /**
      * Adds an element type to the types list
      *
-     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinderElementType $type
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType $type
      */
     public function add_element_type(AdvancedElementFinderElementType $type)
     {
-        if (! $type instanceof AdvancedElementFinderElementType)
+        if (!$type instanceof AdvancedElementFinderElementType)
         {
             return false;
         }

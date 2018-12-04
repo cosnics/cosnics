@@ -2,12 +2,12 @@
 namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocation;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocationEntityRight;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
+use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -32,19 +32,66 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     private $configurationConsulter;
 
     /**
+     * @var \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
+     */
+    private $userEntityProvider;
+
+    /**
+     * @var \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
+     */
+    private $groupEntityProvider;
+
+    /**
      * @param \Chamilo\Libraries\Rights\Storage\Repository\RightsRepository $rightsRepository
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
+     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
      */
     public function __construct(
         RightsRepository $rightsRepository, UserService $userService, Translator $translator,
-        ConfigurationConsulter $configurationConsulter
+        ConfigurationConsulter $configurationConsulter, UserEntityProvider $userEntityProvider,
+        GroupEntityProvider $groupEntityProvider
     )
     {
         parent::__construct($rightsRepository, $userService, $translator);
 
         $this->configurationConsulter = $configurationConsulter;
+        $this->userEntityProvider = $userEntityProvider;
+        $this->groupEntityProvider = $groupEntityProvider;
+    }
+
+    /**
+     * @return \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
+     */
+    public function getGroupEntityProvider(): GroupEntityProvider
+    {
+        return $this->groupEntityProvider;
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
+     */
+    public function setGroupEntityProvider(GroupEntityProvider $groupEntityProvider): void
+    {
+        $this->groupEntityProvider = $groupEntityProvider;
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
+     */
+    public function getUserEntityProvider(): UserEntityProvider
+    {
+        return $this->userEntityProvider;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
+     */
+    public function setUserEntityProvider(UserEntityProvider $userEntityProvider): void
+    {
+        $this->userEntityProvider = $userEntityProvider;
     }
 
     /**
@@ -202,13 +249,14 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     }
 
     /**
-     * @return \Chamilo\Core\Rights\Entity\RightsEntity[]
+     * @return \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[]
      */
     public function getAvailableEntities()
     {
         $entities = array();
-        $entities[UserEntity::ENTITY_TYPE] = UserEntity::getInstance();
-        $entities[PlatformGroupEntity::ENTITY_TYPE] = PlatformGroupEntity::getInstance();
+        
+        $entities[UserEntityProvider::ENTITY_TYPE] = $this->getUserEntityProvider();
+        $entities[GroupEntityProvider::ENTITY_TYPE] = $this->getGroupEntityProvider();
 
         return $entities;
     }

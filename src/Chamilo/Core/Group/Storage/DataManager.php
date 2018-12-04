@@ -161,6 +161,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static $allSubscribedGroupsCache = array();
 
+    /**
+     * @param $user_id
+     * @param bool $only_retrieve_ids
+     *
+     * @return mixed
+     * @deprecated Replaced by GroupService::findAllSubscribedGroupIdentifiersForUserIdentifier() and GroupService::findAllSubscribedGroupsForUserIdentifier()
+     */
     public static function retrieve_all_subscribed_groups_array($user_id, $only_retrieve_ids = false)
     {
         $cacheId = md5(serialize(array($user_id, $only_retrieve_ids)));

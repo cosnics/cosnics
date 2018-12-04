@@ -1,14 +1,14 @@
 {
-    "name": "cosnics/core-user-integration-chamilo-core-admin",
+    "name": "cosnics/core-user-integration-chamilo-libraries-rights",
     "version": "1.0.0",
-    "description": "Core User Integration Chamilo Core Admin",
+    "description": "Core User Integration Chamilo Libraries Rights",
     "keywords": [
         "Core",
         "User",
         "Integration",
         "Chamilo",
-        "Core",
-        "Admin"
+        "Libraries",
+        "Rights"
     ],
     "homepage": "http://www.cosnics.org",
     "license": "MIT",
@@ -27,8 +27,8 @@
     },
     "extra": {
         "cosnics": {
-            "name": "Admin",
-            "context": "Chamilo\\Core\\User\\Integration\\Chamilo\\Core\\Admin",
+            "name": "Rights",
+            "context": "Chamilo\\Core\\User\\Integration\\Chamilo\\Libraries\\Rights",
             "type": "Chamilo\\Core\\User\\Integration",
             "dependencies": [
                 {
@@ -36,7 +36,7 @@
                     "version": ">=1.0.0"
                 },
                 {
-                    "id": "Chamilo\\Core\\Admin",
+                    "id": "Chamilo\\Libraries\\Rights",
                     "version": ">=1.0.0"
                 }
             ],

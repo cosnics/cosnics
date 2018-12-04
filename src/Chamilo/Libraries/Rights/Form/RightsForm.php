@@ -56,7 +56,7 @@ class RightsForm extends FormValidator
     private $availableRights;
 
     /**
-     * @var array
+     * @var \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[]
      */
     private $entities;
 
@@ -65,7 +65,9 @@ class RightsForm extends FormValidator
      * @param \Symfony\Component\Translation\Translator $translator
      * @param boolean $isAllowedToInherit
      * @param integer[] $availableRights
-     * @param array $entities
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
+     *
+     * @throws \Exception
      */
     public function __construct(
         string $postBackUrl, Translator $translator, bool $isAllowedToInherit, array $availableRights, array $entities
@@ -199,9 +201,9 @@ class RightsForm extends FormValidator
         // Add the advanced element finder
         $types = new AdvancedElementFinderElementTypes();
 
-        foreach ($this->entities as $entity)
+        foreach ($this->getEntities() as $entity)
         {
-            $types->add_element_type($entity->get_element_finder_type());
+            $types->add_element_type($entity->getEntityElementFinderType());
         }
 
         $this->addElement('html', '<div style="margin-left:25px; display:none;" class="entity_selector_box">');
@@ -223,7 +225,7 @@ class RightsForm extends FormValidator
     }
 
     /**
-     * @return array
+     * @return \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[]
      */
     public function getEntities(): array
     {
@@ -233,7 +235,7 @@ class RightsForm extends FormValidator
     /**
      * @param integer $entityType
      *
-     * @return \Chamilo\Core\Rights\Entity\RightsEntity
+     * @return \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider
      */
     public function getEntityByType(int $entityType)
     {
@@ -352,7 +354,7 @@ class RightsForm extends FormValidator
                 foreach ($rightTargetEntityIdentifiers as $rightTargetEntityIdentifier)
                 {
                     $defaultElements->add_element(
-                        $entity->get_element_finder_element($rightTargetEntityIdentifier)
+                        $entity->getEntityElementFinderElement($rightTargetEntityIdentifier)
                     );
                 }
             }
@@ -360,7 +362,7 @@ class RightsForm extends FormValidator
             $element = $this->getElement(self::PROPERTY_TARGETS . '[' . $rightIdentifier . ']');
             $element->setDefaultValues($defaultElements);
         }
-
+        
         parent::setDefaults($defaults);
     }
 }

@@ -33,7 +33,7 @@ class Utilities
      * For example, the query /"chamilo repository" utilities/ would be parsed into
      * array('chamilo repository', 'utilities').
      *
-     * @param $pattern The query.
+     * @param string $pattern
      * @return string[] The query's parts.
      */
     public static function split_query($pattern)
@@ -415,23 +415,6 @@ class Utilities
                 return $class_name;
             }
         }
-    }
-
-    /**
-     *
-     * @param string[] $items
-     * @return string[]
-     */
-    public static function clone_array($items)
-    {
-        $result = array();
-
-        foreach ($items as $key => $value)
-        {
-            $result[$key] = is_object($value) ? clone ($value) : $value;
-        }
-
-        return $result;
     }
 
     /**
