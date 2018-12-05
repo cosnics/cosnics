@@ -26,13 +26,30 @@
     }
 
     .tab-pane#notifications {
+        padding: 0;
+    }
+
+    .tab-pane#notifications .assignment-notifications-list {
         max-height: 500px;
         overflow-y: scroll;
-        padding: 0;
     }
 
     .tab-pane#notifications .list-group-item:last-child {
         border-bottom: none;
+    }
+
+    .notifications-beta-warning {
+        padding: 7px;
+        background-color: #f5f5f5;
+        color: brown !important;
+        text-align: center;
+        font-weight: bold;
+        border-top: 1px solid lightgrey;
+    }
+
+    .notifications-beta-warning a {
+        color: brown;
+        font-weight: bold;
     }
 
 </style>
@@ -61,11 +78,14 @@
 
 <div class="dynamic-visual-tab-content tab-content">
     <div role="tabpanel" class="tab-pane tab-pane-with-border" id="notifications">
+        <div class="assignment-notifications-list">
         <notifications-list ref="notifications" scroll-detector-element="#notifications"
                 retrieve-notifications-url="{{ NOTIFICATIONS_URL }}"
                 view-notification-url="{{ VIEW_NOTIFICATION_URL }}"
                 :load-on-startup="false">
         </notifications-list>
+        </div>
+        <div class="notifications-beta-warning">{{ 'BETAWarning'|trans({'{ADMIN_EMAIL}': ADMIN_EMAIL}, 'Chamilo\\Application\\Weblcms\\Integration\\Chamilo\\Core\\Home')|raw }}</div>
     </div>
     <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entities">
         {{ ENTITY_TABLE|raw }}

@@ -364,6 +364,27 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             }
         }
 
+        $targetUserIds = $this->filterTargetUsers($entry, $targetUserIds);
+
         return array_unique($targetUserIds);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry $entry
+     * @param array $targetUserIds
+     *
+     * @return array
+     */
+    protected function filterTargetUsers(Entry $entry, $targetUserIds = [])
+    {
+        foreach($targetUserIds as $key => $targetUserId)
+        {
+            if($targetUserId == $this->getUserId($entry))
+            {
+                unset($targetUserIds[$key]);
+            }
+        }
+
+        return $targetUserIds;
     }
 }

@@ -148,6 +148,8 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
             $targetUserIds[] = $feedback->get_user_id();
         }
 
+        $targetUserIds = $this->filterTargetUsers($entry, $targetUserIds);
+
         return array_unique($targetUserIds);
     }
 

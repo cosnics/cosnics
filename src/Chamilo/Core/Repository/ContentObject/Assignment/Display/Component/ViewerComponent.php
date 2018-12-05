@@ -125,7 +125,8 @@ class ViewerComponent extends Manager implements TableSupport
             'ADMINISTRATOR_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email']),
             'NOTIFICATIONS_URL' => $notificationsUrl,
             'NOTIFICATIONS_COUNT' => $notificationsCount,
-            'VIEW_NOTIFICATION_URL' => $viewNotificationUrl
+            'VIEW_NOTIFICATION_URL' => $viewNotificationUrl,
+            'ADMIN_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email'])
         ];
     }
 
