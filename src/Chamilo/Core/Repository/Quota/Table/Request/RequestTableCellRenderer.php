@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Quota\Table\Request;
 
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Manager;
+use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -13,14 +14,133 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Symfony\Component\Translation\Translator;
 
 class RequestTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     * @var \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
+     */
+    private $rightsService;
+
+    /**
+     * @param $table
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
+     *
+     * @throws \Exception
+     */
+    public function __construct($table, Translator $translator, RightsService $rightsService)
+    {
+        parent::__construct($table);
+
+        $this->translator = $translator;
+        $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    public function get_actions($object)
+    {
+        $rightsService = $this->getRightsService();
+        $toolbar = new Toolbar();
+
+        if ($rightsService->canUserViewQuotaRequests($this->get_component()->getUser()))
+        {
+            if (!$object->was_granted() && $rightsService->isUserIdentifierTargetForUser(
+                    $object->get_user_id(), $this->get_component()->getUser()
+                ))
+            {
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation::get('Grant'),
+                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Grant'),
+                        $this->get_component()->get_url(
+                            array(
+                                Manager::PARAM_ACTION => Manager::ACTION_GRANT,
+                                Manager::PARAM_REQUEST_ID => $object->get_id()
+                            )
+                        ), ToolbarItem::DISPLAY_ICON
+                    )
+                );
+            }
+
+            if (!$object->is_pending() && $rightsService->isUserIdentifierTargetForUser(
+                    $object->get_user_id(), $this->get_component()->getUser()
+                ))
+            {
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation::get('Deny'),
+                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Deny'),
+                        $this->get_component()->get_url(
+                            array(
+                                Manager::PARAM_ACTION => Manager::ACTION_DENY,
+                                Manager::PARAM_REQUEST_ID => $object->get_id()
+                            )
+                        ), ToolbarItem::DISPLAY_ICON
+                    )
+                );
+            }
+        }
+
+        if ($this->get_component()->get_user()->is_platform_admin() ||
+            ($this->get_component()->get_user_id() == $object->get_user_id() && $object->is_pending()))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Delete'), $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE, Manager::PARAM_REQUEST_ID => $object->get_id()
+                    )
+                ), ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+
+        return $toolbar->render();
+    }
 
     public function render_cell($column, $object)
     {
         $calculator = new Calculator($object->get_user());
-        
+
         switch ($column->get_name())
         {
             case Translation::get('User') :
@@ -38,60 +158,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             case Translation::get('MaximumUsedDiskSpace') :
                 return Filesystem::format_file_size($calculator->getMaximumUserDiskQuota());
         }
-        return parent::render_cell($column, $object);
-    }
 
-    public function get_actions($object)
-    {
-        $toolbar = new Toolbar();
-        
-        if (\Chamilo\Core\Repository\Quota\Rights\Rights::getInstance()->quota_is_allowed())
-        {
-            if (! $object->was_granted() && (\Chamilo\Core\Repository\Quota\Rights\Rights::getInstance()->is_target_user(
-                $this->get_component()->get_user(), 
-                $object->get_user_id()) || $this->get_component()->get_user()->is_platform_admin()))
-            {
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation::get('Grant'), 
-                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Grant'), 
-                        $this->get_component()->get_url(
-                            array(
-                                Manager::PARAM_ACTION => Manager::ACTION_GRANT, 
-                                Manager::PARAM_REQUEST_ID => $object->get_id())), 
-                        ToolbarItem::DISPLAY_ICON));
-            }
-            
-            if ($object->is_pending() && (\Chamilo\Core\Repository\Quota\Rights\Rights::getInstance()->is_target_user(
-                $this->get_component()->get_user(), 
-                $object->get_user_id()) || $this->get_component()->get_user()->is_platform_admin()))
-            {
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation::get('Deny'), 
-                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Deny'), 
-                        $this->get_component()->get_url(
-                            array(
-                                Manager::PARAM_ACTION => Manager::ACTION_DENY, 
-                                Manager::PARAM_REQUEST_ID => $object->get_id())), 
-                        ToolbarItem::DISPLAY_ICON));
-            }
-        }
-        
-        if ($this->get_component()->get_user()->is_platform_admin() ||
-             ($this->get_component()->get_user_id() == $object->get_user_id() && $object->is_pending()))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'), 
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_DELETE, 
-                            Manager::PARAM_REQUEST_ID => $object->get_id())), 
-                    ToolbarItem::DISPLAY_ICON));
-        }
-        
-        return $toolbar->as_html();
+        return parent::render_cell($column, $object);
     }
 }

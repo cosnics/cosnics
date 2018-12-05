@@ -2,12 +2,14 @@
 namespace Chamilo\Core\Repository\Quota\Table\Request;
 
 use Chamilo\Core\Repository\Quota\Manager;
+use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Symfony\Component\Translation\Translator;
 
 class RequestTable extends DataClassTable implements TableFormActionsSupport
 {
@@ -17,35 +19,118 @@ class RequestTable extends DataClassTable implements TableFormActionsSupport
     const TYPE_GRANTED = 3;
     const TYPE_DENIED = 4;
 
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     * @var \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
+     */
+    private $rightsService;
+
+    /**
+     * @param $component
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
+     *
+     * @throws \Exception
+     */
+    public function __construct(
+        $component, Translator $translator, RightsService $rightsService
+    )
+    {
+        $this->translator = $translator;
+        $this->rightsService = $rightsService;
+
+        parent::__construct($component);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Quota\Table\Request\RequestTableCellRenderer|\Chamilo\Libraries\Format\Table\TableCellRenderer
+     * @throws \Exception
+     */
+    public function get_cell_renderer()
+    {
+        if (!isset($this->cellRenderer))
+        {
+            $this->cellRenderer =
+                new RequestTableCellRenderer($this, $this->getTranslator(), $this->getRightsService());
+        }
+
+        return $this->cellRenderer;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
+     */
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
-        
-        if ($this->get_component()->get_user()->is_platform_admin())
+
+        if ($this->getRightsService()->canUserViewAllQuotaRequests($this->get_component()->getUser()))
         {
             if ($this->get_component()->get_table_type() == self::TYPE_PENDING ||
-                 $this->get_component()->get_table_type() == self::TYPE_DENIED)
+                $this->get_component()->get_table_type() == self::TYPE_DENIED)
             {
                 $actions->add_form_action(
                     new TableFormAction(
-                        $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_GRANT)), 
-                        Translation::get('GrantSelected', null, Utilities::COMMON_LIBRARIES)));
+                        $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_GRANT)),
+                        Translation::get('GrantSelected', null, Utilities::COMMON_LIBRARIES)
+                    )
+                );
             }
-            
+
             if ($this->get_component()->get_table_type() == self::TYPE_PENDING)
             {
                 $actions->add_form_action(
                     new TableFormAction(
-                        $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DENY)), 
-                        Translation::get('DenySelected', null, Utilities::COMMON_LIBRARIES)));
+                        $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DENY)),
+                        Translation::get('DenySelected', null, Utilities::COMMON_LIBRARIES)
+                    )
+                );
             }
         }
-        
+
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)), 
-                Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES)));
-        
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)),
+                Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES)
+            )
+        );
+
         return $actions;
     }
 }

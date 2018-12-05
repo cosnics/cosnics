@@ -664,6 +664,23 @@ abstract class RightsService
     }
 
     /**
+     * @param integer $right
+     * @param integer[] $entityIdentifiers
+     * @param integer $entityType
+     * @param integer $locationIdentifier
+     *
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[]
+     */
+    protected function findRightsLocationEntityRightsByParameters(
+        int $right, array $entityIdentifiers, int $entityType, int $locationIdentifier
+    )
+    {
+        return $this->getRightsRepository()->findRightsLocationEntityRightsByParameters(
+            $right, $entityIdentifiers, $entityType, $locationIdentifier
+        );
+    }
+
+    /**
      * @param integer[] $identifiers
      * @param integer $type
      *

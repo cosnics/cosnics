@@ -1,90 +1,67 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Rights\Component;
 
-use Chamilo\Core\Repository\Quota\Manager;
-use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
-use Chamilo\Core\Repository\Quota\Rights\Storage\DataManager;
+use Chamilo\Core\Repository\Quota\Rights\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 
+/**
+ * @package Chamilo\Core\Repository\Quota\Rights\Component
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class DeleterComponent extends Manager
 {
 
+    /**
+     * @return void
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     */
     public function run()
     {
-        if (!$this->getRightsService()->canUserConfigureQuotaRequestManagement($this->getUser()))
+        if (!$this->getRightsService()->canUserSetRightsForQuotaRequests($this->getUser()))
         {
             throw new NotAllowedException();
         }
-        
-        $ids = $this->getRequest()->get(self::PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID);
+
+        $rightsLocationEntityRightGroups = $this->getRightsLocationEntityRightGroups();
         $failures = 0;
-        
-        if (! empty($ids))
+
+        foreach ($rightsLocationEntityRightGroups as $rightsLocationEntityRightGroup)
         {
-            if (! is_array($ids))
+            if (!$this->getRightsService()->deleteRightsLocationEntityRightGroup($rightsLocationEntityRightGroup))
             {
-                $ids = array($ids);
+                $failures ++;
             }
-            
-            foreach ($ids as $id)
-            {
-                $location_entity_right_group = DataManager::retrieve_by_id(
-                    RightsLocationEntityRightGroup::class_name(), 
-                    (int) $id);
-                
-                if (! $location_entity_right_group->delete())
-                {
-                    $failures ++;
-                }
-            }
-            
-            if ($failures)
-            {
-                if (count($ids) == 1)
-                {
-                    $message = 'ObjectNotDeleted';
-                    $parameter = array('OBJECT' => Translation::get('RightsLocationEntityRightGroup'));
-                }
-                elseif (count($ids) > $failures)
-                {
-                    $message = 'SomeObjectsNotDeleted';
-                    $parameter = array('OBJECTS' => Translation::get('RightsLocationEntityRightGroups'));
-                }
-                else
-                {
-                    $message = 'ObjectsNotDeleted';
-                    $parameter = array('OBJECTS' => Translation::get('RightsLocationEntityRightGroups'));
-                }
-            }
-            else
-            {
-                if (count($ids) == 1)
-                {
-                    $message = 'ObjectDeleted';
-                    $parameter = array('OBJECT' => Translation::get('RightsLocationEntityRightGroup'));
-                }
-                else
-                {
-                    $message = 'ObjectsDeleted';
-                    $parameter = array('OBJECTS' => Translation::get('RightsLocationEntityRightGroups'));
-                }
-            }
-            
-            $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), 
-                ($failures ? true : false), 
-                array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE));
         }
-        else
+
+        $message = $this->get_result(
+            $failures, count($rightsLocationEntityRightGroups), 'ObjectNotDeleted', 'ObjectsNotDeleted',
+            'ObjectDeleted', 'ObjectsDeleted'
+        );
+
+        $this->redirect($message, ($failures ? true : false), array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE));
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     */
+    protected function getRightsLocationEntityRightGroups()
+    {
+        $identifiers = $this->getRequest()->query->get(self::PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID);
+
+        if (is_null($identifiers))
         {
-            return $this->display_error_page(
-                htmlentities(
-                    Translation::get(
-                        'NoObjectSelected', 
-                        array('OBJECT' => Translation::get('RightsLocationEntityRightGroup')), 
-                        Utilities::COMMON_LIBRARIES)));
+            throw new ParameterNotDefinedException(self::PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID);
         }
+
+        if (!is_array($identifiers))
+        {
+            $identifiers = array($identifiers);
+        }
+
+        return $this->getRightsService()->findRightsLocationEntityRightGroupByIdentifiers($identifiers);
     }
 }

@@ -321,9 +321,18 @@ class UserService
 
     /**
      *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function findPlatformAdministrators()
+    {
+        return $this->getUserRepository()->findPlatformAdministrators();
+    }
+
+    /**
+     *
      * @param integer[] $userIdentifiers
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
     public function findUsersByIdentifiersOrderedByName($userIdentifiers)
     {

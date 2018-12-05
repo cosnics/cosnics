@@ -9,9 +9,14 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 class BrowserComponent extends Manager implements TableSupport
 {
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Exception
+     */
     public function run()
     {
-        if (!$this->getRightsService()->canUserConfigureQuotaRequestManagement($this->getUser()))
+        if (!$this->getRightsService()->canUserSetRightsForQuotaRequests($this->getUser()))
         {
             throw new NotAllowedException();
         }

@@ -310,6 +310,27 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function findPlatformAdministrators()
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User::class, User::PROPERTY_PLATFORMADMIN), new StaticConditionVariable(1)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User::class, User::PROPERTY_ACTIVE), new StaticConditionVariable(1)
+        );
+
+        return $this->getDataClassRepository()->retrieves(
+            User::class, new DataClassRetrievesParameters(new AndCondition($conditions))
+        );
+    }
+
+    /**
      * @param string $searchQuery
      * @param integer $offset
      * @param integer $count

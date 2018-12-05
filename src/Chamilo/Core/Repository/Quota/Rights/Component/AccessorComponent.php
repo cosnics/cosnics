@@ -8,6 +8,11 @@ use Chamilo\Libraries\Rights\Form\RightsForm;
 use Chamilo\Core\Repository\Manager as RepositoryManager;
 use Chamilo\Core\Repository\Quota\Manager as QuotaManager;
 
+/**
+ * @package Chamilo\Core\Repository\Quota\Rights\Component
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class AccessorComponent extends Manager
 {
 
@@ -18,21 +23,20 @@ class AccessorComponent extends Manager
      */
     public function run()
     {
-        if (!$this->getRightsService()->canUserConfigureQuotaRequestManagement($this->getUser()))
+        if (!$this->getRightsService()->canUserSetRightsForQuotaRequests($this->getUser()))
         {
             throw new NotAllowedException();
         }
 
         $rightsService = $this->getRightsService();
 
-        $postBackUrl = new Redirect(
-            array(
-                RepositoryManager::PARAM_CONTEXT => RepositoryManager::package(),
-                RepositoryManager::PARAM_ACTION => RepositoryManager::ACTION_QUOTA,
-                QuotaManager::PARAM_ACTION => QuotaManager::ACTION_RIGHTS,
-                Manager::PARAM_ACTION => Manager::ACTION_ACCESS
-            )
+        $urlParameters = array(
+            RepositoryManager::PARAM_CONTEXT => RepositoryManager::package(),
+            RepositoryManager::PARAM_ACTION => RepositoryManager::ACTION_QUOTA,
+            QuotaManager::PARAM_ACTION => QuotaManager::ACTION_RIGHTS, Manager::PARAM_ACTION => Manager::ACTION_ACCESS
         );
+
+        $postBackUrl = new Redirect($urlParameters);
 
         $rightsForm = new RightsForm(
             $postBackUrl->getUrl(), $this->getTranslator(), false, $rightsService->getAvailableRights(),
@@ -55,7 +59,7 @@ class AccessorComponent extends Manager
                 'Chamilo\Libraries\Rights'
             );
 
-            $postBackUrl->toUrl();
+            $this->redirect($message, !$success, $urlParameters);
         }
 
         $html = array();

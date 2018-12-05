@@ -1,8 +1,14 @@
 <?php
 namespace Chamilo\Core\Repository\Quota;
 
+use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 
+/**
+ * @package Chamilo\Core\Repository\Quota
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 abstract class Manager extends Application
 {
     const PARAM_ACTION = 'quota_action';
@@ -16,4 +22,12 @@ abstract class Manager extends Application
     const ACTION_GRANT = 'Granter';
     const ACTION_RIGHTS = 'Rights';
     const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    /**
+     * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
+     */
+    public function getRightsService()
+    {
+        return $this->getService(RightsService::class);
+    }
 }

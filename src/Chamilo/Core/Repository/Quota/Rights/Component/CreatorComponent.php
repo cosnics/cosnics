@@ -14,10 +14,11 @@ class CreatorComponent extends Manager
     /**
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Exception
      */
     public function run()
     {
-        if (!$this->getRightsService()->canUserConfigureQuotaRequestManagement($this->getUser()))
+        if (!$this->getRightsService()->canUserSetRightsForQuotaRequests($this->getUser()))
         {
             throw new NotAllowedException();
         }
