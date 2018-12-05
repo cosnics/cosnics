@@ -401,7 +401,7 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      * @param integer $contentObjectId
      * @param string $ipAddress
      *
-     * @return void
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -428,6 +428,8 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
 
             $this->jobProducer->produceJob($job, 'notifications');
         }
+
+        return $entry;
     }
 
     /**
