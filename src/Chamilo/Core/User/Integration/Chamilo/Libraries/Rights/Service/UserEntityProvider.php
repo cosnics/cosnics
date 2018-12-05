@@ -6,6 +6,8 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -79,6 +81,23 @@ class UserEntityProvider implements RightsEntityProvider
     /**
      * @param integer $entityIdentifier
      *
+     * @return string
+     */
+    public function getEntityDescriptionByIdentifier(int $entityIdentifier)
+    {
+        $user = $this->getUserService()->findUserByIdentifier($entityIdentifier);
+
+        if (!$user instanceof User)
+        {
+            return null;
+        }
+
+        return $user->get_official_code();
+    }
+
+    /**
+     * @param integer $entityIdentifier
+     *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement
      */
     public function getEntityElementFinderElement(int $entityIdentifier)
@@ -91,8 +110,9 @@ class UserEntityProvider implements RightsEntityProvider
         }
 
         return new AdvancedElementFinderElement(
-            static::ENTITY_TYPE . '_' . $entityIdentifier, 'type type_user', $user->get_fullname(),
-            $user->get_official_code()
+            static::ENTITY_TYPE . '_' . $entityIdentifier, 'type type_user',
+            $this->getEntityTitleByIdentifier($entityIdentifier),
+            $this->getEntityDescriptionByIdentifier($entityIdentifier)
         );
     }
 
@@ -123,6 +143,23 @@ class UserEntityProvider implements RightsEntityProvider
     public function getEntityName()
     {
         return self::ENTITY_NAME;
+    }
+
+    /**
+     * @param integer $entityIdentifier
+     *
+     * @return string
+     */
+    public function getEntityTitleByIdentifier(int $entityIdentifier)
+    {
+        $user = $this->getUserService()->findUserByIdentifier($entityIdentifier);
+
+        if (!$user instanceof User)
+        {
+            return null;
+        }
+
+        return $user->get_fullname();
     }
 
     /**
@@ -189,5 +226,13 @@ class UserEntityProvider implements RightsEntityProvider
     public function setUserService(UserService $userService): void
     {
         $this->userService = $userService;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
+     */
+    public function getEntityGlyph()
+    {
+        return new FontAwesomeGlyph('user', [], $this->getEntityTranslatedName());
     }
 }

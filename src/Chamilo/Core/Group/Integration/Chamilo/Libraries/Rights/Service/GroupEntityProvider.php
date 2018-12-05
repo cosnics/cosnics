@@ -6,6 +6,8 @@ use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -57,54 +59,6 @@ class GroupEntityProvider implements RightsEntityProvider
     }
 
     /**
-     * @return \Chamilo\Core\Group\Service\GroupService
-     */
-    public function getGroupService(): GroupService
-    {
-        return $this->groupService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Service\GroupService $groupService
-     */
-    public function setGroupService(GroupService $groupService): void
-    {
-        $this->groupService = $groupService;
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
-    public function setStringUtilities(StringUtilities $stringUtilities): void
-    {
-        $this->stringUtilities = $stringUtilities;
-    }
-
-    /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return integer
@@ -132,6 +86,23 @@ class GroupEntityProvider implements RightsEntityProvider
     /**
      * @param integer $entityIdentifier
      *
+     * @return string
+     */
+    public function getEntityDescriptionByIdentifier(int $entityIdentifier)
+    {
+        $group = $this->getGroupService()->findGroupByIdentifier($entityIdentifier);
+
+        if (!$group instanceof Group)
+        {
+            return null;
+        }
+
+        return strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
+    }
+
+    /**
+     * @param integer $entityIdentifier
+     *
      * @return mixed
      */
     public function getEntityElementFinderElement(int $entityIdentifier)
@@ -143,10 +114,10 @@ class GroupEntityProvider implements RightsEntityProvider
             return null;
         }
 
-        $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
-
         return new AdvancedElementFinderElement(
-            static::ENTITY_TYPE . '_' . $entityIdentifier, 'type type_group', $group->get_name(), $description
+            static::ENTITY_TYPE . '_' . $entityIdentifier, 'type type_group',
+            $this->getEntityTitleByIdentifier($entityIdentifier),
+            $this->getEntityDescriptionByIdentifier($entityIdentifier)
         );
     }
 
@@ -187,6 +158,23 @@ class GroupEntityProvider implements RightsEntityProvider
     }
 
     /**
+     * @param integer $entityIdentifier
+     *
+     * @return string
+     */
+    public function getEntityTitleByIdentifier(int $entityIdentifier)
+    {
+        $group = $this->getGroupService()->findGroupByIdentifier($entityIdentifier);
+
+        if (!$group instanceof Group)
+        {
+            return null;
+        }
+
+        return $group->get_name();
+    }
+
+    /**
      * @return string
      */
     public function getEntityTranslatedName()
@@ -202,5 +190,61 @@ class GroupEntityProvider implements RightsEntityProvider
     public function getEntityType()
     {
         return static::ENTITY_TYPE;
+    }
+
+    /**
+     * @return \Chamilo\Core\Group\Service\GroupService
+     */
+    public function getGroupService(): GroupService
+    {
+        return $this->groupService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Service\GroupService $groupService
+     */
+    public function setGroupService(GroupService $groupService): void
+    {
+        $this->groupService = $groupService;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Utilities\StringUtilities
+     */
+    public function getStringUtilities(): StringUtilities
+    {
+        return $this->stringUtilities;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     */
+    public function setStringUtilities(StringUtilities $stringUtilities): void
+    {
+        $this->stringUtilities = $stringUtilities;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
+     */
+    public function getEntityGlyph()
+    {
+        return new FontAwesomeGlyph('users', [], $this->getEntityTranslatedName());
     }
 }

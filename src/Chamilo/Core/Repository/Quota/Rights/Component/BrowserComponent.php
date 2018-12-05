@@ -11,19 +11,19 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function run()
     {
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->getRightsService()->canUserConfigureQuotaRequestManagement($this->getUser()))
         {
             throw new NotAllowedException();
         }
-        
-        $table = new EntityTable($this);
-        
+
+        $table = new EntityTable($this, $this->getTranslator(), $this->getRightsService());
+
         $html = array();
-        
+
         $html[] = $this->render_header();
-        $html[] = $this->get_tabs(self::ACTION_BROWSE, $table->as_html())->render();
+        $html[] = $this->get_tabs(self::ACTION_BROWSE, $table->render())->render();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 

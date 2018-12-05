@@ -2,83 +2,135 @@
 namespace Chamilo\Core\Repository\Quota\Rights\Table\Entity;
 
 use Chamilo\Core\Repository\Quota\Rights\Manager;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
+use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight;
+use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Symfony\Component\Translation\Translator;
 
-class EntityTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
+/**
+ * @package Chamilo\Core\Repository\Quota\Rights\Table\Entity
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
+class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
 
-    public function render_cell($column, $object)
+    /**
+     * @var \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
+     */
+    private $rightsService;
+
+    /**
+     * @param $table
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
+     *
+     * @throws \Exception
+     */
+    public function __construct($table, Translator $translator, RightsService $rightsService)
     {
-        switch ($column->get_name())
-        {
-            case Translation::get('Type') :
-                $location_entity_right = $object->get_location_entity_right();
-                
-                switch ($location_entity_right->get_entity_type())
-                {
-                    case UserEntity::ENTITY_TYPE :
-                        $context = \Chamilo\Core\User\Storage\DataClass\User::context();
-                        break;
-                    case PlatformGroupEntity::ENTITY_TYPE :
-                        $context = \Chamilo\Core\Group\Storage\DataClass\Group::context();
-                        break;
-                }
-                
-                return Theme::getInstance()->getImage(
-                    'Logo/16', 
-                    'png', 
-                    Translation::get('TypeName', null, $context), 
-                    null, 
-                    ToolbarItem::DISPLAY_ICON, 
-                    false, 
-                    $context);
-            case Translation::get('Entity') :
-                $location_entity_right = $object->get_location_entity_right();
-                switch ($location_entity_right->get_entity_type())
-                {
-                    case UserEntity::ENTITY_TYPE :
-                        return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
-                            (int) $location_entity_right->get_entity_id())->get_fullname();
-                    case PlatformGroupEntity::ENTITY_TYPE :
-                        return \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-                            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
-                            (int) $location_entity_right->get_entity_id())->get_name();
-                }
-            case Translation::get('Group') :
-                return $object->get_group()->get_name();
-            case Translation::get('Path') :
-                return $object->get_group()->get_fully_qualified_name();
-        }
-        
-        return parent::render_cell($column, $object);
+        parent::__construct($table);
+
+        $this->translator = $translator;
+        $this->rightsService = $rightsService;
     }
 
-    public function get_actions($object)
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @param string[] $record
+     *
+     * @return string
+     */
+    public function get_actions($record)
     {
         $toolbar = new Toolbar();
-        
-        if ($this->get_component()->get_user()->is_platform_admin())
+
+        if ($this->get_component()->getUser()->is_platform_admin())
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'), 
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_DELETE, 
-                            Manager::PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID => $object->get_id())), 
-                    ToolbarItem::DISPLAY_ICON));
+                    $this->getTranslator()->trans('Delete', [], Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Delete'), $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE,
+                        Manager::PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID => $record[RightsLocationEntityRightGroup::PROPERTY_ID]
+                    )
+                ), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
-        
-        return $toolbar->as_html();
+
+        return $toolbar->render();
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
+     * @param string[] $record
+     *
+     * @return string
+     */
+    public function render_cell($column, $record)
+    {
+        switch ($column->get_name())
+        {
+            case RightsLocationEntityRight::PROPERTY_ENTITY_TYPE :
+                $entityType = $record[RightsLocationEntityRight::PROPERTY_ENTITY_TYPE];
+
+                if ($entityType != 0)
+                {
+                    $entityProvider = $this->getRightsService()->getAvailableEntityByType($entityType);
+
+                    return $entityProvider->getEntityGlyph()->render();
+                }
+
+                $glyph = new FontAwesomeGlyph('globe');
+
+                return $glyph->render();
+        }
+
+        return parent::render_cell($column, $record);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
     }
 }

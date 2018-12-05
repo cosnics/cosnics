@@ -18,7 +18,7 @@ class AccessorComponent extends Manager
      */
     public function run()
     {
-        if (!$this->getUser()->is_platform_admin())
+        if (!$this->getRightsService()->canUserConfigureQuotaRequestManagement($this->getUser()))
         {
             throw new NotAllowedException();
         }

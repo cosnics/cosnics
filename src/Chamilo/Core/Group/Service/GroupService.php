@@ -61,7 +61,6 @@ class GroupService
             $directlySubscribedGroupNestingValues =
                 $this->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
 
-
             if (count($directlySubscribedGroupNestingValues) > 0)
             {
                 $this->userSubscribedGroupIdentifiers[$userIdentifier] =
@@ -269,5 +268,16 @@ class GroupService
     {
         $group = $this->findGroupByCode($groupCode);
         $this->subscribeUserToGroup($group, $user);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     *
+     * @return string
+     * @todo This should be rewritten when implementing the new NestedSetDataClassRepository for Group objects
+     */
+    public function getGroupPath(Group $group)
+    {
+        return $group->get_fully_qualified_name();
     }
 }

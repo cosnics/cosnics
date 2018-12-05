@@ -1,13 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Rights\Service;
 
+use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Rights\Domain\RightsLocation;
 use Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight;
 use Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Libraries\Rights\Form\RightsForm;
 use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
-use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
@@ -190,6 +191,58 @@ abstract class RightsService
         return $this->createRightsLocationFromParameters(
             self::TYPE_ROOT, 0, 0, 0, 0, $treeIdentifier, $treeType, $returnLocation
         );
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[][] $values
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    protected function deleteAndCreateRightsLocationEntityRightsForRightsLocationAndUserFromValues(
+        RightsLocation $location, User $user, array $values
+    )
+    {
+        if (!$this->deleteRightsLocationEntityRightsForLocation($location))
+        {
+            return false;
+        }
+
+        $success = true;
+
+        foreach ($values[RightsForm::PROPERTY_RIGHT_OPTION] as $rightIdentifier => $rightsOption)
+        {
+            switch ($rightsOption)
+            {
+                case RightsForm::RIGHT_OPTION_ALL :
+                    $success &= $this->createRightsLocationEntityRightFromParameters(
+                        $rightIdentifier, 0, 0, $location->getId()
+                    );
+                    break;
+                case RightsForm::RIGHT_OPTION_ME :
+                    $success &= $this->createRightsLocationEntityRightFromParameters(
+                        $rightIdentifier, $user->getId(), UserEntityProvider::ENTITY_TYPE, $location->getId()
+                    );
+                    break;
+                case RightsForm::RIGHT_OPTION_SELECT :
+
+                    foreach (
+                        $values[RightsForm::PROPERTY_TARGETS][$rightIdentifier] as $entityType => $entityIdentifiers
+                    )
+                    {
+                        foreach ($entityIdentifiers as $entityIdentifier)
+                        {
+                            $success &= $this->createRightsLocationEntityRightFromParameters(
+                                $rightIdentifier, $entityIdentifier, $entityType, $location->getId()
+                            );
+                        }
+                    }
+            }
+        }
+
+        return $success;
     }
 
     /**
@@ -975,25 +1028,6 @@ abstract class RightsService
     }
 
     /**
-     * @param integer[] $rights
-     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
-     *
-     * @return integer[][][]
-     * @throws \Exception
-     */
-    protected function getTargetEntitiesForRightsAndLocation(array $rights, RightsLocation $location)
-    {
-        $rightsTargetEntities = array();
-
-        foreach ($rights as $right)
-        {
-            $rightsTargetEntities[$right] = $this->getTargetEntitiesForLocation($right, $location);
-        }
-
-        return $rightsTargetEntities;
-    }
-
-    /**
      * @param integer $right
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
@@ -1033,6 +1067,25 @@ abstract class RightsService
         }
 
         return $targetEntities;
+    }
+
+    /**
+     * @param integer[] $rights
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
+     *
+     * @return integer[][][]
+     * @throws \Exception
+     */
+    protected function getTargetEntitiesForRightsAndLocation(array $rights, RightsLocation $location)
+    {
+        $rightsTargetEntities = array();
+
+        foreach ($rights as $right)
+        {
+            $rightsTargetEntities[$right] = $this->getTargetEntitiesForLocation($right, $location);
+        }
+
+        return $rightsTargetEntities;
     }
 
     /**
@@ -1136,6 +1189,85 @@ abstract class RightsService
     }
 
     /**
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[][] $values
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    protected function saveRightsConfigurationForRightsLocationAndUserFromValues(
+        RightsLocation $location, User $user, array $values
+    )
+    {
+        if (!$this->saveRightsLocationInheritanceForRightsLocationFromValues($location, $values))
+        {
+            return false;
+        }
+
+        if (!$this->deleteAndCreateRightsLocationEntityRightsForRightsLocationAndUserFromValues(
+            $location, $user, $values
+        ))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation[] $locations
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[][] $values
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    protected function saveRightsConfigurationForRightsLocationsAndUserFromValues(
+        array $locations, User $user, array $values
+    )
+    {
+        foreach ($locations as $location)
+        {
+            if (!$this->saveRightsConfigurationForRightsLocationAndUserFromValues($location, $user, $values))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
+     * @param integer[][] $values
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    protected function saveRightsLocationInheritanceForRightsLocationFromValues(RightsLocation $location, array $values)
+    {
+        $inheritanceValue =
+            array_key_exists(RightsForm::PROPERTY_INHERIT, $values) ? $values[RightsForm::PROPERTY_INHERIT] :
+                RightsForm::INHERIT_FALSE;
+
+        if ($inheritanceValue == RightsForm::INHERIT_TRUE && !$location->inherits())
+        {
+            $location->inherit();
+
+            return $this->updateRightsLocation($location);
+        }
+        elseif ($location->inherits())
+        {
+            $location->disinherit();
+
+            return $this->updateRightsLocation($location);
+        }
+
+        return true;
+    }
+
+    /**
      * Enables a right for a specific entity on a specific location
      *
      * @param integer $right
@@ -1170,6 +1302,53 @@ abstract class RightsService
         {
             return false;
         }
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[][][] $values
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    protected function setRightsLocationEntityRightsForRightsLocationAndUserFromValues(
+        RightsLocation $location, User $user, array $values
+    )
+    {
+        $success = true;
+
+        foreach ($values[RightsForm::PROPERTY_RIGHT_OPTION] as $rightIdentifier => $rightsOption)
+        {
+            switch ($rightsOption)
+            {
+                case RightsForm::RIGHT_OPTION_ALL :
+                    $success &= $this->setRightsLocationEntityRight(
+                        $rightIdentifier, 0, 0, $location->getId()
+                    );
+                    break;
+                case RightsForm::RIGHT_OPTION_ME :
+                    $success &= $this->setRightsLocationEntityRight(
+                        $rightIdentifier, $user->getId(), UserEntityProvider::ENTITY_TYPE, $location->getId()
+                    );
+                    break;
+                case RightsForm::RIGHT_OPTION_SELECT :
+
+                    foreach (
+                        $values[RightsForm::PROPERTY_TARGETS][$rightIdentifier] as $entityType => $entityIdentifiers
+                    )
+                    {
+                        foreach ($entityIdentifiers as $entityIdentifier)
+                        {
+                            $success &= $this->setRightsLocationEntityRight(
+                                $rightIdentifier, $entityIdentifier, $entityType, $location->getId()
+                            );
+                        }
+                    }
+            }
+        }
+
+        return $success;
     }
 
     /**
@@ -1215,136 +1394,5 @@ abstract class RightsService
     protected function updateRightsLocation(RightsLocation $location)
     {
         return $this->getRightsRepository()->updateRightsLocation($location);
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation[] $locations
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param integer[][] $values
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    protected function saveRightsConfigurationForRightsLocationsAndUserFromValues(
-        array $locations, User $user, array $values
-    )
-    {
-        foreach ($locations as $location)
-        {
-            if (!$this->saveRightsConfigurationForRightsLocationAndUserFromValues($location, $user, $values))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param integer[][] $values
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    protected function saveRightsConfigurationForRightsLocationAndUserFromValues(
-        RightsLocation $location, User $user, array $values
-    )
-    {
-        if (!$this->saveRightsLocationInheritanceForRightsLocationFromValues($location, $values))
-        {
-            return false;
-        }
-
-        if (!$this->clearAndCreateRightsLocationEntityRightsForRightsLocationAndUserFromValues(
-            $location, $user, $values
-        ))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
-     * @param integer[][] $values
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    protected function saveRightsLocationInheritanceForRightsLocationFromValues(RightsLocation $location, array $values)
-    {
-        $inheritanceValue =
-            array_key_exists(RightsForm::PROPERTY_INHERIT, $values) ? $values[RightsForm::PROPERTY_INHERIT] :
-                RightsForm::INHERIT_FALSE;
-
-        if ($inheritanceValue == RightsForm::INHERIT_TRUE && !$location->inherits())
-        {
-            $location->inherit();
-
-            return $this->updateRightsLocation($location);
-        }
-        elseif ($location->inherits())
-        {
-            $location->disinherit();
-
-            return $this->updateRightsLocation($location);
-        }
-
-        return true;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param integer[][] $values
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    protected function clearAndCreateRightsLocationEntityRightsForRightsLocationAndUserFromValues(
-        RightsLocation $location, User $user, array $values
-    )
-    {
-        if (!$this->deleteRightsLocationEntityRightsForLocation($location))
-        {
-            return false;
-        }
-
-        $success = true;
-
-        foreach ($values[RightsForm::PROPERTY_RIGHT_OPTION] as $rightIdentifier => $rightsOption)
-        {
-            switch ($rightsOption)
-            {
-                case RightsForm::RIGHT_OPTION_ALL :
-                    $success &= $this->createRightsLocationEntityRightFromParameters(
-                        $rightIdentifier, 0, 0, $location->getId()
-                    );
-                    break;
-                case RightsForm::RIGHT_OPTION_ME :
-                    $success &= $this->createRightsLocationEntityRightFromParameters(
-                        $rightIdentifier, $user->getId(), 1, $location->getId()
-                    );
-                    break;
-                case RightsForm::RIGHT_OPTION_SELECT :
-
-                    foreach (
-                        $values[RightsForm::PROPERTY_TARGETS][$rightIdentifier] as $entityType => $entityIdentifiers
-                    )
-                    {
-                        foreach ($entityIdentifiers as $entityIdentifier)
-                        {
-                            $success &= $this->createRightsLocationEntityRightFromParameters(
-                                $rightIdentifier, $entityIdentifier, $entityType, $location->getId()
-                            );
-                        }
-                    }
-            }
-        }
-
-        return $success;
     }
 }

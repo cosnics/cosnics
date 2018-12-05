@@ -6,12 +6,12 @@ use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityP
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocation;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocationEntityRight;
-use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
+use Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
 use Symfony\Component\Translation\Translator;
 
@@ -77,6 +77,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
+     * @throws \Exception
      */
     public function canUserViewItem(User $user, Item $item)
     {
@@ -102,6 +103,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
      * @param bool $returnLocation
      *
      * @return boolean
+     * @throws \Exception
      */
     public function createItemRightsLocation(Item $item, bool $returnLocation = false)
     {
@@ -140,6 +142,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
      * @param bool $returnLocation
      *
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
+     * @throws \Exception
      */
     public function createRoot(bool $returnLocation = true)
     {

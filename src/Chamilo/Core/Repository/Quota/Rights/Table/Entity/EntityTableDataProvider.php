@@ -1,24 +1,58 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Rights\Table\Entity;
 
-use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
-use Chamilo\Core\Repository\Quota\Rights\Storage\DataManager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
+use Chamilo\Libraries\Format\Table\Table;
 
-class EntityTableDataProvider extends DataClassTableDataProvider
+class EntityTableDataProvider extends RecordTableDataProvider
 {
+    /**
+     * @var \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
+     */
+    private $rightsService;
 
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Table $table
+     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
+     */
+    public function __construct(Table $table, RightsService $rightsService)
     {
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        return DataManager::retrieves(RightsLocationEntityRightGroup::class_name(), $parameters);
+        parent::__construct($table);
+
+        $this->rightsService = $rightsService;
     }
 
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return integer
+     */
     public function count_data($condition)
     {
-        $parameters = new DataClassCountParameters($condition);
-        return DataManager::count(RightsLocationEntityRightGroup::class_name(), $parameters);
+        return $this->getRightsService()->countAllRightsLocationEntityRightGroups();
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
+    }
+
+    public function retrieve_data($condition, $offset, $count, $orderProperties = null)
+    {
+        return $this->getRightsService()->getRightsLocationEntityRightGroupsWithEntityAndGroup(
+            $count, $offset, $orderProperties
+        );
     }
 }

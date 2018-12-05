@@ -11,6 +11,10 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
  */
 class FixedPropertyConditionVariable extends PropertyConditionVariable
 {
+    /**
+     * @var string
+     */
+    private $alias;
 
     /**
      * Constructor
@@ -23,6 +27,19 @@ class FixedPropertyConditionVariable extends PropertyConditionVariable
     {
         parent::__construct($class, $property);
         $this->alias = $alias;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable::getHashParts()
+     */
+    public function getHashParts()
+    {
+        $hashParts = parent::getHashParts();
+
+        $hashParts[] = $this->get_alias();
+
+        return $hashParts;
     }
 
     /**
@@ -43,18 +60,5 @@ class FixedPropertyConditionVariable extends PropertyConditionVariable
     public function set_alias($alias)
     {
         $this->alias = $alias;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable::getHashParts()
-     */
-    public function getHashParts()
-    {
-        $hashParts = parent::getHashParts();
-
-        $hashParts[] = $this->get_alias();
-
-        return $hashParts;
     }
 }

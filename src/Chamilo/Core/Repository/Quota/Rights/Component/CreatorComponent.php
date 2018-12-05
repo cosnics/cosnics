@@ -11,9 +11,13 @@ use Chamilo\Libraries\File\Redirect;
 class CreatorComponent extends Manager
 {
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function run()
     {
-        if (!$this->getUser()->is_platform_admin())
+        if (!$this->getRightsService()->canUserConfigureQuotaRequestManagement($this->getUser()))
         {
             throw new NotAllowedException();
         }
@@ -25,7 +29,7 @@ class CreatorComponent extends Manager
                 RepositoryManager::PARAM_CONTEXT => RepositoryManager::package(),
                 RepositoryManager::PARAM_ACTION => RepositoryManager::ACTION_QUOTA,
                 QuotaManager::PARAM_ACTION => QuotaManager::ACTION_RIGHTS,
-                Manager::PARAM_ACTION => Manager::ACTION_ACCESS
+                Manager::PARAM_ACTION => Manager::ACTION_CREATE
             )
         );
 
@@ -36,11 +40,17 @@ class CreatorComponent extends Manager
 
         if ($rightsForm->validate())
         {
-            //            $success = $rightsForm->set_rights();
+            $success = $rightsService->setRightsConfigurationForUserFromValues(
+                $this->getUser(), $rightsForm->exportValues()
+            );
 
-            //            $this->redirect(
-            //                Translation::get($success ? 'AccessRightsSaved' : 'AccessRightsNotSaved'), ($success ? false : true)
-            //            );
+            $message = $this->getTranslator()->trans(
+                $success ? 'RightsConfigured' : 'RightsNotConfigured',
+                array('OBJECT' => $this->getTranslator()->trans('Quota', [], 'Chamilo\Core\Repository\Quota\Rights')),
+                'Chamilo\Libraries\Rights'
+            );
+
+            $postBackUrl->toUrl();
         }
 
         $html = array();
