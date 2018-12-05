@@ -71,6 +71,8 @@ class GetAssignmentNotificationsComponent extends Manager
             foreach($courses as $course)
             {
                 $contextPaths[] = 'Chamilo\\Application\\Weblcms::Tool:Assignment::Course:' . $course->getId();
+                // TODO: FIX THIS FOR LEARNING PATHS CORRECTLY
+                $contextPaths[] = 'Chamilo\\Application\\Weblcms::Tool:LearningPath::Course:' . $course->getId();
             }
 
             return $contextPaths;
