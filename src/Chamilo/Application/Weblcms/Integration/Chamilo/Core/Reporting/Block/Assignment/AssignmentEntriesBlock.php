@@ -2,8 +2,8 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Entry;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\Score;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;

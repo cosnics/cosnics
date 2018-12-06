@@ -38,10 +38,14 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param array $formValues
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
     public function createGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
-        if ($this->usesPlanner($formValues))
+        if ($this->usesGroupAndTeam($formValues)) {
+            $this->courseGroupOffice365Connector->createGroupAndTeamFromCourseGroup($courseGroup, $user);
+        } elseif ($this->usesGroup($formValues))
         {
             $this->courseGroupOffice365Connector->createGroupFromCourseGroup($courseGroup, $user);
         }
@@ -57,7 +61,7 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function updateGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
-        if ($this->usesPlanner($formValues))
+        if ($this->usesGroup($formValues))
         {
             $this->courseGroupOffice365Connector->createOrUpdateGroupFromCourseGroup($courseGroup, $user);
         }
@@ -65,6 +69,14 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
         {
             $this->courseGroupOffice365Connector->unlinkOffice365GroupFromCourseGroup($courseGroup, $user);
         }
+
+        if ($this->usesGroupAndTeam($formValues)) {
+            $this->courseGroupOffice365Connector->createOrUpdateTeamFromCourseGroup($courseGroup, $user);
+        } else {
+            $this->courseGroupOffice365Connector->unlinkTeamFromOffice365Group($courseGroup, $user);
+        }
+
+
     }
 
     /**
@@ -106,8 +118,18 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      *
      * @return bool
      */
-    protected function usesPlanner($formValues = [])
+    protected function usesGroup($formValues = [])
     {
-        return boolval($formValues[CourseGroupFormDecorator::PROPERTY_USE_PLANNER]);
+        return boolval($formValues[CourseGroupFormDecorator::PROPERTY_USE_GROUP]);
+    }
+
+    /**
+     * @param array $formValues
+     *
+     * @return bool
+     */
+    protected function usesGroupAndTeam($formValues = [])
+    {
+        return boolval($formValues[CourseGroupFormDecorator::PROPERTY_USE_GROUP_AND_TEAM]);
     }
 }

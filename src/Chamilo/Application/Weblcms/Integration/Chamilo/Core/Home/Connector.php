@@ -30,7 +30,7 @@ class Connector
     /**
      * Returns the active course types for which a user can choose
      * 
-     * @return string[int]
+     * @return array
      */
     public function get_course_types()
     {

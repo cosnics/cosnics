@@ -4,14 +4,16 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackRightsServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreFormType;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\FormHandler\SetScoreFormHandler;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryNavigator;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreService;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -183,6 +185,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
         $configuration->set(\Chamilo\Core\Repository\Feedback\Manager::CONFIGURATION_SHOW_FEEDBACK_HEADER, false);
 
+        $this->buildBridgeServices();
+
         $feedbackManager = $this->getApplicationFactory()->getApplication(
             "Chamilo\Core\Repository\Feedback", $configuration,
             \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE
@@ -194,7 +198,9 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $extendParameters = [
             'HAS_ENTRY' => true,
-            'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject() ? $this->getEntry()->getContentObject()->get_title() : Translation::getInstance()->getTranslation('SubmissionRemoved', null, Manager::context()),
+            'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject() ?
+                $this->getEntry()->getContentObject()->get_title() :
+                Translation::getInstance()->getTranslation('SubmissionRemoved', null, Manager::context()),
             'CONTENT_OBJECT_RENDITION' => $this->getEntry()->getContentObject() ? $this->renderContentObject() : null,
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
             'FEEDBACK_COUNT' => $this->count_feedbacks(),
@@ -231,10 +237,28 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 ]
             ),
             'ATTACHED_CONTENT_OBJECTS' => $this->getAttachedContentObjects(),
-            'SHOW_COMPACT_FEEDBACK' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Repository\ContentObject\Assignment', 'show_compact_feedback'])
+            'SHOW_COMPACT_FEEDBACK' => $this->getConfigurationConsulter()->getSetting(
+                ['Chamilo\Core\Repository\ContentObject\Assignment', 'show_compact_feedback']
+            )
         ];
 
         return array_merge($baseParameters, $extendParameters);
+    }
+
+    protected function buildBridgeServices()
+    {
+        /** @var FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge */
+        $assignmentFeedbackServiceBridge =
+            $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
+
+        $feedbackServiceBridge = new FeedbackServiceBridge($assignmentFeedbackServiceBridge);
+        $feedbackServiceBridge->setEntry($this->entry);
+
+        $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge();
+        $feedbackRightsServiceBridge->setCurrentUser($this->getUser());
+
+        $this->getBridgeManager()->addBridge($feedbackServiceBridge);
+        $this->getBridgeManager()->addBridge($feedbackRightsServiceBridge);
     }
 
     /**
@@ -253,7 +277,16 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $scoreFormHandler = new SetScoreFormHandler($this->scoreService);
         $scoreFormHandler->setScoringUser($this->getUser());
 
-        return $scoreFormHandler->handle($scoreForm, $this->getRequest());
+        $success = $scoreFormHandler->handle($scoreForm, $this->getRequest());
+        if ($success)
+        {
+            $score = $scoreForm->getData();
+            $this->getNotificationServiceBridge()->createNotificationForNewScore(
+                $this->getUser(), $this->getEntry(), $score
+            );
+        }
+
+        return $success;
     }
 
     /**
@@ -276,7 +309,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getScoreDataClass()
     {
-        if(!$this->getEntry() instanceof Entry)
+        if (!$this->getEntry() instanceof Entry)
         {
             return null;
         }
@@ -473,32 +506,32 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $buttonToolBar->addButtonGroup($buttonGroup);
 
-/*            if ($this->getDataProvider()->canEditAssignment())
-            {
-                $buttonToolBar->addButtonGroup(
-                    new ButtonGroup(
-                        array(
-                            new Button(
-                                Translation::get(
-                                    'CorrectCurrentEntry'
-                                ),
-                                new FontAwesomeGlyph('pencil-square-o'),
-                                $this->get_url(
-                                    [
-                                        self::PARAM_ACTION => self::ACTION_ENTRY_CODE_PAGE_CORRECTOR,
-                                        self::PARAM_ENTITY_TYPE => $this->getEntityType(),
-                                        self::PARAM_ENTITY_ID => $this->getEntityIdentifier(),
-                                        self::PARAM_ENTRY_ID => $this->getEntry()->getId()
-                                    ]
-                                ),
-                                Button::DISPLAY_ICON_AND_LABEL,
-                                false,
-                                'btn-success'
-                            )
-                        )
-                    )
-                );
-            }*/
+            /*            if ($this->getDataProvider()->canEditAssignment())
+                        {
+                            $buttonToolBar->addButtonGroup(
+                                new ButtonGroup(
+                                    array(
+                                        new Button(
+                                            Translation::get(
+                                                'CorrectCurrentEntry'
+                                            ),
+                                            new FontAwesomeGlyph('pencil-square-o'),
+                                            $this->get_url(
+                                                [
+                                                    self::PARAM_ACTION => self::ACTION_ENTRY_CODE_PAGE_CORRECTOR,
+                                                    self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                                                    self::PARAM_ENTITY_ID => $this->getEntityIdentifier(),
+                                                    self::PARAM_ENTRY_ID => $this->getEntry()->getId()
+                                                ]
+                                            ),
+                                            Button::DISPLAY_ICON_AND_LABEL,
+                                            false,
+                                            'btn-success'
+                                        )
+                                    )
+                                )
+                            );
+                        }*/
 
             $buttonGroup = new ButtonGroup();
 
@@ -639,6 +672,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 ),
                 new FontAwesomeGlyph('user')
             );
+
+            $selectEntityButton->setDropdownClasses('dropdown-entities');
 
             $selectEntityButton->addSubButton(
                 new SubButtonHeader(

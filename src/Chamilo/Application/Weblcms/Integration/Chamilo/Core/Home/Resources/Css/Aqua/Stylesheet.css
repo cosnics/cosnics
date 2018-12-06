@@ -25,3 +25,27 @@ span.badge-date {
 	color: #337ab7;
 	font-size: 13px;
 }
+
+.notifications-block {
+	max-height: 500px;
+	overflow-y: scroll;
+}
+
+.notifications-block .list-group-item {
+	border-left: none;
+}
+
+.notifications-block .list-group-item:last-child {
+	border-bottom: none;
+}
+
+.notifications-block-new-label {
+	background-color: red;
+	color: white !important;
+	border-radius: 20px;
+	padding: 5px 8px;
+	font-size: 10px;
+	margin-left: 5px;
+	margin-right: 5px;
+	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}

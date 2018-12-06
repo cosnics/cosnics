@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true" public="true" />
+
+        <prototype namespace="Chamilo\Application\Weblcms\Bridge\Assignment\" resource="../../../{Service, Storage/Repository}/*" />
+
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\AssignmentServiceBridge" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\EphorusServiceBridge" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\FeedbackServiceBridge" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\NotificationServiceBridge" />
+
+        <service
+                id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager">
+            <call method="addEntityService">
+                <argument type="constant">\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::ENTITY_TYPE_USER</argument>
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\UserEntityService" />
+            </call>
+            <call method="addEntityService">
+                <argument type="constant">\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::ENTITY_TYPE_COURSE_GROUP</argument>
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\CourseGroupEntityService" />
+            </call>
+            <call method="addEntityService">
+                <argument type="constant">\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::ENTITY_TYPE_PLATFORM_GROUP</argument>
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\PlatformGroupEntityService" />
+            </call>
+        </service>
+
+    </services>
+</container>

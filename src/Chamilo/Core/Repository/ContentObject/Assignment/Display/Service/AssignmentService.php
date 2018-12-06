@@ -2,10 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -70,10 +70,12 @@ abstract class AssignmentService
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score $score
      */
     public function updateScore(Score $score)
     {
+        $score->setModified(time());
+
         if (!$this->assignmentRepository->updateScore($score))
         {
             throw new \RuntimeException('Could not update the score ' . $score->getId());
@@ -82,11 +84,11 @@ abstract class AssignmentService
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $submittedNote
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note
      */
     public function createNote(Entry $entry, User $user, $submittedNote)
     {
@@ -108,7 +110,7 @@ abstract class AssignmentService
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note $note
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note $note
      */
     public function updateNote(Note $note)
     {
@@ -119,7 +121,7 @@ abstract class AssignmentService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @param $entityType
      * @param $entityId
@@ -127,7 +129,7 @@ abstract class AssignmentService
      * @param $contentObjectId
      * @param $ipAddress
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      */
     protected function createEntryByInstance(Entry $entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress
     )
@@ -141,7 +143,7 @@ abstract class AssignmentService
 
         if (!$this->assignmentRepository->createEntry($entry))
         {
-            throw new \RuntimeException('Could not create a new score for entry ' . $entry->getId());
+            throw new \RuntimeException('Could not create a new entry');
         }
 
         return $entry;
@@ -162,7 +164,7 @@ abstract class AssignmentService
      *
      * @param integer $entryIdentifier
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      */
     public function findEntryByIdentifier($entryIdentifier)
     {
@@ -182,9 +184,9 @@ abstract class AssignmentService
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score
      */
     public function findScoreByEntry(Entry $entry)
     {
@@ -193,9 +195,9 @@ abstract class AssignmentService
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note
      */
     public function findNoteByEntry(Entry $entry)
     {
@@ -206,7 +208,7 @@ abstract class AssignmentService
      *
      * @param integer $feedbackIdentifier
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
     public function findFeedbackByIdentifier($feedbackIdentifier)
     {
@@ -215,12 +217,12 @@ abstract class AssignmentService
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return integer
      */
     public function countFeedbackByEntry(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
     )
     {
         return $this->assignmentRepository->countFeedbackByEntry($entry);
@@ -228,12 +230,12 @@ abstract class AssignmentService
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback[]
      */
     public function findFeedbackByEntry(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
     )
     {
         return $this->assignmentRepository->findFeedbackByEntry($entry);
@@ -249,7 +251,7 @@ abstract class AssignmentService
 
     /**
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
     public function initializeFeedback()
     {
@@ -288,10 +290,10 @@ abstract class AssignmentService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment
      */
     public function attachContentObjectToEntry(Entry $entry, ContentObject $contentObject)
     {
@@ -299,6 +301,7 @@ abstract class AssignmentService
 
         $entryAttachment->setEntryId($entry->getId());
         $entryAttachment->setAttachmentId($contentObject->getId());
+        $entryAttachment->setCreated(time());
 
         if (!$this->assignmentRepository->createEntryAttachment($entryAttachment))
         {
@@ -309,7 +312,7 @@ abstract class AssignmentService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      */
     public function detachContentObjectFromEntry(Entry $entry, ContentObject $contentObject)
@@ -327,7 +330,7 @@ abstract class AssignmentService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment $entryAttachment
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment $entryAttachment
      */
     public function deleteEntryAttachment(EntryAttachment $entryAttachment)
     {
@@ -338,7 +341,7 @@ abstract class AssignmentService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment $entryAttachment
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment $entryAttachment
      */
     public function updateEntryAttachment(EntryAttachment $entryAttachment)
     {
@@ -359,7 +362,7 @@ abstract class AssignmentService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return EntryAttachment[]
      */
@@ -369,7 +372,7 @@ abstract class AssignmentService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return bool
@@ -438,35 +441,35 @@ abstract class AssignmentService
     /**
      * Creates a new instance for an entry
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      */
     abstract protected function createEntryInstance();
 
     /**
      * Creates a new instance for an entry attachment
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment
      */
     abstract protected function createEntryAttachmentInstance();
 
     /**
      * Creates a new instance for a score
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score
      */
     abstract protected function createScoreInstance();
 
     /**
      * Creates a new instance for a score
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
     abstract protected function createFeedbackInstance();
 
     /**
      * Creates a new instance for a score
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note
      */
     abstract protected function createNoteInstance();
 }

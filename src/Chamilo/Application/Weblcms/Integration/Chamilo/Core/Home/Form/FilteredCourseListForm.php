@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Form;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Connector;
@@ -16,30 +17,39 @@ class FilteredCourseListForm extends ConfigurationForm
     public function addSettings()
     {
         $this->addElement(
-            'checkbox', 
-            FilteredCourseList::CONFIGURATION_SHOW_NEW_ICONS, 
-            Translation::get('ShowNewIcons'));
-        
+            'checkbox',
+            FilteredCourseList::CONFIGURATION_SHOW_NEW_ICONS,
+            Translation::get('ShowNewIcons')
+        );
+
         $connector = new Connector();
-        
+
+        $courseTypes = [];
+        $courseTypes["-1"] = '-- ' . Translation::getInstance()->getTranslation('AllCourses') . ' --';
+        $courseTypes = $courseTypes + $connector->get_course_types();
+
         $this->addElement(
-            'select', 
-            FilteredCourseList::CONFIGURATION_COURSE_TYPE, 
-            Translation::get('CourseType'), 
-            $connector->get_course_types());
+            'select',
+            FilteredCourseList::CONFIGURATION_COURSE_TYPE,
+            Translation::get('CourseType'),
+            $courseTypes
+        );
     }
 
     public function setDefaults()
     {
         $defaults = array();
-        
+
         $defaults[FilteredCourseList::CONFIGURATION_SHOW_NEW_ICONS] = $this->getBlock()->getSetting(
-            FilteredCourseList::CONFIGURATION_SHOW_NEW_ICONS, 
-            true);
+            FilteredCourseList::CONFIGURATION_SHOW_NEW_ICONS,
+            true
+        );
+
         $defaults[FilteredCourseList::CONFIGURATION_COURSE_TYPE] = $this->getBlock()->getSetting(
-            FilteredCourseList::CONFIGURATION_COURSE_TYPE, 
-            0);
-        
+            FilteredCourseList::CONFIGURATION_COURSE_TYPE,
+            "-1"
+        );
+
         parent::setDefaults($defaults);
     }
 }

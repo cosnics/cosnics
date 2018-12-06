@@ -1,0 +1,194 @@
+<style>
+    .navbar-chamilo ul.navbar-nav li a.chamilo-menu-item-link {
+        padding: 15px;
+        width: 50px;
+        height: 78px;
+    }
+
+    .navbar-chamilo ul.navbar-nav li.chamilo-menu-item-notifications a {
+        padding-top: 30px;
+    }
+
+    .chamilo-menu-item-notifications ul.dropdown-notifications{
+        padding-top: 30px;
+        width: 452px;
+    }
+
+    .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications {
+        max-height: 480px;
+        overflow-y: scroll;
+        background-color: white;
+    }
+
+    .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications::-webkit-scrollbar {
+        width: 15px;
+    }
+
+    .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications::-webkit-scrollbar-track  {
+        background: #f1f1f1;
+    }
+
+    .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications .notifications-list {
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .chamilo-menu-item-link .chamilo-menu-item-css-icon {
+        color: white;
+        font-size: 20px;
+        width: 100%;
+    }
+
+    li.open .chamilo-menu-item-link .chamilo-menu-item-css-icon {
+        color: #406e8e;
+    }
+
+    .chamilo-menu-item-priority ul li {
+        padding: 0;
+    }
+
+    .chamilo-menu-item-notifications .new-notifications-label {
+        background-color: red;
+        color: white !important;
+        border-radius: 20px;
+        position: absolute;
+        padding: 2px 5px;
+        font-size: 10px;
+        top: 20px;
+        right: 10px;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .navbar-chamilo div.navbar-header ul.nav li.chamilo-menu-item-priority {
+        display: none;
+    }
+
+    .chamilo-menu-item-notifications ul li div.notifications-footer {
+        border-top: 1px solid #dddddd;
+        background-color: white;
+        text-align: right;
+        padding: 5px 17px;
+        font-size: 12px;
+    }
+
+    .chamilo-menu-item-notifications ul li div.notifications-footer a {
+        display: inline-block !important;
+        background-color: white !important;
+        color: #337ab7 !important;
+    }
+
+    .chamilo-menu-item-notifications ul li div.notifications-footer a:hover {
+        text-decoration: underline;
+        color: #23527c;
+    }
+
+    @media ( max-width : 900px) {
+        .chamilo-menu-item-notifications ul.dropdown-notifications {
+            position: fixed;
+            top: 48px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 0;
+            padding: 0;
+            border: none;
+            width: 100%;
+        }
+
+        .chamilo-menu-item-notifications ul.dropdown-notifications .visible-notifications{
+            max-height: calc(100vh - 78px);
+        }
+
+        .chamilo-menu-item-notifications .dropdown-notifications .notifications-list {
+            min-width: 100%;
+            max-width: 100%;
+            box-shadow: none;
+        }
+
+        .chamilo-menu-item-notifications ul.dropdown-notifications div.notifications-footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .navbar-chamilo div.navbar-header ul.nav li a.chamilo-menu-item-link {
+            padding: 15px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .navbar-chamilo div.navbar-header ul.nav li.chamilo-menu-item-priority {
+            display: block;
+        }
+
+        .navbar-chamilo ul.navbar-nav li.chamilo-menu-item-priority {
+            display: none;
+        }
+
+        .navbar-chamilo ul.nav li.chamilo-menu-item-notifications.open a.chamilo-menu-item-link {
+            margin-right: 15px;
+        }
+
+        .chamilo-menu-item-notifications .new-notifications-label {
+            top: 5px;
+        }
+
+        body.no-scroll {
+            overflow: hidden;
+        }
+    }
+</style>
+
+{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
+
+{% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
+
+{% set notificationsID = "notifications" ~ random() %}
+
+<li class="chamilo-menu-item-priority dropdown chamilo-menu-item-notifications" id="{{ notificationsID }}">
+    <a href="#" class="dropdown-toggle chamilo-menu-item-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+        <span class="fa fa-bell-o chamilo-menu-item-css-icon"></span>
+        <span class="new-notifications-label">2</span>
+    </a>
+    <ul class="dropdown-notifications dropdown-menu dropdown-menu-right">
+        <li>
+            <div class="visible-notifications">
+                <notifications-list
+                        scroll-detector-element="#{{ notificationsID }} .visible-notifications"
+                        show-filters ref="notificationsList"
+                        retrieve-notifications-url="index.php?application=Chamilo\Core\Notification\Ajax&go=GetNotifications">
+                </notifications-list>
+            </div>
+            <div class="notifications-footer">
+                <a href="{{ VIEWER_URL }}">Bekijk alle meldingen</a> - <a href="{{ FILTER_MANAGER_URL }}">Beheer de actieve filters</a>
+            </div>
+        </li>
+    </ul>
+</li>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        new Vue({
+            el: '#{{ notificationsID }}',
+            data: {}
+        });
+
+        var notificationsElement = $('.chamilo-menu-item-notifications');
+
+        notificationsElement.on('show.bs.dropdown', function () {
+            $('body').addClass('no-scroll');
+        });
+
+        notificationsElement.on('hide.bs.dropdown', function () {
+            $('body').removeClass('no-scroll');
+        });
+    });
+</script>

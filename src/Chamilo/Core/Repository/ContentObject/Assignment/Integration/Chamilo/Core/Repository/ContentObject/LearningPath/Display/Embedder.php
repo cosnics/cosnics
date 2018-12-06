@@ -5,8 +5,18 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentEphorusRepository;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository;
+use Chamilo\Core\Queue\Service\JobProducer;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\AssignmentServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EphorusServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\FeedbackServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\FeedbackServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\NotificationServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\NotificationServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\AssignmentDataProvider;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\AssignmentServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\EphorusServiceBridge;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
@@ -40,7 +50,8 @@ class Embedder extends ContentObjectEmbedder
             $this->get_application()->getTranslator(),
             new LearningPathAssignmentService(
                 new LearningPathAssignmentRepository($this->getDataClassRepository()),
-                new LearningPathAssignmentEphorusRepository($this->getDataClassRepository())
+                new LearningPathAssignmentEphorusRepository($this->getDataClassRepository()),
+                $this->getService(JobProducer::class)
             )
         );
 
@@ -63,6 +74,8 @@ class Embedder extends ContentObjectEmbedder
 
         $assignmentDataProvider->setEphorusEnabled($this->get_application()->get_application()->isEphorusEnabled());
 
+        $this->buildBridgeServices($activeAttempt);
+
         $configuration->set(
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::CONFIGURATION_DATA_PROVIDER,
             $assignmentDataProvider
@@ -75,6 +88,39 @@ class Embedder extends ContentObjectEmbedder
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(),
             $configuration
         )->run();
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt $activeAttempt
+     */
+    protected function buildBridgeServices(TreeNodeAttempt $activeAttempt)
+    {
+        /** @var AssignmentServiceBridgeInterface $learningPathAssignmentServiceBridge */
+        $learningPathAssignmentServiceBridge = $this->getBridgeManager()->getBridgeByInterface(AssignmentServiceBridgeInterface::class);
+
+        $assignmentServiceBridge = new AssignmentServiceBridge($learningPathAssignmentServiceBridge);
+        $assignmentServiceBridge->setTreeNode($this->treeNode);
+        $assignmentServiceBridge->setTreeNodeAttempt($activeAttempt);
+
+        /** @var FeedbackServiceBridgeInterface $learningPathFeedbackServiceBridge */
+        $learningPathFeedbackServiceBridge = $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
+        $feedbackServiceBridge = new FeedbackServiceBridge($learningPathFeedbackServiceBridge);
+        $feedbackServiceBridge->setTreeNode($this->treeNode);
+
+        /** @var EphorusServiceBridgeInterface $learningPathEphorusServiceBridge */
+        $learningPathEphorusServiceBridge = $this->getBridgeManager()->getBridgeByInterface(EphorusServiceBridgeInterface::class);
+        $ephorusServiceBridge = new EphorusServiceBridge($learningPathEphorusServiceBridge);
+        $ephorusServiceBridge->setTreeNode($this->treeNode);
+
+        /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\NotificationServiceBridgeInterface $learningPathNotificationServiceBridge */
+        $learningPathNotificationServiceBridge = $this->getBridgeManager()->getBridgeByInterface(NotificationServiceBridgeInterface::class);
+        $notificationServiceBridge = new NotificationServiceBridge($learningPathNotificationServiceBridge);
+        $notificationServiceBridge->setTreeNode($this->treeNode);
+
+        $this->getBridgeManager()->addBridge($assignmentServiceBridge);
+        $this->getBridgeManager()->addBridge($feedbackServiceBridge);
+        $this->getBridgeManager()->addBridge($ephorusServiceBridge);
+        $this->getBridgeManager()->addBridge($notificationServiceBridge);
     }
 
     /**

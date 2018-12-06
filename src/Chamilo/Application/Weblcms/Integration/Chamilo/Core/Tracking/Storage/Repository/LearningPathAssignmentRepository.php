@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
@@ -62,7 +62,7 @@ class LearningPathAssignmentRepository extends
     )
     {
         return $this->findTargetsForEntityType(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER,
+            Entry::ENTITY_TYPE_USER,
             $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
             $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
             $offset,
@@ -93,7 +93,7 @@ class LearningPathAssignmentRepository extends
     )
     {
         return $this->findTargetsForEntityTypeWithEntries(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER,
+            Entry::ENTITY_TYPE_USER,
             $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
             $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
             $offset,
@@ -350,7 +350,7 @@ class LearningPathAssignmentRepository extends
      * @param int $entityType
      * @param int $entityIdentifier
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function findLastEntryForEntityByTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityIdentifier
@@ -366,7 +366,7 @@ class LearningPathAssignmentRepository extends
      */
     protected function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::class;
     }
 
     /**
@@ -374,7 +374,7 @@ class LearningPathAssignmentRepository extends
      */
     protected function getFeedbackClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Feedback::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback::class;
     }
 
     /**
@@ -382,7 +382,7 @@ class LearningPathAssignmentRepository extends
      */
     protected function getNoteClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Note::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Note::class;
     }
 
     /**
@@ -390,7 +390,7 @@ class LearningPathAssignmentRepository extends
      */
     protected function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score::class;
     }
 
     /**
@@ -398,7 +398,7 @@ class LearningPathAssignmentRepository extends
      */
     protected function getEntryAttachmentClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment::class;
     }
 
     /**

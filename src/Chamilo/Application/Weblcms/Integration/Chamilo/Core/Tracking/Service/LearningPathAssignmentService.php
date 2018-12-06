@@ -2,13 +2,22 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service;
 
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentEphorusRepository;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
+use Chamilo\Core\Queue\Service\JobProducer;
+use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  *
@@ -31,6 +40,23 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentEphorusRepository
      */
     protected $assignmentEphorusRepository;
+
+    /**
+     * @var \Chamilo\Core\Queue\Service\JobProducer
+     */
+    protected $jobProducer;
+
+    /**
+     *
+     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository $assignmentRepository
+     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentEphorusRepository $learningPathAssignmentEphorusRepository
+     * @param \Chamilo\Core\Queue\Service\JobProducer $jobProducer
+     */
+    public function __construct(LearningPathAssignmentRepository $assignmentRepository, LearningPathAssignmentEphorusRepository $learningPathAssignmentEphorusRepository, JobProducer $jobProducer)
+    {
+        parent::__construct($assignmentRepository, $learningPathAssignmentEphorusRepository);
+        $this->jobProducer = $jobProducer;
+    }
 
     /**
      *
@@ -165,6 +191,9 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [], $condition = null, $offset = null, $count = null, $orderProperty = []
     )
     {
+        $orderProperty[] = new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+        $orderProperty[] = new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+
         return $this->assignmentRepository->findTargetUsersWithEntriesForTreeNodeData(
             $contentObjectPublication, $treeNodeData, $userIds, $condition, $offset, $count, $orderProperty
         );
@@ -352,7 +381,7 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      * @param int $entityType
      * @param int $entityIdentifier
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry
      */
     public function findLastEntryForEntity(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityIdentifier)
     {
@@ -365,28 +394,42 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt $treeNodeAttempt
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt|\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt $treeNodeAttempt
      * @param integer $entityType
      * @param integer $entityId
      * @param integer $userId
      * @param integer $contentObjectId
      * @param string $ipAddress
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createEntry(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, TreeNodeAttempt $treeNodeAttempt, $entityType, $entityId, $userId, $contentObjectId,
         $ipAddress
     )
     {
-        /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry $entry */
+        /** @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry */
         $entry = $this->createEntryInstance();
 
         $entry->setTreeNodeDataId($treeNodeData->getId());
         $entry->setTreeNodeAttemptId($treeNodeAttempt->getId());
         $entry->setContentObjectPublicationId($contentObjectPublication->getId());
 
-        return $this->createEntryByInstance($entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress);
+        $entry = $this->createEntryByInstance($entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress);
+
+        if($entry instanceof Entry)
+        {
+            $job = new Job();
+            $job->setProcessorClass(EntryNotificationJobProcessor::class)
+                ->setParameter(EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId())
+                ->setParameter(EntryNotificationJobProcessor::PARAM_CONTENT_OBJECT_PUBLICATION_ID, $treeNodeAttempt->get_publication_id());
+
+            $this->jobProducer->produceJob($job, 'notifications');
+        }
+
+        return $entry;
     }
 
     /**
@@ -447,52 +490,52 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
     /**
      * Creates a new instance for an entry
      *
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry
      */
     protected function createEntryInstance()
     {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry(
+        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry(
         );
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\EntryAttachment
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment
      */
     protected function createEntryAttachmentInstance()
     {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment();
+        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment();
     }
 
     /**
      * Creates a new instance for a score
      *
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score
      */
     protected function createScoreInstance()
     {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score(
+        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score(
         );
     }
 
     /**
      * Creates a new instance for a score
      *
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Feedback
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback
      */
     protected function createFeedbackInstance()
     {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Feedback(
+        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback(
         );
     }
 
     /**
      * Creates a new instance for a score
      *
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Note
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Note
      */
     protected function createNoteInstance()
     {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Note(
+        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Note(
         );
     }
 
@@ -501,7 +544,7 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     public function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::class;
     }
 
     /**
@@ -509,7 +552,7 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     public function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score::class;
     }
 
     /**
@@ -517,6 +560,6 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     public function getFeedbackClassName()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Feedback::class;
+        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback::class;
     }
 }

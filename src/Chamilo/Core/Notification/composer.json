@@ -1,0 +1,41 @@
+{
+    "name": "cosnics/core-notification",
+    "version": "1.0.0",
+    "description": "Core Notification",
+    "keywords": [
+        "Core",
+        "User"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Pieterjan Broekaert",
+            "email": "pieterjan.broekaert@hogent.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Notification",
+            "context": "Chamilo\\Core\\Notification",
+            "type": "Chamilo\\Core",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Libraries",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}

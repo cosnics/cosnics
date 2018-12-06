@@ -330,9 +330,12 @@ abstract class Manager extends Application
             )
         );
 
-        $tabs[self::TAB_IMPORTER] = $this->get_url(
-            array(self::PARAM_TAB => self::TAB_IMPORTER, self::PARAM_ACTION => self::ACTION_IMPORTER)
-        );
+        if($this->get_maximum_select() > 1)
+        {
+            $tabs[self::TAB_IMPORTER] = $this->get_url(
+                array(self::PARAM_TAB => self::TAB_IMPORTER, self::PARAM_ACTION => self::ACTION_IMPORTER)
+            );
+        }
 
         if ($this->get_action() == self::ACTION_VIEWER)
         {

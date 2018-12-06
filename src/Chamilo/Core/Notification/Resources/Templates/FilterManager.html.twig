@@ -1,0 +1,107 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Core\\Notification' %}
+
+{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
+
+<div id="filterManager">
+    <b-table striped bordered :items="filters" :fields="fields"
+             show-empty empty-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
+             empty-filtered-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
+    >
+        <template slot="message" slot-scope="data">
+            <span v-html="data.item.message"></span>
+        </template>
+        <template slot="HEAD_checkbox" slot-scope="data">
+            <!-- We use click.stop here to prevent 'sort-changed' or 'head-clicked' events -->
+            <input @click.stop type="checkbox" v-model="isAllSelected" @change="selectAll">
+        </template>
+        <template slot="checkbox" slot-scope="data">
+            <input @click.stop type="checkbox" :value="data.item.id" v-model="data.item.selected" @change="selectSingleItem(data.item)">
+        </template>
+    </b-table>
+    <button type="button" class="btn btn-default"><span class="fa fa-trash"></span> {{ 'RemoveSelectedFilters'|trans({}, appContext) }}</button>
+</div>
+
+<style>
+    .column-checkbox {
+        text-align: center;
+        width: 16px;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var fields = {
+            checkbox: {
+                label: '',
+                class: 'column-checkbox'
+            },
+            message: {
+                label: '{{ 'FilterMessage'|trans({}, appContext) }}'
+            }
+        };
+
+        new Vue({
+            el: '#filterManager',
+            data: {
+                filters: [
+                    {
+                        message: 'Verberg alle meldingen van de cursus <b>Web Development</b>',
+                        id: 1,
+                        selected: false
+                    },
+                    {
+                        message: 'Verberg alle meldingen van de opdracht <b>Programmeren 101</b> in de cursus <b>Web Development</b>',
+                        id: 2,
+                        selected: false
+                    },
+                    {
+                        message: 'Verberg alle meldingen van de cursus <b>Elektronica voor gevorderden</b>',
+                        id: 3,
+                        selected: false
+                    },
+                    {
+                        message: 'Verberg alle meldingen over <b>aankondigingen</b> in de cursus <b>Elektronica voor gevorderden</b>',
+                        id: 4,
+                        selected: false
+                    }
+                ],
+                fields: fields,
+                isAllSelected: false,
+                selectedItems: []
+            },
+            methods: {
+                selectAll: function() {
+                    var vueInstance = this;
+
+                    this.filters.forEach(function(filter) {
+                        filter.selected = vueInstance.isAllSelected;
+                    });
+                },
+                selectSingleItem: function(filter) {
+                    if(!filter.selected) {
+                        this.isAllSelected = false;
+                    } else {
+                        var isAllSelected = true;
+
+                        this.filters.forEach(function(filter) {
+                            if(!filter.selected) {
+                                isAllSelected = false;
+                            }
+                        });
+
+                        this.isAllSelected = isAllSelected;
+                    }
+                }
+            }
+        });
+
+    });
+</script>
+
+{{ FOOTER|raw }}

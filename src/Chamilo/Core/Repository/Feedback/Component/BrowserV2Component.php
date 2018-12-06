@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Feedback\Component;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
@@ -18,7 +19,6 @@ use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
-
 class BrowserV2Component extends Manager implements DelegateComponent
 {
     const PARAM_COUNT = 'feedback_count';
@@ -29,8 +29,10 @@ class BrowserV2Component extends Manager implements DelegateComponent
      */
     public function run()
     {
-        if (! $this->get_application()->is_allowed_to_view_feedback() &&
-             ! $this->get_application()->is_allowed_to_create_feedback())
+        $canViewFeedback = $this->feedbackRightsServiceBridge->canViewFeedback();
+        $canCreateFeedback = $this->feedbackRightsServiceBridge->canCreateFeedback();
+
+        if (!$canViewFeedback && !$canCreateFeedback)
         {
             throw new NotAllowedException();
         }
@@ -39,65 +41,68 @@ class BrowserV2Component extends Manager implements DelegateComponent
 
         $form = $formFactory->create(AddFeedbackFormType::class);
 
-
         $form->handleRequest($this->getRequest());
 
-        if($form->isValid())
+        if ($form->isValid())
         {
-            if (! $this->get_application()->is_allowed_to_create_feedback())
+            if (!$canCreateFeedback)
             {
                 throw new NotAllowedException();
             }
 
             $formData = $form->getData();
 
-            /**
-             * @var Feedback $feedback
-             */
-            $feedback = $this->get_application()->get_feedback();
-
-            $feedback->set_user_id($this->getUser()->getId());
-            $feedback->set_comment($formData[Feedback::PROPERTY_COMMENT]);
-            $feedback->set_creation_date(time());
-            $feedback->set_modification_date(time());
-
-            $success = $feedback->create();
+            $feedback = $this->feedbackServiceBridge->createFeedback($this->getUser(), $formData[Feedback::PROPERTY_COMMENT]);
+            $success = $feedback instanceof Feedback;
 
             $this->notifyNewFeedback($feedback);
 
             $this->redirect(
                 $this->getTranslator()->trans(
                     $success ? 'ObjectCreated' : 'ObjectNotCreated',
-                    array('OBJECT' => $this->getTranslator()->trans('Feedback', [], 'Chamilo\Core\Repository\Feedback')),
-                    'Chamilo\Libraries'),
-                ! $success);
+                    array(
+                        'OBJECT' => $this->getTranslator()->trans(
+                            'Feedback', [], 'Chamilo\Core\Repository\Feedback'
+                        )
+                    ),
+                    'Chamilo\Libraries'
+                ),
+                !$success
+            );
         }
 
-        $feedback = $this->get_application()->retrieve_feedbacks(
+        $feedback = $this->feedbackServiceBridge->getFeedback(
             $this->getPager()->getNumberOfItemsPerPage(),
-            $this->getPager()->getCurrentRangeOffset());
+            $this->getPager()->getCurrentRangeOffset()
+        );
 
-        if ($feedback instanceof ResultSet) {
+        if ($feedback instanceof ResultSet)
+        {
             $feedback = $feedback->as_array();
         }
 
         $feedbackCount = count($feedback);
 
-        if($this->get_application()->count_feedbacks() > $feedbackCount) {
+        if ($this->feedbackServiceBridge->countFeedback() > $feedbackCount)
+        {
             $pagination = $this->getPagerRenderer()->renderPaginationWithPageLimit(
                 $this->get_parameters(),
-                self::PARAM_PAGE_NUMBER);
-        } else {
+                self::PARAM_PAGE_NUMBER
+            );
+        }
+        else
+        {
             $pagination = null;
         }
 
         $formView = $form->createView();
+
         return $this->getTwig()
             ->render(
                 Manager::context() . ':add_feedback.html.twig',
                 [
                     'form' => $formView,
-                    'createRight' => $this->get_application()->is_allowed_to_create_feedback(),
+                    'createRight' => $canCreateFeedback,
                     'feedbackCount' => $feedbackCount,
                     'feedbackToolbar' => $this->renderFeedbackButtonToolbar(),
                     'showFeedbackHeader' => $this->showFeedbackHeader(),
@@ -110,7 +115,8 @@ class BrowserV2Component extends Manager implements DelegateComponent
     protected function toFeedbackDTOs($feedback)
     {
         $feedbackDTOs = [];
-        foreach ($feedback as $feedbackItem) {
+        foreach ($feedback as $feedbackItem)
+        {
             /**
              * @var Feedback $feedbackItem
              */
@@ -119,18 +125,19 @@ class BrowserV2Component extends Manager implements DelegateComponent
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
                     Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                    \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedbackItem->get_user()->getId())
+                    \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedbackItem->get_user()->getId()
+                )
             );
 
             $feedbackDTO['photoUrl'] = $profilePhotoUrl->getUrl();
-            $feedbackDTO['updateAllowed'] = $this->get_application()->is_allowed_to_update_feedback($feedbackItem);
+            $feedbackDTO['updateAllowed'] = $this->feedbackRightsServiceBridge->canEditFeedback($feedbackItem);
             $feedbackDTO['updateUrl'] = $this->get_url(
                 [
                     Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
                     Manager::PARAM_FEEDBACK_ID => $feedbackItem->get_id()
                 ]
             );
-            $feedbackDTO['deleteAllowed'] = $this->get_application()->is_allowed_to_delete_feedback($feedbackItem);
+            $feedbackDTO['deleteAllowed'] = $this->feedbackRightsServiceBridge->canDeleteFeedback($feedbackItem);
             $feedbackDTO['deleteUrl'] = $this->get_url(
                 [
                     Manager::PARAM_ACTION => Manager::ACTION_DELETE,
@@ -152,6 +159,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
         $content = $feedback->get_comment();
 
         $descriptionRenderer = new ContentObjectResourceRenderer($this, $content);
+
         return $descriptionRenderer->run();
     }
 
@@ -165,15 +173,15 @@ class BrowserV2Component extends Manager implements DelegateComponent
         $buttonToolbar = new ButtonToolBar(null, array(), array('receive-feedback-buttons'));
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
 
-        if (! $this->get_application() instanceof FeedbackNotificationSupport)
+        if (!$this->get_application() instanceof FeedbackNotificationSupport)
         {
             return $buttonToolbarRenderer->render();
         }
 
         $hasNotification = false;
 
-        $isAllowedToViewFeedback = $this->get_application()->is_allowed_to_view_feedback();
-        $isAllowedToCreateFeedback = $this->get_application()->is_allowed_to_create_feedback();
+        $isAllowedToViewFeedback = $this->feedbackRightsServiceBridge->canViewFeedback();
+        $isAllowedToCreateFeedback = $this->feedbackRightsServiceBridge->canCreateFeedback();
 
         if ($isAllowedToViewFeedback || $isAllowedToCreateFeedback)
         {
@@ -181,7 +189,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
 
             if ($isAllowedToViewFeedback)
             {
-                $feedbackCount = $this->get_application()->count_feedbacks();
+                $feedbackCount = $this->feedbackServiceBridge->countFeedback();
                 $portfolioNotification = $this->get_application()->retrieve_notification();
                 $hasNotification = $portfolioNotification instanceof Notification;
             }
@@ -196,7 +204,8 @@ class BrowserV2Component extends Manager implements DelegateComponent
                 $baseParameters,
                 $isAllowedToViewFeedback,
                 $feedbackCount,
-                $hasNotification);
+                $hasNotification
+            );
 
             $buttonToolbar->addItems($actionsGenerator->run());
         }
@@ -208,7 +217,8 @@ class BrowserV2Component extends Manager implements DelegateComponent
         if ($hasNotification)
         {
             $html[] = '<div class="alert alert-info alert-receive-feedback">';
-            $html[] = '<div class="pull-left receive-feedback-info">Nieuwe feedback wordt naar jouw e-mail verzonden.</div>';
+            $html[] =
+                '<div class="pull-left receive-feedback-info">Nieuwe feedback wordt naar jouw e-mail verzonden.</div>';
         }
 
         $html[] = $buttonToolbarRenderer->render();
@@ -251,8 +261,9 @@ class BrowserV2Component extends Manager implements DelegateComponent
             $this->pager = new Pager(
                 $this->getCount(),
                 1,
-                $this->get_application()->count_feedbacks(),
-                $this->getPageNumber());
+                $this->feedbackServiceBridge->countFeedback(),
+                $this->getPageNumber()
+            );
         }
 
         return $this->pager;

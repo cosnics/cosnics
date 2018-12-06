@@ -1,5 +1,60 @@
 {{ HEADER|raw }}
 
+{{ getJavascript('VueCommon.js', 'Hogent\\Libraries') }}
+
+<style>
+    .tab-pane#notifications .list-group-item {
+        border: 1px solid #ddd;
+        padding: 10px 15px;
+        border-left: none;
+        border-right: none;
+        box-shadow: none;
+    }
+
+    .tab-pane#notifications .list-group-item.notifications-list-title {
+        padding: 5px 15px;
+    }
+
+    .dynamic-visual-tabs .new-notifications-label {
+        background-color: red;
+        color: white !important;
+        border-radius: 20px;
+        padding: 2px 5px;
+        font-size: 10px;
+        margin-left: 3px;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .tab-pane#notifications {
+        padding: 0;
+    }
+
+    .tab-pane#notifications .assignment-notifications-list {
+        max-height: 500px;
+        overflow-y: scroll;
+    }
+
+    .tab-pane#notifications .list-group-item:last-child {
+        border-bottom: none;
+    }
+
+    .notifications-beta-warning {
+        padding: 7px;
+        background-color: #f5f5f5;
+        color: brown !important;
+        text-align: center;
+        font-weight: bold;
+        border-top: 1px solid lightgrey;
+    }
+
+    .notifications-beta-warning a {
+        color: brown;
+        font-weight: bold;
+    }
+
+</style>
+{% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
+
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Display' %}
 
 {% set valueTrue = '<i class="fa fa-check value-true" aria-hidden="true"></i>' %}
@@ -10,12 +65,28 @@
 {{ BUTTON_TOOLBAR|raw }}
 
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
+    <li role="presentation">
+        <a href="#notifications" aria-controls="entities" role="tab" data-toggle="tab" id="notifications-tab">
+            {{ 'Notifications'|trans({}, appContext) }}
+            {% if NOTIFICATIONS_COUNT > 0 %}<span class="new-notifications-label">{{ NOTIFICATIONS_COUNT }}</span>{% endif %}
+        </a>
+    </li>
     <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ ENTITY_NAME }}</a></li>
     <li role="presentation"><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
     <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
 </ul>
 
 <div class="dynamic-visual-tab-content tab-content">
+    <div role="tabpanel" class="tab-pane tab-pane-with-border" id="notifications">
+        <div class="assignment-notifications-list">
+        <notifications-list ref="notifications" scroll-detector-element="#notifications"
+                retrieve-notifications-url="{{ NOTIFICATIONS_URL }}"
+                view-notification-url="{{ VIEW_NOTIFICATION_URL }}"
+                :load-on-startup="false">
+        </notifications-list>
+        </div>
+        <div class="notifications-beta-warning">{{ 'BETAWarning'|trans({'{ADMIN_EMAIL}': ADMIN_EMAIL}, 'Chamilo\\Application\\Weblcms\\Integration\\Chamilo\\Core\\Home')|raw }}</div>
+    </div>
     <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entities">
         {{ ENTITY_TABLE|raw }}
     </div>
@@ -100,5 +171,28 @@
 
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        new Vue({
+            el: '#notifications',
+            data: {
+
+            },
+            mounted: function() {
+                var vueInstance = this;
+                var showedBefore = false;
+                $('#notifications-tab').on('shown.bs.tab', function() {
+                    if(!showedBefore) {
+                        showedBefore = true;
+                        vueInstance.$refs.notifications.loadData();
+                    }
+                });
+            }
+        });
+
+
+    });
+</script>
 
 {{ FOOTER|raw }}

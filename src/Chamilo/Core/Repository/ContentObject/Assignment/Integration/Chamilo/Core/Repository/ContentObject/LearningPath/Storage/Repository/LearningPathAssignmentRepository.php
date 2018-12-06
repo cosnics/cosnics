@@ -29,7 +29,7 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
         $treeNodeDataCondition = new EqualityCondition(
             new PropertyConditionVariable(
                 $this->getEntryClassName(),
-                \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::PROPERTY_TREE_NODE_DATA_ID
+                \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::PROPERTY_TREE_NODE_DATA_ID
             ),
             new StaticConditionVariable($treeNodeDataIdentifier)
         );

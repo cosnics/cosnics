@@ -19,6 +19,8 @@ class GraphRepository
 {
     const RESPONSE_CODE_RESOURCE_NOT_FOUND = '404';
     const RESPONSE_CODE_ACCESS_TOKEN_EXPIRED = '401';
+    const API_VERSION_V1 = 'V1.0';
+    const API_VERSION_BETA = 'beta';
 
     /**
      *
@@ -234,6 +236,7 @@ class GraphRepository
      *
      * @throws \GuzzleHttp\Exception\ClientException $exception
      * @return mixed
+     * @throws \Microsoft\Graph\Exception\GraphException
      */
     protected function executeRequestWithAccessTokenExpirationRetry(GraphRequest $graphRequest)
     {
@@ -285,19 +288,21 @@ class GraphRepository
     }
 
     /**
-     *
-     * @param string $requestType
-     * @param string $endpoint
-     * @param string[] $requestBody
-     * @param string $returnClass
+     * @param $requestType
+     * @param $endpoint
+     * @param array $requestBody
+     * @param null $returnClass
      * @param bool $isCollectionRequest
-     *
-     * @return \Microsoft\Graph\Http\GraphRequest
+     * @param string $apiVersion
+     * @return \Microsoft\Graph\Http\GraphCollectionRequest|GraphRequest
      */
     protected function createRequest(
-        $requestType, $endpoint, $requestBody = [], $returnClass = null, $isCollectionRequest = false
+        $requestType, $endpoint, $requestBody = [], $returnClass = null, bool $isCollectionRequest = false,
+        string $apiVersion = self::API_VERSION_V1
     )
     {
+        $this->getGraph()->setApiVersion($apiVersion);
+
         if(!$isCollectionRequest)
         {
             $request = $this->getGraph()->createRequest($requestType, $endpoint)->setReturnType($returnClass);
@@ -349,6 +354,7 @@ class GraphRepository
      * @param string $endpoint
      * @param string[] $requestBody
      * @param string $returnClass
+     * @param string $apiVersion
      *
      * @param bool $isCollectionRequest
      *
@@ -357,11 +363,12 @@ class GraphRepository
      */
     protected function createAndExecuteRequestWithAccessTokenExpirationRetry(
         $requestType, $endpoint, $requestBody = [],
-        $returnClass = null, $isCollectionRequest = false
+        $returnClass = null, bool $isCollectionRequest = false,
+        $apiVersion = self::API_VERSION_V1
     )
     {
         return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->createRequest($requestType, $endpoint, $requestBody, $returnClass, $isCollectionRequest)
+            $this->createRequest($requestType, $endpoint, $requestBody, $returnClass, $isCollectionRequest, $apiVersion)
         );
     }
 
@@ -372,17 +379,20 @@ class GraphRepository
      * @param string[] $requestBody
      * @param string $returnClass
      * @param bool $isCollectionRequest
+     * @param string $apiVersion
      *
      * @return \Microsoft\Graph\Model\Entity | \Microsoft\Graph\Http\GraphResponse -
      *      A Microsoft Graph Entity-instance of type $returnClass or a dry collection response
+     * @throws \Exception
      */
     protected function createAndExecuteRequestWithDelegatedAccessToken(
         $requestType, $endpoint, $requestBody = [],
-        $returnClass = null, $isCollectionRequest = false
+        $returnClass = null, $isCollectionRequest = false,
+        $apiVersion = self::API_VERSION_V1
     )
     {
         return $this->executeRequestWithDelegatedAccess(
-            $this->createRequest($requestType, $endpoint, $requestBody, $returnClass, $isCollectionRequest)
+            $this->createRequest($requestType, $endpoint, $requestBody, $returnClass, $isCollectionRequest, $apiVersion)
         );
     }
 
@@ -392,15 +402,16 @@ class GraphRepository
      * @param string $returnClass
      * @param bool $isCollectionRequest
      *
+     * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity | \Microsoft\Graph\Model\Entity[]
      *  A Microsoft Graph Entity-instance of type $returnClass
      */
     public function executeGetWithAccessTokenExpirationRetry(
-        $endpoint, $returnClass = null, $isCollectionRequest = false
+        $endpoint, $returnClass = null, $isCollectionRequest = false, $apiVersion = self::API_VERSION_V1
     )
     {
         $response = $this->createAndExecuteRequestWithAccessTokenExpirationRetry(
-            'GET', $endpoint, [], $returnClass, $isCollectionRequest
+            'GET', $endpoint, [], $returnClass, $isCollectionRequest, $apiVersion
         );
 
         if($isCollectionRequest)
@@ -417,13 +428,16 @@ class GraphRepository
      * @param string $returnClass
      * @param bool $isCollectionRequest
      *
+     * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity | \Microsoft\Graph\Model\Entity[]
      *  A Microsoft Graph Entity-instance of type $returnClass
+     * @throws \Exception
      */
-    public function executeGetWithDelegatedAccess($endpoint, $returnClass = null, $isCollectionRequest = false)
+    public function executeGetWithDelegatedAccess($endpoint, $returnClass = null, $isCollectionRequest = false,
+                                                  $apiVersion = self::API_VERSION_V1)
     {
         $response = $this->createAndExecuteRequestWithDelegatedAccessToken(
-            'GET', $endpoint, [], $returnClass, $isCollectionRequest
+            'GET', $endpoint, [], $returnClass, $isCollectionRequest, $apiVersion
         );
 
         if($isCollectionRequest)
@@ -440,15 +454,18 @@ class GraphRepository
      * @param string[] $requestBody
      * @param string $returnClass
      *
+     * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
      */
-    public function executePostWithAccessTokenExpirationRetry($endpoint, $requestBody = [], $returnClass = null)
+    public function executePostWithAccessTokenExpirationRetry($endpoint, $requestBody = [], $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
         return $this->createAndExecuteRequestWithAccessTokenExpirationRetry(
             'POST',
             $endpoint,
             $requestBody,
-            $returnClass
+            $returnClass,
+            false,
+            $apiVersion
         );
     }
 
@@ -458,11 +475,19 @@ class GraphRepository
      * @param string[] $requestBody
      * @param string $returnClass
      *
+     * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
      */
-    public function executePostWithDelegatedAccess($endpoint, $requestBody = [], $returnClass = null)
+    public function executePutWithAccessTokenExpirationRetry($endpoint, $requestBody = [], $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
-        return $this->createAndExecuteRequestWithDelegatedAccessToken('POST', $endpoint, $requestBody, $returnClass);
+        return $this->createAndExecuteRequestWithAccessTokenExpirationRetry(
+            'PUT',
+            $endpoint,
+            $requestBody,
+            $returnClass,
+            false,
+            $apiVersion
+        );
     }
 
     /**
@@ -471,15 +496,33 @@ class GraphRepository
      * @param string[] $requestBody
      * @param string $returnClass
      *
+     * @param string $apiVersion
+     * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
+     * @throws \Exception
+     */
+    public function executePostWithDelegatedAccess($endpoint, $requestBody = [], $returnClass = null, $apiVersion = self::API_VERSION_V1)
+    {
+        return $this->createAndExecuteRequestWithDelegatedAccessToken('POST', $endpoint, $requestBody, $returnClass, $apiVersion);
+    }
+
+    /**
+     *
+     * @param string $endpoint
+     * @param string[] $requestBody
+     * @param string $returnClass
+     *
+     * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
      */
-    public function executePatchWithAccessTokenExpirationRetry($endpoint, $requestBody = [], $returnClass = null)
+    public function executePatchWithAccessTokenExpirationRetry($endpoint, $requestBody = [], $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
         return $this->createAndExecuteRequestWithAccessTokenExpirationRetry(
             'PATCH',
             $endpoint,
             $requestBody,
-            $returnClass
+            $returnClass,
+            false,
+            $apiVersion
         );
     }
 
@@ -489,11 +532,13 @@ class GraphRepository
      * @param string[] $requestBody
      * @param string $returnClass
      *
+     * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
+     * @throws \Exception
      */
-    public function executePatchWithDelegatedAccess($endpoint, $requestBody = [], $returnClass = null)
+    public function executePatchWithDelegatedAccess($endpoint, $requestBody = [], $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
-        return $this->createAndExecuteRequestWithDelegatedAccessToken('PATCH', $endpoint, $requestBody, $returnClass);
+        return $this->createAndExecuteRequestWithDelegatedAccessToken('PATCH', $endpoint, $requestBody, $returnClass, $apiVersion);
     }
 
     /**
@@ -501,11 +546,12 @@ class GraphRepository
      * @param string $endpoint
      * @param string $returnClass
      *
+     * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
      */
-    public function executeDeleteWithAccessTokenExpirationRetry($endpoint, $returnClass = null)
+    public function executeDeleteWithAccessTokenExpirationRetry($endpoint, $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
-        return $this->createAndExecuteRequestWithAccessTokenExpirationRetry('DELETE', $endpoint, [], $returnClass);
+        return $this->createAndExecuteRequestWithAccessTokenExpirationRetry('DELETE', $endpoint, [], $returnClass, false, $apiVersion);
     }
 
     /**
@@ -513,10 +559,12 @@ class GraphRepository
      * @param string $endpoint
      * @param string $returnClass
      *
+     * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
+     * @throws \Exception
      */
-    public function executeDeleteWithDelegatedAccess($endpoint, $returnClass = null)
+    public function executeDeleteWithDelegatedAccess($endpoint, $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
-        return $this->createAndExecuteRequestWithDelegatedAccessToken('DELETE', $endpoint, [], $returnClass);
+        return $this->createAndExecuteRequestWithDelegatedAccessToken('DELETE', $endpoint, [], $returnClass, $apiVersion);
     }
 }

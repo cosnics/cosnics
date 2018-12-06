@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\Queue">
+    <settings>
+        <category name="queue">
+
+            <setting
+                    name="queue_provider"
+                    field="radio"
+                    default="database"
+                    user_setting="1">
+                <options type="static">
+                    <option name="Database" value="database" />
+                    <option name="Beanstalk" value="beanstalk" />
+                </options>
+            </setting>
+
+        </category>
+        <category name="beanstalk_queue">
+            <setting
+                    name="beanstalk_queue_host"
+                    field="text"
+                    default="127.0.0.1" />
+
+            <setting
+                    name="beanstalk_queue_port"
+                    field="text"
+                    default="11300" />
+        </category>
+    </settings>
+</package>

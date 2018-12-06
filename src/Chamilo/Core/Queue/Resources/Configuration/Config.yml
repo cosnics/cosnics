@@ -1,0 +1,6 @@
+chamilo.libraries:
+  doctrine:
+    orm:
+      mappings:
+        default:
+          - 'Chamilo/Core/Queue/Storage/Entity'

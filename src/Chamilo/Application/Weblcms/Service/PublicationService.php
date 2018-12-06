@@ -174,7 +174,7 @@ class PublicationService implements PublicationServiceInterface
 
     /**
      * Returns the users for who the content object is published
-     * 
+     *
      * @param ContentObjectPublication $publication
      *
      * @return User[]
@@ -194,6 +194,16 @@ class PublicationService implements PublicationServiceInterface
     public function countTargetUsersForPublication(ContentObjectPublication $publication)
     {
         return count($this->getTargetUsersForPublication($publication));
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $publication
+     *
+     * @return int[]
+     */
+    public function getTargetUserIdsForPublication(ContentObjectPublication $publication)
+    {
+        return $this->publicationRepository->findTargetUserIdsForPublication($publication);
     }
 
     /**

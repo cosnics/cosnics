@@ -19,12 +19,12 @@ class Feedback extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent::get_default_property_names(
-            array(
-                self::PROPERTY_USER_ID, 
-                self::PROPERTY_COMMENT, 
-                self::PROPERTY_CREATION_DATE, 
-                self::PROPERTY_MODIFICATION_DATE));
+        $extended_property_names[] = self::PROPERTY_USER_ID;
+        $extended_property_names[] = self::PROPERTY_COMMENT;
+        $extended_property_names[] = self::PROPERTY_CREATION_DATE;
+        $extended_property_names[] = self::PROPERTY_MODIFICATION_DATE;
+
+        return parent::get_default_property_names($extended_property_names);
     }
 
     public function get_user_id()

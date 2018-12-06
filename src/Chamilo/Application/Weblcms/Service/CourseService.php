@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseSettingsServiceInterface;
 use Chamilo\Application\Weblcms\Service\Interfaces\RightsServiceInterface;
@@ -226,6 +227,19 @@ class CourseService implements CourseServiceInterface
         return $this->courseRepository->findCoursesWhereUserIsStudent($user);
     }
 
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType $courseType
+     *
+     * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course[]
+     */
+    public function getCoursesInCourseTypeForUser(User $user, CourseType $courseType)
+    {
+        $subscribedCourseIds = $this->getSubscribedCourseIdsForUser($user);
+        return $this->courseRepository->findCoursesByCourseTypeAndSubscribedCourseIds($courseType, $subscribedCourseIds);
+    }
+
     /**
      * **************************************************************************************************************
      * Course Subscription Functionality *
@@ -311,6 +325,16 @@ class CourseService implements CourseServiceInterface
     public function getStudentsFromCourse(Course $course)
     {
         return $this->getUsersFromCourseByStatus($course, CourseEntityRelation::STATUS_STUDENT);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return int[]
+     */
+    public function getSubscribedCourseIdsForUser(User $user)
+    {
+        return $this->courseRepository->findSubscribedCourseIdsForUser($user);
     }
 
     /**

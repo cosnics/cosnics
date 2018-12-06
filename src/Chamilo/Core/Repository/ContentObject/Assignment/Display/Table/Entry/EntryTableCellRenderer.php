@@ -3,8 +3,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -51,8 +51,7 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
                             Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
-                        ),
-                        [Manager::PARAM_ENTITY_TYPE, Manager::PARAM_ENTITY_ID]
+                        )
                     );
 
                     return '<a href="' . $url . '">' . $title . '</a>';

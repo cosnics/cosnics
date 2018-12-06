@@ -18,6 +18,11 @@
                 notnull="1"
                 length="50"/>
         <property
+                name="office365_has_team"
+                type="boolean"
+                notnull="1"
+                default="0"/>
+        <property
                 name="office365_plan_id"
                 type="text"
                 length="50" />

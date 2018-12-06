@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -343,7 +343,7 @@ class EntryDownloader
     /**
      *
      * @param string $fileName
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[] $entries
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[] $entries
      *
      * @return BinaryFileResponse
      */

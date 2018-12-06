@@ -17,7 +17,7 @@ class EntityEntriesDownloader extends EntriesDownloader
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[] $entries
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[] $entries
      * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\Archive $archive
      */
     function handleAssignment(Assignment $assignment, $entries, Archive $archive)
@@ -28,7 +28,7 @@ class EntityEntriesDownloader extends EntriesDownloader
 
             if (!$file instanceof File)
             {
-                return;
+                continue;
             }
 
             $entityFolder = $this->getOrCreateFolderByEntity(

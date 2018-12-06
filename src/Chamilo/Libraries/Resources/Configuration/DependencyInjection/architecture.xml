@@ -22,6 +22,8 @@
             <argument>%chamilo.configuration.debug.show_errors%</argument>
         </service>
 
+        <service id="Chamilo\Libraries\Architecture\Bridge\BridgeManager" autowire="true" />
+
         <service
                 id="chamilo.libraries.architecture.bootstrap.kernel"
                 class="Chamilo\Libraries\Architecture\Bootstrap\Kernel">

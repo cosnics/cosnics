@@ -38,7 +38,8 @@
 		"symfony/twig-bridge" : "^3.4",
 		"symfony/validator" : "^3.4",
 		"symfony/yaml" : "^3.4",
-		"twig/twig" : "2.4.8"
+		"twig/twig": "2.4.8"
+		"kriswallsmith/assetic": "^1.4"
 	},
 	"require-dev" : {
 		"behat/behat" : "*",

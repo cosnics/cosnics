@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Compo
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Component

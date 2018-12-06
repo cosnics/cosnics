@@ -35,3 +35,5 @@ OversizedWarning = "You are subscribed to a lot of courses. Generating this list
 ClickForAnnouncements = "Click <a href="{URL}">here</a> to view a list of all new announcments in your courses since the last time you visited them."
 CheckWhatsNew = "Click <a href="{URL}">here</a> to check what's new in these courses."
 ShowContent = "Show content"
+AssignmentNotifications = "Assignment notifications"
+BETAWarning = "The notifications are currently in BETA mode. Any questions or feedback can be sent to us via <a href=\"mailto:{ADMIN_EMAIL}\">{ADMIN_EMAIL}</a>"

@@ -1,0 +1,46 @@
+{
+	"name": "cosnics/application-weblcms-bridge-learning-path-assignment",
+	"version": "1.0.0",
+	"description": "Application Weblcms LearningPath Assignment Bridge",
+	"keywords": [
+		"Application",
+		"Weblcms",
+		"Bridge",
+		"Learning Path Assignment",
+		"Assignment"
+	],
+	"homepage": "http://www.cosnics.org",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0"
+	},
+	"extra": {
+		"cosnics": {
+			"name": "Learning Path Assignment Bridge",
+			"context": "Chamilo\\Application\\Weblcms\\Bridge\\LearningPath\\Assignment",
+			"type": "Chamilo\\Application\\Weblcms\\Bridge\\LearningPath",
+			"install": {
+				"default": 1,
+				"core": 0
+			},
+			"dependencies": [
+				{
+					"id": "Chamilo\\Application\\Weblcms",
+					"version": ">=1.0.0"
+				}
+			],
+			"extra": {
+			}
+		}
+	}
+}

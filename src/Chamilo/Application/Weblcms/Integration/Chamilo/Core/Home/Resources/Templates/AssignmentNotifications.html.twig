@@ -1,0 +1,41 @@
+{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
+
+{% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
+
+<style>
+    .notifications-beta-warning {
+        padding: 7px;
+        background-color: #f5f5f5;
+        color: brown !important;
+        text-align: center;
+        font-weight: bold;
+        border-top: 1px solid lightgrey;
+    }
+
+    .notifications-beta-warning a {
+        color: brown;
+        font-weight: bold;
+    }
+</style>
+
+<div class="portal-block-content portal-block-new-list {% if HIDDEN %} hidden {% endif %}">
+    <div id="notifications{{ BLOCK_ID }}" class="notifications-block">
+        <notifications-list scroll-detector-element="#notifications{{ BLOCK_ID }}"
+            retrieve-notifications-url="{{ RETRIEVE_NOTIFICATIONS_URL }}"
+            view-notification-url="{{ VIEW_NOTIFICATION_URL }}">
+        </notifications-list>
+    </div>
+    <div class="notifications-beta-warning">{{ 'BETAWarning'|trans({'{ADMIN_EMAIL}': ADMIN_EMAIL}, 'Chamilo\\Application\\Weblcms\\Integration\\Chamilo\\Core\\Home')|raw }}</div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        new Vue({
+            el: '#notifications{{ BLOCK_ID }}',
+            data: {}
+        })
+    });
+</script>
