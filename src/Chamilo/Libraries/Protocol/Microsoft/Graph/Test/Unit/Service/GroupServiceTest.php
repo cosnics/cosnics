@@ -81,7 +81,7 @@ class GroupServiceTest extends ChamiloTestCase
             ->will($this->returnValue(new \Microsoft\Graph\Model\Group(['id' => 5])));
 
         $this->groupRepositoryMock->expects($this->once())
-            ->method('subscribeMemberInGroup')
+            ->method('subscribeOwnerInGroup')
             ->with(5, $externalUserIdentifier);
 
         $this->assertEquals(5, $this->groupService->createGroupByName($user, $groupName));

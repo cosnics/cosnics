@@ -502,7 +502,7 @@ class GraphRepository
      */
     public function executePostWithDelegatedAccess($endpoint, $requestBody = [], $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
-        return $this->createAndExecuteRequestWithDelegatedAccessToken('POST', $endpoint, $requestBody, $returnClass, $apiVersion);
+        return $this->createAndExecuteRequestWithDelegatedAccessToken('POST', $endpoint, $requestBody, $returnClass, false, $apiVersion);
     }
 
     /**
@@ -538,7 +538,7 @@ class GraphRepository
      */
     public function executePatchWithDelegatedAccess($endpoint, $requestBody = [], $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
-        return $this->createAndExecuteRequestWithDelegatedAccessToken('PATCH', $endpoint, $requestBody, $returnClass, $apiVersion);
+        return $this->createAndExecuteRequestWithDelegatedAccessToken('PATCH', $endpoint, $requestBody, $returnClass, false, $apiVersion);
     }
 
     /**
@@ -565,6 +565,6 @@ class GraphRepository
      */
     public function executeDeleteWithDelegatedAccess($endpoint, $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
-        return $this->createAndExecuteRequestWithDelegatedAccessToken('DELETE', $endpoint, [], $returnClass, $apiVersion);
+        return $this->createAndExecuteRequestWithDelegatedAccessToken('DELETE', $endpoint, [], $returnClass, false, $apiVersion);
     }
 }
