@@ -94,7 +94,7 @@ class FilteredCourseListRenderer extends CourseListRenderer
      */
     protected function retrieve_courses()
     {
-        if($this->get_course_type_id() >= 0)
+        if ($this->get_course_type_id() >= 0)
         {
             $courseType = new CourseType();
             $courseType->setId($this->get_course_type_id());
@@ -104,12 +104,16 @@ class FilteredCourseListRenderer extends CourseListRenderer
                 $courseUserCategory = new CourseUserCategory();
                 $courseUserCategory->setId($this->get_user_course_category_id());
 
-                return $this->courseUserCategoryService->getCoursesForUserByCourseUserCategoryAndCourseType(
-                    $this->get_parent()->getUser(), $courseUserCategory, $courseType
+                return new ArrayResultSet(
+                    $this->courseUserCategoryService->getCoursesForUserByCourseUserCategoryAndCourseType(
+                        $this->get_parent()->getUser(), $courseUserCategory, $courseType
+                    )
                 );
             }
 
-            return new ArrayResultSet($this->courseService->getCoursesInCourseTypeForUser($this->get_parent()->getUser(), $courseType));
+            return new ArrayResultSet(
+                $this->courseService->getCoursesInCourseTypeForUser($this->get_parent()->getUser(), $courseType)
+            );
         }
 
         return new ArrayResultSet($this->courseService->getAllCoursesForUser($this->get_parent()->getUser()));
