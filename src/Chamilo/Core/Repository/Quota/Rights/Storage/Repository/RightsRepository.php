@@ -263,4 +263,22 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
             RightsLocationEntityRight::class, new DataClassRetrievesParameters($condition, null, null, array(), $joins)
         );
     }
+
+    /**
+     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight $rightsLocationEntityRight
+     *
+     * @return boolean
+     */
+    public function deleteRightLocationEntityRightGroupsForRightsLocationEntityRight(
+        RightsLocationEntityRight $rightsLocationEntityRight
+    )
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                RightsLocationEntityRightGroup::class, RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID
+            ), new StaticConditionVariable($rightsLocationEntityRight->getId())
+        );
+
+        return $this->getDataClassRepository()->deletes(RightsLocationEntityRightGroup::class, $condition);
+    }
 }

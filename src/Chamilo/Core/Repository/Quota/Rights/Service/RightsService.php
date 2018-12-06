@@ -738,4 +738,36 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
 
         return $success;
     }
+
+    /**
+     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight $rightsLocationEntityRight
+     *
+     * @return boolean
+     */
+    public function deleteRightLocationEntityRightGroupsForRightsLocationEntityRight(
+        RightsLocationEntityRight $rightsLocationEntityRight
+    )
+    {
+        return $this->getRightsRepository()->deleteRightLocationEntityRightGroupsForRightsLocationEntityRight(
+            $rightsLocationEntityRight
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight $rightsLocationEntityRight
+     *
+     * @return boolean
+     */
+    protected function deleteRightsLocationEntityRight(RightsLocationEntityRight $rightsLocationEntityRight)
+    {
+        if (!$this->deleteRightLocationEntityRightGroupsForRightsLocationEntityRight($rightsLocationEntityRight))
+        {
+            return false;
+        }
+
+        return parent::deleteRightsLocationEntityRight(
+            $rightsLocationEntityRight
+        );
+    }
+
 }
