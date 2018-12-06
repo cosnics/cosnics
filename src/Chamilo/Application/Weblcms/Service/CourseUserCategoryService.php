@@ -53,7 +53,7 @@ class CourseUserCategoryService
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory $courseUserCategory
      * @param \Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType $courseType
      *
-     * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course[]
+     * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getCoursesForUserByCourseUserCategoryAndCourseType(
         User $user, CourseUserCategory $courseUserCategory, CourseType $courseType

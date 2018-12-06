@@ -107,7 +107,7 @@ class FilteredCourseListRenderer extends CourseListRenderer
                 return new ArrayResultSet(
                     $this->courseUserCategoryService->getCoursesForUserByCourseUserCategoryAndCourseType(
                         $this->get_parent()->getUser(), $courseUserCategory, $courseType
-                    )
+                    )->getArrayCopy()
                 );
             }
 
