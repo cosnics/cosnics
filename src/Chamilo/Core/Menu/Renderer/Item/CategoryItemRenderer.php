@@ -53,10 +53,24 @@ class CategoryItemRenderer extends ItemRenderer
     }
 
     /**
+     * @param boolean $isSelected
+     * @param string[] $existingClasses
+     *
+     * @return string[]
+     */
+    protected function getClasses($isSelected = false, $existingClasses = [])
+    {
+        $existingClasses[] = 'dropdown';
+
+        return parent::getClasses($isSelected, $existingClasses);
+    }
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\CategoryItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function render(Item $item, User $user)
     {
@@ -66,7 +80,7 @@ class CategoryItemRenderer extends ItemRenderer
 
         $title = $this->renderTitle($item);
 
-        $html[] = '<li class="dropdown' . ($selected ? ' active' : '') . '">';
+        $html[] = '<li class="' . implode(' ', $this->getClasses($selected)) . '">';
         $html[] =
             '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 

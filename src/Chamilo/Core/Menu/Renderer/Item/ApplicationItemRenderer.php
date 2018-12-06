@@ -78,7 +78,7 @@ class ApplicationItemRenderer extends ItemRenderer
 
         $isSelected = $this->isSelected($item);
 
-        $html[] = '<li' . ($isSelected ? ' class="active"' : '') . '>';
+        $html[] = '<li class="' . implode(' ', $this->getClasses($isSelected)) . '">';
 
         $title = $this->renderTitle($item);
 

@@ -69,16 +69,6 @@ abstract class ItemRenderer
     abstract public function render(Item $item, User $user);
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
-     */
-    public function renderTitle(Item $item)
-    {
-        return $this->getItemCacheService()->getItemTitleForCurrentLanguage($item);
-    }
-
-    /**
      * @return \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface
      */
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
@@ -92,6 +82,22 @@ abstract class ItemRenderer
     public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): void
     {
         $this->authorizationChecker = $authorizationChecker;
+    }
+
+    /**
+     * @param boolean $isSelected
+     * @param string[] $existingClasses
+     *
+     * @return string[]
+     */
+    protected function getClasses($isSelected = false, $existingClasses = [])
+    {
+        if ($isSelected)
+        {
+            $existingClasses[] = 'active';
+        }
+
+        return $existingClasses;
     }
 
     /**
@@ -183,5 +189,15 @@ abstract class ItemRenderer
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $this->getItemCacheService()->getItemTitleForCurrentLanguage($item);
     }
 }

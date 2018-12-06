@@ -26,56 +26,12 @@ trait DependencyInjectionContainerTrait
     protected $container;
 
     /**
-     * Initializes the container
-     */
-    public function initializeContainer()
-    {
-        if (!isset($this->container))
-        {
-            $this->container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        }
-    }
-
-    /**
-     * Sets the dependency injection container
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @return \Chamilo\Libraries\Architecture\Factory\ApplicationFactory
      */
-    public function setContainer(ContainerInterface $container)
+    public function getApplicationFactory()
     {
-        $this->container = $container;
-    }
-
-    /**
-     * Returns the dependency injection container
-     *
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-    /**
-     * Returns a service from the dependency injection container
-     *
-     * @param string $serviceId
-     *
-     * @return mixed
-     */
-    public function getService($serviceId)
-    {
-        return $this->getContainer()->get($serviceId);
-    }
-
-    /**
-     * Returns the request
-     *
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    public function getRequest()
-    {
-        return $this->getService('symfony.component.http_foundation.request');
+        return $this->getService('chamilo.libraries.architecture.factory.application_factory');
     }
 
     /**
@@ -88,30 +44,20 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
-     *
-     * @return \Chamilo\Core\User\Service\UserService
+     * @return \Chamilo\Libraries\Architecture\Bridge\BridgeManager
      */
-    public function getUserService()
+    public function getBridgeManager()
     {
-        return $this->getService(UserService::class);
-    }
+        return $this->getService(BridgeManager::class);
+}
 
     /**
      *
-     * @return \Chamilo\Core\Group\Service\GroupService
+     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
      */
-    public function getGroupService()
+    public function getClassnameUtilities()
     {
-        return $this->getService(GroupService::class);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\File\PathBuilder
-     */
-    public function getPathBuilder()
-    {
-        return $this->getService('chamilo.libraries.file.path_builder');
+        return $this->getService('chamilo.libraries.architecture.classname_utilities');
     }
 
     /**
@@ -133,100 +79,32 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     * Returns the dependency injection container
      *
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
      */
-    public function getRegistrationConsulter()
+    public function getContainer()
     {
-        return $this->getService('chamilo.configuration.service.registration_consulter');
+        return $this->container;
+    }
+
+    /**
+     * Sets the dependency injection container
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     */
+    public function setContainer(ContainerInterface $container)
+    {
+        $this->container = $container;
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
-    protected function getExceptionLogger()
+    protected function getDataClassRepository()
     {
-        return $this->getService('chamilo.libraries.architecture.error_handler.exception_logger');
-    }
-
-    /**
-     * Returns the validator form the dependency injection container
-     *
-     * @return \Symfony\Component\Validator\Validator
-     */
-    public function getValidator()
-    {
-        return $this->getService('symfony.component.validator.validator');
-    }
-
-    /**
-     * Returns the symfony form builder and renderer
-     *
-     * @return \Symfony\Component\Form\FormFactory
-     */
-    public function getForm()
-    {
-        return $this->getService('symfony.component.forms.form');
-    }
-
-    /**
-     * Returns the Twig_Environment
-     *
-     * @return \Twig_Environment
-     */
-    public function getTwig()
-    {
-        return $this->getService('twig.environment');
-    }
-
-    /**
-     * Returns the Monolog Logger
-     *
-     * @return \Monolog\Logger
-     */
-    public function getLogger()
-    {
-        return $this->getService('monolog.logger');
-    }
-
-    /**
-     * Returns the translator
-     *
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator()
-    {
-        return $this->getService('symfony.component.translation.translator');
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Theme
-     */
-    public function getThemeUtilities()
-    {
-        return $this->getService('chamilo.libraries.format.theme');
-    }
-
-    /**
-     * Returns the event dispatcher
-     *
-     * @return \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
-     */
-    public function getEventDispatcher()
-    {
-        return $this->getService('symfony.component.event_dispatcher');
-    }
-
-    /**
-     * Returns the serializer service
-     *
-     * @return \JMS\Serializer\Serializer
-     */
-    public function getSerializer()
-    {
-        return $this->getService('jms.serializer');
+        return $this->getService('chamilo.libraries.storage.data_manager.doctrine.data_class_repository');
     }
 
     /**
@@ -240,30 +118,110 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     * Returns the event dispatcher
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @return \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
      */
-    protected function getDataClassRepository()
+    public function getEventDispatcher()
     {
-        return $this->getService('chamilo.libraries.storage.data_manager.doctrine.data_class_repository');
+        return $this->getService('symfony.component.event_dispatcher');
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Architecture\Factory\ApplicationFactory
+     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
-    public function getApplicationFactory()
+    protected function getExceptionLogger()
     {
-        return $this->getService('chamilo.libraries.architecture.factory.application_factory');
+        return $this->getService('chamilo.libraries.architecture.error_handler.exception_logger');
+    }
+
+    /**
+     * Returns the symfony form builder and renderer
+     *
+     * @return \Symfony\Component\Form\FormFactory
+     */
+    public function getForm()
+    {
+        return $this->getService('symfony.component.forms.form');
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
+     * @return \Chamilo\Core\Group\Service\GroupService
      */
-    public function getClassnameUtilities()
+    public function getGroupService()
     {
-        return $this->getService('chamilo.libraries.architecture.classname_utilities');
+        return $this->getService(GroupService::class);
+    }
+
+    /**
+     * Returns the Monolog Logger
+     *
+     * @return \Monolog\Logger
+     */
+    public function getLogger()
+    {
+        return $this->getService('monolog.logger');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\File\PathBuilder
+     */
+    public function getPathBuilder()
+    {
+        return $this->getService('chamilo.libraries.file.path_builder');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     */
+    public function getRegistrationConsulter()
+    {
+        return $this->getService('chamilo.configuration.service.registration_consulter');
+    }
+
+    /**
+     * Returns the request
+     *
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     */
+    public function getRequest()
+    {
+        return $this->getService('symfony.component.http_foundation.request');
+    }
+
+    /**
+     * Returns the serializer service
+     *
+     * @return \JMS\Serializer\Serializer
+     */
+    public function getSerializer()
+    {
+        return $this->getService('jms.serializer');
+    }
+
+    /**
+     * Returns a service from the dependency injection container
+     *
+     * @param string $serviceId
+     *
+     * @return mixed
+     */
+    public function getService($serviceId)
+    {
+        return $this->getContainer()->get($serviceId);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    public function getSessionUtilities()
+    {
+        return $this->getService('chamilo.libraries.platform.session.session_utilities');
     }
 
     /**
@@ -277,18 +235,60 @@ trait DependencyInjectionContainerTrait
 
     /**
      *
-     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
+     * @return \Chamilo\Libraries\Format\Theme
      */
-    public function getSessionUtilities()
+    public function getThemeUtilities()
     {
-        return $this->getService('chamilo.libraries.platform.session.session_utilities');
+        return $this->getService('chamilo.libraries.format.theme');
     }
 
     /**
-     * @return \Chamilo\Libraries\Architecture\Bridge\BridgeManager
+     * Returns the translator
+     *
+     * @return \Symfony\Component\Translation\Translator
      */
-    public function getBridgeManager()
+    public function getTranslator()
     {
-        return $this->getService(BridgeManager::class);
-}
+        return $this->getService('symfony.component.translation.translator');
+    }
+
+    /**
+     * Returns the Twig_Environment
+     *
+     * @return \Twig_Environment
+     */
+    public function getTwig()
+    {
+        return $this->getService('twig.environment');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    public function getUserService()
+    {
+        return $this->getService(UserService::class);
+    }
+
+    /**
+     * Returns the validator form the dependency injection container
+     *
+     * @return \Symfony\Component\Validator\Validator
+     */
+    public function getValidator()
+    {
+        return $this->getService('symfony.component.validator.validator');
+    }
+
+    /**
+     * Initializes the container
+     */
+    public function initializeContainer()
+    {
+        if (!isset($this->container))
+        {
+            $this->container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        }
+    }
 }

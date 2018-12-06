@@ -1,24 +1,25 @@
 <?php
+namespace Chamilo\Core\Menu\Renderer\Item;
 
-namespace Chamilo\Core\Menu\Renderer\Item\Bar;
+use Chamilo\Core\Menu\Renderer\ItemRenderer;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\Item\Bar
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-abstract class PriorityItem extends Bar
+abstract class PriorityItemRenderer extends ItemRenderer
 {
     /**
-     * @param bool $isSelected
+     * @param boolean $isSelected
+     * @param string[] $existingClasses
      *
-     * @param array $existingClasses
-     *
-     * @return array
+     * @return string[]
      */
     protected function getClasses($isSelected = false, $existingClasses = [])
     {
         $existingClasses[] = 'chamilo-menu-item-priority';
+
         return parent::getClasses($isSelected, $existingClasses);
     }
 }
