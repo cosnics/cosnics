@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\Quota\Rights\Table\Entity\EntityTableColumnModel;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Rights\Form\RightsForm;
 use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
@@ -462,15 +463,18 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
             if ($entityType != 0)
             {
                 $entityService = $this->getAvailableEntityByType($entityType);
+
                 $groupRecord[EntityTableColumnModel::PROPERTY_ENTITY_TITLE] =
                     $entityService->getEntityTitleByIdentifier($entityIdentifier);
                 $groupRecord[EntityTableColumnModel::PROPERTY_ENTITY_DESCRIPTION] =
                     $entityService->getEntityDescriptionByIdentifier($entityIdentifier);
+                $groupRecord[EntityTableColumnModel::PROPERTY_ENTITY_GLYPH] = $entityService->getEntityGlyph();
             }
             else
             {
                 $groupRecord[EntityTableColumnModel::PROPERTY_ENTITY_TITLE] = $this->getTranslator()->trans('Everyone');
                 $groupRecord[EntityTableColumnModel::PROPERTY_ENTITY_DESCRIPTION] = '';
+                $groupRecord[EntityTableColumnModel::PROPERTY_ENTITY_GLYPH] = new FontAwesomeGlyph('globe');
             }
 
             $group =

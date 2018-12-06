@@ -10,6 +10,7 @@ use Symfony\Component\Translation\Translator;
 
 class EntityTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport
 {
+    const PROPERTY_ENTITY_GLYPH = 'entity_glyph';
     const PROPERTY_ENTITY_DESCRIPTION = 'entity_description';
     const PROPERTY_ENTITY_TITLE = 'entity_title';
     const PROPERTY_GROUP_NAME = 'group_name';

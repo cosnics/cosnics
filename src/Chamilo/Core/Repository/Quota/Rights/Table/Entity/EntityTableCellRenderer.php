@@ -101,16 +101,7 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
         switch ($column->get_name())
         {
             case RightsLocationEntityRight::PROPERTY_ENTITY_TYPE :
-                $entityType = $record[RightsLocationEntityRight::PROPERTY_ENTITY_TYPE];
-
-                if ($entityType != 0)
-                {
-                    $entityProvider = $this->getRightsService()->getAvailableEntityByType($entityType);
-
-                    return $entityProvider->getEntityGlyph()->render();
-                }
-
-                $glyph = new FontAwesomeGlyph('globe');
+                $glyph = $record[EntityTableColumnModel::PROPERTY_ENTITY_GLYPH];
 
                 return $glyph->render();
         }
