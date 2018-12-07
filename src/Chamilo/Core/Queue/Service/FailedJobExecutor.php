@@ -4,6 +4,7 @@ namespace Chamilo\Core\Queue\Service;
 
 use Chamilo\Core\Queue\Exceptions\JobNoLongerValidException;
 use Chamilo\Core\Queue\Storage\Entity\Job;
+use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -38,7 +39,6 @@ class FailedJobExecutor
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
-     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -50,6 +50,25 @@ class FailedJobExecutor
         if(!$job instanceof Job)
         {
             $output->writeln('No failed job found, exiting');
+            return;
+        }
+
+        $this->retryJob($job, $output);
+    }
+
+    /**
+     * @param \Chamilo\Core\Queue\Storage\Entity\Job $job
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Throwable
+     */
+    public function retryJob(Job $job, OutputInterface $output)
+    {
+        if($job->getStatus() != Job::STATUS_FAILED_RETRY)
+        {
+            $output->writeln('Job not failed, cannot retry job');
             return;
         }
 
@@ -77,7 +96,6 @@ class FailedJobExecutor
             $output->writeln('Failed, please retry');
             throw $ex;
         }
-
     }
 
 }

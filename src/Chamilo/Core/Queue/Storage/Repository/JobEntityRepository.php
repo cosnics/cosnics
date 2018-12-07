@@ -55,4 +55,18 @@ class JobEntityRepository extends EntityRepository
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * @return Job[]
+     */
+    public function findFailedJobs()
+    {
+        $queryBuilder = $this->createQueryBuilder('job')
+            ->addSelect('parameter')
+            ->join('job.jobParameters', 'parameter')
+            ->where('job.status = :failedJobStatus')
+            ->setParameter('failedJobStatus', Job::STATUS_FAILED_RETRY);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

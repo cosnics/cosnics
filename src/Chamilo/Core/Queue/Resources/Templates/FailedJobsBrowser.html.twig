@@ -1,0 +1,30 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Core\\Queue' %}
+
+<table class="table data-table table-bordered table-striped">
+    <tr>
+        <th>{{ 'ID'|trans({}, appContext) }}</th>
+        <th>{{ 'Processor'|trans({}, appContext) }}</th>
+        <th>{{ 'Parameters'|trans({}, appContext) }}</th>
+        <th>{{ 'Date'|trans({}, appContext) }}</th>
+        <th>{{ 'Retry'|trans({}, appContext) }}</th>
+    </tr>
+    {% for JOB in FAILED_JOBS %}
+        <tr>
+            <td>{{ JOB.id }}</td>
+            <td>{{ JOB.processorClass }}</td>
+            <td>
+                {
+                {% for PARAMETER in JOB.getParameters() %}
+                    {{ PARAMETER.name }}: {{ PARAMETER.value }}
+                {% endfor %}
+                }
+            </td>
+            <td>{{ JOB.date|date("d/m/Y H:i") }}</td>
+            <td><a href="{{ RETRY_URL|replace({'__JOB_ID__': JOB.id}) }}"><span class="fa fa-refresh"></span></a></td>
+        </tr>
+    {% endfor %}
+</table>
+
+{{ FOOTER|raw }}

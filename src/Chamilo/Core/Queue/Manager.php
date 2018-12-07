@@ -12,6 +12,13 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 abstract class Manager extends Application
 {
+    const ACTION_BROWSE_FAILED_JOBS = 'FailedJobsBrowser';
+    const ACTION_RETRY_FAILED_JOB = 'RetryFailedJob';
+
+    const DEFAULT_ACTION = self::ACTION_BROWSE_FAILED_JOBS;
+
+    const PARAM_JOB_ID = 'JobId';
+
     /**
      * Constructor
      *

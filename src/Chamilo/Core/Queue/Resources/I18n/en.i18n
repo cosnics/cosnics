@@ -1,1 +1,3 @@
 TypeName = "Queue"
+FailedJobsBrowserComponent = "View failed jobs"
+RetryFailedJobComponent = "Retry failed job"
