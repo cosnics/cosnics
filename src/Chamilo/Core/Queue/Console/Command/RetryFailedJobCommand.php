@@ -2,26 +2,21 @@
 
 namespace Chamilo\Core\Queue\Console\Command;
 
-use Chamilo\Core\Queue\Service\Worker;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Queue\Console\Command
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class WorkerCommand extends Command
+class RetryFailedJobCommand extends Command
 {
-    const ARG_QUEUE = 'queue';
-
     /**
-     * @var Worker
+     * @var \Chamilo\Core\Queue\Service\FailedJobExecutor
      */
-    protected $worker;
+    protected $failedJobExecutor;
 
     /**
      * @var \Symfony\Component\Translation\Translator
@@ -29,14 +24,17 @@ class WorkerCommand extends Command
     protected $translator;
 
     /**
-     * WorkerCommand constructor.
+     * RetryFailedJobCommand constructor.
      *
-     * @param \Chamilo\Core\Queue\Service\Worker $worker
+     * @param \Chamilo\Core\Queue\Service\FailedJobExecutor $failedJobExecutor
      * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function __construct(Worker $worker, Translator $translator)
+    public function __construct(
+        \Chamilo\Core\Queue\Service\FailedJobExecutor $failedJobExecutor,
+        \Symfony\Component\Translation\Translator $translator
+    )
     {
-        $this->worker = $worker;
+        $this->failedJobExecutor = $failedJobExecutor;
         $this->translator = $translator;
 
         parent::__construct();
@@ -44,12 +42,8 @@ class WorkerCommand extends Command
 
     protected function configure()
     {
-        $this->setName('chamilo:queue:worker')
-            ->addArgument(
-                self::ARG_QUEUE, InputArgument::REQUIRED,
-                $this->translator->trans('QueueWorkerCommandQueueArgDescription', [], 'Chamilo\Core\Queue')
-            )
-            ->setDescription($this->translator->trans('QueueWorkerCommandDescription', [], 'Chamilo\Core\Queue'));
+        $this->setName('chamilo:queue:retry_failed_job')
+            ->setDescription($this->translator->trans('RetryFailedJobCommandDescription', [], 'Chamilo\Core\Queue'));
     }
 
     /**
@@ -61,7 +55,7 @@ class WorkerCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->worker->waitForJobAndExecute($input->getArgument(self::ARG_QUEUE));
+        $this->failedJobExecutor->retryFirstFailedJob($output);
     }
 
 }

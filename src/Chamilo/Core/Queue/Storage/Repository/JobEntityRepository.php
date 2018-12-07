@@ -40,4 +40,19 @@ class JobEntityRepository extends EntityRepository
     {
         $this->getEntityManager()->flush();
     }
+
+    /**
+     * @return Job
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findFirstFailedJob()
+    {
+        $queryBuilder = $this->createQueryBuilder('job')
+            ->where('job.status = :failedJobStatus')
+            ->setParameter('failedJobStatus', Job::STATUS_FAILED_RETRY)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

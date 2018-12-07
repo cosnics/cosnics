@@ -73,6 +73,17 @@ class JobEntityManager
         return $job;
     }
 
+    /**
+     * @return Job
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findFirstFailedJob()
+    {
+        return $this->jobEntityRepository->findFirstFailedJob();
+    }
+
 
 
 }

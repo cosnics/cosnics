@@ -613,3 +613,11 @@ ALTER TABLE tracking_weblcms_learning_path_assignment_entry_attachment
 
 /** Teams */
 ALTER TABLE `weblcms_course_group_office365_reference` ADD `office365_has_team` TINYINT(1) NOT NULL AFTER `linked`;
+
+ALTER TABLE tracking_weblcms_learning_path_assignment_entry
+    ADD `content_object_publication_id` int(11) NOT NULL AFTER ID,
+    ADD INDEX `twlpae_content_object_publication_id` (`content_object_publication_id`);
+
+UPDATE tracking_weblcms_learning_path_assignment_entry LPAE
+JOIN tracking_weblcms_learning_path_tree_node_attempt TNA on LPAE.tree_node_attempt_id = TNA.id
+    SET LPAE.content_object_publication_id = TNA.publication_id;
