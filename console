@@ -2,6 +2,7 @@
 
 use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -16,23 +17,19 @@ $container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
 /** @var \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter */
 $configurationConsulter = $container->get('chamilo.configuration.service.configuration_consulter');
 
-if (! \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'debug', 'show_errors'))
-{
-    $exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter);
-    $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
-
-    $errorHandler = new ErrorHandler($exceptionLogger, Translation::getInstance(), Theme::getInstance());
-    $errorHandler->registerErrorHandlers();
-}
+$exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter);
+$exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
 
 try
 {
+    /** @var \Symfony\Component\Console\Application $console */
     $console = $container->get('chamilo.libraries.console');
     $console->setHelperSet($container->get('chamilo.libraries.console.helper_set'));
+    $console->setCatchExceptions(false);
     $console->run();
 }
 catch(\Throwable $ex)
 {
-    echo $ex->getMessage() . "\n\n";
-    echo $ex->getTraceAsString() . "\n\n";
+    $exceptionLogger->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
+    throw $ex;
 }
