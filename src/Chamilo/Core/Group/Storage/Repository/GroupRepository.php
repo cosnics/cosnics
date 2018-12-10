@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -22,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
@@ -394,4 +396,58 @@ class GroupRepository extends CommonDataClassRepository
         $this->dataClassRepository = $dataClassRepository;
     }
 
+    /**
+     * @param integer[] $userGroupIdentifiers
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function getHighestGroupQuotumForUserGroupIdentifiers(array $userGroupIdentifiers): int
+    {
+        return $this->getGroupQuotumWithFunctionForUserGroupIdentifiers(
+            FunctionConditionVariable::MAX, $userGroupIdentifiers
+        );
+    }
+
+    /**
+     * @param integer[] $userGroupIdentifiers
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function getLowestGroupQuotumForUserGroupIdentifiers(array $userGroupIdentifiers): int
+    {
+        return $this->getGroupQuotumWithFunctionForUserGroupIdentifiers(
+            FunctionConditionVariable::MIN, $userGroupIdentifiers
+        );
+    }
+
+    /**
+     * @param integer $function
+     * @param integer[] $userGroupIdentifiers
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    protected function getGroupQuotumWithFunctionForUserGroupIdentifiers(int $function, array $userGroupIdentifiers
+    ): int
+    {
+        $condition =
+            new InCondition(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $userGroupIdentifiers);
+
+        $parameters = new RecordRetrieveParameters(
+            new DataClassProperties(
+                array(
+                    new FunctionConditionVariable(
+                        $function, new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA),
+                        Group::PROPERTY_DISK_QUOTA
+                    )
+                )
+            ), $condition
+        );
+
+        $record = $this->getDataClassRepository()->record(Group::class, $parameters);
+
+        return (int) $record[Group::PROPERTY_DISK_QUOTA];
+    }
 }

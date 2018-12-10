@@ -32,6 +32,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Dieter De Neef
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Use QuotaCalculator service now
  */
 class Calculator
 {
@@ -72,12 +73,14 @@ class Calculator
     /**
      *
      * @var integer
+     * @deprecated No longer relevant
      */
     private $usedDatabaseQuota;
 
     /**
      *
      * @var integer
+     * @deprecated No longer relevant
      */
     private $maximumDatabaseQuota;
 
@@ -103,12 +106,10 @@ class Calculator
     }
 
     /**
-     * USER DISK QUOTA
-     */
-
-    /**
      *
      * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     *
+     * @deprecated Use QuotaCalculator::addUploadWarningToForm() now
      */
     public function addUploadWarningToForm(FormValidator $form)
     {
@@ -172,6 +173,7 @@ class Calculator
      * @param integer $requestedStorageSize
      *
      * @return boolean
+     * @deprecated Use QuotaCalculator::doesUserHaveRequestedStorageSpace() now
      */
     public function canUpload($requestedStorageSize)
     {
@@ -186,6 +188,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getAggregatedUserStorageSpacePercentage() now
      */
     public function getAggregatedUserDiskQuotaPercentage()
     {
@@ -195,6 +198,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getAllocatedStorageSpacePercentage() now
      */
     public function getAllocatedDiskSpacePercentage()
     {
@@ -204,6 +208,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getAvailableAggregatedUserStorageSpace() now
      */
     public function getAvailableAggregatedUserDiskQuota()
     {
@@ -215,6 +220,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getAvailableAllocatedStorageSpace()
      */
     public function getAvailableAllocatedDiskSpace()
     {
@@ -224,6 +230,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated No longer relevant
      */
     public function getAvailableDatabaseQuota()
     {
@@ -235,6 +242,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getAvailableReservedStorageSpace() now
      */
     public function getAvailableReservedDiskSpace()
     {
@@ -244,12 +252,9 @@ class Calculator
     }
 
     /**
-     * AGGREGATED USER DISK QUOTA
-     */
-
-    /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getAvailableStorageSpaceForUser() now
      */
     public function getAvailableUserDiskQuota()
     {
@@ -301,6 +306,11 @@ class Calculator
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @return \Chamilo\Core\Repository\Quota\Service\CalculatorCacheService
+     * @deprecated Re-implement caching differently
+     * @todo Re-implement caching differently
+     */
     private function getCalculatorCacheService()
     {
         if (!isset($this->calculatorCacheService))
@@ -314,6 +324,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getHighestGroupQuotumForUser() now
      */
     public function getGroupHighest()
     {
@@ -340,12 +351,9 @@ class Calculator
     }
 
     /**
-     * RESERVED DISK SPACE
-     */
-
-    /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getLowestGroupQuotumForUser() now
      */
     public function getGroupLowest()
     {
@@ -377,6 +385,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getMaximumAggregatedUserStorageSpace() now
      */
     public function getMaximumAggregatedUserDiskQuota()
     {
@@ -391,6 +400,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getMaximumAllocatedStorageSpace() now
      */
     public function getMaximumAllocatedDiskSpace()
     {
@@ -400,6 +410,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated No longer relevant
      */
     public function getMaximumDatabaseQuota()
     {
@@ -412,12 +423,9 @@ class Calculator
     }
 
     /**
-     * ALLOCATED DISK SPACE
-     */
-
-    /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getMaximumAllocatedStorageSpace() now
      */
     public function getMaximumReservedDiskSpace()
     {
@@ -427,6 +435,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated USe QuotaCalculator::getMaximumUploadSizeForUser() now
      */
     public function getMaximumUploadSize()
     {
@@ -455,6 +464,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getAllowedStorageSpaceForUser() now
      */
     public function getMaximumUserDiskQuota()
     {
@@ -509,15 +519,12 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getReservedStorageSpacePercentage() now
      */
     public function getReservedDiskSpacePercentage()
     {
         return 100 * $this->getUsedReservedDiskSpace() / $this->getMaximumReservedDiskSpace();
     }
-
-    /**
-     * DATABASE SPACE
-     */
 
     /**
      * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
@@ -529,6 +536,9 @@ class Calculator
         return $container->get(RightsService::class);
     }
 
+    /**
+     * @deprecated Use QuotaCalculator::getMaximumAggregatedUserStorageSpace() now
+     */
     public function getTotalUserDiskQuota($reset = false)
     {
         if ($reset)
@@ -544,6 +554,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getUsedAggregatedUserStorageSpace() now
      */
     public function getUsedAggregatedUserDiskQuota()
     {
@@ -558,6 +569,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getUsedAggregatedUserStorageSpace() now
      */
     public function getUsedAllocatedDiskSpace()
     {
@@ -567,6 +579,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated No longer relevant
      */
     public function getUsedDatabaseQuota()
     {
@@ -595,6 +608,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getMaximumAggregatedUserStorageSpace() now
      */
     public function getUsedReservedDiskSpace()
     {
@@ -604,6 +618,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated Use QuotaCalculator::getUsedStorageSpaceForUser() now
      */
     public function getUsedUserDiskQuota()
     {
@@ -620,6 +635,7 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated No longer relevant
      */
     public function getUserDatabasePercentage()
     {
@@ -629,12 +645,17 @@ class Calculator
     /**
      *
      * @return integer
+     * @deprecated UseQuotaCalculator::geStorageSpacePercentageForUser() now
      */
     public function getUserDiskQuotaPercentage()
     {
         return 100 * $this->getUsedUserDiskQuota() / $this->getMaximumUserDiskQuota();
     }
 
+    /**
+     * @return bool
+     * @deprecated Use QuotaCalculator::isStorageQuotumEnabled() now
+     */
     public function isEnabled()
     {
         return (boolean) Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'enable_quota'));
@@ -643,6 +664,7 @@ class Calculator
     /**
      *
      * @return boolean
+     * @deprecated Use RightsService::canUserRequestAdditionalStorageSpace() now
      */
     public function requestAllowed()
     {
@@ -676,6 +698,9 @@ class Calculator
         return false;
     }
 
+    /**
+     * @deprecated No longer relevant
+     */
     public function resetCache()
     {
         $this->getCalculatorCacheService()->clearForIdentifiers(
@@ -686,6 +711,7 @@ class Calculator
     /**
      *
      * @return boolean
+     * @deprecated Use RightsService::canUserUpgradeStorageSpace() now
      */
     public function upgradeAllowed()
     {
@@ -740,6 +766,7 @@ class Calculator
     /**
      *
      * @return boolean
+     * @deprecated Use QuotaCalculator::isQuotumDefinedForUser() now
      */
     public function usesUserDiskQuota()
     {

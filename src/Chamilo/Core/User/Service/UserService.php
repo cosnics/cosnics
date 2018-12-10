@@ -298,7 +298,7 @@ class UserService
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    public function findUsers($condition, $offset = 0, $count = - 1, $orderProperty = null)
+    public function findUsers($condition = null, $offset = 0, $count = - 1, $orderProperty = null)
     {
         return $this->getUserRepository()->findUsers($condition, $count, $offset, $orderProperty);
     }

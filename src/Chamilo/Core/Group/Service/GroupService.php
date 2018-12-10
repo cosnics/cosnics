@@ -280,4 +280,40 @@ class GroupService
     {
         return $group->get_fully_qualified_name();
     }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function getLowestGroupQuotumForUser(User $user)
+    {
+        $userGroupIdentifiers = $this->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());
+
+        if (count($userGroupIdentifiers) == 0)
+        {
+            return 0;
+        }
+
+        return $this->getGroupRepository()->getLowestGroupQuotumForUserGroupIdentifiers($userGroupIdentifiers);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function getHighestGroupQuotumForUser(User $user)
+    {
+        $userGroupIdentifiers = $this->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());
+
+        if (count($userGroupIdentifiers) == 0)
+        {
+            return 0;
+        }
+
+        return $this->getGroupRepository()->getHighestGroupQuotumForUserGroupIdentifiers($userGroupIdentifiers);
+    }
 }

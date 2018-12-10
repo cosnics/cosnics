@@ -283,6 +283,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = '<h3>' . htmlentities(Translation::get('RepositoryStatistics')) . '</h3>';
 
         $properties = array();
+        //TODO: Make this a normal count
         $properties[Translation::get('NumberOfContentObjects')] = $this->calculator->getUsedDatabaseQuota();
 
         $type_counts = array();
