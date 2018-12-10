@@ -48,7 +48,7 @@ class CreatorComponent extends Manager
                 $objects = $objects[0];
             }
 
-            $entry = $this->getDataProvider()->createEntry(
+            $entry = $this->getAssignmentServiceBridge()->createEntry(
                 $this->getEntityType(),
                 $this->getEntityIdentifier(),
                 $this->getUser()->getId(),

@@ -15,7 +15,7 @@ class LatestDocumentsPublisherComponent extends Manager
 {
     public function run()
     {
-        $trackers = $this->getDataProvider()->findAssignmentEntriesWithEphorusRequests();
+        $trackers = $this->getEphorusServiceBridge()->findAssignmentEntriesWithEphorusRequests();
 
         $ids = array();
         foreach($trackers as $tracker)

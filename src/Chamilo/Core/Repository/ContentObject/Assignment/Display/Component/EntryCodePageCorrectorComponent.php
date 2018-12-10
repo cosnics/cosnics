@@ -62,7 +62,7 @@ class EntryCodePageCorrectorComponent extends Manager
             $page->set_owner_id($this->getUser()->getId());
 
             $success = $page->create();
-            $this->getDataProvider()->attachContentObjectToEntry($this->getEntry(), $page);
+            $this->getAssignmentServiceBridge()->attachContentObjectToEntry($this->getEntry(), $page);
 
             $this->redirect(
                 $this->getTranslator()->trans(
@@ -109,7 +109,7 @@ class EntryCodePageCorrectorComponent extends Manager
      */
     protected function checkAccessRights()
     {
-        if($this->getDataProvider()->canEditAssignment())
+        if($this->getAssignmentServiceBridge()->canEditAssignment())
         {
             return;
         }

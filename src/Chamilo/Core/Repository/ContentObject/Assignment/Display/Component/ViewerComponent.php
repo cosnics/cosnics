@@ -71,11 +71,11 @@ class ViewerComponent extends Manager implements TableSupport
      */
     protected function getTemplateProperties()
     {
-        $entityName = $this->getDataProvider()->getPluralEntityNameByType($this->getEntityType());
-        $entryCount = $this->getDataProvider()->countDistinctEntriesByEntityType($this->getEntityType());
-        $feedbackCount = $this->getDataProvider()->countDistinctFeedbackByEntityType($this->getEntityType());
-        $lateEntryCount = $this->getDataProvider()->countDistinctLateEntriesByEntityType($this->getEntityType());
-        $entityCount = $this->getDataProvider()->countEntitiesByEntityType($this->getEntityType());
+        $entityName = $this->getAssignmentServiceBridge()->getPluralEntityNameByType($this->getEntityType());
+        $entryCount = $this->getAssignmentServiceBridge()->countDistinctEntriesByEntityType($this->getEntityType());
+        $feedbackCount = $this->getFeedbackServiceBridge()->countDistinctFeedbackByEntityType($this->getEntityType());
+        $lateEntryCount = $this->getAssignmentServiceBridge()->countDistinctLateEntriesByEntityType($this->getEntityType());
+        $entityCount = $this->getAssignmentServiceBridge()->countEntitiesByEntityType($this->getEntityType());
 
         /** @var Assignment $assignment */
         $assignment = $this->get_root_content_object();
@@ -121,7 +121,7 @@ class ViewerComponent extends Manager implements TableSupport
             'ALLOW_LATE_SUBMISSIONS' => $assignment->get_allow_late_submissions(),
             'VISIBILITY_SUBMISSIONS' => $assignment->get_visibility_submissions(),
             'ENTITY_TABLE' => $this->renderEntityTable(),
-            'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
+            'CAN_EDIT_ASSIGNMENT' => $this->getAssignmentServiceBridge()->canEditAssignment(),
             'ADMINISTRATOR_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email']),
             'NOTIFICATIONS_URL' => $notificationsUrl,
             'NOTIFICATIONS_COUNT' => $notificationsCount,
@@ -152,7 +152,7 @@ class ViewerComponent extends Manager implements TableSupport
      */
     protected function renderEntityTable()
     {
-        return $this->getDataProvider()->getEntityTableForType($this, $this->getEntityType())->as_html();
+        return $this->getAssignmentServiceBridge()->getEntityTableForType($this, $this->getEntityType())->as_html();
     }
 
     /**
@@ -181,7 +181,7 @@ class ViewerComponent extends Manager implements TableSupport
                 )
             );
 
-            if($this->isEphorusEnabled() && $this->getDataProvider()->canEditAssignment())
+            if($this->isEphorusEnabled() && $this->getAssignmentServiceBridge()->canEditAssignment())
             {
                 $buttonToolBar->addButtonGroup(
                     new ButtonGroup(

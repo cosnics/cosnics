@@ -26,7 +26,7 @@ class UploadEntryAttachmentComponent extends Manager
      */
     function run()
     {
-        if (!$this->getDataProvider()->canEditAssignment())
+        if (!$this->getAssignmentServiceBridge()->canEditAssignment())
         {
             throw new NotAllowedException();
         }
@@ -62,7 +62,7 @@ class UploadEntryAttachmentComponent extends Manager
             throw new ObjectNotExistException(Translation::get('Entry'));
         }
 
-        $entryAttachment = $this->getDataProvider()->attachContentObjectToEntry($entry, $file);
+        $entryAttachment = $this->getAssignmentServiceBridge()->attachContentObjectToEntry($entry, $file);
 
         $properties = [
             'id' => $file->getId(),

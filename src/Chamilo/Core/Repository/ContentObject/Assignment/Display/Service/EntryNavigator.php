@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
@@ -68,13 +68,13 @@ class EntryNavigator
     /**
      * Calculates the position of the current entry and the current entity
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $currentEntry
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
      */
     protected function calculateNavigatorOptions(
-        AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
+        AssignmentServiceBridgeInterface $assignmentServiceBridge, Entry $currentEntry, $currentEntityType,
         $currentEntityIdentifier
     )
     {
@@ -88,7 +88,7 @@ class EntryNavigator
             return;
         }
 
-        $entries = $assignmentDataProvider->findEntriesByEntityTypeAndIdentifiers(
+        $entries = $assignmentServiceBridge->findEntriesByEntityTypeAndIdentifiers(
             $currentEntityType, [$currentEntityIdentifier]
         );
 
@@ -114,7 +114,7 @@ class EntryNavigator
             }
         }
 
-        $this->entities = $assignmentDataProvider->findEntitiesWithEntriesByEntityType($currentEntityType);
+        $this->entities = $assignmentServiceBridge->findEntitiesWithEntriesByEntityType($currentEntityType);
         $this->currentEntityPosition = 1;
 
         foreach ($this->entities as $entity)
@@ -141,7 +141,7 @@ class EntryNavigator
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $currentEntry
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
@@ -149,16 +149,16 @@ class EntryNavigator
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      */
     public function getNextEntry(
-        AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
+        AssignmentServiceBridgeInterface $assignmentServiceBridge, Entry $currentEntry, $currentEntityType,
         $currentEntityIdentifier
     )
     {
-        $this->calculateNavigatorOptions($assignmentDataProvider, $currentEntry, $currentEntityType, $currentEntityIdentifier);
+        $this->calculateNavigatorOptions($assignmentServiceBridge, $currentEntry, $currentEntityType, $currentEntityIdentifier);
         return $this->nextEntry;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $currentEntry
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
@@ -166,16 +166,16 @@ class EntryNavigator
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      */
     public function getPreviousEntry(
-        AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
+        AssignmentServiceBridgeInterface $assignmentServiceBridge, Entry $currentEntry, $currentEntityType,
         $currentEntityIdentifier
     )
     {
-        $this->calculateNavigatorOptions($assignmentDataProvider, $currentEntry, $currentEntityType, $currentEntityIdentifier);
+        $this->calculateNavigatorOptions($assignmentServiceBridge, $currentEntry, $currentEntityType, $currentEntityIdentifier);
         return $this->previousEntry;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $currentEntry
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
@@ -183,16 +183,16 @@ class EntryNavigator
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      */
     public function getCurrentEntry(
-        AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
+        AssignmentServiceBridgeInterface $assignmentServiceBridge, Entry $currentEntry, $currentEntityType,
         $currentEntityIdentifier
     )
     {
-        $this->calculateNavigatorOptions($assignmentDataProvider, $currentEntry, $currentEntityType, $currentEntityIdentifier);
+        $this->calculateNavigatorOptions($assignmentServiceBridge, $currentEntry, $currentEntityType, $currentEntityIdentifier);
         return $this->currentEntry;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $currentEntry
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
@@ -200,16 +200,16 @@ class EntryNavigator
      * @return int
      */
     public function getCurrentEntryPosition(
-        AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
+        AssignmentServiceBridgeInterface $assignmentServiceBridge, Entry $currentEntry, $currentEntityType,
         $currentEntityIdentifier
     )
     {
-        $this->calculateNavigatorOptions($assignmentDataProvider, $currentEntry, $currentEntityType, $currentEntityIdentifier);
+        $this->calculateNavigatorOptions($assignmentServiceBridge, $currentEntry, $currentEntityType, $currentEntityIdentifier);
         return $this->currentEntryPosition;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $currentEntry
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
@@ -217,16 +217,16 @@ class EntryNavigator
      * @return DataClass
      */
     public function getNextEntity(
-        AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
+        AssignmentServiceBridgeInterface $assignmentServiceBridge, Entry $currentEntry, $currentEntityType,
         $currentEntityIdentifier
     )
     {
-        $this->calculateNavigatorOptions($assignmentDataProvider, $currentEntry, $currentEntityType, $currentEntityIdentifier);
+        $this->calculateNavigatorOptions($assignmentServiceBridge, $currentEntry, $currentEntityType, $currentEntityIdentifier);
         return $this->nextEntity;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $currentEntry
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
@@ -234,16 +234,16 @@ class EntryNavigator
      * @return DataClass
      */
     public function getPreviousEntity(
-        AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
+        AssignmentServiceBridgeInterface $assignmentServiceBridge, Entry $currentEntry, $currentEntityType,
         $currentEntityIdentifier
     )
     {
-        $this->calculateNavigatorOptions($assignmentDataProvider, $currentEntry, $currentEntityType, $currentEntityIdentifier);
+        $this->calculateNavigatorOptions($assignmentServiceBridge, $currentEntry, $currentEntityType, $currentEntityIdentifier);
         return $this->previousEntity;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $currentEntry
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
@@ -251,16 +251,16 @@ class EntryNavigator
      * @return DataClass
      */
     public function getCurrentEntity(
-        AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
+        AssignmentServiceBridgeInterface $assignmentServiceBridge, Entry $currentEntry, $currentEntityType,
         $currentEntityIdentifier
     )
     {
-        $this->calculateNavigatorOptions($assignmentDataProvider, $currentEntry, $currentEntityType, $currentEntityIdentifier);
+        $this->calculateNavigatorOptions($assignmentServiceBridge, $currentEntry, $currentEntityType, $currentEntityIdentifier);
         return $this->currentEntity;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $currentEntry
      * @param int $currentEntityType
      * @param int $currentEntityIdentifier
@@ -268,11 +268,11 @@ class EntryNavigator
      * @return int
      */
     public function getCurrentEntityPosition(
-        AssignmentDataProvider $assignmentDataProvider, Entry $currentEntry, $currentEntityType,
+        AssignmentServiceBridgeInterface $assignmentServiceBridge, Entry $currentEntry, $currentEntityType,
         $currentEntityIdentifier
     )
     {
-        $this->calculateNavigatorOptions($assignmentDataProvider, $currentEntry, $currentEntityType, $currentEntityIdentifier);
+        $this->calculateNavigatorOptions($assignmentServiceBridge, $currentEntry, $currentEntityType, $currentEntityIdentifier);
         return $this->currentEntityPosition;
     }
 

@@ -37,7 +37,7 @@ class EntryRequestTableDataProvider extends DataClassTableDataProvider
             );
         }
 
-        return $this->getDataProvider()->findAssignmentEntriesWithEphorusRequests(
+        return $this->getEphorusServiceBridge()->findAssignmentEntriesWithEphorusRequests(
             new RecordRetrievesParameters(null, $condition, $count, $offset, $order_property)
         );
     }
@@ -49,14 +49,14 @@ class EntryRequestTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return $this->getDataProvider()->countAssignmentEntriesWithEphorusRequests($condition);
+        return $this->getEphorusServiceBridge()->countAssignmentEntriesWithEphorusRequests($condition);
     }
 
     /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface
      */
-    public function getDataProvider()
+    public function getEphorusServiceBridge()
     {
-        return $this->get_component()->getDataProvider();
+        return $this->get_component()->getEphorusServiceBridge();
     }
 }

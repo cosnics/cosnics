@@ -53,6 +53,6 @@ class IndexVisibilityChangerComponent extends Manager
             $entryIds = [$entryIds];
         }
 
-        return $this->getDataProvider()->findEphorusRequestsForAssignmentEntries($entryIds);
+        return $this->getEphorusServiceBridge()->findEphorusRequestsForAssignmentEntries($entryIds);
     }
 }

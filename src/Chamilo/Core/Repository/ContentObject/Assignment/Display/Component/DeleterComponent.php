@@ -96,13 +96,13 @@ class DeleterComponent extends Manager
     {
         foreach ($entryIdentifiers as $entryIdentifier)
         {
-            $entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
+            $entry = $this->getAssignmentServiceBridge()->findEntryByIdentifier($entryIdentifier);
             if (!$entry instanceof Entry)
             {
                 continue;
             }
 
-            $this->getDataProvider()->deleteEntry($entry);
+            $this->getAssignmentServiceBridge()->deleteEntry($entry);
         }
     }
 }

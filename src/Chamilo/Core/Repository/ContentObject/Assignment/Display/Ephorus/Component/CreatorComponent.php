@@ -57,7 +57,7 @@ class CreatorComponent extends Manager
         $contentObjectIds = [];
         foreach ($ids as $id)
         {
-            $entry = $this->getDataProvider()->findEntryByIdentifier($id);
+            $entry = $this->getAssignmentServiceBridge()->findEntryByIdentifier($id);
             $contentObjectIds[] = $entry->getContentObjectId();
         }
 

@@ -43,7 +43,7 @@ class AttachmentViewerComponent extends Manager
 
         if (!$this->get_root_content_object()->is_attached_to_or_included_in($attachment_id))
         {
-            if(!$entry instanceof Entry || !$this->getDataProvider()->isContentObjectAttachedToEntry($entry, $attachment))
+            if(!$entry instanceof Entry || !$this->getAssignmentServiceBridge()->isContentObjectAttachedToEntry($entry, $attachment))
             {
                 throw new NotAllowedException();
             }

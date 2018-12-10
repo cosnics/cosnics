@@ -18,12 +18,12 @@ class DownloaderComponent extends Manager
 
     /**
      * @return string|void
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function run()
     {
         $entryCompressor = new EntryDownloader(
-            $this->getDataProvider(), $this->getRightsService(), $this->getArchiveCreator(),
+            $this->getAssignmentServiceBridge(), $this->getRightsService(), $this->getArchiveCreator(),
             $this->getUser(), $this->getAssignment()
         );
 

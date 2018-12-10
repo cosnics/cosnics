@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\EphorusComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -45,11 +47,19 @@ abstract class Manager extends Application
     }
 
     /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider | \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface
      */
-    public function getDataProvider()
+    protected function getEphorusServiceBridge()
     {
-        return $this->getEphorusComponent()->getDataProvider();
+        return $this->getBridgeManager()->getBridgeByInterface(EphorusServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface
+     */
+    protected function getAssignmentServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(AssignmentServiceBridgeInterface::class);
     }
 
     /**

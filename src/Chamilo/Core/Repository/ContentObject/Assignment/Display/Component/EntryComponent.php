@@ -72,7 +72,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     {
         parent::__construct($applicationConfiguration);
 
-        $this->scoreService = new ScoreService($this->getDataProvider());
+        $this->scoreService = new ScoreService($this->getAssignmentServiceBridge());
     }
 
     /**
@@ -109,7 +109,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         catch (\Exception $ex)
         {
             $this->entry =
-                $this->getDataProvider()->findLastEntryForEntity($this->getEntityType(), $this->getEntityIdentifier());
+                $this->getAssignmentServiceBridge()->findLastEntryForEntity($this->getEntityType(), $this->getEntityIdentifier());
         }
 
         if (!$this->entry instanceof Entry)
@@ -154,7 +154,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $baseParameters = [
             'HAS_ENTRY' => false,
-            'IS_USER_PART_OF_ENTITY' => $this->getDataProvider()->isUserPartOfEntity(
+            'IS_USER_PART_OF_ENTITY' => $this->getAssignmentServiceBridge()->isUserPartOfEntity(
                 $this->getUser(), $this->getEntityType(), $this->getEntityIdentifier()
             ),
             'CHANGE_ENTITY_URL' => $this->get_url([self::PARAM_ENTITY_ID => '__ENTITY_ID__']),
@@ -208,9 +208,9 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'SUBMITTED_BY' => $this->getUserService()->getUserFullNameById($this->getEntry()->getUserId()),
             'SCORE_FORM' => $scoreForm->createView(),
             'SCORE' => $this->getScore(),
-            'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
+            'CAN_EDIT_ASSIGNMENT' => $this->getAssignmentServiceBridge()->canEditAssignment(),
             'ENTRY_TABLE' => $this->renderEntryTable(),
-            'ENTRY_COUNT' => $this->getDataProvider()->countEntriesForEntityTypeAndId(
+            'ENTRY_COUNT' => $this->getAssignmentServiceBridge()->countEntriesForEntityTypeAndId(
                 $this->getEntityType(), $this->getEntityIdentifier()
             ),
             'SHOW_AUTOMATIC_FEEDBACK' => $assignment->isAutomaticFeedbackVisible(),
@@ -269,7 +269,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function processSubmittedData(FormInterface $scoreForm)
     {
-        if (!$this->getDataProvider()->canEditAssignment() || !$this->getEntry() instanceof Entry)
+        if (!$this->getAssignmentServiceBridge()->canEditAssignment() || !$this->getEntry() instanceof Entry)
         {
             return false;
         }
@@ -314,7 +314,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             return null;
         }
 
-        return $this->getDataProvider()->findScoreByEntry($this->getEntry());
+        return $this->getAssignmentServiceBridge()->findScoreByEntry($this->getEntry());
     }
 
     /**
@@ -362,7 +362,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         if (empty($this->score))
         {
-            $this->score = $this->getDataProvider()->initializeScore();
+            $this->score = $this->getAssignmentServiceBridge()->initializeScore();
 
             if ($this->getEntry() instanceof Entry)
             {
@@ -381,7 +381,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function renderEntryTable()
     {
-        $table = $this->getDataProvider()->getEntryTableForEntityTypeAndId(
+        $table = $this->getAssignmentServiceBridge()->getEntryTableForEntityTypeAndId(
             $this,
             $this->getEntityType(),
             $this->getEntityIdentifier()
@@ -401,7 +401,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     public function retrieve_feedbacks($count, $offset)
     {
-        return $this->getDataProvider()->findFeedbackByEntry($this->getEntry());
+        return $this->getFeedbackServiceBridge()->getFeedbackByEntry($this->getEntry());
     }
 
     /**
@@ -410,7 +410,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     public function count_feedbacks()
     {
-        return $this->getDataProvider()->countFeedbackByEntry($this->getEntry());
+        return $this->getFeedbackServiceBridge()->countFeedbackByEntry($this->getEntry());
     }
 
     /**
@@ -419,7 +419,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     public function retrieve_feedback($feedbackIdentifier)
     {
-        return $this->getDataProvider()->findFeedbackByIdentifier($feedbackIdentifier);
+        return $this->getFeedbackServiceBridge()->getFeedbackByIdentifier($feedbackIdentifier);
     }
 
     /**
@@ -428,10 +428,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     public function get_feedback()
     {
-        $feedback = $this->getDataProvider()->initializeFeedback();
-        $feedback->setEntryId($this->getEntry()->getId());
-
-        return $feedback;
+        return null;
     }
 
     /**
@@ -506,7 +503,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $buttonToolBar->addButtonGroup($buttonGroup);
 
-            /*            if ($this->getDataProvider()->canEditAssignment())
+            /*            if ($this->getAssignmentServiceBridge()->canEditAssignment())
                         {
                             $buttonToolBar->addButtonGroup(
                                 new ButtonGroup(
@@ -571,7 +568,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $buttonToolBar->addButtonGroup($buttonGroup);
 
-            if ($this->getDataProvider()->canEditAssignment() || $this->getAssignment()->get_visibility_submissions())
+            if ($this->getAssignmentServiceBridge()->canEditAssignment() || $this->getAssignment()->get_visibility_submissions())
             {
                 $buttonToolBar->addButtonGroup(
                     new ButtonGroup(
@@ -581,7 +578,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                                     'BrowseEntities',
                                     [
                                         'NAME' => strtolower(
-                                            $this->getDataProvider()->getPluralEntityNameByType($this->getEntityType())
+                                            $this->getAssignmentServiceBridge()->getPluralEntityNameByType($this->getEntityType())
                                         )
                                     ]
                                 ),
@@ -611,24 +608,24 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     {
         $buttonToolBar = new ButtonToolBar();
 
-        if (!$this->getDataProvider()->canEditAssignment() || empty($this->getEntry()))
+        if (!$this->getAssignmentServiceBridge()->canEditAssignment() || empty($this->getEntry()))
         {
             return new ButtonToolBarRenderer($buttonToolBar);
         }
 
         $currentEntityPosition = $this->getEntryNavigator()->getCurrentEntityPosition(
-            $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
+            $this->getAssignmentServiceBridge(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
 
         $currentEntryPosition = $this->getEntryNavigator()->getCurrentEntryPosition(
-            $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
+            $this->getAssignmentServiceBridge(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
 
         $translator = Translation::getInstance();
-        $entityName = $this->getDataProvider()->getEntityNameByType($this->getEntityType());
+        $entityName = $this->getAssignmentServiceBridge()->getEntityNameByType($this->getEntityType());
 
-        $entitiesCount = $this->getDataProvider()->countEntitiesWithEntriesByEntityType($this->getEntityType());
-        $entriesCount = $this->getDataProvider()->countEntriesForEntityTypeAndId(
+        $entitiesCount = $this->getAssignmentServiceBridge()->countEntitiesWithEntriesByEntityType($this->getEntityType());
+        $entriesCount = $this->getAssignmentServiceBridge()->countEntriesForEntityTypeAndId(
             $this->getEntityType(), $this->getEntityIdentifier()
         );
 
@@ -667,7 +664,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $buttonToolBar->addButtonGroup($entityNavigatorActions);
 
             $selectEntityButton = new DropdownButton(
-                $this->getDataProvider()->renderEntityNameByEntityTypeAndEntityId(
+                $this->getAssignmentServiceBridge()->renderEntityNameByEntityTypeAndEntityId(
                     $this->getEntityType(), $this->getEntityIdentifier()
                 ),
                 new FontAwesomeGlyph('user')
@@ -702,7 +699,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
                 $selectEntityButton->addSubButton(
                     new SubButton(
-                        $this->getDataProvider()->renderEntityNameByEntityTypeAndEntity(
+                        $this->getAssignmentServiceBridge()->renderEntityNameByEntityTypeAndEntity(
                             $this->getEntityType(), $entity
                         ), null, $url, SubButton::DISPLAY_LABEL, false, $classes
                     )
@@ -754,7 +751,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected function getPreviousEntryUrl()
     {
         $previousEntry = $this->getEntryNavigator()->getPreviousEntry(
-            $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
+            $this->getAssignmentServiceBridge(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
 
         if (!$previousEntry instanceof Entry)
@@ -771,7 +768,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected function getNextEntryUrl()
     {
         $nextEntry = $this->getEntryNavigator()->getNextEntry(
-            $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
+            $this->getAssignmentServiceBridge(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
 
         if (!$nextEntry instanceof Entry)
@@ -788,7 +785,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected function getPreviousEntityUrl()
     {
         $previousEntity = $this->getEntryNavigator()->getPreviousEntity(
-            $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
+            $this->getAssignmentServiceBridge(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
 
         if (!$previousEntity instanceof DataClass)
@@ -807,7 +804,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected function getNextEntityUrl()
     {
         $nextEntity = $this->getEntryNavigator()->getNextEntity(
-            $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
+            $this->getAssignmentServiceBridge(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
 
         if (!$nextEntity instanceof DataClass)
@@ -860,7 +857,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             return [];
         }
 
-        $entryAttachments = $this->getDataProvider()->findAttachmentsByEntry($this->getEntry());
+        $entryAttachments = $this->getAssignmentServiceBridge()->findAttachmentsByEntry($this->getEntry());
 
         if (empty($entryAttachments))
         {

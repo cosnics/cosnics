@@ -18,7 +18,7 @@ class ResultExporterComponent extends Manager
     public function run()
     {
         $entryId = $this->getRequest()->getFromPostOrUrl(self::PARAM_ENTRY_ID);
-        $requests = $this->getDataProvider()->findEphorusRequestsForAssignmentEntries([$entryId]);
+        $requests = $this->getEphorusServiceBridge()->findEphorusRequestsForAssignmentEntries([$entryId]);
 
         if (empty($requests))
         {

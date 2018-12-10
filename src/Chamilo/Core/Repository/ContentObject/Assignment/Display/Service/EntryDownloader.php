@@ -2,10 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -14,7 +14,6 @@ use Chamilo\Libraries\File\Compression\ArchiveCreator\Archive;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFile;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFolder;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -38,7 +37,7 @@ class EntryDownloader
      *
      * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
      */
-    protected $assignmentDataProvider;
+    protected $assignmentServiceBridge;
 
     /**
      * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService
@@ -63,18 +62,18 @@ class EntryDownloader
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService $rightsService
      * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator $archiveCreator
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
      */
     public function __construct(
-        AssignmentDataProvider $assignmentDataProvider, RightsService $rightsService,
+        AssignmentServiceBridgeInterface $assignmentServiceBridge, RightsService $rightsService,
         ArchiveCreator $archiveCreator, User $user, Assignment $assignment
     )
     {
-        $this->assignmentDataProvider = $assignmentDataProvider;
+        $this->assignmentServiceBridge = $assignmentServiceBridge;
         $this->rightsService = $rightsService;
         $this->archiveCreator = $archiveCreator;
         $this->assignment = $assignment;
@@ -85,18 +84,18 @@ class EntryDownloader
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
      */
-    protected function getAssignmentDataProvider()
+    protected function getAssignmentServiceBridge()
     {
-        return $this->assignmentDataProvider;
+        return $this->assignmentServiceBridge;
     }
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentServiceBridge
      */
-    protected function setAssignmentDataProvider(AssignmentDataProvider $assignmentDataProvider)
+    protected function setAssignmentServiceBridge(AssignmentDataProvider $assignmentServiceBridge)
     {
-        $this->assignmentDataProvider = $assignmentDataProvider;
+        $this->assignmentServiceBridge = $assignmentServiceBridge;
     }
 
     /**
@@ -130,7 +129,7 @@ class EntryDownloader
 
     protected function getEntityArchiveFileName($entityType, $entityIdentifier)
     {
-        $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
+        $entityName = $this->getAssignmentServiceBridge()->renderEntityNameByEntityTypeAndEntityId(
             $entityType,
             $entityIdentifier
         );
@@ -166,7 +165,7 @@ class EntryDownloader
     /**
      *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param integer[] $entryIdentifier
+     * @param $entryIdentifiers
      */
     public function downloadByEntryIdentifiers(ChamiloRequest $request, $entryIdentifiers)
     {
@@ -181,7 +180,7 @@ class EntryDownloader
      */
     public function compressByEntryIdentifiers($entryIdentifiers)
     {
-        $entries = $this->getAssignmentDataProvider()->findEntriesByIdentifiers($entryIdentifiers);
+        $entries = $this->getAssignmentServiceBridge()->findEntriesByIdentifiers($entryIdentifiers);
         $entry = $entries[0];
 
         return $this->compressEntries(
@@ -213,7 +212,7 @@ class EntryDownloader
      */
     public function compressForEntityTypeAndIdentifier($entityType, $entityIdentifier)
     {
-        $entries = $this->getAssignmentDataProvider()->findEntriesByEntityTypeAndIdentifiers(
+        $entries = $this->getAssignmentServiceBridge()->findEntriesByEntityTypeAndIdentifiers(
             $entityType,
             array($entityIdentifier)
         );
@@ -244,7 +243,7 @@ class EntryDownloader
      */
     public function compressForEntityTypeAndIdentifiers($entityType, $entityIdentifiers)
     {
-        $entries = $this->getAssignmentDataProvider()->findEntriesByEntityTypeAndIdentifiers(
+        $entries = $this->getAssignmentServiceBridge()->findEntriesByEntityTypeAndIdentifiers(
             $entityType,
             $entityIdentifiers
         );
@@ -269,10 +268,10 @@ class EntryDownloader
      */
     public function downloadByRequest(ChamiloRequest $request)
     {
-        $entityType = $request->get(Manager::PARAM_ENTITY_TYPE);
-        $entityIdentifiers = $request->get(Manager::PARAM_ENTITY_ID);
+        $entityType = $request->getFromUrl(Manager::PARAM_ENTITY_TYPE);
+        $entityIdentifiers = $request->getFromUrl(Manager::PARAM_ENTITY_ID);
 
-        $entryIdentifiers = $request->get(Manager::PARAM_ENTRY_ID);
+        $entryIdentifiers = $request->getFromUrl(Manager::PARAM_ENTRY_ID);
 
         if (!is_null($entryIdentifiers))
         {
@@ -335,7 +334,7 @@ class EntryDownloader
      */
     public function compressAll()
     {
-        $entries = $this->getAssignmentDataProvider()->findEntries();
+        $entries = $this->getAssignmentServiceBridge()->findEntries();
 
         return $this->compressEntries($this->getAssignmentName(), $entries);
     }
@@ -380,7 +379,7 @@ class EntryDownloader
 
             try
             {
-                $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
+                $entityName = $this->getAssignmentServiceBridge()->renderEntityNameByEntityTypeAndEntityId(
                     $entry->getEntityType(), $entry->getEntityId()
                 );
             }
@@ -454,7 +453,7 @@ class EntryDownloader
 
             try
             {
-                $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
+                $entityName = $this->getAssignmentServiceBridge()->renderEntityNameByEntityTypeAndEntityId(
                     $entityType, $entityId
                 );
 

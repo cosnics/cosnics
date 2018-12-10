@@ -2,8 +2,11 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\AjaxComponent;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EphorusServiceBridgeInterface;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
@@ -49,19 +52,35 @@ abstract class Manager extends AjaxManager
     }
 
     /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
-     */
-    protected function getDataProvider()
-    {
-        return $this->ajaxComponent->getDataProvider();
-    }
-
-    /**
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface
      */
     protected function getNotificationServiceBridge()
     {
         return $this->getBridgeManager()->getBridgeByInterface(NotificationServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface
+     */
+    protected function getAssignmentServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(AssignmentServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface
+     */
+    protected function getFeedbackServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface
+     */
+    protected function getEphorusServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(EphorusServiceBridgeInterface::class);
     }
 
 }

@@ -21,13 +21,13 @@ class DeleteEntryAttachmentComponent extends Manager
     {
         try
         {
-            if (!$this->getDataProvider()->canEditAssignment())
+            if (!$this->getAssignmentServiceBridge()->canEditAssignment())
             {
                 throw new NotAllowedException();
             }
 
             $entryAttachmentId = $this->getRequest()->getFromPost(self::PARAM_ENTRY_ATTACHMENT_ID);
-            $entryAttachment = $this->getDataProvider()->findEntryAttachmentById($entryAttachmentId);
+            $entryAttachment = $this->getAssignmentServiceBridge()->findEntryAttachmentById($entryAttachmentId);
             if (!$entryAttachment instanceof EntryAttachment)
             {
                 throw new ObjectNotExistException(
@@ -35,7 +35,7 @@ class DeleteEntryAttachmentComponent extends Manager
                 );
             }
 
-            $this->getDataProvider()->deleteEntryAttachment($entryAttachment);
+            $this->getAssignmentServiceBridge()->deleteEntryAttachment($entryAttachment);
         }
         catch (\Exception $ex)
         {

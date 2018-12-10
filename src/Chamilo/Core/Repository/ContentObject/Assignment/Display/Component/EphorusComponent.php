@@ -21,7 +21,7 @@ class EphorusComponent extends Manager
      */
     function run()
     {
-        if( !$this->isEphorusEnabled() ||!$this->getDataProvider()->canEditAssignment())
+        if( !$this->isEphorusEnabled() ||!$this->getAssignmentServiceBridge()->canEditAssignment())
         {
             throw new NotAllowedException();
         }

@@ -9,8 +9,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -21,19 +20,20 @@ use Chamilo\Core\User\Storage\DataClass\User;
 class ScoreService
 {
     /**
-     * @var AssignmentDataProvider
+     * @var AssignmentServiceBridgeInterface
      */
-    protected $assignmentDataProvider;
+    protected $assignmentServiceBridge;
 
     /**
      * ScoreService constructor.
-     * @param AssignmentDataProvider $assignmentDataProvider
+     *
+     * @param AssignmentServiceBridgeInterface $assignmentServiceBridge
      */
     public function __construct(
-        AssignmentDataProvider $assignmentDataProvider
+        AssignmentServiceBridgeInterface $assignmentServiceBridge
     )
     {
-        $this->assignmentDataProvider = $assignmentDataProvider;
+        $this->assignmentServiceBridge = $assignmentServiceBridge;
     }
 
     /**
@@ -50,12 +50,12 @@ class ScoreService
         if(empty($score->getId())){
             $score->setModified(time());
 
-            return $this->assignmentDataProvider->createScore(
+            return $this->assignmentServiceBridge->createScore(
                 $score
             );
         }
 
-        $this->assignmentDataProvider->updateScore($score);
+        $this->assignmentServiceBridge->updateScore($score);
 
         return $score;
     }

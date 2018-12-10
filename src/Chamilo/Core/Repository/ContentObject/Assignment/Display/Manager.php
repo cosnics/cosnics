@@ -2,6 +2,9 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
@@ -66,15 +69,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
     protected $rightsService;
 
     /**
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
-     */
-    public function getDataProvider()
-    {
-        return $this->getApplicationConfiguration()->get(self::CONFIGURATION_DATA_PROVIDER);
-    }
-
-    /**
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject | \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment
      */
     public function getAssignment()
@@ -90,7 +84,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
     {
         if (!isset($this->entityType))
         {
-            $this->entityType = $this->getDataProvider()->getCurrentEntityType();
+            $this->entityType = $this->getAssignmentServiceBridge()->getCurrentEntityType();
         }
 
         return $this->entityType;
@@ -108,7 +102,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
 
             if (empty($this->entityIdentifier))
             {
-                $this->entityIdentifier = $this->getDataProvider()->getCurrentEntityIdentifier($this->getUser());
+                $this->entityIdentifier = $this->getAssignmentServiceBridge()->getCurrentEntityIdentifier($this->getUser());
             }
         }
 
@@ -128,7 +122,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
         if (!isset($this->rightsService))
         {
             $this->rightsService = new RightsService();
-            $this->rightsService->setAssignmentDataProvider($this->getDataProvider());
+            $this->rightsService->setAssignmentServiceBridge($this->getAssignmentServiceBridge());
         }
 
         return $this->rightsService;
@@ -165,7 +159,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
             $this->set_parameter(self::PARAM_ENTRY_ID, $entryIdentifier);
         }
 
-        $this->entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
+        $this->entry = $this->getAssignmentServiceBridge()->findEntryByIdentifier($entryIdentifier);
     }
 
     /**
@@ -177,7 +171,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
     {
         $availableEntities = [];
 
-        $availableEntityIds = $this->getDataProvider()->getAvailableEntityIdentifiersForUser($this->getUser());
+        $availableEntityIds = $this->getAssignmentServiceBridge()->getAvailableEntityIdentifiersForUser($this->getUser());
         foreach ($availableEntityIds as $availableEntityId)
         {
             if ($availableEntityId == $this->getEntityIdentifier())
@@ -185,7 +179,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
                 continue;
             }
 
-            $availableEntities[$availableEntityId] = $this->getDataProvider()->renderEntityNameByEntityTypeAndEntityId(
+            $availableEntities[$availableEntityId] = $this->getAssignmentServiceBridge()->renderEntityNameByEntityTypeAndEntityId(
                 $this->getEntityType(), $availableEntityId
             );
         }
@@ -193,14 +187,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
         $parameters['HAS_MULTIPLE_ENTITIES'] = count($availableEntityIds) > 1;
         $parameters['AVAILABLE_ENTITIES'] = $availableEntities;
 
-        $parameters['ENTITY_NAME'] = $this->getDataProvider()->renderEntityNameByEntityTypeAndEntityId(
+        $parameters['ENTITY_NAME'] = $this->getAssignmentServiceBridge()->renderEntityNameByEntityTypeAndEntityId(
             $this->getEntityType(), $this->getEntityIdentifier()
         );
 
         $parameters['ENTITY_TYPE_PLURAL'] =
-            strtolower($this->getDataProvider()->getPluralEntityNameByType($this->getEntityType()));
+            strtolower($this->getAssignmentServiceBridge()->getPluralEntityNameByType($this->getEntityType()));
 
-        $parameters['ENTITY_TYPE'] = strtolower($this->getDataProvider()->getEntityNameByType($this->getEntityType()));
+        $parameters['ENTITY_TYPE'] = strtolower($this->getAssignmentServiceBridge()->getEntityNameByType($this->getEntityType()));
 
         return $parameters;
     }
@@ -210,14 +204,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
      */
     protected function isEphorusEnabled()
     {
-        $dataProvider = $this->getDataProvider();
-
-        if(!$dataProvider instanceof AssignmentEphorusSupportInterface)
-        {
-            return false;
-        }
-
-        return $dataProvider->isEphorusEnabled();
+        return $this->getEphorusServiceBridge()->isEphorusEnabled();
     }
 
     public function get_content_object_display_attachment_url($attachment,
@@ -243,7 +230,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
      */
     public function retrieve_feedbacks($count, $offset)
     {
-        return $this->getDataProvider()->findFeedbackByEntry($this->getEntry());
+        return $this->getFeedbackServiceBridge()->getFeedbackByEntry($this->getEntry());
     }
 
     /**
@@ -252,7 +239,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
      */
     public function count_feedbacks()
     {
-        return $this->getDataProvider()->countFeedbackByEntry($this->getEntry());
+        return $this->getFeedbackServiceBridge()->countFeedbackByEntry($this->getEntry());
     }
 
     /**
@@ -261,7 +248,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
      */
     public function retrieve_feedback($feedbackIdentifier)
     {
-        return $this->getDataProvider()->findFeedbackByIdentifier($feedbackIdentifier);
+        return $this->getFeedbackServiceBridge()->getFeedbackByIdentifier($feedbackIdentifier);
     }
 
     /**
@@ -270,10 +257,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
      */
     public function get_feedback()
     {
-        $feedback = $this->getDataProvider()->initializeFeedback();
-        $feedback->setEntryId($this->getEntry()->getId());
-
-        return $feedback;
+        return null;
     }
 
     /**
@@ -319,5 +303,29 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
     protected function getNotificationServiceBridge()
     {
         return $this->getBridgeManager()->getBridgeByInterface(NotificationServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface
+     */
+    protected function getAssignmentServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(AssignmentServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface
+     */
+    protected function getFeedbackServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface
+     */
+    protected function getEphorusServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(EphorusServiceBridgeInterface::class);
     }
 }
