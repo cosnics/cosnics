@@ -621,3 +621,6 @@ ALTER TABLE tracking_weblcms_learning_path_assignment_entry
 UPDATE tracking_weblcms_learning_path_assignment_entry LPAE
 JOIN tracking_weblcms_learning_path_tree_node_attempt TNA on LPAE.tree_node_attempt_id = TNA.id
     SET LPAE.content_object_publication_id = TNA.publication_id;
+
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES
+  (null, 'Chamilo\\Core\\Queue\\Integration\\Chamilo\\Core\\Admin', 'Chamilo\\Core\\Queue\\Integration', NULL, 'AdminIntegration', 1, '1.0.0', 1);

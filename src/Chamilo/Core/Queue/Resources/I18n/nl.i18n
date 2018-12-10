@@ -1,3 +1,8 @@
 TypeName = "Queue"
 FailedJobsBrowserComponent = "Bekijk gefaalde jobs"
 RetryFailedJobComponent = "Voer de gefaalde job opnieuw uit"
+ID = "ID"
+Processor = "Verwerkt door"
+Parameters = "Parameters"
+Date = "Datum"
+Retry = "Probeer opnieuw"
