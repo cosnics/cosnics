@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Quota\Service;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Core\Repository\Service\ContentObjectService;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
@@ -75,6 +76,11 @@ class QuotaCalculator
     private $maximumAggregatedUserStorageSpace;
 
     /**
+     * @var \Chamilo\Core\Repository\Service\ContentObjectService
+     */
+    private $contentObjectService;
+
+    /**
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
@@ -83,7 +89,7 @@ class QuotaCalculator
      */
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, GroupService $groupService,
-        UserService $userService, ConfigurablePathBuilder $configurablePathBuilder
+        UserService $userService, ConfigurablePathBuilder $configurablePathBuilder, ContentObjectService $contentObjectService
     )
     {
         $this->configurationConsulter = $configurationConsulter;
@@ -91,7 +97,26 @@ class QuotaCalculator
         $this->groupService = $groupService;
         $this->userService = $userService;
         $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->contentObjectService = $contentObjectService;
     }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\ContentObjectService
+     */
+    public function getContentObjectService(): ContentObjectService
+    {
+        return $this->contentObjectService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Service\ContentObjectService $contentObjectService
+     */
+    public function setContentObjectService(ContentObjectService $contentObjectService): void
+    {
+        $this->contentObjectService = $contentObjectService;
+    }
+
+
 
     /**
      * @param \Chamilo\Libraries\Format\Form\FormValidator $form
@@ -512,14 +537,13 @@ class QuotaCalculator
 
     /**
      * @return integer
-     * @todo Refactor call to Repository DataManager
      * @see Calculator::getUsedAggregatedUserDiskQuota()
      */
     public function getUsedAggregatedUserStorageSpace()
     {
         if (!isset($this->usedAggregatedUserStorageSpace))
         {
-            $this->usedAggregatedUserStorageSpace = \Chamilo\Core\Repository\Storage\DataManager::get_used_disk_space();
+            $this->usedAggregatedUserStorageSpace = $this->getContentObjectService()->getUsedStorageSpace();
         }
 
         return $this->usedAggregatedUserStorageSpace;
@@ -530,16 +554,12 @@ class QuotaCalculator
      *
      * @return integer
      * @see Calculator::getUsedUserDiskQuota()
-     * @todo Refactor call to Repository DataManager
      */
     public function getUsedStorageSpaceForUser(User $user)
     {
         if (!isset($this->usedStorageSpaceForUserCache[$user->getId()]))
         {
-            $this->usedStorageSpaceForUserCache[$user->getId()] =
-                \Chamilo\Core\Repository\Storage\DataManager::get_used_disk_space(
-                    $user->getId()
-                );
+            $this->usedStorageSpaceForUserCache[$user->getId()] = $this->getContentObjectService()->getUsedStorageSpaceForUser($user);
         }
 
         return $this->usedStorageSpaceForUserCache[$user->getId()];
