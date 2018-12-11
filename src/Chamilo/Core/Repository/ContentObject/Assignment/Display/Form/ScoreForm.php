@@ -2,9 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Form;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
@@ -27,9 +26,9 @@ class ScoreForm extends FormValidator
 
     /**
      *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface
      */
-    private $assignmentDataProvider;
+    private $assignmentServiceBridge;
 
     /**
      * @var \Twig_Environment
@@ -39,18 +38,18 @@ class ScoreForm extends FormValidator
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score $score
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param string $postUrl
      * @param \Twig_Environment $twig
      */
     public function __construct(
-        Score $score = null, AssignmentDataProvider $assignmentDataProvider, $postUrl, \Twig_Environment $twig
+        Score $score = null, AssignmentServiceBridgeInterface $assignmentServiceBridge, $postUrl, \Twig_Environment $twig
     )
     {
         parent::__construct('details', 'post', $postUrl);
 
         $this->score = $score;
-        $this->assignmentDataProvider = $assignmentDataProvider;
+        $this->assignmentServiceBridge = $assignmentServiceBridge;
         $this->twig = $twig;
 
         $this->buildForm();

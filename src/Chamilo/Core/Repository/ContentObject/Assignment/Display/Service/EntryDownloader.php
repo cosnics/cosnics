@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
@@ -35,7 +34,7 @@ class EntryDownloader
 
     /**
      *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+     * @var AssignmentServiceBridgeInterface
      */
     protected $assignmentServiceBridge;
 
@@ -82,7 +81,7 @@ class EntryDownloader
 
     /**
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface
      */
     protected function getAssignmentServiceBridge()
     {
@@ -91,9 +90,9 @@ class EntryDownloader
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentServiceBridge
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      */
-    protected function setAssignmentServiceBridge(AssignmentDataProvider $assignmentServiceBridge)
+    protected function setAssignmentServiceBridge(AssignmentServiceBridgeInterface $assignmentServiceBridge)
     {
         $this->assignmentServiceBridge = $assignmentServiceBridge;
     }

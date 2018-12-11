@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback;
@@ -913,7 +912,7 @@ abstract class AssignmentRepository
             new FunctionConditionVariable(
                 FunctionConditionVariable::AVERAGE,
                 new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_SCORE),
-                AssignmentDataProvider::AVERAGE_SCORE
+                self::AVERAGE_SCORE
             )
         );
 
@@ -926,7 +925,7 @@ abstract class AssignmentRepository
 
         $record = $this->dataClassRepository->record($this->getEntryClassName(), $parameters);
 
-        return $record[AssignmentDataProvider::AVERAGE_SCORE];
+        return $record[self::AVERAGE_SCORE];
     }
 
     /**
