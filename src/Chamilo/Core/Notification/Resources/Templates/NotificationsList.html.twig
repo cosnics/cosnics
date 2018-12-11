@@ -249,8 +249,9 @@
                 }
 
                 if(this.scrollDetectorElement) {
-                    $(this.scrollDetectorElement).on('scroll', function() {
+                    $(this.scrollDetectorElement).on('scroll', function(evt) {
                         if(vueInstance.isLoading) {
+                            evt.preventDefault();
                             return;
                         }
 
@@ -260,6 +261,7 @@
 
                         if((scrollTop + containerHeight) >= (divHeight - 5)) {
                             vueInstance.loadData();
+                            evt.preventDefault();
                             console.log('loadData' + vueInstance.scrollDetectorElement);
                         }
                     });
