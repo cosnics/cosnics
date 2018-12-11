@@ -5,6 +5,7 @@ namespace Chamilo\Core\Queue\Service;
 use Chamilo\Core\Queue\Exceptions\JobNoLongerValidException;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Interop\Queue\PsrContext;
+use Interop\Queue\PsrMessage;
 
 /**
  * @package Chamilo\Core\Queue\Service
@@ -51,9 +52,15 @@ class Worker
      */
     public function waitForJobAndExecute($queueName)
     {
+        $timeout = 10 * (60 * 1000); // x minutes * 60 seconds * 1000 milliseconds
+
         $destination = $this->psrContext->createQueue($queueName);
         $consumer = $this->psrContext->createConsumer($destination);
-        $message = $consumer->receive();
+        $message = $consumer->receive($timeout);
+        if(!$message instanceof PsrMessage)
+        {
+            return;
+        }
 
         try
         {
