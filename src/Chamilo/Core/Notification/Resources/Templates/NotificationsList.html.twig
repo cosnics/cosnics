@@ -260,8 +260,8 @@
                         var containerHeight = isWindow ? window.innerHeight : $(this)[0].clientHeight;
 
                         if((scrollTop + containerHeight) >= (divHeight - 5)) {
-                            vueInstance.loadData();
                             evt.preventDefault();
+                            vueInstance.loadData();
                             console.log('loadData' + vueInstance.scrollDetectorElement);
                         }
                     });
