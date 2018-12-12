@@ -73,6 +73,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
      * @param \Chamilo\Core\Repository\Quota\Service\QuotaCalculator $quotaCalculator
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
         RightsRepository $rightsRepository, UserService $userService, Translator $translator,
@@ -244,6 +245,8 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
 
     /**
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[] $locationEntityRights
+     *
+     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
      */
     public function findRightsLocationEntityRightGroupsForRightsLocationEntityRights(
         DataClassIterator $locationEntityRights
@@ -265,6 +268,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
+     * @throws \Exception
      */
     public function findRightsLocationEntityRightGroupsForSubscribedUserGroups(User $user)
     {
@@ -306,6 +310,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function findRightsLocationEntityRightGroupsIdentifiersForUser(User $user)
     {
@@ -538,7 +543,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
             }
         );
 
-        return $groupRecords;
+        return array_slice($groupRecords, $offset, $count);
     }
 
     /**
@@ -569,6 +574,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function getTargetGroupIdentifiersForUser(User $user)
     {
@@ -592,6 +598,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function getTargetUsersForUser(User $user)
     {
@@ -636,6 +643,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return boolean
+     * @throws \Exception
      */
     public function isUserIdentifierTargetForUser(int $userIdentifier, User $user)
     {

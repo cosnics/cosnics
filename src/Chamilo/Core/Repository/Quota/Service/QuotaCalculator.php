@@ -86,6 +86,7 @@ class QuotaCalculator
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+     * @param \Chamilo\Core\Repository\Service\ContentObjectService $contentObjectService
      */
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, GroupService $groupService,

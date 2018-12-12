@@ -12,7 +12,7 @@ class ConfigurationConsulter extends DataConsulter
 
     /**
      *
-     * @return string[]
+     * @return string[][]
      */
     public function getSettings()
     {

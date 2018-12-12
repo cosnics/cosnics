@@ -23,7 +23,7 @@ class RegistrationConsulter extends DataConsulter
     /**
      *
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     * @param \Chamilo\Configuration\Storage\Repository\RegistrationRepository $registrationRepository
+     * @param \Chamilo\Configuration\Interfaces\DataLoaderInterface $dataLoader
      */
     public function __construct(StringUtilities $stringUtilities, DataLoaderInterface $dataLoader)
     {
@@ -51,7 +51,7 @@ class RegistrationConsulter extends DataConsulter
 
     /**
      *
-     * @return string[]
+     * @return string[][]
      */
     public function getRegistrations()
     {
@@ -61,11 +61,13 @@ class RegistrationConsulter extends DataConsulter
     /**
      *
      * @param string $context
+     *
      * @return string[]
      */
     public function getRegistrationForContext($context)
     {
         $registrations = $this->getRegistrations();
+
         return $registrations[RegistrationLoader::REGISTRATION_CONTEXT][$context];
     }
 
@@ -76,47 +78,64 @@ class RegistrationConsulter extends DataConsulter
     public function getRegistrationContexts()
     {
         $registrations = $this->getRegistrations();
+
         return array_keys($registrations[RegistrationLoader::REGISTRATION_CONTEXT]);
     }
 
     /**
      *
      * @param string $type
-     * @return \string[]
+     *
+     * @return string[][]
      */
     public function getRegistrationsByType($type)
     {
         $registrations = $this->getRegistrations();
+
         return $registrations[RegistrationLoader::REGISTRATION_TYPE][$type];
     }
 
     /**
      *
      * @param string $context
+     *
      * @return boolean
      */
     public function isContextRegistered($context)
     {
         $registration = $this->getRegistrationForContext($context);
-        return ! empty($registration);
+
+        return !empty($registration);
     }
 
     /**
      *
      * @param string $context
+     *
      * @return boolean
      */
     public function isContextRegisteredAndActive($context)
     {
         $registration = $this->getRegistrationForContext($context);
-        return $this->isContextRegistered($context) &&
-             $registration[Registration::PROPERTY_STATUS] == Registration::STATUS_ACTIVE;
+
+        return $this->isContextRegistered($context) && $this->isRegistrationActive($registration);
+    }
+
+    /**
+     * @param array $registration
+     *
+     * @return bool
+     */
+    public function isRegistrationActive(array $registration)
+    {
+        return $registration[Registration::PROPERTY_STATUS] == Registration::STATUS_ACTIVE;
     }
 
     /**
      *
      * @param string $integration
      * @param string $root
+     *
      * @return string[]
      */
     public function getIntegrationRegistrations($integration, $root = null)
@@ -144,5 +163,26 @@ class RegistrationConsulter extends DataConsulter
         {
             return $integrationRegistrations;
         }
+    }
+
+    /**
+     * @param boolean $alsoReturnInactiveTypes
+     *
+     * @return string[][]
+     */
+    public function getContentObjectRegistrations(bool $alsoReturnInactiveTypes = true)
+    {
+        $registrations = $this->getRegistrationsByType('Chamilo\Core\Repository\ContentObject');
+        $contentObjectTypes = array();
+
+        foreach ($registrations as $registration)
+        {
+            if ($alsoReturnInactiveTypes || $this->isRegistrationActive($registration))
+            {
+                $contentObjectTypes[] = $registration;
+            }
+        }
+
+        return $contentObjectTypes;
     }
 }
