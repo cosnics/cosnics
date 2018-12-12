@@ -103,22 +103,6 @@ class QuotaCalculator
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Service\ContentObjectService
-     */
-    public function getContentObjectService(): ContentObjectService
-    {
-        return $this->contentObjectService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Service\ContentObjectService $contentObjectService
-     */
-    public function setContentObjectService(ContentObjectService $contentObjectService): void
-    {
-        $this->contentObjectService = $contentObjectService;
-    }
-
-    /**
      * @param \Chamilo\Libraries\Format\Form\FormValidator $form
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
@@ -410,6 +394,22 @@ class QuotaCalculator
     public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
     {
         $this->configurationConsulter = $configurationConsulter;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\ContentObjectService
+     */
+    public function getContentObjectService(): ContentObjectService
+    {
+        return $this->contentObjectService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Service\ContentObjectService $contentObjectService
+     */
+    public function setContentObjectService(ContentObjectService $contentObjectService): void
+    {
+        $this->contentObjectService = $contentObjectService;
     }
 
     /**
