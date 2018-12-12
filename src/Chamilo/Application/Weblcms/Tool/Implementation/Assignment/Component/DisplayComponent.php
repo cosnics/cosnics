@@ -12,6 +12,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -56,13 +57,14 @@ class DisplayComponent extends Manager implements DelegateComponent
         );
 
         $applicationFactory = $this->getApplicationFactory();
-        $applicationFactory->setAssignmentDataProvider($assignmentDataProvider);
+        $applicationFactory->setAssignmentServiceBridge(
+            $this->getBridgeManager()->getBridgeByInterface(AssignmentServiceBridgeInterface::class)
+        );
 
         return $applicationFactory->getApplication(
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(),
             $configuration
         )->run();
-
     }
 
     /**

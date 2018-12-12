@@ -18,44 +18,33 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntityTable extends RecordTable implements TableFormActionsSupport
+class EntityTable extends RecordTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = Entry::PROPERTY_ENTITY_ID;
 
     /**
-     *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+     * @var EntityTableParameters
      */
-    private $assignmentDataProvider;
+    protected $entityTableParameters;
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $component
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param EntityTableParameters $entityTableParameters
+     *
+     * @throws \Exception
      */
-    public function __construct($component, AssignmentDataProvider $assignmentDataProvider)
+    public function __construct($component, EntityTableParameters $entityTableParameters)
     {
-        $this->assignmentDataProvider = $assignmentDataProvider;
-
+        $this->entityTableParameters = $entityTableParameters;
         parent::__construct($component);
     }
 
     /**
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+     * @return EntityTableParameters
      */
-    public function getAssignmentDataProvider()
+    public function getEntityTableParameters(): EntityTableParameters
     {
-        return $this->assignmentDataProvider;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     */
-    public function setAssignmentDataProvider(AssignmentDataProvider $assignmentDataProvider)
-    {
-        $this->assignmentDataProvider = $assignmentDataProvider;
+        return $this->entityTableParameters;
     }
 
     /**
@@ -72,7 +61,8 @@ abstract class EntityTable extends RecordTable implements TableFormActionsSuppor
                 $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD,
-                        Manager::PARAM_ENTITY_TYPE => $this->getAssignmentDataProvider()->getCurrentEntityType()
+                        Manager::PARAM_ENTITY_TYPE => $this->getEntityTableParameters()->getAssignmentServiceBridge()
+                            ->getCurrentEntityType()
                     )
                 ),
                 Translation::get('DownloadSelected'),

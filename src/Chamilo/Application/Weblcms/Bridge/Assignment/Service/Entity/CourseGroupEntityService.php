@@ -5,9 +5,9 @@ namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity\CourseGroup\EntityTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -165,19 +165,19 @@ class CourseGroupEntityService implements EntityServiceInterface
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters $entityTableParameters
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
      */
     public function getEntityTable(
-        Application $application, AssignmentDataProvider $assignmentDataProvider,
-        ContentObjectPublication $contentObjectPublication
+        Application $application, EntityTableParameters $entityTableParameters
     )
     {
-        return new EntityTable(
-            $application, $assignmentDataProvider, $contentObjectPublication, $this
-        );
+        $entityTableParameters->setEntityClass(CourseGroup::class);
+        $entityTableParameters->setEntityProperties([CourseGroup::PROPERTY_NAME]);
+        $entityTableParameters->setEntityHasMultipleMembers(true);
+
+        return new EntityTable($application, $entityTableParameters);
     }
 
     /**

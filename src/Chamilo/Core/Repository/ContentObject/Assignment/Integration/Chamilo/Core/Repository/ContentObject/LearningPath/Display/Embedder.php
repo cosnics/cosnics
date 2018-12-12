@@ -82,7 +82,7 @@ class Embedder extends ContentObjectEmbedder
         );
 
         $applicationFactory = $this->getApplicationFactory();
-        $applicationFactory->setAssignmentDataProvider($assignmentDataProvider);
+        $applicationFactory->setAssignmentServiceBridge($assignmentDataProvider);
 
         return $applicationFactory->getApplication(
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(),

@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\A
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
@@ -142,13 +143,35 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      *
      * @param integer $entityType
      *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
      * @return integer
      */
-    public function countEntitiesByEntityType($entityType)
+    public function countEntitiesByEntityType($entityType, Condition $condition = null)
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
 
-        return $entityService->countEntities($this->contentObjectPublication);
+        return $entityService->countEntities($this->contentObjectPublication, $condition);
+    }
+
+    /**
+     * @param int $entityType
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int|null $offset
+     * @param int|null $count
+     * @param array $order_property
+     *
+     * @return mixed
+     */
+    public function findEntitiesByEntityType(
+        int $entityType, Condition $condition = null, int $offset = null, int $count = null, array $order_property = []
+    )
+    {
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+
+        return $entityService->retrieveEntities(
+            $this->contentObjectPublication, $condition, $offset, $count, $order_property
+        );
     }
 
     /**
@@ -203,15 +226,15 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param integer $entityType
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters $entityTableParameters
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
+     * @return void
      */
-    public function getEntityTableForType(Application $application, $entityType)
+    public function getEntityTableForType(Application $application, EntityTableParameters $entityTableParameters)
     {
-        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityTableParameters->getEntityType());
 
-        return $entityService->getEntityTable($application, $this, $this->contentObjectPublication);
+        return $entityService->getEntityTable($application, $entityTableParameters);
     }
 
     /**
@@ -220,10 +243,15 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
      */
-    public function getEntryTableForEntityTypeAndId(Application $application, EntryTableParameters $entryTableParameters)
+    public function getEntryTableForEntityTypeAndId(Application $application, EntryTableParameters $entryTableParameters
+    )
     {
-        $entryTableParameters->setEntryClassName(\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::class);
-        $entryTableParameters->setScoreClassName(\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score::class);
+        $entryTableParameters->setEntryClassName(
+            \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::class
+        );
+        $entryTableParameters->setScoreClassName(
+            \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score::class
+        );
 
         return new EntryTable($application, $entryTableParameters);
     }
@@ -273,6 +301,18 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
         $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
 
         return $entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return User[]
+     */
+    public function getUsersForEntity(int $entityType, int $entityId)
+    {
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
+        return $entityService->getUsersForEntity($entityId);
     }
 
     /**

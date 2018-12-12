@@ -5,6 +5,9 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -152,7 +155,15 @@ class ViewerComponent extends Manager implements TableSupport
      */
     protected function renderEntityTable()
     {
-        return $this->getAssignmentServiceBridge()->getEntityTableForType($this, $this->getEntityType())->as_html();
+        $entityTableParameters = new EntityTableParameters();
+        $entityTableParameters->setAssignmentServiceBridge($this->getAssignmentServiceBridge());
+        $entityTableParameters->setFeedbackServiceBridge($this->getFeedbackServiceBridge());
+        $entityTableParameters->setAssignment($this->getAssignment());
+        $entityTableParameters->setEntityType($this->getEntityType());
+        $entityTableParameters->setUser($this->getUser());
+        $entityTableParameters->setRightService($this->getRightsService());
+
+        return $this->getAssignmentServiceBridge()->getEntityTableForType($this, $entityTableParameters)->as_html();
     }
 
     /**
