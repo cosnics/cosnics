@@ -97,11 +97,11 @@ class ContentObjectService
      *
      * @return string[]
      */
-    public function getContentObjectDataClassTypes(bool $alsoReturnInactiveTypes = true)
+    public function getContentObjectTypes(bool $alsoReturnInactiveTypes = true)
     {
         $contentObjectRegistrations =
             $this->getRegistrationConsulter()->getContentObjectRegistrations($alsoReturnInactiveTypes);
-        $contentObjectDataClassTypes = array();
+        $contentObjectTypes = array();
 
         foreach ($contentObjectRegistrations as $contentObjectRegistration)
         {
@@ -110,30 +110,75 @@ class ContentObjectService
                 $contentObjectRegistration[Registration::PROPERTY_NAME]
             )->upperCamelize()->__toString();
 
-            $types[] = $contentObjectContext . '\Storage\DataClass\\' . $contentObjectName;
+            $contentObjectTypes[] = $contentObjectContext . '\Storage\DataClass\\' . $contentObjectName;
         }
 
-        return $contentObjectDataClassTypes;
+        return $contentObjectTypes;
     }
 
     /**
      * @return integer
+     * @throws \Exception
      * @see \Chamilo\Core\Repository\Storage\DataManager::get_used_disk_space()
-     * @todo Implement this
      */
     public function getUsedStorageSpace()
     {
+        $contentObjectTypes = $this->getContentObjectTypes();
+        $usedStorageSpace = 0;
 
+        foreach ($contentObjectTypes as $contentObjectType)
+        {
+            $usedStorageSpace += $this->getUsedStorageSpaceForContentObjectType($contentObjectType);
+        }
+
+        return $usedStorageSpace;
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return integer
+     * @throws \Exception
      * @see \Chamilo\Core\Repository\Storage\DataManager::get_used_disk_space()
-     * @todo Implement this
      */
     public function getUsedStorageSpaceForUser(User $user)
     {
+        $contentObjectTypes = $this->getContentObjectTypes();
+        $usedStorageSpace = 0;
 
+        foreach ($contentObjectTypes as $contentObjectType)
+        {
+            $usedStorageSpace += $this->getUsedStorageSpaceForContentObjectTypeAndUser($contentObjectType, $user);
+        }
+
+        return $usedStorageSpace;
+    }
+
+    /**
+     * @param string $contentObjectType
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function getUsedStorageSpaceForContentObjectTypeAndUser(string $contentObjectType, User $user)
+    {
+        return $this->getContentObjectRepository()->getUsedStorageSpaceForContentObjectTypeAndUser(
+            $contentObjectType, $user
+        );
+    }
+
+    /**
+     * @param string $contentObjectType
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function getUsedStorageSpaceForContentObjectType(string $contentObjectType)
+    {
+        return $this->getContentObjectRepository()->getUsedStorageSpaceForContentObjectType(
+            $contentObjectType
+        );
     }
 
 }

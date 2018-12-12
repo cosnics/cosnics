@@ -90,7 +90,8 @@ class QuotaCalculator
      */
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, GroupService $groupService,
-        UserService $userService, ConfigurablePathBuilder $configurablePathBuilder, ContentObjectService $contentObjectService
+        UserService $userService, ConfigurablePathBuilder $configurablePathBuilder,
+        ContentObjectService $contentObjectService
     )
     {
         $this->configurationConsulter = $configurationConsulter;
@@ -116,8 +117,6 @@ class QuotaCalculator
     {
         $this->contentObjectService = $contentObjectService;
     }
-
-
 
     /**
      * @param \Chamilo\Libraries\Format\Form\FormValidator $form
@@ -223,6 +222,7 @@ class QuotaCalculator
     /**
      * @see Calculator::getAllocatedDiskSpacePercentage()
      * @return integer
+     * @throws \Exception
      */
     public function getAllocatedStorageSpacePercentage()
     {
@@ -345,6 +345,7 @@ class QuotaCalculator
      *
      * @return integer
      * @see Calculator::getAvailableAllocatedDiskSpace()
+     * @throws \Exception
      */
     public function getAvailableAllocatedStorageSpace()
     {
@@ -539,6 +540,7 @@ class QuotaCalculator
     /**
      * @return integer
      * @see Calculator::getUsedAggregatedUserDiskQuota()
+     * @throws \Exception
      */
     public function getUsedAggregatedUserStorageSpace()
     {
@@ -555,12 +557,14 @@ class QuotaCalculator
      *
      * @return integer
      * @see Calculator::getUsedUserDiskQuota()
+     * @throws \Exception
      */
     public function getUsedStorageSpaceForUser(User $user)
     {
         if (!isset($this->usedStorageSpaceForUserCache[$user->getId()]))
         {
-            $this->usedStorageSpaceForUserCache[$user->getId()] = $this->getContentObjectService()->getUsedStorageSpaceForUser($user);
+            $this->usedStorageSpaceForUserCache[$user->getId()] =
+                $this->getContentObjectService()->getUsedStorageSpaceForUser($user);
         }
 
         return $this->usedStorageSpaceForUserCache[$user->getId()];
