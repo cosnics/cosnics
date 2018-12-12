@@ -6,16 +6,18 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
-use Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entry\EntryTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Assignment
@@ -213,18 +215,17 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters $entryTableParameters
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
      */
-    public function getEntryTableForEntityTypeAndId(Application $application, $entityType, $entityId)
+    public function getEntryTableForEntityTypeAndId(Application $application, EntryTableParameters $entryTableParameters)
     {
-        return new EntryTable(
-            $application, $this, $entityId, $entityType, $this->assignmentService, $this->contentObjectPublication
-        );
+        $entryTableParameters->setEntryClassName(\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::class);
+        $entryTableParameters->setScoreClassName(\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score::class);
+
+        return new EntryTable($application, $entryTableParameters);
     }
 
     /**
@@ -327,13 +328,14 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      *
      * @param integer $entityType
      * @param integer $entityId
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return integer
      */
-    public function countEntriesForEntityTypeAndId($entityType, $entityId)
+    public function countEntriesForEntityTypeAndId($entityType, $entityId, Condition $condition = null)
     {
         return $this->assignmentService->countEntriesForContentObjectPublicationEntityTypeAndId(
-            $this->contentObjectPublication, $entityType, $entityId
+            $this->contentObjectPublication, $entityType, $entityId, $condition
         );
     }
 
@@ -478,6 +480,26 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     {
         return $this->assignmentService->findEntriesByContentObjectPublicationEntityTypeAndIdentifiers(
             $this->contentObjectPublication, $entityType, $entityIdentifiers
+        );
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderProperty
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesForEntityTypeAndId(
+        int $entityType, int $entityId, Condition $condition = null, int $offset = null, int $count = null,
+        array $orderProperty = []
+    )
+    {
+        return $this->assignmentService->findEntriesForContentObjectPublicationEntityTypeAndId(
+            $this->contentObjectPublication, $entityType, $entityId, $condition, $offset, $count, $orderProperty
         );
     }
 

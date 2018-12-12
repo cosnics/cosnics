@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryNaviga
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -376,16 +377,21 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     }
 
     /**
-     *
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function renderEntryTable()
     {
-        $table = $this->getAssignmentServiceBridge()->getEntryTableForEntityTypeAndId(
-            $this,
-            $this->getEntityType(),
-            $this->getEntityIdentifier()
-        );
+        $entryTableParameters = new EntryTableParameters();
+        $entryTableParameters->setAssignmentServiceBridge($this->getAssignmentServiceBridge());
+        $entryTableParameters->setFeedbackServiceBridge($this->getFeedbackServiceBridge());
+        $entryTableParameters->setAssignment($this->getAssignment());
+        $entryTableParameters->setEntityType($this->getEntityType());
+        $entryTableParameters->setEntityId($this->getEntityIdentifier());
+        $entryTableParameters->setUser($this->getUser());
+        $entryTableParameters->setCurrentEntry($this->getEntry());
+
+        $table = $this->getAssignmentServiceBridge()->getEntryTableForEntityTypeAndId($this, $entryTableParameters);
 
         if (!empty($table))
         {

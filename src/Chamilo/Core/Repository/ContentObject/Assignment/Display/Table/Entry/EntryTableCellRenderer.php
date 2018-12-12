@@ -24,7 +24,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
+class EntryTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
     public function render_cell($column, $entry)
@@ -41,11 +41,11 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
                 $title =
                     StringUtilities::getInstance()->createString($title)->safeTruncate(50, ' &hellip;')->__toString();
 
-                $isUser = $entry[Entry::PROPERTY_USER_ID] == $this->get_component()->get_user_id();
-                $assignment = $this->get_table()->get_component()->get_root_content_object();
+                $isUser = $entry[Entry::PROPERTY_USER_ID] == $this->getEntryTableParameters()->getUser()->getId();
+                $assignment = $this->getEntryTableParameters()->getAssignment();
 
                 if ($isUser || $assignment->get_visibility_submissions() == 1 ||
-                    $this->get_table()->getAssignmentDataProvider()->canEditAssignment())
+                    $this->getEntryTableParameters()->getAssignmentServiceBridge()->canEditAssignment())
                 {
                     $url = $this->get_component()->get_url(
                         array(
@@ -84,7 +84,7 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
 
                 return $score . '%';
             case EntryTableColumnModel::PROPERTY_FEEDBACK_COUNT :
-                return $this->get_table()->getAssignmentDataProvider()->countFeedbackByEntryIdentifier(
+                return $this->getEntryTableParameters()->getFeedbackServiceBridge()->countFeedbackByEntryIdentifier(
                     $entry[Entry::PROPERTY_ID]
                 );
                 break;
@@ -99,19 +99,22 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport::get_actions()
+     *
+     * @param Entry $entry
+     *
+     * @return string
      */
     public function get_actions($entry)
     {
         $toolbar = new Toolbar();
 
-        $isCurrentEntry = $this->get_component()->getEntry()->getId() == $entry[Entry::PROPERTY_ID];
-        $isUser = $entry[Entry::PROPERTY_USER_ID] == $this->get_component()->get_user_id();
-        $assignment = $this->get_table()->get_component()->get_root_content_object();
+        $isCurrentEntry = $this->getEntryTableParameters()->getCurrentEntry()->getId() == $entry[Entry::PROPERTY_ID];
+        $isUser = $entry[Entry::PROPERTY_USER_ID] == $this->getEntryTableParameters()->getUser()->getId();
+        $assignment = $this->getEntryTableParameters()->getAssignment();
 
         if (!$isCurrentEntry && ($isUser || $assignment->get_visibility_submissions() == 1 ||
-            $this->get_table()->getAssignmentDataProvider()->canEditAssignment()))
+            $this->getEntryTableParameters()->getAssignmentServiceBridge()->canEditAssignment()))
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -121,8 +124,8 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
                             Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID],
-                            Manager::PARAM_ENTITY_ID => $this->get_component()->getEntityIdentifier(),
-                            Manager::PARAM_ENTITY_TYPE => $this->get_component()->getEntityType()
+                            Manager::PARAM_ENTITY_ID => $this->getEntryTableParameters()->getEntityId(),
+                            Manager::PARAM_ENTITY_TYPE => $this->getEntryTableParameters()->getEntityType()
                         )
                     ),
                     ToolbarItem::DISPLAY_ICON
@@ -181,11 +184,27 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
             $date
         );
 
-        if ($this->get_table()->getAssignmentDataProvider()->isDateAfterAssignmentEndTime($date))
+        if ($this->getEntryTableParameters()->getAssignmentServiceBridge()->isDateAfterAssignmentEndTime($date))
         {
             return '<span style="color:red">' . $formatted_date . '</span>';
         }
 
         return $formatted_date;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters
+     */
+    protected function getEntryTableParameters()
+    {
+        return $this->getTable()->getEntryTableParameters();
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Table\Table | \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
+     */
+    protected function getTable()
+    {
+        return $this->get_table();
     }
 }

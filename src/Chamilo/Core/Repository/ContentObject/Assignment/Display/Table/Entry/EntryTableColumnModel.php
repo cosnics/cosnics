@@ -18,7 +18,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntryTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport
+class EntryTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport
 {
     const PROPERTY_FEEDBACK_COUNT = 'feedback_count';
     const DEFAULT_ORDER_COLUMN_INDEX = 2;
@@ -39,13 +39,13 @@ abstract class EntryTableColumnModel extends RecordTableColumnModel implements T
 
         $this->add_column(
             new DataClassPropertyTableColumn(
-                $this->getEntryClassName(), Entry::PROPERTY_SUBMITTED, Translation::get('Submitted')
+                $this->getEntryTableParameters()->getEntryClassName(), Entry::PROPERTY_SUBMITTED, Translation::get('Submitted')
             )
         );
 
         $this->add_column(
             new DataClassPropertyTableColumn(
-                $this->getScoreClassName(), Score::PROPERTY_SCORE, 'Score'
+                $this->getEntryTableParameters()->getScoreClassName(), Score::PROPERTY_SCORE, 'Score'
             )
         );
 
@@ -53,12 +53,18 @@ abstract class EntryTableColumnModel extends RecordTableColumnModel implements T
     }
 
     /**
-     * @return string
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters
      */
-    abstract function getEntryClassName();
+    protected function getEntryTableParameters()
+    {
+        return $this->getTable()->getEntryTableParameters();
+    }
 
     /**
-     * @return string
+     * @return \Chamilo\Libraries\Format\Table\Table | \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
      */
-    abstract function getScoreClassName();
+    protected function getTable()
+    {
+        return $this->get_table();
+    }
 }

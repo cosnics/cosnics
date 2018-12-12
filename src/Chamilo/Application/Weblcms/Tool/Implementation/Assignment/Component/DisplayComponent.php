@@ -51,19 +51,8 @@ class DisplayComponent extends Manager implements DelegateComponent
 
         $this->buildBridges($publication);
 
-        $assignmentDataProvider->setContentObjectPublication($publication);
-        $assignmentDataProvider->setAssignmentPublication($this->getAssignmentPublication($publication));
-        $assignmentDataProvider->setCanEditAssignment($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication));
-
-        $assignmentDataProvider->setEphorusEnabled($this->isEphorusEnabled());
-
         $configuration = new ApplicationConfiguration(
             $this->get_application()->getRequest(), $this->get_application()->getUser(), $this
-        );
-
-        $configuration->set(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::CONFIGURATION_DATA_PROVIDER,
-            $assignmentDataProvider
         );
 
         $applicationFactory = $this->getApplicationFactory();

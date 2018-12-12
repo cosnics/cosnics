@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Score;
@@ -9,7 +10,9 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeA
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Interface AssignmentServiceBridgeInterface
@@ -83,15 +86,14 @@ interface AssignmentServiceBridgeInterface
     public function getEntityTableForType(Application $application, TreeNode $treeNode, $entityType);
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters $entryTableParameters
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
      */
-    public function getEntryTableForEntityTypeAndId(Application $application, TreeNode $treeNode, $entityType, $entityId);
+    public function getEntryTableForEntityTypeAndId(
+        Application $application, EntryTableParameters $entryTableParameters
+    );
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
@@ -151,7 +153,10 @@ interface AssignmentServiceBridgeInterface
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
      */
-    public function createEntry(TreeNode $treeNode, TreeNodeAttempt $treeNodeAttempt, $entityType, $entityId, $userId, $contentObjectId, $ipAdress);
+    public function createEntry(
+        TreeNode $treeNode, TreeNodeAttempt $treeNodeAttempt, $entityType, $entityId, $userId, $contentObjectId,
+        $ipAdress
+    );
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry $entry
@@ -162,10 +167,11 @@ interface AssignmentServiceBridgeInterface
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param integer $entityType
      * @param integer $entityId
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return integer
      */
-    public function countEntriesForTreeNodeEntityTypeAndId(TreeNode $treeNode, $entityType, $entityId);
+    public function countEntriesForTreeNodeEntityTypeAndId(TreeNode $treeNode, $entityType, $entityId, Condition $condition);
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
@@ -194,7 +200,6 @@ interface AssignmentServiceBridgeInterface
      * @return integer
      */
     public function getLastScoreForTreeNodeEntityTypeAndId(TreeNode $treeNode, $entityType, $entityId);
-
 
     /**
      *
@@ -262,6 +267,22 @@ interface AssignmentServiceBridgeInterface
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntriesByTreeNodeEntityTypeAndIdentifiers(TreeNode $treeNode, $entityType, $entityIdentifiers);
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     * @param int $entityType
+     * @param int $entityId
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderProperty
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesByTreeNodeEntityTypeAndId(
+        TreeNode $treeNode, int $entityType, int $entityId, Condition $condition = null, int $offset = null, int $count = null,
+        array $orderProperty = []
+    );
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode

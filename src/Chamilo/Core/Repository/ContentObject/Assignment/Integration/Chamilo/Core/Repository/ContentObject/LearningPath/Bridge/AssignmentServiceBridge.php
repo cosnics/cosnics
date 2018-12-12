@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\A
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
@@ -13,6 +15,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service
@@ -168,17 +171,16 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters $entryTableParameters
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
      */
-    public function getEntryTableForEntityTypeAndId(Application $application, $entityType, $entityId)
+    public function getEntryTableForEntityTypeAndId(Application $application, EntryTableParameters $entryTableParameters
+    )
     {
         return $this->learningPathAssignmentServiceBridge->getEntryTableForEntityTypeAndId(
-            $application, $this->treeNode, $entityType, $entityId
+            $application, $entryTableParameters
         );
     }
 
@@ -275,12 +277,14 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @param integer $entityType
      * @param integer $entityId
      *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
      * @return integer
      */
-    public function countEntriesForEntityTypeAndId($entityType, $entityId)
+    public function countEntriesForEntityTypeAndId($entityType, $entityId, Condition $condition = null)
     {
         return $this->learningPathAssignmentServiceBridge->countEntriesForTreeNodeEntityTypeAndId(
-            $this->treeNode, $entityType, $entityId
+            $this->treeNode, $entityType, $entityId, $condition
         );
     }
 
@@ -423,6 +427,26 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     {
         return $this->learningPathAssignmentServiceBridge->findEntriesByTreeNodeEntityTypeAndIdentifiers(
             $this->treeNode, $entityType, $entityIdentifiers
+        );
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderProperty
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesForEntityTypeAndId(
+        int $entityType, int $entityId, Condition $condition = null, int $offset = null, int $count = null,
+        array $orderProperty = []
+    )
+    {
+        return $this->learningPathAssignmentServiceBridge->findEntriesByTreeNodeEntityTypeAndId(
+            $this->treeNode, $entityType, $entityId, $condition, $offset, $count, $orderProperty
         );
     }
 

@@ -5,10 +5,12 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interf
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  *
@@ -85,14 +87,12 @@ interface AssignmentServiceBridgeInterface
     public function getEntityTableForType(Application $application, $entityType);
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters $entryTableParameters
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
      */
-    public function getEntryTableForEntityTypeAndId(Application $application, $entityType, $entityId);
+    public function getEntryTableForEntityTypeAndId(Application $application, EntryTableParameters $entryTableParameters);
 
     /**
      *
@@ -158,10 +158,11 @@ interface AssignmentServiceBridgeInterface
      *
      * @param integer $entityType
      * @param integer $entityId
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return integer
      */
-    public function countEntriesForEntityTypeAndId($entityType, $entityId);
+    public function countEntriesForEntityTypeAndId($entityType, $entityId, Condition $condition = null);
 
     /**
      *
@@ -223,6 +224,7 @@ interface AssignmentServiceBridgeInterface
 
     /**
      * @param Score $score
+     *
      * @return Score
      */
     public function createScore(Score $score);
@@ -257,6 +259,21 @@ interface AssignmentServiceBridgeInterface
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]
      */
     public function findEntriesByEntityTypeAndIdentifiers($entityType, $entityIdentifiers);
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderProperty
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesForEntityTypeAndId(
+        int $entityType, int $entityId, Condition $condition = null, int $offset = null, int $count = null,
+        array $orderProperty = []
+    );
 
     /**
      *

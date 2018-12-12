@@ -5,12 +5,13 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entity\EntityTable;
-use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entry\EntryTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
@@ -18,6 +19,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -65,6 +67,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function __construct(Translator $translator, AssignmentService $assignmentService)
     {
+        $this->translator = $translator;
         $this->assignmentService = $assignmentService;
     }
 
@@ -205,24 +208,29 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function getEntityTableForType(Application $application, TreeNode $treeNode, $entityType)
     {
         return new EntityTable(
-            $application, $this, $this->assignmentService, $this->contentObjectPublication, $treeNode->getTreeNodeData(),
+            $application, $this, $this->assignmentService, $this->contentObjectPublication,
+            $treeNode->getTreeNodeData(),
             $this->targetUserIds
         );
     }
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters $entryTableParameters
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
      */
-    public function getEntryTableForEntityTypeAndId(Application $application, TreeNode $treeNode, $entityType, $entityId)
+    public function getEntryTableForEntityTypeAndId(Application $application, EntryTableParameters $entryTableParameters
+    )
     {
-        return new EntryTable(
-            $application, $this, $entityId, $this->assignmentService, $this->contentObjectPublication, $treeNode->getTreeNodeData()
+        $entryTableParameters->setEntryClassName(
+            \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::class
         );
+        $entryTableParameters->setScoreClassName(
+            \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score::class
+        );
+
+        return new EntryTable($application, $entryTableParameters);
     }
 
     /**
@@ -308,7 +316,10 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function createEntry(TreeNode $treeNode, TreeNodeAttempt $treeNodeAttempt, $entityType, $entityId, $userId, $contentObjectId, $ipAdress)
+    public function createEntry(
+        TreeNode $treeNode, TreeNodeAttempt $treeNodeAttempt, $entityType, $entityId, $userId, $contentObjectId,
+        $ipAdress
+    )
     {
         $user = new User();
         $user->setId($userId);
@@ -319,7 +330,8 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
         $this->learningPathTrackingService->setActiveAttemptCompleted($learningPath, $treeNode, $user);
 
         return $this->assignmentService->createEntry(
-            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $treeNodeAttempt, $entityType, $entityId, $userId,
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $treeNodeAttempt, $entityType, $entityId,
+            $userId,
             $contentObjectId, $ipAdress
         );
     }
@@ -336,13 +348,16 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param integer $entityType
      * @param integer $entityId
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return integer
      */
-    public function countEntriesForTreeNodeEntityTypeAndId(TreeNode $treeNode, $entityType, $entityId)
+    public function countEntriesForTreeNodeEntityTypeAndId(
+        TreeNode $treeNode, $entityType, $entityId, Condition $condition = null
+    )
     {
         return $this->assignmentService->countEntriesForTreeNodeDataEntityTypeAndId(
-            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $entityType, $entityId
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $entityType, $entityId, $condition
         );
     }
 
@@ -435,7 +450,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
     {
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $entityId);
-        if(!$user instanceof User)
+        if (!$user instanceof User)
         {
             throw new \InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
         }
@@ -543,6 +558,29 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     * @param int $entityType
+     * @param int $entityId
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderProperty
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesByTreeNodeEntityTypeAndId(
+        TreeNode $treeNode, int $entityType, int $entityId, Condition $condition = null, int $offset = null,
+        int $count = null,
+        array $orderProperty = []
+    )
+    {
+        return $this->assignmentService->findEntriesForTreeNodeDataEntityTypeAndId(
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $entityType, $entityId, $condition, $offset,
+            $count, $orderProperty
+        );
+    }
+
+    /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      *
@@ -550,7 +588,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function findEntriesByTreeNode(TreeNode $treeNode)
     {
-        return $this->assignmentService->findEntriesByTreeNodeData($this->contentObjectPublication, $treeNode->getTreeNodeData());
+        return $this->assignmentService->findEntriesByTreeNodeData(
+            $this->contentObjectPublication, $treeNode->getTreeNodeData()
+        );
     }
 
     /**
