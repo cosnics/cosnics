@@ -3,7 +3,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\AssignmentRepository;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;

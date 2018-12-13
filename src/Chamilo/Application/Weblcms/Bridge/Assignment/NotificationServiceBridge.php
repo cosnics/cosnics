@@ -30,8 +30,6 @@ class NotificationServiceBridge implements NotificationServiceBridgeInterface
     protected $contentObjectPublication;
 
     /**
-     * AssignmentDataProvider constructor.
-     *
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationService $notificationService
      */
     public function __construct(NotificationService $notificationService)

@@ -53,8 +53,6 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     protected $canEditAssignment;
 
     /**
-     * AssignmentDataProvider constructor.
-     *
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService $assignmentService
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager $entityServiceManager
      */
@@ -228,7 +226,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters $entityTableParameters
      *
-     * @return void
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
      */
     public function getEntityTableForType(Application $application, EntityTableParameters $entityTableParameters)
     {

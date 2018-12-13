@@ -68,7 +68,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                 $entityType = $this->getAssignmentPublication($contentObjectPublication)->getEntityType();
 
                 $entitiesCount =
-                    $this->getAssignmentDataProvider($contentObjectPublication)->countEntitiesByEntityType($entityType);
+                    $this->getEntityServiceManager()->getEntityServiceByType($entityType)->countEntities($contentObjectPublication);
 
                 $entitiesWithEntriesCount =
                     $this->getAssignmentService()->countDistinctEntriesByContentObjectPublicationAndEntityType(
@@ -89,7 +89,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                 $entityType = $this->getAssignmentPublication($contentObjectPublication)->getEntityType();
 
                 $entityTypeName =
-                    $this->getAssignmentDataProvider($contentObjectPublication)->getPluralEntityNameByType($entityType);
+                    $this->getEntityServiceManager()->getEntityServiceByType($entityType)->getPluralEntityName();
 
                 $iconName = ($entityType == Entry::ENTITY_TYPE_USER) ? 'user' : 'users';
 
@@ -122,7 +122,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
+     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService
      */
     protected function getAssignmentService()
     {
@@ -133,19 +133,14 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     *
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider
+     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager
      */
-    protected function getAssignmentDataProvider(ContentObjectPublication $contentObjectPublication)
+    protected function getEntityServiceManager()
     {
         /** @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\BrowserComponent $component */
         $component = $this->get_component()->get_tool_browser()->get_parent();
 
-        $dataProvider = $component->getAssignmentDataProvider();
-        $dataProvider->setContentObjectPublication($contentObjectPublication);
-
-        return $dataProvider;
+        return $component->getEntityServiceManager();
     }
 
     /**

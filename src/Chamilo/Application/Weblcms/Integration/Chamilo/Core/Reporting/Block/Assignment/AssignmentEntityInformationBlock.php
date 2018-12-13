@@ -2,8 +2,8 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\AssignmentRepository;
 use Chamilo\Core\Reporting\ReportingData;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -110,7 +110,7 @@ class AssignmentEntityInformationBlock extends AssignmentReportingManager
         );
 
         $entriesWithFeedback =
-            $this->getAssignmentService()->countDistinctFeedbackForContentObjectPublicationEntityTypeAndId(
+            $this->getFeedbackService()->countDistinctFeedbackForContentObjectPublicationEntityTypeAndId(
                 $contentObjectPublication, $this->getEntityType(), $this->getEntityId()
             );
 

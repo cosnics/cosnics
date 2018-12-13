@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;

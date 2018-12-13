@@ -2,6 +2,8 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\FeedbackService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -383,13 +385,19 @@ abstract class AssignmentReportingManager extends ToolBlock
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
+     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService
      */
     protected function getAssignmentService()
     {
-        return $this->getService(
-            'chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service'
-        );
+        return $this->getService(AssignmentService::class);
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Service\FeedbackService
+     */
+    protected function getFeedbackService()
+    {
+        return $this->getService(FeedbackService::class);
     }
 
     /**

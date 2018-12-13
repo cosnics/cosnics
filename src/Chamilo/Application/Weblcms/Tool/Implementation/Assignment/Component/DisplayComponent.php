@@ -39,8 +39,6 @@ class DisplayComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $assignmentDataProvider = $this->getAssignmentDataProvider();
-
         $publication = $this->getContentObjectPublication();
         if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
         {

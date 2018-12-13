@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
@@ -45,13 +46,13 @@ class Manager implements PublicationInterface
         $containerBuilder = DependencyInjectionContainerBuilder::getInstance();
         $container = $containerBuilder->createContainer();
 
-        /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService */
+        /** @var AssignmentService $assignmentService */
         $assignmentService =
-            $container->get('chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service');
+            $container->get(AssignmentService::class);
 
-        /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService $learningPathAssignmentService */
+        /** @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService $learningPathAssignmentService */
         $learningPathAssignmentService = $container->get(
-            'chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service'
+            \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService::class
         );
 
         $contentObject = new ContentObject();

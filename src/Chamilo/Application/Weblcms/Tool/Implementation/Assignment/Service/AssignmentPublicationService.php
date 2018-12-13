@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
 
@@ -19,7 +19,7 @@ class AssignmentPublicationService
     protected $assignmentPublicationRepository;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
+     * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService
      */
     protected $assignmentService;
 
@@ -27,7 +27,7 @@ class AssignmentPublicationService
      * AssignmentPublicationService constructor.
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository $assignmentPublicationRepository
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService $assignmentService
      */
     public function __construct(
         PublicationRepository $assignmentPublicationRepository, AssignmentService $assignmentService

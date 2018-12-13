@@ -2,11 +2,11 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentStudentEntriesTemplate;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingData;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
@@ -105,7 +105,7 @@ class CourseUserAssignmentInformationBlock extends AssignmentReportingManager
             );
 
             $feedbackCount =
-                $this->getAssignmentService()->countFeedbackForContentObjectPublicationByEntityTypeAndEntityId(
+                $this->getFeedbackService()->countFeedbackForContentObjectPublicationByEntityTypeAndEntityId(
                     $publicationObject, Entry::ENTITY_TYPE_USER, $userId
                 );
 

@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -192,10 +193,19 @@ class RepositoryMenu
         $extensionsButtonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
         $buttonToolBar->addButtonGroup($extensionsButtonGroup);
 
-        $this->getRepositoryManager()->getWorkspaceExtensionManager()->getWorkspaceActions(
-            $this->getRepositoryManager(), $repositoryManager->getWorkspace(), $repositoryManager->getUser(),
-            $extensionsButtonGroup
-        );
+        try
+        {
+            $this->getRepositoryManager()->getWorkspaceExtensionManager()->getWorkspaceActions(
+                $this->getRepositoryManager(), $repositoryManager->getWorkspace(), $repositoryManager->getUser(),
+                $extensionsButtonGroup
+            );
+        }
+        catch (\Exception $ex)
+        {
+            $this->getRepositoryManager()->getExceptionLogger()->logException(
+                $ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR
+            );
+        }
 
         $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 

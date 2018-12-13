@@ -2,8 +2,6 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
 use Chamilo\Core\Repository\Publication\Service\ContentObjectPublicationManagerInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Service\UserService;
@@ -20,12 +18,12 @@ use Chamilo\Core\User\Storage\DataClass\User;
 class ContentObjectPublicationManager implements ContentObjectPublicationManagerInterface
 {
     /**
-     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
+     * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService
      */
     protected $assignmentService;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
+     * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService
      */
     protected $learningPathAssignmentService;
 
@@ -37,12 +35,12 @@ class ContentObjectPublicationManager implements ContentObjectPublicationManager
     /**
      * ContentObjectPublicationManager constructor.
      *
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService $learningPathAssignmentService
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService $learningPathAssignmentService
      * @param \Chamilo\Core\User\Service\UserService $userService
      */
     public function __construct(
-        AssignmentService $assignmentService, LearningPathAssignmentService $learningPathAssignmentService,
+        \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService $assignmentService,  \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService $learningPathAssignmentService,
         UserService $userService
     )
     {

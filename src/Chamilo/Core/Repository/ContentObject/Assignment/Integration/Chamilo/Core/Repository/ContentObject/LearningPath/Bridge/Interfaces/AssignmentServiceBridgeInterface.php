@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\EntryAttachment;
@@ -39,11 +40,27 @@ interface AssignmentServiceBridgeInterface
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     * @param int $entityType
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int|null $offset
+     * @param int|null $count
+     * @param array $order_property
+     *
+     * @return mixed
+     */
+    public function findEntitiesByEntityType(
+        TreeNode $treeNode, int $entityType, Condition $condition = null, int $offset = null, int $count = null,
+        array $order_property = []
+    );
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param integer $entityType
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return integer
      */
-    public function countEntitiesByEntityType(TreeNode $treeNode, $entityType);
+    public function countEntitiesByEntityType(TreeNode $treeNode, $entityType, Condition $condition = null);
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
@@ -76,14 +93,12 @@ interface AssignmentServiceBridgeInterface
     public function getEntityNameByType($entityType);
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
-     * @param integer $entityType
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters $entityTableParameters
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
      */
-    public function getEntityTableForType(Application $application, TreeNode $treeNode, $entityType);
+    public function getEntityTableForType(Application $application, EntityTableParameters $entityTableParameters);
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
@@ -135,6 +150,14 @@ interface AssignmentServiceBridgeInterface
     public function isUserPartOfEntity(User $user, $entityType, $entityId);
 
     /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return User[]
+     */
+    public function getUsersForEntity(int $entityType, int $entityId);
+
+    /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      *
      * @return boolean
@@ -171,7 +194,9 @@ interface AssignmentServiceBridgeInterface
      *
      * @return integer
      */
-    public function countEntriesForTreeNodeEntityTypeAndId(TreeNode $treeNode, $entityType, $entityId, Condition $condition);
+    public function countEntriesForTreeNodeEntityTypeAndId(
+        TreeNode $treeNode, $entityType, $entityId, Condition $condition
+    );
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
@@ -280,7 +305,8 @@ interface AssignmentServiceBridgeInterface
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntriesByTreeNodeEntityTypeAndId(
-        TreeNode $treeNode, int $entityType, int $entityId, Condition $condition = null, int $offset = null, int $count = null,
+        TreeNode $treeNode, int $entityType, int $entityId, Condition $condition = null, int $offset = null,
+        int $count = null,
         array $orderProperty = []
     );
 

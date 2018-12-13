@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\A
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
@@ -101,14 +101,35 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     }
 
     /**
+     * @param int $entityType
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int|null $offset
+     * @param int|null $count
+     * @param array $order_property
+     *
+     * @return mixed
+     */
+    public function findEntitiesByEntityType(
+        int $entityType, Condition $condition = null, int $offset = null, int $count = null, array $order_property = []
+    )
+    {
+        return $this->learningPathAssignmentServiceBridge->findEntitiesByEntityType(
+            $this->treeNode, $entityType, $condition, $offset, $count, $order_property
+        );
+    }
+
+    /**
      *
      * @param integer $entityType
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return integer
      */
-    public function countEntitiesByEntityType($entityType)
+    public function countEntitiesByEntityType($entityType, Condition $condition = null)
     {
-        return $this->learningPathAssignmentServiceBridge->countEntitiesByEntityType($this->treeNode, $entityType);
+        return $this->learningPathAssignmentServiceBridge->countEntitiesByEntityType(
+            $this->treeNode, $entityType, $condition
+        );
     }
 
     /**
@@ -159,15 +180,13 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param integer $entityType
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters $entityTableParameters
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
      */
-    public function getEntityTableForType(Application $application, $entityType)
+    public function getEntityTableForType(Application $application, EntityTableParameters $entityTableParameters)
     {
-        return $this->learningPathAssignmentServiceBridge->getEntityTableForType(
-            $application, $this->treeNode, $entityType
-        );
+        return $this->learningPathAssignmentServiceBridge->getEntityTableForType($application, $entityTableParameters);
     }
 
     /**
@@ -236,6 +255,17 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function isUserPartOfEntity(User $user, $entityType, $entityId)
     {
         return $this->learningPathAssignmentServiceBridge->isUserPartOfEntity($user, $entityType, $entityId);
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return User[]
+     */
+    public function getUsersForEntity(int $entityType, int $entityId)
+    {
+        return $this->learningPathAssignmentServiceBridge->getUsersForEntity($entityType, $entityId);
     }
 
     /**

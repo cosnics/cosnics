@@ -6,21 +6,13 @@
     <services>
 
         <service
-                id="chamilo.application.weblcms.tool.implementation.assignment.service.assignment_data_provider"
-                class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider">
-            <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
-            <argument type="service" id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager" />
-            <argument type="service" id="Chamilo\Core\Queue\Service\JobProducer" />
-        </service>
-
-        <service
                 id="chamilo.application.weblcms.tool.implementation.assignment.service.entries_downloader.entries_downloader_factory"
                 class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntriesDownloader\EntriesDownloaderFactory">
             <argument type="service" id="symfony.component.translation.translator" />
             <argument type="service" id="chamilo.application.weblcms.storage.repository.publication_repository" />
             <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository" />
             <argument type="service" id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager" />
-            <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
+            <argument type="service" id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService" />
             <argument type="service" id="chamilo.libraries.file.compression.archive_creator.archive_creator" />
         </service>
 
@@ -28,7 +20,7 @@
                 id="chamilo.application.weblcms.tool.implementation.assignment.service.assignment_publication_service"
                 class="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentPublicationService">
             <argument type="service" id="chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository" />
-            <argument type="service" id="chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service" />
+            <argument type="service" id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService" />
         </service>
 
     </services>

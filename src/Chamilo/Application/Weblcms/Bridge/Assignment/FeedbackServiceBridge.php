@@ -28,8 +28,6 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
     protected $contentObjectPublication;
 
     /**
-     * AssignmentDataProvider constructor.
-     *
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\FeedbackService $feedbackService
      */
     public function __construct(FeedbackService $feedbackService)

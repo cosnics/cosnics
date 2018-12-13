@@ -156,7 +156,7 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
             $this->reportingData->add_data_category_row(
                 $count,
                 self::$COLUMN_NUMBER_OF_FEEDBACKS,
-                $this->getAssignmentService()->countFeedbackForContentObjectPublicationByEntityTypeAndEntityId(
+                $this->getFeedbackService()->countFeedbackForContentObjectPublicationByEntityTypeAndEntityId(
                     $contentObjectPublication, $entityType, $entityId
                 )
             );

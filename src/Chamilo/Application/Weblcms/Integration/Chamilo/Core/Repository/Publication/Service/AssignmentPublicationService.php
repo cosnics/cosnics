@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
@@ -33,12 +33,12 @@ class AssignmentPublicationService
     /**
      * AssignmentPublicationService constructor.
      *
-     * @param AssignmentService $assignmentService
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service\AssignmentService $assignmentService
      * @param \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository $contentObjectRepository
      * @param string $publicationContext
      */
     public function __construct(
-        AssignmentService $assignmentService, ContentObjectRepository $contentObjectRepository, $publicationContext
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service\AssignmentService $assignmentService, ContentObjectRepository $contentObjectRepository, $publicationContext
     )
     {
         $this->assignmentService = $assignmentService;

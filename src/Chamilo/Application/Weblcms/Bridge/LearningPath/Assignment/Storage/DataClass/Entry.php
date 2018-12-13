@@ -10,6 +10,11 @@ class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\Integratio
 {
     const PROPERTY_CONTENT_OBJECT_PUBLICATION_ID = 'content_object_publication_id';
 
+    // Entity types
+    const ENTITY_TYPE_USER = 0;
+    const ENTITY_TYPE_COURSE_GROUP = 1;
+    const ENTITY_TYPE_PLATFORM_GROUP = 2;
+
     public static function get_table_name()
     {
         return 'tracking_weblcms_learning_path_assignment_entry';

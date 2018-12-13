@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -123,12 +124,10 @@ class DeleterComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
+     * @return AssignmentService
      */
     protected function getLearningPathAssignmentService()
     {
-        return $this->getService(
-            'chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service'
-        );
+        return $this->getService(AssignmentService::class);
     }
 }

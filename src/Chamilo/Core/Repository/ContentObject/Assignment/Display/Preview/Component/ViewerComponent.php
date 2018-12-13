@@ -2,7 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Component;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\AssignmentDataProvider;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge\AssignmentServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge\EphorusServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge\FeedbackServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge\NotificationServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
@@ -18,15 +21,21 @@ class ViewerComponent extends Manager
 
     public function run()
     {
+        $this->initializeBridges();
+
         $configuration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
-        $configuration->set(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::CONFIGURATION_DATA_PROVIDER,
-            new AssignmentDataProvider()
-        );
 
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(),
             $configuration
         )->run();
+    }
+
+    public function initializeBridges()
+    {
+        $this->getBridgeManager()->addBridge(new AssignmentServiceBridge());
+        $this->getBridgeManager()->addBridge(new FeedbackServiceBridge());
+        $this->getBridgeManager()->addBridge(new NotificationServiceBridge());
+        $this->getBridgeManager()->addBridge(new EphorusServiceBridge());
     }
 }

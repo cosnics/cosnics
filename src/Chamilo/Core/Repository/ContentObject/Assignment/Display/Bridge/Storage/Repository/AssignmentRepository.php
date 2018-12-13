@@ -374,17 +374,14 @@ abstract class AssignmentRepository
      * @param integer $offset
      * @param integer $count
      * @param OrderBy[] $orderBy
-     * @param DataClassProperties $properties
      * @param string $baseClass
      * @param PropertyConditionVariable $baseVariable
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     *
-     * TODO: changed from records to dataclass so remove properties in calls
      */
     protected function findTargetsForEntityTypeWithEntries(
         $entityType, Condition $condition = null, Condition $joinCondition = null, $offset, $count, $orderBy,
-        DataClassProperties $properties, $baseClass, $baseVariable
+        $baseClass, $baseVariable
     )
     {
         $submittedVariable = new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED);

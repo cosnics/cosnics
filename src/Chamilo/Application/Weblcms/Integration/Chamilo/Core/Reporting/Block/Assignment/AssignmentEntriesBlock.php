@@ -96,7 +96,7 @@ class AssignmentEntriesBlock extends AssignmentReportingManager
             $title = $this->createLink($entryUrl, $entry[ContentObject::PROPERTY_TITLE], '_blank');
 
             $numberOfFeedbacks =
-                $this->getAssignmentService()->countFeedbackForContentObjectPublicationByEntityTypeAndEntityId(
+                $this->getFeedbackService()->countFeedbackForContentObjectPublicationByEntityTypeAndEntityId(
                     $contentObjectPublication, $this->getEntityType(), $this->getEntityId()
                 );
 

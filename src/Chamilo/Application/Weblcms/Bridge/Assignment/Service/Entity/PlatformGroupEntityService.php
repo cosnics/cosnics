@@ -2,11 +2,10 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
 use Chamilo\Core\User\Service\UserService;

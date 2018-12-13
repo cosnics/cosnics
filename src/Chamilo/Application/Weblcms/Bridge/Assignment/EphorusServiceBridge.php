@@ -33,8 +33,6 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     protected $ephorusEnabled;
 
     /**
-     * AssignmentDataProvider constructor.
-     *
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\EphorusService $ephorusService
      */
     public function __construct(EphorusService $ephorusService)

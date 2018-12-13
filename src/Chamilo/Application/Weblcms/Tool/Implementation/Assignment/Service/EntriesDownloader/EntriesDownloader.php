@@ -2,8 +2,8 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntriesDownloader;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -42,7 +42,7 @@ abstract class EntriesDownloader
     protected $entityServiceManager;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
+     * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService
      */
     protected $assignmentService;
 
@@ -68,7 +68,7 @@ abstract class EntriesDownloader
      * @param \Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository $contentObjectPublicationRepository
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository $assignmentPublicationRepository
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager $entityServiceManager
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService $assignmentService
      * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator $archiveCreator
      */
     public function __construct(

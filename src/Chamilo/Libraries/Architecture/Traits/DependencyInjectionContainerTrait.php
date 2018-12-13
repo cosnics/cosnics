@@ -123,7 +123,7 @@ trait DependencyInjectionContainerTrait
      *
      * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
-    protected function getExceptionLogger()
+    public function getExceptionLogger()
     {
         return $this->getService('chamilo.libraries.architecture.error_handler.exception_logger');
     }

@@ -4,6 +4,8 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Rep
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -22,7 +24,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\Repository\AssignmentRepository
+class AssignmentRepository extends
+    \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\Repository\AssignmentRepository
 {
     /**
      *
@@ -98,7 +101,6 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
             $offset,
             $count,
             $orderBy,
-            $this->getDataClassPropertiesForUser(),
             User::class_name(),
             $this->getTargetBaseVariable(User::class_name())
         );
@@ -113,6 +115,146 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+
+        return $properties;
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param int[] $groupIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param OrderBy[] $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetCourseGroupsForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $groupIds,
+        $condition = null, $offset = null, $count = null, $orderBy = []
+    )
+    {
+        return $this->findTargetsForEntityType(
+            Entry::ENTITY_TYPE_COURSE_GROUP,
+            $this->getTargetEntitiesCondition(CourseGroup::class_name(), $groupIds, $condition),
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
+            $offset,
+            $count,
+            $orderBy,
+            $this->getDataClassPropertiesForCourseGroup(),
+            CourseGroup::class_name(),
+            $this->getTargetBaseVariable(CourseGroup::class_name())
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param int[] $courseGroupIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param OrderBy[] $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findTargetCourseGroupsWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
+        array $courseGroupIds, $condition = null, $offset = null, $count = null,
+        $orderBy = []
+    )
+    {
+        return $this->findTargetsForEntityTypeWithEntries(
+            Entry::ENTITY_TYPE_COURSE_GROUP,
+            $this->getTargetEntitiesCondition(CourseGroup::class_name(), $courseGroupIds, $condition),
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
+            $offset,
+            $count,
+            $orderBy,
+            CourseGroup::class_name(),
+            $this->getTargetBaseVariable(CourseGroup::class_name())
+        );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     */
+    protected function getDataClassPropertiesForCourseGroup()
+    {
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
+
+        return $properties;
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param int[] $groupIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param OrderBy[] $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetPlatformGroupsForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $groupIds,
+        $condition = null, $offset = null, $count = null, $orderBy = []
+    )
+    {
+        return $this->findTargetsForEntityType(
+            Entry::ENTITY_TYPE_PLATFORM_GROUP,
+            $this->getTargetEntitiesCondition(Group::class_name(), $groupIds, $condition),
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
+            $offset,
+            $count,
+            $orderBy,
+            $this->getDataClassPropertiesForPlatformGroups(),
+            Group::class_name(),
+            $this->getTargetBaseVariable(Group::class_name())
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param int[] $platformGroupIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param OrderBy[] $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findTargetPlatformGroupsWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $platformGroupIds, $condition = null, $offset = null,
+        $count = null,
+        $orderBy = []
+    )
+    {
+        return $this->findTargetsForEntityTypeWithEntries(
+            Entry::ENTITY_TYPE_PLATFORM_GROUP,
+            $this->getTargetEntitiesCondition(Group::class_name(), $platformGroupIds, $condition),
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
+            $offset,
+            $count,
+            $orderBy,
+            Group::class_name(),
+            $this->getTargetBaseVariable(Group::class_name())
+        );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     */
+    protected function getDataClassPropertiesForPlatformGroups()
+    {
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME));
 
         return $properties;
     }
@@ -286,7 +428,9 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData
     )
     {
-        return $this->findEntries($this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData));
+        return $this->findEntries(
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
+        );
     }
 
     /**
@@ -302,7 +446,8 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
     )
     {
         return $this->findLastEntryForEntity(
-            $entityType, $entityIdentifier, $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
+            $entityType, $entityIdentifier,
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
         );
     }
 

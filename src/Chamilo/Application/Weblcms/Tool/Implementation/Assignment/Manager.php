@@ -2,15 +2,15 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentEntitiesTemplate;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
@@ -222,19 +222,19 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
+     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService
      */
     public function getAssignmentService()
     {
-        return $this->getService('chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service');
+        return $this->getService(AssignmentService::class);
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider
+     * @return EntityServiceManager
      */
-    public function getAssignmentDataProvider()
+    public function getEntityServiceManager()
     {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.assignment.service.assignment_data_provider');
+        return $this->getService(EntityServiceManager::class);
     }
 
     /**

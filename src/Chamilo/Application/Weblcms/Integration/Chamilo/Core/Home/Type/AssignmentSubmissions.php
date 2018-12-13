@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit;
@@ -163,13 +164,11 @@ class AssignmentSubmissions extends Block
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
+     * @return AssignmentService
      */
     protected function getAssignmentService()
     {
-        return $this->getService(
-            'chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service'
-        );
+        return $this->getService(AssignmentService::class);
     }
 
     /**

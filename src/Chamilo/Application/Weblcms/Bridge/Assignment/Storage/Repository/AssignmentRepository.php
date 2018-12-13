@@ -96,7 +96,6 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
             $offset,
             $count,
             $orderBy,
-            $this->getDataClassPropertiesForUser(),
             User::class_name(),
             $this->getTargetBaseVariable(User::class_name())
         );
@@ -168,7 +167,6 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
             $offset,
             $count,
             $orderBy,
-            $this->getDataClassPropertiesForCourseGroup(),
             CourseGroup::class_name(),
             $this->getTargetBaseVariable(CourseGroup::class_name())
         );
@@ -238,7 +236,6 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
             $offset,
             $count,
             $orderBy,
-            $this->getDataClassPropertiesForPlatformGroups(),
             Group::class_name(),
             $this->getTargetBaseVariable(Group::class_name())
         );
