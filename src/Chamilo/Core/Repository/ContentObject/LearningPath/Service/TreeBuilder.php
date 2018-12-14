@@ -1,15 +1,20 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNodeConfigurationInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use JMS\Serializer\Serializer;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
  * Builds an in memory tree for an entire learning path based on a given root
@@ -38,16 +43,25 @@ class TreeBuilder
     protected $treeNodesPerContentObjectId;
 
     /**
+     * @var \JMS\Serializer\Serializer
+     */
+    protected $serializer;
+
+    /**
      * TreeBuilder constructor.
      *
      * @param TreeNodeDataRepository $treeNodeDataRepository
      * @param ContentObjectRepository $contentObjectRepository
+     * @param \JMS\Serializer\Serializer $serializer
      */
-    public function __construct(TreeNodeDataRepository $treeNodeDataRepository,
-        ContentObjectRepository $contentObjectRepository)
+    public function __construct(
+        TreeNodeDataRepository $treeNodeDataRepository,
+        ContentObjectRepository $contentObjectRepository, Serializer $serializer
+    )
     {
         $this->treeNodeDataRepository = $treeNodeDataRepository;
         $this->contentObjectRepository = $contentObjectRepository;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -69,7 +83,8 @@ class TreeBuilder
 
         foreach ($treeNodesData as $treeNodeData)
         {
-            $orderedTreeNodesData[$treeNodeData->getParentTreeNodeDataId()][$treeNodeData->getDisplayOrder()] = $treeNodeData;
+            $orderedTreeNodesData[$treeNodeData->getParentTreeNodeDataId()][$treeNodeData->getDisplayOrder()] =
+                $treeNodeData;
         }
 
         $this->addChildrenForSection(0, $orderedTreeNodesData, $tree);
@@ -84,19 +99,22 @@ class TreeBuilder
     /**
      *
      * @param int $parentTreeNodeDataId
-     * @param TreeNodeData[][] $orderedTreeNodesData
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData[][] $orderedTreeNodesData
      * @param Tree $tree
      * @param TreeNode $parentTreeNode
      */
-    protected function addChildrenForSection($parentTreeNodeDataId = 0, $orderedTreeNodesData = array(), Tree $tree,
-        TreeNode $parentTreeNode = null)
+    protected function addChildrenForSection(
+        $parentTreeNodeDataId = 0, $orderedTreeNodesData = array(), Tree $tree,
+        TreeNode $parentTreeNode = null
+    )
     {
         $treeNodeDataForSection = $orderedTreeNodesData[$parentTreeNodeDataId];
         ksort($treeNodeDataForSection);
 
         foreach ($treeNodeDataForSection as $treeNodeData)
         {
-            $treeNode = new TreeNode($tree, null, $treeNodeData);
+            $configuration = $this->getConfigurationFromTreeNodeData($treeNodeData);
+            $treeNode = new TreeNode($tree, null, $treeNodeData, $configuration);
 
             if ($parentTreeNode instanceof TreeNode)
             {
@@ -121,7 +139,10 @@ class TreeBuilder
             new DataClassRetrievesParameters(
                 new InCondition(
                     new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
-                    $contentObjectIds)));
+                    $contentObjectIds
+                )
+            )
+        );
 
         while ($contentObject = $contentObjects->next_result())
         {
@@ -132,5 +153,31 @@ class TreeBuilder
                 $node->setContentObject($contentObject);
             }
         }
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNodeConfigurationInterface|null
+     */
+    protected function getConfigurationFromTreeNodeData(TreeNodeData $treeNodeData): ?TreeNodeConfigurationInterface
+    {
+        $serializedConfiguration = $treeNodeData->getConfiguration();
+        if (empty($serializedConfiguration))
+        {
+            return null;
+        }
+
+        $configurationClass = $treeNodeData->getConfigurationClass();
+        $interfaces = class_implements($configurationClass);
+
+        if (!class_exists($configurationClass) || !array_key_exists(TreeNodeConfigurationInterface::class, $interfaces))
+        {
+            throw new \InvalidArgumentException(
+                'The given configuration class in the TreeNodeData does not implement the TreeNodeConfigurationInterface'
+            );
+        }
+
+        return $this->serializer->deserialize($serializedConfiguration, $configurationClass, 'json');
     }
 }

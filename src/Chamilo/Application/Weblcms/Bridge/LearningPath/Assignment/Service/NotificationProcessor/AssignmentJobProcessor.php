@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Service\CourseService;
@@ -21,6 +22,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
@@ -34,6 +36,11 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService
      */
     protected $assignmentService;
+
+    /**
+     * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager
+     */
+    protected $entityServiceManager;
 
     /**
      * @var \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
@@ -74,6 +81,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      * EntryNotificationProcessor constructor.
      *
      * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager $entityServiceManager
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService $treeNodeDataService
      * @param \Chamilo\Application\Weblcms\Service\PublicationService $publicationService
      * @param \Chamilo\Application\Weblcms\Service\CourseService $courseService
@@ -83,13 +91,15 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      * @param NotificationManager $notificationManager
      */
     public function __construct(
-        AssignmentService $assignmentService, TreeNodeDataService $treeNodeDataService,
+        AssignmentService $assignmentService, EntityServiceManager $entityServiceManager,
+        TreeNodeDataService $treeNodeDataService,
         PublicationService $publicationService, CourseService $courseService,
         UserService $userService, ContentObjectRepository $contentObjectRepository,
         FilterManager $filterManager, NotificationManager $notificationManager
     )
     {
         $this->assignmentService = $assignmentService;
+        $this->entityServiceManager = $entityServiceManager;
         $this->treeNodeDataService = $treeNodeDataService;
         $this->publicationService = $publicationService;
         $this->courseService = $courseService;
@@ -201,7 +211,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->getId(),
             \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'LearningPath',
             \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id(),
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->getId(),
             \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => $publication->get_category_id(),
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $treeNodeData->getId(),
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_ENTRY,
@@ -405,6 +415,9 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
     protected function getTargetUserIds($course, $entry)
     {
         $courseTeachers = $this->courseService->getTeachersFromCourse($course);
+        $entityUsers = $this->entityServiceManager->getEntityServiceByType($entry->getEntityType())->getUsersForEntity(
+            $entry->getEntityId()
+        );
 
         $targetUserIds = [];
         $targetUserIds[] = $entry->getUserId();
@@ -412,6 +425,18 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         foreach ($courseTeachers as $courseTeacher)
         {
             $targetUserIds[] = $courseTeacher->getId();
+        }
+
+        foreach ($entityUsers as $entityUser)
+        {
+            if($entityUser instanceof User)
+            {
+                $targetUserIds[] = $entityUser->getId();
+            }
+            else
+            {
+                $targetUserIds[] = $entityUser;
+            }
         }
 
         $targetUserIds = $this->filterTargetUsers($entry, $targetUserIds);

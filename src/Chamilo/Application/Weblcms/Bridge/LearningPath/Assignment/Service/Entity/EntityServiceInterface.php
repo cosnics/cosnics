@@ -1,9 +1,10 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
+namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 /**
  * Interface EntityServiceInterface
  *
- * @package Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity
+ * @package Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -21,6 +22,7 @@ interface EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      * @param int $offset
      * @param int $count
@@ -29,31 +31,43 @@ interface EntityServiceInterface
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function retrieveEntities(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null,
+        $offset = null, $count = null,
         $orderProperty = []
     );
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return int
      */
-    public function countEntities(ContentObjectPublication $contentObjectPublication, Condition $condition = null);
+    public function countEntities(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null
+    );
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      *
      * @return int
      */
-    public function countEntitiesWithEntries(ContentObjectPublication $contentObjectPublication);
+    public function countEntitiesWithEntries(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData
+    );
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | DataClass[]
      */
-    public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication);
+    public function retrieveEntitiesWithEntries(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData
+    );
 
     /**
      * @return string
@@ -89,7 +103,9 @@ interface EntityServiceInterface
      *
      * @return int[]
      */
-    public function getAvailableEntityIdentifiersForUser(ContentObjectPublication $contentObjectPublication, User $currentUser);
+    public function getAvailableEntityIdentifiersForUser(
+        ContentObjectPublication $contentObjectPublication, User $currentUser
+    );
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user

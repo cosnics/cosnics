@@ -12,6 +12,7 @@
                     id="chamilo.core.repository.content_object.learning_path.storage.repository.tree_node_data_repository"/>
             <argument type="service"
                       id="chamilo.core.repository.workspace.repository.content_object_repository"/>
+            <argument type="service" id="jms.serializer" />
         </service>
 
         <service
@@ -20,7 +21,11 @@
             <argument
                     type="service"
                     id="chamilo.core.repository.content_object.learning_path.storage.repository.tree_node_data_repository"/>
+            <argument type="service" id="jms.serializer" />
         </service>
+
+        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"
+                 alias="chamilo.core.repository.content_object.learning_path.service.tree_node_data_service" />
 
         <service
                 id="chamilo.core.repository.content_object.learning_path.service.learning_path_service"

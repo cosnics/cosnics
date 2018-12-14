@@ -2,11 +2,14 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNodeConfigurationInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use JMS\Serializer\Serializer;
 
 /**
  * Service class to manage TreeNodeData classes
@@ -21,13 +24,20 @@ class TreeNodeDataService
     protected $treeNodeDataRepository;
 
     /**
+     * @var \JMS\Serializer\Serializer
+     */
+    protected $serializer;
+
+    /**
      * TreeNodeDataService constructor.
      *
      * @param TreeNodeDataRepository $treeNodeDataRepository
+     * @param \JMS\Serializer\Serializer $serializer
      */
-    public function __construct(TreeNodeDataRepository $treeNodeDataRepository)
+    public function __construct(TreeNodeDataRepository $treeNodeDataRepository, Serializer $serializer)
     {
         $this->treeNodeDataRepository = $treeNodeDataRepository;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -109,7 +119,7 @@ class TreeNodeDataService
         $treeNodeData->setUserId((int) $user->getId());
         $treeNodeData->setAddedDate(time());
 
-        if($rootLearningPath->enforcesDefaultTraversingOrder())
+        if ($rootLearningPath->enforcesDefaultTraversingOrder())
         {
             $treeNodeData->setEnforceDefaultTraversingOrder(true);
         }
@@ -128,7 +138,7 @@ class TreeNodeDataService
     {
         $treeNodeData = $this->treeNodeDataRepository->findTreeNodeDataForLearningPathRoot($learningPath);
 
-        if(!$treeNodeData instanceof TreeNodeData)
+        if (!$treeNodeData instanceof TreeNodeData)
         {
             throw new \RuntimeException('No TreeNodeData was found for LearningPath ' . $learningPath->getId());
         }
@@ -144,7 +154,7 @@ class TreeNodeDataService
      */
     public function deleteTreeNodeDataForLearningPath(LearningPath $learningPath)
     {
-        if(!$this->treeNodeDataRepository->deleteTreeNodeDataForLearningPath($learningPath))
+        if (!$this->treeNodeDataRepository->deleteTreeNodeDataForLearningPath($learningPath))
         {
             throw new \RuntimeException(
                 sprintf(
@@ -235,5 +245,31 @@ class TreeNodeDataService
     public function countTreeNodesDataForLearningPath(LearningPath $learningPath)
     {
         return $this->treeNodeDataRepository->countTreeNodesDataForLearningPath($learningPath);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     */
+    public function storeConfigurationForTreeNode(TreeNode $treeNode)
+    {
+        $configuration = $treeNode->getConfiguration();
+        if (!$configuration instanceof TreeNodeConfigurationInterface)
+        {
+            throw new \InvalidArgumentException(
+                sprintf('The given treenode configuration for treenode %s is invalid.', $treeNode->getId())
+            );
+        }
+
+        $serializedConfiguration = $this->serializer->serialize($configuration, 'json');
+        $treeNodeData = $treeNode->getTreeNodeData();
+        if(!$treeNodeData instanceof  TreeNodeData)
+        {
+            throw new \RuntimeException('The given treenode does not support a valid TreeNodeData class');
+        }
+
+        $treeNodeData->setConfiguration($serializedConfiguration);
+        $treeNodeData->setConfigurationClass(get_class($configuration));
+
+        $this->updateTreeNodeData($treeNodeData);
     }
 }

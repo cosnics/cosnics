@@ -141,21 +141,23 @@ interface AssignmentServiceBridgeInterface
     public function isDateAfterAssignmentEndTime($date);
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param int $entityType
      * @param int $entityId
      *
      * @return bool
      */
-    public function isUserPartOfEntity(User $user, $entityType, $entityId);
+    public function isUserPartOfEntity(TreeNode $treeNode, User $user, $entityType, $entityId);
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
      * @param int $entityId
      *
      * @return User[]
      */
-    public function getUsersForEntity(int $entityType, int $entityId);
+    public function getUsersForEntity(TreeNode $treeNode, int $entityType, int $entityId);
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
@@ -243,20 +245,22 @@ interface AssignmentServiceBridgeInterface
     public function findEntriesByIdentifiers($entryIdentifiers);
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      *
      * @return String
      */
-    public function renderEntityNameByEntityTypeAndEntity($entityType, DataClass $entity);
+    public function renderEntityNameByEntityTypeAndEntity(TreeNode $treeNode, $entityType, DataClass $entity);
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
      * @param int $entityId
      *
      * @return String
      */
-    public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId);
+    public function renderEntityNameByEntityTypeAndEntityId(TreeNode $treeNode, $entityType, $entityId);
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode

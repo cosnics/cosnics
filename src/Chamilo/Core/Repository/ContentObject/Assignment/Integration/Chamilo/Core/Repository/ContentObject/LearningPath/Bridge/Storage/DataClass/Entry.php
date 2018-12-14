@@ -12,6 +12,11 @@ abstract class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\D
     const PROPERTY_TREE_NODE_ATTEMPT_ID = 'tree_node_attempt_id';
     const PROPERTY_TREE_NODE_DATA_ID = 'tree_node_data_id';
 
+    // Entity types
+    const ENTITY_TYPE_USER = 0;
+    const ENTITY_TYPE_COURSE_GROUP = 1;
+    const ENTITY_TYPE_PLATFORM_GROUP = 2;
+
     /**
      *
      * @param string[] $extendedPropertyNames

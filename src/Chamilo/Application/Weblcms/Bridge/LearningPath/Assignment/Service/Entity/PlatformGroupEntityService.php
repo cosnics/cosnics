@@ -1,12 +1,15 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
+namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity;
 
-use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -14,11 +17,11 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity
+ * @package Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UserEntityService implements EntityServiceInterface
+class PlatformGroupEntityService implements EntityServiceInterface
 {
     /**
      * @var AssignmentService
@@ -31,77 +34,95 @@ class UserEntityService implements EntityServiceInterface
     protected $translator;
 
     /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    protected $userService;
+
+    /**
      * @var array
      */
-    protected $targetUsersCache = [];
+    protected $targetPlatformGroupIds = [];
 
     /**
      * UserEntityService constructor.
      *
      * @param AssignmentService $assignmentService
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Core\User\Service\UserService $userService
      */
-    public function __construct(AssignmentService $assignmentService, Translator $translator)
+    public function __construct(AssignmentService $assignmentService, Translator $translator, UserService $userService)
     {
         $this->assignmentService = $assignmentService;
         $this->translator = $translator;
+        $this->userService = $userService;
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      * @param int $offset
      * @param int $count
      * @param array $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
     public function retrieveEntities(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null,
+        $offset = null, $count = null,
         $orderProperty = []
     )
     {
-        return $this->assignmentService->findTargetUsersForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication),
+        return $this->assignmentService->findTargetPlatformGroupsForContentObjectPublication(
+            $contentObjectPublication, $treeNodeData, $this->getTargetPlatformGroupIds($contentObjectPublication),
             $condition, $offset, $count, $orderProperty
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return int
      */
-    public function countEntities(ContentObjectPublication $contentObjectPublication, Condition $condition = null)
+    public function countEntities(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null
+    )
     {
-        return $this->assignmentService->countTargetUsersForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+        return $this->assignmentService->countTargetPlatformGroupsForContentObjectPublication(
+            $contentObjectPublication, $treeNodeData, $this->getTargetPlatformGroupIds($contentObjectPublication)
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      *
      * @return int
      */
-    public function countEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
+    public function countEntitiesWithEntries(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData
+    )
     {
-        return $this->assignmentService->countTargetUsersWithEntriesForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+        return $this->assignmentService->countTargetPlatformGroupsWithEntriesForContentObjectPublication(
+            $contentObjectPublication, $treeNodeData, $this->getTargetPlatformGroupIds($contentObjectPublication)
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
+    public function retrieveEntitiesWithEntries(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData
+    )
     {
-        return $this->assignmentService->findTargetUsersWithEntriesForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+        return $this->assignmentService->findTargetPlatformGroupsWithEntriesForContentObjectPublication(
+            $contentObjectPublication, $treeNodeData, $this->getTargetPlatformGroupIds($contentObjectPublication)
         );
     }
 
@@ -110,26 +131,25 @@ class UserEntityService implements EntityServiceInterface
      *
      * @return int[]
      */
-    protected function getTargetUserIdsForPublication(ContentObjectPublication $contentObjectPublication)
+    protected function getTargetPlatformGroupIds(ContentObjectPublication $contentObjectPublication)
     {
         $id = $contentObjectPublication->getId();
 
-        if (!array_key_exists($id, $this->targetUsersCache))
+        if (!array_key_exists($id, $this->targetPlatformGroupIds))
         {
-            $this->targetUsersCache[$id] = [];
+            $this->targetPlatformGroupIds[$id] = [];
 
-            $targetUsers = DataManager::get_publication_target_users_by_publication_id(
-                $contentObjectPublication->getId()
+            $platformGroups = DataManager::retrieve_publication_target_platform_groups(
+                $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
             );
 
-            foreach ($targetUsers as $targetUser)
+            while ($platformGroup = $platformGroups->next_result())
             {
-                $this->targetUsersCache[$id][] = $targetUser instanceof User ?
-                    $targetUser->getId() : $targetUser[User::PROPERTY_ID];
+                $this->targetPlatformGroupIds[$id][] = $platformGroup->getId();
             }
         }
 
-        return $this->targetUsersCache[$id];
+        return $this->targetPlatformGroupIds[$id];
     }
 
     /**
@@ -138,7 +158,7 @@ class UserEntityService implements EntityServiceInterface
     public function getPluralEntityName()
     {
         return $this->translator->trans(
-            'UsersEntity', [],
+            'PlatformGroupsEntity', [],
             'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
         );
     }
@@ -149,7 +169,7 @@ class UserEntityService implements EntityServiceInterface
     public function getEntityName()
     {
         return $this->translator->trans(
-            'UserEntity', [],
+            'PlatformGroupEntity', [],
             'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
         );
     }
@@ -164,9 +184,9 @@ class UserEntityService implements EntityServiceInterface
         Application $application, EntityTableParameters $entityTableParameters
     )
     {
-        $entityTableParameters->setEntityClass(User::class);
-        $entityTableParameters->setEntityProperties([User::PROPERTY_FIRSTNAME, User::PROPERTY_LASTNAME]);
-        $entityTableParameters->setEntityHasMultipleMembers(false);
+        $entityTableParameters->setEntityClass(Group::class);
+        $entityTableParameters->setEntityProperties([Group::PROPERTY_NAME]);
+        $entityTableParameters->setEntityHasMultipleMembers(true);
 
         return new EntityTable($application, $entityTableParameters);
     }
@@ -179,7 +199,10 @@ class UserEntityService implements EntityServiceInterface
      */
     public function getCurrentEntityIdentifier(ContentObjectPublication $contentObjectPublication, User $currentUser)
     {
-        return $currentUser->getId();
+        $availableEntityIdentifiers =
+            $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $currentUser);
+
+        return $availableEntityIdentifiers[0];
     }
 
     /**
@@ -192,7 +215,13 @@ class UserEntityService implements EntityServiceInterface
         ContentObjectPublication $contentObjectPublication, User $currentUser
     )
     {
-        return [$currentUser->getId()];
+        $subscribedGroupIds = \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
+            $currentUser->getId(), true
+        );
+
+        $targetGroupIds = $this->getTargetPlatformGroupIds($contentObjectPublication);
+
+        return array_values(array_intersect($subscribedGroupIds, $targetGroupIds));
     }
 
     /**
@@ -204,7 +233,9 @@ class UserEntityService implements EntityServiceInterface
      */
     public function isUserPartOfEntity(User $user, ContentObjectPublication $contentObjectPublication, $entityId)
     {
-        return $user->getId() == $entityId;
+        $availableEntityIdentifiers = $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $user);
+
+        return in_array($entityId, $availableEntityIdentifiers);
     }
 
     /**
@@ -214,7 +245,11 @@ class UserEntityService implements EntityServiceInterface
      */
     public function getUsersForEntity($entityId)
     {
-        return [$entityId];
+        /** @var Group $entity */
+        $entity = DataManager::retrieve_by_id(Group::class_name(), $entityId);
+        $groupUserIds = $entity->get_users(true, true);
+
+        return $this->userService->findUsersByIdentifiers($groupUserIds);
     }
 
     /**
@@ -224,12 +259,12 @@ class UserEntityService implements EntityServiceInterface
      */
     public function renderEntityName(DataClass $entity)
     {
-        if(!$entity instanceof User)
+        if (!$entity instanceof Group)
         {
-            throw new \InvalidArgumentException('The given entity must be of the type ' . User::class);
+            throw new \InvalidArgumentException('The given entity must be of the type ' . Group::class);
         }
 
-        return $entity->get_fullname();
+        return $entity->get_name();
     }
 
     /**
@@ -239,7 +274,7 @@ class UserEntityService implements EntityServiceInterface
      */
     public function renderEntityNameByArray($entityArray = [])
     {
-        return User::fullname($entityArray[User::PROPERTY_FIRSTNAME], $entityArray[User::PROPERTY_LASTNAME]);
+        return $entityArray[Group::PROPERTY_NAME];
     }
 
     /**
@@ -249,10 +284,10 @@ class UserEntityService implements EntityServiceInterface
      */
     public function renderEntityNameById($entityId)
     {
-        $entity = DataManager::retrieve_by_id(User::class, $entityId);
-        if(!$entity instanceof User)
+        $entity = DataManager::retrieve_by_id(Group::class, $entityId);
+        if (!$entity instanceof Group)
         {
-            throw new \InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
+            throw new \InvalidArgumentException('The given platform group with id ' . $entityId . ' does not exist');
         }
 
         return $this->renderEntityName($entity);

@@ -254,7 +254,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function isUserPartOfEntity(User $user, $entityType, $entityId)
     {
-        return $this->learningPathAssignmentServiceBridge->isUserPartOfEntity($user, $entityType, $entityId);
+        return $this->learningPathAssignmentServiceBridge->isUserPartOfEntity(
+            $this->treeNode, $user, $entityType, $entityId
+        );
     }
 
     /**
@@ -265,7 +267,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function getUsersForEntity(int $entityType, int $entityId)
     {
-        return $this->learningPathAssignmentServiceBridge->getUsersForEntity($entityType, $entityId);
+        return $this->learningPathAssignmentServiceBridge->getUsersForEntity($this->treeNode, $entityType, $entityId);
     }
 
     /**
@@ -390,7 +392,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function renderEntityNameByEntityTypeAndEntity($entityType, DataClass $entity)
     {
-        return $this->learningPathAssignmentServiceBridge->renderEntityNameByEntityTypeAndEntity($entityType, $entity);
+        return $this->learningPathAssignmentServiceBridge->renderEntityNameByEntityTypeAndEntity(
+            $this->treeNode, $entityType, $entity
+        );
     }
 
     /**
@@ -402,7 +406,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
     {
         return $this->learningPathAssignmentServiceBridge->renderEntityNameByEntityTypeAndEntityId(
-            $entityType, $entityId
+            $this->treeNode, $entityType, $entityId
         );
     }
 

@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNodeConfigurationInterface;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
@@ -31,6 +32,8 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_ADDED_DATE = 'added_date';
     const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';
+    const PROPERTY_CONFIGURATION = 'configuration';
+    const PROPERTY_CONFIGURATION_CLASS = 'configuration_class';
 
     /**
      * TreeNodeData constructor.
@@ -66,7 +69,9 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
                 self::PROPERTY_DISPLAY_ORDER,
                 self::PROPERTY_USER_ID,
                 self::PROPERTY_ADDED_DATE,
-                self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER
+                self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER,
+                self::PROPERTY_CONFIGURATION,
+                self::PROPERTY_CONFIGURATION_CLASS
             )
         );
     }
@@ -489,7 +494,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function setEnforceDefaultTraversingOrder($enforceDefaultTraversingOrder = true)
     {
-        if(!is_bool($enforceDefaultTraversingOrder))
+        if (!is_bool($enforceDefaultTraversingOrder))
         {
             throw new \InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
         }
@@ -505,6 +510,53 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     public function enforcesDefaultTraversingOrder()
     {
         return (bool) $this->get_default_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
+    }
+
+    /**
+     * @param string $configurationJSONString
+     */
+    public function setConfiguration(string $configurationJSONString)
+    {
+        json_decode($configurationJSONString);
+        if (json_last_error() != JSON_ERROR_NONE)
+        {
+            throw new \InvalidArgumentException('The given configuration string is not a valid JSON');
+        }
+
+        $this->set_default_property(self::PROPERTY_CONFIGURATION, $configurationJSONString);
+    }
+
+    /**
+     * @return string
+     */
+    public function getConfiguration(): ?string
+    {
+        return $this->get_default_property(self::PROPERTY_CONFIGURATION);
+    }
+
+    /**
+     * @param string $configurationClass
+     */
+    public function setConfigurationClass(string $configurationClass)
+    {
+        $interfaces = class_implements($configurationClass);
+
+        if (!class_exists($configurationClass) || !array_key_exists(TreeNodeConfigurationInterface::class, $interfaces))
+        {
+            throw new \InvalidArgumentException(
+                'The given configuration class must be a valid instance of TreeNodeConfigurationInterface'
+            );
+        }
+
+        $this->set_default_property(self::PROPERTY_CONFIGURATION_CLASS, $configurationClass);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getConfigurationClass(): ?string
+    {
+        return $this->get_default_property(self::PROPERTY_CONFIGURATION_CLASS);
     }
 
     /**

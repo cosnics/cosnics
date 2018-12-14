@@ -1,12 +1,13 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
+namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity;
 
-use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -14,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity
+ * @package Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -50,6 +51,7 @@ class UserEntityService implements EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      * @param int $offset
      * @param int $count
@@ -58,50 +60,60 @@ class UserEntityService implements EntityServiceInterface
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function retrieveEntities(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null,
+        $offset = null, $count = null,
         $orderProperty = []
     )
     {
-        return $this->assignmentService->findTargetUsersForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication),
+        return $this->assignmentService->findTargetUsersForTreeNodeData(
+            $contentObjectPublication, $treeNodeData, $this->getTargetUserIdsForPublication($contentObjectPublication),
             $condition, $offset, $count, $orderProperty
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return int
      */
-    public function countEntities(ContentObjectPublication $contentObjectPublication, Condition $condition = null)
+    public function countEntities(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null
+    )
     {
-        return $this->assignmentService->countTargetUsersForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+        return $this->assignmentService->countTargetUsersForTreeNodeData(
+            $contentObjectPublication, $treeNodeData, $this->getTargetUserIdsForPublication($contentObjectPublication)
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      *
      * @return int
      */
-    public function countEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
+    public function countEntitiesWithEntries(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData
+    )
     {
-        return $this->assignmentService->countTargetUsersWithEntriesForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+        return $this->assignmentService->countTargetUsersWithEntriesForTreeNodeData(
+            $contentObjectPublication, $treeNodeData, $this->getTargetUserIdsForPublication($contentObjectPublication)
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
+    public function retrieveEntitiesWithEntries(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData
+    )
     {
-        return $this->assignmentService->findTargetUsersWithEntriesForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+        return $this->assignmentService->findTargetUsersWithEntriesForTreeNodeData(
+            $contentObjectPublication, $treeNodeData, $this->getTargetUserIdsForPublication($contentObjectPublication)
         );
     }
 
@@ -224,7 +236,7 @@ class UserEntityService implements EntityServiceInterface
      */
     public function renderEntityName(DataClass $entity)
     {
-        if(!$entity instanceof User)
+        if (!$entity instanceof User)
         {
             throw new \InvalidArgumentException('The given entity must be of the type ' . User::class);
         }
@@ -250,7 +262,7 @@ class UserEntityService implements EntityServiceInterface
     public function renderEntityNameById($entityId)
     {
         $entity = DataManager::retrieve_by_id(User::class, $entityId);
-        if(!$entity instanceof User)
+        if (!$entity instanceof User)
         {
             throw new \InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
         }

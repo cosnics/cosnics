@@ -13,5 +13,21 @@
         <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\FeedbackServiceBridge" />
         <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServiceBridge" />
 
+        <service
+                id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager">
+            <call method="addEntityService">
+                <argument type="constant">\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::ENTITY_TYPE_USER</argument>
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\UserEntityService" />
+            </call>
+            <call method="addEntityService">
+                <argument type="constant">\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::ENTITY_TYPE_COURSE_GROUP</argument>
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\CourseGroupEntityService" />
+            </call>
+            <call method="addEntityService">
+                <argument type="constant">\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::ENTITY_TYPE_PLATFORM_GROUP</argument>
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\PlatformGroupEntityService" />
+            </call>
+        </service>
+
     </services>
 </container>

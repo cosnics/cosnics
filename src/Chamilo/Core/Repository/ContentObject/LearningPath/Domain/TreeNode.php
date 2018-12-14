@@ -66,20 +66,27 @@ class TreeNode
     protected $descendantNodes;
 
     /**
+     * @var TreeNodeConfigurationInterface
+     */
+    protected $configuration;
+
+    /**
      * TreeNode constructor.
      *
      * @param Tree $tree
      * @param ContentObject $contentObject
      * @param TreeNodeData $treeNodeData
+     * @param TreeNodeConfigurationInterface $configuration
      */
     public function __construct(
         Tree $tree, ContentObject $contentObject = null,
-        TreeNodeData $treeNodeData = null
+        TreeNodeData $treeNodeData = null, TreeNodeConfigurationInterface $configuration = null
     )
     {
         $this->tree = $tree;
         $this->contentObject = $contentObject;
         $this->treeNodeData = $treeNodeData;
+        $this->configuration = $configuration;
 
         $this->parentNodes = array();
         $this->childNodes = array();
@@ -176,6 +183,29 @@ class TreeNode
         $this->treeNodeData = $treeNodeData;
 
         return $this;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNodeConfigurationInterface|null $defaultConfiguration
+     *
+     * @return TreeNodeConfigurationInterface
+     */
+    public function getConfiguration(TreeNodeConfigurationInterface $defaultConfiguration = null): ?TreeNodeConfigurationInterface
+    {
+        if($this->configuration instanceof TreeNodeConfigurationInterface)
+        {
+            return $this->configuration;
+        }
+
+        return $defaultConfiguration;
+    }
+
+    /**
+     * @param TreeNodeConfigurationInterface $configuration
+     */
+    public function setConfiguration(TreeNodeConfigurationInterface $configuration = null)
+    {
+        $this->configuration = $configuration;
     }
 
     /**

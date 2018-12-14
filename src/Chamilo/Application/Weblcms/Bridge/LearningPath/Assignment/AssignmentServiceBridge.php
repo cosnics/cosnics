@@ -3,9 +3,9 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters;
@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Re
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\AssignmentConfiguration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
@@ -34,6 +35,11 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService
      */
     protected $assignmentService;
+
+    /**
+     * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager
+     */
+    protected $entityServiceManager;
 
     /**
      * @var \Symfony\Component\Translation\Translator
@@ -65,11 +71,15 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      *
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager $entityServiceManager
      */
-    public function __construct(Translator $translator, AssignmentService $assignmentService)
+    public function __construct(
+        Translator $translator, AssignmentService $assignmentService, EntityServiceManager $entityServiceManager
+    )
     {
         $this->translator = $translator;
         $this->assignmentService = $assignmentService;
+        $this->entityServiceManager = $entityServiceManager;
     }
 
     /**
@@ -148,9 +158,10 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
         array $order_property = []
     )
     {
-        return $this->assignmentService->findTargetUsersForTreeNodeData(
-            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $this->targetUserIds, $condition, $offset,
-            $count, $order_property
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+
+        return $entityService->retrieveEntities(
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $condition, $offset, $count, $order_property
         );
     }
 
@@ -163,9 +174,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function countEntitiesByEntityType(TreeNode $treeNode, $entityType, Condition $condition = null)
     {
-        return $this->assignmentService->countTargetUsersForTreeNodeData(
-            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $this->targetUserIds, $condition
-        );
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+
+        return $entityService->countEntities($this->contentObjectPublication, $treeNode->getTreeNodeData(), $condition);
     }
 
     /**
@@ -176,9 +187,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function countEntitiesWithEntriesByEntityType(TreeNode $treeNode, $entityType)
     {
-        return $this->assignmentService->countTargetUsersWithEntriesForTreeNodeData(
-            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $this->targetUserIds
-        );
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+
+        return $entityService->countEntitiesWithEntries($this->contentObjectPublication, $treeNode->getTreeNodeData());
     }
 
     /**
@@ -189,9 +200,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function findEntitiesWithEntriesByEntityType(TreeNode $treeNode, $entityType)
     {
-        return $this->assignmentService->findTargetUsersWithEntriesForTreeNodeData(
-            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $this->targetUserIds
-        );
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+
+        return $entityService->retrieveEntitiesWithEntries($this->contentObjectPublication, $treeNode->getTreeNodeData());
     }
 
     /**
@@ -202,10 +213,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function getPluralEntityNameByType($entityType)
     {
-        return $this->translator->trans(
-            'Users', [],
-            'Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath'
-        );
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+
+        return $entityService->getPluralEntityName();
     }
 
     /**
@@ -215,10 +225,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function getEntityNameByType($entityType)
     {
-        return $this->translator->trans(
-            'User', [],
-            'Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath'
-        );
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+
+        return $entityService->getEntityName();
     }
 
     /**
@@ -229,11 +238,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function getEntityTableForType(Application $application, EntityTableParameters $entityTableParameters)
     {
-        $entityTableParameters->setEntityClass(User::class);
-        $entityTableParameters->setEntityProperties([User::PROPERTY_FIRSTNAME, User::PROPERTY_LASTNAME]);
-        $entityTableParameters->setEntityHasMultipleMembers(false);
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityTableParameters->getEntityType());
 
-        return new EntityTable($application, $entityTableParameters);
+        return $entityService->getEntityTable($application, $entityTableParameters);
     }
 
     /**
@@ -263,7 +270,10 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function getCurrentEntityType(TreeNode $treeNode)
     {
-        return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::ENTITY_TYPE_USER;
+        /** @var AssignmentConfiguration $configuration */
+        $configuration = $treeNode->getConfiguration(new AssignmentConfiguration());
+
+        return $configuration->getEntityType();
     }
 
     /**
@@ -275,7 +285,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function getCurrentEntityIdentifier(User $currentUser, TreeNode $treeNode)
     {
-        return $currentUser->getId();
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType($treeNode));
+
+        return $entityService->getCurrentEntityIdentifier($this->contentObjectPublication, $currentUser);
     }
 
     /**
@@ -286,7 +298,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function getAvailableEntityIdentifiersForUser(User $currentUser, TreeNode $treeNode)
     {
-        return [$currentUser->getId()];
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType($treeNode));
+
+        return $entityService->getAvailableEntityIdentifiersForUser($this->contentObjectPublication, $currentUser);
     }
 
     /**
@@ -301,28 +315,31 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param int $entityType
      * @param int $entityId
      *
      * @return bool
      */
-    public function isUserPartOfEntity(User $user, $entityType, $entityId)
+    public function isUserPartOfEntity(TreeNode $treeNode, User $user, $entityType, $entityId)
     {
-        return $entityType ==
-            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::ENTITY_TYPE_USER &&
-            $entityId == $user->getId();
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType($treeNode));
+
+        return $entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
      * @param int $entityId
      *
      * @return User[]
      */
-    public function getUsersForEntity(int $entityType, int $entityId)
+    public function getUsersForEntity(TreeNode $treeNode, int $entityType, int $entityId)
     {
-        return [];
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType($treeNode));
+        return $entityService->getUsersForEntity($entityId);
     }
 
     /**
@@ -459,36 +476,31 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      *
      * @return String
      */
-    public function renderEntityNameByEntityTypeAndEntity($entityType, DataClass $entity)
+    public function renderEntityNameByEntityTypeAndEntity(TreeNode $treeNode, $entityType, DataClass $entity)
     {
-        if (!$entity instanceof User)
-        {
-            throw new \InvalidArgumentException('The given entity must be of the type ' . User::class);
-        }
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType($treeNode));
 
-        return $entity->get_fullname();
+        return $entityService->renderEntityName($entity);
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
      * @param int $entityId
      *
      * @return String
      */
-    public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
+    public function renderEntityNameByEntityTypeAndEntityId(TreeNode $treeNode, $entityType, $entityId)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $entityId);
-        if (!$user instanceof User)
-        {
-            throw new \InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
-        }
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType($treeNode));
 
-        return $this->renderEntityNameByEntityTypeAndEntity($entityType, $user);
+        return $entityService->renderEntityNameById($entityId);
     }
 
     /**
