@@ -7,11 +7,8 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachm
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Queue\Service\JobProducer;
-use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -33,20 +30,13 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     protected $assignmentRepository;
 
     /**
-     * @var \Chamilo\Core\Queue\Service\JobProducer
-     */
-    protected $jobProducer;
-
-    /**
      *
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\AssignmentRepository $assignmentRepository
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\FeedbackService $feedbackService
-     * @param \Chamilo\Core\Queue\Service\JobProducer $jobProducer
      */
-    public function __construct(AssignmentRepository $assignmentRepository, FeedbackService $feedbackService, JobProducer $jobProducer)
+    public function __construct(AssignmentRepository $assignmentRepository, FeedbackService $feedbackService)
     {
         parent::__construct($assignmentRepository, $feedbackService);
-        $this->jobProducer = $jobProducer;
     }
 
     /**
@@ -585,8 +575,6 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param string $ipAddress
      *
      * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createEntry(
         ContentObjectPublication $contentObjectPublication, $entityType, $entityId, $userId, $contentObjectId,
@@ -594,20 +582,8 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     )
     {
         $entry = $this->createEntryInstance();
-
         $entry->setContentObjectPublicationId($contentObjectPublication->getId());
-
-        $entry = $this->createEntryByInstance($entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress);
-        if($entry instanceof Entry)
-        {
-            $job = new Job();
-            $job->setProcessorClass(EntryNotificationJobProcessor::class)
-                ->setParameter(EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId());
-
-            $this->jobProducer->produceJob($job, 'notifications');
-        }
-
-        return $entry;
+        return $this->createEntryByInstance($entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress);
     }
 
     /**

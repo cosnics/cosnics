@@ -25,44 +25,12 @@ class FeedbackService extends \Chamilo\Core\Repository\ContentObject\Assignment\
     protected $feedbackRepository;
 
     /**
-     * @var \Chamilo\Core\Queue\Service\JobProducer
-     */
-    protected $jobProducer;
-
-    /**
      *
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\FeedbackRepository $feedbackRepository
-     * @param \Chamilo\Core\Queue\Service\JobProducer $jobProducer
      */
-    public function __construct(FeedbackRepository $feedbackRepository, JobProducer $jobProducer)
+    public function __construct(FeedbackRepository $feedbackRepository)
     {
         parent::__construct($feedbackRepository);
-        $this->jobProducer = $jobProducer;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $feedback
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function createFeedback(User $user, $feedback, Entry $entry)
-    {
-        $feedbackObject = parent::createFeedback($user, $feedback, $entry);
-        if($feedbackObject instanceof Feedback)
-        {
-            $job = new Job();
-            $job->setProcessorClass(EntryFeedbackNotificationJobProcessor::class)
-                ->setParameter(EntryFeedbackNotificationJobProcessor::PARAM_FEEDBACK_ID, $feedbackObject->getId());
-
-            $this->jobProducer->produceJob($job, 'notifications');
-        }
-
-        return $feedbackObject;
     }
 
     /**

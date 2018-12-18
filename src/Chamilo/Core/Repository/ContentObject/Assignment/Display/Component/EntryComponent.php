@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackRightsServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreFormType;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\FormHandler\SetScoreFormHandler;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
@@ -110,7 +111,9 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         catch (\Exception $ex)
         {
             $this->entry =
-                $this->getAssignmentServiceBridge()->findLastEntryForEntity($this->getEntityType(), $this->getEntityIdentifier());
+                $this->getAssignmentServiceBridge()->findLastEntryForEntity(
+                    $this->getEntityType(), $this->getEntityIdentifier()
+                );
         }
 
         if (!$this->entry instanceof Entry)
@@ -252,7 +255,12 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $assignmentFeedbackServiceBridge =
             $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
 
-        $feedbackServiceBridge = new FeedbackServiceBridge($assignmentFeedbackServiceBridge);
+        /** @var NotificationServiceBridgeInterface $notificationServiceBridge */
+        $notificationServiceBridge =
+            $this->getBridgeManager()->getBridgeByInterface(NotificationServiceBridgeInterface::class);
+
+        $feedbackServiceBridge =
+            new FeedbackServiceBridge($assignmentFeedbackServiceBridge, $notificationServiceBridge);
         $feedbackServiceBridge->setEntry($this->entry);
 
         $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge();
@@ -574,7 +582,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $buttonToolBar->addButtonGroup($buttonGroup);
 
-            if ($this->getAssignmentServiceBridge()->canEditAssignment() || $this->getAssignment()->get_visibility_submissions())
+            if ($this->getAssignmentServiceBridge()->canEditAssignment() ||
+                $this->getAssignment()->get_visibility_submissions())
             {
                 $buttonToolBar->addButtonGroup(
                     new ButtonGroup(
@@ -584,7 +593,9 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                                     'BrowseEntities',
                                     [
                                         'NAME' => strtolower(
-                                            $this->getAssignmentServiceBridge()->getPluralEntityNameByType($this->getEntityType())
+                                            $this->getAssignmentServiceBridge()->getPluralEntityNameByType(
+                                                $this->getEntityType()
+                                            )
                                         )
                                     ]
                                 ),
@@ -630,7 +641,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $translator = Translation::getInstance();
         $entityName = $this->getAssignmentServiceBridge()->getEntityNameByType($this->getEntityType());
 
-        $entitiesCount = $this->getAssignmentServiceBridge()->countEntitiesWithEntriesByEntityType($this->getEntityType());
+        $entitiesCount =
+            $this->getAssignmentServiceBridge()->countEntitiesWithEntriesByEntityType($this->getEntityType());
         $entriesCount = $this->getAssignmentServiceBridge()->countEntriesForEntityTypeAndId(
             $this->getEntityType(), $this->getEntityIdentifier()
         );

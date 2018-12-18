@@ -137,12 +137,10 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createFeedback(User $user, $feedback, Entry $entry)
     {
-        return $this->feedbackService->createFeedbackForPublicationAndEntry($user, $feedback, $entry, $this->contentObjectPublication);
+        return $this->feedbackService->createFeedback($user, $feedback, $entry);
     }
 
     /**

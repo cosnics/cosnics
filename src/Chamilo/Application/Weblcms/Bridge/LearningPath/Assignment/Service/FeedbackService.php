@@ -24,11 +24,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 class FeedbackService extends \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Service\FeedbackService
 {
     /**
-     * @var \Chamilo\Core\Queue\Service\JobProducer
-     */
-    protected $jobProducer;
-
-    /**
      * @var FeedbackRepository
      */
     protected $feedbackRepository;
@@ -36,39 +31,10 @@ class FeedbackService extends \Chamilo\Core\Repository\ContentObject\Assignment\
     /**
      *
      * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Repository\FeedbackRepository $feedbackRepository
-     * @param \Chamilo\Core\Queue\Service\JobProducer $jobProducer
      */
-    public function __construct(FeedbackRepository $feedbackRepository, JobProducer $jobProducer)
+    public function __construct(FeedbackRepository $feedbackRepository)
     {
         parent::__construct($feedbackRepository);
-        $this->jobProducer = $jobProducer;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $feedback
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function createFeedbackForPublicationAndEntry(User $user, $feedback, Entry $entry, ContentObjectPublication $contentObjectPublication)
-    {
-        $feedbackObject = parent::createFeedback($user, $feedback, $entry);
-        if($feedbackObject instanceof Feedback)
-        {
-            $job = new Job();
-            $job->setProcessorClass(EntryFeedbackNotificationJobProcessor::class)
-                ->setParameter(EntryFeedbackNotificationJobProcessor::PARAM_CONTENT_OBJECT_PUBLICATION_ID, $contentObjectPublication->getId())
-                ->setParameter(EntryFeedbackNotificationJobProcessor::PARAM_FEEDBACK_ID, $feedbackObject->getId());
-
-            $this->jobProducer->produceJob($job, 'notifications');
-        }
-
-        return $feedbackObject;
     }
 
     /**

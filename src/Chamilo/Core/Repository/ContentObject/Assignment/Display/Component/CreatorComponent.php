@@ -58,6 +58,8 @@ class CreatorComponent extends Manager
 
             if ($entry instanceof Entry)
             {
+                $this->getNotificationServiceBridge()->createNotificationForNewEntry($this->getUser(), $entry);
+
                 $this->redirect(
                     Translation::get('EntryCreated'),
                     false,

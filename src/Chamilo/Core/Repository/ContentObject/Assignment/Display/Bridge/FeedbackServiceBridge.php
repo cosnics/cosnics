@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
@@ -25,13 +26,23 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
     protected $entry;
 
     /**
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface
+     */
+    protected $notificationServiceBridge;
+
+    /**
      * FeedbackServiceBridge constructor.
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface $notificationServiceBridge
      */
-    public function __construct(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge)
+    public function __construct(
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge,
+        NotificationServiceBridgeInterface $notificationServiceBridge
+    )
     {
         $this->assignmentFeedbackServiceBridge = $assignmentFeedbackServiceBridge;
+        $this->notificationServiceBridge = $notificationServiceBridge;
     }
 
     /**
@@ -50,7 +61,13 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
      */
     public function createFeedback(User $user, $feedback)
     {
-        return $this->assignmentFeedbackServiceBridge->createFeedback($user, $feedback, $this->entry);
+        $feedback = $this->assignmentFeedbackServiceBridge->createFeedback($user, $feedback, $this->entry);
+        if($feedback instanceof \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback)
+        {
+            $this->notificationServiceBridge->createNotificationForNewFeedback($user, $this->entry, $feedback);
+        }
+
+        return $feedback;
     }
 
     /**
