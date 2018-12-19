@@ -2,11 +2,8 @@
 
 namespace Chamilo\Core\Queue\Service\Producer;
 
-use Chamilo\Core\Queue\Service\Producer\BeanstalkProducer;
-use Chamilo\Core\Queue\Service\Producer\DBALProducer;
 use Enqueue\Dbal\DbalContext;
 use Enqueue\Pheanstalk\PheanstalkContext;
-use Gedmo\Exception\RuntimeException;
 use Interop\Queue\PsrContext;
 
 /**
@@ -45,6 +42,6 @@ class ProducerFactory
                 return new DBALProducer($this->psrContext);
         }
 
-        throw new RuntimeException('Could not find a valid producer for context ' . $contextClass);
+        throw new \RuntimeException('Could not find a valid producer for context ' . $contextClass);
     }
 }
