@@ -12,7 +12,7 @@ class LanguageConsulter extends DataConsulter
 
     /**
      *
-     * @return string[]
+     * @return string[][]
      */
     public function getLanguages()
     {

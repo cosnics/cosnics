@@ -9,6 +9,7 @@
                 class="Chamilo\Core\Repository\Service\WorkspaceExtensionManager">
         </service>
 
+        <service id="Chamilo\Core\Repository\Service\ContentObjectService" autowire="true"/>
         <service id="Chamilo\Core\Repository\Quota\Rights\Service\RightsService" autowire="true">
             <argument key="$rightsRepository" type="service"
                       id="Chamilo\Core\Repository\Quota\Rights\Storage\Repository\RightsRepository"/>

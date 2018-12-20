@@ -178,10 +178,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         $icon_name = strtolower($parts[count($parts) - 1]);
         $icon_name = $size . '_' . $icon_name;
         $icon_path = Theme::getInstance()->getImagePath(
-            ContentObject::get_content_object_type_namespace($this->get_type()),
-            'Logo/' . $icon_name,
-            'png',
-            false
+            ContentObject::get_content_object_type_namespace($this->get_type()), 'Logo/' . $icon_name, 'png', false
         );
 
         if (!file_exists($icon_path))
@@ -195,7 +192,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
     {
         return '<img src="' . $this->get_icon_path($size) . '" alt="' . $this->get_extension() . '" title="' .
-        htmlentities($this->get_extension()) . '"/>';
+            htmlentities($this->get_extension()) . '"/>';
     }
 
     public function get_icon_path($size = Theme :: ICON_SMALL)
@@ -218,9 +215,20 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         }
     }
 
+    /**
+     * @return string
+     */
     public static function get_disk_space_properties()
     {
-        return 'filesize';
+        return static::getStorageSpaceProperty();
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageSpaceProperty()
+    {
+        return self::PROPERTY_FILESIZE;
     }
 
     public function get_extension()
@@ -320,9 +328,9 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public function has_file_to_save()
     {
         return StringUtilities::getInstance()->hasValue($this->get_temporary_file_path()) ||
-        StringUtilities::getInstance()->hasValue(
-            $this->get_in_memory_file()
-        );
+            StringUtilities::getInstance()->hasValue(
+                $this->get_in_memory_file()
+            );
     }
 
     /**
@@ -488,20 +496,17 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         );
 
         $safeFileName = StringUtilities::getInstance()->createString($fileName)->toAscii()->replace('/', '-')->replace(
-            '\\',
-            '-'
+            '\\', '-'
         )->replace('%', '_')->__toString();
 
         $dispositionHeader = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $safeFileName
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT, $safeFileName
         );
 
         $response->headers->set('Content-Disposition', $dispositionHeader);
 
         $response->setCallback(
-            function () use ($file)
-            {
+            function () use ($file) {
                 readfile($file);
             }
         );
@@ -521,19 +526,16 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         );
 
         $safeFileName = StringUtilities::getInstance()->createString($fileName)->toAscii()->replace('/', '-')->replace(
-            '\\',
-            '-'
+            '\\', '-'
         )->replace('%', '_')->__toString();
 
         $dispositionHeader = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_INLINE,
-            $safeFileName
+            ResponseHeaderBag::DISPOSITION_INLINE, $safeFileName
         );
 
         $response->headers->set('Content-Disposition', $dispositionHeader);
         $response->setCallback(
-            function () use ($file)
-            {
+            function () use ($file) {
                 readfile($file);
             }
         );
@@ -545,12 +547,8 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_FILENAME,
-            self :: PROPERTY_FILESIZE,
-            self :: PROPERTY_PATH,
-            self :: PROPERTY_HASH,
-            self :: PROPERTY_STORAGE_PATH,
-            self::PROPERTY_SHOW_INLINE
+            self :: PROPERTY_FILENAME, self :: PROPERTY_FILESIZE, self :: PROPERTY_PATH, self :: PROPERTY_HASH,
+            self :: PROPERTY_STORAGE_PATH, self::PROPERTY_SHOW_INLINE
         );
     }
 
@@ -707,10 +705,8 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                     }
                 }
                 elseif (StringUtilities::getInstance()->hasValue($this->in_memory_file) && Filesystem::write_to_file(
-                        $path_to_save,
-                        $this->in_memory_file
-                    )
-                )
+                        $path_to_save, $this->in_memory_file
+                    ))
                 {
                     $save_success = true;
                 }

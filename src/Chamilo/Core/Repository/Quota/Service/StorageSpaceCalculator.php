@@ -18,7 +18,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class StorageSpaceCalculator
+class QuotaCalculator
 {
     const POLICY_GROUP_HIGHEST = 1;
 
@@ -86,6 +86,7 @@ class StorageSpaceCalculator
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+     * @param \Chamilo\Core\Repository\Service\ContentObjectService $contentObjectService
      */
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, GroupService $groupService,
@@ -98,22 +99,6 @@ class StorageSpaceCalculator
         $this->groupService = $groupService;
         $this->userService = $userService;
         $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->contentObjectService = $contentObjectService;
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\Service\ContentObjectService
-     */
-    public function getContentObjectService(): ContentObjectService
-    {
-        return $this->contentObjectService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Service\ContentObjectService $contentObjectService
-     */
-    public function setContentObjectService(ContentObjectService $contentObjectService): void
-    {
         $this->contentObjectService = $contentObjectService;
     }
 
@@ -221,6 +206,7 @@ class StorageSpaceCalculator
     /**
      * @see Calculator::getAllocatedDiskSpacePercentage()
      * @return integer
+     * @throws \Exception
      */
     public function getAllocatedStorageSpacePercentage()
     {
@@ -343,6 +329,7 @@ class StorageSpaceCalculator
      *
      * @return integer
      * @see Calculator::getAvailableAllocatedDiskSpace()
+     * @throws \Exception
      */
     public function getAvailableAllocatedStorageSpace()
     {
@@ -407,6 +394,22 @@ class StorageSpaceCalculator
     public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
     {
         $this->configurationConsulter = $configurationConsulter;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\ContentObjectService
+     */
+    public function getContentObjectService(): ContentObjectService
+    {
+        return $this->contentObjectService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Service\ContentObjectService $contentObjectService
+     */
+    public function setContentObjectService(ContentObjectService $contentObjectService): void
+    {
+        $this->contentObjectService = $contentObjectService;
     }
 
     /**
@@ -537,6 +540,7 @@ class StorageSpaceCalculator
     /**
      * @return integer
      * @see Calculator::getUsedAggregatedUserDiskQuota()
+     * @throws \Exception
      */
     public function getUsedAggregatedUserStorageSpace()
     {
@@ -553,6 +557,7 @@ class StorageSpaceCalculator
      *
      * @return integer
      * @see Calculator::getUsedUserDiskQuota()
+     * @throws \Exception
      */
     public function getUsedStorageSpaceForUser(User $user)
     {

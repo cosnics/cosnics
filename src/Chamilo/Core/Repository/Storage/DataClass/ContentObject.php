@@ -1453,11 +1453,19 @@ class ContentObject extends CompositeDataClass
 
     /**
      * Get all properties of this type of object that should be taken into account to calculate the used disk space.
-     *
+     * @deprecated Use ContentObject::getStorageSpaceProperty() now
      * @return mixed The property names. Either a string, an array of strings, or null if no properties affect disk
      *         quota.
      */
     static public function get_disk_space_properties()
+    {
+        return static::getStorageSpaceProperty();
+    }
+
+    /**
+     * @return string
+     */
+    static public function getStorageSpaceProperty()
     {
         return null;
     }

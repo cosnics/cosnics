@@ -14,7 +14,7 @@ class DataConsulter
 
     /**
      *
-     * @var string[]
+     * @var string[][]
      */
     private $data;
 
@@ -53,7 +53,7 @@ class DataConsulter
 
     /**
      *
-     * @return string[]
+     * @return string[][]
      */
     public function getData()
     {

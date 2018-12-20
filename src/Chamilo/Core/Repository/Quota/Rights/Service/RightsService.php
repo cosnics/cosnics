@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityR
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
 use Chamilo\Core\Repository\Quota\Rights\Storage\Repository\RightsRepository as QuotaRightsRepository;
 use Chamilo\Core\Repository\Quota\Rights\Table\Entity\EntityTableColumnModel;
-use Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator;
+use Chamilo\Core\Repository\Quota\Service\QuotaCalculator;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -56,7 +56,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     private $authorizedUsersCache = array();
 
     /**
-     * @var \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator
+     * @var \Chamilo\Core\Repository\Quota\Service\QuotaCalculator
      */
     private $quotaCalculator;
 
@@ -72,12 +72,13 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
      * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
-     * @param \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator $quotaCalculator
+     * @param \Chamilo\Core\Repository\Quota\Service\QuotaCalculator $quotaCalculator
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
         RightsRepository $rightsRepository, UserService $userService, Translator $translator,
         UserEntityProvider $userEntityProvider, GroupEntityProvider $groupEntityProvider, GroupService $groupService,
-        StorageSpaceCalculator $quotaCalculator, ConfigurationConsulter $configurationConsulter
+        QuotaCalculator $quotaCalculator, ConfigurationConsulter $configurationConsulter
     )
     {
         parent::__construct($rightsRepository, $userService, $translator);
@@ -244,6 +245,8 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
 
     /**
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[] $locationEntityRights
+     *
+     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
      */
     public function findRightsLocationEntityRightGroupsForRightsLocationEntityRights(
         DataClassIterator $locationEntityRights
@@ -265,6 +268,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
+     * @throws \Exception
      */
     public function findRightsLocationEntityRightGroupsForSubscribedUserGroups(User $user)
     {
@@ -306,6 +310,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function findRightsLocationEntityRightGroupsIdentifiersForUser(User $user)
     {
@@ -538,7 +543,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
             }
         );
 
-        return $groupRecords;
+        return array_slice($groupRecords, $offset, $count);
     }
 
     /**
@@ -569,6 +574,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function getTargetGroupIdentifiersForUser(User $user)
     {
@@ -592,6 +598,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function getTargetUsersForUser(User $user)
     {
@@ -636,6 +643,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return boolean
+     * @throws \Exception
      */
     public function isUserIdentifierTargetForUser(int $userIdentifier, User $user)
     {
@@ -807,17 +815,17 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator
+     * @return \Chamilo\Core\Repository\Quota\Service\QuotaCalculator
      */
-    public function getQuotaCalculator(): StorageSpaceCalculator
+    public function getQuotaCalculator(): QuotaCalculator
     {
         return $this->quotaCalculator;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator $quotaCalculator
+     * @param \Chamilo\Core\Repository\Quota\Service\QuotaCalculator $quotaCalculator
      */
-    public function setQuotaCalculator(StorageSpaceCalculator $quotaCalculator): void
+    public function setQuotaCalculator(QuotaCalculator $quotaCalculator): void
     {
         $this->quotaCalculator = $quotaCalculator;
     }
