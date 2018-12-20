@@ -39,6 +39,19 @@ class GroupMembershipService
     }
 
     /**
+     * @param integer[] $groupIdentifiers
+     *
+     * @return integer[]
+     * @throws \Exception
+     */
+    public function findSubscribedUserIdentifiersForGroupIdentifiers(array $groupIdentifiers)
+    {
+        return $this->getGroupMembershipRepository()->findSubscribedUserIdentifiersForGroupIdentifiers(
+            $groupIdentifiers
+        );
+    }
+
+    /**
      * @return \Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository
      */
     public function getGroupMembershipRepository(): GroupMembershipRepository
@@ -106,14 +119,25 @@ class GroupMembershipService
     }
 
     /**
-     * @param integer[] $groupIdentifiers
+     * @param integer $groupIdentifier
      *
-     * @return integer[]
+     * @return integer
      * @throws \Exception
      */
-    public function findSubscribedUserIdentifiersForGroupIdentifiers(array $groupIdentifiers)
+    public function countSubscribedUsersForGroupIdentifier(int $groupIdentifier)
     {
-        return $this->getGroupMembershipRepository()->findSubscribedUserIdentifiersForGroupIdentifiers(
+        return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifier($groupIdentifier);
+    }
+
+    /**
+     * @param integer[] $groupIdentifiers
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers)
+    {
+        return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifiers(
             $groupIdentifiers
         );
     }

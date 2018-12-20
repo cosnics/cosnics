@@ -6,6 +6,7 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -165,5 +166,32 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->deletes(GroupRelUser::class, $condition);
+    }
+
+    /**
+     * @param integer $groupIdentifier
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function countSubscribedUsersForGroupIdentifier(int $groupIdentifier)
+    {
+        return $this->countSubscribedUsersForGroupIdentifiers(array($groupIdentifier));
+    }
+
+    /**
+     * @param integer[] $groupIdentifiers
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers)
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            $groupIdentifiers
+        );
+
+        return $this->getDataClassRepository()->count(GroupRelUser::class, new DataClassCountParameters($condition));
     }
 }

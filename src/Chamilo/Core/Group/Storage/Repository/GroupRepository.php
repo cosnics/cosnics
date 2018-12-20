@@ -465,4 +465,15 @@ class GroupRepository
     {
         return $this->getNestedSetDataClassRepository()->update($group);
     }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param boolean $recursiveSubgroups
+     *
+     * @return integer
+     */
+    public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false)
+    {
+        return $this->getNestedSetDataClassRepository()->countDescendants($group, $recursiveSubgroups);
+    }
 }

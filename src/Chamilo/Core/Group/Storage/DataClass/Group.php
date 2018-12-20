@@ -79,6 +79,12 @@ class Group extends NestedSet
      */
     private $siblings;
 
+    /**
+     * @param bool $recursive
+     *
+     * @return mixed
+     * @deprecated Use GroupService::countSubGroupsForGroup() now
+     */
     public function count_subgroups($recursive = false)
     {
         if (!isset($this->subgroup_count[(int) $recursive]))
@@ -102,6 +108,13 @@ class Group extends NestedSet
         return $this->subgroup_count[(int) $recursive];
     }
 
+    /**
+     * @param bool $include_subgroups
+     * @param bool $recursive_subgroups
+     *
+     * @return mixed
+     * @deprecated Use GroupService::countUsersForGroup() now
+     */
     public function count_users($include_subgroups = false, $recursive_subgroups = false)
     {
         if (!isset($this->user_count[(int) $include_subgroups][(int) $recursive_subgroups]))
@@ -199,6 +212,12 @@ class Group extends NestedSet
         return $this->user_count[(int) $include_subgroups][(int) $recursive_subgroups];
     }
 
+    /**
+     * @param int $previous_id
+     *
+     * @return bool
+     * @deprecated Use GroupService::createGroup() now
+     */
     public function create($previous_id = 0)
     {
         $parent_id = $this->get_parent_id();
@@ -216,7 +235,7 @@ class Group extends NestedSet
     /**
      * Instructs the DataManager to delete this group.
      *
-     * @param in_batch - delete groups in batch and fix nested values later
+     * @param $in_batch - delete groups in batch and fix nested values later
      *
      * @return boolean True if success, false otherwise.
      * @deprecated should use $this->delete() of self :: deletes( $array ) instead
@@ -230,6 +249,8 @@ class Group extends NestedSet
      * Deletes all content related to a group: - Users that are part of a group - Meta-data describing the group -
      * Rights templates tied to a group In principle, these could be deleted implicitly when using foreign keys (the
      * group id) with cascading deletes.
+     *
+     * @deprecated Part of GroupService::deleteGroup() now
      */
     public function delete_related_content()
     {
@@ -283,6 +304,8 @@ class Group extends NestedSet
 
     /**
      * Get the group's children
+     *
+     * @deprecated Use GroupService::findSubGroupsForGroup() now
      */
     public function get_children($recursive = true)
     {
@@ -507,13 +530,20 @@ class Group extends NestedSet
 
     /**
      *
-     * @deprecated should use is_ancestor_of
+     * @deprecated Use Group::isAncestorOf()
      */
     public function is_parent_of($child)
     {
         return $this->is_ancestor_of($child);
     }
 
+    /**
+     * @param integer $new_parent_id
+     * @param integer $new_previous_id
+     *
+     * @return boolean
+     * @deprecated Use GroupService::moveGroup() now
+     */
     public function move($new_parent_id, $new_previous_id = 0)
     {
         if ($new_previous_id != 0)
@@ -572,6 +602,8 @@ class Group extends NestedSet
 
     /**
      * Unsubscribes all users from this group
+     *
+     * @deprecated Part of GroupService::deleteGroup() now
      */
     public function truncate()
     {
