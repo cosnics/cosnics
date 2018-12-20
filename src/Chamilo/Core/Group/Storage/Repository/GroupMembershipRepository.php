@@ -39,6 +39,33 @@ class GroupMembershipRepository
     }
 
     /**
+     * @param integer $groupIdentifier
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function countSubscribedUsersForGroupIdentifier(int $groupIdentifier)
+    {
+        return $this->countSubscribedUsersForGroupIdentifiers(array($groupIdentifier));
+    }
+
+    /**
+     * @param integer[] $groupIdentifiers
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers)
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            $groupIdentifiers
+        );
+
+        return $this->getDataClassRepository()->count(GroupRelUser::class, new DataClassCountParameters($condition));
+    }
+
+    /**
      *
      * @param int $groupId
      * @param int $userId
@@ -166,32 +193,5 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->deletes(GroupRelUser::class, $condition);
-    }
-
-    /**
-     * @param integer $groupIdentifier
-     *
-     * @return integer
-     * @throws \Exception
-     */
-    public function countSubscribedUsersForGroupIdentifier(int $groupIdentifier)
-    {
-        return $this->countSubscribedUsersForGroupIdentifiers(array($groupIdentifier));
-    }
-
-    /**
-     * @param integer[] $groupIdentifiers
-     *
-     * @return integer
-     * @throws \Exception
-     */
-    public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers)
-    {
-        $condition = new InCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
-            $groupIdentifiers
-        );
-
-        return $this->getDataClassRepository()->count(GroupRelUser::class, new DataClassCountParameters($condition));
     }
 }

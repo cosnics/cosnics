@@ -30,6 +30,30 @@ class GroupMembershipService
     /**
      * @param integer $groupIdentifier
      *
+     * @return integer
+     * @throws \Exception
+     */
+    public function countSubscribedUsersForGroupIdentifier(int $groupIdentifier)
+    {
+        return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifier($groupIdentifier);
+    }
+
+    /**
+     * @param integer[] $groupIdentifiers
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers)
+    {
+        return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifiers(
+            $groupIdentifiers
+        );
+    }
+
+    /**
+     * @param integer $groupIdentifier
+     *
      * @return integer[]
      * @throws \Exception
      */
@@ -116,29 +140,5 @@ class GroupMembershipService
         }
 
         return $this->unsubscribeUsersFromGroupIdentifiers($groupsIdentifiers);
-    }
-
-    /**
-     * @param integer $groupIdentifier
-     *
-     * @return integer
-     * @throws \Exception
-     */
-    public function countSubscribedUsersForGroupIdentifier(int $groupIdentifier)
-    {
-        return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifier($groupIdentifier);
-    }
-
-    /**
-     * @param integer[] $groupIdentifiers
-     *
-     * @return integer
-     * @throws \Exception
-     */
-    public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers)
-    {
-        return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifiers(
-            $groupIdentifiers
-        );
     }
 }

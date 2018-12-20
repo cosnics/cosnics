@@ -70,6 +70,17 @@ class GroupRepository
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param boolean $recursiveSubgroups
+     *
+     * @return integer
+     */
+    public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false)
+    {
+        return $this->getNestedSetDataClassRepository()->countDescendants($group, $recursiveSubgroups);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      *
      * @return boolean
      * @throws \Exception
@@ -255,6 +266,17 @@ class GroupRepository
                 array(new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME)))
             )
         );
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param boolean $includeSelf
+     *
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     */
+    public function findParentGroupsForGroup(Group $group, bool $includeSelf = true)
+    {
+        return $this->getNestedSetDataClassRepository()->findAncestors($group, $includeSelf);
     }
 
     /**
@@ -464,16 +486,5 @@ class GroupRepository
     public function updateGroup(Group $group)
     {
         return $this->getNestedSetDataClassRepository()->update($group);
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $recursiveSubgroups
-     *
-     * @return integer
-     */
-    public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false)
-    {
-        return $this->getNestedSetDataClassRepository()->countDescendants($group, $recursiveSubgroups);
     }
 }

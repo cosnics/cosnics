@@ -96,6 +96,76 @@ class GroupService
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param boolean $recursiveSubgroups
+     *
+     * @return integer
+     */
+    public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false)
+    {
+        $cacheKey = md5(serialize([$group->getId(), $recursiveSubgroups]));
+
+        if (!array_key_exists($cacheKey, $this->subGroupsCount))
+        {
+            if ($group->getRightValue() == $group->getLeftValue() + 1)
+            {
+                $this->subGroupsCount[$cacheKey] = 0;
+            }
+            elseif ($group->getRightValue() == $group->getLeftValue() + 3)
+            {
+                $this->subGroupsCount[$cacheKey] = 1;
+            }
+            else
+            {
+                if ($recursiveSubgroups)
+                {
+                    $this->subGroupsCount[$cacheKey] = ($group->getRightValue() - $group->getLeftValue() - 1) / 2;
+                }
+                else
+                {
+
+                    $this->subGroupsCount[$cacheKey] =
+                        $this->getGroupRepository()->countSubGroupsForGroup($group, false);
+                }
+            }
+        }
+
+        return $this->subGroupsCount[$cacheKey];
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param boolean $includeSubGroups
+     * @param boolean $recursiveSubgroups
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function countUsersForGroup(Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false)
+    {
+        $cacheKey = md5(serialize([$group->getId(), $includeSubGroups, $recursiveSubgroups]));
+
+        if (!array_key_exists($cacheKey, $this->groupUsersCount))
+        {
+            if ($includeSubGroups)
+            {
+                $groupIdentifiers = $this->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
+            }
+            else
+            {
+                $groupIdentifiers = array();
+            }
+
+            $groupIdentifiers[] = $group->getId();
+
+            $this->groupUsersCount[$cacheKey] =
+                $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifiers($groupIdentifiers);
+        }
+
+        return $this->groupUsersCount[$cacheKey];
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      *
      * @return boolean
      * @throws \Exception
@@ -281,6 +351,17 @@ class GroupService
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param boolean $includeSelf
+     *
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     */
+    public function findParentGroupsForGroup(Group $group, bool $includeSelf = true)
+    {
+        return $this->getGroupRepository()->findParentGroupsForGroup($group, $includeSelf);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param boolean $recursiveSubgroups
      *
      * @return integer[]
@@ -359,6 +440,26 @@ class GroupService
         }
 
         return $this->groupUserIdentifiers[$cacheKey];
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param boolean $includeSelf
+     *
+     * @return string
+     */
+    public function getFullyQualifiedNameForGroup(Group $group, bool $includeSelf = true)
+    {
+        $parentGroups = $this->findParentGroupsForGroup($group, $includeSelf);
+
+        $names = array();
+
+        foreach ($parentGroups as $parentGroup)
+        {
+            $names[] = $parentGroup->get_name();
+        }
+
+        return implode(' <span class="visible">></span> ', array_reverse($names));
     }
 
     /**
@@ -497,75 +598,5 @@ class GroupService
     public function updateGroup(Group $group)
     {
         return $this->getGroupRepository()->updateGroup($group);
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $recursiveSubgroups
-     *
-     * @return integer
-     */
-    public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false)
-    {
-        $cacheKey = md5(serialize([$group->getId(), $recursiveSubgroups]));
-
-        if (!array_key_exists($cacheKey, $this->subGroupsCount))
-        {
-            if ($group->getRightValue() == $group->getLeftValue() + 1)
-            {
-                $this->subGroupsCount[$cacheKey] = 0;
-            }
-            elseif ($group->getRightValue() == $group->getLeftValue() + 3)
-            {
-                $this->subGroupsCount[$cacheKey] = 1;
-            }
-            else
-            {
-                if ($recursiveSubgroups)
-                {
-                    $this->subGroupsCount[$cacheKey] = ($group->getRightValue() - $group->getLeftValue() - 1) / 2;
-                }
-                else
-                {
-
-                    $this->subGroupsCount[$cacheKey] =
-                        $this->getGroupRepository()->countSubGroupsForGroup($group, false);
-                }
-            }
-        }
-
-        return $this->subGroupsCount[$cacheKey];
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $includeSubGroups
-     * @param boolean $recursiveSubgroups
-     *
-     * @return integer
-     * @throws \Exception
-     */
-    public function countUsersForGroup(Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false)
-    {
-        $cacheKey = md5(serialize([$group->getId(), $includeSubGroups, $recursiveSubgroups]));
-
-        if (!array_key_exists($cacheKey, $this->groupUsersCount))
-        {
-            if ($includeSubGroups)
-            {
-                $groupIdentifiers = $this->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
-            }
-            else
-            {
-                $groupIdentifiers = array();
-            }
-
-            $groupIdentifiers[] = $group->getId();
-
-            $this->groupUsersCount[$cacheKey] =
-                $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifiers($groupIdentifiers);
-        }
-
-        return $this->groupUsersCount[$cacheKey];
     }
 }
