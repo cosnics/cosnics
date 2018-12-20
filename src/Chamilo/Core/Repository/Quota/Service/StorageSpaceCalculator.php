@@ -18,7 +18,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class QuotaCalculator
+class StorageSpaceCalculator
 {
     const POLICY_GROUP_HIGHEST = 1;
 
@@ -89,7 +89,8 @@ class QuotaCalculator
      */
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, GroupService $groupService,
-        UserService $userService, ConfigurablePathBuilder $configurablePathBuilder, ContentObjectService $contentObjectService
+        UserService $userService, ConfigurablePathBuilder $configurablePathBuilder,
+        ContentObjectService $contentObjectService
     )
     {
         $this->configurationConsulter = $configurationConsulter;
@@ -115,8 +116,6 @@ class QuotaCalculator
     {
         $this->contentObjectService = $contentObjectService;
     }
-
-
 
     /**
      * @param \Chamilo\Libraries\Format\Form\FormValidator $form
@@ -559,7 +558,8 @@ class QuotaCalculator
     {
         if (!isset($this->usedStorageSpaceForUserCache[$user->getId()]))
         {
-            $this->usedStorageSpaceForUserCache[$user->getId()] = $this->getContentObjectService()->getUsedStorageSpaceForUser($user);
+            $this->usedStorageSpaceForUserCache[$user->getId()] =
+                $this->getContentObjectService()->getUsedStorageSpaceForUser($user);
         }
 
         return $this->usedStorageSpaceForUserCache[$user->getId()];

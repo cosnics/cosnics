@@ -32,7 +32,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Dieter De Neef
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
- * @deprecated Use QuotaCalculator service now
+ * @deprecated Use StorageSpaceCalculator service now
  */
 class Calculator
 {
@@ -109,7 +109,7 @@ class Calculator
      *
      * @param \Chamilo\Libraries\Format\Form\FormValidator $form
      *
-     * @deprecated Use QuotaCalculator::addUploadWarningToForm() now
+     * @deprecated Use StorageSpaceCalculator::addUploadWarningToForm() now
      */
     public function addUploadWarningToForm(FormValidator $form)
     {
@@ -173,7 +173,7 @@ class Calculator
      * @param integer $requestedStorageSize
      *
      * @return boolean
-     * @deprecated Use QuotaCalculator::doesUserHaveRequestedStorageSpace() now
+     * @deprecated Use StorageSpaceCalculator::doesUserHaveRequestedStorageSpace() now
      */
     public function canUpload($requestedStorageSize)
     {
@@ -188,7 +188,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getAggregatedUserStorageSpacePercentage() now
+     * @deprecated Use StorageSpaceCalculator::getAggregatedUserStorageSpacePercentage() now
      */
     public function getAggregatedUserDiskQuotaPercentage()
     {
@@ -198,7 +198,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getAllocatedStorageSpacePercentage() now
+     * @deprecated Use StorageSpaceCalculator::getAllocatedStorageSpacePercentage() now
      */
     public function getAllocatedDiskSpacePercentage()
     {
@@ -208,7 +208,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getAvailableAggregatedUserStorageSpace() now
+     * @deprecated Use StorageSpaceCalculator::getAvailableAggregatedUserStorageSpace() now
      */
     public function getAvailableAggregatedUserDiskQuota()
     {
@@ -220,7 +220,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getAvailableAllocatedStorageSpace()
+     * @deprecated Use StorageSpaceCalculator::getAvailableAllocatedStorageSpace()
      */
     public function getAvailableAllocatedDiskSpace()
     {
@@ -242,7 +242,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getAvailableReservedStorageSpace() now
+     * @deprecated Use StorageSpaceCalculator::getAvailableReservedStorageSpace() now
      */
     public function getAvailableReservedDiskSpace()
     {
@@ -254,7 +254,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getAvailableStorageSpaceForUser() now
+     * @deprecated Use StorageSpaceCalculator::getAvailableStorageSpaceForUser() now
      */
     public function getAvailableUserDiskQuota()
     {
@@ -324,7 +324,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getHighestGroupQuotumForUser() now
+     * @deprecated Use StorageSpaceCalculator::getHighestGroupQuotumForUser() now
      */
     public function getGroupHighest()
     {
@@ -353,7 +353,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getLowestGroupQuotumForUser() now
+     * @deprecated Use StorageSpaceCalculator::getLowestGroupQuotumForUser() now
      */
     public function getGroupLowest()
     {
@@ -385,7 +385,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getMaximumAggregatedUserStorageSpace() now
+     * @deprecated Use StorageSpaceCalculator::getMaximumAggregatedUserStorageSpace() now
      */
     public function getMaximumAggregatedUserDiskQuota()
     {
@@ -400,7 +400,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getMaximumAllocatedStorageSpace() now
+     * @deprecated Use StorageSpaceCalculator::getMaximumAllocatedStorageSpace() now
      */
     public function getMaximumAllocatedDiskSpace()
     {
@@ -425,7 +425,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getMaximumAllocatedStorageSpace() now
+     * @deprecated Use StorageSpaceCalculator::getMaximumAllocatedStorageSpace() now
      */
     public function getMaximumReservedDiskSpace()
     {
@@ -435,7 +435,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated USe QuotaCalculator::getMaximumUploadSizeForUser() now
+     * @deprecated USe StorageSpaceCalculator::getMaximumUploadSizeForUser() now
      */
     public function getMaximumUploadSize()
     {
@@ -464,7 +464,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getAllowedStorageSpaceForUser() now
+     * @deprecated Use StorageSpaceCalculator::getAllowedStorageSpaceForUser() now
      */
     public function getMaximumUserDiskQuota()
     {
@@ -519,7 +519,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getReservedStorageSpacePercentage() now
+     * @deprecated Use StorageSpaceCalculator::getReservedStorageSpacePercentage() now
      */
     public function getReservedDiskSpacePercentage()
     {
@@ -537,7 +537,7 @@ class Calculator
     }
 
     /**
-     * @deprecated Use QuotaCalculator::getMaximumAggregatedUserStorageSpace() now
+     * @deprecated Use StorageSpaceCalculator::getMaximumAggregatedUserStorageSpace() now
      */
     public function getTotalUserDiskQuota($reset = false)
     {
@@ -554,7 +554,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getUsedAggregatedUserStorageSpace() now
+     * @deprecated Use StorageSpaceCalculator::getUsedAggregatedUserStorageSpace() now
      */
     public function getUsedAggregatedUserDiskQuota()
     {
@@ -569,7 +569,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getUsedAggregatedUserStorageSpace() now
+     * @deprecated Use StorageSpaceCalculator::getUsedAggregatedUserStorageSpace() now
      */
     public function getUsedAllocatedDiskSpace()
     {
@@ -608,7 +608,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getMaximumAggregatedUserStorageSpace() now
+     * @deprecated Use StorageSpaceCalculator::getMaximumAggregatedUserStorageSpace() now
      */
     public function getUsedReservedDiskSpace()
     {
@@ -618,7 +618,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated Use QuotaCalculator::getUsedStorageSpaceForUser() now
+     * @deprecated Use StorageSpaceCalculator::getUsedStorageSpaceForUser() now
      */
     public function getUsedUserDiskQuota()
     {
@@ -645,7 +645,7 @@ class Calculator
     /**
      *
      * @return integer
-     * @deprecated UseQuotaCalculator::geStorageSpacePercentageForUser() now
+     * @deprecated UseStorageSpaceCalculator::geStorageSpacePercentageForUser() now
      */
     public function getUserDiskQuotaPercentage()
     {
@@ -654,7 +654,7 @@ class Calculator
 
     /**
      * @return bool
-     * @deprecated Use QuotaCalculator::isStorageQuotumEnabled() now
+     * @deprecated Use StorageSpaceCalculator::isStorageQuotumEnabled() now
      */
     public function isEnabled()
     {
@@ -766,7 +766,7 @@ class Calculator
     /**
      *
      * @return boolean
-     * @deprecated Use QuotaCalculator::isQuotumDefinedForUser() now
+     * @deprecated Use StorageSpaceCalculator::isQuotumDefinedForUser() now
      */
     public function usesUserDiskQuota()
     {
