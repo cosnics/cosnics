@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityR
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
 use Chamilo\Core\Repository\Quota\Rights\Storage\Repository\RightsRepository as QuotaRightsRepository;
 use Chamilo\Core\Repository\Quota\Rights\Table\Entity\EntityTableColumnModel;
-use Chamilo\Core\Repository\Quota\Service\QuotaCalculator;
+use Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -56,9 +56,9 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     private $authorizedUsersCache = array();
 
     /**
-     * @var \Chamilo\Core\Repository\Quota\Service\QuotaCalculator
+     * @var \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator
      */
-    private $quotaCalculator;
+    private $storageSpaceCalculator;
 
     /**
      * @var \Chamilo\Configuration\Service\ConfigurationConsulter
@@ -72,13 +72,13 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
      * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
-     * @param \Chamilo\Core\Repository\Quota\Service\QuotaCalculator $quotaCalculator
+     * @param \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator $storageSpaceCalculator
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
         RightsRepository $rightsRepository, UserService $userService, Translator $translator,
         UserEntityProvider $userEntityProvider, GroupEntityProvider $groupEntityProvider, GroupService $groupService,
-        QuotaCalculator $quotaCalculator, ConfigurationConsulter $configurationConsulter
+        StorageSpaceCalculator $storageSpaceCalculator, ConfigurationConsulter $configurationConsulter
     )
     {
         parent::__construct($rightsRepository, $userService, $translator);
@@ -86,7 +86,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
         $this->userEntityProvider = $userEntityProvider;
         $this->groupEntityProvider = $groupEntityProvider;
         $this->groupService = $groupService;
-        $this->quotaCalculator = $quotaCalculator;
+        $this->storageSpaceCalculator = $storageSpaceCalculator;
         $this->configurationConsulter = $configurationConsulter;
     }
 
@@ -815,19 +815,19 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Quota\Service\QuotaCalculator
+     * @return \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator
      */
-    public function getQuotaCalculator(): QuotaCalculator
+    public function getStorageSpaceCalculator(): StorageSpaceCalculator
     {
-        return $this->quotaCalculator;
+        return $this->storageSpaceCalculator;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Quota\Service\QuotaCalculator $quotaCalculator
+     * @param \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator $storageSpaceCalculator
      */
-    public function setQuotaCalculator(QuotaCalculator $quotaCalculator): void
+    public function setStorageSpaceCalculator(StorageSpaceCalculator $storageSpaceCalculator): void
     {
-        $this->quotaCalculator = $quotaCalculator;
+        $this->storageSpaceCalculator = $storageSpaceCalculator;
     }
 
     /**
@@ -839,7 +839,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      */
     public function canUserRequestAdditionalStorageSpace(User $user)
     {
-        $quotaCalculator = $this->getQuotaCalculator();
+        $quotaCalculator = $this->getStorageSpaceCalculator();
 
         if (!$quotaCalculator->isStorageQuotumEnabled())
         {
@@ -883,7 +883,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      */
     public function canUserUpgradeStorageSpace(User $user)
     {
-        $quotaCalculator = $this->getQuotaCalculator();
+        $quotaCalculator = $this->getStorageSpaceCalculator();
         $configurationConsulter = $this->getConfigurationConsulter();
 
         $quotaStep = (int) $configurationConsulter->getSetting(array('Chamilo\Core\Repository', 'step'));

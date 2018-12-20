@@ -18,7 +18,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class QuotaCalculator
+class StorageSpaceCalculator
 {
     const POLICY_GROUP_HIGHEST = 1;
 
