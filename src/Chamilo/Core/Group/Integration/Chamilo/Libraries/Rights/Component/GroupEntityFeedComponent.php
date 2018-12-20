@@ -3,9 +3,8 @@ namespace Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Component;
 
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Manager;
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
+use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -209,6 +208,14 @@ class GroupEntityFeedComponent extends Manager
             return [];
         }
 
-        return $this->getGroupService()->findSubscribedUserIdentifiersForGroupIdentifier($filterIdentifier);
+        return $this->getGroupMemberShipService()->findSubscribedUserIdentifiersForGroupIdentifier($filterIdentifier);
+    }
+
+    /**
+     * @return \Chamilo\Core\Group\Service\GroupMembershipService
+     */
+    protected function getGroupMemberShipService()
+    {
+        return $this->getService(GroupMembershipService::class);
     }
 }

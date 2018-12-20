@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container
-        xmlns="http://symfony.com/schema/dic/services"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://symfony.com/schema/dic/services"
         xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults autowire="true" public="true"/>
 
-        <service
-                id="chamilo.core.group.service.group_service"
-                class="Chamilo\Core\Group\Service\GroupService">
-            <argument type="service" id="chamilo.core.group.storage.repository.group_repository"/>
-        </service>
+        <service id="Chamilo\Core\Group\Service\GroupMembershipService"/>
+        <service id="Chamilo\Core\Group\Service\GroupService"/>
 
-        <service
-                alias="chamilo.core.group.service.group_service"
-                id="Chamilo\Core\Group\Service\GroupService">
-        </service>
-
+        <service id="Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository"/>
+        <service id="Chamilo\Core\Group\Storage\Repository\GroupRepository"/>
     </services>
 </container>

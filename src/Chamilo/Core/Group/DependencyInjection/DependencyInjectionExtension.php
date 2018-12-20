@@ -21,30 +21,31 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
 
     /**
      * Loads a specific configuration.
-     * 
+     *
      * @param array $config An array of configuration values
      * @param ContainerBuilder $container A ContainerBuilder instance
+     *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     *         @api
+     * @api
      */
     public function load(array $config, ContainerBuilder $container)
     {
         $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
-        
+
         $loader = new XmlFileLoader(
-            $container, 
-            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Group') . 'DependencyInjection'));
-        
-        $loader->load('repository.xml');
+            $container,
+            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Group') . 'DependencyInjection')
+        );
+
         $loader->load('services.xml');
     }
 
     /**
      * Returns the recommended alias to use in XML.
      * This alias is also the mandatory prefix to use when using YAML.
-     * 
+     *
      * @return string The alias
-     *         @api
+     * @api
      */
     public function getAlias()
     {
