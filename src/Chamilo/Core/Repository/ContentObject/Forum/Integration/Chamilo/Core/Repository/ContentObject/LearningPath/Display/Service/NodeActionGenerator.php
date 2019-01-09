@@ -21,11 +21,12 @@ class NodeActionGenerator
      *
      * @param TreeNode $learningPathTreeNode
      * @param bool $canEditTreeNode
+     * @param bool $canViewReporting
      *
      * @return array|Action[]
      */
     public function generateNodeActions(
-        TreeNode $learningPathTreeNode, $canEditTreeNode = false
+        TreeNode $learningPathTreeNode, bool $canEditTreeNode = false, bool $canViewReporting = false
     ): array
     {
         $actions = array();

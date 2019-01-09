@@ -3,14 +3,15 @@
 
     learningPathHtmlTreeApp.controller(
         'learningPathHtmlTreeController',
-        ['$scope', '$http', 'canEditTree', 'inReportingMode', 'treeData',
+        ['$scope', '$http', 'canEditTree', 'canViewReporting', 'inReportingMode', 'treeData',
             'addTreeNodeAjaxUrl', 'deleteTreeNodeAjaxUrl', 'fetchTreeNodesAjaxUrl', 'moveTreeNodeAjaxUrl', 'updateTreeNodeTitleAjaxUrl', 'translationsJSON',
-            function ($scope, $http, canEditTree, inReportingMode, treeData, addTreeNodeAjaxUrl, deleteTreeNodeAjaxUrl, fetchTreeNodesAjaxUrl, moveTreeNodeAjaxUrl, updateTreeNodeTitleAjaxUrl, translationsJSON) {
+            function ($scope, $http, canEditTree, canViewReporting, inReportingMode, treeData, addTreeNodeAjaxUrl, deleteTreeNodeAjaxUrl, fetchTreeNodesAjaxUrl, moveTreeNodeAjaxUrl, updateTreeNodeTitleAjaxUrl, translationsJSON) {
 
 
             var translations = JSON.parse(translationsJSON);
 
             $scope.canEditTree = canEditTree;
+            $scope.canViewReporting = canViewReporting;
             $scope.inReportingMode = inReportingMode;
             $scope.isLoading = false;
             $scope.showError = false;
@@ -205,10 +206,13 @@
                         ];
                     }
                 }
-                else if (!$scope.inReportingMode) {
-                    actions = ['progress', 'activity'];
+                else if (!$scope.inReportingMode && $scope.canViewReporting) {
+                    actions = ['reporting', 'progress', 'activity'];
                 }
-                else if($scope.canEditTree && $scope.inReportingMode)
+                else if(!$scope.inReportingMode) {
+                    actions = ['progress', 'activity']
+                }
+                else if($scope.canViewReporting && $scope.inReportingMode)
                 {
                     actions = ['view', '-', 'reporting', 'progress'];
                 }

@@ -42,6 +42,11 @@ class ReportingExporterComponent extends BaseReportingComponent
         switch($exportMode)
         {
             case self::EXPORT_USER_PROGRESS:
+                if(!$this->canViewReporting())
+                {
+                    throw new NotAllowedException();
+                }
+
                 $exporter->exportUserProgress($this->learningPath, $this->getCurrentTreeNode(), $csvWriter);
                 $filename = 'Progress.csv';
                 break;
@@ -52,6 +57,7 @@ class ReportingExporterComponent extends BaseReportingComponent
                 $filename = 'Attempts.csv';
                 break;
             case self::EXPORT_TREE_NODE_CHILDREN_PROGRESS:
+
                 $exporter->exportTreeNodeChildrenProgressForUser(
                     $this->learningPath, $this->getCurrentTreeNode(), $this->getReportingUser(), $csvWriter
                 );

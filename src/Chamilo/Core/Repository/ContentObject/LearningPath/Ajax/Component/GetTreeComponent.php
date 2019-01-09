@@ -69,7 +69,7 @@ class GetTreeComponent extends Manager
             $this->getAutomaticNumberingService(),
             new NodeBaseActionGenerator(Translation::getInstance(), $this->get_parameters()),
             '',
-            $tree->getRoot(), true, false
+            $tree->getRoot(), true, false, true
         );
 
         return $treeJSONMapper->getNodes();

@@ -21,6 +21,11 @@ interface LearningPathDisplaySupport extends DisplaySupport
     public function is_allowed_to_edit_learning_path_attempt_data();
 
     /**
+     * @return boolean
+     */
+    public function is_allowed_to_audit_learning_path();
+
+    /**
      *
      * @return \core\repository\content_object\learning_path\display\AbstractAttempt
      */

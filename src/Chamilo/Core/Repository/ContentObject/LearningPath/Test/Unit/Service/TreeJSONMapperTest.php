@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
@@ -108,11 +109,14 @@ class TreeJSONMapperTest extends ChamiloTestCase
         $this->user = new User();
         $this->user->setId(2);
 
-        $this->trackingServiceMock = $this->getMockBuilder(TrackingService::class)->disableOriginalConstructor()->getMock();
+        $this->trackingServiceMock =
+            $this->getMockBuilder(TrackingService::class)->disableOriginalConstructor()->getMock();
 
-        $this->automaticNumberingServiceMock = $this->getMockBuilder(AutomaticNumberingService::class)->disableOriginalConstructor()->getMock();
+        $this->automaticNumberingServiceMock =
+            $this->getMockBuilder(AutomaticNumberingService::class)->disableOriginalConstructor()->getMock();
 
-        $this->nodeActionGeneratorMock = $this->getMockBuilder(NodeActionGenerator::class)->disableOriginalConstructor()->getMock();
+        $this->nodeActionGeneratorMock =
+            $this->getMockBuilder(NodeActionGenerator::class)->disableOriginalConstructor()->getMock();
 
         $currentTreeNode = $this->treeNodes[3];
 
@@ -131,15 +135,20 @@ class TreeJSONMapperTest extends ChamiloTestCase
                 false,
                 false,
                 false,
-                false));
+                false
+            )
+        );
 
-        $this->automaticNumberingServiceMock->expects($this->exactly(7))->method('getAutomaticNumberingForTreeNode')->will(
-            $this->returnValue(5));
+        $this->automaticNumberingServiceMock->expects($this->exactly(7))->method('getAutomaticNumberingForTreeNode')
+            ->will(
+                $this->returnValue(5)
+            );
 
         $actions = [new Action('remove', 'Remove', 'fa fa-remove', 'https://remove-url', 'Are you sure?')];
 
         $this->nodeActionGeneratorMock->expects($this->exactly(7))->method('generateNodeActions')->will(
-            $this->returnValue($actions));
+            $this->returnValue($actions)
+        );
 
         $this->contentObjects[1]->set_title('Test Learning Path');
         $this->treeNodes[4]->getTreeNodeData()->setBlocked(true);
@@ -153,7 +162,8 @@ class TreeJSONMapperTest extends ChamiloTestCase
             'local/index.php?node=__NODE__',
             $currentTreeNode,
             true,
-            true);
+            true, true
+        );
 
         $this->nodesArray = $this->treeJSONMapper->getNodes();
     }
@@ -248,7 +258,8 @@ class TreeJSONMapperTest extends ChamiloTestCase
             'url' => 'fa fa-remove',
             'image' => 'https://remove-url',
             'confirm' => true,
-            'confirmation_message' => 'Are you sure?'];
+            'confirmation_message' => 'Are you sure?'
+        ];
 
         $this->assertEquals($action, $this->nodesArray[0]['actions']['remove']);
     }

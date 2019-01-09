@@ -73,6 +73,11 @@ class TreeJSONMapper
     protected $allowedToEditTree;
 
     /**
+     * @var bool
+     */
+    protected $allowedToViewReporting;
+
+    /**
      * @param Tree $tree
      * @param User $user
      * @param TrackingService $trackingService
@@ -82,6 +87,7 @@ class TreeJSONMapper
      * @param TreeNode $currentTreeNode
      * @param bool $allowedToViewContentObject
      * @param bool $allowedToEditTree
+     * @param bool $allowedToViewReporting
      */
     public function __construct(
         Tree $tree, User $user,
@@ -89,7 +95,7 @@ class TreeJSONMapper
         AutomaticNumberingService $automaticNumberingService,
         NodeActionGenerator $nodeActionGenerator,
         $treeMenuUrl, TreeNode $currentTreeNode,
-        $allowedToViewContentObject, $allowedToEditTree = false
+        bool $allowedToViewContentObject, bool $allowedToEditTree = false, bool $allowedToViewReporting = false
     )
     {
         $this->tree = $tree;
@@ -102,6 +108,7 @@ class TreeJSONMapper
         $this->currentTreeNode = $currentTreeNode;
         $this->allowedToViewContentObject = $allowedToViewContentObject;
         $this->allowedToEditTree = $allowedToEditTree;
+        $this->allowedToViewReporting = $allowedToViewReporting;
     }
 
     /**
@@ -214,7 +221,7 @@ class TreeJSONMapper
             }
         }
 
-        $actions = $this->nodeActionGenerator->generateNodeActions($node, $this->allowedToEditTree);
+        $actions = $this->nodeActionGenerator->generateNodeActions($node, $this->allowedToEditTree, $this->allowedToViewReporting);
         foreach ($actions as $action)
         {
             $nodeData['actions'][$action->getName()] = $action->toArray();

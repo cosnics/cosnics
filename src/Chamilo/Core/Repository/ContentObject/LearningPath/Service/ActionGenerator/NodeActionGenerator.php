@@ -1,6 +1,8 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\ActionInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 
 /**
@@ -16,8 +18,11 @@ abstract class NodeActionGenerator extends ActionGenerator
      *
      * @param TreeNode $treeNode
      * @param bool $canEditTreeNode
+     * @param bool $canViewReporting
      *
      * @return array|ActionInterface[]
      */
-    abstract public function generateNodeActions(TreeNode $treeNode, $canEditTreeNode = false): array;
+    abstract public function generateNodeActions(
+        TreeNode $treeNode, bool $canEditTreeNode = false, bool $canViewReporting = false
+    ): array;
 }

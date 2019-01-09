@@ -43,7 +43,8 @@ class GetTreeNodesComponent extends Manager
                 $this->get_application()->get_application()->is_allowed_to_view_content_object(),
                 $this->get_application()->canEditTreeNode(
                     $this->get_application()->getCurrentTreeNode()
-                )
+                ),
+                $this->get_application()->canViewReporting()
             );
 
             $treeData = $treeJSONMapper->getNodes();

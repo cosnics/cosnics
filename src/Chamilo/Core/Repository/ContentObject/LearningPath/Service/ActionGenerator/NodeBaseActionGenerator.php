@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportService;
@@ -6,11 +7,13 @@ use Chamilo\Core\Repository\Common\Import\ImportTypeSelector;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\ActionGroup;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\ActionInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
+use Chamilo\Core\Repository\Selector\TypeSelectorOption;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -50,8 +53,10 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      * @param array $baseParameters
      * @param NodeActionGenerator[] $contentObjectTypeNodeActionGenerators
      */
-    public function __construct(Translation $translator, array $baseParameters = array(),
-        $contentObjectTypeNodeActionGenerators = array())
+    public function __construct(
+        Translation $translator, array $baseParameters = array(),
+        $contentObjectTypeNodeActionGenerators = array()
+    )
     {
         parent::__construct($translator, $baseParameters);
 
@@ -63,26 +68,28 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      *
      * @param TreeNode $treeNode
      * @param bool $canEditTreeNode
+     * @param bool $canViewReporting
      *
      * @return array|ActionInterface[]
      */
-    public function generateNodeActions(TreeNode $treeNode, $canEditTreeNode = false): array
+    public function generateNodeActions(
+        TreeNode $treeNode, bool $canEditTreeNode = false, bool $canViewReporting = false
+    ): array
     {
         $actions = array();
 
         if ($canEditTreeNode)
         {
             $actions[] = $this->getUpdateNodeAction($treeNode);
-            $actions[] = $this->getNodeReportingAction($treeNode);
 
             if (!$treeNode->isInDefaultTraversingOrder())
             {
-                if(!$treeNode->isRootNode())
+                if (!$treeNode->isRootNode())
                 {
                     $actions[] = $this->getBlockOrUnblockNodeAction($treeNode);
                 }
 
-                if($treeNode->getContentObject() instanceof Section || $treeNode->isRootNode())
+                if ($treeNode->getContentObject() instanceof Section || $treeNode->isRootNode())
                 {
                     $actions[] = $this->getToggleDefaultTraversingOrderAction($treeNode);
                 }
@@ -99,6 +106,11 @@ class NodeBaseActionGenerator extends NodeActionGenerator
             $actions[] = $this->getImportActions($treeNode);
         }
 
+        if ($canViewReporting)
+        {
+            $actions[] = $this->getNodeReportingAction($treeNode);
+        }
+
         $actions[] = $this->getMyProgressNodeAction($treeNode);
         $actions[] = $this->getNodeActivityAction($treeNode);
 
@@ -109,9 +121,9 @@ class NodeBaseActionGenerator extends NodeActionGenerator
 
         $actions[] = $this->getViewNodeAction($treeNode);
 
-        $nodeSpecificActions = $this->getNodeSpecificActions($treeNode, $canEditTreeNode);
+        $nodeSpecificActions = $this->getNodeSpecificActions($treeNode, $canEditTreeNode, $canViewReporting);
 
-        if (is_array($nodeSpecificActions) && ! empty($nodeSpecificActions))
+        if (is_array($nodeSpecificActions) && !empty($nodeSpecificActions))
         {
             $actions = array_merge($actions, $nodeSpecificActions);
         }
@@ -131,7 +143,8 @@ class NodeBaseActionGenerator extends NodeActionGenerator
         $title = $this->translator->getTranslation('ReturnToLearningPath', null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT),
-            $treeNode->getId());
+            $treeNode->getId()
+        );
 
         return new Action('view', $title, $url, 'fa-file');
     }
@@ -148,7 +161,8 @@ class NodeBaseActionGenerator extends NodeActionGenerator
         $title = $this->translator->getTranslation('UpdaterComponent', null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM),
-            $treeNode->getId());
+            $treeNode->getId()
+        );
 
         return new Action('edit', $title, $url, 'fa-pencil');
     }
@@ -165,14 +179,16 @@ class NodeBaseActionGenerator extends NodeActionGenerator
         $title = $this->translator->getTranslation('DeleterComponent', null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM),
-            $treeNode->getId());
+            $treeNode->getId()
+        );
 
         return new Action(
             'delete',
             $title,
             $url,
             'fa-times',
-            $this->translator->getTranslation('Confirm', null, 'Chamilo\Libraries'));
+            $this->translator->getTranslation('Confirm', null, 'Chamilo\Libraries')
+        );
     }
 
     /**
@@ -229,14 +245,17 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      */
     protected function getBlockOrUnblockNodeAction(TreeNode $treeNode)
     {
-        $translationVariable = ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->isBlocked()) ? 'MarkAsOptional' : 'MarkAsRequired';
+        $translationVariable =
+            ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->isBlocked()) ? 'MarkAsOptional' :
+                'MarkAsRequired';
 
         $icon = ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->isBlocked()) ? 'unlock' : 'ban';
 
         $title = $this->translator->getTranslation($translationVariable, null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_BLOCKED_STATUS),
-            $treeNode->getId());
+            $treeNode->getId()
+        );
 
         return new Action('block', $title, $url, 'fa-' . $icon);
     }
@@ -294,7 +313,8 @@ class NodeBaseActionGenerator extends NodeActionGenerator
         $title = $this->translator->getTranslation('Reporting', null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS),
-            $treeNode->getId());
+            $treeNode->getId()
+        );
 
         return new Action('reporting', $title, $url, 'fa-bar-chart');
     }
@@ -304,17 +324,22 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      *
      * @param TreeNode $treeNode
      * @param bool $canEditTreeNode
+     * @param bool $canViewReporting
      *
      * @return array|Action[]
      */
-    protected function getNodeSpecificActions(TreeNode $treeNode, $canEditTreeNode = false)
+    protected function getNodeSpecificActions(
+        TreeNode $treeNode, bool $canEditTreeNode = false, bool $canViewReporting = false
+    )
     {
         $contentObjectType = $treeNode->getContentObject()->get_type();
         if (array_key_exists($contentObjectType, $this->contentObjectTypeNodeActionGenerators))
         {
             return $this->contentObjectTypeNodeActionGenerators[$contentObjectType]->generateNodeActions(
                 $treeNode,
-                $canEditTreeNode);
+                $canEditTreeNode,
+                $canViewReporting
+            );
         }
 
         return array();
@@ -331,9 +356,10 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     {
         $baseParameters = [
             Manager::PARAM_ACTION => Manager::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_CREATOR];
+            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_CREATOR
+        ];
 
-        if (! isset($this->typeSelectorOptions))
+        if (!isset($this->typeSelectorOptions))
         {
             /** @var LearningPath $learningPath */
             $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
@@ -341,7 +367,8 @@ class NodeBaseActionGenerator extends NodeActionGenerator
                 $learningPath->get_allowed_types(),
                 Session::get_user_id(),
                 TypeSelectorFactory::MODE_FLAT_LIST,
-                false);
+                false
+            );
 
             $typeSelector = $typeSelectorFactory->getTypeSelector();
 
@@ -357,7 +384,8 @@ class NodeBaseActionGenerator extends NodeActionGenerator
             $url = $this->getUrlForNode($baseParameters, $treeNode->getId());
 
             $createAction->addAction(
-                new Action('create_' . $id, $option->get_label(), $url, ''));
+                new Action('create_' . $id, $option->get_label(), $url, '')
+            );
         }
 
         return $createAction;
@@ -374,7 +402,8 @@ class NodeBaseActionGenerator extends NodeActionGenerator
 
         $baseParameters = [
             Manager::PARAM_ACTION => Manager::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER];
+            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER
+        ];
 
         $url = $this->getUrlForNode($baseParameters, $treeNode->getId());
 
@@ -382,7 +411,8 @@ class NodeBaseActionGenerator extends NodeActionGenerator
             'browse_repository',
             $this->translator->getTranslation('SelectFromRepository', null, $repoViewerContext),
             $url,
-            '');
+            ''
+        );
 
         $workspaceParameters = $baseParameters;
         $workspaceParameters[\Chamilo\Core\Repository\Viewer\Manager::PARAM_IN_WORKSPACES] = true;
@@ -393,7 +423,8 @@ class NodeBaseActionGenerator extends NodeActionGenerator
             'browse_workspaces',
             $this->translator->getTranslation('SelectFromWorkspaces', null, $repoViewerContext),
             $url,
-            '');
+            ''
+        );
     }
 
     /**
@@ -408,9 +439,10 @@ class NodeBaseActionGenerator extends NodeActionGenerator
         $creatorParameters = $this->baseParameters;
         $creatorParameters[Manager::PARAM_ACTION] = Manager::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
         $creatorParameters[Manager::PARAM_CHILD_ID] = $treeNode->getId();
-        $creatorParameters[\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION] = \Chamilo\Core\Repository\Viewer\Manager::ACTION_IMPORTER;
+        $creatorParameters[\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION] =
+            \Chamilo\Core\Repository\Viewer\Manager::ACTION_IMPORTER;
 
-        if (! isset($this->importTypes))
+        if (!isset($this->importTypes))
         {
             /** @var LearningPath $learningPath */
             $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
@@ -425,7 +457,8 @@ class NodeBaseActionGenerator extends NodeActionGenerator
             $creatorParameters[ContentObjectImportService::PARAM_IMPORT_TYPE] = $importType;
 
             $actionGroup->addAction(
-                new Action('import_' . $importType, $importName, $this->getUrlForNode($creatorParameters), ''));
+                new Action('import_' . $importType, $importName, $this->getUrlForNode($creatorParameters), '')
+            );
         }
 
         return $actionGroup;

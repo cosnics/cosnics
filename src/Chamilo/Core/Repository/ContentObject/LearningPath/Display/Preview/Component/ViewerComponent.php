@@ -300,4 +300,10 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     {
         return true;
     }
+
+    public function is_allowed_to_audit_learning_path()
+    {
+        return true;
+    }
+
 }

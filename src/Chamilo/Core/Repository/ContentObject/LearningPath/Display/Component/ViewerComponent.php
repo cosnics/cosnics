@@ -54,7 +54,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this->getCurrentTreeNode(),
             $this->getUser());
 
-        if (! $this->canEditCurrentTreeNode() && $trackingService->isCurrentTreeNodeBlocked(
+        if (! $this->canAuditCurrentTreeNode() && $trackingService->isCurrentTreeNodeBlocked(
             $learning_path,
             $this->getUser(),
             $this->getCurrentTreeNode()))
@@ -129,7 +129,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $html[] = $this->renderMovePanel();
         }
 
-        if ($this->canEditCurrentTreeNode() &&
+        if ($this->canAuditCurrentTreeNode() &&
             (
                 (
                     $this->getCurrentTreeNode()->getTreeNodeData() &&
@@ -182,20 +182,19 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $buttonToolbar = new ButtonToolBar();
             $this->buttonToolbar = $buttonToolbar;
 
-            if (! $this->canEditCurrentTreeNode())
-            {
-                return $this->buttonToolbar;
-            }
-
             $primaryActions = new ButtonGroup();
             $secondaryActions = new ButtonGroup();
             $tertiaryActions = new ButtonGroup();
 
-            $this->addCreatorButtons($primaryActions, $translator);
-            $this->addManageContentObjectButton($secondaryActions, $translator);
-            $this->addNodeSpecificButtons($primaryActions, $secondaryActions);
+            if($this->canEditCurrentTreeNode())
+            {
+                $this->addCreatorButtons($primaryActions, $translator);
+                $this->addManageContentObjectButton($secondaryActions, $translator);
+                $this->addNodeSpecificButtons($primaryActions, $secondaryActions);
+            }
 
-            if ($this->get_action() != self::ACTION_REPORTING)
+
+            if ($this->canViewReporting() && $this->get_action() != self::ACTION_REPORTING)
             {
                 $this->addReportingButtons($tertiaryActions, $translator);
             }
@@ -498,7 +497,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
         $icon = new FontAwesomeGlyph('pie-chart');
 
-        if (! $this->canEditCurrentTreeNode())
+        if (! $this->canViewReporting() )
         {
             $splitDropDownButton = new SplitDropdownButton($label, $icon, $url);
         }
@@ -516,7 +515,12 @@ class ViewerComponent extends BaseHtmlTreeComponent
         }
 
         $this->addActivityButton($splitDropDownButton, $translator);
-        $this->addStudentViewButton($splitDropDownButton, $translator);
+
+        if($this->canEditCurrentTreeNode())
+        {
+            $this->addStudentViewButton($splitDropDownButton, $translator);
+        }
+
         $buttonGroup->addButton($splitDropDownButton);
     }
 

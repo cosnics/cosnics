@@ -582,6 +582,12 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
+    public function is_allowed_to_audit_learning_path()
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+    }
+
+
     /**
      *
      * @param int $learning_path_item_attempt_id

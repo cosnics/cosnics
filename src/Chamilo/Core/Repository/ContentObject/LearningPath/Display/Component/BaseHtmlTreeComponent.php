@@ -195,6 +195,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             ),
             'canEditTree' =>
                 $this->canEditCurrentTreeNode() ? 'true' : 'false',
+            'canViewReporting' => $this->canViewReporting() ? 'true' : 'false',
             'inReportingMode' => $inReportingMode ? 'true' : 'false',
             'treeData' => $this->getBootstrapTreeData(),
             'translationsJSON' => json_encode($translations)
@@ -377,7 +378,8 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             $this->get_application()->is_allowed_to_view_content_object(),
             $this->canEditTreeNode(
                 $this->getCurrentTreeNode()
-            )
+            ),
+            $this->canViewReporting()
         );
 
         return json_encode($treeJSONMapper->getNodes());

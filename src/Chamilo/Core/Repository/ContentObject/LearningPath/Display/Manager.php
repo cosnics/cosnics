@@ -135,7 +135,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function is_allowed_to_edit_attempt_data()
     {
-        return $this->canEditCurrentTreeNode() &&
+        return $this->canViewReporting() && $this->canEditCurrentTreeNode() &&
             $this->get_application()->is_allowed_to_edit_learning_path_attempt_data();
     }
 
@@ -254,6 +254,61 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
 
         return $treeNode->getContentObject()->get_owner_id() == $this->getUser()->getId();
+    }
+
+    /**
+     * @return bool
+     */
+    public function canAuditLearningPath()
+    {
+        if($this->inStudentView())
+        {
+            return false;
+        }
+
+        /** @var LearningPathDisplaySupport $application */
+        $application = $this->get_application();
+
+        if ($application->is_allowed_to_audit_learning_path())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks whether or not the current user can audit the given tree node
+     * (view everything without restrictions without the possibility to change anything)
+     *
+     * @return bool
+     */
+    public function canAuditCurrentTreeNode()
+    {
+        return $this->canAuditTreeNode($this->getCurrentTreeNode());
+    }
+
+    /**
+     * Checks whether or not the current user can audit the given tree node
+     * (view everything without restrictions without the possibility to change anything)
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     *
+     * @return bool
+     */
+    public function canAuditTreeNode(TreeNode $treeNode)
+    {
+        return $this->canEditTreeNode($treeNode) || $this->canAuditLearningPath();
+    }
+
+    /**
+     * Shortcut method for viewing the reporting
+     *
+     * @return bool
+     */
+    public function canViewReporting()
+    {
+        return $this->canAuditLearningPath();
     }
 
     /**

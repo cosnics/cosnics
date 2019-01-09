@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TargetUserProgress\TargetUserProgressTable;
@@ -35,7 +36,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
     function build()
     {
-        if (! $this->canEditCurrentTreeNode())
+        if (!$this->canViewReporting())
         {
             throw new NotAllowedException();
         }
@@ -59,7 +60,8 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
             $this->getCurrentTreeNode(),
             $this->getAutomaticNumberingService(),
             $translator,
-            $panelRenderer);
+            $panelRenderer
+        );
 
         $html[] = '</div>';
         $html[] = '<div class="col-lg-4 col-md-12">';
@@ -74,7 +76,8 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
         $html[] = $panelRenderer->render(
             $translator->getTranslation('UserProgress'),
-            $this->getSearchButtonToolbarRenderer()->render() . $table->as_html());
+            $this->getSearchButtonToolbarRenderer()->render() . $table->as_html()
+        );
 
         $html[] = $this->render_footer();
 
@@ -102,8 +105,10 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
      *
      * @return string
      */
-    protected function renderInformationPanel(TreeNode $currentTreeNode,
-        AutomaticNumberingService $automaticNumberingService, Translation $translator, PanelRenderer $panelRenderer)
+    protected function renderInformationPanel(
+        TreeNode $currentTreeNode,
+        AutomaticNumberingService $automaticNumberingService, Translation $translator, PanelRenderer $panelRenderer
+    )
     {
         $parentTitles = array();
         foreach ($currentTreeNode->getParentNodes() as $parentNode)
@@ -115,10 +120,12 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
         $informationValues = [];
 
-        $informationValues[$translator->getTranslation('Title')] = $automaticNumberingService->getAutomaticNumberedTitleForTreeNode(
-            $currentTreeNode);
+        $informationValues[$translator->getTranslation('Title')] =
+            $automaticNumberingService->getAutomaticNumberedTitleForTreeNode(
+                $currentTreeNode
+            );
 
-        if (! $currentTreeNode->isRootNode())
+        if (!$currentTreeNode->isRootNode())
         {
             $informationValues[$translator->getTranslation('Parents')] = implode(' >> ', $parentTitles);
         }
@@ -141,18 +148,23 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         $labels = [
             $translator->getTranslation('TargetUsersWithFullAttempts'),
             $translator->getTranslation('TargetUsersWithPartialAttempts'),
-            $translator->getTranslation('TargetUsersWithoutAttempts')];
+            $translator->getTranslation('TargetUsersWithoutAttempts')
+        ];
 
         $data = [
             $trackingService->countTargetUsersWithFullLearningPathAttempts(
                 $this->learningPath,
-                $this->getCurrentTreeNode()),
+                $this->getCurrentTreeNode()
+            ),
             $trackingService->countTargetUsersWithPartialLearningPathAttempts(
                 $this->learningPath,
-                $this->getCurrentTreeNode()),
+                $this->getCurrentTreeNode()
+            ),
             $trackingService->countTargetUsersWithoutLearningPathAttempts(
                 $this->learningPath,
-                $this->getCurrentTreeNode())];
+                $this->getCurrentTreeNode()
+            )
+        ];
 
         $panelHtml = array();
         $panelHtml[] = '<canvas id="myChart" height="135" width="270" style="margin: auto;"></canvas>';
@@ -188,7 +200,9 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         $panelHtml[] = '});';
         $panelHtml[] = '</script>';
 
-        return $panelRenderer->render($translator->getTranslation('OverviewUserProgress'), implode(PHP_EOL, $panelHtml));
+        return $panelRenderer->render(
+            $translator->getTranslation('OverviewUserProgress'), implode(PHP_EOL, $panelHtml)
+        );
     }
 
     /**
@@ -197,7 +211,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
      */
     protected function getSearchButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
 
@@ -208,7 +222,11 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
                     $this->get_url(
                         [
                             self::PARAM_ACTION => self::ACTION_EXPORT_REPORTING,
-                            ReportingExporterComponent::PARAM_EXPORT => ReportingExporterComponent::EXPORT_USER_PROGRESS])));
+                            ReportingExporterComponent::PARAM_EXPORT => ReportingExporterComponent::EXPORT_USER_PROGRESS
+                        ]
+                    )
+                )
+            );
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
@@ -222,15 +240,21 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
         $buttonGroup = new ButtonGroup();
 
-        $translationVariable = $this->getCurrentTreeNode()->isRootNode() ? 'MailNotCompletedUsersRoot' : 'MailNotCompletedUsers';
+        $translationVariable =
+            $this->getCurrentTreeNode()->isRootNode() ? 'MailNotCompletedUsersRoot' : 'MailNotCompletedUsers';
 
-        $buttonGroup->addButton(
-            new Button(
-                $translator->getTranslation($translationVariable),
-                new FontAwesomeGlyph('envelope'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_MAIL_USERS_WITH_INCOMPLETE_PROGRESS)),
-                Button::DISPLAY_ICON_AND_LABEL,
-                true));
+        if ($this->canEditCurrentTreeNode())
+        {
+            $buttonGroup->addButton(
+                new Button(
+                    $translator->getTranslation($translationVariable),
+                    new FontAwesomeGlyph('envelope'),
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_MAIL_USERS_WITH_INCOMPLETE_PROGRESS)),
+                    Button::DISPLAY_ICON_AND_LABEL,
+                    true
+                )
+            );
+        }
 
         $toolbar->addItem($buttonGroup);
 
@@ -250,7 +274,9 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
             array(
                 new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
                 new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL)));
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL)
+            )
+        );
     }
 
     /**
