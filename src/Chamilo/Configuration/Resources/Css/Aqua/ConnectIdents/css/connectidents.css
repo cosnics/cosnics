@@ -1,0 +1,103 @@
+@font-face {
+  font-family: 'connectidents';
+  src: url('../font/connectidents.eot?54559438');
+  src: url('../font/connectidents.eot?54559438#iefix') format('embedded-opentype'),
+       url('../font/connectidents.woff2?54559438') format('woff2'),
+       url('../font/connectidents.woff?54559438') format('woff'),
+       url('../font/connectidents.ttf?54559438') format('truetype'),
+       url('../font/connectidents.svg?54559438#connectidents') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'connectidents';
+    src: url('../font/connectidents.svg?54559438#connectidents') format('svg');
+  }
+}
+*/
+ 
+ [class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "connectidents";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+ 
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+ 
+.icon-announcement:before { content: '\e700'; } /* '' */
+.icon-blog:before { content: '\e701'; } /* '' */
+.icon-course-description:before { content: '\e702'; } /* '' */
+.icon-course-group:before { content: '\e703'; } /* '' */
+.icon-document:before { content: '\e704'; } /* '' */
+.icon-ephorus:before { content: '\e705'; } /* '' */
+.icon-forum:before { content: '\e706'; } /* '' */
+.icon-chat:before { content: '\e707'; } /* '' */
+.icon-user:before { content: '\e708'; } /* '' */
+.icon-calendar:before { content: '\e709'; } /* '' */
+.icon-link:before { content: '\e70a'; } /* '' */
+.icon-location:before { content: '\e70b'; } /* '' */
+.icon-note:before { content: '\e70c'; } /* '' */
+.icon-assessment:before { content: '\e70d'; } /* '' */
+.icon-assignment:before { content: '\e70e'; } /* '' */
+.icon-streaming-video:before { content: '\e70f'; } /* '' */
+.icon-wiki:before { content: '\e710'; } /* '' */
+.icon-glossary:before { content: '\e711'; } /* '' */
+.icon-peer-assessment:before { content: '\e712'; } /* '' */
+.icon-app-weblcms-tool-search:before { content: '\e713'; } /* '' */
+.icon-course-copier:before { content: '\e714'; } /* '' */
+.icon-course-truncater:before { content: '\e715'; } /* '' */
+.icon-course-settings:before { content: '\e717'; } /* '' */
+.icon-rights:before { content: '\e718'; } /* '' */
+.icon-reporting:before { content: '\e719'; } /* '' */
+.icon-course-sections:before { content: '\e71a'; } /* '' */
+.icon-learning-path:before { content: '\e71b'; } /* '' */
+.icon-home:before { content: '\e71e'; } /* '' */
+.icon-repository:before { content: '\e71f'; } /* '' */
+.icon-workspaces:before { content: '\e720'; } /* '' */
+.icon-admin:before { content: '\e721'; } /* '' */
+.icon-group:before { content: '\e722'; } /* '' */
+.icon-help:before { content: '\e723'; } /* '' */
+.icon-install:before { content: '\e72a'; } /* '' */
+.icon-microsoft-teams:before { content: '\e800'; } /* '' */
+.icon-font-bamaflex:before { content: '\e801'; } /* '' */
+.icon-rss_icon:before { content: '\e802'; } /* '' */
+.icon-portfolio:before { content: '\e81c'; } /* '' */
+.icon-weblcms:before { content: '\e81d'; } /* '' */
+.icon-course-deleter:before { content: '\e823'; } /* '' */
+.icon-tracking:before { content: '\e825'; } /* '' */
+.icon-cache:before { content: '\e826'; } /* '' */
+.icon-cas-storage:before { content: '\e829'; } /* '' */
+.icon-metadata:before { content: '\e82a'; } /* '' */
+.icon-menu:before { content: '\e82c'; } /* '' */
+.icon-lynx:before { content: '\e82d'; } /* '' */
