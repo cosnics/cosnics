@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Group\Service;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -17,14 +18,23 @@ class GroupMembershipService
     /**
      * @var \Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository
      */
-    private $groupMembershipRepository;
+    protected $groupMembershipRepository;
+
+    /**
+     * @var \Chamilo\Core\Group\Service\GroupEventNotifier
+     */
+    protected $groupEventNotifier;
 
     /**
      * @param \Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository $groupMembershipRepository
+     * @param \Chamilo\Core\Group\Service\GroupEventNotifier $groupEventNotifier
      */
-    public function __construct(GroupMembershipRepository $groupMembershipRepository)
+    public function __construct(
+        GroupMembershipRepository $groupMembershipRepository, GroupEventNotifier $groupEventNotifier
+    )
     {
         $this->groupMembershipRepository = $groupMembershipRepository;
+        $this->groupEventNotifier = $groupEventNotifier;
     }
 
     /**
@@ -94,6 +104,31 @@ class GroupMembershipService
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Core\Group\Storage\DataClass\GroupRelUser|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function getGroupUserRelationByGroupAndUser(Group $group, User $user)
+    {
+        return $this->getGroupMembershipRepository()->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
+    }
+
+    /**
+     * @param string $groupCode
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Core\Group\Storage\DataClass\GroupRelUser|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function getGroupUserRelationByGroupCodeAndUser(string $groupCode, User $user)
+    {
+        return $this->getGroupMembershipRepository()->findGroupRelUserByGroupCodeAndUserId($groupCode, $user->getId());
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Core\Group\Storage\DataClass\GroupRelUser|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @throws \Exception
      */
     public function subscribeUserToGroup(Group $group, User $user)
     {
@@ -106,23 +141,67 @@ class GroupMembershipService
             $groupRelation->set_user_id($user->getId());
             $groupRelation->set_group_id($group->getId());
 
-            if (!$this->getGroupMembershipRepository()->create($groupRelation))
+            if (!$this->getGroupMembershipRepository()->createGroupUserRelation($groupRelation))
             {
                 throw new \RuntimeException(
                     sprintf('Could not subscribe the user %s to the group %s', $user->getId(), $group->getId())
                 );
             }
+
+            $this->groupEventNotifier->afterSubscribe($group, $user);
         }
+
+        return $groupRelation;
     }
 
     /**
-     * @param integer[] $groupsIdentifiers
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function unsubscribeUserFromGroup(Group $group, User $user)
+    {
+        $groupRelation =
+            $this->getGroupMembershipRepository()->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
+
+        if (!$groupRelation instanceof GroupRelUser)
+        {
+            throw new \RuntimeException(
+                sprintf('Could not unsubscribe the user %s from the group %s because there is no active subscription', $user->getId(), $group->getId())
+            );
+        }
+
+        if(!$this->getGroupMembershipRepository()->deleteGroupUserRelation($groupRelation))
+        {
+            throw new \RuntimeException(
+                sprintf('Could not unsubscribe the user %s to the group %s', $user->getId(), $group->getId())
+            );
+        }
+
+        $this->groupEventNotifier->afterUnsubscribe($group, $user);
+    }
+
+    /**
+     * @param integer[] $groupIdentifiers
      *
      * @return boolean
      */
-    public function unsubscribeUsersFromGroupIdentifiers(array $groupsIdentifiers)
+    public function unsubscribeUsersFromGroupIdentifiers(array $groupIdentifiers)
     {
-        return $this->getGroupMembershipRepository()->unsubscribeUsersFromGroupIdentifiers($groupsIdentifiers);
+        $success = $this->getGroupMembershipRepository()->unsubscribeUsersFromGroupIdentifiers($groupIdentifiers);
+        if(!$success)
+        {
+            return false;
+        }
+
+        foreach($groupIdentifiers as $groupIdentifier)
+        {
+            $group = new Group();
+            $group->setId($groupIdentifier);
+
+            $this->groupEventNotifier->afterEmptyGroup($group);
+        }
+
+        return true;
     }
 
     /**

@@ -114,7 +114,7 @@ class ParametersProcessor
 
         if ($dataClassProperties instanceof DataClassProperties)
         {
-            $dataClassPropertyVariable = $dataClassProperties->get();
+            $dataClassPropertyVariable = $dataClassProperties->get()[0];
         }
         else
         {

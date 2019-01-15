@@ -194,4 +194,25 @@ class GroupMembershipRepository
 
         return $this->getDataClassRepository()->deletes(GroupRelUser::class, $condition);
     }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\GroupRelUser $groupUserRelation
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function createGroupUserRelation(GroupRelUser $groupUserRelation)
+    {
+        return $this->dataClassRepository->create($groupUserRelation);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\GroupRelUser $groupUserRelation
+     *
+     * @return bool
+     */
+    public function deleteGroupUserRelation(GroupRelUser $groupUserRelation)
+    {
+        return $this->dataClassRepository->delete($groupUserRelation);
+    }
 }

@@ -81,5 +81,9 @@
         <service id="Chamilo\Application\Weblcms\Service\CourseUserCategoryService" autowire="true"/>
         <service id="Chamilo\Application\Weblcms\Repository\CourseUserCategoryRepository" autowire="true"/>
 
+        <service id="Chamilo\Application\Weblcms\Service\GroupEventListener\GroupEventListener" autowire="true">
+            <tag name="Chamilo\Core\Group\Service\GroupEventListenerInterface" />
+        </service>
+
     </services>
 </container>
