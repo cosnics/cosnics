@@ -138,6 +138,12 @@ class FileForm extends ContentObjectForm
         else
         {
             $fileUploadData = json_decode($this->exportValue('file_upload_data'));
+
+            if(!$fileUploadData || empty($fileUploadData->temporaryFileName))
+            {
+                throw new \RuntimeException('The given uploaded file was empty and therefor the file could not be created');
+            }
+
             $temporaryFilePath = Path::getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
                  $fileUploadData->temporaryFileName;
             
@@ -174,6 +180,11 @@ class FileForm extends ContentObjectForm
             
             if ($fileUploadData)
             {
+                if(empty($fileUploadData->temporaryFileName))
+                {
+                    throw new \RuntimeException('The given uploaded file was empty and therefor the file could not be created');
+                }
+
                 $temporaryFilePath = Path::getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
                      $fileUploadData->temporaryFileName;
                 
