@@ -53,6 +53,10 @@ class GroupsTreeTraverser
      */
     protected $subGroupIdentifiers = array();
 
+    /**
+     * @var integer[][]
+     */
+    protected $parentGroupIdentifiers = array();
 
     /**
      * @var integer[]
@@ -201,6 +205,31 @@ class GroupsTreeTraverser
     public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(int $userIdentifier)
     {
         return $this->groupRepository->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param bool $includeSelf
+     *
+     * @return integer[]
+     */
+    public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true)
+    {
+        $cacheKey = md5(serialize([$group->getId(), $includeSelf]));
+        if(!array_key_exists($cacheKey, $this->parentGroupIdentifiers))
+        {
+            $parentGroupIdentifiers =
+                $this->groupRepository->findParentGroupIdentifiersForGroup($group, $includeSelf);
+
+            if (!is_array($parentGroupIdentifiers))
+            {
+                $parentGroupIdentifiers = array();
+            }
+
+            $this->parentGroupIdentifiers[$cacheKey] = $parentGroupIdentifiers;
+        }
+
+        return $this->parentGroupIdentifiers[$cacheKey];
     }
 
     /**

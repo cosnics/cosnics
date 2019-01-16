@@ -281,9 +281,21 @@ class GroupRepository
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param bool $includeSelf
+     *
+     * @return string[]|integer[]
+     * @throws \Exception
+     */
+    public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true)
+    {
+        return $this->getNestedSetDataClassRepository()->findAncestorIdentifiers($group, $includeSelf);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param boolean $recursiveSubgroups
      *
-     * @return integer[]
+     * @return integer[]|string[]
      * @throws \Exception
      * @todo This could be generalized to the NestedSetDataClassRepository
      */

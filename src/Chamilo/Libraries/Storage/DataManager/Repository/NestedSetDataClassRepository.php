@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -80,7 +81,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
      * @param int $nestedSetIdentifier
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet
+     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet|DataClass
      */
     public function findRelatedNestedSetByIdentifier(NestedSet $nestedSet, int $nestedSetIdentifier)
     {
@@ -88,7 +89,7 @@ class NestedSetDataClassRepository extends DataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|DataClass $nestedSet
      * @param int $previousNestedSetIdentifier
      *
      * @return bool
@@ -149,7 +150,7 @@ class NestedSetDataClassRepository extends DataClassRepository
         // Use a transaction to guarantee this.
 
         return $this->transactional(
-            function ($c) use ($nestedSet, $insertAfter) { // Correct the left and right values wherever necessary.
+            function () use ($nestedSet, $insertAfter) { // Correct the left and right values wherever necessary.
                 if (!$this->preInsert($nestedSet, $insertAfter, 1))
                 {
                     return false;
@@ -167,7 +168,7 @@ class NestedSetDataClassRepository extends DataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|DataClass $nestedSet
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]
@@ -180,7 +181,7 @@ class NestedSetDataClassRepository extends DataClassRepository
         // consistently. Use a transaction to guarantee this.
 
         return $this->transactional(
-            function ($c) use ($nestedSet, $condition) {
+            function () use ($nestedSet, $condition) {
                 // Since we want to hold on to this information until after all nodes have been deleted
                 // We have to copy the content of this result set into a temporary array
 
@@ -212,7 +213,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @param boolean $includeSelf
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]
+     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findAncestors(NestedSet $nestedSet, bool $includeSelf = true, Condition $condition = null)
     {
@@ -226,10 +227,29 @@ class NestedSetDataClassRepository extends DataClassRepository
 
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
+     * @param bool $includeSelf
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return string[]|integer[]
+     *
+     * @throws \Exception
+     */
+    public function findAncestorIdentifiers(NestedSet $nestedSet, bool $includeSelf = true, Condition $condition = null)
+    {
+        return $this->distinct(
+            get_class($nestedSet), new DataClassDistinctParameters(
+                $this->getAncestorsCondition($nestedSet, $includeSelf, $condition),
+                new DataClassProperties(array(new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_ID)))
+            )
+        );
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
      * @param boolean $recursive
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]
+     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @see NestedSet::get_descendants()
      * @see NestedSet::get_children()
      */
@@ -247,14 +267,16 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @param boolean $includeSelf
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]
+     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @see NestedSet::get_siblings()
      */
     public function findSiblings(NestedSet $nestedSet, bool $includeSelf = true, Condition $condition = null)
     {
         return $this->retrieves(
-            get_class($nestedSet), $this->getSiblingsCondition($nestedSet, $includeSelf, $condition), null, null,
-            $this->getPreOrderBy()
+            get_class($nestedSet), new DataClassRetrievesParameters(
+                $this->getSiblingsCondition($nestedSet, $includeSelf, $condition), null, null,
+                $this->getPreOrderBy($nestedSet)
+            )
         );
     }
 
@@ -404,7 +426,7 @@ class NestedSetDataClassRepository extends DataClassRepository
             {
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(get_class($nestedSet), $subTreePropertyName),
-                    new StaticConditionVariable($nestedSet->get_default_property($subTreePropertyName))
+                    new StaticConditionVariable($nestedSet->getDefaultProperty($subTreePropertyName))
                 );
             }
 
@@ -419,7 +441,7 @@ class NestedSetDataClassRepository extends DataClassRepository
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet
+     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet|DataClass
      * @see NestedSet::get_parent();
      */
     public function getParent(NestedSet $nestedSet)
@@ -596,7 +618,7 @@ class NestedSetDataClassRepository extends DataClassRepository
         // Use a transaction to guarantee this.
 
         return $this->transactional(
-            function ($c) use ($nestedSet, $insertAfter, $condition
+            function () use ($nestedSet, $insertAfter, $condition
             ) { // Step 0: Compute the auxiliary values used by this
                 // algorithm
                 // This is the initial position of the node to be moved

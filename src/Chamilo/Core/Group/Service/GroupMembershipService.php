@@ -26,15 +26,23 @@ class GroupMembershipService
     protected $groupEventNotifier;
 
     /**
+     * @var \Chamilo\Core\Group\Service\GroupsTreeTraverser
+     */
+    protected $groupsTreeTraverser;
+
+    /**
      * @param \Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository $groupMembershipRepository
      * @param \Chamilo\Core\Group\Service\GroupEventNotifier $groupEventNotifier
+     * @param \Chamilo\Core\Group\Service\GroupsTreeTraverser $groupsTreeTraverser
      */
     public function __construct(
-        GroupMembershipRepository $groupMembershipRepository, GroupEventNotifier $groupEventNotifier
+        GroupMembershipRepository $groupMembershipRepository, GroupEventNotifier $groupEventNotifier,
+        GroupsTreeTraverser $groupsTreeTraverser
     )
     {
         $this->groupMembershipRepository = $groupMembershipRepository;
         $this->groupEventNotifier = $groupEventNotifier;
+        $this->groupsTreeTraverser = $groupsTreeTraverser;
     }
 
     /**
@@ -166,11 +174,14 @@ class GroupMembershipService
         if (!$groupRelation instanceof GroupRelUser)
         {
             throw new \RuntimeException(
-                sprintf('Could not unsubscribe the user %s from the group %s because there is no active subscription', $user->getId(), $group->getId())
+                sprintf(
+                    'Could not unsubscribe the user %s from the group %s because there is no active subscription',
+                    $user->getId(), $group->getId()
+                )
             );
         }
 
-        if(!$this->getGroupMembershipRepository()->deleteGroupUserRelation($groupRelation))
+        if (!$this->getGroupMembershipRepository()->deleteGroupUserRelation($groupRelation))
         {
             throw new \RuntimeException(
                 sprintf('Could not unsubscribe the user %s to the group %s', $user->getId(), $group->getId())
@@ -181,43 +192,35 @@ class GroupMembershipService
     }
 
     /**
+     * Shortcut method to remove the users from a group by the group identifiers, only directly after removal of the
+     * groups because no notifiers are called. This is due to the fact that a group removal already triggers an event
+     * and therefore this cleanup action of the users after a delete should not trigger a new event.
+     *
      * @param integer[] $groupIdentifiers
      *
      * @return boolean
+     * @throws \Exception
      */
-    public function unsubscribeUsersFromGroupIdentifiers(array $groupIdentifiers)
+    public function removeUsersFromGroupsByIdsAfterRemoval(array $groupIdentifiers)
     {
-        $success = $this->getGroupMembershipRepository()->unsubscribeUsersFromGroupIdentifiers($groupIdentifiers);
-        if(!$success)
-        {
-            return false;
-        }
-
-        foreach($groupIdentifiers as $groupIdentifier)
-        {
-            $group = new Group();
-            $group->setId($groupIdentifier);
-
-            $this->groupEventNotifier->afterEmptyGroup($group);
-        }
-
-        return true;
+        return $this->groupMembershipRepository->unsubscribeUsersFromGroupIdentifiers($groupIdentifiers);
     }
 
     /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group[] $groups
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      *
-     * @return boolean
+     * @throws \Exception
      */
-    public function unsubscribeUsersFromGroups(DataClassIterator $groups)
+    public function emptyGroup(Group $group)
     {
-        $groupsIdentifiers = array();
+        $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group, false, false);
 
-        foreach ($groups as $group)
+        $success = $this->getGroupMembershipRepository()->emptyGroup($group);
+        if (!$success)
         {
-            $groupsIdentifiers[] = $group->getId();
+            throw new \RuntimeException('Could not empty the group with id ' . $group->getId());
         }
 
-        return $this->unsubscribeUsersFromGroupIdentifiers($groupsIdentifiers);
+        $this->groupEventNotifier->afterEmptyGroup($group, $impactedUserIds);
     }
 }

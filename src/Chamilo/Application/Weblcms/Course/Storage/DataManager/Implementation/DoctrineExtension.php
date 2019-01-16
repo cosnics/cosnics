@@ -56,19 +56,20 @@ class DoctrineExtension
      * Implemented Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Retrieves all course users of a given course with status and subscription type
-     * 
+     *
      * @param int $course_id
      * @param Condition $condition
      * @param int $offset
      * @param int $count
      * @param ObjectTableOrder[] $order_property
      *
-     * @throws \libraries\storage\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      *
      * @return RecordResultSet
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function retrieve_all_course_users($course_id, $condition = null, $offset = null, $count = null, $order_property = null)
     {

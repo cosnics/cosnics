@@ -60,6 +60,22 @@ interface CourseRepositoryInterface
     public function findCoursesByCourseTypeAndSubscribedCourseIds(CourseType $courseType, array $subscribedCourseIds = []);
 
     /**
+     * @param array $groupIdentifiers
+     *
+     * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course[]
+     */
+    public function findCoursesWhereAtLeastOneGroupIsDirectlySubscribed(array $groupIdentifiers = array());
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param int $entityType
+     * @param array $entityIdentifiers
+     *
+     * @return int
+     */
+    public function countCourseEntityRelationsByCourseAndEntityTypeAndIdentifiers(Course $course, int $entityType, array $entityIdentifiers = array());
+
+    /**
      * Returns Courses with a given set of parameters
      * 
      * @param DataClassRetrievesParameters $retrievesParameters
@@ -164,4 +180,11 @@ interface CourseRepositoryInterface
      * @return int[]
      */
     public function findSubscribedCourseIdsForUser(User $user);
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\RecordResultSet
+     */
+    public function findAllUsersFromCourse(Course $course);
 }

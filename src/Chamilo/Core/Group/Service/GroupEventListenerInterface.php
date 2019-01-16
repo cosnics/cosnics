@@ -20,8 +20,10 @@ interface GroupEventListenerInterface
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param int[] $subGroupIds
+     * @param int[] $impactedUserIds
      */
-    public function afterDelete(Group $group);
+    public function afterDelete(Group $group, array $subGroupIds = [], array $impactedUserIds = []);
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
@@ -44,6 +46,7 @@ interface GroupEventListenerInterface
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param int[] $impactedUserIds
      */
-    public function afterEmptyGroup(Group $group);
+    public function afterEmptyGroup(Group $group, array $impactedUserIds = []);
 }

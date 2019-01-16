@@ -134,6 +134,9 @@ class GroupService
      */
     public function deleteGroup(Group $group)
     {
+        $subGroupIds = [];
+        $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group, true, true);
+
         $deletedGroups = $this->getGroupRepository()->deleteGroup($group);
 
         if (!$deletedGroups instanceof DataClassIterator)
@@ -141,12 +144,17 @@ class GroupService
             return false;
         }
 
-        if (!$this->getGroupMembershipService()->unsubscribeUsersFromGroups($deletedGroups))
+        foreach($deletedGroups as $deletedGroup)
+        {
+            $subGroupIds[] = $deletedGroup->getId();
+        }
+
+        if (!$this->getGroupMembershipService()->removeUsersFromGroupsByIdsAfterRemoval($subGroupIds))
         {
             return false;
         }
 
-        $this->groupEventNotifier->afterDelete($group);
+        $this->groupEventNotifier->afterDelete($group, $subGroupIds, $impactedUserIds);
 
         return true;
     }

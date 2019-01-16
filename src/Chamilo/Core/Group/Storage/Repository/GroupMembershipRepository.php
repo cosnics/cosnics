@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Group\Storage\Repository;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -190,6 +191,21 @@ class GroupMembershipRepository
     {
         $condition = new InCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID), $groupsIdentifiers
+        );
+
+        return $this->getDataClassRepository()->deletes(GroupRelUser::class, $condition);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     *
+     * @return boolean
+     */
+    public function emptyGroup(Group $group)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($group->getId())
         );
 
         return $this->getDataClassRepository()->deletes(GroupRelUser::class, $condition);

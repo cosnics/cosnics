@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Service\GroupEventListener;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -12,6 +13,46 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class GroupEventListener implements \Chamilo\Core\Group\Service\GroupEventListenerInterface
 {
+    /**
+     * @var \Chamilo\Core\Group\Service\GroupsTreeTraverser
+     */
+    protected $groupsTreeTraverser;
+
+    /**
+     * @var \Chamilo\Application\Weblcms\Service\CourseService
+     */
+    protected $courseService;
+
+    /**
+     * @var \Chamilo\Application\Weblcms\Service\RightsService
+     */
+    protected $rightsService;
+
+    /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService
+     */
+    protected $courseGroupService;
+
+    /**
+     * GroupEventListener constructor.
+     *
+     * @param \Chamilo\Core\Group\Service\GroupsTreeTraverser $groupsTreeTraverser
+     * @param \Chamilo\Application\Weblcms\Service\CourseService $courseService
+     * @param \Chamilo\Application\Weblcms\Service\RightsService $rightsService
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService $courseGroupService
+     */
+    public function __construct(
+        \Chamilo\Core\Group\Service\GroupsTreeTraverser $groupsTreeTraverser,
+        \Chamilo\Application\Weblcms\Service\CourseService $courseService,
+        \Chamilo\Application\Weblcms\Service\RightsService $rightsService,
+        \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService $courseGroupService
+    )
+    {
+        $this->groupsTreeTraverser = $groupsTreeTraverser;
+        $this->courseService = $courseService;
+        $this->rightsService = $rightsService;
+        $this->courseGroupService = $courseGroupService;
+    }
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
@@ -22,34 +63,53 @@ class GroupEventListener implements \Chamilo\Core\Group\Service\GroupEventListen
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param int[] $subGroupIds
+     * @param int[] $impactedUserIds
+     *
+     * @throws \Exception
      */
-    public function afterDelete(Group $group)
+    public function afterDelete(Group $group, array $subGroupIds = [], array $impactedUserIds = [])
     {
-        /**
-         * Retrieve all parent groups of the group
-         * Retrieve all (sub)groups that were impacted
-         * Retrieve all users from all (sub)groups that were impacted
-         * Retrieve all courses that were impacted (that have at least one of the subgroups or parent groups subscribed)
-         *
-         * For each course, determine the new course users, depending on the remaining subscriptions
-         * Make a difference with all the users that are scheduled for deletion. Every user that is not subscribed anymore should be deleted
-         *
-         * Loop over every user that is not subscribed anymore
-         * Remove them from the rights
-         * Remove them from the course groups (with the course groups api so changes to extensions are pulled through)
-         *
-         * Remove the (sub)groups that were removed from the rights
-         */
+        $parentGroupIds = $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($group, true);
+        $allGroupIds = array_merge($parentGroupIds, $subGroupIds);
+
+        $deleteGroupIds = $subGroupIds;
+        $deleteGroupIds[] = $group->getId();
+
+        $this->handleCoursesForRemovalOfUsers($allGroupIds, $impactedUserIds, $deleteGroupIds);
     }
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $oldParentGroup
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $newParentGroup
+     *
+     * @throws \Exception
      */
     public function afterMove(Group $group, Group $oldParentGroup, Group $newParentGroup)
     {
-        // TODO: Implement afterMove() method.
+        $oldParentGroupIds = $this->groupsTreeTraverser->findParentGroupsForGroup($oldParentGroup, true);
+        $subGroupIds = $this->groupsTreeTraverser->findSubGroupIdentifiersForGroup($group, true);
+
+        $deleteGroupIds = $subGroupIds;
+        $deleteGroupIds[] = $group->getId();
+
+        $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group, true, true);
+        $newParentGroupIds = $this->groupsTreeTraverser->findParentGroupsForGroup($newParentGroup, true);
+
+        $courses = $this->courseService->getCoursesWhereAtLeastOneGroupIsDirectlySubscribed($oldParentGroupIds);
+        foreach ($courses as $course)
+        {
+            if($this->courseService->isAtLeastOneGroupDirectlySubscribed($course, $newParentGroupIds))
+            {
+                continue;
+            }
+
+            $courseUsersIds = $this->courseService->getAllUserIdsFromCourse($course);
+            $actualDeletedCourseUserIds = array_diff($impactedUserIds, $courseUsersIds);
+
+            $this->deleteUsersAndGroupsFromCourse($course, $actualDeletedCourseUserIds, $deleteGroupIds);
+        }
     }
 
     /**
@@ -63,29 +123,72 @@ class GroupEventListener implements \Chamilo\Core\Group\Service\GroupEventListen
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Exception
      */
     public function afterUnsubscribe(Group $group, User $user)
     {
-        /**
-         * Retrieve all parent groups of the group
-         * Retrieve all courses that were impacted (that have at least one of parent groups (or the current group)
-         *
-         * For each course, determine the new course users, depending on the remaining subscriptions
-         * Check if the user is still subscribed in the course
-         *
-         * If the user is not subscribed anymore:
-         *
-         * Remove them from the rights
-         * Remove them from the course groups (with the course groups api so changes to extensions are pulled through)
-         */
+        $parentGroupIds = $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($group, true);
+        $this->handleCoursesForRemovalOfUsers($parentGroupIds, [$user->getId()]);
     }
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param int[] $impactedUserIds
+     *
+     * @throws \Exception
      */
-    public function afterEmptyGroup(Group $group)
+    public function afterEmptyGroup(Group $group, array $impactedUserIds = [])
     {
-        // TODO: Implement afterEmptyGroup() method.
+        $parentGroupIds = $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($group, true);
+
+        $this->handleCoursesForRemovalOfUsers($parentGroupIds, $impactedUserIds);
+    }
+
+    /**
+     * Handles the courses for the impacted users that where scheduled for removal
+     *
+     * @param int[] $allGroupIds (includes every parent and every child group)
+     * @param int[] $impactedUserIds
+     * @param int[] $deletedGroupIds
+     *
+     * @throws \Exception
+     */
+    protected function handleCoursesForRemovalOfUsers(
+        array $allGroupIds = [], array $impactedUserIds = [], array $deletedGroupIds = []
+    )
+    {
+        $courses = $this->courseService->getCoursesWhereAtLeastOneGroupIsDirectlySubscribed($allGroupIds);
+        foreach ($courses as $course)
+        {
+            $courseUsersIds = $this->courseService->getAllUserIdsFromCourse($course);
+            $actualDeletedCourseUserIds = array_diff($impactedUserIds, $courseUsersIds);
+
+            $this->deleteUsersAndGroupsFromCourse($course, $actualDeletedCourseUserIds, $deletedGroupIds);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param array $removedUserIds
+     * @param array $removedGroupIds
+     *
+     * @throws \Exception
+     */
+    protected function deleteUsersAndGroupsFromCourse(
+        Course $course, array $removedUserIds = [], array $removedGroupIds = []
+    )
+    {
+        if (!empty($removedUserIds))
+        {
+            $this->rightsService->removeUsersFromRightsByIds($course, $removedUserIds);
+            $this->courseGroupService->removeUsersFromAllCourseGroupsByIds($course, $removedUserIds);
+        }
+
+        if (!empty($removedGroupIds))
+        {
+            $this->rightsService->removeGroupsFromRightsByIds($course, $removedGroupIds);
+        }
     }
 }
 

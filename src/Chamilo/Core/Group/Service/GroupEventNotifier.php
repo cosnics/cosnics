@@ -47,11 +47,24 @@ class GroupEventNotifier implements GroupEventListenerInterface
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      */
-    public function afterDelete(Group $group)
+    public function beforeDelete(Group $group)
     {
         foreach($this->groupEventListeners as $groupEventListener)
         {
-            $groupEventListener->afterDelete($group);
+            $groupEventListener->beforeDelete($group);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param int[] $subGroupIds
+     * @param int[] $impactedUserIds
+     */
+    public function afterDelete(Group $group, array $subGroupIds = [], array $impactedUserIds = [])
+    {
+        foreach($this->groupEventListeners as $groupEventListener)
+        {
+            $groupEventListener->afterDelete($group, $subGroupIds, $impactedUserIds);
         }
     }
 
@@ -94,12 +107,13 @@ class GroupEventNotifier implements GroupEventListenerInterface
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param int[] $impactedUserIds
      */
-    public function afterEmptyGroup(Group $group)
+    public function afterEmptyGroup(Group $group, array $impactedUserIds = [])
     {
         foreach($this->groupEventListeners as $groupEventListener)
         {
-            $groupEventListener->afterEmptyGroup($group);
+            $groupEventListener->afterEmptyGroup($group, $impactedUserIds);
         }
     }
 }
