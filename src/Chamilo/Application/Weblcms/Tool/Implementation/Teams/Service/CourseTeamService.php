@@ -1,11 +1,13 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseTeamRelation;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\Repository\CourseTeamRelationRepository;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\CourseTeamRelation;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\CourseTeamRelationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Microsoft\Graph\Model\Team;
 
@@ -65,10 +67,15 @@ class CourseTeamService
     /**
      * @param Course $course
      * @return Team
+     * @throws ObjectNotExistException
      */
     public function getTeam(Course $course): Team
     {
         $courseTeamRelation = $this->courseTeamRelationRepository->findByCourse($course);
+
+        if(!$courseTeamRelation instanceof CourseTeamRelation) {
+            throw new ObjectNotExistException(Translation::get('CourseTeamRelation'), $course->getId());
+        }
 
         return $this->teamService->getTeam($courseTeamRelation->getTeamId());
     }

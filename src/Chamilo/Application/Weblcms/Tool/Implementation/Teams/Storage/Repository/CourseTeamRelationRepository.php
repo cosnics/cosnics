@@ -1,9 +1,9 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\Repository;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseTeamRelation;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\CourseTeamRelation;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -18,15 +18,21 @@ class CourseTeamRelationRepository extends CommonDataClassRepository
 
     /**
      * @param Course $course
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass | CourseTeamRelation
+     * @return CourseTeamRelation
      */
-    public function findByCourse(Course $course):\Chamilo\Libraries\Storage\DataClass\DataClass
+    public function findByCourse(Course $course): ?CourseTeamRelation
     {
         $condition = $this->getConditionByCourse($course);
 
-        return $this->dataClassRepository->retrieve(
+        $courseTeamRelation = $this->dataClassRepository->retrieve(
             CourseTeamRelation::class, new DataClassRetrieveParameters($condition)
         );
+
+        if(!$courseTeamRelation instanceof CourseTeamRelation) {
+            return null;
+        }
+
+        return $courseTeamRelation;
     }
 
     /**
@@ -39,7 +45,7 @@ class CourseTeamRelationRepository extends CommonDataClassRepository
             new PropertyConditionVariable(
                 Course::class, Course::PROPERTY_ID
             ),
-            new StaticConditionVariable($course->getId())
+            new StaticConditionVariable((string) $course->getId())
         );
     }
 }

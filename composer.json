@@ -14,7 +14,7 @@
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"require": {
-		"php": ">=7.0.0",
+		"php": ">=7.1.0",
 		"chamilo/pear-libraries": "*",
 		"doctrine/cache": "1.7.1",
 		"doctrine/dbal": "2.7.1",
@@ -48,7 +48,7 @@
 		"composer/composer": "*@dev",
 		"fabpot/goutte": "^3",
 		"nelmio/alice": "^3.0@RC",
-		"phpunit/phpunit": "7.2.6"
+		"phpunit/phpunit": "7.2.6",
 	},
 	"repositories": [
 		{

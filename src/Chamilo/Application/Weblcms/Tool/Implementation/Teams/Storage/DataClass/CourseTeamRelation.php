@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 

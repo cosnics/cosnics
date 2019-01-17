@@ -61,15 +61,16 @@ class TeamService
 
     /**
      * @param string $groupId
-     * @return \Microsoft\Graph\Model\Entity | Team
+     * @return Team
      */
-    public function getTeam(string $groupId): \Microsoft\Graph\Model\Entity
+    public function getTeam(string $groupId): Team
     {
-        try {
-            return $this->teamRepository->getTeam($groupId);
-        } catch (\Exception $exception) {
+        $team = $this->teamRepository->getTeam($groupId);
+        if(!$team instanceof Team) {
             return null;
         }
+
+        return $team;
     }
 
     /**
