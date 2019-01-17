@@ -235,7 +235,7 @@ class GroupService
     {
         if (empty($groupIdentifiers))
         {
-            return [];
+            return new DataClassIterator(Group::class, []);
         }
 
         return $this->groupRepository->findGroupsByIdentifiersOrderedByName($groupIdentifiers);
