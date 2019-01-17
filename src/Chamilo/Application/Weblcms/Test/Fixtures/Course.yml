@@ -1,0 +1,14 @@
+Chamilo\Application\Weblcms\Course\Storage\DataClass\Course:
+  course{1..5}:
+    id: <current()>
+    course_type_id: 0
+    titular_id: <numberBetween(1, 10)>
+    category_id: 0
+    last_visit: 0
+    last_edit: 0
+    creation_date: <unixTime()>
+    expiration_date: 0
+    title: <sentence()>
+    visual_code: <word()>
+    system_code: <word()>
+    language: 'en'

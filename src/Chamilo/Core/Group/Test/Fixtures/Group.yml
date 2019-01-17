@@ -1,0 +1,61 @@
+Chamilo\Core\Group\Storage\DataClass\Group:
+  group (template):
+    name: <word()>
+    description: <word()>
+    parent_id: 0
+    left_value: 0
+    right_value: 0
+    sort: 0
+    code: <word()>
+    disk_quota: 0
+    database_quota: 0
+  group1 (extends group):
+    id: 1
+    parent_id: 0
+    left_value: 1
+    right_value: 20
+  group2 (extends group):
+    id: 2
+    parent_id: 1
+    left_value: 2
+    right_value: 13
+  group3 (extends group):
+    id: 3
+    parent_id: 1
+    left_value: 14
+    right_value: 17
+  group4 (extends group):
+    id: 4
+    parent_id: 2
+    left_value: 3
+    right_value: 10
+  group5 (extends group):
+    id: 5
+    parent_id: 2
+    left_value: 11
+    right_value: 12
+  group6 (extends group):
+    id: 6
+    parent_id: 3
+    left_value: 15
+    right_value: 16
+  group7 (extends group):
+    id: 7
+    parent_id: 4
+    left_value: 4
+    right_value: 9
+  group8 (extends group):
+    id: 8
+    parent_id: 7
+    left_value: 5
+    right_value: 6
+  group9 (extends group):
+    id: 9
+    parent_id: 7
+    left_value: 7
+    right_value: 8
+  group10 (extends group):
+    id: 10
+    parent_id: 1
+    left_value: 18
+    right_value: 19

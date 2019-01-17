@@ -1,0 +1,11 @@
+Chamilo\Application\Weblcms\Storage\DataClass\RightsLocationEntityRight:
+  rights_location_entity_right_user:
+    entity_id: 1
+    entity_type: 1
+    location_id: 4
+    right_id: 1
+  rights_location_entity_right_group:
+    entity_id: 4
+    entity_type: 2
+    location_id: 3
+    right_id: 1

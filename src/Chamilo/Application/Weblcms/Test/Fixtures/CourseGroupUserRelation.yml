@@ -1,0 +1,11 @@
+Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation:
+  course_group_user_relation{1..2}:
+    course_group: 3
+    user: '@user<current()>->id'
+  course_group_user_relation{3..4}:
+    course_group: 4
+    user: '@user<current()>->id'
+  course_group_user_relation5:
+    course_group: 5
+    user: 5
+

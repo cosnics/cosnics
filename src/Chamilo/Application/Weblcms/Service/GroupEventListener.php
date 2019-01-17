@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Service\GroupEventListener;
+namespace Chamilo\Application\Weblcms\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Core\Group\Storage\DataClass\Group;
