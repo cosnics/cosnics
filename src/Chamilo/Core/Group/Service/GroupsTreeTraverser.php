@@ -200,7 +200,7 @@ class GroupsTreeTraverser
     /**
      * @param integer $userIdentifier
      *
-     * @return string[][]
+     * @return string[][]|DataClassIterator
      * @throws \Exception
      */
     public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(int $userIdentifier)
@@ -238,7 +238,7 @@ class GroupsTreeTraverser
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param boolean $includeSelf
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findParentGroupsForGroup(Group $group, bool $includeSelf = true)
     {
@@ -276,7 +276,7 @@ class GroupsTreeTraverser
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param boolean $recursiveSubgroups
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false)
     {
