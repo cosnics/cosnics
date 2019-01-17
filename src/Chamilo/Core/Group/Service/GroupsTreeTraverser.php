@@ -170,7 +170,8 @@ class GroupsTreeTraverser
     /**
      * @param integer $userIdentifier
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     *
      * @throws \Exception
      */
     public function findAllSubscribedGroupsForUserIdentifier(int $userIdentifier)

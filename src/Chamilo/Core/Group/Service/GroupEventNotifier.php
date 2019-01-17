@@ -46,17 +46,6 @@ class GroupEventNotifier implements GroupEventListenerInterface
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     */
-    public function beforeDelete(Group $group)
-    {
-        foreach($this->groupEventListeners as $groupEventListener)
-        {
-            $groupEventListener->beforeDelete($group);
-        }
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param int[] $subGroupIds
      * @param int[] $impactedUserIds
      */
