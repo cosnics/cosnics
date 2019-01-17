@@ -218,7 +218,7 @@ class GroupService
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findGroups($condition, $offset = 0, $count = - 1, $orderProperty = null)
     {
@@ -229,7 +229,7 @@ class GroupService
      *
      * @param integer[] $groupIdentifiers
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findGroupsByIdentifiers($groupIdentifiers)
     {
@@ -245,7 +245,7 @@ class GroupService
      * @param string $searchQuery
      * @param integer $parentIdentifier
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findGroupsForSearchQueryAndParentIdentifier(string $searchQuery = null, int $parentIdentifier = 0)
     {

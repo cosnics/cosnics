@@ -213,6 +213,7 @@ class GroupsTreeTraverser
      * @param bool $includeSelf
      *
      * @return integer[]
+     * @throws \Exception
      */
     public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true)
     {

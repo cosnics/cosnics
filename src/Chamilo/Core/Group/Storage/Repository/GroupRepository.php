@@ -165,7 +165,7 @@ class GroupRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $directlySubscribedGroupNestingValues
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator|string[][] $directlySubscribedGroupNestingValues
      *
      * @return string[]
      * @throws \Exception
