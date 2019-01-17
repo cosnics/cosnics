@@ -2,12 +2,12 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\TeamRepository;
 use GuzzleHttp\Exception\ClientException;
 use Microsoft\Graph\Model\Group;
+use Microsoft\Graph\Model\Team;
 
 /**
  * Class TeamService
@@ -42,23 +42,28 @@ class TeamService
     /**
      * @param string $groupId
      * @param int $retryCounter
+     * @return Team
      */
-    public function addTeamToGroup(string $groupId, int $retryCounter = 0)
+    public function addTeamToGroup(string $groupId, int $retryCounter = 0): Team
     { //todo queue implementation
         try {
-            $this->teamRepository->createTeam($groupId);
+            return $this->teamRepository->addTeamToGroup($groupId);
         } catch (ClientException $exception) {
             if ($exception->getCode() == 404 && $retryCounter < 3) {//group maybe not created due to replication delay
                 $retryCounter++;
                 sleep(10);
-                $this->addTeamToGroup($groupId, $retryCounter);
+                return $this->addTeamToGroup($groupId, $retryCounter);
             } else {
                 throw $exception;
             }
         }
     }
 
-    public function getTeam(string $groupId)
+    /**
+     * @param string $groupId
+     * @return \Microsoft\Graph\Model\Entity | Team
+     */
+    public function getTeam(string $groupId): \Microsoft\Graph\Model\Entity
     {
         try {
             return $this->teamRepository->getTeam($groupId);
@@ -75,18 +80,17 @@ class TeamService
     {
         return $this->teamRepository->getUrl($group->getId());
     }
+
     /**
      * @param User $owner
      * @param string $teamName
-     * @return string
+     * @return Team
      * @throws AzureUserNotExistsException
      */
-    public function createTeamByName(User $owner, string $teamName)
+    public function createTeamByName(User $owner, string $teamName):Team
     {
         $groupId = $this->groupService->createGroupByName($owner, $teamName);
 
-        $this->addTeamToGroup($groupId);
-
-        return $groupId;
+        return $this->addTeamToGroup($groupId);
     }
 }

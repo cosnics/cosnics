@@ -4,13 +4,9 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Unit\Storage\Repositor
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepositoryInterface;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepositoryFactory;
-use League\OAuth2\Client\Token\AccessToken;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Tests the Office365RepositoryFactory

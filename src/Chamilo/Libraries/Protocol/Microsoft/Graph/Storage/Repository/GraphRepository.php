@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 use Microsoft\Graph\Graph;
 use Microsoft\Graph\Http\GraphRequest;
 use Microsoft\Graph\Http\GraphResponse;
@@ -130,9 +131,9 @@ class GraphRepository
 
     /**
      *
-     * @param \League\OAuth2\Client\Token\AccessToken $delegatedAccessToken
+     * @param \League\OAuth2\Client\Token\AccessTokenInterface $delegatedAccessToken
      */
-    protected function setDelegatedAccessToken(AccessToken $delegatedAccessToken = null)
+    protected function setDelegatedAccessToken(AccessTokenInterface $delegatedAccessToken = null)
     {
         $this->delegatedAccessToken = $delegatedAccessToken;
     }
@@ -154,9 +155,8 @@ class GraphRepository
     }
 
     /**
-     * Returns the access token
-     *
-     * @return \League\OAuth2\Client\Token\AccessToken
+     * @return AccessTokenInterface
+     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
      */
     protected function requestNewApplicationAccessToken()
     {

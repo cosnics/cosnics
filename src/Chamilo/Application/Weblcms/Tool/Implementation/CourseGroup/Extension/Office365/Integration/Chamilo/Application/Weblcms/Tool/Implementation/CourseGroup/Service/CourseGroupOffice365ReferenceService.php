@@ -19,9 +19,8 @@ class CourseGroupOffice365ReferenceService
     protected $courseGroupOffice365ReferenceRepository;
 
     /**
-     * CourseGroupOffice365Service constructor.
-     *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\Repository\CourseGroupOffice365ReferenceRepository|\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\CourseGroupOffice365ReferenceRepository $courseGroupOffice365ReferenceRepository
+     * CourseGroupOffice365ReferenceService constructor.
+     * @param CourseGroupOffice365ReferenceRepository $courseGroupOffice365ReferenceRepository
      */
     public function __construct(CourseGroupOffice365ReferenceRepository $courseGroupOffice365ReferenceRepository)
     {

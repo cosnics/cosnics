@@ -12,7 +12,6 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsExcep
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
-use Microsoft\Graph\Model\Group;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service
@@ -220,7 +219,7 @@ class CourseGroupOffice365Connector
      * @param CourseGroup $courseGroup
      * @param User $user
      */
-    public function unlinkTeamFromOffice365Group(CourseGroup $courseGroup, User $user)
+    public function unlinkTeamFromOffice365Group(CourseGroup $courseGroup)
     {
         $office365Reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
         if(!$office365Reference) {

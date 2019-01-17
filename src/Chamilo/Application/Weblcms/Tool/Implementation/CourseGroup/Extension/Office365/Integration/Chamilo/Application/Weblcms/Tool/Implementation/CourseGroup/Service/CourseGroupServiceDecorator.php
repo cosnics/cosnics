@@ -73,7 +73,7 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
         if ($this->usesGroupAndTeam($formValues)) {
             $this->courseGroupOffice365Connector->createOrUpdateTeamFromCourseGroup($courseGroup, $user);
         } else {
-            $this->courseGroupOffice365Connector->unlinkTeamFromOffice365Group($courseGroup, $user);
+            $this->courseGroupOffice365Connector->unlinkTeamFromOffice365Group($courseGroup);
         }
 
 
