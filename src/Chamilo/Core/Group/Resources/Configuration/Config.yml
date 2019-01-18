@@ -1,0 +1,5 @@
+chamilo.libraries:
+  phpstan:
+    paths:
+      - 'Chamilo/Core/Group/Service'
+      - 'Chamilo/Core/Group/Storage/Repository'

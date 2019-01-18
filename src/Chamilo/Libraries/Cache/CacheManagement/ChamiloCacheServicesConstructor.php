@@ -170,12 +170,12 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
             'chamilo_javascript', new JavascriptCacheService($pathBuilder, $configurablePathBuilder)
         );
 
-        new
-
         $cacheManager->addCacheService(
             'chamilo_calculator', new CalculatorCacheService()
         );
-        $cacheManager->addCacheService('chamilo_menu_items', $this->container->get(ItemCacheService::class));
+
+// TODO: fix this for the new cache services for items
+//            $cacheManager->addCacheService('chamilo_menu_items', $this->container->get(ItemCacheService::class));
 
         $cacheManager->addCacheService(
             'chamilo_twig', new TwigCacheService(
@@ -213,9 +213,13 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
             'chamilo_google_calendars', new OwnedCalendarsCacheService($googleCalendarRepository)
         );
         $cacheManager->addCacheService('chamilo_external_calendar', new ExternalCalendarCacheService());
-        $cacheManager->addCacheService(
-            'chamilo_menu_rights', $this->container->get(RightsCacheService::class)
-        );
+
+        // TODO: fix the new cache services for rights
+//        $cacheManager->addCacheService(
+//            'chamilo_menu_rights', $this->container->get(RightsCacheService::class)
+//
+//        );
+
         $cacheManager->addCacheService('chamilo_user_groups', new UserGroupMembershipCacheService());
         $cacheManager->addCacheService('chamilo_local_settings', new LocalSettingCacheService());
     }

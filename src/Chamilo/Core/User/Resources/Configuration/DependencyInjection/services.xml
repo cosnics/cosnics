@@ -44,6 +44,9 @@
             <argument type="service" id="Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator"/>
         </service>
 
+        <service alias="chamilo.core.user.storage.repository.user_repository"
+                 id="Chamilo\Core\User\Storage\Repository\UserRepository" />
+
         <service id="chamilo.core.user.service.session_handler" class="Chamilo\Core\User\Service\SessionHandler">
             <factory service="chamilo.core.user.factory.session_handler_factory"
                      method="getSessionHandler"/>
