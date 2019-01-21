@@ -1,0 +1,41 @@
+{
+    "name": "cosnics/application-plagiarism",
+    "version": "1.0.0",
+    "description": "Application Plagiarism",
+    "keywords": [
+        "Application",
+        "Help"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Help",
+            "context": "Chamilo\\Application\\Plagiarism",
+            "type": "Chamilo\\Application",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Configuration",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}
