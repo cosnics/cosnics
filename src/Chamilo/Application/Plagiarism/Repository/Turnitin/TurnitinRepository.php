@@ -7,6 +7,7 @@ use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\NotAuthenticatedExc
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\NotFoundException;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\RateLimitException;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\UnexpectedErrorException;
+use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\TurnitinConfig;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\TurnitinRequest;
 use GuzzleHttp\Client;
@@ -40,7 +41,7 @@ class TurnitinRepository
     }
 
     /**
-     * @return string
+     * @return array
      * @throws \Exception
      */
     public function getEnabledFeatures()
@@ -53,7 +54,7 @@ class TurnitinRepository
     /**
      * @param string $versionId
      *
-     * @return string
+     * @return array
      * @throws \Exception
      */
     public function getEULAVersionInfo($versionId = 'latest')
@@ -70,7 +71,7 @@ class TurnitinRepository
      * @param string $language
      * @param string $versionId
      *
-     * @return string
+     * @return array
      * @throws \Exception
      */
     public function acceptEULAVersion(
@@ -95,7 +96,7 @@ class TurnitinRepository
      * @param string $userId
      * @param string $versionId
      *
-     * @return string
+     * @return array
      * @throws \Exception
      */
     public function getEULAUserAcceptanceInfo(string $userId, $versionId = 'latest')
@@ -109,7 +110,7 @@ class TurnitinRepository
     /**
      * @param string $versionId
      *
-     * @return string
+     * @return array
      * @throws \Exception
      */
     public function getEULAPage($versionId = 'latest')
@@ -122,20 +123,25 @@ class TurnitinRepository
 
     /**
      * @param string $userId
+     * @param string $ownerId
      * @param string $title
      * @param bool $extractTextOnly
      * @param array $metadata
+     * @param array $eula
      *
-     * @return string
+     * @return array
      * @throws \Exception
      */
-    public function createSubmission(string $userId, string $title, bool $extractTextOnly = false, $metadata = [])
+    public function createSubmission(
+        string $userId, string $ownerId, string $title, bool $extractTextOnly = false, array $metadata = [],
+        array $eula = []
+    )
     {
         $url = sprintf('/submissions');
 
         $body = [
-            'owner' => $userId, 'title' => $title, 'extract_text_only' => $extractTextOnly ? 'true' : 'false',
-            'metadata' => $metadata
+            'submitter' => $userId, 'owner' => $ownerId, 'title' => $title,
+            'extract_text_only' => $extractTextOnly, 'metadata' => $metadata, 'eula' => $eula
         ];
 
         $bodyString = json_encode($body);
@@ -150,7 +156,7 @@ class TurnitinRepository
      * @param string $filename
      * @param resource $file
      *
-     * @return string
+     * @return array
      * @throws \Exception
      */
     public function uploadSubmissionFile(string $submissionId, string $filename, resource $file)
@@ -159,17 +165,250 @@ class TurnitinRepository
         $contentDisposition = sprintf('inline; filename="%s"', $filename);
 
         $headers = ['Content-Type' => 'binary/octet-stream', 'Content-Disposition' => $contentDisposition];
-        $request = new TurnitinRequest('POST', $url, $this->getSecretKey(), $file, $headers);
+        $request = new TurnitinRequest('PUT', $url, $this->getSecretKey(), $file, $headers);
 
         return $this->handleRequest($request);
     }
 
+    /**
+     * @param string $submissionId
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function getSubmissionInfo(string $submissionId)
+    {
+        $url = sprintf('/submissions/%s', $submissionId);
+        $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param string $submissionId
+     * @param bool $hardDelete
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function deleteSubmission(string $submissionId, bool $hardDelete = false)
+    {
+        $url = sprintf('/submissions/%s', $submissionId);
+
+        if ($hardDelete)
+        {
+            $url .= '?hard=true';
+        }
+
+        $request = new TurnitinRequest('DELETE', $url, $this->getSecretKey());
+
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param string $submissionId
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function recoverSubmission(string $submissionId)
+    {
+        $url = sprintf('/submissions/%s/recover', $submissionId);
+        $request = new TurnitinRequest('PUT', $url, $this->getSecretKey());
+
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param string $submissionId
+     * @param \Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings $similarityReportSettings
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function generateSimilarityReport(
+        string $submissionId, SimilarityReportSettings $similarityReportSettings
+    )
+    {
+        $url = sprintf('/submissions/%s/similarity', $submissionId);
+
+        $body = $similarityReportSettings->toArray();
+        $bodyString = json_encode($body);
+
+        $request = new TurnitinRequest('PUT', $url, $this->getSecretKey(), $bodyString);
+
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param string $submissionId
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function getSimilarityReportInfo(string $submissionId)
+    {
+        $url = sprintf('/submissions/%s/similarity', $submissionId);
+        $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
+
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param string $submissionId
+     * @param string $viewerUserId
+     * @param string $locale
+     * @param string $viewerDefaultPermissionSet
+     * @param array $viewerPermissions
+     * @param array $similarity
+     * @param array $authorMetadataOverride
+     * @param array $eula
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function createViewerLaunchURL(
+        string $submissionId, string $viewerUserId, string $locale = 'en',
+        string $viewerDefaultPermissionSet = '', array $viewerPermissions = array(), array $similarity = array(),
+        array $authorMetadataOverride = array(), array $eula = array()
+    )
+    {
+        $url = sprintf('/submissions/%s/viewer-url', $submissionId);
+
+        $body = [
+            'viewerUserId' => $viewerUserId, 'locale' => $locale,
+            'viewer_default_permission_set' => $viewerDefaultPermissionSet, 'viewer_permissions' => $viewerPermissions,
+            'similarity' => $similarity, 'author_metadata_override' => $authorMetadataOverride, 'eula' => $eula
+        ];
+
+        $bodyString = json_encode($body);
+
+        $request = new TurnitinRequest('POST', $url, $this->getSecretKey(), $bodyString);
+
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param string $submissionId
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function indexSubmission(string $submissionId)
+    {
+        $url = sprintf('/submissions/%s/index', $submissionId);
+        $request = new TurnitinRequest('PUT', $url, $this->getSecretKey());
+
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param string $submissionId
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function getSubmissionIndex(string $submissionId)
+    {
+        $url = sprintf('/submissions/%s/index', $submissionId);
+        $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
+
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param string $signingSecret (base 64 encoded)
+     * @param string $webhookUrl
+     * @param array $eventTypes
+     * @param string $description
+     * @param bool $allowInsecureURL
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function createWebhook(
+        string $signingSecret, string $webhookUrl, array $eventTypes, string $description = '',
+        boolean $allowInsecureURL = false
+    )
+    {
+        $url = sprintf('/webhooks');
+
+        $body = [
+            'description' => $description, 'signing_secret' => $signingSecret, 'url' => $webhookUrl,
+            'event_types' => $eventTypes, 'allow_insecure' => $allowInsecureURL
+        ];
+
+        $bodyString = json_encode($body);
+
+        $request = new TurnitinRequest('POST', $url, $this->getSecretKey(), $bodyString);
+
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param string $webhookId
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function getWebhookInfo(string $webhookId)
+    {
+        $url = sprintf('/webhooks/%s', $webhookId);
+        $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
+
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param string $webhookId
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function deleteWebhook(string $webhookId)
+    {
+        $url = sprintf('/webhooks/%s', $webhookId);
+        $request = new TurnitinRequest('DELETE', $url, $this->getSecretKey());
+
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function listWebhooks()
+    {
+        $url = sprintf('/webhooks');
+        $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
+
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param string $webhookId
+     * @param array $eventTypes
+     * @param string $description
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function updateWebhook(string $webhookId, array $eventTypes, string $description = '')
+    {
+        $url = sprintf('/webhooks/%s', $webhookId);
+
+        $body = ['description' => $description, 'event_types' => $eventTypes];
+        $bodyString = json_encode($body);
+
+        $request = new TurnitinRequest('PATCH', $url, $this->getSecretKey(), $bodyString);
+
+        return $this->handleRequest($request);
+    }
 
     /**
      * @param \GuzzleHttp\Psr7\Request $request
      *
-     * @return string
+     * @return array
      * @throws \Exception
      */
     protected function handleRequest(Request $request)
@@ -192,10 +431,11 @@ class TurnitinRepository
             case 429:
                 throw new RateLimitException();
             case 500:
+            case 409:
                 throw new UnexpectedErrorException();
         }
 
-        return $response->getBody()->getContents();
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     protected function initializeClient()
