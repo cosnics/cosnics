@@ -2,8 +2,8 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\DependencyInjection;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager;
 use Chamilo\Libraries\File\Path;
-use Hogent\Application\Weblcms\Tool\Implementation\Survey\Manager;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;

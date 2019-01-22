@@ -46,6 +46,10 @@ class CourseTeamService
      */
     public function createTeam(User $owner, Course $course): Team
     {
+        if(!is_null($this->getTeam($course))) {
+            throw new \RuntimeException("Team already exists");
+        }
+
         $team = $this->teamService->createTeamByName($owner, $course->get_title());
 
         $courseTeamRelation = new CourseTeamRelation();
@@ -66,15 +70,14 @@ class CourseTeamService
 
     /**
      * @param Course $course
-     * @return Team
-     * @throws ObjectNotExistException
+     * @return Team|null
      */
-    public function getTeam(Course $course): Team
+    public function getTeam(Course $course): ?Team
     {
         $courseTeamRelation = $this->courseTeamRelationRepository->findByCourse($course);
 
         if(!$courseTeamRelation instanceof CourseTeamRelation) {
-            throw new ObjectNotExistException(Translation::get('CourseTeamRelation'), $course->getId());
+            return null;
         }
 
         return $this->teamService->getTeam($courseTeamRelation->getTeamId());

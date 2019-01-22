@@ -43,7 +43,7 @@ class CourseTeamRelationRepository extends CommonDataClassRepository
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                Course::class, Course::PROPERTY_ID
+                CourseTeamRelation::class, CourseTeamRelation::PROPERTY_COURSE_ID
             ),
             new StaticConditionVariable((string) $course->getId())
         );

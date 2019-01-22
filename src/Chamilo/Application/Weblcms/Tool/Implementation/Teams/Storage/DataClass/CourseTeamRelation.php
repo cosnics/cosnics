@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class CourseTeamRelation extends DataClass
 {
-    const PROPERTY_COURSE_ID = 'course_group_id';
+    const PROPERTY_COURSE_ID = 'course_id';
     const PROPERTY_TEAM_ID = 'team_id';
 
     /**
