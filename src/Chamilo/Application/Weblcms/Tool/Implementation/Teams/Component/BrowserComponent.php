@@ -35,17 +35,16 @@ class BrowserComponent extends Manager
             return $this->renderCreateTeam();
         }
 
-        return $this->renderBrowser($team);
+        return $this->renderBrowser();
     }
 
     /**
-     * @param Team $team
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    protected function renderBrowser(Team $team): string
+    protected function renderBrowser(): string
     {
         $goToTeamParameters = $this->get_parameters();
         $goToTeamParameters[self::PARAM_ACTION] = self::ACTION_GO_TO_TEAM;
