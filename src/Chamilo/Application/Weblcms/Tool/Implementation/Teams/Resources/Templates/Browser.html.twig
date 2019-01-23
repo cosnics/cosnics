@@ -2,6 +2,6 @@
 
 {% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Teams' %}
 
-    <a target="_blank" href="{{ TEAM_URL }}" class="btn btn-primary btn-lg">Go to Team</a>
+    <a target="_blank" href="{{ TEAM_URL }}" class="btn btn-primary btn-lg">{{ 'GoToTeam'|trans({}, appContext) }}</a>
 
 {{ FOOTER|raw }}

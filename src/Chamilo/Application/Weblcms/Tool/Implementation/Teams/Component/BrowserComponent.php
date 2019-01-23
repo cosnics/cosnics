@@ -47,9 +47,12 @@ class BrowserComponent extends Manager
      */
     protected function renderBrowser(Team $team): string
     {
+        $goToTeamParameters = $this->get_parameters();
+        $goToTeamParameters[self::PARAM_ACTION] = self::ACTION_GO_TO_TEAM;
+
         return $this->render(
             [
-                'TEAM_URL' => $team->getWebUrl()
+                'TEAM_URL' => $this->get_url($goToTeamParameters),
             ],
             'Chamilo\Application\Weblcms\Tool\Implementation\Teams:Browser.html.twig'
         );

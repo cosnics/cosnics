@@ -15,15 +15,15 @@ use Microsoft\Graph\Model\Team;
 class TeamService
 {
     /**
+     * @var TeamRepository
+     */
+    protected $teamRepository;
+
+    /**
      *
      * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService
      */
     protected $groupService;
-
-    /**
-     * @var TeamRepository
-     */
-    protected $teamRepository;
 
     /**
      * TeamService constructor.
@@ -93,5 +93,45 @@ class TeamService
         $groupId = $this->groupService->createGroupByName($owner, $teamName);
 
         return $this->addTeamToGroup($groupId);
+    }
+
+    /**
+     * @param User $user
+     * @param Team $team
+     * @return bool
+     */
+    public function isMember(User $user, Team $team):bool
+    {
+        return $this->groupService->isMemberOfGroup($team->getId(), $user);
+    }
+
+    /**
+     * @param User $user
+     * @param Team $team
+     * @return bool
+     */
+    public function isOwner(User $user, Team $team): bool
+    {
+        return $this->groupService->isOwnerOfGroup($team->getId(), $user);
+    }
+
+    /**
+     * @param User $user
+     * @param Team $team
+     * @throws AzureUserNotExistsException
+     */
+    public function addMember(User $user, Team $team)
+    {
+        $this->groupService->addMemberToGroup($team->getId(), $user);
+    }
+
+    /**
+     * @param User $user
+     * @param Team $team
+     * @throws AzureUserNotExistsException
+     */
+    public function addOwner(User $user, Team $team)
+    {
+        $this->groupService->addOwnerToGroup($team->getId(), $user);
     }
 }

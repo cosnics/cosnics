@@ -1,2 +1,8 @@
 TypeName = "Teams"
 BrowserComponent = "Teams"
+GoToTeam = "Go to Team"
+CreateTeam = "Create Team for this course"
+TeamNotExists = "This course has no Team"
+TeamNotActivated = "This Team is not yet activated. Please contact the course admin."
+TeamCreated = "Team Created"
+TeamAlreadyExists = "Team already exists for course"

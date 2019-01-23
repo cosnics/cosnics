@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Component;
 
 use Chamilo\Application\Weblcms\Service\CourseService;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\CourseTeamAlreadyExistsException;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\CourseTeamService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -37,8 +38,8 @@ class CreateTeamComponent extends Manager
 
         try {
             $courseTeamService->createTeam($this->getUser(), $this->get_course());
-            $message = 'Team created';
-        } catch (\RuntimeException $exception) {
+            $message = $this->getTranslator()->trans('TeamCreated', [], Manager::class);
+        } catch (CourseTeamAlreadyExistsException $exception) { //race conditions
                 $message = $exception->getMessage();
                 $isError = true;
         }

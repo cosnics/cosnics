@@ -151,7 +151,7 @@ class GroupService
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
-    public function addMemberToGroup($groupId, User $user)
+    public function addMemberToGroup(string $groupId, User $user)
     {
         if (!$this->isMemberOfGroup($groupId, $user))
         {
@@ -282,12 +282,12 @@ class GroupService
     /**
      * Returns whether or not the given user is subscribed to the given group
      *
-     * @param integer $groupId
+     * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return boolean
      */
-    public function isOwnerOfGroup($groupId, User $user)
+    public function isOwnerOfGroup(string $groupId, User $user)
     {
         $azureUserIdentifier = $this->getAzureUserIdentifier($user);
 

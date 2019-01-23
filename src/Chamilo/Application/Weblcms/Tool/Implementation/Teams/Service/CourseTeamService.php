@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\CourseTeamAlreadyExistsException;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\CourseTeamRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\CourseTeamRelationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -42,12 +43,13 @@ class CourseTeamService
      * @param User $owner
      * @param Course $course
      * @return Team
+     * @throws CourseTeamAlreadyExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
     public function createTeam(User $owner, Course $course): Team
     {
         if(!is_null($this->getTeam($course))) {
-            throw new \RuntimeException("Team already exists");
+            throw new CourseTeamAlreadyExistsException($course);
         }
 
         $team = $this->teamService->createTeamByName($owner, $course->get_title());

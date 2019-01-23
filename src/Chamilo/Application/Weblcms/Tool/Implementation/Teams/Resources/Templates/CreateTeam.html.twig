@@ -3,10 +3,10 @@
 {% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Teams' %}
 
 {% if IS_TEACHER %}
-    <a href="{{ CREATE_TEAM_URL }}" class="btn btn-primary btn-lg">Create Team</a>
+    <a href="{{ CREATE_TEAM_URL }}" class="btn btn-primary btn-lg">{{ 'CreateTeam'|trans({}, appContext) }}</a>
 {% else %}
     <div class="alert alert-info">
-        This Team is not yet activated. Please contact your teacher.
+        {{ 'TeamNotActivated'|trans({}, appContext) }}
     </div>
 {% endif %}
 
