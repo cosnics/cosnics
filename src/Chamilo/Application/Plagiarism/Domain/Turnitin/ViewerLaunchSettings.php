@@ -15,7 +15,7 @@ class ViewerLaunchSettings
     /**
      * @var string
      */
-    protected $locale;
+    protected $locale = 'en';
 
     /**
      * @var string
@@ -157,12 +157,35 @@ class ViewerLaunchSettings
      */
     public function isValid()
     {
-        if(empty($this->locale))
+        if (empty($this->locale))
         {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'locale' => $this->locale,
+            'viewer_default_permission_set' => $this->viewerDefaultPermissionSet,
+            'viewer_permissions' => ['may_view_submission_full_source' => $this->mayViewSubmissionFullSource],
+            'similarity' => [
+                'modes' => ['match_overview' => $this->matchOverviewMode, 'all_sources' => $this->allSourcesMode]
+            ],
+            'author_metadata_override' => [
+                'family_name' => $this->overrideAuthorFamilyName, 'given_name' => $this->overrideAuthorGivenName
+            ],
+            'eula' => [
+                'version' => $this->eulaVersion,
+                'accepted_timestamp' => $this->eulaAcceptedTimestamp->format(\DateTimeInterface::ISO8601),
+                'language' => $this->eulaLanguage
+            ]
+        ];
     }
 
     /**

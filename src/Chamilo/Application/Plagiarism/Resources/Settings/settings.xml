@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\Home">
+    <settings>
+        <category name="turnitin">
+            <setting name="turnitin_api_url" field="text" default="" />
+            <setting name="turnitin_secret_key" field="text" default="" />
+            <setting name="turnitin_webhook_id" field="text" locked="true" default="" />
+            <setting name="turnitin_webhook_secret" field="text" locked="true" default="" />
+            <setting name="turnitin_eula_accepted_date" field="text" locked="true" default="" user_setting="1" />
+            <setting name="turnitin_eula_valid_from_date" field="text" locked="true" default="" />
+            <setting name="turnitin_eula_valid_until_date" field="text" locked="true" default="" />
+        </category>
+    </settings>
+</package>

@@ -11,7 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TurnitinService
+class PlagiarismChecker
 {
     /**
      * @var \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository
@@ -19,9 +19,24 @@ class TurnitinService
     protected $turnitinRepository;
 
     /**
-     * @var \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverterInterface
+     * @var \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface
      */
     protected $userConverter;
+
+    /**
+     * TurnitinService constructor.
+     *
+     * @param \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository
+     * @param \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter
+     */
+    public function __construct(
+        \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository,
+        \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter
+    )
+    {
+        $this->turnitinRepository = $turnitinRepository;
+        $this->userConverter = $userConverter;
+    }
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $submitter
@@ -78,12 +93,21 @@ class TurnitinService
      * @param string $submissionId
      * @param \Chamilo\Core\User\Storage\DataClass\User $viewUser
      * @param \Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings $viewerLaunchSettings
+     *
+     * @throws \Exception
      */
     public function createViewerLaunchURL(
         string $submissionId, User $viewUser, ViewerLaunchSettings $viewerLaunchSettings
     )
     {
+        if (!$viewerLaunchSettings->isValid())
+        {
+            throw new \InvalidArgumentException('The given viewer launcher settings are not valid');
+        }
 
+        $this->turnitinRepository->createViewerLaunchURL(
+            $submissionId, $this->userConverter->convertUserToId($viewUser), $viewerLaunchSettings
+        );
     }
 
 }

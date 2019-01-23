@@ -10,6 +10,7 @@ use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\UnexpectedErrorExce
 use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\TurnitinConfig;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\TurnitinRequest;
+use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 
@@ -48,7 +49,7 @@ class TurnitinRepository
     {
         $request = new TurnitinRequest('GET', '/features-enabled', $this->getSecretKey());
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -62,7 +63,7 @@ class TurnitinRepository
         $url = sprintf('/eula/%s', $versionId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -89,7 +90,7 @@ class TurnitinRepository
 
         $request = new TurnitinRequest('POST', $url, $this->getSecretKey(), $bodyString);
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -104,13 +105,13 @@ class TurnitinRepository
         $url = sprintf('/eula/%s/accept/%s', $versionId, $userId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
      * @param string $versionId
      *
-     * @return array
+     * @return string
      * @throws \Exception
      */
     public function getEULAPage($versionId = 'latest')
@@ -148,7 +149,7 @@ class TurnitinRepository
 
         $request = new TurnitinRequest('POST', $url, $this->getSecretKey(), $bodyString);
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -167,7 +168,7 @@ class TurnitinRepository
         $headers = ['Content-Type' => 'binary/octet-stream', 'Content-Disposition' => $contentDisposition];
         $request = new TurnitinRequest('PUT', $url, $this->getSecretKey(), $file, $headers);
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -181,7 +182,7 @@ class TurnitinRepository
         $url = sprintf('/submissions/%s', $submissionId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -202,7 +203,7 @@ class TurnitinRepository
 
         $request = new TurnitinRequest('DELETE', $url, $this->getSecretKey());
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -216,7 +217,7 @@ class TurnitinRepository
         $url = sprintf('/submissions/%s/recover', $submissionId);
         $request = new TurnitinRequest('PUT', $url, $this->getSecretKey());
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -237,7 +238,7 @@ class TurnitinRepository
 
         $request = new TurnitinRequest('PUT', $url, $this->getSecretKey(), $bodyString);
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -251,41 +252,30 @@ class TurnitinRepository
         $url = sprintf('/submissions/%s/similarity', $submissionId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
      * @param string $submissionId
      * @param string $viewerUserId
-     * @param string $locale
-     * @param string $viewerDefaultPermissionSet
-     * @param array $viewerPermissions
-     * @param array $similarity
-     * @param array $authorMetadataOverride
-     * @param array $eula
+     * @param \Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings $viewerLaunchSettings
      *
      * @return array
      * @throws \Exception
      */
     public function createViewerLaunchURL(
-        string $submissionId, string $viewerUserId, string $locale = 'en',
-        string $viewerDefaultPermissionSet = '', array $viewerPermissions = array(), array $similarity = array(),
-        array $authorMetadataOverride = array(), array $eula = array()
+        string $submissionId, string $viewerUserId, ViewerLaunchSettings $viewerLaunchSettings
     )
     {
         $url = sprintf('/submissions/%s/viewer-url', $submissionId);
 
-        $body = [
-            'viewerUserId' => $viewerUserId, 'locale' => $locale,
-            'viewer_default_permission_set' => $viewerDefaultPermissionSet, 'viewer_permissions' => $viewerPermissions,
-            'similarity' => $similarity, 'author_metadata_override' => $authorMetadataOverride, 'eula' => $eula
-        ];
-
+        $body = $viewerLaunchSettings->toArray();
+        $body['viewerUserId'] = $viewerUserId;
         $bodyString = json_encode($body);
 
         $request = new TurnitinRequest('POST', $url, $this->getSecretKey(), $bodyString);
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -299,7 +289,7 @@ class TurnitinRepository
         $url = sprintf('/submissions/%s/index', $submissionId);
         $request = new TurnitinRequest('PUT', $url, $this->getSecretKey());
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -313,7 +303,7 @@ class TurnitinRepository
         $url = sprintf('/submissions/%s/index', $submissionId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -342,7 +332,7 @@ class TurnitinRepository
 
         $request = new TurnitinRequest('POST', $url, $this->getSecretKey(), $bodyString);
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -356,7 +346,7 @@ class TurnitinRepository
         $url = sprintf('/webhooks/%s', $webhookId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -370,7 +360,7 @@ class TurnitinRepository
         $url = sprintf('/webhooks/%s', $webhookId);
         $request = new TurnitinRequest('DELETE', $url, $this->getSecretKey());
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -382,7 +372,7 @@ class TurnitinRepository
         $url = sprintf('/webhooks');
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
@@ -402,16 +392,33 @@ class TurnitinRepository
 
         $request = new TurnitinRequest('PATCH', $url, $this->getSecretKey(), $bodyString);
 
-        return $this->handleRequest($request);
+        return $this->handleJSONRequest($request);
     }
 
     /**
      * @param \GuzzleHttp\Psr7\Request $request
      *
      * @return array
+     *
      * @throws \Exception
      */
-    protected function handleRequest(Request $request)
+    protected function handleJSONRequest(Request $request)
+    {
+        $content = $this->handleRequest($request);
+        return json_decode($content, true);
+    }
+
+    /**
+     * @param \GuzzleHttp\Psr7\Request $request
+     *
+     * @return string
+     * @throws \Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\MalformedRequestException
+     * @throws \Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\NotAuthenticatedException
+     * @throws \Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\NotFoundException
+     * @throws \Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\RateLimitException
+     * @throws \Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\UnexpectedErrorException
+     */
+    protected function handleRequest(Request $request): string
     {
         if (!$this->client instanceof Client)
         {
@@ -435,7 +442,9 @@ class TurnitinRepository
                 throw new UnexpectedErrorException();
         }
 
-        return json_decode($response->getBody()->getContents(), true);
+        $content = $response->getBody()->getContents();
+
+        return $content;
     }
 
     protected function initializeClient()
@@ -450,4 +459,6 @@ class TurnitinRepository
     {
         return $this->turnitinConfig->getSecretKey();
     }
+
+
 }
