@@ -7,6 +7,7 @@
         <service id="Chamilo\Application\Plagiarism\Service\Turnitin\PlagiarismChecker" autowire="true" />
         <service id="Chamilo\Application\Plagiarism\Service\Turnitin\WebhookHandler" autowire="true" />
         <service id="Chamilo\Application\Plagiarism\Service\Turnitin\WebhookService" autowire="true" />
+        <service id="Chamilo\Application\Plagiarism\Service\Turnitin\EulaService" autowire="true" />
         <service id="Chamilo\Application\Plagiarism\Service\Turnitin\Events\TurnitinEventNotifier" autowire="true" />
 
         <service id="Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface"

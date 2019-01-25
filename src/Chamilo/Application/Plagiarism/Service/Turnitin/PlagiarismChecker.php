@@ -2,8 +2,10 @@
 
 namespace Chamilo\Application\Plagiarism\Service\Turnitin;
 
+use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\EulaNotAcceptedException;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
+use Chamilo\Application\Plagiarism\PlagiarismException;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -24,18 +26,26 @@ class PlagiarismChecker
     protected $userConverter;
 
     /**
+     * @var \Chamilo\Application\Plagiarism\Service\Turnitin\EulaService
+     */
+    protected $eulaService;
+
+    /**
      * TurnitinService constructor.
      *
      * @param \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter
+     * @param \Chamilo\Application\Plagiarism\Service\Turnitin\EulaService $eulaService
      */
     public function __construct(
         \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository,
-        \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter
+        \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter,
+        EulaService $eulaService
     )
     {
         $this->turnitinRepository = $turnitinRepository;
         $this->userConverter = $userConverter;
+        $this->eulaService = $eulaService;
     }
 
     /**
@@ -49,44 +59,64 @@ class PlagiarismChecker
      * @param array $metadata
      * @param array $eula
      *
-     * @throws \Exception
+     * @throws \Chamilo\Application\Plagiarism\PlagiarismException
      */
     public function uploadFile(
         User $submitter, User $owner, string $title, string $filePath, string $filename,
         bool $extractTextOnly = false, array $metadata = [], array $eula = []
     )
     {
-        if (!file_exists($filePath))
+        try
         {
-            throw new \InvalidArgumentException(sprintf('The given file with path %s does not exist', $filePath));
+            if(!$this->eulaService->userHasAcceptedEULA($submitter))
+            {
+                throw new EulaNotAcceptedException();
+            }
+
+            if (!file_exists($filePath))
+            {
+                throw new \InvalidArgumentException(sprintf('The given file with path %s does not exist', $filePath));
+            }
+
+            $submitterId = $this->userConverter->convertUserToId($submitter);
+            $ownerId = $this->userConverter->convertUserToId($owner);
+
+            $createSubmissionResponse = $this->turnitinRepository->createSubmission(
+                $submitterId, $ownerId, $title, $extractTextOnly, $metadata, $eula
+            );
+
+            $submissionId = $createSubmissionResponse['id'];
+
+            $this->turnitinRepository->uploadSubmissionFile($submissionId, $filename, fopen($filePath, 'r'));
         }
-
-        $submitterId = $this->userConverter->convertUserToId($submitter);
-        $ownerId = $this->userConverter->convertUserToId($owner);
-
-        $createSubmissionResponse = $this->turnitinRepository->createSubmission(
-            $submitterId, $ownerId, $title, $extractTextOnly, $metadata, $eula
-        );
-
-        $submissionId = $createSubmissionResponse['id'];
-
-        $this->turnitinRepository->uploadSubmissionFile($submissionId, $filename, fopen($filePath, 'r'));
+        catch(\Exception $ex)
+        {
+            $this->handleException($ex);
+        }
     }
 
     /**
      * @param string $submissionId
      * @param \Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings $similarityReportSettings
      *
-     * @throws \Exception
+     * @throws \Chamilo\Application\Plagiarism\PlagiarismException
      */
     public function generateSimilarityReport(string $submissionId, SimilarityReportSettings $similarityReportSettings)
     {
-        if (!$similarityReportSettings->isValid())
+        try
         {
-            throw new \InvalidArgumentException('The given similarity report settings are not valid');
+            if (!$similarityReportSettings->isValid())
+            {
+                throw new \InvalidArgumentException('The given similarity report settings are not valid');
+            }
+
+            $this->turnitinRepository->generateSimilarityReport($submissionId, $similarityReportSettings);
+        }
+        catch(\Exception $ex)
+        {
+            $this->handleException($ex);
         }
 
-        $this->turnitinRepository->generateSimilarityReport($submissionId, $similarityReportSettings);
     }
 
     /**
@@ -94,20 +124,48 @@ class PlagiarismChecker
      * @param \Chamilo\Core\User\Storage\DataClass\User $viewUser
      * @param \Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings $viewerLaunchSettings
      *
-     * @throws \Exception
+     * @throws \Chamilo\Application\Plagiarism\PlagiarismException
      */
     public function createViewerLaunchURL(
         string $submissionId, User $viewUser, ViewerLaunchSettings $viewerLaunchSettings
     )
     {
-        if (!$viewerLaunchSettings->isValid())
+        try
         {
-            throw new \InvalidArgumentException('The given viewer launcher settings are not valid');
+            if(!$this->eulaService->userHasAcceptedEULA($viewUser))
+            {
+                throw new EulaNotAcceptedException();
+            }
+
+            if (!$viewerLaunchSettings->isValid())
+            {
+                throw new \InvalidArgumentException('The given viewer launcher settings are not valid');
+            }
+
+            $this->turnitinRepository->createViewerLaunchURL(
+                $submissionId, $this->userConverter->convertUserToId($viewUser), $viewerLaunchSettings
+            );
+        }
+        catch(\Exception $ex)
+        {
+            $this->handleException($ex);
         }
 
-        $this->turnitinRepository->createViewerLaunchURL(
-            $submissionId, $this->userConverter->convertUserToId($viewUser), $viewerLaunchSettings
-        );
+    }
+
+    /**
+     * @param \Exception $ex
+     *
+     * @throws \Chamilo\Application\Plagiarism\PlagiarismException
+     */
+    protected function handleException(\Exception $ex)
+    {
+        if ($ex instanceof PlagiarismException)
+        {
+            throw $ex;
+        }
+
+        throw new PlagiarismException($ex->getMessage());
     }
 
 }

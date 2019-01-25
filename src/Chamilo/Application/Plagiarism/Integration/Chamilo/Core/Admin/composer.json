@@ -1,0 +1,49 @@
+{
+    "name": "cosnics/application-plagiarism-integration-chamilo-application-admin",
+    "version": "1.0.0",
+    "description": "Application Plagiarism Integration Chamilo Application Admin",
+    "keywords": [
+        "Application",
+        "Plagiarism",
+        "Integration",
+        "Chamilo",
+        "Application",
+        "Admin"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Admin",
+            "context": "Chamilo\\Application\\Plagiarism\\Integration\\Chamilo\\Core\\Admin",
+            "type": "Chamilo\\Application\\Plagiarism\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Plagiarism",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Admin",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

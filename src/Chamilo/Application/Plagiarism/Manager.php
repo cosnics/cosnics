@@ -13,6 +13,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 abstract class Manager extends Application
 {
     const ACTION_TURNITIN_WEBHOOK = 'TurnitinWebhook';
+    const ACTION_TURNITIN_EULA = 'TurnitinEula';
+    const ACTION_TURNITIN_MANAGE_WEBHOOK = 'TurnitinWebhookManager';
 
     /**
      * Manager constructor.

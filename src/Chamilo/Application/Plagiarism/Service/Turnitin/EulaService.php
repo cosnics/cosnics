@@ -2,9 +2,16 @@
 
 namespace Chamilo\Application\Plagiarism\Service\Turnitin;
 
+use Chamilo\Application\Plagiarism\Component\TurnitinEulaComponent;
+use Chamilo\Application\Plagiarism\Manager;
+use Chamilo\Application\Plagiarism\PlagiarismException;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\ConfigurationWriter;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * @package Chamilo\Application\Plagiarism\Service\Turnitin
@@ -34,23 +41,38 @@ class EulaService
     protected $configurationConsulter;
 
     /**
+     * @var \Chamilo\Configuration\Service\ConfigurationWriter
+     */
+    protected $configurationWriter;
+
+    /**
+     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    protected $sessionUtilities;
+
+    /**
      * TurnitinService constructor.
      *
      * @param \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter
      * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSetting
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\ConfigurationWriter $configurationWriter
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      */
     public function __construct(
         \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository,
         \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter,
-        LocalSetting $localSetting, ConfigurationConsulter $configurationConsulter
+        LocalSetting $localSetting, ConfigurationConsulter $configurationConsulter, ConfigurationWriter $configurationWriter,
+        SessionUtilities $sessionUtilities
     )
     {
         $this->turnitinRepository = $turnitinRepository;
         $this->userConverter = $userConverter;
         $this->localSetting = $localSetting;
         $this->configurationConsulter = $configurationConsulter;
+        $this->configurationWriter = $configurationWriter;
+        $this->sessionUtilities = $sessionUtilities;
     }
 
     /**
@@ -112,6 +134,30 @@ class EulaService
             'turnitin_eula_accepted_date', $dateTime->format(\DateTimeInterface::ISO8601),
             'Chamilo\Application\Plagiarism', $user
         );
+    }
+
+    /**
+     * @param string $redirectToURL
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Chamilo\Application\Plagiarism\PlagiarismException
+     */
+    public function getRedirectToEULAPageResponse(string $redirectToURL)
+    {
+        if(empty($redirectToURL))
+        {
+            throw new PlagiarismException('The given redirect URL can not be empty');
+        }
+
+        $redirect = new Redirect(
+            [
+                Manager::PARAM_CONTEXT => Manager::context(),
+                Manager::PARAM_ACTION => Manager::ACTION_TURNITIN_EULA
+            ]
+        );
+
+        $this->sessionUtilities->register(TurnitinEulaComponent::REDIRECT_URL, $redirectToURL);
+        return new RedirectResponse($redirect->getUrl());
     }
 
     /**

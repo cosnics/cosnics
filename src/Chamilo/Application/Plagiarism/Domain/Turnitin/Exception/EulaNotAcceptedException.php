@@ -9,13 +9,14 @@ use Chamilo\Application\Plagiarism\PlagiarismException;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class NotAuthenticatedException extends PlagiarismException
+class EulaNotAcceptedException extends PlagiarismException
 {
+
     /**
-     * NotAuthenticatedException constructor.
+     * MalformedRequestException constructor.
      */
     public function __construct()
     {
-        parent::__construct('Not Properly Authenticated');
+        parent::__construct('The user has not accepted the EULA and must be redirect to the accept EULA component');
     }
 }

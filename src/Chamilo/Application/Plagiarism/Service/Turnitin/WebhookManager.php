@@ -26,7 +26,28 @@ class WebhookManager
      */
     protected $configurationConsulter;
 
+    /**
+     * @var \Chamilo\Configuration\Service\ConfigurationWriter
+     */
+    protected $configurationWriter;
 
+    /**
+     * WebhookManager constructor.
+     *
+     * @param \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\ConfigurationWriter $configurationWriter
+     */
+    public function __construct(
+        \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository,
+        \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter,
+        \Chamilo\Configuration\Service\ConfigurationWriter $configurationWriter
+    )
+    {
+        $this->turnitinRepository = $turnitinRepository;
+        $this->configurationConsulter = $configurationConsulter;
+        $this->configurationWriter = $configurationWriter;
+    }
 
     /**
      * @return bool
@@ -84,7 +105,7 @@ class WebhookManager
      */
     public function removeWebhook()
     {
-        if(!$this->isWebhookRegistered())
+        if (!$this->isWebhookRegistered())
         {
             throw new \InvalidArgumentException(
                 'The given webhook is not registered and can not be remove'
@@ -120,7 +141,9 @@ class WebhookManager
      */
     protected function storeWebhookSecret(string $webhookSecret)
     {
-        $this->configurationWriter->writeSetting('Chamilo\Application\Plagiarism', 'turnitin_webhook_secret', $webhookSecret);
+        $this->configurationWriter->writeSetting(
+            'Chamilo\Application\Plagiarism', 'turnitin_webhook_secret', $webhookSecret
+        );
     }
 
 }
