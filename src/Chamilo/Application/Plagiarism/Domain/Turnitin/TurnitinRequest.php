@@ -24,9 +24,10 @@ class TurnitinRequest extends Request
         $method, $uri, $secretKey = '', $body = null, array $headers = []
     )
     {
-        $headers[] = 'X-Turnitin-Integration-Name: Chamilo';
-        $headers[] = 'X-Turnitin-Integration-Version: 1.0';
-        $headers[] = 'Authorization: Bearer ' . $secretKey;
+        $headers['X-Turnitin-Integration-Name'] = 'Chamilo';
+        $headers['X-Turnitin-Integration-Version'] = '1.0';
+        $headers['Authorization'] = 'Bearer ' . $secretKey;
+        $headers['Content-Type'] = 'application/json';
 
         parent::__construct($method, $uri, $headers, $body);
     }

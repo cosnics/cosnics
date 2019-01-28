@@ -1,1 +1,3 @@
 TypeName = "Admin Integratie voor Plagiaat App"
+ManageWebhook = "Beheer Turnitin Webhook"
+ManageWebhookDescription = "Activeer of deactiveer de Turnitin webhook voor deze installatie."

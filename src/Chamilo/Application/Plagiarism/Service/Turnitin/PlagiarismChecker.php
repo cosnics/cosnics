@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Plagiarism\Service\Turnitin;
 
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\EulaNotAcceptedException;
+use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\InvalidConfigurationException;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
 use Chamilo\Application\Plagiarism\PlagiarismException;
@@ -12,6 +13,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
  * @package Chamilo\Application\Plagiarism\Service\Turnitin
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ *
+ * TODO: CHECK FOR VALID FILES BEFORE UPLOADING
  */
 class PlagiarismChecker
 {
@@ -31,21 +34,28 @@ class PlagiarismChecker
     protected $eulaService;
 
     /**
+     * @var \Chamilo\Application\Plagiarism\Service\Turnitin\WebhookManager
+     */
+    protected $webhookManager;
+
+    /**
      * TurnitinService constructor.
      *
      * @param \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\EulaService $eulaService
+     * @param \Chamilo\Application\Plagiarism\Service\Turnitin\WebhookManager $webhookManager
      */
     public function __construct(
         \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository,
         \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter,
-        EulaService $eulaService
+        EulaService $eulaService, WebhookManager $webhookManager
     )
     {
         $this->turnitinRepository = $turnitinRepository;
         $this->userConverter = $userConverter;
         $this->eulaService = $eulaService;
+        $this->webhookManager = $webhookManager;
     }
 
     /**
@@ -68,6 +78,11 @@ class PlagiarismChecker
     {
         try
         {
+            if(!$this->isPlagiarismCheckerActive())
+            {
+                throw new InvalidConfigurationException();
+            }
+
             if(!$this->eulaService->userHasAcceptedEULA($submitter))
             {
                 throw new EulaNotAcceptedException();
@@ -105,6 +120,11 @@ class PlagiarismChecker
     {
         try
         {
+            if(!$this->isPlagiarismCheckerActive())
+            {
+                throw new InvalidConfigurationException();
+            }
+
             if (!$similarityReportSettings->isValid())
             {
                 throw new \InvalidArgumentException('The given similarity report settings are not valid');
@@ -132,6 +152,11 @@ class PlagiarismChecker
     {
         try
         {
+            if(!$this->isPlagiarismCheckerActive())
+            {
+                throw new InvalidConfigurationException();
+            }
+
             if(!$this->eulaService->userHasAcceptedEULA($viewUser))
             {
                 throw new EulaNotAcceptedException();
@@ -151,6 +176,14 @@ class PlagiarismChecker
             $this->handleException($ex);
         }
 
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPlagiarismCheckerActive()
+    {
+        return $this->webhookManager->isWebhookRegistered() && $this->turnitinRepository->isValidConfig();
     }
 
     /**

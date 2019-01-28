@@ -54,7 +54,7 @@ class WebhookManager
      */
     public function isWebhookRegistered()
     {
-        return empty($this->getWebhookId());
+        return !empty($this->getWebhookId());
     }
 
     /**
@@ -101,6 +101,25 @@ class WebhookManager
     }
 
     /**
+     * Deletes the webhook
+     */
+    public function deleteWebhook()
+    {
+        if(!$this->isWebhookRegistered())
+        {
+            throw new \InvalidArgumentException(
+                'The given webhook is not registered and can not be deleted'
+            );
+        }
+
+        $webhookId = $this->getWebhookId();
+        $this->turnitinRepository->deleteWebhook($webhookId);
+
+        $this->storeWebhookId('');
+        $this->storeWebhookSecret('');
+    }
+
+    /**
      * @throws \Exception
      */
     public function removeWebhook()
@@ -116,6 +135,14 @@ class WebhookManager
 
         $this->storeWebhookId('');
         $this->storeWebhookSecret('');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConfigurationValid()
+    {
+        return $this->turnitinRepository->isValidConfig();
     }
 
     /**

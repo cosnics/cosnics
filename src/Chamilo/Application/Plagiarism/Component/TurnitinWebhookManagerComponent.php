@@ -17,6 +17,7 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 class TurnitinWebhookManagerComponent extends Manager
 {
     const PARAM_REGISTER_WEBHOOK = 'RegisterWebhook';
+    const PARAM_DELETE_WEBHOOK = 'DeleteWebhook';
 
     /**
      * @return string|\Symfony\Component\HttpFoundation\Response
@@ -35,6 +36,12 @@ class TurnitinWebhookManagerComponent extends Manager
             return $this->registerWebhook();
         }
 
+        $deleteWebhook = $this->getRequest()->getFromUrl(self::PARAM_DELETE_WEBHOOK);
+        if($deleteWebhook)
+        {
+            return $this->deleteWebhook();
+        }
+
         return $this->displayWebhookInfo();
     }
 
@@ -50,8 +57,25 @@ class TurnitinWebhookManagerComponent extends Manager
         }
         catch(\Exception $ex)
         {
-            $this->redirect($this->getTranslator()->trans('WebhookNotRegistered', [], Manager::context()), true);
             $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
+            $this->redirect($this->getTranslator()->trans('WebhookNotRegistered', [], Manager::context()), true);
+        }
+    }
+
+    /**
+     * Deletes the webhook
+     */
+    protected function deleteWebhook()
+    {
+        try
+        {
+            $this->getWebhookManager()->deleteWebhook();
+            $this->redirect($this->getTranslator()->trans('WebhookDeleted', [], Manager::context()), false);
+        }
+        catch(\Exception $ex)
+        {
+            $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
+            $this->redirect($this->getTranslator()->trans('WebhookNotDeleted', [], Manager::context()), true);
         }
     }
 
@@ -69,6 +93,16 @@ class TurnitinWebhookManagerComponent extends Manager
             $html[] = '<div class="alert alert-info">';
             $html[] = $this->getTranslator()->trans('WebhookInstalled', [], Manager::context());
             $html[] = '</div>';
+
+            $deleteWebhookUrl = $this->get_url([self::PARAM_DELETE_WEBHOOK => 1]);
+
+            $html[] = '<div class="text-center">';
+            $html[] = '<a href="' . $deleteWebhookUrl . '">';
+            $html[] = '<button type="button" class="btn btn-warning">';
+            $html[] = $this->getTranslator()->trans('DeleteWebhook', [], Manager::context());
+            $html[] = '</button>';
+            $html[] = '</a>';
+            $html[] = '</div>';
         }
         else
         {
@@ -76,15 +110,25 @@ class TurnitinWebhookManagerComponent extends Manager
             $html[] = $this->getTranslator()->trans('WebhookNotInstalled', [], Manager::context());
             $html[] = '</div>';
 
-            $registerWebhookUrl = $this->get_url([self::PARAM_REGISTER_WEBHOOK => 1]);
+            if($this->getWebhookManager()->isConfigurationValid())
+            {
+                $registerWebhookUrl = $this->get_url([self::PARAM_REGISTER_WEBHOOK => 1]);
 
-            $html[] = '<div class="text-center">';
-            $html[] = '<a href="' . $registerWebhookUrl . '">';
-            $html[] = '<button type="button" class="btn btn-primary">';
-            $html[] = $this->getTranslator()->trans('InstallWebhook', [], Manager::context());
-            $html[] = '</button>';
-            $html[] = '</a>';
-            $html[] = '</div>';
+                $html[] = '<div class="text-center">';
+                $html[] = '<a href="' . $registerWebhookUrl . '">';
+                $html[] = '<button type="button" class="btn btn-primary">';
+                $html[] = $this->getTranslator()->trans('InstallWebhook', [], Manager::context());
+                $html[] = '</button>';
+                $html[] = '</a>';
+                $html[] = '</div>';
+            }
+            else
+            {
+                $html[] = '<div class="alert alert-danger">';
+                $html[] = $this->getTranslator()->trans('ConfigurationInvalid', [], Manager::context());
+                $html[] = '</div>';
+            }
+
         }
 
 

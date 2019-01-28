@@ -1,1 +1,8 @@
 TypeName = "Plagiaat Controle"
+EULAInfo = "Alvorens je de gevraagde actie kan uitvoeren dien je eerst de overeenkomst met Turnitin (Plagiaat-controle software) te lezen en te accepteren."
+AcceptEULA = "Accepteer Turnitin overeenkomst"
+WebhookRegistered = "De webhook werd succesvol geregistreerd"
+WebhookNotRegistered = "De webhook kon niet worden geregistreerd"
+WebhookInstalled = "De webhook is reeds geregistreerd. Er hoeft geen actie ondernomen te worden"
+WebhookNotInstalled = "De webhook is nog niet geregistreerd. De installatie zal niet correct werken totdat de webhook geregistreerd is. Klik op de knop om de webhook te registreren."
+InstallWebhook = "Registreer webhook"

@@ -1,1 +1,8 @@
 TypeName = "Plagiarism Checker"
+EULAInfo = "Before you can execute the requested action you have to accept the EULA from Turnitin. Please read through the following page and click on accept to continue."
+AcceptEULA = "Accept Turnitin EULA"
+WebhookRegistered = "The webhook is succesfully registered"
+WebhookNotRegistered = "The webhook could not be registered"
+WebhookInstalled = "The webhook is already correctly installed"
+WebhookNotInstalled = "The webhook is not yet installed. The installation will not work correctly untill the webhook has been installed. Click on the button below to install the webhook for the current installation."
+InstallWebhook = "Install webhook"

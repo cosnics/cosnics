@@ -47,7 +47,7 @@ class TurnitinRepository
      */
     public function getEnabledFeatures()
     {
-        $request = new TurnitinRequest('GET', '/features-enabled', $this->getSecretKey());
+        $request = new TurnitinRequest('GET', 'features-enabled', $this->getSecretKey());
 
         return $this->handleJSONRequest($request);
     }
@@ -60,7 +60,7 @@ class TurnitinRepository
      */
     public function getEULAVersionInfo($versionId = 'latest')
     {
-        $url = sprintf('/eula/%s', $versionId);
+        $url = sprintf('eula/%s', $versionId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
         return $this->handleJSONRequest($request);
@@ -79,7 +79,7 @@ class TurnitinRepository
         string $userId, \DateTime $acceptedTimestamp, string $language, $versionId = 'latest'
     )
     {
-        $url = sprintf('/eula/%s/accept', $versionId);
+        $url = sprintf('eula/%s/accept', $versionId);
 
         $body = [
             'user_id' => $userId, 'accepted_timestamp' => $acceptedTimestamp->format(\DateTimeInterface::ISO8601),
@@ -102,7 +102,7 @@ class TurnitinRepository
      */
     public function getEULAUserAcceptanceInfo(string $userId, $versionId = 'latest')
     {
-        $url = sprintf('/eula/%s/accept/%s', $versionId, $userId);
+        $url = sprintf('eula/%s/accept/%s', $versionId, $userId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
         return $this->handleJSONRequest($request);
@@ -116,7 +116,7 @@ class TurnitinRepository
      */
     public function getEULAPage($versionId = 'latest')
     {
-        $url = sprintf('/eula/%s/view', $versionId);
+        $url = sprintf('eula/%s/view', $versionId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
         return $this->handleRequest($request);
@@ -138,7 +138,7 @@ class TurnitinRepository
         array $eula = []
     )
     {
-        $url = sprintf('/submissions');
+        $url = sprintf('submissions');
 
         $body = [
             'submitter' => $userId, 'owner' => $ownerId, 'title' => $title,
@@ -162,7 +162,7 @@ class TurnitinRepository
      */
     public function uploadSubmissionFile(string $submissionId, string $filename, resource $file)
     {
-        $url = sprintf('/submissions/%s/original', $submissionId);
+        $url = sprintf('submissions/%s/original', $submissionId);
         $contentDisposition = sprintf('inline; filename="%s"', $filename);
 
         $headers = ['Content-Type' => 'binary/octet-stream', 'Content-Disposition' => $contentDisposition];
@@ -179,7 +179,7 @@ class TurnitinRepository
      */
     public function getSubmissionInfo(string $submissionId)
     {
-        $url = sprintf('/submissions/%s', $submissionId);
+        $url = sprintf('submissions/%s', $submissionId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
         return $this->handleJSONRequest($request);
@@ -194,7 +194,7 @@ class TurnitinRepository
      */
     public function deleteSubmission(string $submissionId, bool $hardDelete = false)
     {
-        $url = sprintf('/submissions/%s', $submissionId);
+        $url = sprintf('submissions/%s', $submissionId);
 
         if ($hardDelete)
         {
@@ -214,7 +214,7 @@ class TurnitinRepository
      */
     public function recoverSubmission(string $submissionId)
     {
-        $url = sprintf('/submissions/%s/recover', $submissionId);
+        $url = sprintf('submissions/%s/recover', $submissionId);
         $request = new TurnitinRequest('PUT', $url, $this->getSecretKey());
 
         return $this->handleJSONRequest($request);
@@ -231,7 +231,7 @@ class TurnitinRepository
         string $submissionId, SimilarityReportSettings $similarityReportSettings
     )
     {
-        $url = sprintf('/submissions/%s/similarity', $submissionId);
+        $url = sprintf('submissions/%s/similarity', $submissionId);
 
         $body = $similarityReportSettings->toArray();
         $bodyString = json_encode($body);
@@ -249,7 +249,7 @@ class TurnitinRepository
      */
     public function getSimilarityReportInfo(string $submissionId)
     {
-        $url = sprintf('/submissions/%s/similarity', $submissionId);
+        $url = sprintf('submissions/%s/similarity', $submissionId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
         return $this->handleJSONRequest($request);
@@ -267,7 +267,7 @@ class TurnitinRepository
         string $submissionId, string $viewerUserId, ViewerLaunchSettings $viewerLaunchSettings
     )
     {
-        $url = sprintf('/submissions/%s/viewer-url', $submissionId);
+        $url = sprintf('submissions/%s/viewer-url', $submissionId);
 
         $body = $viewerLaunchSettings->toArray();
         $body['viewerUserId'] = $viewerUserId;
@@ -286,7 +286,7 @@ class TurnitinRepository
      */
     public function indexSubmission(string $submissionId)
     {
-        $url = sprintf('/submissions/%s/index', $submissionId);
+        $url = sprintf('submissions/%s/index', $submissionId);
         $request = new TurnitinRequest('PUT', $url, $this->getSecretKey());
 
         return $this->handleJSONRequest($request);
@@ -300,7 +300,7 @@ class TurnitinRepository
      */
     public function getSubmissionIndex(string $submissionId)
     {
-        $url = sprintf('/submissions/%s/index', $submissionId);
+        $url = sprintf('submissions/%s/index', $submissionId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
         return $this->handleJSONRequest($request);
@@ -318,10 +318,10 @@ class TurnitinRepository
      */
     public function createWebhook(
         string $signingSecret, string $webhookUrl, array $eventTypes, string $description = '',
-        boolean $allowInsecureURL = false
+        bool $allowInsecureURL = false
     )
     {
-        $url = sprintf('/webhooks');
+        $url = sprintf('webhooks');
 
         $body = [
             'description' => $description, 'signing_secret' => $signingSecret, 'url' => $webhookUrl,
@@ -343,7 +343,7 @@ class TurnitinRepository
      */
     public function getWebhookInfo(string $webhookId)
     {
-        $url = sprintf('/webhooks/%s', $webhookId);
+        $url = sprintf('webhooks/%s', $webhookId);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
         return $this->handleJSONRequest($request);
@@ -357,7 +357,7 @@ class TurnitinRepository
      */
     public function deleteWebhook(string $webhookId)
     {
-        $url = sprintf('/webhooks/%s', $webhookId);
+        $url = sprintf('webhooks/%s', $webhookId);
         $request = new TurnitinRequest('DELETE', $url, $this->getSecretKey());
 
         return $this->handleJSONRequest($request);
@@ -369,7 +369,7 @@ class TurnitinRepository
      */
     public function listWebhooks()
     {
-        $url = sprintf('/webhooks');
+        $url = sprintf('webhooks');
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
         return $this->handleJSONRequest($request);
@@ -385,7 +385,7 @@ class TurnitinRepository
      */
     public function updateWebhook(string $webhookId, array $eventTypes, string $description = '')
     {
-        $url = sprintf('/webhooks/%s', $webhookId);
+        $url = sprintf('webhooks/%s', $webhookId);
 
         $body = ['description' => $description, 'event_types' => $eventTypes];
         $bodyString = json_encode($body);
@@ -393,6 +393,14 @@ class TurnitinRepository
         $request = new TurnitinRequest('PATCH', $url, $this->getSecretKey(), $bodyString);
 
         return $this->handleJSONRequest($request);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidConfig()
+    {
+        return $this->turnitinConfig->isValid();
     }
 
     /**

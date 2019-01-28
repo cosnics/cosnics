@@ -1,1 +1,3 @@
 TypeName = "Admin Integration for Plagiarism App"
+ManageWebhook = "Manage Turnitin Webhook"
+ManageWebhookDescription = "Enable or disable the Turnitin webhook for this installation."

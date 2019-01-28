@@ -25,7 +25,7 @@ class TurnitinConfig
      * @param string $apiUrl
      * @param string $secretKey
      */
-    public function __construct(string $apiUrl, string $secretKey)
+    public function __construct(string $apiUrl = '', string $secretKey = '')
     {
         $this->apiUrl = $apiUrl;
         $this->secretKey = $secretKey;
@@ -45,5 +45,13 @@ class TurnitinConfig
     public function getSecretKey(): string
     {
         return $this->secretKey;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return !empty($this->apiUrl) && !empty($this->secretKey);
     }
 }
