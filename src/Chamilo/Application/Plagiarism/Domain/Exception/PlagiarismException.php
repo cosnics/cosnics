@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Plagiarism;
+namespace Chamilo\Application\Plagiarism\Domain\Exception;
 
 /**
  * @package Chamilo\Application\Plagiarism

@@ -1,9 +1,9 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Storage\Repository;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Storage\DataClass\EntryPlagiarismResult;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -70,7 +70,7 @@ abstract class EntryPlagiarismResultRepository
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
      *
      * @return bool
      */
@@ -80,7 +80,7 @@ abstract class EntryPlagiarismResultRepository
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
      *
      * @return bool
      */

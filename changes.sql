@@ -627,3 +627,28 @@ INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `
 
 ALTER TABLE `repository_learning_path_tree_node_data` ADD `configuration` TEXT NOT NULL AFTER `added_date`;
 ALTER TABLE `repository_learning_path_tree_node_data` ADD `configuration_class` VARCHAR(255) NOT NULL AFTER `configuration`;
+
+
+/** PLAGIARISM **/
+/** INSTALL PLAGIARISM APP **/
+CREATE TABLE `chamilo`.`tracking_weblcms_assignment_entry_plagiarism_result` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `entry_id` INT(10) UNSIGNED NOT NULL ,
+  `external_id` VARCHAR(255) NOT NULL ,
+  `status` INT(10) UNSIGNED NOT NULL ,
+  `result` INT(10) UNSIGNED NULL ,
+  `error_code` VARCHAR(255) NULL ,
+  PRIMARY KEY (`id`),
+  INDEX (`entry_id`),
+  INDEX (`external_id`)) ENGINE = InnoDB;
+
+CREATE TABLE `chamilo`.`tracking_weblcms_learning_path_assignment_entry_plagiarism` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `entry_id` INT(10) UNSIGNED NOT NULL ,
+  `external_id` VARCHAR(255) NOT NULL ,
+  `status` INT(10) UNSIGNED NOT NULL ,
+  `result` INT(10) UNSIGNED NULL ,
+  `error_code` VARCHAR(255) NULL ,
+  PRIMARY KEY (`id`),
+  INDEX (`entry_id`),
+  INDEX (`external_id`)) ENGINE = InnoDB;

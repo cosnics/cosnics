@@ -2,15 +2,20 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\EntryPlagiarismResultServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackRightsServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackServiceBridge;
 
 /**
  *
@@ -19,7 +24,8 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implements \Chamilo\Core\Repository\Feedback\FeedbackSupport
+abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
+    implements \Chamilo\Core\Repository\Feedback\FeedbackSupport
 {
     const PARAM_ACTION = 'assignment_display_action';
 
@@ -43,6 +49,46 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
     const ACTION_DELETE = self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM;
     const ACTION_AJAX = 'Ajax';
     const ACTION_EPHORUS = 'Ephorus';
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
+     */
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent::__construct($applicationConfiguration);
+        $this->buildBridgeServices();
+    }
+
+    /**
+     * Builds the bridge services for the feedback and for the extensions
+     */
+    protected function buildBridgeServices()
+    {
+        /** @var FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge */
+        $assignmentFeedbackServiceBridge =
+            $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
+
+        /** @var NotificationServiceBridgeInterface $notificationServiceBridge */
+        $notificationServiceBridge =
+            $this->getBridgeManager()->getBridgeByInterface(NotificationServiceBridgeInterface::class);
+
+        $feedbackServiceBridge =
+            new FeedbackServiceBridge($assignmentFeedbackServiceBridge, $notificationServiceBridge);
+        $feedbackServiceBridge->setEntry($this->entry);
+
+        $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge();
+        $feedbackRightsServiceBridge->setCurrentUser($this->getUser());
+
+        $assignmentEntryPlagiarismResultServiceBridge =
+            $this->getBridgeManager()->getBridgeByInterface(EntryPlagiarismResultServiceBridgeInterface::class);
+
+        $entryPlagiarismResultServiceBridge =
+            new EntryPlagiarismResultServiceBridge($assignmentEntryPlagiarismResultServiceBridge);
+
+        $this->getBridgeManager()->addBridge($feedbackServiceBridge);
+        $this->getBridgeManager()->addBridge($feedbackRightsServiceBridge);
+        $this->getBridgeManager()->addBridge($entryPlagiarismResultServiceBridge);
+    }
 
     /**
      *
@@ -91,6 +137,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
     /**
      *
      * @return integer
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function getEntityIdentifier()
     {
@@ -100,11 +147,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
 
             if (empty($this->entityIdentifier))
             {
-                $this->entityIdentifier = $this->getAssignmentServiceBridge()->getCurrentEntityIdentifier($this->getUser());
+                $this->entityIdentifier =
+                    $this->getAssignmentServiceBridge()->getCurrentEntityIdentifier($this->getUser());
             }
         }
 
-        if(empty($this->entityIdentifier))
+        if (empty($this->entityIdentifier))
         {
             throw new UserException($this->getTranslator()->trans('CanNotViewAssignment', [], Manager::context()));
         }
@@ -164,12 +212,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
      * @param string[] $parameters
      *
      * @return string[]
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function getAvailableEntitiesParameters($parameters)
     {
         $availableEntities = [];
 
-        $availableEntityIds = $this->getAssignmentServiceBridge()->getAvailableEntityIdentifiersForUser($this->getUser());
+        $availableEntityIds =
+            $this->getAssignmentServiceBridge()->getAvailableEntityIdentifiersForUser($this->getUser());
         foreach ($availableEntityIds as $availableEntityId)
         {
             if ($availableEntityId == $this->getEntityIdentifier())
@@ -177,9 +227,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
                 continue;
             }
 
-            $availableEntities[$availableEntityId] = $this->getAssignmentServiceBridge()->renderEntityNameByEntityTypeAndEntityId(
-                $this->getEntityType(), $availableEntityId
-            );
+            $availableEntities[$availableEntityId] =
+                $this->getAssignmentServiceBridge()->renderEntityNameByEntityTypeAndEntityId(
+                    $this->getEntityType(), $availableEntityId
+                );
         }
 
         $parameters['HAS_MULTIPLE_ENTITIES'] = count($availableEntityIds) > 1;
@@ -192,7 +243,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
         $parameters['ENTITY_TYPE_PLURAL'] =
             strtolower($this->getAssignmentServiceBridge()->getPluralEntityNameByType($this->getEntityType()));
 
-        $parameters['ENTITY_TYPE'] = strtolower($this->getAssignmentServiceBridge()->getEntityNameByType($this->getEntityType()));
+        $parameters['ENTITY_TYPE'] =
+            strtolower($this->getAssignmentServiceBridge()->getEntityNameByType($this->getEntityType()));
 
         return $parameters;
     }
@@ -205,16 +257,18 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
         return $this->getEphorusServiceBridge()->isEphorusEnabled();
     }
 
-    public function get_content_object_display_attachment_url($attachment,
-                                                              $selected_complex_content_object_item_id = null)
+    public function get_content_object_display_attachment_url(
+        $attachment,
+        $selected_complex_content_object_item_id = null
+    )
     {
         $parameters = [
-                static::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
-                self::PARAM_ATTACHMENT_ID => $attachment->get_id(),
-                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item_id
+            static::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
+            self::PARAM_ATTACHMENT_ID => $attachment->get_id(),
+            self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item_id
         ];
 
-        if($this->getEntry() instanceof Entry)
+        if ($this->getEntry() instanceof Entry)
         {
             $parameters[self::PARAM_ENTRY_ID] = $this->getEntry()->getId();
         }

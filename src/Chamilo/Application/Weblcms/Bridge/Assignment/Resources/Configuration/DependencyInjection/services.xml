@@ -12,6 +12,7 @@
         <service id="Chamilo\Application\Weblcms\Bridge\Assignment\EphorusServiceBridge" />
         <service id="Chamilo\Application\Weblcms\Bridge\Assignment\FeedbackServiceBridge" />
         <service id="Chamilo\Application\Weblcms\Bridge\Assignment\NotificationServiceBridge" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\EntryPlagiarismResultServiceBridge" />
 
         <service
                 id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager">

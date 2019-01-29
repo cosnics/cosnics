@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Plagiarism\Domain\Turnitin\Exception;
 
-use Chamilo\Application\Plagiarism\PlagiarismException;
+use Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException;
 
 /**
  * @package Chamilo\Application\Plagiarism\Domain\Turnitin\Exception

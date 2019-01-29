@@ -16,6 +16,11 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 abstract class Manager extends Application
 {
+    const PARAM_ACTION = 'PlagiarismAction';
+
+    const ACTION_CHECK_PLAGIARISM = 'CheckPlagiarism';
+    const DEFAULT_ACTION = self::ACTION_CHECK_PLAGIARISM;
+
     /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration

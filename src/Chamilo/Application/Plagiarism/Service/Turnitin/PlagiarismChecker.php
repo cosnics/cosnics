@@ -2,11 +2,12 @@
 
 namespace Chamilo\Application\Plagiarism\Service\Turnitin;
 
+use Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\EulaNotAcceptedException;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\InvalidConfigurationException;
+use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\InvalidFileException;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
-use Chamilo\Application\Plagiarism\PlagiarismException;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -69,7 +70,9 @@ class PlagiarismChecker
      * @param array $metadata
      * @param array $eula
      *
-     * @throws \Chamilo\Application\Plagiarism\PlagiarismException
+     * @return string
+     *
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
     public function uploadFile(
         User $submitter, User $owner, string $title, string $filePath, string $filename,
@@ -88,9 +91,9 @@ class PlagiarismChecker
                 throw new EulaNotAcceptedException();
             }
 
-            if (!file_exists($filePath))
+            if (!$this->canUploadFile($filePath, $filename))
             {
-                throw new \InvalidArgumentException(sprintf('The given file with path %s does not exist', $filePath));
+                throw new InvalidFileException($filePath, $filename);
             }
 
             $submitterId = $this->userConverter->convertUserToId($submitter);
@@ -103,18 +106,48 @@ class PlagiarismChecker
             $submissionId = $createSubmissionResponse['id'];
 
             $this->turnitinRepository->uploadSubmissionFile($submissionId, $filename, fopen($filePath, 'r'));
+            return $submissionId;
         }
         catch(\Exception $ex)
         {
             $this->handleException($ex);
         }
+
+        return null;
+    }
+
+    /**
+     * Checks whether or not a file can be uploaded
+     *   File must exist
+     *   Filename must be within a list of valid extensions
+     *
+     * @param string $filePath
+     * @param string $filename
+     *
+     * @return bool
+     */
+    public function canUploadFile(string $filePath, string $filename)
+    {
+        if (!file_exists($filePath))
+        {
+            return false;
+        }
+
+        $fileParts = explode('.', $filename);
+        $extension = array_pop($fileParts);
+        if(!in_array($extension, $this->getAllowedFileExtensions()))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * @param string $submissionId
      * @param \Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings $similarityReportSettings
      *
-     * @throws \Chamilo\Application\Plagiarism\PlagiarismException
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
     public function generateSimilarityReport(string $submissionId, SimilarityReportSettings $similarityReportSettings)
     {
@@ -144,7 +177,7 @@ class PlagiarismChecker
      * @param \Chamilo\Core\User\Storage\DataClass\User $viewUser
      * @param \Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings $viewerLaunchSettings
      *
-     * @throws \Chamilo\Application\Plagiarism\PlagiarismException
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
     public function createViewerLaunchURL(
         string $submissionId, User $viewUser, ViewerLaunchSettings $viewerLaunchSettings
@@ -187,9 +220,20 @@ class PlagiarismChecker
     }
 
     /**
+     * @param string $redirectToURL
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
+     */
+    public function getRedirectToEULAPageResponse(string $redirectToURL)
+    {
+        return $this->eulaService->getRedirectToEULAPageResponse($redirectToURL);
+    }
+
+    /**
      * @param \Exception $ex
      *
-     * @throws \Chamilo\Application\Plagiarism\PlagiarismException
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
     protected function handleException(\Exception $ex)
     {
@@ -199,6 +243,14 @@ class PlagiarismChecker
         }
 
         throw new PlagiarismException($ex->getMessage());
+    }
+
+    /**
+     * @return array
+     */
+    protected function getAllowedFileExtensions()
+    {
+        return ['doc', 'txt', 'rtf', 'sxw', 'odt', 'pdf', 'html', 'htm', 'docx', 'wpd'];
     }
 
 }

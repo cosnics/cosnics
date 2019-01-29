@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\AssignmentServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\Assignment\EntryPlagiarismResultServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\Assignment\EphorusServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\Assignment\FeedbackServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\Assignment\NotificationServiceBridge;
@@ -96,10 +97,14 @@ class DisplayComponent extends Manager implements DelegateComponent
         $notificationServiceBridge = $this->getService(NotificationServiceBridge::class);
         $notificationServiceBridge->setContentObjectPublication($contentObjectPublication);
 
+        /** @var \Chamilo\Application\Weblcms\Bridge\Assignment\EntryPlagiarismResultServiceBridge $entryPlagiarismResultServiceBridge */
+        $entryPlagiarismResultServiceBridge = $this->getService(EntryPlagiarismResultServiceBridge::class);
+
         $this->getBridgeManager()->addBridge($assignmentServiceBridge);
         $this->getBridgeManager()->addBridge($assignmentEphorusServiceBridge);
         $this->getBridgeManager()->addBridge($assignmentFeedbackServiceBridge);
         $this->getBridgeManager()->addBridge($notificationServiceBridge);
+        $this->getBridgeManager()->addBridge($entryPlagiarismResultServiceBridge);
     }
 
     /**

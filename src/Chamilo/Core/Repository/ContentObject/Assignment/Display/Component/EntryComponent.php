@@ -4,10 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackRightsServiceBridge;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackServiceBridge;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreFormType;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\FormHandler\SetScoreFormHandler;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
@@ -247,27 +243,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         ];
 
         return array_merge($baseParameters, $extendParameters);
-    }
-
-    protected function buildBridgeServices()
-    {
-        /** @var FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge */
-        $assignmentFeedbackServiceBridge =
-            $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
-
-        /** @var NotificationServiceBridgeInterface $notificationServiceBridge */
-        $notificationServiceBridge =
-            $this->getBridgeManager()->getBridgeByInterface(NotificationServiceBridgeInterface::class);
-
-        $feedbackServiceBridge =
-            new FeedbackServiceBridge($assignmentFeedbackServiceBridge, $notificationServiceBridge);
-        $feedbackServiceBridge->setEntry($this->entry);
-
-        $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge();
-        $feedbackRightsServiceBridge->setCurrentUser($this->getUser());
-
-        $this->getBridgeManager()->addBridge($feedbackServiceBridge);
-        $this->getBridgeManager()->addBridge($feedbackRightsServiceBridge);
     }
 
     /**

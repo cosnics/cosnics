@@ -4,7 +4,7 @@ namespace Chamilo\Application\Plagiarism\Service\Turnitin;
 
 use Chamilo\Application\Plagiarism\Component\TurnitinEulaComponent;
 use Chamilo\Application\Plagiarism\Manager;
-use Chamilo\Application\Plagiarism\PlagiarismException;
+use Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\ConfigurationWriter;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -140,7 +140,7 @@ class EulaService
      * @param string $redirectToURL
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Chamilo\Application\Plagiarism\PlagiarismException
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
     public function getRedirectToEULAPageResponse(string $redirectToURL)
     {

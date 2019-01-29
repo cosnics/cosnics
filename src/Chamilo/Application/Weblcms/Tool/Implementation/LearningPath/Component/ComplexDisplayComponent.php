@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\AssignmentServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EntryPlagiarismResultServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EphorusServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\FeedbackServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServiceBridge;
@@ -196,6 +197,10 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $assignmentNotificationServiceBridge = $this->getService(NotificationServiceBridge::class);
         $assignmentNotificationServiceBridge->setContentObjectPublication($this->publication);
         $this->getBridgeManager()->addBridge($assignmentNotificationServiceBridge);
+
+        /** @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EntryPlagiarismResultServiceBridge $entryPlagiarismResultServiceBridge */
+        $entryPlagiarismResultServiceBridge = $this->getService(EntryPlagiarismResultServiceBridge::class);
+        $this->getBridgeManager()->addBridge($entryPlagiarismResultServiceBridge);
     }
 
     public function get_root_content_object()

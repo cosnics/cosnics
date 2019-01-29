@@ -1,10 +1,10 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Service;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Service;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Storage\DataClass\EntryPlagiarismResult;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Storage\Repository\EntryPlagiarismResultRepository;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\Repository\EntryPlagiarismResultRepository;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Service
@@ -14,14 +14,14 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiaris
 abstract class EntryPlagiarismResultService
 {
     /**
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Storage\Repository\EntryPlagiarismResultRepository
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\Repository\EntryPlagiarismResultRepository
      */
     protected $entryPlagiarismResultRepository;
 
     /**
      * EntryPlagiarismResultService constructor.
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Storage\Repository\EntryPlagiarismResultRepository $entryPlagiarismResultRepository
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\Repository\EntryPlagiarismResultRepository $entryPlagiarismResultRepository
      */
     public function __construct(
         EntryPlagiarismResultRepository $entryPlagiarismResultRepository
@@ -53,12 +53,47 @@ abstract class EntryPlagiarismResultService
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      * @param string $externalId
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult
      */
     public function createEntryPlagiarismResultForEntry(Entry $entry, string $externalId)
     {
-        $plagiarismInstance = $this->createEntryPlagiarismResultInstance();
+        $entryPlagiarismResult = $this->createEntryPlagiarismResultInstance();
+
+        $entryPlagiarismResult->setEntryId($entry->getId());
+        $entryPlagiarismResult->setExternalId($externalId);
+        $entryPlagiarismResult->setStatus(EntryPlagiarismResult::STATUS_IN_PROGRESS);
+
+        if (!$this->entryPlagiarismResultRepository->createEntryPlagiarismResult($entryPlagiarismResult))
+        {
+            throw new \InvalidArgumentException(
+                sprintf('The entry plagiarism result for entry %s could not be created', $entry->getId())
+            );
+        }
+
+        return $entryPlagiarismResult;
     }
 
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function updateEntryPlagiarismResult(EntryPlagiarismResult $entryPlagiarismResult)
+    {
+        if(!$this->entryPlagiarismResultRepository->updateEntryPlagiarismResult($entryPlagiarismResult))
+        {
+            throw new \RuntimeException(
+                sprintf('The entry plagiarism result %s could not be update', $entryPlagiarismResult->getId())
+            );
+        }
+
+        return $entryPlagiarismResult;
+    }
+
+    /**
+     * @return EntryPlagiarismResult
+     */
     abstract protected function createEntryPlagiarismResultInstance();
 
 }

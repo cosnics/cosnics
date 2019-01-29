@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="tracking_weblcms_learning_path_assignment_entry_plagiarism">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="entry_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="external_id"
+            type="string"
+            length="255"
+            notnull="1" />
+        <property
+            name="status"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="result"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="error_code"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
+    <index name="entry_id">
+        <indexproperty name="entry_id" />
+    </index>
+    <index name="external_id">
+        <indexproperty name="external_id" />
+    </index>
+</object>

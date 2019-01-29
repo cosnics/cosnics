@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Storage\DataClass;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
@@ -15,6 +15,11 @@ abstract class EntryPlagiarismResult extends DataClass
     const PROPERTY_EXTERNAL_ID = 'external_id';
     const PROPERTY_STATUS = 'status';
     const PROPERTY_RESULT = 'result';
+    const PROPERTY_ERROR_CODE = 'error_code';
+
+    const STATUS_IN_PROGRESS = 1;
+    const STATUS_FAILED = 2;
+    const STATUS_SUCCESS = 3;
 
     /**
      * Get the default properties of all feedback
@@ -27,6 +32,7 @@ abstract class EntryPlagiarismResult extends DataClass
         $extended_property_names[] = self::PROPERTY_EXTERNAL_ID;
         $extended_property_names[] = self::PROPERTY_STATUS;
         $extended_property_names[] = self::PROPERTY_RESULT;
+        $extended_property_names[] = self::PROPERTY_ERROR_CODE;
 
         return parent::get_default_property_names($extended_property_names);
     }
@@ -63,7 +69,6 @@ abstract class EntryPlagiarismResult extends DataClass
         $this->set_default_property(self::PROPERTY_EXTERNAL_ID, $externalId);
     }
 
-
     /**
      * @return string
      */
@@ -77,6 +82,17 @@ abstract class EntryPlagiarismResult extends DataClass
      */
     public function setStatus(string $status)
     {
+        $allowedStatuses = $this->getAllowedStatuses();
+
+        if (!in_array($status, $allowedStatuses))
+        {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The given status %s is not allowed. Status must be either one of the following constants (STATUS_IN_PROGRESS, STATUS_SUCCESS, STATUS_FAILED)'
+                )
+            );
+        }
+
         $this->set_default_property(self::PROPERTY_STATUS, $status);
     }
 
@@ -85,7 +101,7 @@ abstract class EntryPlagiarismResult extends DataClass
      */
     public function getResult()
     {
-        return $this->get_default_property(self::PROPERTY_STATUS);
+        return $this->get_default_property(self::PROPERTY_RESULT);
     }
 
     /**
@@ -93,7 +109,31 @@ abstract class EntryPlagiarismResult extends DataClass
      */
     public function setResult(string $status)
     {
-        $this->set_default_property(self::PROPERTY_STATUS, $status);
+        $this->set_default_property(self::PROPERTY_RESULT, $status);
     }
-    
+
+    /**
+     * @return string
+     */
+    public function getErrorCode()
+    {
+        return $this->get_default_property(self::PROPERTY_ERROR_CODE);
+    }
+
+    /**
+     * @param string $errorCode
+     */
+    public function setErrorCode(string $errorCode)
+    {
+        $this->set_default_property(self::PROPERTY_ERROR_CODE, $errorCode);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllowedStatuses()
+    {
+        return [self::STATUS_IN_PROGRESS, self::STATUS_SUCCESS, self::STATUS_FAILED];
+    }
+
 }
