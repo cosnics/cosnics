@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\E
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Extensions\ExtensionManager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -49,6 +50,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_DELETE = self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM;
     const ACTION_AJAX = 'Ajax';
     const ACTION_EPHORUS = 'Ephorus';
+    const ACTION_EXTENSION = 'Extension';
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
@@ -74,7 +76,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
         $feedbackServiceBridge =
             new FeedbackServiceBridge($assignmentFeedbackServiceBridge, $notificationServiceBridge);
-        $feedbackServiceBridge->setEntry($this->entry);
+
+        if($this->getEntry() instanceof Entry)
+        {
+            $feedbackServiceBridge->setEntry($this->getEntry());
+        }
 
         $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge();
         $feedbackRightsServiceBridge->setCurrentUser($this->getUser());
@@ -379,5 +385,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function getEphorusServiceBridge()
     {
         return $this->getBridgeManager()->getBridgeByInterface(EphorusServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return ExtensionManager
+     */
+    protected function getExtensionManager()
+    {
+        return $this->getService(ExtensionManager::class);
     }
 }

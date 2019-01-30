@@ -12,5 +12,7 @@
             <argument type="service" id="symfony.component.translation.translator"/>
             <tag name="form.type"/>
         </service>
+
+        <service id="Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Extensions\ExtensionManager" autowire="true" />
     </services>
 </container>

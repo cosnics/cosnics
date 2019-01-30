@@ -1,9 +1,8 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\DependencyInjection;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\DependencyInjection;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\DependencyInjection\CompilerPass\AssignmentExtensionCompilerPass;
-use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
+use Chamilo\Core\Repository\DependencyInjection\CompilerPass\AssignmentExtensionCompilerPass;
 use Chamilo\Libraries\File\Path;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,7 +19,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class DependencyInjectionExtension extends Extension implements ExtensionInterface, ICompilerPassExtension
+class DependencyInjectionExtension extends Extension implements ExtensionInterface
 {
 
     /**
@@ -37,7 +36,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     {
         $loader = new XmlFileLoader(
             $container, new FileLocator(
-                Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\Assignment\Display') .
+                Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism') .
                 'Resources/Configuration/DependencyInjection'
             )
         );
@@ -56,16 +55,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function getAlias()
     {
-        return 'chamilo.core.repository.content_object.assignment';
-    }
-
-    /**
-     * Registers the compiler passes in the container
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
-    public function registerCompilerPasses(ContainerBuilder $container)
-    {
-        $container->addCompilerPass(new AssignmentExtensionCompilerPass());
+        return 'chamilo.core.repository.content_object.assignment.display.extension.plagiarism';
     }
 }

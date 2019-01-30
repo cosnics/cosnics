@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface;
@@ -19,6 +19,9 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'PlagiarismAction';
 
     const ACTION_CHECK_PLAGIARISM = 'CheckPlagiarism';
+    const ACTION_VIEW_PLAGIARISM_RESULT = 'ViewPlagiarismResult';
+    const ACTION_RETRY_CHECK_PLAGIARISM = 'RetryCheckPlagiarism';
+
     const DEFAULT_ACTION = self::ACTION_CHECK_PLAGIARISM;
 
     /**

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Package;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Package;
 
 use Chamilo\Configuration\Package\NotAllowed;
 

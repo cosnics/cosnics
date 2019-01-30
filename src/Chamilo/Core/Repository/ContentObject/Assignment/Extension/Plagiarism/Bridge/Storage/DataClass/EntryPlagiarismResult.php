@@ -1,11 +1,11 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Storage\DataClass
+ * @package Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Storage\DataClass
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -17,9 +17,16 @@ abstract class EntryPlagiarismResult extends DataClass
     const PROPERTY_RESULT = 'result';
     const PROPERTY_ERROR_CODE = 'error_code';
 
-    const STATUS_IN_PROGRESS = 1;
-    const STATUS_FAILED = 2;
-    const STATUS_SUCCESS = 3;
+    const STATUS_UPLOAD_IN_PROGRESS = 1;
+    const STATUS_CREATE_REPORT_IN_PROGRESS = 2;
+    const STATUS_FAILED = 3;
+    const STATUS_SUCCESS = 4;
+
+    const ERROR_UNKNOWN = 1;
+    const ERROR_INVALID_FILE = 2;
+    const ERROR_FILE_TOO_SMALL = 3;
+    const ERROR_FILE_TOO_LARGE = 4;
+    const ERROR_TOO_MANY_PAGES = 5;
 
     /**
      * Get the default properties of all feedback
@@ -133,7 +140,43 @@ abstract class EntryPlagiarismResult extends DataClass
      */
     public function getAllowedStatuses()
     {
-        return [self::STATUS_IN_PROGRESS, self::STATUS_SUCCESS, self::STATUS_FAILED];
+        return [
+            self::STATUS_UPLOAD_IN_PROGRESS, self::STATUS_CREATE_REPORT_IN_PROGRESS, self::STATUS_SUCCESS,
+            self::STATUS_FAILED
+        ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInProgress()
+    {
+        return $this->getStatus() == self::STATUS_UPLOAD_IN_PROGRESS ||
+            $this->getStatus() == self::STATUS_CREATE_REPORT_IN_PROGRESS;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFailed()
+    {
+        return $this->getStatus() == self::STATUS_FAILED;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuccess()
+    {
+        return $this->getStatus() == self::STATUS_SUCCESS;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canRetry()
+    {
+        return $this->getErrorCode() == self::ERROR_UNKNOWN;
     }
 
 }

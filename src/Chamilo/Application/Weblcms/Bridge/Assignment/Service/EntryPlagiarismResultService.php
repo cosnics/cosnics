@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 
 /**
  *
@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiaris
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class EntryPlagiarismResultService extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Service\EntryPlagiarismResultService
+class EntryPlagiarismResultService extends \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Service\EntryPlagiarismResultService
 {
     /**
      * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\EntryPlagiarismResultRepository

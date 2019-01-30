@@ -185,8 +185,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
         $configuration->set(\Chamilo\Core\Repository\Feedback\Manager::CONFIGURATION_SHOW_FEEDBACK_HEADER, false);
 
-        $this->buildBridgeServices();
-
         $feedbackManager = $this->getApplicationFactory()->getApplication(
             "Chamilo\Core\Repository\Feedback", $configuration,
             \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE
@@ -195,6 +193,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $feedbackManagerHtml = $feedbackManager->run();
 
         $contentObjects = $assignment->getAutomaticFeedbackObjects();
+
+        $extensionManager = $this->getExtensionManager();
+        $titleExtension =
+            $extensionManager->extendEntryViewerTitle($this, $this->getAssignment(), $this->getEntry(), $this->getUser());
+
+        $partsExtension =
+            $extensionManager->extendEntryViewerParts($this, $this->getAssignment(), $this->getEntry(), $this->getUser());
 
         $extendParameters = [
             'HAS_ENTRY' => true,
@@ -239,7 +244,9 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'ATTACHED_CONTENT_OBJECTS' => $this->getAttachedContentObjects(),
             'SHOW_COMPACT_FEEDBACK' => $this->getConfigurationConsulter()->getSetting(
                 ['Chamilo\Core\Repository\ContentObject\Assignment', 'show_compact_feedback']
-            )
+            ),
+            'TITLE_EXTENSION' => $titleExtension,
+            'PARTS_EXTENSION' => $partsExtension
         ];
 
         return array_merge($baseParameters, $extendParameters);

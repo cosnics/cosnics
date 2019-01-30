@@ -17,9 +17,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * @package Chamilo\Application\Plagiarism\Service\Turnitin
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ *
+ * TODO: always retrieve version from database / api before getting the eula page
  */
 class EulaService
 {
+    const ZULU_DATE_FORMAT = 'Y-m-d\TH:i:s\Z';
+    
+
     /**
      * @var \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository
      */
@@ -119,6 +124,8 @@ class EulaService
             $dateTime = new \DateTime();
         }
 
+        $dateTime->setTimezone(new \DateTimeZone('UTC'));
+
         $datePeriod = $this->getActiveEULADatePeriod();
         if (!$this->isDateTimeWithinPeriod($dateTime, $datePeriod))
         {
@@ -128,10 +135,10 @@ class EulaService
         }
 
         $userId = $this->userConverter->convertUserToId($user);
-        $this->turnitinRepository->acceptEULAVersion($userId, $dateTime, 'en-US', 'latest');
+        $this->turnitinRepository->acceptEULAVersion($userId, $dateTime, 'en-US', $this->getEULAVersion());
 
         $this->localSetting->create(
-            'turnitin_eula_accepted_date', $dateTime->format(\DateTimeInterface::ISO8601),
+            'turnitin_eula_accepted_date', $dateTime->format(self::ZULU_DATE_FORMAT),
             'Chamilo\Application\Plagiarism', $user
         );
     }
@@ -174,8 +181,8 @@ class EulaService
             ['Chamilo\Application\Plagiarism', 'turnitin_eula_valid_until_date']
         );
 
-        $dateTimeFrom = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $validDateFrom);
-        $dateTimeUntil = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $validUntil);
+        $dateTimeFrom = \DateTime::createFromFormat(self::ZULU_DATE_FORMAT, $validDateFrom);
+        $dateTimeUntil = \DateTime::createFromFormat(self::ZULU_DATE_FORMAT, $validUntil);
 
         if (!$dateTimeFrom instanceof \DateTime || !$dateTimeUntil instanceof \DateTime)
         {
@@ -184,13 +191,29 @@ class EulaService
 
         $datePeriod = new \DatePeriod($dateTimeFrom, new \DateInterval('P1D'), $dateTimeUntil);
 
-        if (!$this->isDateTimeWithinPeriod(new \DateTime(), $datePeriod))
+        $currentDate = new \DateTime();
+        $currentDate->setTimezone(new \DateTimeZone('UTC'));
+
+        if (!$this->isDateTimeWithinPeriod($currentDate, $datePeriod))
         {
             return $this->retrieveEULADatePeriodFromAPI();
         }
 
         return $datePeriod;
     }
+
+    /**
+     * @return string
+     */
+    protected function getEULAVersion()
+    {
+        $eulaVersion = $this->configurationConsulter->getSetting(
+            ['Chamilo\Application\Plagiarism', 'turnitin_eula_version']
+        );
+
+        return $eulaVersion;
+    }
+
 
     /**
      * @return \DatePeriod
@@ -200,28 +223,43 @@ class EulaService
     {
         $versionInfo = $this->turnitinRepository->getEULAVersionInfo();
 
-        $validDateFrom = $versionInfo['valid_from'];
-        $validUntil = $versionInfo['valid_until'];
+        $validFrom = $versionInfo['valid_from'];
+        $dateTimeFrom = \DateTime::createFromFormat(self::ZULU_DATE_FORMAT, $validFrom);
 
-        $dateTimeFrom = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $validDateFrom);
-        $dateTimeUntil = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $validUntil);
+        $validUntil = $versionInfo['valid_until'];
+        if(empty($validUntil))
+        {
+            $dateTimeUntil = new \DateTime();
+            $dateTimeUntil->add(new \DateInterval('P1D'));
+            $dateTimeUntil->setTimezone(new \DateTimeZone('UTC'));
+
+            $validUntil = $dateTimeUntil->format(self::ZULU_DATE_FORMAT);
+        }
+        else
+        {
+            $dateTimeUntil = \DateTime::createFromFormat(self::ZULU_DATE_FORMAT, $validUntil);
+        }
 
         if (!$dateTimeFrom instanceof \DateTime || !$dateTimeUntil instanceof \DateTime)
         {
             throw new \RuntimeException(
                 sprintf(
                     'The given EULA date range from %s to %s could not be parsed as a valid date time object',
-                    $validDateFrom, $validUntil
+                    $validFrom, $validUntil
                 )
             );
         }
 
         $this->configurationWriter->writeSetting(
-            'Chamilo\Application\Plagiarism', 'turnitin_eula_valid_from_date', $validDateFrom
+            'Chamilo\Application\Plagiarism', 'turnitin_eula_valid_from_date', $validFrom
         );
 
         $this->configurationWriter->writeSetting(
             'Chamilo\Application\Plagiarism', 'turnitin_eula_valid_until_date', $validUntil
+        );
+
+        $this->configurationWriter->writeSetting(
+            'Chamilo\Application\Plagiarism', 'turnitin_eula_version', $versionInfo['version']
         );
 
         return new \DatePeriod($dateTimeFrom, new \DateInterval('P1D'), $dateTimeUntil);
@@ -237,7 +275,7 @@ class EulaService
         $acceptedDate =
             $this->localSetting->get('turnitin_eula_accepted_date', 'Chamilo\Application\Plagiarism', $user);
 
-        $dateTime = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $acceptedDate);
+        $dateTime = \DateTime::createFromFormat(self::ZULU_DATE_FORMAT, $acceptedDate);
 
         if (!$dateTime instanceof \DateTime)
         {

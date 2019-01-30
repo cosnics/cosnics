@@ -3,13 +3,13 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface;
 
 /**
  * Interface EntryPlagiarismResultServiceBridge
  *
- * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Interfaces
+ * @package Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Interfaces
  */
 class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultServiceBridgeInterface
 {
@@ -17,6 +17,18 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
      * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService
      */
     protected $assignmentEntryPlagiarismResultService;
+
+    /**
+     * EntryPlagiarismResultServiceBridge constructor.
+     *
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService $assignmentEntryPlagiarismResultService
+     */
+    public function __construct(
+        \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService $assignmentEntryPlagiarismResultService
+    )
+    {
+        $this->assignmentEntryPlagiarismResultService = $assignmentEntryPlagiarismResultService;
+    }
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
@@ -42,7 +54,7 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      * @param string $externalId
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult
      */
     public function createEntryPlagiarismResultForEntry(Entry $entry, string $externalId)
     {
@@ -52,9 +64,9 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function updateEntryPlagiarismResult(EntryPlagiarismResult $entryPlagiarismResult)
     {

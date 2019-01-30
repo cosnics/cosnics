@@ -3,15 +3,15 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 
 /**
  * Interface EntryPlagiarismResultServiceBridge
  *
- * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Interfaces
+ * @package Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Interfaces
  */
 class EntryPlagiarismResultServiceBridge implements
-    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface
+    \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface
 {
     /**
      * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface
@@ -54,7 +54,7 @@ class EntryPlagiarismResultServiceBridge implements
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      * @param string $externalId
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult
      */
     public function createEntryPlagiarismResultForEntry(Entry $entry, string $externalId)
     {
@@ -64,9 +64,9 @@ class EntryPlagiarismResultServiceBridge implements
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function updateEntryPlagiarismResult(EntryPlagiarismResult $entryPlagiarismResult)
     {

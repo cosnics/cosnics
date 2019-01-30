@@ -9,6 +9,7 @@
             <setting name="turnitin_eula_accepted_date" field="text" locked="true" default="" user_setting="1" />
             <setting name="turnitin_eula_valid_from_date" field="text" locked="true" default="" />
             <setting name="turnitin_eula_valid_until_date" field="text" locked="true" default="" />
+            <setting name="turnitin_eula_version" field="text" locked="true" default="" />
         </category>
     </settings>
 </package>

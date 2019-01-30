@@ -11,6 +11,7 @@ use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\TurnitinConfig;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\TurnitinRequest;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
+use Chamilo\Application\Plagiarism\Service\Turnitin\EulaService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 
@@ -82,7 +83,7 @@ class TurnitinRepository
         $url = sprintf('eula/%s/accept', $versionId);
 
         $body = [
-            'user_id' => $userId, 'accepted_timestamp' => $acceptedTimestamp->format(\DateTimeInterface::ISO8601),
+            'user_id' => $userId, 'accepted_timestamp' => $acceptedTimestamp->format(EulaService::ZULU_DATE_FORMAT),
             'language' => $language
         ];
 
@@ -134,8 +135,8 @@ class TurnitinRepository
      * @throws \Exception
      */
     public function createSubmission(
-        string $userId, string $ownerId, string $title, bool $extractTextOnly = false, array $metadata = [],
-        array $eula = []
+        string $userId, string $ownerId, string $title, bool $extractTextOnly = false, array $metadata = null,
+        array $eula = null
     )
     {
         $url = sprintf('submissions');
@@ -146,7 +147,6 @@ class TurnitinRepository
         ];
 
         $bodyString = json_encode($body);
-
         $request = new TurnitinRequest('POST', $url, $this->getSecretKey(), $bodyString);
 
         return $this->handleJSONRequest($request);
@@ -155,12 +155,12 @@ class TurnitinRepository
     /**
      * @param string $submissionId
      * @param string $filename
-     * @param resource $file
+     * @param \resource $file
      *
      * @return array
      * @throws \Exception
      */
-    public function uploadSubmissionFile(string $submissionId, string $filename, resource $file)
+    public function uploadSubmissionFile(string $submissionId, string $filename, $file)
     {
         $url = sprintf('submissions/%s/original', $submissionId);
         $contentDisposition = sprintf('inline; filename="%s"', $filename);

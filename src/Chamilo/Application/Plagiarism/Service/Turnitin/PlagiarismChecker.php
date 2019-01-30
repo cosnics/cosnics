@@ -14,8 +14,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
  * @package Chamilo\Application\Plagiarism\Service\Turnitin
  *
  * @author Sven Vanpoucke - Hogeschool Gent
- *
- * TODO: CHECK FOR VALID FILES BEFORE UPLOADING
  */
 class PlagiarismChecker
 {
@@ -67,8 +65,6 @@ class PlagiarismChecker
      * @param string $filename
      *
      * @param bool $extractTextOnly
-     * @param array $metadata
-     * @param array $eula
      *
      * @return string
      *
@@ -76,7 +72,7 @@ class PlagiarismChecker
      */
     public function uploadFile(
         User $submitter, User $owner, string $title, string $filePath, string $filename,
-        bool $extractTextOnly = false, array $metadata = [], array $eula = []
+        bool $extractTextOnly = false
     )
     {
         try
@@ -99,8 +95,20 @@ class PlagiarismChecker
             $submitterId = $this->userConverter->convertUserToId($submitter);
             $ownerId = $this->userConverter->convertUserToId($owner);
 
+            $metadata = [
+                'owners' =>
+                    [
+                        [
+                            'id' => $ownerId,
+                            'email' => $owner->get_email(),
+                            'family_name' => $owner->get_lastname(),
+                            'given_name' => $owner->get_firstname()
+                        ]
+                    ]
+            ];
+
             $createSubmissionResponse = $this->turnitinRepository->createSubmission(
-                $submitterId, $ownerId, $title, $extractTextOnly, $metadata, $eula
+                $submitterId, $ownerId, $title, $extractTextOnly, $metadata
             );
 
             $submissionId = $createSubmissionResponse['id'];
@@ -128,6 +136,11 @@ class PlagiarismChecker
      */
     public function canUploadFile(string $filePath, string $filename)
     {
+        if(!$this->isPlagiarismCheckerActive())
+        {
+            return false;
+        }
+
         if (!file_exists($filePath))
         {
             return false;
