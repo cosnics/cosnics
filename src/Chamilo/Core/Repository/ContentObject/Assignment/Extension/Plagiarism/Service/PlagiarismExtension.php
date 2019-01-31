@@ -104,6 +104,8 @@ class PlagiarismExtension implements ExtensionInterface
         $result = $this->getEntryPlagiarismResultServiceBridge()->findEntryPlagiarismResultByEntry($entry);
         $hasResult = ($result instanceof EntryPlagiarismResult);
 
+        $submissionStatus = $hasResult ? $result->getSubmissionStatus() : null;
+
         return $this->twig->render(
             Manager::context() . ':AssignmentPlagiarismPart.html.twig',
             [
@@ -111,10 +113,11 @@ class PlagiarismExtension implements ExtensionInterface
                 'VIEW_URL' => $viewUrl,
                 'CAN_CHECK_PLAGIARISM' => $canCheckPlagiarism,
                 'HAS_RESULT' => $hasResult,
-                'IN_PROGRESS' => $hasResult ? $result->isInProgress() : false,
-                'SUCCESS' => $hasResult ? $result->isSuccess() : false,
-                'FAILED' => $hasResult ? $result->isFailed() : false,
-                'CAN_RETRY' => $hasResult ? $result->canRetry() : false
+                'RESULT' => $result,
+                'IN_PROGRESS' => $hasResult ? $submissionStatus->isInProgress() : false,
+                'SUCCESS' => $hasResult ? $submissionStatus->isReportGenerated() : false,
+                'FAILED' => $hasResult ? $submissionStatus->isFailed() : false,
+                'CAN_RETRY' => $hasResult ? $submissionStatus->canRetry() : false
             ]
         );
     }

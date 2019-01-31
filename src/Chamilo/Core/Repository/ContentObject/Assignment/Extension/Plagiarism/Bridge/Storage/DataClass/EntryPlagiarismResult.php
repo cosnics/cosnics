@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass;
 
+use Chamilo\Application\Plagiarism\Domain\Turnitin\SubmissionStatus;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -15,18 +16,12 @@ abstract class EntryPlagiarismResult extends DataClass
     const PROPERTY_EXTERNAL_ID = 'external_id';
     const PROPERTY_STATUS = 'status';
     const PROPERTY_RESULT = 'result';
-    const PROPERTY_ERROR_CODE = 'error_code';
+    const PROPERTY_ERROR = 'error_code';
 
-    const STATUS_UPLOAD_IN_PROGRESS = 1;
-    const STATUS_CREATE_REPORT_IN_PROGRESS = 2;
-    const STATUS_FAILED = 3;
-    const STATUS_SUCCESS = 4;
-
-    const ERROR_UNKNOWN = 1;
-    const ERROR_INVALID_FILE = 2;
-    const ERROR_FILE_TOO_SMALL = 3;
-    const ERROR_FILE_TOO_LARGE = 4;
-    const ERROR_TOO_MANY_PAGES = 5;
+    /**
+     * @var SubmissionStatus
+     */
+    protected $submissionStatus;
 
     /**
      * Get the default properties of all feedback
@@ -39,7 +34,7 @@ abstract class EntryPlagiarismResult extends DataClass
         $extended_property_names[] = self::PROPERTY_EXTERNAL_ID;
         $extended_property_names[] = self::PROPERTY_STATUS;
         $extended_property_names[] = self::PROPERTY_RESULT;
-        $extended_property_names[] = self::PROPERTY_ERROR_CODE;
+        $extended_property_names[] = self::PROPERTY_ERROR;
 
         return parent::get_default_property_names($extended_property_names);
     }
@@ -89,15 +84,9 @@ abstract class EntryPlagiarismResult extends DataClass
      */
     public function setStatus(string $status)
     {
-        $allowedStatuses = $this->getAllowedStatuses();
-
-        if (!in_array($status, $allowedStatuses))
+        if (!in_array($status, SubmissionStatus::getAllowedStatuses()))
         {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'The given status %s is not allowed. Status must be either one of the following constants (STATUS_IN_PROGRESS, STATUS_SUCCESS, STATUS_FAILED)'
-                )
-            );
+            throw new \InvalidArgumentException(sprintf('The given status %s is not allowed', $status));
         }
 
         $this->set_default_property(self::PROPERTY_STATUS, $status);
@@ -114,7 +103,7 @@ abstract class EntryPlagiarismResult extends DataClass
     /**
      * @param string $status
      */
-    public function setResult(string $status)
+    public function setResult(string $status = null)
     {
         $this->set_default_property(self::PROPERTY_RESULT, $status);
     }
@@ -122,61 +111,49 @@ abstract class EntryPlagiarismResult extends DataClass
     /**
      * @return string
      */
-    public function getErrorCode()
+    public function getError()
     {
-        return $this->get_default_property(self::PROPERTY_ERROR_CODE);
+        return $this->get_default_property(self::PROPERTY_ERROR);
     }
 
     /**
-     * @param string $errorCode
+     * @param string $error
      */
-    public function setErrorCode(string $errorCode)
+    public function setError(string $error = null)
     {
-        $this->set_default_property(self::PROPERTY_ERROR_CODE, $errorCode);
+        if (!empty($error) && !in_array($error, SubmissionStatus::getAllowedErrorCodes()))
+        {
+            throw new \InvalidArgumentException(sprintf('The given error code %s is not allowed', $error));
+        }
+
+        $this->set_default_property(self::PROPERTY_ERROR, $error);
     }
 
     /**
-     * @return array
+     * @return SubmissionStatus
      */
-    public function getAllowedStatuses()
+    public function getSubmissionStatus()
     {
-        return [
-            self::STATUS_UPLOAD_IN_PROGRESS, self::STATUS_CREATE_REPORT_IN_PROGRESS, self::STATUS_SUCCESS,
-            self::STATUS_FAILED
-        ];
+        if(!$this->submissionStatus)
+        {
+            $this->submissionStatus = new SubmissionStatus();
+            $this->submissionStatus->setStatus($this->getStatus());
+            $this->submissionStatus->setResult($this->getResult());
+            $this->submissionStatus->setError($this->getError());
+
+        }
+
+        return $this->submissionStatus;
     }
 
     /**
-     * @return bool
+     * @param \Chamilo\Application\Plagiarism\Domain\Turnitin\SubmissionStatus $submissionStatus
      */
-    public function isInProgress()
+    public function copyFromSubmissionStatus(SubmissionStatus $submissionStatus)
     {
-        return $this->getStatus() == self::STATUS_UPLOAD_IN_PROGRESS ||
-            $this->getStatus() == self::STATUS_CREATE_REPORT_IN_PROGRESS;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFailed()
-    {
-        return $this->getStatus() == self::STATUS_FAILED;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSuccess()
-    {
-        return $this->getStatus() == self::STATUS_SUCCESS;
-    }
-
-    /**
-     * @return bool
-     */
-    public function canRetry()
-    {
-        return $this->getErrorCode() == self::ERROR_UNKNOWN;
+        $this->setStatus($submissionStatus->getStatus());
+        $this->setResult($submissionStatus->getResult());
+        $this->setError($submissionStatus->getError());
     }
 
 }

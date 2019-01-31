@@ -170,22 +170,46 @@ class ViewerLaunchSettings
      */
     public function toArray()
     {
-        return [
-            'locale' => $this->locale,
-            'viewer_default_permission_set' => $this->viewerDefaultPermissionSet,
-            'viewer_permissions' => ['may_view_submission_full_source' => $this->mayViewSubmissionFullSource],
-            'similarity' => [
-                'modes' => ['match_overview' => $this->matchOverviewMode, 'all_sources' => $this->allSourcesMode]
-            ],
-            'author_metadata_override' => [
+        $result = ['locale' => $this->locale];
+
+        if(!empty($this->viewerDefaultPermissionSet))
+        {
+            $result['viewer_default_permission_set'] = $this->viewerDefaultPermissionSet;
+        }
+
+        if(!empty($this->mayViewSubmissionFullSource))
+        {
+            $result['viewer_permissions']['may_view_submission_full_source'] = $this->mayViewSubmissionFullSource;
+        }
+
+        if(!empty($this->matchOverviewMode))
+        {
+            $result['similarity']['modes']['match_overview'] = $this->matchOverviewMode;
+        }
+
+        if(!empty($this->allSourcesMode))
+        {
+            $result['similarity']['modes']['all_sources'] = $this->allSourcesMode;
+        }
+
+        if(!empty($this->overrideAuthorGivenName))
+        {
+            $result['author_metadata_override'] = [
                 'family_name' => $this->overrideAuthorFamilyName, 'given_name' => $this->overrideAuthorGivenName
-            ],
-            'eula' => [
+            ];
+        }
+
+        if (!empty($this->eulaVersion))
+        {
+            $result['eula'] = [
                 'version' => $this->eulaVersion,
-                'accepted_timestamp' => $this->eulaAcceptedTimestamp->format(\DateTimeInterface::ISO8601),
+                'accepted_timestamp' => !empty($this->eulaAcceptedTimestamp) ?
+                    $this->eulaAcceptedTimestamp->format(\DateTimeInterface::ISO8601) : '',
                 'language' => $this->eulaLanguage
-            ]
-        ];
+            ];
+        }
+
+        return $result;
     }
 
     /**

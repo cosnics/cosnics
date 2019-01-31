@@ -270,7 +270,7 @@ class TurnitinRepository
         $url = sprintf('submissions/%s/viewer-url', $submissionId);
 
         $body = $viewerLaunchSettings->toArray();
-        $body['viewerUserId'] = $viewerUserId;
+        $body['viewer_user_id'] = $viewerUserId;
         $bodyString = json_encode($body);
 
         $request = new TurnitinRequest('POST', $url, $this->getSecretKey(), $bodyString);

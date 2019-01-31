@@ -20,7 +20,6 @@ abstract class Manager extends Application
 
     const ACTION_CHECK_PLAGIARISM = 'CheckPlagiarism';
     const ACTION_VIEW_PLAGIARISM_RESULT = 'ViewPlagiarismResult';
-    const ACTION_RETRY_CHECK_PLAGIARISM = 'RetryCheckPlagiarism';
 
     const DEFAULT_ACTION = self::ACTION_CHECK_PLAGIARISM;
 

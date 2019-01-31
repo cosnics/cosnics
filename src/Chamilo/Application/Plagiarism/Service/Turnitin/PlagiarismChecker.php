@@ -7,6 +7,7 @@ use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\EulaNotAcceptedExce
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\InvalidConfigurationException;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\InvalidFileException;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
+use Chamilo\Application\Plagiarism\Domain\Turnitin\SubmissionStatus;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -58,6 +59,38 @@ class PlagiarismChecker
     }
 
     /**
+     * Checks whether or not a file can be uploaded
+     *   File must exist
+     *   Filename must be within a list of valid extensions
+     *
+     * @param string $filePath
+     * @param string $filename
+     *
+     * @return bool
+     */
+    public function canUploadFile(string $filePath, string $filename)
+    {
+        if (!$this->isPlagiarismCheckerActive())
+        {
+            return false;
+        }
+
+        if (!file_exists($filePath))
+        {
+            return false;
+        }
+
+        $fileParts = explode('.', $filename);
+        $extension = array_pop($fileParts);
+        if (!in_array($extension, $this->getAllowedFileExtensions()))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $submitter
      * @param \Chamilo\Core\User\Storage\DataClass\User $owner
      * @param string $title
@@ -77,20 +110,41 @@ class PlagiarismChecker
     {
         try
         {
-            if(!$this->isPlagiarismCheckerActive())
+            $submissionId = $this->createSubmission($submitter, $owner, $title, $extractTextOnly);
+            $this->uploadFileForSubmission($submissionId, $filePath, $filename);
+            return $submissionId;
+        }
+        catch (\Exception $ex)
+        {
+            $this->handleException($ex);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $submitter
+     * @param \Chamilo\Core\User\Storage\DataClass\User $owner
+     * @param string $title
+     * @param bool $extractTextOnly
+     *
+     * @return null
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
+     */
+    public function createSubmission(User $submitter, User $owner, string $title, bool $extractTextOnly = false)
+    {
+        try
+        {
+            if (!$this->isPlagiarismCheckerActive())
             {
                 throw new InvalidConfigurationException();
             }
 
-            if(!$this->eulaService->userHasAcceptedEULA($submitter))
+            if (!$this->eulaService->userHasAcceptedEULA($submitter))
             {
                 throw new EulaNotAcceptedException();
             }
 
-            if (!$this->canUploadFile($filePath, $filename))
-            {
-                throw new InvalidFileException($filePath, $filename);
-            }
 
             $submitterId = $this->userConverter->convertUserToId($submitter);
             $ownerId = $this->userConverter->convertUserToId($owner);
@@ -113,10 +167,9 @@ class PlagiarismChecker
 
             $submissionId = $createSubmissionResponse['id'];
 
-            $this->turnitinRepository->uploadSubmissionFile($submissionId, $filename, fopen($filePath, 'r'));
             return $submissionId;
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             $this->handleException($ex);
         }
@@ -125,35 +178,82 @@ class PlagiarismChecker
     }
 
     /**
-     * Checks whether or not a file can be uploaded
-     *   File must exist
-     *   Filename must be within a list of valid extensions
-     *
+     * @param string $submissionId
      * @param string $filePath
      * @param string $filename
      *
-     * @return bool
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
-    public function canUploadFile(string $filePath, string $filename)
+    public function uploadFileForSubmission(string $submissionId, string $filePath, string $filename)
     {
-        if(!$this->isPlagiarismCheckerActive())
+        try
         {
-            return false;
+            if (!$this->isPlagiarismCheckerActive())
+            {
+                throw new InvalidConfigurationException();
+            }
+
+            if (!$this->canUploadFile($filePath, $filename))
+            {
+                throw new InvalidFileException($filePath, $filename);
+            }
+
+            $this->turnitinRepository->uploadSubmissionFile($submissionId, $filename, fopen($filePath, 'r'));
+        }
+        catch (\Exception $ex)
+        {
+            $this->handleException($ex);
+        }
+    }
+
+    /**
+     * @param string $submissionId
+     *
+     * @return \Chamilo\Application\Plagiarism\Domain\Turnitin\SubmissionStatus
+     * @throws \Exception
+     */
+    public function getUploadStatus(string $submissionId)
+    {
+        $submissionInfo = $this->turnitinRepository->getSubmissionInfo($submissionId);
+        if (empty($submissionInfo))
+        {
+            throw new PlagiarismException(sprintf('Could not retrieve the submission info for id %s', $submissionId));
         }
 
-        if (!file_exists($filePath))
+        $submissionStatus = new SubmissionStatus();
+
+        $status = $submissionInfo['status'];
+        if ($status == 'COMPLETE')
         {
-            return false;
+            $submissionStatus->setStatus(SubmissionStatus::STATUS_UPLOAD_COMPLETE);
+        }
+        elseif ($status == 'CREATED' || $status == 'PROCESSING')
+        {
+            $submissionStatus->setStatus(SubmissionStatus::STATUS_UPLOAD_IN_PROGRESS);
+        }
+        else
+        {
+            $submissionStatus->setStatus(SubmissionStatus::STATUS_FAILED);
+            $submissionStatus->setError(SubmissionStatus::ERROR_UNKNOWN);
+
+            $errorMapping = [
+                'UNSUPPORTED_FILETYPE' => SubmissionStatus::ERROR_INVALID_FILE,
+                'PROCESSING_ERROR' => SubmissionStatus::ERROR_UNKNOWN,
+                'TOO_LITTLE_TEXT' => SubmissionStatus::ERROR_FILE_TOO_SMALL,
+                'TOO_MUCH_TEXT' => SubmissionStatus::ERROR_FILE_TOO_LARGE,
+                'TOO_MANY_PAGES' => SubmissionStatus::ERROR_TOO_MANY_PAGES,
+                'FILE_LOCKED' => SubmissionStatus::ERROR_FILE_LOCKED,
+                'CORRUPT_FILE' => SubmissionStatus::ERROR_FILE_CORRUPT,
+            ];
+
+            $errorCode = $submissionInfo['error_code'];
+            if (array_key_exists($errorCode, $errorMapping))
+            {
+                $submissionStatus->setError($errorMapping[$errorCode]);
+            }
         }
 
-        $fileParts = explode('.', $filename);
-        $extension = array_pop($fileParts);
-        if(!in_array($extension, $this->getAllowedFileExtensions()))
-        {
-            return false;
-        }
-
-        return true;
+        return $submissionStatus;
     }
 
     /**
@@ -166,7 +266,7 @@ class PlagiarismChecker
     {
         try
         {
-            if(!$this->isPlagiarismCheckerActive())
+            if (!$this->isPlagiarismCheckerActive())
             {
                 throw new InvalidConfigurationException();
             }
@@ -178,17 +278,50 @@ class PlagiarismChecker
 
             $this->turnitinRepository->generateSimilarityReport($submissionId, $similarityReportSettings);
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             $this->handleException($ex);
         }
+    }
 
+    /**
+     * @param string $submissionId
+     *
+     * @return \Chamilo\Application\Plagiarism\Domain\Turnitin\SubmissionStatus
+     * @throws \Exception
+     */
+    public function getSimilarityReportStatus(string $submissionId)
+    {
+        $similarityReportInfo = $this->turnitinRepository->getSimilarityReportInfo($submissionId);
+        if (empty($similarityReportInfo))
+        {
+            throw new PlagiarismException(
+                sprintf('Could not retrieve the similarity report info for submission  %s', $submissionId)
+            );
+        }
+
+        $submissionStatus = new SubmissionStatus();
+
+        $status = $similarityReportInfo['status'];
+        if ($status == 'COMPLETE')
+        {
+            $submissionStatus->setStatus(SubmissionStatus::STATUS_REPORT_GENERATED);
+            $submissionStatus->setResult($similarityReportInfo['overall_match_percentage']);
+        }
+        else
+        {
+            $submissionStatus->setStatus(SubmissionStatus::STATUS_CREATE_REPORT_IN_PROGRESS);
+        }
+
+        return $submissionStatus;
     }
 
     /**
      * @param string $submissionId
      * @param \Chamilo\Core\User\Storage\DataClass\User $viewUser
      * @param \Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings $viewerLaunchSettings
+     *
+     * @return string
      *
      * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
@@ -198,12 +331,12 @@ class PlagiarismChecker
     {
         try
         {
-            if(!$this->isPlagiarismCheckerActive())
+            if (!$this->isPlagiarismCheckerActive())
             {
                 throw new InvalidConfigurationException();
             }
 
-            if(!$this->eulaService->userHasAcceptedEULA($viewUser))
+            if (!$this->eulaService->userHasAcceptedEULA($viewUser))
             {
                 throw new EulaNotAcceptedException();
             }
@@ -213,15 +346,16 @@ class PlagiarismChecker
                 throw new \InvalidArgumentException('The given viewer launcher settings are not valid');
             }
 
-            $this->turnitinRepository->createViewerLaunchURL(
+            $response = $this->turnitinRepository->createViewerLaunchURL(
                 $submissionId, $this->userConverter->convertUserToId($viewUser), $viewerLaunchSettings
             );
+
+            return $response['viewer_url'];
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             $this->handleException($ex);
         }
-
     }
 
     /**

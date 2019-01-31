@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\
 
 use Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
+use Chamilo\Application\Plagiarism\Domain\Turnitin\SubmissionStatus;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface;
@@ -59,6 +60,7 @@ class PlagiarismChecker
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
      *
      * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
+     * @throws \Exception
      */
     public function checkEntryForPlagiarism(
         Assignment $assignment, Entry $entry,
@@ -73,18 +75,45 @@ class PlagiarismChecker
             return;
         }
 
-        if ($result->isInProgress())
+        try
         {
-            $this->requestStatusUpdateForPlagiarismCheck($result);
+            $submissionStatus = $result->getSubmissionStatus();
 
-            return;
+            if ($submissionStatus->isUploadInProgress())
+            {
+                $this->requestUploadProgressStatusUpdate($result, $entryPlagiarismResultServiceBridge);
+
+                return;
+            }
+
+            if ($submissionStatus->isUploadComplete())
+            {
+                $this->requestSimilarityCheckForResult($result, $entryPlagiarismResultServiceBridge);
+
+                return;
+            }
+
+            if ($submissionStatus->isReportGenerationInProgress())
+            {
+                $this->requestReportGenerationStatusUpdate($result, $entryPlagiarismResultServiceBridge);
+
+                return;
+            }
+
+            if ($submissionStatus->isFailed() && $submissionStatus->canRetry())
+            {
+                $this->retryPlagiarismCheck($result, $entry, $entryPlagiarismResultServiceBridge);
+
+                return;
+            }
         }
-
-        if ($result->isFailed() && $result->canRetry())
+        catch (PlagiarismException $exception)
         {
-            $this->retryPlagiarismCheck($result, $assignment, $entry, $entryPlagiarismResultServiceBridge);
+            $result->setStatus(SubmissionStatus::STATUS_FAILED);
+            $result->setError(SubmissionStatus::ERROR_UNKNOWN);
+            $entryPlagiarismResultServiceBridge->updateEntryPlagiarismResult($result);
 
-            return;
+            throw $exception;
         }
     }
 
@@ -126,24 +155,140 @@ class PlagiarismChecker
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
+     *
+     * @throws \Exception
      */
-    protected function requestStatusUpdateForPlagiarismCheck(EntryPlagiarismResult $entryPlagiarismResult)
+    protected function requestUploadProgressStatusUpdate(
+        EntryPlagiarismResult $entryPlagiarismResult,
+        EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
+    )
     {
+        $submissionStatus = $entryPlagiarismResult->getSubmissionStatus();
 
+        if (!$submissionStatus->isUploadInProgress())
+        {
+            return;
+        }
+
+        $progressStatus = $this->plagiarismChecker->getUploadStatus($entryPlagiarismResult->getExternalId());
+        if ($progressStatus->isUploadComplete())
+        {
+            $this->requestSimilarityCheckForResult($entryPlagiarismResult, $entryPlagiarismResultServiceBridge);
+
+            return;
+        }
+
+        if (!$progressStatus->isInProgress())
+        {
+            $entryPlagiarismResult->copyFromSubmissionStatus($progressStatus);
+            $entryPlagiarismResultServiceBridge->updateEntryPlagiarismResult($entryPlagiarismResult);
+        }
     }
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
+     *
+     * @throws \Exception
      */
-    protected function retryPlagiarismCheck(
-        EntryPlagiarismResult $entryPlagiarismResult, Assignment $assignment, Entry $entry,
+    protected function requestReportGenerationStatusUpdate(
+        EntryPlagiarismResult $entryPlagiarismResult,
         EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
     )
     {
+        $submissionStatus = $entryPlagiarismResult->getSubmissionStatus();
 
+        if (!$submissionStatus->isReportGenerationInProgress())
+        {
+            return;
+        }
+
+        $progressStatus = $this->plagiarismChecker->getSimilarityReportStatus($entryPlagiarismResult->getExternalId());
+        if (!$progressStatus->isInProgress())
+        {
+            $entryPlagiarismResult->copyFromSubmissionStatus($progressStatus);
+            $entryPlagiarismResultServiceBridge->updateEntryPlagiarismResult($entryPlagiarismResult);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
+     *
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
+     */
+    protected function requestSimilarityCheckForResult(
+        EntryPlagiarismResult $entryPlagiarismResult,
+        EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
+    )
+    {
+        $settings = new SimilarityReportSettings();
+        $settings->setSearchRepositories(
+            [
+                SimilarityReportSettings::SEARCH_REPOSITORY_INTERNET,
+                SimilarityReportSettings::SEARCH_REPOSITORY_PUBLICATION,
+                SimilarityReportSettings::SEARCH_REPOSITORY_SUBMITTED_WORK
+            ]
+        );
+
+        $settings->setAutoExcludeMatchingScope(SimilarityReportSettings::AUTO_EXCLUDE_ALL);
+
+        $this->plagiarismChecker->generateSimilarityReport(
+            $entryPlagiarismResult->getExternalId(), $settings
+        );
+
+        $entryPlagiarismResult->setStatus(SubmissionStatus::STATUS_CREATE_REPORT_IN_PROGRESS);
+        $entryPlagiarismResultServiceBridge->updateEntryPlagiarismResult($entryPlagiarismResult);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
+     *
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
+     * @throws \Exception
+     */
+    protected function retryPlagiarismCheck(
+        EntryPlagiarismResult $entryPlagiarismResult, Entry $entry,
+        EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
+    )
+    {
+        if (!$this->canCheckForPlagiarism($entry))
+        {
+            throw new PlagiarismException(
+                sprintf(
+                    'The given entry %s does not represent a valid file object and therefore the entry can not be checked for plagiarism',
+                    $entry->getId()
+                )
+            );
+        }
+
+        $submissionStatus = $entryPlagiarismResult->getSubmissionStatus();
+
+        if (!$submissionStatus->isFailed())
+        {
+            return;
+        }
+
+        $uploadStatus = $this->plagiarismChecker->getUploadStatus($entryPlagiarismResult->getExternalId());
+        if ($uploadStatus->isUploadComplete())
+        {
+            $this->requestSimilarityCheckForResult($entryPlagiarismResult, $entryPlagiarismResultServiceBridge);
+        }
+        else
+        {
+            /** @var File $contentObject */
+            $contentObject = $this->contentObjectRepository->findById($entry->getContentObjectId());
+
+            $this->plagiarismChecker->uploadFileForSubmission(
+                $entryPlagiarismResult->getExternalId(), $contentObject->get_full_path(), $contentObject->get_filename()
+            );
+
+            $entryPlagiarismResult->setStatus(SubmissionStatus::STATUS_UPLOAD_IN_PROGRESS);
+            $entryPlagiarismResultServiceBridge->updateEntryPlagiarismResult($entryPlagiarismResult);
+        }
     }
 
     /**
@@ -151,6 +296,7 @@ class PlagiarismChecker
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
      *
+     * @return string
      * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
     public function getPlagiarismViewerUrlForEntry(
@@ -167,7 +313,9 @@ class PlagiarismChecker
         }
 
         $viewerLaunchSettings = new ViewerLaunchSettings();
-        $this->plagiarismChecker->createViewerLaunchURL(
+        $viewerLaunchSettings->setViewerDefaultPermissionSet(ViewerLaunchSettings::DEFAULT_PERMISSION_SET_INSTRUCTOR);
+
+        return $this->plagiarismChecker->createViewerLaunchURL(
             $entryPlagiarismResult->getExternalId(), $user, $viewerLaunchSettings
         );
     }

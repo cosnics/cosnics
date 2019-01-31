@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Service;
 
+use Chamilo\Application\Plagiarism\Domain\Turnitin\SubmissionStatus;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\Repository\EntryPlagiarismResultRepository;
@@ -62,7 +63,7 @@ abstract class EntryPlagiarismResultService
 
         $entryPlagiarismResult->setEntryId($entry->getId());
         $entryPlagiarismResult->setExternalId($externalId);
-        $entryPlagiarismResult->setStatus(EntryPlagiarismResult::STATUS_IN_PROGRESS);
+        $entryPlagiarismResult->setStatus(SubmissionStatus::STATUS_UPLOAD_IN_PROGRESS);
 
         if (!$this->entryPlagiarismResultRepository->createEntryPlagiarismResult($entryPlagiarismResult))
         {
