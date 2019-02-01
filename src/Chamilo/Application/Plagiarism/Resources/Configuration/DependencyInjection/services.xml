@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <service id="Chamilo\Application\Plagiarism\Service\PlagiarismCheckerFactory" autowire="true" />
+
+        <service id="Chamilo\Application\Plagiarism\Service\PlagiarismCheckerInterface" autowire="true" >
+            <factory service="Chamilo\Application\Plagiarism\Service\PlagiarismCheckerFactory" method="createPlagiarismChecker" />
+        </service>
+    </services>
+</container>

@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass;
 
-use Chamilo\Application\Plagiarism\Domain\Turnitin\SubmissionStatus;
+use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -134,20 +134,18 @@ abstract class EntryPlagiarismResult extends DataClass
      */
     public function getSubmissionStatus()
     {
-        if(!$this->submissionStatus)
+        if (!$this->submissionStatus)
         {
-            $this->submissionStatus = new SubmissionStatus();
-            $this->submissionStatus->setStatus($this->getStatus());
-            $this->submissionStatus->setResult($this->getResult());
-            $this->submissionStatus->setError($this->getError());
-
+            $this->submissionStatus = new SubmissionStatus(
+                $this->getExternalId(), $this->getStatus(), $this->getResult(), $this->getError()
+            );
         }
 
         return $this->submissionStatus;
     }
 
     /**
-     * @param \Chamilo\Application\Plagiarism\Domain\Turnitin\SubmissionStatus $submissionStatus
+     * @param \Chamilo\Application\Plagiarism\Domain\SubmissionStatus $submissionStatus
      */
     public function copyFromSubmissionStatus(SubmissionStatus $submissionStatus)
     {

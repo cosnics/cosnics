@@ -40,6 +40,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
             $container, 
             new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Application\Plagiarism') . 'DependencyInjection'));
 
+        $xmlFileLoader->load('services.xml');
         $xmlFileLoader->load('turnitin.xml');
     }
 

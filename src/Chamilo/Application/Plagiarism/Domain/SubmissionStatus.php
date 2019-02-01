@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Plagiarism\Domain\Turnitin;
+namespace Chamilo\Application\Plagiarism\Domain;
 
 /**
  * @package Chamilo\Application\Plagiarism\Domain\Turnitin
@@ -24,6 +24,11 @@ class SubmissionStatus
     const ERROR_FILE_LOCKED = 7;
 
     /**
+     * @var string
+     */
+    protected $submissionId;
+
+    /**
      * @var int
      */
     protected $status;
@@ -39,24 +44,37 @@ class SubmissionStatus
     protected $result;
 
     /**
+     * SubmissionStatus constructor.
+     *
+     * @param string $submissionId
+     * @param int $status
+     * @param int $error
+     * @param int $result
+     */
+    public function __construct(
+        string $submissionId, int $status = self::STATUS_UPLOAD_IN_PROGRESS, int $result = null, int $error = null
+    )
+    {
+        $this->setSubmissionId($submissionId);
+        $this->setStatus($status);
+        $this->setError($error);
+        $this->setResult($result);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubmissionId(): string
+    {
+        return $this->submissionId;
+    }
+
+    /**
      * @return int
      */
     public function getStatus(): int
     {
         return $this->status;
-    }
-
-    /**
-     * @param int $status
-     */
-    public function setStatus(int $status)
-    {
-        if (!in_array($status, self::getAllowedStatuses()))
-        {
-            throw new \InvalidArgumentException(sprintf('The given status %s is not supported', $status));
-        }
-
-        $this->status = $status;
     }
 
     /**
@@ -67,18 +85,7 @@ class SubmissionStatus
         return $this->error;
     }
 
-    /**
-     * @param int $error
-     */
-    public function setError(int $error = null)
-    {
-        if (!empty($error) && !in_array($error, self::getAllowedErrorCodes()))
-        {
-            throw new \InvalidArgumentException(sprintf('The given error code %s is not supported', $error));
-        }
 
-        $this->error = $error;
-    }
 
     /**
      * @return int
@@ -88,13 +95,9 @@ class SubmissionStatus
         return $this->result;
     }
 
-    /**
-     * @param int $result
+    /*
+     * ALLOWED VALUES
      */
-    public function setResult(int $result = null)
-    {
-        $this->result = $result;
-    }
 
     /**
      * @return int[]
@@ -117,6 +120,10 @@ class SubmissionStatus
             self::ERROR_TOO_MANY_PAGES, self::ERROR_FILE_CORRUPT
         ];
     }
+
+    /*
+     * HELPER METHODS
+     */
 
     /**
      * @return bool
@@ -173,5 +180,52 @@ class SubmissionStatus
     public function canRetry()
     {
         return $this->getError() == SubmissionStatus::ERROR_UNKNOWN;
+    }
+
+
+    /*
+     * PRIVATE SETTERS
+     */
+
+    /**
+     * @param string $submissionId
+     */
+    protected function setSubmissionId(string $submissionId)
+    {
+        $this->submissionId = $submissionId;
+    }
+
+    /**
+     * @param int $status
+     */
+    protected function setStatus(int $status)
+    {
+        if (!in_array($status, self::getAllowedStatuses()))
+        {
+            throw new \InvalidArgumentException(sprintf('The given status %s is not supported', $status));
+        }
+
+        $this->status = $status;
+    }
+
+    /**
+     * @param int $error
+     */
+    protected function setError(int $error = null)
+    {
+        if (!empty($error) && !in_array($error, self::getAllowedErrorCodes()))
+        {
+            throw new \InvalidArgumentException(sprintf('The given error code %s is not supported', $error));
+        }
+
+        $this->error = $error;
+    }
+
+    /**
+     * @param int $result
+     */
+    protected function setResult(int $result = null)
+    {
+        $this->result = $result;
     }
 }
