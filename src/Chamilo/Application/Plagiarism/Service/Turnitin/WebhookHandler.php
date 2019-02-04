@@ -2,6 +2,10 @@
 
 namespace Chamilo\Application\Plagiarism\Service\Turnitin;
 
+use Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException;
+use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
+use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
+
 /**
  * @package Chamilo\Application\Plagiarism\Domain\Turnitin
  *
@@ -18,93 +22,99 @@ class WebhookHandler
     protected $configurationConsulter;
 
     /**
-     * @var \Chamilo\Application\Plagiarism\Service\Turnitin\Events\TurnitinEventNotifier
+     * @var \Chamilo\Application\Plagiarism\Service\Events\PlagiarismEventNotifier
      */
-    protected $turnitinEventNotifier;
+    protected $plagiarismEventNotifier;
+
+    /**
+     * @var \Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionStatusParser
+     */
+    protected $submissionStatusParser;
+
+    /**
+     * @var \Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionService
+     */
+    protected $submissionService;
+
+    /**
+     * WebhookHandler constructor.
+     *
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Application\Plagiarism\Service\Events\PlagiarismEventNotifier $plagiarismEventNotifier
+     * @param \Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionStatusParser $submissionStatusParser
+     * @param \Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionService $submissionService
+     */
+    public function __construct(
+        \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter,
+        \Chamilo\Application\Plagiarism\Service\Events\PlagiarismEventNotifier $plagiarismEventNotifier,
+        \Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionStatusParser $submissionStatusParser,
+        SubmissionService $submissionService
+    )
+    {
+        $this->configurationConsulter = $configurationConsulter;
+        $this->plagiarismEventNotifier = $plagiarismEventNotifier;
+        $this->submissionStatusParser = $submissionStatusParser;
+        $this->submissionService = $submissionService;
+    }
 
     /**
      * @param string $eventType
      * @param string $authorizationKey
      * @param string $requestBody
+     *
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
-    public function handleWebhookRequest(string $eventType, string $authorizationKey, string $requestBody)
+    public function handleWebhookRequest(
+        string $eventType = null, string $authorizationKey = null, string $requestBody = null
+    )
     {
         $this->validateAuthorizationKey($authorizationKey, $requestBody);
         $this->validateEventType($eventType);
 
         $data = $this->getDataFromRequestBody($requestBody);
 
-        switch ($eventType)
+        $webhookToStatusMapping = [
+            WebhookManager::WEBHOOK_SUBMISSION_COMPLETE => SubmissionStatusParser::SUBMISSION_STATUS_UPLOAD,
+            WebhookManager::WEBHOOK_SIMILARITY_COMPLETE => SubmissionStatusParser::SUBMISSION_STATUS_REPORT_GENERATION
+        ];
+
+        if (array_key_exists($eventType, $webhookToStatusMapping))
         {
-            case WebhookManager::WEBHOOK_SUBMISSION_COMPLETE:
-                $this->handleSubmissionComplete($data);
-                break;
-            case WebhookManager::WEBHOOK_SIMILARITY_COMPLETE:
-                $this->handleSimilarityComplete($data);
-                break;
+            $submissionStatus = $this->submissionStatusParser->parse($webhookToStatusMapping[$eventType], $data);
+
+            if ($submissionStatus->isUploadComplete())
+            {
+//                $submissionStatus = $this->handleUploadComplete($submissionStatus);
+            }
+
+            $this->plagiarismEventNotifier->submissionStatusChanged($submissionStatus);
         }
     }
 
     /**
-     * @param array $data
+     * @param \Chamilo\Application\Plagiarism\Domain\SubmissionStatus $currentSubmissionStatus
+     *
+     * @return \Chamilo\Application\Plagiarism\Domain\SubmissionStatus
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
-    protected function handleSubmissionComplete(array $data)
+    protected function handleUploadComplete(SubmissionStatus $currentSubmissionStatus)
     {
-        $submissionId = $data['id'];
-        if (empty($submissionId))
-        {
-            throw new \InvalidArgumentException('The given submission ID could not be found in the data');
-        }
+        $settings = new SimilarityReportSettings();
+        $settings->setSearchRepositories(
+            [
+                SimilarityReportSettings::SEARCH_REPOSITORY_INTERNET,
+                SimilarityReportSettings::SEARCH_REPOSITORY_PUBLICATION,
+                SimilarityReportSettings::SEARCH_REPOSITORY_SUBMITTED_WORK
+            ]
+        );
 
-        $status = $data['status'];
+        $settings->setAutoExcludeMatchingScope(SimilarityReportSettings::AUTO_EXCLUDE_ALL);
 
-        if (!in_array($status, [self::STATUS_COMPLETE, self::STATUS_ERROR]))
-        {
-            throw new \InvalidArgumentException(
-                sprintf('The given status should be either COMPLETE or ERROR, %s given', $status)
-            );
-        }
+        $this->submissionService->generateSimilarityReport($currentSubmissionStatus->getSubmissionId(), $settings);
 
-        $isError = $status == self::STATUS_ERROR;
-        $errorCode = null;
-
-        if ($isError)
-        {
-            $errorCode = $data['error_code'];
-        }
-
-        $this->turnitinEventNotifier->submissionUploadProcessed($submissionId, $isError, $errorCode);
-    }
-
-    /**
-     * @param array $data
-     */
-    protected function handleSimilarityComplete(array $data)
-    {
-        $submissionId = $data['submission_id'];
-        if (empty($submissionId))
-        {
-            throw new \InvalidArgumentException('The given submission ID could not be found in the data');
-        }
-
-        $status = $data['status'];
-        if (!$status == self::STATUS_COMPLETE)
-        {
-            throw new \InvalidArgumentException(sprintf('The given status should be COMPLETE, %s given', $status));
-        }
-
-        $overallMatchPercentage = $data['overall_match_percentage'];
-        if (!is_integer($overallMatchPercentage) || $overallMatchPercentage < 0 || $overallMatchPercentage > 100)
-        {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'The given match percentage (%s) could not be found or is not within the valid range between 0 and 100',
-                    $overallMatchPercentage
-                )
-            );
-        }
-
-        $this->turnitinEventNotifier->similarityReportGenerated($submissionId, $overallMatchPercentage);
+        return new SubmissionStatus(
+            $currentSubmissionStatus->getSubmissionId(), SubmissionStatus::STATUS_CREATE_REPORT_IN_PROGRESS
+        );
     }
 
     /**
@@ -112,38 +122,49 @@ class WebhookHandler
      *
      * @param string $authorizationKey
      * @param string $requestBody
+     *
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
-    protected function validateAuthorizationKey(string $authorizationKey, string $requestBody)
+    protected function validateAuthorizationKey(string $authorizationKey = null, string $requestBody = null)
     {
+        if(empty($authorizationKey))
+        {
+            throw new PlagiarismException(
+                'The given authorization key is empty and therefor it is insecure to call this service, request aborted'
+            );
+        }
+
         $webhookSecret = $this->configurationConsulter->getSetting(
             ['Chamilo\Application\Plagiarism', 'turnitin_webhook_secret']
         );
 
         if (empty($storedAuthorizationKey))
         {
-            throw new \RuntimeException(
+            throw new PlagiarismException(
                 'The stored authorization key is empty and therefor it is insecure to call this service, request aborted'
             );
         }
 
         $expectedKey = hash_hmac('sha256', $requestBody, $webhookSecret);
-        if($expectedKey != $authorizationKey)
+        if ($expectedKey != $authorizationKey)
         {
-            throw new \RuntimeException('The given authorization key is not correct');
+            throw new PlagiarismException('The given authorization key is not correct');
         }
     }
 
     /**
      * @param string $eventType
+     *
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
-    protected function validateEventType(string $eventType)
+    protected function validateEventType(string $eventType = null)
     {
         $availableEventTypes =
             [WebhookManager::WEBHOOK_SIMILARITY_COMPLETE, WebhookManager::WEBHOOK_SUBMISSION_COMPLETE];
 
         if (!in_array($eventType, $availableEventTypes))
         {
-            throw new \InvalidArgumentException(sprintf('The given event type %s is invalid', $eventType));
+            throw new PlagiarismException(sprintf('The given event type %s is invalid', $eventType));
         }
     }
 
@@ -151,13 +172,14 @@ class WebhookHandler
      * @param string $requestBody
      *
      * @return array
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
     protected function getDataFromRequestBody(string $requestBody)
     {
         $data = \json_decode($requestBody, true);
         if (empty($data))
         {
-            throw new \InvalidArgumentException(
+            throw new PlagiarismException(
                 sprintf('Could not decode the data from the request body, not a valid json string (%s)', $requestBody)
             );
         }

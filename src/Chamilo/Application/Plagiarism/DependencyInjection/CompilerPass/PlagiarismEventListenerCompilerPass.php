@@ -2,8 +2,8 @@
 
 namespace Chamilo\Application\Plagiarism\DependencyInjection\CompilerPass;
 
-use Chamilo\Application\Plagiarism\Service\Turnitin\Events\TurnitinEventListenerInterface;
-use Chamilo\Application\Plagiarism\Service\Turnitin\Events\TurnitinEventNotifier;
+use Chamilo\Application\Plagiarism\Service\Events\PlagiarismEventListenerInterface;
+use Chamilo\Application\Plagiarism\Service\Events\PlagiarismEventNotifier;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TurnitinEventListenerCompilerPass implements CompilerPassInterface
+class PlagiarismEventListenerCompilerPass implements CompilerPassInterface
 {
 
     /**
@@ -25,10 +25,10 @@ class TurnitinEventListenerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if ($container->hasDefinition(TurnitinEventNotifier::class))
+        if ($container->hasDefinition(PlagiarismEventNotifier::class))
         {
-            $taggedServices = $container->findTaggedServiceIds(TurnitinEventListenerInterface::class);
-            $definition =  $container->getDefinition(TurnitinEventNotifier::class);
+            $taggedServices = $container->findTaggedServiceIds(PlagiarismEventListenerInterface::class);
+            $definition =  $container->getDefinition(PlagiarismEventNotifier::class);
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {

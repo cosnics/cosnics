@@ -14,6 +14,10 @@
         <service id="Chamilo\Application\Weblcms\Bridge\Assignment\NotificationServiceBridge" />
         <service id="Chamilo\Application\Weblcms\Bridge\Assignment\EntryPlagiarismResultServiceBridge" />
 
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Plagiarism\PlagiarismEventListener">
+            <tag name="Chamilo\Application\Plagiarism\Service\Events\PlagiarismEventListenerInterface" />
+        </service>
+
         <service
                 id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager">
             <call method="addEntityService">

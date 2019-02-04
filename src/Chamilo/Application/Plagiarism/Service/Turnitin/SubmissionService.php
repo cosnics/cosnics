@@ -40,23 +40,30 @@ class SubmissionService
     protected $webhookManager;
 
     /**
+     * @var \Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionStatusParser
+     */
+    protected $submissionStatusParser;
+
+    /**
      * TurnitinService constructor.
      *
      * @param \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\EulaService $eulaService
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\WebhookManager $webhookManager
+     * @param \Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionStatusParser $submissionStatusParser
      */
     public function __construct(
         \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository,
         \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter,
-        EulaService $eulaService, WebhookManager $webhookManager
+        EulaService $eulaService, WebhookManager $webhookManager, SubmissionStatusParser $submissionStatusParser
     )
     {
         $this->turnitinRepository = $turnitinRepository;
         $this->userConverter = $userConverter;
         $this->eulaService = $eulaService;
         $this->webhookManager = $webhookManager;
+        $this->submissionStatusParser = $submissionStatusParser;
     }
 
     /**
@@ -221,36 +228,7 @@ class SubmissionService
             throw new PlagiarismException(sprintf('Could not retrieve the submission info for id %s', $submissionId));
         }
 
-        $status = $submissionInfo['status'];
-        if ($status == 'COMPLETE')
-        {
-            return new SubmissionStatus($submissionId, SubmissionStatus::STATUS_UPLOAD_COMPLETE);
-        }
-
-        if ($status == 'CREATED' || $status == 'PROCESSING')
-        {
-            return new SubmissionStatus($submissionId, SubmissionStatus::STATUS_UPLOAD_IN_PROGRESS);
-        }
-
-        $error = SubmissionStatus::ERROR_UNKNOWN;
-
-        $errorMapping = [
-            'UNSUPPORTED_FILETYPE' => SubmissionStatus::ERROR_INVALID_FILE,
-            'PROCESSING_ERROR' => SubmissionStatus::ERROR_UNKNOWN,
-            'TOO_LITTLE_TEXT' => SubmissionStatus::ERROR_FILE_TOO_SMALL,
-            'TOO_MUCH_TEXT' => SubmissionStatus::ERROR_FILE_TOO_LARGE,
-            'TOO_MANY_PAGES' => SubmissionStatus::ERROR_TOO_MANY_PAGES,
-            'FILE_LOCKED' => SubmissionStatus::ERROR_FILE_LOCKED,
-            'CORRUPT_FILE' => SubmissionStatus::ERROR_FILE_CORRUPT,
-        ];
-
-        $errorCode = $submissionInfo['error_code'];
-        if (array_key_exists($errorCode, $errorMapping))
-        {
-            $error = $errorMapping[$errorCode];
-        }
-
-        return new SubmissionStatus($submissionId, SubmissionStatus::STATUS_FAILED, 0, $error);
+        return $this->submissionStatusParser->parse(SubmissionStatusParser::SUBMISSION_STATUS_UPLOAD, $submissionInfo);
     }
 
     /**
@@ -297,20 +275,9 @@ class SubmissionService
             );
         }
 
-        $status = $similarityReportInfo['status'];
-        if ($status == 'COMPLETE')
-        {
-            $submissionStatus = new SubmissionStatus(
-                $submissionId, SubmissionStatus::STATUS_REPORT_GENERATED,
-                $similarityReportInfo['overall_match_percentage']
-            );
-        }
-        else
-        {
-            $submissionStatus = new SubmissionStatus($submissionId, SubmissionStatus::STATUS_CREATE_REPORT_IN_PROGRESS);
-        }
-
-        return $submissionStatus;
+        return $this->submissionStatusParser->parse(
+            SubmissionStatusParser::SUBMISSION_STATUS_REPORT_GENERATION, $similarityReportInfo
+        );
     }
 
     /**

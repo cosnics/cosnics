@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Plagiarism\DependencyInjection;
 
-use Chamilo\Application\Plagiarism\DependencyInjection\CompilerPass\TurnitinEventListenerCompilerPass;
+use Chamilo\Application\Plagiarism\DependencyInjection\CompilerPass\PlagiarismEventListenerCompilerPass;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\File\PathBuilder;
@@ -62,6 +62,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function registerCompilerPasses(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new TurnitinEventListenerCompilerPass());
+        $container->addCompilerPass(new PlagiarismEventListenerCompilerPass());
     }
 }

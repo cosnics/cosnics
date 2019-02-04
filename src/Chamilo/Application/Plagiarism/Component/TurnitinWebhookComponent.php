@@ -35,10 +35,10 @@ class TurnitinWebhookComponent extends Manager implements NoAuthenticationSuppor
         catch(\Exception $ex)
         {
             $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
-            return new JsonResponse(['error' => $ex->getMessage()]);
+            return new JsonResponse(['error' => $ex->getMessage()], 500);
         }
 
-        return null;
+        return new JsonResponse(['success' => true]);
     }
 
     /**

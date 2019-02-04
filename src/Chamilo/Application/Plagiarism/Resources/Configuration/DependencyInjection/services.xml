@@ -10,5 +10,7 @@
         <service id="Chamilo\Application\Plagiarism\Service\PlagiarismCheckerInterface" autowire="true" >
             <factory service="Chamilo\Application\Plagiarism\Service\PlagiarismCheckerFactory" method="createPlagiarismChecker" />
         </service>
+
+        <service id="Chamilo\Application\Plagiarism\Service\Events\PlagiarismEventNotifier" autowire="true" />
     </services>
 </container>

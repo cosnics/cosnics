@@ -226,6 +226,21 @@ class SubmissionStatus
      */
     protected function setResult(int $result = null)
     {
+        if(empty($result))
+        {
+            return;
+        }
+
+        if (!is_integer($result) || $result < 0 || $result > 100)
+        {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The given $result (%s) is empty or is not within the valid range between 0 and 100',
+                    $result
+                )
+            );
+        }
+
         $this->result = $result;
     }
 }
