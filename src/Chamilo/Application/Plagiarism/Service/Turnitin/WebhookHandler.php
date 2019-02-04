@@ -84,7 +84,7 @@ class WebhookHandler
 
             if ($submissionStatus->isUploadComplete())
             {
-//                $submissionStatus = $this->handleUploadComplete($submissionStatus);
+                $submissionStatus = $this->handleUploadComplete($submissionStatus);
             }
 
             $this->plagiarismEventNotifier->submissionStatusChanged($submissionStatus);
