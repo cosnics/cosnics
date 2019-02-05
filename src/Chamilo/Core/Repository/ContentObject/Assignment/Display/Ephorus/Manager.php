@@ -49,7 +49,7 @@ abstract class Manager extends Application
     /**
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface
      */
-    protected function getEphorusServiceBridge()
+    public function getEphorusServiceBridge()
     {
         return $this->getBridgeManager()->getBridgeByInterface(EphorusServiceBridgeInterface::class);
     }
