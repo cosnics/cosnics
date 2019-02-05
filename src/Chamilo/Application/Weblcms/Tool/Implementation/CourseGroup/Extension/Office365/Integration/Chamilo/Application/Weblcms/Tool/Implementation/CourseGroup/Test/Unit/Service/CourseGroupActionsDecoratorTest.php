@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Test\Unit\Service;
 
 use \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference;
 use \Symfony\Component\Translation\Translator;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupActionsDecorator;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
@@ -81,13 +82,24 @@ class CourseGroupActionsDecoratorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue(true));
 
+        $reference = $this->getMockBuilder(CourseGroupOffice365Reference::class)
+            ->disableOriginalConstructor()->getMock();
+        $reference->expects($this->atLeastOnce())
+            ->method('hasTeam')
+            ->willReturn(true);
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('getCourseGroupReference')
+            ->with($courseGroup)
+            ->will($this->returnValue($reference));
+
         $this->courseGroupActionsDecorator->addCourseGroupActions($buttonToolbar, $courseGroup, $user, true);
 
         /** @var SplitDropdownButton $splitDropDownButton */
         $splitDropDownButton = $buttonToolbar->getItems()[0];
         $this->assertInstanceOf(SplitDropdownButton::class, $splitDropDownButton);
 
-        $this->assertCount(2, $splitDropDownButton->getSubButtons());
+        $this->assertCount(3, $splitDropDownButton->getSubButtons());
     }
 
     public function testAddCourseGroupActionsNoTeacher()
@@ -101,13 +113,24 @@ class CourseGroupActionsDecoratorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue(true));
 
+        $reference = $this->getMockBuilder(CourseGroupOffice365Reference::class)
+            ->disableOriginalConstructor()->getMock();
+        $reference->expects($this->atLeastOnce())
+            ->method('hasTeam')
+            ->willReturn(true);
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('getCourseGroupReference')
+            ->with($courseGroup)
+            ->will($this->returnValue($reference));
+
         $this->courseGroupActionsDecorator->addCourseGroupActions($buttonToolbar, $courseGroup, $user, false);
 
         /** @var SplitDropdownButton $splitDropDownButton */
         $splitDropDownButton = $buttonToolbar->getItems()[0];
         $this->assertInstanceOf(SplitDropdownButton::class, $splitDropDownButton);
 
-        $this->assertCount(1, $splitDropDownButton->getSubButtons());
+        $this->assertCount(2, $splitDropDownButton->getSubButtons());
     }
 
     public function testAddCourseGroupActionsNoReference()
