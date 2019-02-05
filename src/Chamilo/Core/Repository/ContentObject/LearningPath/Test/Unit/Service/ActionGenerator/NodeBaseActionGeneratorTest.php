@@ -202,7 +202,7 @@ class NodeBaseActionGeneratorTest extends ChamiloTestCase
 
     public function testGenerateNodeActionsWithEditRight()
     {
-        $actions = $this->nodeBaseActionGenerator->generateNodeActions($this->tree->getTreeNodeByStep(2), true);
+        $actions = $this->nodeBaseActionGenerator->generateNodeActions($this->tree->getTreeNodeByStep(2), true, true);
         $this->assertCount(12, $actions);
     }
 
