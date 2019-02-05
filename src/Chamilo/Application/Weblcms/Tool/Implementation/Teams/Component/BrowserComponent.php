@@ -2,11 +2,10 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Component;
 
-use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\CourseTeamService;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Microsoft\Graph\Model\Team;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
@@ -22,6 +21,7 @@ class BrowserComponent extends Manager
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws GraphException
      */
     public function run(): string
     {
@@ -46,15 +46,27 @@ class BrowserComponent extends Manager
      */
     protected function renderBrowser(): string
     {
-        $goToTeamParameters = $this->get_parameters();
-        $goToTeamParameters[self::PARAM_ACTION] = self::ACTION_GO_TO_TEAM;
-
         return $this->render(
             [
-                'TEAM_URL' => $this->get_url($goToTeamParameters),
+                'IS_TEACHER' => $this->get_course()->is_course_admin($this->getUser()),
+                'TEAM_URL' => $this->getUrlWithAction(self::ACTION_GO_TO_TEAM),
+                'REMOVE_TEAM_USERS_URL' => $this->getUrlWithAction(self::ACTION_REMOVE_TEAM_USERS_NOT_IN_COURSE),
+                'SUBSCRIBE_ALL_COURSE_USERS_URL' =>  $this->getUrlWithAction(self::ACTION_SUBSCRIBE_ALL_COURSE_USERS_TO_TEAM)
             ],
             'Chamilo\Application\Weblcms\Tool\Implementation\Teams:Browser.html.twig'
         );
+    }
+
+    /**
+     * @param string $action
+     * @return string
+     */
+    protected function getUrlWithAction(string $action)
+    {
+        $parameters = $this->get_parameters();
+        $parameters[self::PARAM_ACTION] = $action;
+
+        return $this->get_url($parameters);
     }
 
     /**
@@ -65,12 +77,9 @@ class BrowserComponent extends Manager
      */
     protected function renderCreateTeam(): string
     {
-        $createTeamUrlParameters = $this->get_parameters();
-        $createTeamUrlParameters[self::PARAM_ACTION] = self::ACTION_CREATE_TEAM;
-
         return $this->render(
             [
-                'CREATE_TEAM_URL' => $this->get_url($createTeamUrlParameters),
+                'CREATE_TEAM_URL' => $this->getUrlWithAction(self::ACTION_CREATE_TEAM),
                 'IS_TEACHER' => $this->get_course()->is_course_admin($this->getUser())
             ],
             'Chamilo\Application\Weblcms\Tool\Implementation\Teams:CreateTeam.html.twig'

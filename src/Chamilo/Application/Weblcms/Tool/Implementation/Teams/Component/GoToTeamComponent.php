@@ -24,6 +24,7 @@ class GoToTeamComponent extends Manager
      * @return string|RedirectResponse
      * @throws CourseTeamNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function run()
     {

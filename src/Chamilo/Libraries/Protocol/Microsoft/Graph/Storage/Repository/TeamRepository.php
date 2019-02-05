@@ -2,6 +2,7 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
 use Microsoft\Graph\Model\Team;
 
 /**
@@ -29,6 +30,7 @@ class TeamRepository
     /**
      * @param $groupId
      * @return \Microsoft\Graph\Model\Entity | Team
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function addTeamToGroup(string $groupId): \Microsoft\Graph\Model\Entity
     {
@@ -46,19 +48,31 @@ class TeamRepository
 
     /**
      * @param string $teamId
+     *
      * @return \Microsoft\Graph\Model\Entity | Team
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    public function getTeam(string $teamId): \Microsoft\Graph\Model\Entity
+    public function getTeam(string $teamId): ?\Microsoft\Graph\Model\Entity
     {
-        return $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
-            '/teams/' . $teamId,
-            Team::class
-        );
+        try {
+            return $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
+                '/teams/' . $teamId,
+                Team::class
+            );
+        } catch ( \GuzzleHttp\Exception\ClientException $exception){
+            if($exception->getCode() == 404) {
+                return null;
+            }
+            else {
+                throw new GraphException("Could not retrieve team with id" . $teamId, 0, $exception);
+            }
+        }
     }
 
     /**
      * @param string $teamId
      * @return string
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function getUrl(string $teamId): string
     {

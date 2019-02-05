@@ -2,6 +2,22 @@
 
 {% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Teams' %}
 
-    <a target="_blank" href="{{ TEAM_URL }}" class="btn btn-primary btn-lg">{{ 'GoToTeam'|trans({}, appContext) }}</a>
+<a target="_blank" href="{{ TEAM_URL }}" class="btn btn-primary btn-lg">{{ 'GoToTeam'|trans({}, appContext) }}</a>
+
+{% if IS_TEACHER %}
+    <div class="alert alert-info" role="alert" style="margin-top: 10px">
+        {{ 'UserSyncExplanation'|trans({}, appContext) }}
+        <div style="margin-top: 5px">
+            <a href="{{ SUBSCRIBE_ALL_COURSE_USERS_URL }}"
+               class="btn btn-info">{{ 'SubscribeAllCourseUsers'|trans({}, appContext) }}
+            </a>
+        <a href="{{ REMOVE_TEAM_USERS_URL }}"
+           class="btn btn-warning">{{ 'RemoveTeamUsersNotInCourse'|trans({}, appContext) }}
+        </a>
+
+        </div>
+
+    </div>
+{% endif %}
 
 {{ FOOTER|raw }}
