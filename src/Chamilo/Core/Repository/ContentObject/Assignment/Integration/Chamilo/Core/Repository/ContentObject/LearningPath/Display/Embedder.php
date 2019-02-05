@@ -4,9 +4,11 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\AssignmentServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\EntryPlagiarismResultServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\EphorusServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\FeedbackServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\AssignmentServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EphorusServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\NotificationServiceBridgeInterface;
@@ -91,10 +93,17 @@ class Embedder extends ContentObjectEmbedder
         $notificationServiceBridge = new NotificationServiceBridge($learningPathNotificationServiceBridge);
         $notificationServiceBridge->setTreeNode($this->treeNode);
 
+        /** @var EntryPlagiarismResultServiceBridgeInterface  $learningPathEntryPlagiarismResultServiceBridge */
+        $learningPathEntryPlagiarismResultServiceBridge =
+            $this->getBridgeManager()->getBridgeByInterface(EntryPlagiarismResultServiceBridgeInterface::class);
+
+        $entryPlagiarismResultServiceBridge = new EntryPlagiarismResultServiceBridge($learningPathEntryPlagiarismResultServiceBridge);
+
         $this->getBridgeManager()->addBridge($assignmentServiceBridge);
         $this->getBridgeManager()->addBridge($feedbackServiceBridge);
         $this->getBridgeManager()->addBridge($ephorusServiceBridge);
         $this->getBridgeManager()->addBridge($notificationServiceBridge);
+        $this->getBridgeManager()->addBridge($entryPlagiarismResultServiceBridge);
     }
 
     /**
