@@ -232,8 +232,13 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with(false, false, true)
             ->will($this->returnValue($courseGroupMembers));
 
+        $this->groupServiceMock
+            ->expects($this->once())
+            ->method('createGroupByName')
+            ->willReturn("a");
         $this->groupServiceMock->expects($this->at(1))
             ->method('addMemberToGroup')
+            ->with("a", $courseGroupMember)
             ->will($this->throwException(new AzureUserNotExistsException($courseGroupMember)));
 
         $this->courseGroupOffice365Connector->createGroupFromCourseGroup($courseGroup, $user);
