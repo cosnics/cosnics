@@ -37,7 +37,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying..'
-                sh 'ansible-playbook /ansible/deploy.yml -i /ansible/hosts --extra-vars "hosts=test remote_user=jenkins project_root=/cosnics/${BRANCH_NAME} project_local_path=${WORKSPACE}/ cosnics_url=https://demo.cosnics.org/${BRANCH_NAME}/current/web/ cosnics_deploy_database_name=cosnics-${BRANCH_NAME} cosnics_deploy_test_database_name=cosnics-${BRANCH_NAME}-test"'
+                sh 'ansible-playbook /ansible/deploy.yml -i /ansible/hosts --extra-vars "hosts=test remote_user=jenkins project_root=/cosnics/${BRANCH_NAME} project_local_path=${WORKSPACE}/ cosnics_url=https://demo.cosnics.org/${BRANCH_NAME}/current/web/ branch=${BRANCH_NAME}"'
             }
         }
         stage('Test') {
@@ -84,7 +84,7 @@ def notifySlack(String buildStatus = 'STARTED') {
             color = '#FF9FA1'
         }
 
-        def msg = "BUILD ${buildStatus}: `${env.JOB_NAME}` <${env.RUN_DISPLAY_URL}|#${env.BUILD_NUMBER}> ${extraMessage}"
+        def msg = "BUILD ${buildStatus}: `${env.JOB_NAME}` <${env.JOB_DISPLAY_URL}|#${env.BUILD_NUMBER}> ${extraMessage}"
 
         slackSend(color: color, message: msg)
  }

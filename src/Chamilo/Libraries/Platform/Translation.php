@@ -12,7 +12,7 @@ class Translation
 
     /**
      *
-     * @return \Chamilo\Libraries\Platform\Translation
+     * @return \Chamilo\Libraries\Translation\Translation
      */
     static public function getInstance()
     {

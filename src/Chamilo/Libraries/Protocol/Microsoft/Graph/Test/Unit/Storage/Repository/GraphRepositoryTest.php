@@ -110,7 +110,7 @@ class GraphRepositoryTest extends ChamiloTestCase
             ->with($accessToken);
 
         $this->graphRepository =
-            new GraphRepository($this->oauthProviderMock, $this->graphMock, $this->accessTokenRepositoryMock, '');
+            new GraphRepository($this->oauthProviderMock, $this->graphMock, $this->accessTokenRepositoryMock);
     }
 
     public function testAuthorizeUserByAuthorizationCode()

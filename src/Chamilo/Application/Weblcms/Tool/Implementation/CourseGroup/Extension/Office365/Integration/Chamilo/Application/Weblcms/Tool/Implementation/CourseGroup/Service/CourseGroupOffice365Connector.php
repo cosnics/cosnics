@@ -9,10 +9,10 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
-use Microsoft\Graph\Model\Group;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service
@@ -220,7 +220,7 @@ class CourseGroupOffice365Connector
      * @param CourseGroup $courseGroup
      * @param User $user
      */
-    public function unlinkTeamFromOffice365Group(CourseGroup $courseGroup, User $user)
+    public function unlinkTeamFromOffice365Group(CourseGroup $courseGroup)
     {
         $office365Reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
         if(!$office365Reference) {
@@ -291,6 +291,10 @@ class CourseGroupOffice365Connector
     public function syncCourseGroupSubscriptions(CourseGroup $courseGroup)
     {
         $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
+
+        if(empty($reference)) {
+            return;
+        }
 
         if(!$reference->isLinked()) {
             return;
@@ -382,7 +386,7 @@ class CourseGroupOffice365Connector
         $office365ReferenceService = $this->courseGroupOffice365ReferenceService;
         if (!$office365ReferenceService->courseGroupHasLinkedReference($courseGroup))
         {
-            throw new \RuntimeException();
+            throw new \RuntimeException("Course group is not linked to office365 group");
         }
 
         $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
@@ -392,7 +396,12 @@ class CourseGroupOffice365Connector
             ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri']
         );
 
-        $group = $this->groupService->getGroup($reference->getOffice365GroupId());
+        try {
+            $group = $this->groupService->getGroup($reference->getOffice365GroupId());
+        } catch (GroupNotExistsException $exception) {
+            throw new \RuntimeException('Office365 group not found');
+        }
+
 
         return str_replace('{GROUP_ID}', $group->getMailNickname(), $groupUrl);
 

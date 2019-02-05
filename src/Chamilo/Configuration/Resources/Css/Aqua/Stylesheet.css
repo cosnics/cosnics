@@ -6,7 +6,9 @@
 /* Font Awesome */
 @import url('FontAwesome/css/font-awesome.min.css');
 
-@import url('ConnectIdents/ConnectIdents.css');
+@import url('ConnectIdentsGeneral.css');
+
+@import url('ConnectIdents/css/connectidents.css');
 
 /* Plugin CSS */
 @import url('Plugin.css');

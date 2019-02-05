@@ -14,7 +14,7 @@
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"require": {
-		"php": ">=7.0.0",
+		"php": ">=7.1.0",
 		"chamilo/pear-libraries": "*",
 		"doctrine/cache": "1.7.1",
 		"doctrine/dbal": "2.7.1",
@@ -37,7 +37,8 @@
 		"symfony/validator": "^3.4",
 		"symfony/yaml": "^3.4",
 		"twig/twig": "2.4.8",
-		"kriswallsmith/assetic": "^1.4"
+		"kriswallsmith/assetic": "^1.4",
+		"ext-json": "*"
 	},
 	"require-dev": {
 		"behat/behat": "*",

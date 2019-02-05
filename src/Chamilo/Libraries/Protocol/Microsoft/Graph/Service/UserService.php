@@ -79,7 +79,7 @@ class UserService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return string
+     * @return string @todo should be value object
      */
     public function getAzureUserIdentifier(User $user)
     {
@@ -105,6 +105,20 @@ class UserService
         }
 
         return $azureActiveDirectoryUserIdentifier;
+    }
+
+    /**
+     * @param User[] $users
+     * @return string[]
+     */
+    public function getAzureUserIdentifiers(array $users):array
+    {
+        $azureIds = [];
+        foreach ($users as $user) {
+            $azureIds[] = $this->getAzureUserIdentifier($user);
+        }
+
+        return $azureIds;
     }
 
     /**

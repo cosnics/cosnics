@@ -92,22 +92,6 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
             ]
         );
 
-        $groupReference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
-
-        if ($groupReference->hasTeam()) {
-            $visitTeamLabel = $this->translator->trans('VisitTeam', [], Manager::context());
-
-            $visitTeamUrl = $this->urlGenerator->generateURL(
-                [
-                    \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
-                        \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_LAUNCH_INTEGRATION,
-                    IntegrationLauncherComponent::PARAM_BASE_CONTEXT =>
-                        'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365',
-                    Manager::PARAM_ACTION => Manager::ACTION_VISIT_TEAM
-                ]
-            );
-        }
-
         $visitPlannerLabel = $this->translator->trans('VisitPlanner', [], Manager::context());
 
         $synchronizePlannerUrl = $this->urlGenerator->generateURL(
@@ -133,7 +117,19 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
             )
         );
 
+        $groupReference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
+
         if($groupReference->hasTeam()){
+            $visitTeamUrl = $this->urlGenerator->generateURL(
+                [
+                    \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
+                        \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_LAUNCH_INTEGRATION,
+                    IntegrationLauncherComponent::PARAM_BASE_CONTEXT =>
+                        'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365',
+                    Manager::PARAM_ACTION => Manager::ACTION_VISIT_TEAM
+                ]
+            );
+            $visitTeamLabel = $this->translator->trans('VisitTeam', [], Manager::context());
             $visitGroupButton->addSubButton(
                 new SubButton(
                 $visitTeamLabel, null, $visitTeamUrl, Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'

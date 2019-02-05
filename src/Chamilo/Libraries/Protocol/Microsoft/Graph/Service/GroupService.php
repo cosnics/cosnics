@@ -151,7 +151,7 @@ class GroupService
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
-    public function addMemberToGroup($groupId, User $user)
+    public function addMemberToGroup(string $groupId, User $user)
     {
         if (!$this->isMemberOfGroup($groupId, $user))
         {
@@ -181,6 +181,15 @@ class GroupService
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
             $this->getGroupRepository()->removeMemberFromGroup($groupId, $azureUserIdentifier);
         }
+    }
+
+    /**
+     * @param string $groupId
+     * @param string $azureMemberId
+     */
+    public function removeMemberFromGroupByAzureId(string $groupId, string $azureMemberId)
+    {
+        $this->getGroupRepository()->removeMemberFromGroup($groupId, $azureMemberId);
     }
 
     /**
@@ -280,14 +289,23 @@ class GroupService
     }
 
     /**
+     * @param string $groupId
+     * @param string $ownerAzureId
+     */
+    public function removeOwnerByAzureId(string $groupId, string $ownerAzureId)
+    {
+        $this->getGroupRepository()->removeOwnerFromGroup($groupId, $ownerAzureId);
+    }
+
+    /**
      * Returns whether or not the given user is subscribed to the given group
      *
-     * @param integer $groupId
+     * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return boolean
      */
-    public function isOwnerOfGroup($groupId, User $user)
+    public function isOwnerOfGroup(string $groupId, User $user)
     {
         $azureUserIdentifier = $this->getAzureUserIdentifier($user);
 
@@ -493,6 +511,48 @@ class GroupService
         foreach ($usersToRemove as $userToRemove)
         {
             $this->groupRepository->removeMemberFromGroup($groupId, $userToRemove);
+        }
+    }
+
+    /**
+     * @param string $groupId
+     * @param User[] $members
+     * @return string[]
+     */
+    public function getGroupMemberAzureIdsNotInArray(string $groupId, array $members):array
+    {
+        return array_diff($this->getGroupMembers($groupId), $this->userService->getAzureUserIdentifiers($members));
+    }
+
+    /**
+     * @param string $groupId
+     * @param User[] $owners
+     * @return string[]
+     */
+    public function getGroupOwnerAzureIdsNotInArray(string $groupId, array $owners):array
+    {
+        return array_diff($this->getGroupOwners($groupId), $this->userService->getAzureUserIdentifiers($owners));
+    }
+
+    /**
+     * @param string $groupId
+     * @param User[] $members
+     */
+    public function removeGroupMembersNotInArray(string $groupId, array $members)
+    {
+        foreach ($this->getGroupMemberAzureIdsNotInArray($groupId, $members) as $memberAzureId) {
+            $this->removeMemberFromGroupByAzureId($groupId, $memberAzureId);
+        }
+    }
+
+    /**
+     * @param string $groupId
+     * @param User[] $owners
+     */
+    public function removeGroupOwnersNotInArray(string $groupId, array $owners)
+    {
+        foreach ($this->getGroupOwnerAzureIdsNotInArray($groupId, $owners) as $memberAzureId) {
+            $this->removeOwnerByAzureId($groupId, $memberAzureId);
         }
     }
 

@@ -22,6 +22,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\DynamicContentMenu\DynamicContentMenuItem;
 use Chamilo\Libraries\Format\Menu\DynamicContentMenu\FormDynamicContentMenu;
 use Chamilo\Libraries\Format\Menu\DynamicContentMenu\FormDynamicContentMenuItem;
+use Chamilo\Libraries\Format\Structure\IdentRenderer;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -465,8 +466,10 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             
             $table_body = array();
             $table_body[] = '<tr>';
-            $table_body[] = '<td class="column_icon"><img class="' . $tool_image . '" width="16px" height="16px" src="';
-            $table_body[] = $tool_image_src . '" style="vertical-align: middle;" alt="' . $tool_title . '"/></td>';
+            $table_body[] = '<td class="column_icon">';
+            $identRenderer = new IdentRenderer($tool_namespace, false, false, IdentRenderer::SIZE_SM);
+            $table_body[] = $identRenderer->render();
+            $table_body[] = '</td>';
             
             $table_body[] = '<td class="column_tool_title">' . $tool_title . '</td>';
             
