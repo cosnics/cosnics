@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 
 /**
  * Storage solution for the Graph access token
@@ -59,9 +60,9 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     /**
      * Stores the application access token
      *
-     * @param \League\OAuth2\Client\Token\AccessToken $accessToken
+     * @param \League\OAuth2\Client\Token\AccessTokenInterface $accessToken
      */
-    public function storeApplicationAccessToken(AccessToken $accessToken)
+    public function storeApplicationAccessToken(AccessTokenInterface $accessToken)
     {
         $this->localSetting->create(
             'access_token',

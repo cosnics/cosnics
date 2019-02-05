@@ -6,7 +6,8 @@
 /* Font Awesome */
 @import url('../Aqua/FontAwesome/css/font-awesome.min.css');
 
-@import url('../Aqua/ConnectIdents/ConnectIdents.css');
+@import url('../Aqua/ConnectIdentsGeneral.css');
+@import url('../Aqua/ConnectIdents/css/connectidents.css');
 
 /* Plugin CSS */
 @import url('Plugin.css');

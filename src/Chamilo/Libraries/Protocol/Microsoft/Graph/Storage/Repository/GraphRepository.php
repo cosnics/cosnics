@@ -2,9 +2,13 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
 use League\OAuth2\Client\Provider\AbstractProvider;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 use Microsoft\Graph\Graph;
+use Microsoft\Graph\Http\GraphCollectionRequest;
 use Microsoft\Graph\Http\GraphRequest;
 use Microsoft\Graph\Http\GraphResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -130,15 +134,15 @@ class GraphRepository
 
     /**
      *
-     * @param \League\OAuth2\Client\Token\AccessToken $delegatedAccessToken
+     * @param \League\OAuth2\Client\Token\AccessTokenInterface $delegatedAccessToken
      */
-    protected function setDelegatedAccessToken(AccessToken $delegatedAccessToken = null)
+    protected function setDelegatedAccessToken(AccessTokenInterface $delegatedAccessToken = null)
     {
         $this->delegatedAccessToken = $delegatedAccessToken;
     }
 
     /**
-     * Initializes the access token
+     * @throws IdentityProviderException
      */
     protected function initializeApplicationAccessToken()
     {
@@ -154,9 +158,8 @@ class GraphRepository
     }
 
     /**
-     * Returns the access token
-     *
-     * @return \League\OAuth2\Client\Token\AccessToken
+     * @return AccessTokenInterface
+     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
      */
     protected function requestNewApplicationAccessToken()
     {
@@ -187,6 +190,7 @@ class GraphRepository
 
     /**
      * Sets the user access token as the currently to use access token
+     * @throws IdentityProviderException
      */
     protected function activateDelegatedAccessToken()
     {
@@ -215,6 +219,8 @@ class GraphRepository
      * Authorizes a user by a given authorization code
      *
      * @param string $authorizationCode
+     *
+     * @throws IdentityProviderException
      */
     public function authorizeUserByAuthorizationCode($authorizationCode)
     {
@@ -237,6 +243,7 @@ class GraphRepository
      * @throws \GuzzleHttp\Exception\ClientException $exception
      * @return mixed
      * @throws \Microsoft\Graph\Exception\GraphException
+     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
      */
     protected function executeRequestWithAccessTokenExpirationRetry(GraphRequest $graphRequest)
     {
@@ -295,22 +302,29 @@ class GraphRepository
      * @param bool $isCollectionRequest
      * @param string $apiVersion
      * @return \Microsoft\Graph\Http\GraphCollectionRequest|GraphRequest
+     *
+     * @throws GraphException
      */
     protected function createRequest(
         $requestType, $endpoint, $requestBody = [], $returnClass = null, bool $isCollectionRequest = false,
         string $apiVersion = self::API_VERSION_V1
-    )
+    ): GraphRequest
     {
         $this->getGraph()->setApiVersion($apiVersion);
 
-        if(!$isCollectionRequest)
-        {
-            $request = $this->getGraph()->createRequest($requestType, $endpoint)->setReturnType($returnClass);
+        try {
+            if(!$isCollectionRequest)
+            {
+                $request = $this->getGraph()->createRequest($requestType, $endpoint)->setReturnType($returnClass);
+            }
+            else
+            {
+                $request = $this->getGraph()->createCollectionRequest($requestType, $endpoint);
+            }
+        } catch (\Microsoft\Graph\Exception\GraphException $exception) {
+            throw new GraphException("Error creating request", 0, $exception);
         }
-        else
-        {
-            $request = $this->getGraph()->createCollectionRequest($requestType, $endpoint);
-        }
+
 
         if (!empty($requestBody))
         {
@@ -349,17 +363,14 @@ class GraphRepository
     }
 
     /**
-     *
-     * @param string $requestType
-     * @param string $endpoint
-     * @param string[] $requestBody
-     * @param string $returnClass
-     * @param string $apiVersion
-     *
+     * @param $requestType
+     * @param $endpoint
+     * @param array $requestBody
+     * @param null $returnClass
      * @param bool $isCollectionRequest
-     *
-     * @return \Microsoft\Graph\Model\Entity | \Microsoft\Graph\Http\GraphResponse -
-     *      A Microsoft Graph Entity-instance of type $returnClass or a dry collection response
+     * @param string $apiVersion
+     * @return mixed
+     * @throws GraphException
      */
     protected function createAndExecuteRequestWithAccessTokenExpirationRetry(
         $requestType, $endpoint, $requestBody = [],
@@ -367,9 +378,15 @@ class GraphRepository
         $apiVersion = self::API_VERSION_V1
     )
     {
-        return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->createRequest($requestType, $endpoint, $requestBody, $returnClass, $isCollectionRequest, $apiVersion)
-        );
+        try{
+            return $this->executeRequestWithAccessTokenExpirationRetry(
+                $this->createRequest($requestType, $endpoint, $requestBody, $returnClass, $isCollectionRequest, $apiVersion)
+            );
+        } catch (IdentityProviderException $exception) {
+            throw new GraphException("Authentication or authorization failed with Microsoft Graph", 0, $exception);
+        } catch (\Microsoft\Graph\Exception\GraphException $exception) {
+            throw new GraphException("Error while interacting with Microsoft Graph",0, $exception);
+        }
     }
 
     /**
@@ -405,6 +422,7 @@ class GraphRepository
      * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity | \Microsoft\Graph\Model\Entity[]
      *  A Microsoft Graph Entity-instance of type $returnClass
+     * @throws GraphException
      */
     public function executeGetWithAccessTokenExpirationRetry(
         $endpoint, $returnClass = null, $isCollectionRequest = false, $apiVersion = self::API_VERSION_V1
@@ -456,6 +474,7 @@ class GraphRepository
      *
      * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
+     * @throws GraphException
      */
     public function executePostWithAccessTokenExpirationRetry($endpoint, $requestBody = [], $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
@@ -477,6 +496,7 @@ class GraphRepository
      *
      * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
+     * @throws GraphException
      */
     public function executePutWithAccessTokenExpirationRetry($endpoint, $requestBody = [], $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
@@ -513,6 +533,7 @@ class GraphRepository
      *
      * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
+     * @throws GraphException
      */
     public function executePatchWithAccessTokenExpirationRetry($endpoint, $requestBody = [], $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {
@@ -548,6 +569,7 @@ class GraphRepository
      *
      * @param string $apiVersion
      * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
+     * @throws GraphException
      */
     public function executeDeleteWithAccessTokenExpirationRetry($endpoint, $returnClass = null, $apiVersion = self::API_VERSION_V1)
     {

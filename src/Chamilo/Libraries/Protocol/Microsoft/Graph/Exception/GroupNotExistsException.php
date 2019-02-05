@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Exception;
 
-use Chamilo\Core\User\Storage\DataClass\User;
-
 /**
  * Class GroupNotExistsException
  */

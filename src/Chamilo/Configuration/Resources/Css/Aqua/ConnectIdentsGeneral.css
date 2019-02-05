@@ -1,0 +1,74 @@
+.ident {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'connectidents';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #666666;
+    vertical-align: middle;
+}
+
+.ident-xs {
+    font-size: 16px;
+    vertical-align: middle;
+}
+
+.ident-sm {
+    font-size: 20px;
+    vertical-align: middle;
+}
+
+.ident-md {
+    font-size: 28px;
+    vertical-align: middle;
+}
+
+.ident-lg {
+    font-size: 40px;
+    vertical-align: middle;
+}
+
+.ident-disabled:before {
+    opacity: 0.3;
+}
+
+.ident-new:before {
+    opacity: 0.5;
+}
+
+.ident-new:after {
+    display: inline-block;
+    background-color: #f57900;
+    position: absolute;
+    content: "";
+    right: 0px;
+    bottom: 0px;
+}
+
+.ident-xs.ident-new:after {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+}
+
+.ident-sm.ident-new:after {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+}
+
+.ident-md.ident-new:after {
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+}
+
+.ident-lg.ident-new:after {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+}

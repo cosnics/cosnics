@@ -54,7 +54,7 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
             Translation::getInstance()->getTranslation('UseOffice365Group')
         );
 
-        /*$courseGroupForm->addElement(
+        $courseGroupForm->addElement(
             'checkbox', self::PROPERTY_USE_GROUP_AND_TEAM . '[' . $id . ']',
             Translation::getInstance()->getTranslation('UseOffice365GroupAndTeam')
         );
@@ -63,7 +63,7 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
             'html',
             ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup', true) .
-                'TeamAndGroupFormSelection.js'));*/
+                'TeamAndGroupFormSelection.js'));
 
         $defaults = [];
         $office365Reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
