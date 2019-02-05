@@ -26,11 +26,8 @@ class WebhookTest extends ChamiloTestCase
 
         $request = new Request(
             'POST', $webhookURL,
-            ['X-Turnitin-EventType' => WebhookManager::WEBHOOK_SUBMISSION_COMPLETE, 'X-Turnitin-Signature' => 'testkey', 'Content-Type' => 'application/json'],
-            json_encode([
-                'id' => 'e884f478-9757-41c7-80da-37b94ebb2838',
-                'status' => 'COMPLETED'
-            ])
+            ['X-Turnitin-EventType' => WebhookManager::WEBHOOK_SIMILARITY_COMPLETE, 'X-Turnitin-Signature' => 'test', 'Content-Type' => 'application/json'],
+            '{"overall_match_percentage":100,"status":"COMPLETE","time_generated":"2019-02-05T08:34:03.602Z","time_requested":"2019-02-05T08:33:51.302Z","submission_id":"e884f478-9757-41c7-80da-37b94ebb2838","top_source_largest_matched_word_count":182}'
         );
 
         $response = $client->send($request);

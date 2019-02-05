@@ -145,7 +145,7 @@ class WebhookHandler
             );
         }
 
-        $expectedKey = hash_hmac('sha256', $requestBody, $webhookSecret);
+        $expectedKey = hash_hmac('sha256', $requestBody, base64_decode($webhookSecret));
         if ($expectedKey != $authorizationKey)
         {
             throw new PlagiarismException('The given authorization key is not correct');
