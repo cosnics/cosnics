@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNod
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
+use JMS\Serializer\Serializer;
 
 /**
  * Tests the TreeNodeDataService
@@ -29,6 +30,11 @@ class TreeNodeDataServiceTest extends ChamiloTestCase
     protected $treeNodeDataService;
 
     /**
+     * @var \JMS\Serializer\Serializer | \PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $serializerMock;
+
+    /**
      * Set up before each test
      */
     protected function setUp()
@@ -37,7 +43,11 @@ class TreeNodeDataServiceTest extends ChamiloTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->treeNodeDataService = new TreeNodeDataService($this->treeNodeDataRepositoryMock);
+        $this->serializerMock = $this->getMockBuilder(Serializer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->treeNodeDataService = new TreeNodeDataService($this->treeNodeDataRepositoryMock, $this->serializerMock);
     }
 
     /**
@@ -46,6 +56,7 @@ class TreeNodeDataServiceTest extends ChamiloTestCase
     protected function tearDown()
     {
         unset($this->treeNodeDataRepositoryMock);
+        unset($this->serializerMock);
         unset($this->treeNodeDataService);
     }
 

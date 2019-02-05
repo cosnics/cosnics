@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use JMS\Serializer\Serializer;
 
 /**
  * Tests the TreeBuilder class
@@ -30,6 +31,11 @@ class TreeBuilderTest extends ChamiloTestCase
      * @var ContentObjectRepository | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $contentObjectRepositoryMock;
+
+    /**
+     * @var \JMS\Serializer\Serializer | \PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $serializerMock;
 
     /**
      * @var TreeBuilder
@@ -64,8 +70,12 @@ class TreeBuilderTest extends ChamiloTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->serializerMock = $this->getMockBuilder(Serializer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->treeBuilder = new TreeBuilder(
-            $this->treeNodeDataRepositoryMock, $this->contentObjectRepositoryMock
+            $this->treeNodeDataRepositoryMock, $this->contentObjectRepositoryMock, $this->serializerMock
         );
 
         $nodesData = [
@@ -140,6 +150,7 @@ class TreeBuilderTest extends ChamiloTestCase
     {
         unset($this->treeNodeDataRepositoryMock);
         unset($this->contentObjectRepositoryMock);
+        unset($this->serializerMock);
         unset($this->treeBuilder);
     }
 
