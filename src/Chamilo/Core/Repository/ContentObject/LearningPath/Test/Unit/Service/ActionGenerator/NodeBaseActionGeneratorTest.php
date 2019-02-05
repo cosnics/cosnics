@@ -224,7 +224,7 @@ class NodeBaseActionGeneratorTest extends ChamiloTestCase
 
     public function testReportingAction()
     {
-        $actions = $this->nodeBaseActionGenerator->generateNodeActions($this->tree->getTreeNodeByStep(2), true);
+        $actions = $this->nodeBaseActionGenerator->generateNodeActions($this->tree->getTreeNodeByStep(2), true, true);
 
         $expectedData = array (
             'name' => 'reporting',
@@ -235,7 +235,7 @@ class NodeBaseActionGeneratorTest extends ChamiloTestCase
             'confirmation_message' => NULL,
         );
 
-        $this->assertEquals($expectedData, $actions[1]->toArray());
+        $this->assertEquals($expectedData, $actions[8]->toArray());
     }
 
     public function testBlockUnblockNodeAction()
@@ -251,7 +251,7 @@ class NodeBaseActionGeneratorTest extends ChamiloTestCase
             'confirmation_message' => NULL,
         );
 
-        $this->assertEquals($expectedData, $actions[2]->toArray());
+        $this->assertEquals($expectedData, $actions[1]->toArray());
     }
 
     public function testDeleteNodeAction()
@@ -267,7 +267,7 @@ class NodeBaseActionGeneratorTest extends ChamiloTestCase
             'confirmation_message' => 'Confirm',
         );
 
-        $this->assertEquals($expectedData, $actions[3]->toArray());
+        $this->assertEquals($expectedData, $actions[2]->toArray());
     }
 
     public function testMoveNodeAction()
@@ -283,6 +283,6 @@ class NodeBaseActionGeneratorTest extends ChamiloTestCase
             'confirmation_message' => NULL,
         );
 
-        $this->assertEquals($expectedData, $actions[4]->toArray());
+        $this->assertEquals($expectedData, $actions[3]->toArray());
     }
 }
