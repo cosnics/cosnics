@@ -3,6 +3,8 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Test\Unit\Service\NotificationProcessor;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceInterface;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
@@ -77,6 +79,11 @@ class EntryNotificationJobProcessorTest extends ChamiloTestCase
     protected $notificationManagerMock;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager | \PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $entityServiceManagerMock;
+
+    /**
      * Setup before each test
      */
     public function setUp()
@@ -105,8 +112,12 @@ class EntryNotificationJobProcessorTest extends ChamiloTestCase
         $this->notificationManagerMock = $this->getMockBuilder(NotificationManager::class)
             ->disableOriginalConstructor()->getMock();
 
+        $this->entityServiceManagerMock = $this->getMockBuilder(EntityServiceManager::class)
+            ->disableOriginalConstructor()->getMock();
+
         $this->entryNotificationJobProcessor = new EntryNotificationJobProcessor(
-            $this->assignmentServiceMock, $this->treeNodeDataServiceMock, $this->publicationServiceMock,
+            $this->assignmentServiceMock, $this->entityServiceManagerMock, $this->treeNodeDataServiceMock,
+            $this->publicationServiceMock,
             $this->courseServiceMock, $this->userServiceMock, $this->contentObjectRepositoryMock,
             $this->filterManagerMock, $this->notificationManagerMock
         );
@@ -125,6 +136,7 @@ class EntryNotificationJobProcessorTest extends ChamiloTestCase
         unset($this->contentObjectRepositoryMock);
         unset($this->filterManagerMock);
         unset($this->notificationManagerMock);
+        unset($this->entityServiceManagerMock);
         unset($this->entryNotificationJobProcessor);
     }
 
@@ -209,6 +221,19 @@ class EntryNotificationJobProcessorTest extends ChamiloTestCase
             ->will($this->returnValue($teachers));
 
         $filters = [];
+
+        $entityServiceMock = $this->getMockBuilder(EntityServiceInterface::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->entityServiceManagerMock->expects($this->once())
+            ->method('getEntityServiceByType')
+            ->with(1)
+            ->will($this->returnValue($entityServiceMock));
+
+        $entityServiceMock->expects($this->once())
+            ->method('getUsersForEntity')
+            ->with(20)
+            ->will($this->returnValue([$entryUser]));
 
         $this->filterManagerMock->expects($this->exactly(4))
             ->method('getOrCreateFilterByContextPath')
@@ -497,7 +522,6 @@ class EntryNotificationJobProcessorTest extends ChamiloTestCase
 
         $assignment = new Assignment();
         $assignment->setId(14);
-
 
         $this->assignmentServiceMock->expects($this->once())
             ->method('findEntryByIdentifier')
