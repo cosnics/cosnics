@@ -138,7 +138,7 @@ class WebhookHandler
             ['Chamilo\Application\Plagiarism', 'turnitin_webhook_secret']
         );
 
-        if (empty($storedAuthorizationKey))
+        if (empty($webhookSecret))
         {
             throw new PlagiarismException(
                 'The stored authorization key is empty and therefor it is insecure to call this service, request aborted'
