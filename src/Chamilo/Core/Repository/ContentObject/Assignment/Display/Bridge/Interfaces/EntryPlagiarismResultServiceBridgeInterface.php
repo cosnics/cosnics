@@ -13,6 +13,11 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge
 interface EntryPlagiarismResultServiceBridgeInterface
 {
     /**
+     * @return bool
+     */
+    public function checkForPlagiarismAfterSubmission();
+
+    /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return EntryPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass

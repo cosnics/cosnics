@@ -134,6 +134,11 @@ class PublicationForm extends ContentObjectPublicationForm
             $this->translator->trans('PublishAssignmentForEntity', [], Manager::context()),
             ''
         );
+
+        $this->addElement(
+            'checkbox', Publication::PROPERTY_CHECK_FOR_PLAGIARISM,
+            $this->translator->trans('CheckForPlagiarism', [], Manager::context())
+        );
     }
 
     /**
@@ -183,6 +188,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $publication->setPublicationId($contentObjectPublication->getId());
         $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE]);
+        $publication->setCheckForPlagiarism($exportValues[Publication::PROPERTY_CHECK_FOR_PLAGIARISM] == 1);
 
         return $publication->create();
     }
@@ -203,6 +209,7 @@ class PublicationForm extends ContentObjectPublicationForm
                 $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
             $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE]);
+            $publication->setCheckForPlagiarism($exportValues[Publication::PROPERTY_CHECK_FOR_PLAGIARISM] == 1);
 
             return $publication->update();
         }
@@ -221,5 +228,6 @@ class PublicationForm extends ContentObjectPublicationForm
             $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
         $this->setDefaults([Publication::PROPERTY_ENTITY_TYPE => $publication->getEntityType()]);
+        $this->setDefaults([Publication::PROPERTY_CHECK_FOR_PLAGIARISM => $publication->getCheckForPlagiarism()]);
     }
 }

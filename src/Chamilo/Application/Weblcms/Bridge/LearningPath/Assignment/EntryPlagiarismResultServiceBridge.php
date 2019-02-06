@@ -5,6 +5,8 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\AssignmentConfiguration;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 
 /**
  * Interface EntryPlagiarismResultServiceBridge
@@ -28,6 +30,18 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
     )
     {
         $this->assignmentEntryPlagiarismResultService = $assignmentEntryPlagiarismResultService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     *
+     * @return bool
+     */
+    public function checkForPlagiarismAfterSubmission(TreeNode $treeNode)
+    {
+        /** @var AssignmentConfiguration $configuration */
+        $configuration = $treeNode->getConfiguration(new AssignmentConfiguration());
+        return $configuration->getCheckForPlagiarism();
     }
 
     /**

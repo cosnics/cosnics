@@ -31,6 +31,14 @@ class EntryPlagiarismResultServiceBridge implements
     }
 
     /**
+     * @return bool
+     */
+    public function checkForPlagiarismAfterSubmission()
+    {
+        return $this->assignmentEntryPlagiarismResultServiceBridge->checkForPlagiarismAfterSubmission();
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return EntryPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass

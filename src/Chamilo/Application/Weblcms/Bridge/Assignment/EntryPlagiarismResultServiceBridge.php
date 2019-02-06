@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Assignment;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 
@@ -19,6 +20,11 @@ class EntryPlagiarismResultServiceBridge implements
     protected $assignmentEntryPlagiarismResultService;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication
+     */
+    protected $assignmentPublication;
+
+    /**
      * EntryPlagiarismResultServiceBridge constructor.
      *
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\EntryPlagiarismResultService $assignmentEntryPlagiarismResultService
@@ -28,6 +34,22 @@ class EntryPlagiarismResultServiceBridge implements
     )
     {
         $this->assignmentEntryPlagiarismResultService = $assignmentEntryPlagiarismResultService;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication $assignmentPublication
+     */
+    public function setAssignmentPublication(Publication $assignmentPublication)
+    {
+        $this->assignmentPublication = $assignmentPublication;
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkForPlagiarismAfterSubmission()
+    {
+        return $this->assignmentPublication->getCheckForPlagiarism();
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 
 /**
  * Interface EntryPlagiarismResultServiceBridge
@@ -12,6 +13,13 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge
  */
 interface EntryPlagiarismResultServiceBridgeInterface
 {
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     *
+     * @return bool
+     */
+    public function checkForPlagiarismAfterSubmission(TreeNode $treeNode);
+
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *

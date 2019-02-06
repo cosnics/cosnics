@@ -16,6 +16,8 @@ use Symfony\Component\Translation\Translator;
 class ConfigurationFormBuilder
 {
     const FORM_PROPERTY_ENTITY_TYPE = 'entity_type';
+    const FORM_PROPERTY_CHECK_FOR_PLAGIARISM = 'check_for_plagiarism';
+
     const TRANSLATION_CONTEXT = 'Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath';
 
     /**
@@ -39,6 +41,7 @@ class ConfigurationFormBuilder
      *
      * @throws \HTML_QuickForm_Error
      * @throws \PEAR_Error
+     * @throws \Exception
      */
     public function buildForm(FormValidator $formBuilder, AssignmentConfiguration $configuration)
     {
@@ -73,6 +76,11 @@ class ConfigurationFormBuilder
             ''
         );
 
+        $formBuilder->addElement(
+            'checkbox', self::FORM_PROPERTY_CHECK_FOR_PLAGIARISM,
+            $this->translator->trans('CheckForPlagiarism', [], self::TRANSLATION_CONTEXT)
+        );
+
         $buttons = array();
 
         $buttons[] = $formBuilder->createElement(
@@ -86,7 +94,12 @@ class ConfigurationFormBuilder
 
         $formBuilder->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
-        $formBuilder->setDefaults([self::FORM_PROPERTY_ENTITY_TYPE => $configuration->getEntityType()]);
+        $formBuilder->setDefaults(
+            [
+                self::FORM_PROPERTY_ENTITY_TYPE => $configuration->getEntityType(),
+                self::FORM_PROPERTY_CHECK_FOR_PLAGIARISM => $configuration->getCheckForPlagiarism()
+            ]
+        );
     }
 
 }

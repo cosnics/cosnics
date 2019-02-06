@@ -81,8 +81,10 @@ class DisplayComponent extends Manager implements DelegateComponent
             $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $contentObjectPublication)
         );
 
+        $assignmentPublication = $this->getAssignmentPublication($contentObjectPublication);
+
         $assignmentServiceBridge->setContentObjectPublication($contentObjectPublication);
-        $assignmentServiceBridge->setAssignmentPublication($this->getAssignmentPublication($contentObjectPublication));
+        $assignmentServiceBridge->setAssignmentPublication($assignmentPublication);
 
         /** @var FeedbackServiceBridge $assignmentFeedbackServiceBridge */
         $assignmentFeedbackServiceBridge = $this->getService(FeedbackServiceBridge::class);
@@ -99,6 +101,7 @@ class DisplayComponent extends Manager implements DelegateComponent
 
         /** @var \Chamilo\Application\Weblcms\Bridge\Assignment\EntryPlagiarismResultServiceBridge $entryPlagiarismResultServiceBridge */
         $entryPlagiarismResultServiceBridge = $this->getService(EntryPlagiarismResultServiceBridge::class);
+        $entryPlagiarismResultServiceBridge->setAssignmentPublication($assignmentPublication);
 
         $this->getBridgeManager()->addBridge($assignmentServiceBridge);
         $this->getBridgeManager()->addBridge($assignmentEphorusServiceBridge);

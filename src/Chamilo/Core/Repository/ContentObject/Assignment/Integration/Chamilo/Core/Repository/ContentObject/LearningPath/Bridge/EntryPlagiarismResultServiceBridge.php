@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 
 /**
  * Interface EntryPlagiarismResultServiceBridge
@@ -19,6 +21,11 @@ class EntryPlagiarismResultServiceBridge implements
     protected $assignmentEntryPlagiarismResultServiceBridge;
 
     /**
+     * @var TreeNode
+     */
+    protected $treeNode;
+
+    /**
      * EntryPlagiarismResultServiceBridge constructor.
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface $assignmentEntryPlagiarismResultServiceBridge
@@ -28,6 +35,29 @@ class EntryPlagiarismResultServiceBridge implements
     )
     {
         $this->assignmentEntryPlagiarismResultServiceBridge = $assignmentEntryPlagiarismResultServiceBridge;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     */
+    public function setTreeNode(TreeNode $treeNode)
+    {
+        if (!$treeNode->getContentObject() instanceof Assignment)
+        {
+            throw new \RuntimeException(
+                'The given treenode does not reference a valid assignment and should not be used'
+            );
+        }
+
+        $this->treeNode = $treeNode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkForPlagiarismAfterSubmission()
+    {
+        return $this->assignmentEntryPlagiarismResultServiceBridge->checkForPlagiarismAfterSubmission($this->treeNode);
     }
 
     /**

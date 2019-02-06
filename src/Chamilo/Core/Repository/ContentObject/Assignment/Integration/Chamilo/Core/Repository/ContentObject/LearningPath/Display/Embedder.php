@@ -98,6 +98,7 @@ class Embedder extends ContentObjectEmbedder
             $this->getBridgeManager()->getBridgeByInterface(EntryPlagiarismResultServiceBridgeInterface::class);
 
         $entryPlagiarismResultServiceBridge = new EntryPlagiarismResultServiceBridge($learningPathEntryPlagiarismResultServiceBridge);
+        $entryPlagiarismResultServiceBridge->setTreeNode($this->treeNode);
 
         $this->getBridgeManager()->addBridge($assignmentServiceBridge);
         $this->getBridgeManager()->addBridge($feedbackServiceBridge);
