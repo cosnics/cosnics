@@ -6,6 +6,8 @@ use Chamilo\Libraries\Calendar\Event\RecurrenceRules\VObjectRecurrenceRulesForma
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\TimeZone\TimeZoneCalendarWrapper;
+use Chamilo\Libraries\Calendar\TimeZone\TimeZoneGenerator;
+use kigkonsult\iCalcreator\timezoneHandler;
 use Sabre\VObject\Component\VCalendar;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,16 +28,24 @@ class ICalRenderer extends Renderer
      * @var \Sabre\VObject\Component\VCalendar
      */
     private $calendar;
+    /**
+     * @var \Chamilo\Libraries\Calendar\TimeZone\TimeZoneGenerator
+     */
+    private $timeZoneGenerator;
 
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\TimeZone\TimeZoneGenerator $timeZoneGenerator
+     *
+     * @throws \Exception
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider)
+    public function __construct(CalendarRendererProviderInterface $dataProvider, TimeZoneGenerator $timeZoneGenerator)
     {
         parent::__construct($dataProvider);
 
         $this->calendar = new VCalendar();
+        $this->timeZoneGenerator = $timeZoneGenerator;
     }
 
     /**
@@ -62,7 +72,7 @@ class ICalRenderer extends Renderer
      */
     public function render()
     {
-        $this->addTimeZone();
+        $this->timeZoneGenerator->generateTimeZoneForCalendar($this->getCalendar());
         $this->addEvents();
         return $this->getCalendar()->serialize();
     }
@@ -98,19 +108,6 @@ class ICalRenderer extends Renderer
 
         $response = new Response($serializedCalendar, 200, $headers);
         $response->send();
-    }
-
-    /**
-     * Add the correct timezone information
-     */
-    private function addTimeZone()
-    {
-        \iCalUtilityFunctions::createTimezone(
-            new TimeZoneCalendarWrapper($this->getCalendar()),
-            date_default_timezone_get(),
-            array()/*,
-            self :: TIMEZONE_START,
-            self :: TIMEZONE_END*/);
     }
 
     /**

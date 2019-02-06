@@ -48,6 +48,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader->load('architecture.xml');
         $xmlFileLoader->load('authentication.xml');
         $xmlFileLoader->load('cache.xml');
+        $xmlFileLoader->load('calendar.xml');
         $xmlFileLoader->load('file.xml');
         $xmlFileLoader->load('format.xml');
         $xmlFileLoader->load('hashing.xml');

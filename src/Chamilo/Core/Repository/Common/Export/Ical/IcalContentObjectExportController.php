@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Calendar\TimeZone\TimeZoneCalendarWrapper;
+use Chamilo\Libraries\Calendar\TimeZone\TimeZoneGenerator;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -74,12 +75,8 @@ class IcalContentObjectExportController extends ContentObjectExportController
 
     private function addTimeZone()
     {
-        \iCalUtilityFunctions::createTimezone(
-            new TimeZoneCalendarWrapper($this->get_calendar()), 
-            date_default_timezone_get(), 
-            array(), 
-            1, 
-            2145916799);
+        $timezoneGenerator = new TimeZoneGenerator();
+        $timezoneGenerator->generateTimeZoneForCalendar($this->get_calendar());
     }
 
     public function process($content_object)
