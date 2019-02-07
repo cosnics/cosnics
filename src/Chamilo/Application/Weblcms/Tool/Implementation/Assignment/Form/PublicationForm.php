@@ -8,7 +8,10 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
+use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\Translation\Translator;
 
@@ -27,7 +30,12 @@ class PublicationForm extends ContentObjectPublicationForm
     /**
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository
      */
-    private $publicationRepository;
+    protected $publicationRepository;
+
+    /**
+     * @var \Chamilo\Configuration\Service\RegistrationConsulter
+     */
+    protected $registrationConsulter;
 
     /**
      *
@@ -42,12 +50,14 @@ class PublicationForm extends ContentObjectPublicationForm
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository $publicationRepository
      *
+     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function __construct(
         User $user, $form_type, $publications, $course, $action, $is_course_admin,
-        $selectedContentObjects = array(), Translator $translator, PublicationRepository $publicationRepository
+        $selectedContentObjects = array(), Translator $translator, PublicationRepository $publicationRepository,
+        RegistrationConsulter $registrationConsulter
     )
     {
         $this->translator = $translator;
@@ -68,6 +78,7 @@ class PublicationForm extends ContentObjectPublicationForm
         {
             $this->setDefaultsForPublication($publications[0]);
         }
+        $this->registrationConsulter = $registrationConsulter;
     }
 
     /**
@@ -135,10 +146,33 @@ class PublicationForm extends ContentObjectPublicationForm
             ''
         );
 
-        $this->addElement(
-            'checkbox', Publication::PROPERTY_CHECK_FOR_PLAGIARISM,
-            $this->translator->trans('CheckForPlagiarism', [], Manager::context())
-        );
+        if($this->registrationConsulter->isContextRegisteredAndActive('Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism'))
+        {
+            $redirect = new Redirect(
+                [
+                    Application::PARAM_CONTEXT => 'Chamilo\Application\Plagiarism',
+                    Application::PARAM_ACTION => 'TurnitinEula',
+                    'ViewOnly' => 1
+                ]
+            );
+
+            $eulaPageUrl = $redirect->getUrl();
+
+            $this->addElement(
+                'checkbox', Publication::PROPERTY_CHECK_FOR_PLAGIARISM,
+                $this->translator->trans('CheckForPlagiarism', [], 'Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism')
+            );
+
+            $this->addElement(
+                'html', '<div class="alert alert-info" style="margin-top: 15px;">' .
+                $this->translator->trans('CheckForPlagiarismEULAWarning', ['{EULA_PAGE_URL}' => $eulaPageUrl], 'Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism') .
+                '</div>'
+            );
+        }
+        else
+        {
+            $this->addElement('hidden', Publication::PROPERTY_CHECK_FOR_PLAGIARISM);
+        }
     }
 
     /**

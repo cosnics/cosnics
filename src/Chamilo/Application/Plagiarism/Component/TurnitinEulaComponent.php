@@ -18,6 +18,7 @@ class TurnitinEulaComponent extends Manager
 {
     const REDIRECT_URL = 'RedirectUrl';
     const PARAM_ACCEPT_EULA = 'AcceptEULA';
+    const PARAM_VIEW_ONLY = 'ViewOnly';
 
     /**
      * @return string|\Symfony\Component\HttpFoundation\Response
@@ -25,53 +26,69 @@ class TurnitinEulaComponent extends Manager
      */
     function run()
     {
-        $redirectUrl = $this->getSessionUtilities()->get(self::REDIRECT_URL);
-        if (empty($redirectUrl))
+        $viewOnly = !empty($this->getRequest()->getFromUrl(self::PARAM_VIEW_ONLY));
+
+        if(!$viewOnly)
         {
-            throw new \RuntimeException(
-                'The redirect URL for the user is not registered and therefor the EULA can not be accepted'
-            );
+            $redirectUrl = $this->getSessionUtilities()->get(self::REDIRECT_URL);
+
+            if (empty($redirectUrl))
+            {
+                throw new \RuntimeException(
+                    'The redirect URL for the user is not registered and therefor the EULA can not be accepted'
+                );
+            }
+
+            if ($this->getEulaService()->userHasAcceptedEULA($this->getUser()))
+            {
+                return $this->redirectToUrl($redirectUrl);
+            }
+
+            $acceptEULA = $this->getRequest()->getFromUrl(self::PARAM_ACCEPT_EULA);
+            if ($acceptEULA)
+            {
+                $this->getEulaService()->acceptEULA($this->getUser());
+
+                return $this->redirectToURL($redirectUrl);
+            }
         }
 
-        if($this->getEulaService()->userHasAcceptedEULA($this->getUser()))
-        {
-            return $this->redirectToUrl($redirectUrl);
-        }
-
-        $acceptEULA = $this->getRequest()->getFromUrl(self::PARAM_ACCEPT_EULA);
-        if($acceptEULA)
-        {
-            $this->getEulaService()->acceptEULA($this->getUser());
-            return $this->redirectToURL($redirectUrl);
-        }
-
-        return $this->displayEULA();
+        return $this->displayEULA($viewOnly);
     }
 
     /**
+     * @param bool $viewOnly
+     *
      * @return \Chamilo\Libraries\Format\Response\Response
      * @throws \Exception
      */
-    protected function displayEULA()
+    protected function displayEULA(bool $viewOnly = false)
     {
         $html = array();
-        $html[] = '<div class="alert alert-info">';
-        $html[] = $this->getTranslator()->trans('EULAInfo', [], Manager::context());
-        $html[] = '</div>';
+
+        if(!$viewOnly)
+        {
+            $html[] = '<div class="alert alert-info">';
+            $html[] = $this->getTranslator()->trans('EULAInfo', [], Manager::context());
+            $html[] = '</div>';
+        }
 
         $html[] = '<div class="eula-info-page">';
         $html[] = $this->getEulaService()->getEULAPage();
         $html[] = '</div>';
 
-        $acceptEULAUrl = $this->get_url([self::PARAM_ACCEPT_EULA => 1]);
+        if(!$viewOnly)
+        {
+            $acceptEULAUrl = $this->get_url([self::PARAM_ACCEPT_EULA => 1]);
 
-        $html[] = '<div class="text-center">';
-        $html[] = '<a href="' . $acceptEULAUrl . '">';
-        $html[] = '<button type="button" class="btn btn-primary">';
-        $html[] = $this->getTranslator()->trans('AcceptEULA', [], Manager::context());
-        $html[] = '</button>';
-        $html[] = '</a>';
-        $html[] = '</div>';
+            $html[] = '<div class="text-center">';
+            $html[] = '<a href="' . $acceptEULAUrl . '">';
+            $html[] = '<button type="button" class="btn btn-primary">';
+            $html[] = $this->getTranslator()->trans('AcceptEULA', [], Manager::context());
+            $html[] = '</button>';
+            $html[] = '</a>';
+            $html[] = '</div>';
+        }
 
         $content = implode(PHP_EOL, $html);
 

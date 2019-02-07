@@ -66,4 +66,17 @@ class ExtensionManager implements ExtensionInterface
 
         return implode(PHP_EOL, $html);
     }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function entryCreated(Assignment $assignment, Entry $entry, User $user)
+    {
+        foreach($this->extensions as $extension)
+        {
+            $extension->entryCreated($assignment, $entry, $user);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
+use Chamilo\Application\Plagiarism\Service\Turnitin\EulaService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\ConfigurationFormBuilder;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\AssignmentConfiguration;
@@ -29,11 +30,12 @@ class ConfigurerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
+        /** @var AssignmentConfiguration $configuration */
         $configuration = $this->getCurrentTreeNode()->getConfiguration(new AssignmentConfiguration());
 
         $form = new FormValidator('configurer', 'post', $this->get_url());
 
-        $formBuilder = new ConfigurationFormBuilder($this->getTranslator());
+        $formBuilder = new ConfigurationFormBuilder($this->getTranslator(), $this->getRegistrationConsulter());
         $formBuilder->buildForm($form, $configuration);
 
         if ($form->validate())
@@ -58,13 +60,15 @@ class ConfigurerComponent extends Manager implements DelegateComponent
     /**
      * @param $exportValues
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     *
+     * @return bool
      */
     protected function configure($exportValues, TreeNode $treeNode)
     {
         /** @var AssignmentConfiguration $configuration */
         $configuration = $treeNode->getConfiguration(new AssignmentConfiguration());
         $configuration->setEntityType($exportValues[ConfigurationFormBuilder::FORM_PROPERTY_ENTITY_TYPE]);
-        $configuration->setCheckForPlagiarism($exportValues[ConfigurationFormBuilder::FORM_PROPERTY_ENTITY_TYPE] == 1);
+        $configuration->setCheckForPlagiarism($exportValues[ConfigurationFormBuilder::FORM_PROPERTY_CHECK_FOR_PLAGIARISM] == 1);
 
         $treeNode->setConfiguration($configuration);
 
@@ -87,5 +91,4 @@ class ConfigurerComponent extends Manager implements DelegateComponent
     {
         return $this->getService(TreeNodeDataService::class);
     }
-
 }

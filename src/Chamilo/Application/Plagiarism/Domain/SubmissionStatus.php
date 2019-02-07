@@ -117,7 +117,7 @@ class SubmissionStatus
     {
         return [
             self::ERROR_UNKNOWN, self::ERROR_INVALID_FILE, self::ERROR_FILE_TOO_SMALL, self::ERROR_FILE_TOO_LARGE,
-            self::ERROR_TOO_MANY_PAGES, self::ERROR_FILE_CORRUPT
+            self::ERROR_TOO_MANY_PAGES, self::ERROR_FILE_CORRUPT, self::ERROR_FILE_LOCKED
         ];
     }
 
@@ -182,6 +182,29 @@ class SubmissionStatus
         return $this->getError() == SubmissionStatus::ERROR_UNKNOWN;
     }
 
+    /**
+     * @return string
+     */
+    public function getErrorTranslationVariable()
+    {
+        $translationMapping = [
+            self::ERROR_UNKNOWN => 'StatusUnknown',
+            self::ERROR_INVALID_FILE => 'StatusInvalidFile',
+            self::ERROR_FILE_TOO_SMALL => 'StatusFileToSmall',
+            self::ERROR_FILE_TOO_LARGE => 'StatusFileToLarge',
+            self::ERROR_TOO_MANY_PAGES => 'StatusFileToManyPages',
+            self::ERROR_FILE_CORRUPT => 'StatusFileCorrupt',
+            self::ERROR_FILE_LOCKED => 'StatusFileLocked',
+
+        ];
+
+        if(!array_key_exists($this->getError(), $translationMapping))
+        {
+            return '';
+        }
+
+        return $translationMapping[$this->getError()];
+    }
 
     /*
      * PRIVATE SETTERS

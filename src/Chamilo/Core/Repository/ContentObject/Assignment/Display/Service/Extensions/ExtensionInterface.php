@@ -34,4 +34,11 @@ interface ExtensionInterface
      * @return string
      */
     public function extendEntryViewerParts(EntryComponent $entryComponent, Assignment $assignment, Entry $entry, User $user);
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function entryCreated(Assignment $assignment, Entry $entry, User $user);
 }

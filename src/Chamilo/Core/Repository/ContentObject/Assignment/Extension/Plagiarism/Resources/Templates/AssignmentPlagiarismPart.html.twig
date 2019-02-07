@@ -1,4 +1,4 @@
-{% set appContext = 'Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism' %}
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Extension\\Plagiarism' %}
 
 <div class="row">
     <div class="col-xs-12" id="plagiarism">
@@ -10,13 +10,15 @@
                 <a href="{{ CHECK_PLAGIARISM_URL }}"><button type="button" class="btn btn-default">{{ 'RefreshState'|trans({}, appContext) }}</button></a>
             {% endif %}
             {% if FAILED %}
-                <div class="alert alert-danger">{{ 'FailedInfo'|trans({}, appContext) }}</div>
+                <div class="alert alert-danger">
+                    {{ 'FailedInfo'|trans({'{ERROR_TRANSLATION}': (ERROR_TRANSLATION_VARIABLE|trans({}, 'Chamilo\\Application\\Plagiarism')|lower) }, appContext) }}
+                </div>
                 {% if CAN_RETRY %}
                 <a href="{{ CHECK_PLAGIARISM_URL }}"><button type="button" class="btn btn-primary">{{ 'Retry'|trans({}, appContext) }}</button></a>
                 {% endif %}
             {% endif %}
             {% if SUCCESS %}
-                <div class="badge">{{ RESULT.getResult() }}%</div>
+                <div class="alert alert-info">{{ 'ScanCompleteInfo'|trans({'{RESULT}': RESULT.getResult()}, appContext)|raw }}</div>
                 <a href="{{ VIEW_URL }}" target="_blank"><button type="button" class="btn btn-primary">{{ 'ViewPlagiarismReport'|trans({}, appContext) }}</button></a>
             {% endif %}
         {% else %}
