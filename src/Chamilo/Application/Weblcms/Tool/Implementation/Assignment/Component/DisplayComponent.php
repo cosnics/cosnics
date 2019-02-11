@@ -101,6 +101,7 @@ class DisplayComponent extends Manager implements DelegateComponent
 
         /** @var \Chamilo\Application\Weblcms\Bridge\Assignment\EntryPlagiarismResultServiceBridge $entryPlagiarismResultServiceBridge */
         $entryPlagiarismResultServiceBridge = $this->getService(EntryPlagiarismResultServiceBridge::class);
+        $entryPlagiarismResultServiceBridge->setContentObjectPublication($contentObjectPublication);
         $entryPlagiarismResultServiceBridge->setAssignmentPublication($assignmentPublication);
 
         $this->getBridgeManager()->addBridge($assignmentServiceBridge);

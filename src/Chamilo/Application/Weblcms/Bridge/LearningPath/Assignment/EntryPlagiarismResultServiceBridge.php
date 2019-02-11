@@ -86,4 +86,14 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
     {
         return $this->assignmentEntryPlagiarismResultService->updateEntryPlagiarismResult($entryPlagiarismResult);
     }
+
+    /**
+     * @param int $entityType
+     *
+     * @return string[]
+     */
+    public function findEntriesWithPlagiarismResult(int $entityType)
+    {
+
+    }
 }

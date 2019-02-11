@@ -102,4 +102,14 @@ class EntryPlagiarismResultServiceBridge implements
     {
         return $this->assignmentEntryPlagiarismResultServiceBridge->updateEntryPlagiarismResult($entryPlagiarismResult);
     }
+
+    /**
+     * @param int $entityType
+     *
+     * @return string[]
+     */
+    public function findEntriesWithPlagiarismResult(int $entityType)
+    {
+        return $this->assignmentEntryPlagiarismResultServiceBridge->findEntriesWithPlagiarismResult($entityType);
+    }
 }

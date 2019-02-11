@@ -207,6 +207,8 @@ class ViewerComponent extends Manager implements TableSupport
                 );
             }
 
+            $this->getExtensionManager()->buildButtonToolbarForEntityBrowser($this, $buttonToolBar);
+
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
         }
 

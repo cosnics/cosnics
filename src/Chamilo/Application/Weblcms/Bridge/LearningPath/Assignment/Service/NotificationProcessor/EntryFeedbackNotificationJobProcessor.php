@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\FeedbackService;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
@@ -45,6 +46,7 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
      *
      * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\FeedbackService $feedbackService
      * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager $entityServiceManager
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService $treeNodeDataService
      * @param \Chamilo\Application\Weblcms\Service\PublicationService $publicationService
      * @param \Chamilo\Application\Weblcms\Service\CourseService $courseService
@@ -54,14 +56,15 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
      * @param NotificationManager $notificationManager
      */
     public function __construct(
-        FeedbackService $feedbackService, AssignmentService $assignmentService, TreeNodeDataService $treeNodeDataService,
+        FeedbackService $feedbackService, AssignmentService $assignmentService,
+        EntityServiceManager $entityServiceManager, TreeNodeDataService $treeNodeDataService,
         PublicationService $publicationService, CourseService $courseService,
         UserService $userService, ContentObjectRepository $contentObjectRepository,
         FilterManager $filterManager, NotificationManager $notificationManager
     )
     {
         parent::__construct(
-            $assignmentService, $treeNodeDataService, $publicationService, $courseService, $userService,
+            $assignmentService, $entityServiceManager, $treeNodeDataService, $publicationService, $courseService, $userService,
             $contentObjectRepository, $filterManager, $notificationManager
         );
 

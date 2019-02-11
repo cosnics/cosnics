@@ -6,6 +6,7 @@ use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\EulaNotAcceptedExce
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\EntryComponent;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\ExtensionComponent;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\ViewerComponent;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Extensions\ExtensionInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
@@ -13,6 +14,11 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Manage
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service
@@ -172,6 +178,33 @@ class PlagiarismExtension implements ExtensionInterface
                 );
             }
         }
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\ViewerComponent $viewerComponent
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $buttonToolBar
+     */
+    public function buildButtonToolbarForEntityBrowser(ViewerComponent $viewerComponent, ButtonToolBar $buttonToolBar)
+    {
+        $browserUrl = $viewerComponent->get_url(
+            [
+                \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EXTENSION,
+                ExtensionComponent::PARAM_EXTENSION => Manager::context(),
+                Manager::PARAM_ACTION => Manager::ACTION_BROWSE
+            ]
+        );
+
+        $buttonToolBar->addButtonGroup(
+            new ButtonGroup(
+                array(
+                    new Button(
+                        Translation::get('Plagiarism'),
+                        new FontAwesomeGlyph('files-o'),
+                        $browserUrl
+                    )
+                )
+            )
+        );
     }
 
     /**

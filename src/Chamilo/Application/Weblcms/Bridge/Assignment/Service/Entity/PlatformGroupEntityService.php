@@ -8,6 +8,8 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -116,6 +118,36 @@ class PlatformGroupEntityService implements EntityServiceInterface
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param null $offset
+     * @param null $count
+     * @param array $orderProperty
+     *
+     *  @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | DataClass[]
+     */
+    public function findEntriesWithPlagiarismResult(
+        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
+        $orderProperty = []
+    )
+    {
+        return [];
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return int
+     */
+    public function countEntriesWithPlagiarismResult(
+        ContentObjectPublication $contentObjectPublication, Condition $condition = null
+    )
+    {
+        return 0;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
      * @return int[]
      */
@@ -127,6 +159,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
         {
             $this->targetPlatformGroupIds[$id] = [];
 
+            /** @var \Chamilo\Libraries\Storage\ResultSet\ResultSet $platformGroups */
             $platformGroups = DataManager::retrieve_publication_target_platform_groups(
                 $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
             );
@@ -177,6 +210,22 @@ class PlatformGroupEntityService implements EntityServiceInterface
         $entityTableParameters->setEntityHasMultipleMembers(true);
 
         return new EntityTable($application, $entityTableParameters);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTable
+     */
+    public function getEntryPlagiarismResultTable(
+        Application $application, EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
+    )
+    {
+        $entryPlagiarismResultTableParameters->setEntityClass(Group::class);
+        $entryPlagiarismResultTableParameters->setEntityProperties([Group::PROPERTY_NAME]);
+
+        return new EntryPlagiarismResultTable($application, $entryPlagiarismResultTableParameters);
     }
 
     /**

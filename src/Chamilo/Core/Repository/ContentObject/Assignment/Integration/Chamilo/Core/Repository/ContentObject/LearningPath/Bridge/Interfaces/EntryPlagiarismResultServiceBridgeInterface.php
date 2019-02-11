@@ -48,4 +48,11 @@ interface EntryPlagiarismResultServiceBridgeInterface
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function updateEntryPlagiarismResult(EntryPlagiarismResult $entryPlagiarismResult);
+
+    /**
+     * @param int $entityType
+     *
+     * @return string[]
+     */
+    public function findEntriesWithPlagiarismResult(int $entityType);
 }
