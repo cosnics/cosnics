@@ -41,7 +41,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
             $success = $this->configure($form->exportValues(), $this->getCurrentTreeNode());
             $message = $success ? 'AssignmentConfigured' : 'AssignmentNotConfigured';
 
-            $this->redirect(Translation::get($message), ! $success, $this->get_application()->get_parameters());
+            $this->redirect(Translation::get($message), ! $success, $this->get_application()->get_parameters(), [self::PARAM_ACTION, \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION]);
 
             return null;
         }
