@@ -173,7 +173,7 @@ $(function() {
 		initializePolygons();
 
 		// Bind clicks on the edit and reset buttons
-        // $(document).on('click', '.hotspot_question_options .colour_box', editPolygon);
+        $(document).on('click', '.hotspot_question_options .colour_box', editPolygon);
         $(document).on('click', '.hotspot_question_options .reset_option', resetPolygon);
 
 		$('.hotspot_question_options .colour_box:first').trigger('click');
