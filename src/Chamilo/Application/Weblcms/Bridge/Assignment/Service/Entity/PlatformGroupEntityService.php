@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\EntryPlagiarismResultService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -40,6 +41,11 @@ class PlatformGroupEntityService implements EntityServiceInterface
     protected $userService;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Service\EntryPlagiarismResultService
+     */
+    protected $entryPlagiarismResultService;
+
+    /**
      * @var array
      */
     protected $targetPlatformGroupIds = [];
@@ -48,14 +54,19 @@ class PlatformGroupEntityService implements EntityServiceInterface
      * UserEntityService constructor.
      *
      * @param AssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\EntryPlagiarismResultService $entryPlagiarismResultService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\User\Service\UserService $userService
      */
-    public function __construct(AssignmentService $assignmentService, Translator $translator, UserService $userService)
+    public function __construct(
+        AssignmentService $assignmentService, EntryPlagiarismResultService $entryPlagiarismResultService,
+        Translator $translator, UserService $userService
+    )
     {
         $this->assignmentService = $assignmentService;
         $this->translator = $translator;
         $this->userService = $userService;
+        $this->entryPlagiarismResultService = $entryPlagiarismResultService;
     }
 
     /**
@@ -123,14 +134,16 @@ class PlatformGroupEntityService implements EntityServiceInterface
      * @param null $count
      * @param array $orderProperty
      *
-     *  @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | DataClass[]
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findEntriesWithPlagiarismResult(
         ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
         $orderProperty = []
     )
     {
-        return [];
+        return $this->entryPlagiarismResultService->findPlatformGroupEntriesWithPlagiarismResult(
+            $contentObjectPublication, $condition, $offset, $count, $orderProperty
+        );
     }
 
     /**
@@ -143,7 +156,9 @@ class PlatformGroupEntityService implements EntityServiceInterface
         ContentObjectPublication $contentObjectPublication, Condition $condition = null
     )
     {
-        return 0;
+        return $this->entryPlagiarismResultService->countPlatformGroupEntriesWithPlagiarismResult(
+            $contentObjectPublication, $condition
+        );
     }
 
     /**
@@ -271,6 +286,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
     public function isUserPartOfEntity(User $user, ContentObjectPublication $contentObjectPublication, $entityId)
     {
         $availableEntityIdentifiers = $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $user);
+
         return in_array($entityId, $availableEntityIdentifiers);
     }
 
@@ -295,7 +311,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
      */
     public function renderEntityName(DataClass $entity)
     {
-        if(!$entity instanceof Group)
+        if (!$entity instanceof Group)
         {
             throw new \InvalidArgumentException('The given entity must be of the type ' . Group::class);
         }
@@ -321,7 +337,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
     public function renderEntityNameById($entityId)
     {
         $entity = DataManager::retrieve_by_id(Group::class, $entityId);
-        if(!$entity instanceof Group)
+        if (!$entity instanceof Group)
         {
             throw new \InvalidArgumentException('The given platform group with id ' . $entityId . ' does not exist');
         }

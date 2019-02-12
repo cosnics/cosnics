@@ -23,11 +23,14 @@ class BrowserComponent extends Manager implements TableSupport
      */
     function run()
     {
+        $entityType = $this->getAssignmentServiceBridge()->getCurrentEntityType();
+
         $parameters = new EntryPlagiarismResultTableParameters();
+        $parameters->setEntityType($entityType);
         $parameters->setEntryPlagiarismResultServiceBridge($this->getEntryPlagiarismResultServiceBridge());
 
         $table = $this->getEntryPlagiarismResultServiceBridge()->getEntryPlagiarismResultTable(
-            $this->getAssignmentServiceBridge()->getCurrentEntityType(), $this, $parameters
+            $entityType, $this, $parameters
         );
 
         return $this->getTwig()->render(
@@ -45,5 +48,6 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($tableClassname)
     {
-        // TODO: Implement get_table_condition() method.
-}}
+        return null;
+    }
+}

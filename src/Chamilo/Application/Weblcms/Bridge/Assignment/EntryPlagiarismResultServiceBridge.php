@@ -181,6 +181,10 @@ class EntryPlagiarismResultServiceBridge implements
         int $entityType, Application $application, EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
     )
     {
+        $entryPlagiarismResultTableParameters->setEntryClassName(\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::class);
+        $entryPlagiarismResultTableParameters->setScoreClassName(\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score::class);
+        $entryPlagiarismResultTableParameters->setEntryPlagiarismResultClassName(\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryPlagiarismResult::class);
+
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
         return $entityService->getEntryPlagiarismResultTable($application, $entryPlagiarismResultTableParameters);
     }

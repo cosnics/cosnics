@@ -24,7 +24,9 @@ class EntryPlagiarismResultTableDataProvider extends RecordTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $orderProperties = array())
     {
-        // TODO: Implement retrieve_data() method.
+        return $this->getEntryPlagiarismResultServiceBridge()->findEntriesWithPlagiarismResult(
+            $this->getEntityType(), $condition, $offset, $count, $orderProperties
+        );
     }
 
     /**
@@ -36,5 +38,33 @@ class EntryPlagiarismResultTableDataProvider extends RecordTableDataProvider
      */
     public function count_data($condition)
     {
-        // TODO: Implement count_data() method.
-}}
+        return $this->getEntryPlagiarismResultServiceBridge()->countEntriesWithPlagiarismResult(
+            $this->getEntityType(), $condition
+        );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Table\Table|\Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTable
+     */
+    protected function getEntryPlagiarismResultTable()
+    {
+        return $this->get_table();
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface
+     */
+    protected function getEntryPlagiarismResultServiceBridge()
+    {
+        return $this->getEntryPlagiarismResultTable()->getEntryPlagiarismResultTableParameters()
+            ->getEntryPlagiarismResultServiceBridge();
+    }
+
+    /**
+     * @return int
+     */
+    protected function getEntityType()
+    {
+        return $this->getEntryPlagiarismResultTable()->getEntryPlagiarismResultTableParameters()->getEntityType();
+    }
+}

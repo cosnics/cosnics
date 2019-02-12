@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\EntryPlagiarismResultService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
@@ -33,6 +34,11 @@ class UserEntityService implements EntityServiceInterface
     protected $translator;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Service\EntryPlagiarismResultService
+     */
+    protected $entryPlagiarismResultService;
+
+    /**
      * @var array
      */
     protected $targetUsersCache = [];
@@ -41,12 +47,17 @@ class UserEntityService implements EntityServiceInterface
      * UserEntityService constructor.
      *
      * @param AssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\EntryPlagiarismResultService $entryPlagiarismResultService
      * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function __construct(AssignmentService $assignmentService, Translator $translator)
+    public function __construct(
+        AssignmentService $assignmentService, EntryPlagiarismResultService $entryPlagiarismResultService,
+        Translator $translator
+    )
     {
         $this->assignmentService = $assignmentService;
         $this->translator = $translator;
+        $this->entryPlagiarismResultService = $entryPlagiarismResultService;
     }
 
     /**
@@ -114,14 +125,16 @@ class UserEntityService implements EntityServiceInterface
      * @param null $count
      * @param array $orderProperty
      *
-     *  @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | DataClass[]
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findEntriesWithPlagiarismResult(
         ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
         $orderProperty = []
     )
     {
-        return [];
+        return $this->entryPlagiarismResultService->findUserEntriesWithPlagiarismResult(
+            $contentObjectPublication, $condition, $offset, $count, $orderProperty
+        );
     }
 
     /**
@@ -134,7 +147,9 @@ class UserEntityService implements EntityServiceInterface
         ContentObjectPublication $contentObjectPublication, Condition $condition = null
     )
     {
-        return 0;
+        return $this->entryPlagiarismResultService->countUserEntriesWithPlagiarismResult(
+            $contentObjectPublication, $condition
+        );
     }
 
     /**
@@ -272,7 +287,7 @@ class UserEntityService implements EntityServiceInterface
      */
     public function renderEntityName(DataClass $entity)
     {
-        if(!$entity instanceof User)
+        if (!$entity instanceof User)
         {
             throw new \InvalidArgumentException('The given entity must be of the type ' . User::class);
         }
@@ -298,7 +313,7 @@ class UserEntityService implements EntityServiceInterface
     public function renderEntityNameById($entityId)
     {
         $entity = DataManager::retrieve_by_id(User::class, $entityId);
-        if(!$entity instanceof User)
+        if (!$entity instanceof User)
         {
             throw new \InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
         }

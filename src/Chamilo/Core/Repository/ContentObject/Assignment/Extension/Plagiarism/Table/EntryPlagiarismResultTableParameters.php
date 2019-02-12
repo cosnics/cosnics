@@ -44,6 +44,21 @@ class EntryPlagiarismResultTableParameters
     protected $user;
 
     /**
+     * @var string
+     */
+    protected $entryClassName;
+
+    /**
+     * @var string
+     */
+    protected $scoreClassName;
+
+    /**
+     * @var string
+     */
+    protected $entryPlagiarismResultClassName;
+
+    /**
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface
      */
     public function getEntryPlagiarismResultServiceBridge(): EntryPlagiarismResultServiceBridgeInterface
@@ -143,5 +158,51 @@ class EntryPlagiarismResultTableParameters
         $this->entityProperties = $entityProperties;
     }
 
+    /**
+     * @return string
+     */
+    public function getEntryClassName(): string
+    {
+        return $this->entryClassName;
+    }
 
+    /**
+     * @param string $entryClassName
+     */
+    public function setEntryClassName(string $entryClassName): void
+    {
+        $this->entryClassName = $entryClassName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getScoreClassName(): string
+    {
+        return $this->scoreClassName;
+    }
+
+    /**
+     * @param string $scoreClassName
+     */
+    public function setScoreClassName(string $scoreClassName): void
+    {
+        $this->scoreClassName = $scoreClassName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntryPlagiarismResultClassName(): string
+    {
+        return $this->entryPlagiarismResultClassName;
+    }
+
+    /**
+     * @param string $entryPlagiarismResultClassName
+     */
+    public function setEntryPlagiarismResultClassName(string $entryPlagiarismResultClassName): void
+    {
+        $this->entryPlagiarismResultClassName = $entryPlagiarismResultClassName;
+    }
 }

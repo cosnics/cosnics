@@ -135,7 +135,7 @@ class PlagiarismExtension implements ExtensionInterface
                 'CAN_CHECK_PLAGIARISM' => $canCheckPlagiarism,
                 'HAS_RESULT' => $hasResult,
                 'RESULT' => $result,
-                'ERROR_TRANSLATION_VARIABLE' => $submissionStatus->getErrorTranslationVariable(),
+                'ERROR_TRANSLATION_VARIABLE' => $hasResult ? $submissionStatus->getErrorTranslationVariable() : '',
                 'IN_PROGRESS' => $hasResult ? $submissionStatus->isInProgress() : false,
                 'SUCCESS' => $hasResult ? $submissionStatus->isReportGenerated() : false,
                 'FAILED' => $hasResult ? $submissionStatus->isFailed() : false,
