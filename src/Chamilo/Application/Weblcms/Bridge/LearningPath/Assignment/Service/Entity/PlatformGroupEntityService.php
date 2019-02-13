@@ -3,11 +3,14 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -39,6 +42,11 @@ class PlatformGroupEntityService implements EntityServiceInterface
     protected $userService;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService
+     */
+    protected $entryPlagiarismResultService;
+
+    /**
      * @var array
      */
     protected $targetPlatformGroupIds = [];
@@ -49,12 +57,14 @@ class PlatformGroupEntityService implements EntityServiceInterface
      * @param AssignmentService $assignmentService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\User\Service\UserService $userService
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService $entryPlagiarismResultService
      */
-    public function __construct(AssignmentService $assignmentService, Translator $translator, UserService $userService)
+    public function __construct(AssignmentService $assignmentService, Translator $translator, UserService $userService, EntryPlagiarismResultService $entryPlagiarismResultService)
     {
         $this->assignmentService = $assignmentService;
         $this->translator = $translator;
         $this->userService = $userService;
+        $this->entryPlagiarismResultService = $entryPlagiarismResultService;
     }
 
     /**
@@ -128,6 +138,40 @@ class PlatformGroupEntityService implements EntityServiceInterface
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return int
+     */
+    public function countEntriesWithPlagiarismResult(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null)
+    {
+        return $this->entryPlagiarismResultService->countPlatformGroupEntriesWithPlagiarismResult(
+            $contentObjectPublication, $treeNodeData, $condition
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int|null $offset
+     * @param int|null $count
+     * @param array $order_property
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesWithPlagiarismResult(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null, int $offset = null, int $count = null,
+        array $order_property = []
+    )
+    {
+        return $this->entryPlagiarismResultService->findPlatformGroupEntriesWithPlagiarismResult(
+            $contentObjectPublication, $treeNodeData, $condition, $offset, $count, $order_property
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
      * @return int[]
      */
@@ -189,6 +233,23 @@ class PlatformGroupEntityService implements EntityServiceInterface
         $entityTableParameters->setEntityHasMultipleMembers(true);
 
         return new EntityTable($application, $entityTableParameters);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTable
+     */
+    public function getEntryPlagiarismResultTable(
+        Application $application,
+        EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
+    )
+    {
+        $entryPlagiarismResultTableParameters->setEntityClass(Group::class);
+        $entryPlagiarismResultTableParameters->setEntityProperties([Group::PROPERTY_NAME]);
+
+        return new EntryPlagiarismResultTable($application, $entryPlagiarismResultTableParameters);
     }
 
     /**

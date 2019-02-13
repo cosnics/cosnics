@@ -55,7 +55,7 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
      * @param string $file
      * @param integer $line
      */
-    public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
+    public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_FATAL_ERROR, $file = null, $line = 0)
     {
         foreach ($this->exceptionLoggers as $exceptionLogger)
         {

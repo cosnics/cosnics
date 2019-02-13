@@ -5,6 +5,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\ExtensionComponent;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\EntriesPlagiarismChecker;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\PlagiarismChecker;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
@@ -41,6 +43,14 @@ abstract class Manager extends Application
     }
 
     /**
+     * @return \Chamilo\Libraries\Architecture\Application\Application|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\ExtensionComponent
+     */
+    protected function getExtensionComponent()
+    {
+        return $this->get_application();
+    }
+
+    /**
      * @return EntryPlagiarismResultServiceBridgeInterface
      */
     protected function getEntryPlagiarismResultServiceBridge()
@@ -54,5 +64,21 @@ abstract class Manager extends Application
     protected function getAssignmentServiceBridge()
     {
         return $this->getBridgeManager()->getBridgeByInterface(AssignmentServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return EntriesPlagiarismChecker
+     */
+    protected function getEntriesPlagiarismChecker()
+    {
+        return $this->getService(EntriesPlagiarismChecker::class);
+    }
+
+    /**
+     * @return PlagiarismChecker
+     */
+    protected function getPlagiarismChecker()
+    {
+        return $this->getService(PlagiarismChecker::class);
     }
 }

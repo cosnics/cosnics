@@ -147,6 +147,20 @@ abstract class EntryPlagiarismResultRepository
         $properties->add(
             new PropertyConditionVariable(
                 $this->getEntryPlagiarismResultClass(),
+                \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult::PROPERTY_EXTERNAL_ID
+            )
+        );
+
+        $properties->add(
+            new PropertyConditionVariable(
+                $this->getEntryPlagiarismResultClass(),
+                \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult::PROPERTY_ERROR
+            )
+        );
+
+        $properties->add(
+            new PropertyConditionVariable(
+                $this->getEntryPlagiarismResultClass(),
                 \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult::PROPERTY_STATUS
             )
         );

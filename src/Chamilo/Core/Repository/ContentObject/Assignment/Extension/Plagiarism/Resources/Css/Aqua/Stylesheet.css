@@ -1,0 +1,23 @@
+.plagiarism-status-success
+{
+    color: green;
+    font-size: 16px;
+}
+
+.plagiarism-status-failed
+{
+    color: red;
+    font-size: 16px;
+}
+
+.plagiarism-status-in-progress
+{
+    color: #406e8e;
+    font-size: 16px;
+}
+
+.plagiarism-column-status
+{
+    text-align: center;
+    width: 75px;
+}

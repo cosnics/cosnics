@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Ent
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -70,6 +71,30 @@ interface EntityServiceInterface
     );
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return int
+     */
+    public function countEntriesWithPlagiarismResult(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null);
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int|null $offset
+     * @param int|null $count
+     * @param array $order_property
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesWithPlagiarismResult(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null, int $offset = null, int $count = null,
+        array $order_property = []
+    );
+
+    /**
      * @return string
      */
     public function getPluralEntityName();
@@ -87,6 +112,17 @@ interface EntityServiceInterface
      */
     public function getEntityTable(
         Application $application, EntityTableParameters $entityTableParameters
+    );
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTable
+     */
+    public function getEntryPlagiarismResultTable(
+        Application $application,
+        EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
     );
 
     /**

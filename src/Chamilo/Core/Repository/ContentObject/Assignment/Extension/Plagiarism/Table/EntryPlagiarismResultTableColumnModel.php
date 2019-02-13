@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
+use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -15,7 +16,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class EntryPlagiarismResultTableColumnModel extends RecordTableColumnModel
+class EntryPlagiarismResultTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
     /**
@@ -59,6 +60,12 @@ class EntryPlagiarismResultTableColumnModel extends RecordTableColumnModel
         $this->add_column(
             new DataClassPropertyTableColumn(
                 $this->getEntryResultTableParameters()->getEntryPlagiarismResultClassName(), EntryPlagiarismResult::PROPERTY_RESULT, Translation::get('PlagiarismScore')
+            )
+        );
+
+        $this->add_column(
+            new DataClassPropertyTableColumn(
+                $this->getEntryResultTableParameters()->getEntryPlagiarismResultClassName(), EntryPlagiarismResult::PROPERTY_STATUS, Translation::get('Status'), true, 'plagiarism-column-status', 'plagiarism-column-status'
             )
         );
     }

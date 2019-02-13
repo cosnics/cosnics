@@ -2,13 +2,21 @@
 
 {{ HEADER|raw }}
 
-<button type="button" class="btn btn-default"><span class="fa fa-files-o"></span> Controleer alle inzendingen op plagiaat</button>
+<div style="margin-top: 20px;">
 
-<div class="alert alert-info" style="margin-top: 20px;">
-    Er zijn nog geen inzendingen gecontroleerd op plagiaat. Je kan alle nieuwe inzendingen automatisch controleren op plagiaat door de publicatie-details van deze opdracht te configureren. Je kan alle nog niet gecontroleerde inzendingen via bovenstaande knop laten controleren op plagiaat.
+    <a href="{{ CHECK_ALL_ENTRIES_URL }}"><button type="button" class="btn btn-default"><span class="fa fa-files-o"></span> {{ 'CheckAllEntries'|trans({}, appContext) }}</button></a>
+
+    {% if COUNT == 0 %}
+    <div class="alert alert-info" style="margin-top: 20px;">
+        {{ 'NoEntriesCheckedWarning'|trans({}, appContext) }}
+    </div>
+    {% endif %}
+
+
+    <div style="margin-top: 30px;">
+    {{ TABLE|raw }}
+    </div>
+
 </div>
-
-
-{{ TABLE|raw }}
 
 {{ FOOTER|raw }}

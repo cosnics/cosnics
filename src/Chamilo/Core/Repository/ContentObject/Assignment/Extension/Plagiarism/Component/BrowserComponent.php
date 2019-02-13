@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 
 /**
@@ -20,9 +21,15 @@ class BrowserComponent extends Manager implements TableSupport
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     function run()
     {
+        if (!$this->getAssignmentServiceBridge()->canEditAssignment())
+        {
+            throw new NotAllowedException();
+        }
+
         $entityType = $this->getAssignmentServiceBridge()->getCurrentEntityType();
 
         $parameters = new EntryPlagiarismResultTableParameters();
@@ -33,9 +40,15 @@ class BrowserComponent extends Manager implements TableSupport
             $entityType, $this, $parameters
         );
 
+        $count = $this->getEntryPlagiarismResultServiceBridge()->countEntriesWithPlagiarismResult($entityType);
+        $checkEntriesUrl = $this->get_url([self::PARAM_ACTION => self::ACTION_CHECK_ALL_ENTRIES]);
+
         return $this->getTwig()->render(
             Manager::context() . ':Browser.html.twig',
-            ['HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(), 'TABLE' => $table->render()]
+            [
+                'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(), 'TABLE' => $table->render(),
+                'COUNT' => $count, 'CHECK_ALL_ENTRIES_URL' => $checkEntriesUrl
+            ]
         );
     }
 
