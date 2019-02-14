@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -42,103 +43,91 @@ class EntryPlagiarismResultService extends \Chamilo\Core\Repository\ContentObjec
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param null $offset
-     * @param null $count
-     * @param array $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findUserEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = []
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultRepository->findUserEntriesWithPlagiarismResult(
-            $contentObjectPublication, $condition, $offset, $count, $orderProperty
+            $contentObjectPublication, $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countUserEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultRepository->countUserEntriesWithPlagiarismResult(
-            $contentObjectPublication, $condition
+            $contentObjectPublication, $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param null $offset
-     * @param null $count
-     * @param array $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findCourseGroupEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = []
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultRepository->findCourseGroupEntriesWithPlagiarismResult(
-            $contentObjectPublication, $condition, $offset, $count, $orderProperty
+            $contentObjectPublication, $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countCourseGroupEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultRepository->countCourseGroupEntriesWithPlagiarismResult(
-            $contentObjectPublication, $condition
+            $contentObjectPublication, $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param null $offset
-     * @param null $count
-     * @param array $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findPlatformGroupEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = []
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultRepository->findPlatformGroupEntriesWithPlagiarismResult(
-            $contentObjectPublication, $condition, $offset, $count, $orderProperty
+            $contentObjectPublication, $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countPlatformGroupEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultRepository->countPlatformGroupEntriesWithPlagiarismResult(
-            $contentObjectPublication, $condition
+            $contentObjectPublication, $filterParameters
         );
     }
 }

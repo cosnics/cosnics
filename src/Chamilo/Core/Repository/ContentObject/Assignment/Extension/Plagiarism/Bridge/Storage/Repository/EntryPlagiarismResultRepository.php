@@ -8,11 +8,14 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -33,15 +36,23 @@ abstract class EntryPlagiarismResultRepository
     protected $dataClassRepository;
 
     /**
+     * @var \Chamilo\Libraries\Storage\Query\FilterParametersTranslator
+     */
+    protected $filterParametersTranslator;
+
+    /**
      * EntryPlagiarismResultRepository constructor.
      *
      * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param \Chamilo\Libraries\Storage\Query\FilterParametersTranslator $filterParametersTranslator
      */
     public function __construct(
-        \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+        \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository,
+        FilterParametersTranslator $filterParametersTranslator
     )
     {
         $this->dataClassRepository = $dataClassRepository;
+        $this->filterParametersTranslator = $filterParametersTranslator;
     }
 
     /**
@@ -113,21 +124,22 @@ abstract class EntryPlagiarismResultRepository
 
     /**
      * @param integer $entityType
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderBy[] $orderBy
      * @param DataClassProperties $properties
      * @param string $baseClass
      * @param PropertyConditionVariable $baseVariable
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     protected function findEntriesWithPlagiarismResult(
         $entityType, DataClassProperties $properties, $baseClass, $baseVariable,
-        Condition $condition = null, $offset = null, $count = null, $orderBy = array()
+        Condition $condition, FilterParameters $filterParameters
     )
     {
+        $searchProperties = new DataClassProperties($properties->get());
+
         $properties->add(new PropertiesConditionVariable($this->getEntryClassName()));
 
         $properties->add(
@@ -186,38 +198,58 @@ abstract class EntryPlagiarismResultRepository
             )
         );
 
-        $condition = $this->getEntityTypeCondition($entityType, $condition);
+        $parameters = new RecordRetrievesParameters($properties);
+        $parameters->setJoins($joins);
 
-        $parameters = new RecordRetrievesParameters(
-            $properties,
-            $condition,
-            $count,
-            $offset,
-            $orderBy,
-            $joins
-        );
+        $condition = $this->getEntityTypeCondition($entityType, $condition);
+        $this->translateFilterParameters($filterParameters, $searchProperties, $parameters, $condition);
 
         return $this->dataClassRepository->records($this->getEntryClassName(), $parameters);
     }
 
     /**
      * @param integer $entityType
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
      * @param string $baseClass
      * @param PropertyConditionVariable $baseVariable
-     * @param Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     protected function countEntriesWithPlagiarismResult(
-        $entityType, $baseClass, $baseVariable, Condition $condition = null
+        $entityType, DataClassProperties $properties, $baseClass, $baseVariable, Condition $condition,
+        FilterParameters $filterParameters
     )
     {
-        $joins = $this->getEntryPlagiarismResultJoins($baseClass, $baseVariable);
+        $parameters = new DataClassCountParameters();
 
         $condition = $this->getEntityTypeCondition($entityType, $condition);
-        $parameters = new DataClassCountParameters($condition, $joins);
+        $this->translateFilterParameters($filterParameters, $properties, $parameters, $condition);
+
+        $joins = $this->getEntryPlagiarismResultJoins($baseClass, $baseVariable);
+        $parameters->setJoins($joins);
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $searchProperties
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $dataClassParameters
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $contextCondition
+     */
+    protected function translateFilterParameters(
+        FilterParameters $filterParameters, DataClassProperties $searchProperties,
+        DataClassParameters $dataClassParameters, Condition $contextCondition = null
+    )
+    {
+        $searchProperties->add(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE));
+        $searchProperties->add(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION));
+
+        $this->filterParametersTranslator->translateFilterParameters(
+            $filterParameters, $searchProperties, $dataClassParameters, $contextCondition
+        );
     }
 
     /**

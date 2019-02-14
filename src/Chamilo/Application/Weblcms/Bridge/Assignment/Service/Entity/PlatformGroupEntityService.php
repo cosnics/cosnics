@@ -15,6 +15,7 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
@@ -129,35 +130,31 @@ class PlatformGroupEntityService implements EntityServiceInterface
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param null $offset
-     * @param null $count
-     * @param array $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = []
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultService->findPlatformGroupEntriesWithPlagiarismResult(
-            $contentObjectPublication, $condition, $offset, $count, $orderProperty
+            $contentObjectPublication, $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultService->countPlatformGroupEntriesWithPlagiarismResult(
-            $contentObjectPublication, $condition
+            $contentObjectPublication, $filterParameters
         );
     }
 

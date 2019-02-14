@@ -25,7 +25,7 @@ class EntryPlagiarismResultTableDataProvider extends RecordTableDataProvider
     public function retrieve_data($condition, $offset, $count, $orderProperties = array())
     {
         return $this->getEntryPlagiarismResultServiceBridge()->findEntriesWithPlagiarismResult(
-            $this->getEntityType(), $condition, $offset, $count, $orderProperties
+            $this->getEntityType(), $this->getFilterParameters()
         );
     }
 
@@ -39,7 +39,7 @@ class EntryPlagiarismResultTableDataProvider extends RecordTableDataProvider
     public function count_data($condition)
     {
         return $this->getEntryPlagiarismResultServiceBridge()->countEntriesWithPlagiarismResult(
-            $this->getEntityType(), $condition
+            $this->getEntityType(), $this->getFilterParameters()
         );
     }
 

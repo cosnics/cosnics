@@ -4,7 +4,9 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -43,108 +45,96 @@ class EntryPlagiarismResultService extends \Chamilo\Core\Repository\ContentObjec
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param null $offset
-     * @param null $count
-     * @param array $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findUserEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = []
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultRepository->findUserEntriesWithPlagiarismResult(
-            $contentObjectPublication, $treeNodeData, $condition, $offset, $count, $orderProperty
+            $contentObjectPublication, $treeNodeData, $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countUserEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultRepository->countUserEntriesWithPlagiarismResult(
-            $contentObjectPublication, $treeNodeData, $condition
+            $contentObjectPublication, $treeNodeData, $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param null $offset
-     * @param null $count
-     * @param array $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findCourseGroupEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = []
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultRepository->findCourseGroupEntriesWithPlagiarismResult(
-            $contentObjectPublication, $treeNodeData, $condition, $offset, $count, $orderProperty
+            $contentObjectPublication, $treeNodeData, $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countCourseGroupEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultRepository->countCourseGroupEntriesWithPlagiarismResult(
-            $contentObjectPublication, $treeNodeData, $condition
+            $contentObjectPublication, $treeNodeData, $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param null $offset
-     * @param null $count
-     * @param array $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findPlatformGroupEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = []
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultRepository->findPlatformGroupEntriesWithPlagiarismResult(
-            $contentObjectPublication, $treeNodeData, $condition, $offset, $count, $orderProperty
+            $contentObjectPublication, $treeNodeData, $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countPlatformGroupEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultRepository->countPlatformGroupEntriesWithPlagiarismResult(
-            $contentObjectPublication, $treeNodeData, $condition
+            $contentObjectPublication, $treeNodeData, $filterParameters
         );
     }
 }

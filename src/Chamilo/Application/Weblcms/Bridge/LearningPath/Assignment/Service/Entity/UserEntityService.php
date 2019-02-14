@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNod
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
@@ -51,7 +52,10 @@ class UserEntityService implements EntityServiceInterface
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService $entryPlagiarismResultService
      */
-    public function __construct(AssignmentService $assignmentService, Translator $translator, EntryPlagiarismResultService $entryPlagiarismResultService)
+    public function __construct(
+        AssignmentService $assignmentService, Translator $translator,
+        EntryPlagiarismResultService $entryPlagiarismResultService
+    )
     {
         $this->assignmentService = $assignmentService;
         $this->translator = $translator;
@@ -130,34 +134,34 @@ class UserEntityService implements EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
-    public function countEntriesWithPlagiarismResult(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null)
+    public function countEntriesWithPlagiarismResult(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
+        FilterParameters $filterParameters
+    )
     {
         return $this->entryPlagiarismResultService->countUserEntriesWithPlagiarismResult(
-            $contentObjectPublication, $treeNodeData, $condition
+            $contentObjectPublication, $treeNodeData, $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int|null $offset
-     * @param int|null $count
-     * @param array $order_property
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null, int $offset = null, int $count = null,
-        array $order_property = []
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
+        FilterParameters $filterParameters
     )
     {
         return $this->entryPlagiarismResultService->findUserEntriesWithPlagiarismResult(
-            $contentObjectPublication, $treeNodeData, $condition, $offset, $count, $order_property
+            $contentObjectPublication, $treeNodeData, $filterParameters
         );
     }
 

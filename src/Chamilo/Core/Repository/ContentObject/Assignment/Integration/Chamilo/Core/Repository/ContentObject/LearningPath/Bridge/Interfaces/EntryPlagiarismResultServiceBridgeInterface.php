@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -55,11 +56,13 @@ interface EntryPlagiarismResultServiceBridgeInterface
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
-    public function countEntriesWithPlagiarismResult(TreeNode $treeNode, int $entityType, Condition $condition = null);
+    public function countEntriesWithPlagiarismResult(
+        TreeNode $treeNode, int $entityType, FilterParameters $filterParameters
+    );
 
     /**
      * @param int $entityType
@@ -76,14 +79,11 @@ interface EntryPlagiarismResultServiceBridgeInterface
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int|null $offset
-     * @param int|null $count
-     * @param array $order_property
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntriesWithPlagiarismResult(
-        TreeNode $treeNode, int $entityType, Condition $condition = null, int $offset = null, int $count = null, array $order_property = []
+        TreeNode $treeNode, int $entityType, FilterParameters $filterParameters
     );
 }

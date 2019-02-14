@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -59,26 +60,22 @@ interface EntityServiceInterface
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param null $offset
-     * @param null $count
-     * @param array $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
-     *  @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | DataClass[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | DataClass[]
      */
     public function findEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = []
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
     );
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
     );
 
     /**

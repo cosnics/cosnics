@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -108,13 +109,15 @@ class EntryPlagiarismResultServiceBridge implements
 
     /**
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
-    public function countEntriesWithPlagiarismResult(int $entityType, Condition $condition = null)
+    public function countEntriesWithPlagiarismResult(int $entityType, FilterParameters $filterParameters)
     {
-        return $this->assignmentEntryPlagiarismResultServiceBridge->countEntriesWithPlagiarismResult($this->treeNode, $entityType, $condition);
+        return $this->assignmentEntryPlagiarismResultServiceBridge->countEntriesWithPlagiarismResult(
+            $this->treeNode, $entityType, $filterParameters
+        );
     }
 
     /**
@@ -129,22 +132,21 @@ class EntryPlagiarismResultServiceBridge implements
         EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
     )
     {
-        return $this->assignmentEntryPlagiarismResultServiceBridge->getEntryPlagiarismResultTable($entityType, $application, $entryPlagiarismResultTableParameters);
+        return $this->assignmentEntryPlagiarismResultServiceBridge->getEntryPlagiarismResultTable(
+            $entityType, $application, $entryPlagiarismResultTableParameters
+        );
     }
 
     /**
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int|null $offset
-     * @param int|null $count
-     * @param array $order_property
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findEntriesWithPlagiarismResult(
-        int $entityType, Condition $condition = null, int $offset = null, int $count = null, array $order_property = []
-    )
+    public function findEntriesWithPlagiarismResult(int $entityType, FilterParameters $filterParameters)
     {
-        return $this->assignmentEntryPlagiarismResultServiceBridge->findEntriesWithPlagiarismResult($this->treeNode, $entityType, $condition, $offset, $count, $order_property);
+        return $this->assignmentEntryPlagiarismResultServiceBridge->findEntriesWithPlagiarismResult(
+            $this->treeNode, $entityType, $filterParameters
+        );
     }
 }

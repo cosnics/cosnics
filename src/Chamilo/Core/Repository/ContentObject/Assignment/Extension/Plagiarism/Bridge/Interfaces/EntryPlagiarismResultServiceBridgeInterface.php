@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -51,24 +52,19 @@ interface EntryPlagiarismResultServiceBridgeInterface
 
     /**
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int|null $offset
-     * @param int|null $count
-     * @param array $order_property
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findEntriesWithPlagiarismResult(
-        int $entityType, Condition $condition = null, int $offset = null, int $count = null, array $order_property = []
-    );
+    public function findEntriesWithPlagiarismResult(int $entityType, FilterParameters $filterParameters);
 
     /**
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
-    public function countEntriesWithPlagiarismResult(int $entityType, Condition $condition = null);
+    public function countEntriesWithPlagiarismResult(int $entityType, FilterParameters $filterParameters);
 
     /**
      * @param int $entityType

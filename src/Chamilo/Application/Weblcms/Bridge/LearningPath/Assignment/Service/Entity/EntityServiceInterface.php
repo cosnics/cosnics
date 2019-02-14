@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNod
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -73,25 +74,25 @@ interface EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
-    public function countEntriesWithPlagiarismResult(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null);
+    public function countEntriesWithPlagiarismResult(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
+        FilterParameters $filterParameters
+    );
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int|null $offset
-     * @param int|null $count
-     * @param array $order_property
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntriesWithPlagiarismResult(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null, int $offset = null, int $count = null,
-        array $order_property = []
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
+        FilterParameters $filterParameters
     );
 
     /**
