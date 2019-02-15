@@ -18,7 +18,9 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -78,7 +80,7 @@ class ViewerComponent extends Manager implements TableSupport
         $entryCount = $this->getAssignmentServiceBridge()->countDistinctEntriesByEntityType($this->getEntityType());
         $feedbackCount = $this->getFeedbackServiceBridge()->countDistinctFeedbackByEntityType($this->getEntityType());
         $lateEntryCount = $this->getAssignmentServiceBridge()->countDistinctLateEntriesByEntityType($this->getEntityType());
-        $entityCount = $this->getAssignmentServiceBridge()->countEntitiesByEntityType($this->getEntityType());
+        $entityCount = $this->getAssignmentServiceBridge()->countEntitiesByEntityType($this->getEntityType(), new FilterParameters());
 
         /** @var Assignment $assignment */
         $assignment = $this->get_root_content_object();
@@ -112,6 +114,9 @@ class ViewerComponent extends Manager implements TableSupport
 
         $viewNotificationUrl = $redirect->getUrl();
 
+        $searchToolbar = new ButtonToolBar($this->get_url());
+        $searchToolbarRenderer = new ButtonToolBarRenderer($searchToolbar);
+
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
@@ -123,13 +128,14 @@ class ViewerComponent extends Manager implements TableSupport
             'START_TIME' => $startTime, 'END_TIME' => $endTime,
             'ALLOW_LATE_SUBMISSIONS' => $assignment->get_allow_late_submissions(),
             'VISIBILITY_SUBMISSIONS' => $assignment->get_visibility_submissions(),
-            'ENTITY_TABLE' => $this->renderEntityTable(),
+            'ENTITY_TABLE' => $this->renderEntityTable($searchToolbarRenderer->getSearchForm()),
             'CAN_EDIT_ASSIGNMENT' => $this->getAssignmentServiceBridge()->canEditAssignment(),
             'ADMINISTRATOR_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email']),
             'NOTIFICATIONS_URL' => $notificationsUrl,
             'NOTIFICATIONS_COUNT' => $notificationsCount,
             'VIEW_NOTIFICATION_URL' => $viewNotificationUrl,
-            'ADMIN_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email'])
+            'ADMIN_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email']),
+            'SEARCH_TOOLBAR' => $searchToolbarRenderer->render()
         ];
     }
 
@@ -151,9 +157,11 @@ class ViewerComponent extends Manager implements TableSupport
 
     /**
      *
+     * @param \Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface $searchForm
+     *
      * @return string
      */
-    protected function renderEntityTable()
+    protected function renderEntityTable(TableSupportedSearchFormInterface $searchForm)
     {
         $entityTableParameters = new EntityTableParameters();
         $entityTableParameters->setAssignmentServiceBridge($this->getAssignmentServiceBridge());
@@ -163,7 +171,11 @@ class ViewerComponent extends Manager implements TableSupport
         $entityTableParameters->setUser($this->getUser());
         $entityTableParameters->setRightService($this->getRightsService());
 
-        return $this->getAssignmentServiceBridge()->getEntityTableForType($this, $entityTableParameters)->as_html();
+        $table = $this->getAssignmentServiceBridge()->getEntityTableForType($this, $entityTableParameters);
+
+        $table->setSearchForm($searchForm);
+
+        return $table->render();
     }
 
     /**

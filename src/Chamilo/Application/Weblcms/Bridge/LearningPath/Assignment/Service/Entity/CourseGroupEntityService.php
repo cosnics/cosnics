@@ -75,39 +75,36 @@ class CourseGroupEntityService implements EntityServiceInterface
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int $offset
-     * @param int $count
-     * @param array $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
     public function retrieveEntities(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null,
-        $offset = null, $count = null,
-        $orderProperty = []
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
+        FilterParameters $filterParameters
     )
     {
         return $this->assignmentService->findTargetCourseGroupsForContentObjectPublication(
             $contentObjectPublication, $treeNodeData, $this->getTargetCourseGroupIds($contentObjectPublication),
-            $condition, $offset, $count, $orderProperty
+            $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countEntities(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
+        FilterParameters $filterParameters
     )
     {
         return $this->assignmentService->countTargetCourseGroupsForContentObjectPublication(
             $contentObjectPublication, $treeNodeData, $this->getTargetCourseGroupIds($contentObjectPublication),
-            $condition
+            $filterParameters
         );
     }
 

@@ -64,34 +64,31 @@ class UserEntityService implements EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int $offset
-     * @param int $count
-     * @param array $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function retrieveEntities(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = []
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
     )
     {
         return $this->assignmentService->findTargetUsersForContentObjectPublication(
             $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication),
-            $condition, $offset, $count, $orderProperty
+            $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
-    public function countEntities(ContentObjectPublication $contentObjectPublication, Condition $condition = null)
+    public function countEntities(ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters)
     {
         return $this->assignmentService->countTargetUsersForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication)
+            $contentObjectPublication, $this->getTargetUserIdsForPublication($contentObjectPublication),
+            $filterParameters
         );
     }
 

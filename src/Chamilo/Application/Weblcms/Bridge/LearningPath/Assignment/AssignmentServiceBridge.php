@@ -21,6 +21,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
@@ -146,37 +147,35 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int|null $offset
-     * @param int|null $count
-     * @param array $order_property
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return mixed
      */
     public function findEntitiesByEntityType(
-        TreeNode $treeNode, int $entityType, Condition $condition = null, int $offset = null, int $count = null,
-        array $order_property = []
+        TreeNode $treeNode, int $entityType, FilterParameters $filterParameters
     )
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
 
         return $entityService->retrieveEntities(
-            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $condition, $offset, $count, $order_property
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param integer $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return integer
      */
-    public function countEntitiesByEntityType(TreeNode $treeNode, $entityType, Condition $condition = null)
+    public function countEntitiesByEntityType(TreeNode $treeNode, $entityType, FilterParameters $filterParameters)
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
 
-        return $entityService->countEntities($this->contentObjectPublication, $treeNode->getTreeNodeData(), $condition);
+        return $entityService->countEntities(
+            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $filterParameters
+        );
     }
 
     /**
@@ -202,7 +201,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
 
-        return $entityService->retrieveEntitiesWithEntries($this->contentObjectPublication, $treeNode->getTreeNodeData());
+        return $entityService->retrieveEntitiesWithEntries(
+            $this->contentObjectPublication, $treeNode->getTreeNodeData()
+        );
     }
 
     /**
@@ -339,6 +340,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function getUsersForEntity(TreeNode $treeNode, int $entityType, int $entityId)
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType($treeNode));
+
         return $entityService->getUsersForEntity($entityId);
     }
 

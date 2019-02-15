@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -50,26 +51,20 @@ class AssignmentRepository extends
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
      * @param int[] $userIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetUsersForTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $userIds,
-        $condition = null, $offset = null, $count = null,
-        $orderBy = []
+        FilterParameters $filterParameters
     )
     {
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_USER,
-            $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
+            $this->getTargetEntitiesCondition(User::class_name(), $userIds),
             $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
-            $offset,
-            $count,
-            $orderBy,
+            $filterParameters,
             $this->getDataClassPropertiesForUser(),
             User::class_name(),
             $this->getTargetBaseVariable(User::class_name())
@@ -124,25 +119,20 @@ class AssignmentRepository extends
      * @param ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param int[] $groupIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetCourseGroupsForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $groupIds,
-        $condition = null, $offset = null, $count = null, $orderBy = []
+        FilterParameters $filterParameters
     )
     {
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_COURSE_GROUP,
-            $this->getTargetEntitiesCondition(CourseGroup::class_name(), $groupIds, $condition),
+            $this->getTargetEntitiesCondition(CourseGroup::class_name(), $groupIds),
             $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
-            $offset,
-            $count,
-            $orderBy,
+            $filterParameters,
             $this->getDataClassPropertiesForCourseGroup(),
             CourseGroup::class_name(),
             $this->getTargetBaseVariable(CourseGroup::class_name())
@@ -194,25 +184,20 @@ class AssignmentRepository extends
      * @param ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param int[] $groupIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetPlatformGroupsForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $groupIds,
-        $condition = null, $offset = null, $count = null, $orderBy = []
+        FilterParameters $filterParameters
     )
     {
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_PLATFORM_GROUP,
-            $this->getTargetEntitiesCondition(Group::class_name(), $groupIds, $condition),
+            $this->getTargetEntitiesCondition(Group::class_name(), $groupIds),
             $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
-            $offset,
-            $count,
-            $orderBy,
+            $filterParameters,
             $this->getDataClassPropertiesForPlatformGroups(),
             Group::class_name(),
             $this->getTargetBaseVariable(Group::class_name())

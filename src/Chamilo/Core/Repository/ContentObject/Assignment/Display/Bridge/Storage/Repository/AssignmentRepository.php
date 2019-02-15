@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -22,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -50,15 +52,23 @@ abstract class AssignmentRepository
      * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
     protected $dataClassRepository;
+    /**
+     * @var \Chamilo\Libraries\Storage\Query\FilterParametersTranslator
+     */
+    private $filterParametersTranslator;
 
     /**
      * LearningPathAssignmentRepository constructor.
      *
      * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param \Chamilo\Libraries\Storage\Query\FilterParametersTranslator $filterParametersTranslator
      */
-    public function __construct(DataClassRepository $dataClassRepository)
+    public function __construct(
+        DataClassRepository $dataClassRepository, FilterParametersTranslator $filterParametersTranslator
+    )
     {
         $this->dataClassRepository = $dataClassRepository;
+        $this->filterParametersTranslator = $filterParametersTranslator;
     }
 
     /**
@@ -283,9 +293,7 @@ abstract class AssignmentRepository
      * @param integer $entityType
      * @param Condition $condition
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $joinCondition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      * @param DataClassProperties $properties
      * @param string $baseClass
      * @param PropertyConditionVariable $baseVariable
@@ -294,10 +302,12 @@ abstract class AssignmentRepository
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     protected function findTargetsForEntityType(
-        $entityType, Condition $condition = null, Condition $joinCondition = null, $offset, $count, $orderBy,
+        $entityType, Condition $condition = null, Condition $joinCondition = null, FilterParameters $filterParameters,
         DataClassProperties $properties, $baseClass, $baseVariable, Condition $havingCondition = null
     )
     {
+        $searchProperties = new DataClassProperties($properties->get());
+
         $properties->add(
             new FixedPropertyConditionVariable($baseClass, DataClass::PROPERTY_ID, Entry::PROPERTY_ENTITY_ID)
         );
@@ -353,16 +363,13 @@ abstract class AssignmentRepository
         $group_by = new GroupBy();
         $group_by->add($baseVariable);
 
-        $parameters = new RecordRetrievesParameters(
-            $properties,
-            $condition,
-            $count,
-            $offset,
-            $orderBy,
-            $joins,
-            $group_by,
-            $havingCondition
-        );
+        $parameters = new RecordRetrievesParameters($properties);
+        $parameters->setJoins($joins);
+        $parameters->setGroupBy($group_by);
+        $parameters->setHavingCondition($havingCondition);
+
+        $entityTypeCondition = $this->getEntityTypeCondition($entityType, $condition);
+        $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $entityTypeCondition);
 
         return $this->dataClassRepository->records($baseClass, $parameters);
     }

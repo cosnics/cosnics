@@ -27,7 +27,7 @@ class EntityTableDataProvider extends RecordTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return $this->getAssignmentServiceBridge()->findEntitiesByEntityType(
-            $this->getEntityTableParameters()->getEntityType(), $condition, $offset, $count, $order_property
+            $this->getEntityTableParameters()->getEntityType(), $this->getFilterParameters()
         );
     }
 
@@ -42,7 +42,7 @@ class EntityTableDataProvider extends RecordTableDataProvider
     public function count_data($condition)
     {
         return $this->getAssignmentServiceBridge()->countEntitiesByEntityType(
-            $this->getEntityTableParameters()->getEntityType(), $condition
+            $this->getEntityTableParameters()->getEntityType(), $this->getFilterParameters()
         );
     }
 
