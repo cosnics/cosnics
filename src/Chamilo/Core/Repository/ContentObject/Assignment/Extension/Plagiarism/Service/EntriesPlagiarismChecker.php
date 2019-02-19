@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service
@@ -49,7 +50,7 @@ class EntriesPlagiarismChecker
     {
         $entries = $assignmentServiceBridge->findEntries();
         $entriesWithPlagiarismResults = $entryPlagiarismResultServiceBridge->findEntriesWithPlagiarismResult(
-            $assignmentServiceBridge->getCurrentEntityType()
+            $assignmentServiceBridge->getCurrentEntityType(), new FilterParameters()
         );
 
         $checkedEntryIds = [];
