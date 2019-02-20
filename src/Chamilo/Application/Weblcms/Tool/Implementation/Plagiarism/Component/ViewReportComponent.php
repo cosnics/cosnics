@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CheckPlagiarismComponent extends Manager
+class ViewReportComponent extends Manager
 {
     /**
      * @return \Chamilo\Libraries\Format\Response\Response|string
@@ -31,7 +31,7 @@ class CheckPlagiarismComponent extends Manager
 
         try
         {
-            $message = 'PlagiarismCheckSuccess';
+            $message = 'RefreshSuccess';
         }
         catch(EulaNotAcceptedException $exception)
         {
@@ -39,7 +39,7 @@ class CheckPlagiarismComponent extends Manager
         }
         catch(\Exception $ex)
         {
-            $message = 'PlagiarismCheckFailed';
+            $message = 'RefreshFailed';
             $success = false;
         }
 

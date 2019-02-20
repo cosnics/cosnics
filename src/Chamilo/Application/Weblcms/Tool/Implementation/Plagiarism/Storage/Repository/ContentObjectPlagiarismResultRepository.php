@@ -54,12 +54,22 @@ class ContentObjectPlagiarismResultRepository
     }
 
     /**
+     * @param int $plagiarismResultId
+     *
+     * @return ContentObjectPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function findPlagiarismResultById(int $plagiarismResultId)
+    {
+        return $this->dataClassRepository->retrieveById(ContentObjectPlagiarismResult::class, $plagiarismResultId);
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
      * @return \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Storage\DataClass\ContentObjectPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
-    public function findPlagiarismResultByContentObject(ContentObject $contentObject, Course $course)
+    public function findPlagiarismResultByContentObject(Course $course, ContentObject $contentObject)
     {
         $conditions = [];
 
@@ -120,7 +130,7 @@ class ContentObjectPlagiarismResultRepository
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function retrievePlagiarismResults(Course $course, FilterParameters $filterParameters)
+    public function findPlagiarismResults(Course $course, FilterParameters $filterParameters)
     {
         $parameters = new RecordRetrievesParameters();
         $this->setPlagiarismResultParameters($parameters, $course, $filterParameters);
