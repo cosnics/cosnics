@@ -11,5 +11,5 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
     use ContainerAwareTrait;
 
-    const PREFIX = 'weblcms_';
+    const PREFIX = '';
 }
