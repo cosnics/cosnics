@@ -31,7 +31,7 @@
 			"context": "Chamilo\\Libraries\\Protocol\\Microsoft\\Graph",
 			"type": "Chamilo\\Libraries\\Protocol\\Microsoft",
 			"install": {
-				"default": 0,
+				"default": 1,
 				"core": 0
 			},
 			"dependencies": [
