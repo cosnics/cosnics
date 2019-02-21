@@ -25,10 +25,10 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
     /**
      * Do not install the menu item in the database since this item needs special treatment and needs to be fixed
      *
-     * @return bool|void
+     * @return bool
      */
     public function extra()
     {
-
+        return true;
     }
 }
