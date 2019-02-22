@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism;
 
-use Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismChecker;
-use Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismResultService;
+use Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Service\ContentObjectPlagiarismChecker;
+use Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Service\ContentObjectPlagiarismResultService;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism

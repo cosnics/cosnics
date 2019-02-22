@@ -1,10 +1,12 @@
 <?php
 
-namespace Chamilo\Application\Plagiarism\Component;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Component;
 
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\EulaNotAcceptedException;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Manager;
+use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
@@ -26,27 +28,54 @@ class CheckPlagiarismComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $success = true;
-        $message = '';
+        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        {
+            return $this->getApplicationFactory()->getApplication(
+                \Chamilo\Core\Repository\Viewer\Manager::context(),
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            )->run();
+        }
 
         try
         {
-            $message = 'PlagiarismCheckSuccess';
-        }
-        catch(EulaNotAcceptedException $exception)
-        {
+            $objectIds = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            if (! is_array($objectIds))
+            {
+                $objectIds = array($objectIds);
+            }
 
+            $this->getContentObjectPlagiarismChecker()->checkContentObjectsForPlagiarismById(
+                $this->get_course(), $objectIds, $this->getUser()
+            );
+
+            $message = 'PlagiarismCheckSuccess';
+            $success = true;
         }
-        catch(\Exception $ex)
+        catch (EulaNotAcceptedException $exception)
         {
+            $redirectUrl = $this->get_url();
+
+            return $this->getContentObjectPlagiarismChecker()->getRedirectToEULAPageResponse($redirectUrl);
+        }
+        catch (\Exception $ex)
+        {
+            $this->getExceptionLogger()->logException($ex);
+
             $message = 'PlagiarismCheckFailed';
             $success = false;
         }
 
-        $this->redirect($message, $success, [self::PARAM_ACTION => self::ACTION_BROWSE]);
-        return;
+        $this->redirect($message, !$success, [self::PARAM_ACTION => self::ACTION_BROWSE]);
 
+        return null;
     }
 
+    /**
+     * @return array
+     */
+    public function get_allowed_content_object_types()
+    {
+        return [File::class];
+    }
 
 }

@@ -1,8 +1,11 @@
 <?php
 
-namespace Chamilo\Application\Plagiarism\Table;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Table;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * @package Chamilo\Application\Plagiarism\Table
@@ -24,6 +27,14 @@ class PlagiarismResultTableDataProvider extends RecordTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $orderProperties = array())
     {
+        $orderProperty = $orderProperties[0];
+        $conditionVariable = $orderProperty->getConditionVariable();
+        if ($conditionVariable instanceof PropertyConditionVariable && $conditionVariable->get_class() == User::class &&
+            $conditionVariable->get_property() == User::PROPERTY_LASTNAME)
+        {
+            $orderProperties[] = new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        }
+
         return $this->getPlagiarismResultService()->findPlagiarismResults(
             $this->getCourse(), $this->getFilterParameters()
         );
@@ -44,7 +55,7 @@ class PlagiarismResultTableDataProvider extends RecordTableDataProvider
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Table\Table|\Chamilo\Application\Plagiarism\Table\PlagiarismResultTable
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Table\PlagiarismResultTable|\Chamilo\Libraries\Format\Table\Table
      */
     protected function getPlagiarismResultTable()
     {
@@ -52,7 +63,7 @@ class PlagiarismResultTableDataProvider extends RecordTableDataProvider
     }
 
     /**
-     * @return \Chamilo\Application\Plagiarism\Table\PlagiarismResultTableParameters
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Table\PlagiarismResultTableParameters
      */
     protected function getPlagiarismResultTableParameters()
     {
@@ -68,7 +79,7 @@ class PlagiarismResultTableDataProvider extends RecordTableDataProvider
     }
 
     /**
-     * @return \Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismResultService
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Service\ContentObjectPlagiarismResultService
      */
     protected function getPlagiarismResultService()
     {

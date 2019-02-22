@@ -2,39 +2,60 @@
 <object name="weblcms_content_object_plagiarism_result">
     <properties>
         <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            autoincrement="true" />
+                name="id"
+                type="integer"
+                unsigned="1"
+                notnull="1"
+                autoincrement="true"/>
         <property
-            name="content_object_id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
+                name="content_object_id"
+                type="integer"
+                unsigned="1"
+                notnull="1"/>
         <property
-            name="external_id"
-            type="string"
-            length="255"
-            notnull="1" />
+                name="course_id"
+                type="integer"
+                unsigned="1"
+                notnull="1"/>
         <property
-            name="status"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
+                name="external_id"
+                type="string"
+                length="255"
+                notnull="1"/>
         <property
-            name="result"
-            type="integer"
-            unsigned="1" />
+                name="status"
+                type="integer"
+                unsigned="1"
+                notnull="1"/>
         <property
-            name="error_code"
-            type="integer"
-            unsigned="1" />
+                name="result"
+                type="integer"
+                unsigned="1"/>
+        <property
+                name="error_code"
+                type="integer"
+                unsigned="1"/>
+        <property
+                name="request_user_id"
+                type="integer"
+                unsigned="1"
+                notnull="1"/>
+        <property
+                name="request_date"
+                type="integer"
+                unsigned="1"
+                notnull="1"/>
     </properties>
     <index name="content_object_id">
-        <indexproperty name="content_object_id" />
+        <indexproperty name="course_id"/>
+        <indexproperty name="content_object_id"/>
     </index>
+
+    <index name="course_id">
+        <indexproperty name="course_id"/>
+    </index>
+
     <index name="external_id">
-        <indexproperty name="external_id" />
+        <indexproperty name="external_id"/>
     </index>
 </object>

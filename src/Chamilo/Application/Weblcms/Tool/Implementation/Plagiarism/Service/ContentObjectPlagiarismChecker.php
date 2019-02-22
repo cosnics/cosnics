@@ -1,12 +1,14 @@
 <?php
 
-namespace Chamilo\Application\Plagiarism\Service;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Service;
 
 use Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException;
+use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Storage\DataClass\ContentObjectPlagiarismResult;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -22,7 +24,7 @@ class ContentObjectPlagiarismChecker
     protected $plagiarismChecker;
 
     /**
-     * @var \Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismResultService
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Service\ContentObjectPlagiarismResultService
      */
     protected $contentObjectPlagiarismResultService;
 
@@ -32,21 +34,28 @@ class ContentObjectPlagiarismChecker
     protected $userService;
 
     /**
+     * @var \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository
+     */
+    protected $contentObjectRepository;
+
+    /**
      * ContentObjectPlagiarismChecker constructor.
      *
-     * @param \Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismChecker $plagiarismChecker
-     * @param \Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismResultService $contentObjectPlagiarismResultService
+     * @param \Chamilo\Application\Plagiarism\Service\PlagiarismCheckerInterface $plagiarismChecker
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Service\ContentObjectPlagiarismResultService $contentObjectPlagiarismResultService
      * @param \Chamilo\Core\User\Service\UserService $userService
+     * @param \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository $contentObjectRepository
      */
     public function __construct(
-        \Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismChecker $plagiarismChecker,
-        \Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismResultService $contentObjectPlagiarismResultService,
-        \Chamilo\Core\User\Service\UserService $userService
+        \Chamilo\Application\Plagiarism\Service\PlagiarismCheckerInterface $plagiarismChecker,
+        ContentObjectPlagiarismResultService $contentObjectPlagiarismResultService,
+        \Chamilo\Core\User\Service\UserService $userService, ContentObjectRepository $contentObjectRepository
     )
     {
         $this->plagiarismChecker = $plagiarismChecker;
         $this->contentObjectPlagiarismResultService = $contentObjectPlagiarismResultService;
         $this->userService = $userService;
+        $this->contentObjectRepository = $contentObjectRepository;
     }
 
     /**
@@ -68,46 +77,47 @@ class ContentObjectPlagiarismChecker
             );
         }
 
-        $entryPlagiarismResult = $entryPlagiarismResultServiceBridge->findEntryPlagiarismResultByEntry($entry);
+        $contentObjectPlagiarismResult =
+            $this->contentObjectPlagiarismResultService->findPlagiarismResultByContentObject($course, $contentObject);
 
         try
         {
             $currentSubmissionStatus = null;
 
-            if ($entryPlagiarismResult instanceof EntryPlagiarismResult)
+            if ($contentObjectPlagiarismResult instanceof ContentObjectPlagiarismResult)
             {
-                $currentSubmissionStatus = $entryPlagiarismResult->getSubmissionStatus();
+                $currentSubmissionStatus = $contentObjectPlagiarismResult->getSubmissionStatus();
             }
             else
             {
-                $entryPlagiarismResult = null;
+                $contentObjectPlagiarismResult = null;
             }
 
+            $contentObjectOwner = $this->userService->findUserByIdentifier($contentObject->get_owner_id());
+
             /** @var File $contentObject */
-            $contentObject = $this->contentObjectRepository->findById($entry->getContentObjectId());
-
-            $assignmentOwner = $this->userService->findUserByIdentifier($assignment->get_owner_id());
-            $entryOwner = $this->userService->findUserByIdentifier($entry->getUserId());
-
             $newStatus = $this->plagiarismChecker->checkForPlagiarism(
-                $entryOwner, $assignmentOwner, $contentObject->get_title(),
+                $contentObjectOwner, $requestUser, $contentObject->get_title(),
                 $contentObject->get_full_path(), $contentObject->get_filename(), $currentSubmissionStatus
             );
 
             if (empty($currentSubmissionStatus) || $currentSubmissionStatus->getStatus() != $newStatus->getStatus())
             {
                 $this->updateResultWithStatus(
-                    $entryPlagiarismResultServiceBridge, $entry, $newStatus, $entryPlagiarismResult
+                    $course, $contentObject, $newStatus, $contentObjectPlagiarismResult, $requestUser
                 );
             }
         }
         catch (PlagiarismException $exception)
         {
-            if ($entryPlagiarismResult instanceof EntryPlagiarismResult)
+            if ($contentObjectPlagiarismResult instanceof ContentObjectPlagiarismResult)
             {
-                $entryPlagiarismResult->setStatus(SubmissionStatus::STATUS_FAILED);
-                $entryPlagiarismResult->setError(SubmissionStatus::ERROR_UNKNOWN);
-                $entryPlagiarismResultServiceBridge->updateEntryPlagiarismResult($entryPlagiarismResult);
+                $contentObjectPlagiarismResult->setStatus(SubmissionStatus::STATUS_FAILED);
+                $contentObjectPlagiarismResult->setError(SubmissionStatus::ERROR_UNKNOWN);
+
+                $this->contentObjectPlagiarismResultService->updateContentObjectPlagiarismResult(
+                    $contentObjectPlagiarismResult
+                );
             }
 
             throw $exception;
@@ -115,37 +125,93 @@ class ContentObjectPlagiarismChecker
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param array $contentObjectIds
+     * @param \Chamilo\Core\User\Storage\DataClass\User $requestUser
+     *
+     * @throws \Exception
+     */
+    public function checkContentObjectsForPlagiarismById(Course $course, array $contentObjectIds, User $requestUser)
+    {
+        foreach ($contentObjectIds as $contentObjectId)
+        {
+            $contentObject = $this->contentObjectRepository->findById($contentObjectId);
+            if ($contentObject instanceof ContentObject)
+            {
+                $this->checkContentObjectForPlagiarism($course, $contentObject, $requestUser);
+            }
+        }
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param \Chamilo\Core\User\Storage\DataClass\User $requestUser
+     *
+     * @throws \Exception
+     */
+    public function refreshContentObjectPlagiarismChecks(Course $course, User $requestUser)
+    {
+        $contentObjectIds = [];
+
+        $contentObjectPlagiarismResults = $this->contentObjectPlagiarismResultService->findPlagiarismResults($course);
+        foreach ($contentObjectPlagiarismResults as $contentObjectPlagiarismResult)
+        {
+            $submissionStatus = new SubmissionStatus(
+                $contentObjectPlagiarismResult[ContentObjectPlagiarismResult::PROPERTY_EXTERNAL_ID],
+                $contentObjectPlagiarismResult[ContentObjectPlagiarismResult::PROPERTY_STATUS],
+                $contentObjectPlagiarismResult[ContentObjectPlagiarismResult::PROPERTY_RESULT],
+                $contentObjectPlagiarismResult[ContentObjectPlagiarismResult::PROPERTY_ERROR]
+            );
+
+            if ($submissionStatus->isInProgress() || ($submissionStatus->isFailed() && $submissionStatus->canRetry()))
+            {
+                $contentObjectIds[] =
+                    $contentObjectPlagiarismResult[ContentObjectPlagiarismResult::PROPERTY_CONTENT_OBJECT_ID];
+            }
+        }
+
+        $this->checkContentObjectsForPlagiarismById($course, $contentObjectIds, $requestUser);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Application\Plagiarism\Domain\SubmissionStatus $newStatus
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult|null $entryPlagiarismResult
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Storage\DataClass\ContentObjectPlagiarismResult|null $contentObjectPlagiarismResult
+     * @param \Chamilo\Core\User\Storage\DataClass\User $requestUser
      */
     protected function updateResultWithStatus(
-        EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge,
-        Entry $entry, SubmissionStatus $newStatus, EntryPlagiarismResult $entryPlagiarismResult = null
+        Course $course, ContentObject $contentObject, SubmissionStatus $newStatus,
+        ContentObjectPlagiarismResult $contentObjectPlagiarismResult = null, User $requestUser
     )
     {
-        if (!empty($entryPlagiarismResult))
+        if (!empty($contentObjectPlagiarismResult))
         {
-            $entryPlagiarismResult->copyFromSubmissionStatus($newStatus);
-            $entryPlagiarismResultServiceBridge->updateEntryPlagiarismResult($entryPlagiarismResult);
+            $contentObjectPlagiarismResult->copyFromSubmissionStatus($newStatus);
+
+            $this->contentObjectPlagiarismResultService->updateContentObjectPlagiarismResult(
+                $contentObjectPlagiarismResult
+            );
         }
         else
         {
-            $entryPlagiarismResultServiceBridge->createEntryPlagiarismResultForEntry(
-                $entry, $newStatus->getSubmissionId()
+            $this->contentObjectPlagiarismResultService->createContentObjectPlagiarismResult(
+                $course, $contentObject, $newStatus->getSubmissionId(), $requestUser
             );
         }
     }
 
     /**
      * @param int $contentObjectPlagiarismResultId
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param \Chamilo\Core\User\Storage\DataClass\User $viewUser
      *
      * @return string
      * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
-    public function getPlagiarismViewerUrlForContentObjectById(int $contentObjectPlagiarismResultId, User $viewUser)
+    public function getPlagiarismViewerUrlForContentObjectById(
+        int $contentObjectPlagiarismResultId, Course $course, User $viewUser
+    )
     {
         $contentObjectPlagiarismResult =
             $this->contentObjectPlagiarismResultService->findPlagiarismResultById($contentObjectPlagiarismResultId);
@@ -155,6 +221,16 @@ class ContentObjectPlagiarismChecker
             throw new PlagiarismException(
                 sprintf(
                     'The given content object %s has not been checked for plagiarism yet so the result can not be retrieved'
+                )
+            );
+        }
+
+        if ($contentObjectPlagiarismResult->getCourseId() != $course->getId())
+        {
+            throw new PlagiarismException(
+                sprintf(
+                    'The given content object %s is not published in the course %s so the report can not be viewed',
+                    $contentObjectPlagiarismResult->getContentObjectId(), $course->getId()
                 )
             );
         }

@@ -13,6 +13,8 @@ class ContentObjectPlagiarismResult extends PlagiarismResult
 {
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     const PROPERTY_COURSE_ID = 'course_id';
+    const PROPERTY_REQUEST_USER_ID = 'request_user_id';
+    const PROPERTY_REQUEST_DATE = 'request_date';
 
     /**
      * Get the default properties of all feedback
@@ -23,6 +25,8 @@ class ContentObjectPlagiarismResult extends PlagiarismResult
     {
         $extendedPropertyNames[] = self::PROPERTY_CONTENT_OBJECT_ID;
         $extendedPropertyNames[] = self::PROPERTY_COURSE_ID;
+        $extendedPropertyNames[] = self::PROPERTY_REQUEST_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_REQUEST_DATE;
 
         return parent::get_default_property_names($extendedPropertyNames);
     }
@@ -57,6 +61,42 @@ class ContentObjectPlagiarismResult extends PlagiarismResult
     public function setCourseId($courseId)
     {
         $this->set_default_property(self::PROPERTY_COURSE_ID, $courseId);
+    }
+
+    /**
+     * @return int
+     */
+    public function getRequestUserId()
+    {
+        return $this->get_default_property(self::PROPERTY_REQUEST_USER_ID);
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getRequestDate()
+    {
+        $timestamp = $this->get_default_property(self::PROPERTY_REQUEST_DATE);
+        $dateTime = new \DateTime();
+        $dateTime->setTimestamp($timestamp);
+
+        return $dateTime;
+    }
+
+    /**
+     * @param int $requestUserId
+     */
+    public function setRequestUserId(int $requestUserId)
+    {
+        $this->set_default_property(self::PROPERTY_REQUEST_USER_ID, $requestUserId);
+    }
+
+    /**
+     * @param \DateTime $requestDate
+     */
+    public function setRequestDate(\DateTime $requestDate)
+    {
+        $this->set_default_property(self::PROPERTY_REQUEST_DATE, $requestDate->getTimestamp());
     }
 
 }

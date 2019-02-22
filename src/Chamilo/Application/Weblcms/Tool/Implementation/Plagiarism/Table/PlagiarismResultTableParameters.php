@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Plagiarism\Table;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Table;
 
 /**
  * @package Chamilo\Application\Plagiarism\Table
@@ -10,7 +10,7 @@ namespace Chamilo\Application\Plagiarism\Table;
 class PlagiarismResultTableParameters
 {
     /**
-     * @var \Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismResultService
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Service\ContentObjectPlagiarismResultService
      */
     protected $contentObjectPlagiarismResultService;
 
@@ -22,11 +22,11 @@ class PlagiarismResultTableParameters
     /**
      * PlagiarismResultTableParameters constructor.
      *
-     * @param \Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismResultService $contentObjectPlagiarismResultService
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Service\ContentObjectPlagiarismResultService $contentObjectPlagiarismResultService
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      */
     public function __construct(
-        \Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismResultService $contentObjectPlagiarismResultService,
+        \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Service\ContentObjectPlagiarismResultService $contentObjectPlagiarismResultService,
         \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
     )
     {
@@ -35,10 +35,10 @@ class PlagiarismResultTableParameters
     }
 
     /**
-     * @return \Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismResultService
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Service\ContentObjectPlagiarismResultService
      */
     public function getContentObjectPlagiarismResultService(
-    ): \Chamilo\Application\Plagiarism\Service\ContentObjectPlagiarismResultService
+    ): \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Service\ContentObjectPlagiarismResultService
     {
         return $this->contentObjectPlagiarismResultService;
     }

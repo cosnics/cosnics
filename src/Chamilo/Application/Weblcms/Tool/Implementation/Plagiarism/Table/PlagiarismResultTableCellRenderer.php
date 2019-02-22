@@ -1,16 +1,19 @@
 <?php
 
-namespace Chamilo\Application\Plagiarism\Table;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Table;
 
 use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
 use Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Storage\DataClass\ContentObjectPlagiarismResult;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
+use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -18,7 +21,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class PlagiarismResultTableCellRenderer extends RecordTableCellRenderer
+class PlagiarismResultTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
     /**
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
@@ -41,6 +44,13 @@ class PlagiarismResultTableCellRenderer extends RecordTableCellRenderer
 
                 return StringUtilities::getInstance()->createString($description)->safeTruncate(100, ' &hellip;')
                     ->__toString();
+            case User::PROPERTY_LASTNAME:
+                return $contentObjectPlagiarismResult[User::PROPERTY_LASTNAME] . ' ' .
+                    $contentObjectPlagiarismResult[User::PROPERTY_FIRSTNAME];
+            case ContentObjectPlagiarismResult::PROPERTY_REQUEST_DATE:
+                return DatetimeUtilities::format_locale_date(
+                    null, $contentObjectPlagiarismResult[ContentObjectPlagiarismResult::PROPERTY_REQUEST_DATE]
+                );
             case ContentObjectPlagiarismResult::PROPERTY_RESULT:
                 $submissionStatus = new SubmissionStatus(
                     $contentObjectPlagiarismResult[ContentObjectPlagiarismResult::PROPERTY_EXTERNAL_ID],

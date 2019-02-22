@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Storage\Rep
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Storage\DataClass\ContentObjectPlagiarismResult;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
@@ -19,7 +20,6 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Storage\Repository
@@ -51,6 +51,26 @@ class ContentObjectPlagiarismResultRepository
     {
         $this->dataClassRepository = $dataClassRepository;
         $this->filterParametersTranslator = $filterParametersTranslator;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Storage\DataClass\ContentObjectPlagiarismResult $contentObjectPlagiarismResult
+     *
+     * @return bool
+     */
+    public function createPlagiarismResult(ContentObjectPlagiarismResult $contentObjectPlagiarismResult)
+    {
+        return $this->dataClassRepository->create($contentObjectPlagiarismResult);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Storage\DataClass\ContentObjectPlagiarismResult $contentObjectPlagiarismResult
+     *
+     * @return bool
+     */
+    public function updatePlagiarismResult(ContentObjectPlagiarismResult $contentObjectPlagiarismResult)
+    {
+        return $this->dataClassRepository->update($contentObjectPlagiarismResult);
     }
 
     /**
@@ -130,7 +150,7 @@ class ContentObjectPlagiarismResultRepository
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function findPlagiarismResults(Course $course, FilterParameters $filterParameters)
+    public function findPlagiarismResults(Course $course, FilterParameters $filterParameters = null)
     {
         $parameters = new RecordRetrievesParameters();
         $this->setPlagiarismResultParameters($parameters, $course, $filterParameters);
@@ -144,6 +164,9 @@ class ContentObjectPlagiarismResultRepository
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
 
+        $recordProperties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        $recordProperties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+
         $parameters->setDataClassProperties($recordProperties);
 
         return $this->dataClassRepository->records(ContentObjectPlagiarismResult::class, $parameters);
@@ -155,7 +178,7 @@ class ContentObjectPlagiarismResultRepository
      * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      */
     protected function setPlagiarismResultParameters(
-        DataClassParameters $dataClassParameters, Course $course, FilterParameters $filterParameters
+        DataClassParameters $dataClassParameters, Course $course, FilterParameters $filterParameters = null
     )
     {
         $condition = new EqualityCondition(
@@ -171,9 +194,15 @@ class ContentObjectPlagiarismResultRepository
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
 
-        $this->filterParametersTranslator->translateFilterParameters(
-            $filterParameters, $searchProperties, $dataClassParameters, $condition
-        );
+        $searchProperties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        $searchProperties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+
+        if(!empty($filterParameters))
+        {
+            $this->filterParametersTranslator->translateFilterParameters(
+                $filterParameters, $searchProperties, $dataClassParameters, $condition
+            );
+        }
 
         $joins = new Joins();
         $joins->add(
@@ -183,6 +212,18 @@ class ContentObjectPlagiarismResultRepository
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     new PropertyConditionVariable(
                         ContentObjectPlagiarismResult::class, ContentObjectPlagiarismResult::PROPERTY_CONTENT_OBJECT_ID
+                    )
+                )
+            )
+        );
+
+        $joins->add(
+            new Join(
+                User::class,
+                new EqualityCondition(
+                    new PropertyConditionVariable(User::class, User::PROPERTY_ID),
+                    new PropertyConditionVariable(
+                        ContentObjectPlagiarismResult::class, ContentObjectPlagiarismResult::PROPERTY_REQUEST_USER_ID
                     )
                 )
             )

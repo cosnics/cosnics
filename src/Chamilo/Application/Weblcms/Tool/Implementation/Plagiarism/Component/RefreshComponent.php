@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Plagiarism\Component;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Component;
 
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\EulaNotAcceptedException;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -26,27 +26,31 @@ class RefreshComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $success = true;
-        $message = '';
-
         try
         {
-            $message = 'RefreshSuccess';
-        }
-        catch(EulaNotAcceptedException $exception)
-        {
+            $this->getContentObjectPlagiarismChecker()->refreshContentObjectPlagiarismChecks(
+                $this->get_course(), $this->getUser()
+            );
 
+            $message = 'RefreshSuccess';
+            $success = true;
         }
-        catch(\Exception $ex)
+        catch (EulaNotAcceptedException $exception)
         {
+            $redirectUrl = $this->get_url();
+
+            return $this->getContentObjectPlagiarismChecker()->getRedirectToEULAPageResponse($redirectUrl);
+        }
+        catch (\Exception $ex)
+        {
+            $this->getExceptionLogger()->logException($ex);
             $message = 'RefreshFailed';
             $success = false;
         }
 
-        $this->redirect($message, $success, [self::PARAM_ACTION => self::ACTION_BROWSE]);
-        return;
+        $this->redirect($message, !$success, [self::PARAM_ACTION => self::ACTION_BROWSE]);
 
+        return null;
     }
-
 
 }

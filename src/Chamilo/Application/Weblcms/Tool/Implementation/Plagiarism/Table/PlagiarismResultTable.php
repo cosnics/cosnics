@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Plagiarism\Table;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Table;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
 class PlagiarismResultTable extends RecordTable
 {
     /**
-     * @var \Chamilo\Application\Plagiarism\Table\PlagiarismResultTableParameters
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Table\PlagiarismResultTableParameters
      */
     protected $plagiarismResultTableParameters;
 
@@ -21,7 +21,7 @@ class PlagiarismResultTable extends RecordTable
      * PlagiarismResultTable constructor.
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $component
-     * @param \Chamilo\Application\Plagiarism\Table\PlagiarismResultTableParameters $parameters
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Table\PlagiarismResultTableParameters $parameters
      *
      * @throws \Exception
      */
@@ -32,7 +32,7 @@ class PlagiarismResultTable extends RecordTable
     }
 
     /**
-     * @return \Chamilo\Application\Plagiarism\Table\PlagiarismResultTableParameters
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Table\PlagiarismResultTableParameters
      */
     public function getPlagiarismResultTableParameters()
     {
