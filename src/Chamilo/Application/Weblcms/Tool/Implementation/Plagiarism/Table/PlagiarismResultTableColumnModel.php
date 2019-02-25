@@ -42,7 +42,8 @@ class PlagiarismResultTableColumnModel extends RecordTableColumnModel implements
 
         $this->add_column(
             new DataClassPropertyTableColumn(
-                ContentObjectPlagiarismResult::class, ContentObjectPlagiarismResult::PROPERTY_STATUS
+                ContentObjectPlagiarismResult::class, ContentObjectPlagiarismResult::PROPERTY_STATUS, null, true,
+                'plagiarism-column-status', 'plagiarism-column-status'
             )
         );
 

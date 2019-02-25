@@ -31,7 +31,7 @@ class EulaService
     protected $turnitinRepository;
 
     /**
-     * @var \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface
+     * @var \Chamilo\Application\Plagiarism\Service\UserConverter\UserConverterInterface
      */
     protected $userConverter;
 
@@ -59,7 +59,7 @@ class EulaService
      * TurnitinService constructor.
      *
      * @param \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository
-     * @param \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter
+     * @param \Chamilo\Application\Plagiarism\Service\UserConverter\UserConverterInterface $userConverter
      * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSetting
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Configuration\Service\ConfigurationWriter $configurationWriter
@@ -67,7 +67,7 @@ class EulaService
      */
     public function __construct(
         \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository,
-        \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter,
+        \Chamilo\Application\Plagiarism\Service\UserConverter\UserConverterInterface $userConverter,
         LocalSetting $localSetting, ConfigurationConsulter $configurationConsulter, ConfigurationWriter $configurationWriter,
         SessionUtilities $sessionUtilities
     )

@@ -12,5 +12,11 @@
         </service>
 
         <service id="Chamilo\Application\Plagiarism\Service\Events\PlagiarismEventNotifier" autowire="true" />
+
+        <service id="Chamilo\Application\Plagiarism\Service\UserConverter\UserConverterFactory" autowire="true" />
+        <service id="Chamilo\Application\Plagiarism\Service\UserConverter\DefaultUserConverter" autowire="true" />
+        <service id="Chamilo\Application\Plagiarism\Service\UserConverter\UserConverterInterface" autowire="true">
+            <factory service="Chamilo\Application\Plagiarism\Service\UserConverter\UserConverterFactory" method="createUserConverter" />
+        </service>
     </services>
 </container>

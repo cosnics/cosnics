@@ -10,5 +10,9 @@
 
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Storage\Repository\ContentObjectPlagiarismResultRepository" autowire="true" />
 
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Service\PlagiarismEventListener" autowire="true">
+            <tag name="Chamilo\Application\Plagiarism\Service\Events\PlagiarismEventListenerInterface" />
+        </service>
+
     </services>
 </container>
