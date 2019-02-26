@@ -25,7 +25,7 @@ class BridgeManager
     /**
      * @param object $bridge
      */
-    public function addBridge(object $bridge)
+    public function addBridge($bridge)
     {
         $interfaces = class_implements($bridge);
 
