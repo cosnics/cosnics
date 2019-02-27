@@ -368,8 +368,7 @@ abstract class AssignmentRepository
         $parameters->setGroupBy($group_by);
         $parameters->setHavingCondition($havingCondition);
 
-        $entityTypeCondition = $this->getEntityTypeCondition($entityType, $condition);
-        $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $entityTypeCondition);
+        $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $condition);
 
         return $this->dataClassRepository->records($baseClass, $parameters);
     }

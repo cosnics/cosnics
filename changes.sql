@@ -652,3 +652,5 @@ CREATE TABLE `tracking_weblcms_learning_path_assignment_entry_plagiarism` (
   PRIMARY KEY (`id`),
   INDEX (`entry_id`),
   INDEX (`external_id`)) ENGINE = InnoDB;
+
+ALTER TABLE weblcms_assignment_publication ADD `check_for_plagiarism` INT(3) UNSIGNED DEFAULT 0;

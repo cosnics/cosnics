@@ -49,19 +49,39 @@ class FilterParametersTranslator
         FilterParameters $filterParameters, DataClassProperties $searchProperties, Condition $contextCondition = null
     )
     {
-        $conditions = [$contextCondition];
+        $conditions = [];
 
-        $conditions[] = $this->translateSearchStringToCondition(
+        if($contextCondition instanceof Condition)
+        {
+            $conditions[] = $contextCondition;
+        }
+
+        $searchCondition = $this->translateSearchStringToCondition(
             $searchProperties, $filterParameters->getGlobalSearchQuery()
         );
 
+        if($searchCondition instanceof Condition)
+        {
+            $conditions[] = $searchCondition;
+        }
+
         foreach ($filterParameters->getDataClassSearchQueries() as $dataClassSearchQuery)
         {
-            $conditions[] = $this->translateSearchStringToCondition(
+            $searchCondition = $this->translateSearchStringToCondition(
                 new DataClassProperties(
                     [$dataClassSearchQuery->getConditionVariable()], $dataClassSearchQuery->getSearchQuery()
                 )
             );
+
+            if($searchCondition instanceof Condition)
+            {
+                $conditions[] = $searchCondition;
+            }
+        }
+
+        if(empty($conditions))
+        {
+            return null;
         }
 
         return new AndCondition($conditions);
@@ -92,6 +112,11 @@ class FilterParametersTranslator
             }
 
             $conditions[] = new OrCondition($searchPartConditions);
+        }
+
+        if(empty($conditions))
+        {
+            return null;
         }
 
         return new AndCondition($conditions);
