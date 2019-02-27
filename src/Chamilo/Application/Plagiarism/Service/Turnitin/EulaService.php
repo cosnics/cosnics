@@ -82,14 +82,15 @@ class EulaService
 
     /**
      * @param string $version
+     * @param string $language
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
-    public function getEULAPage(string $version = 'latest')
+    public function getEULAPage(string $version = 'latest', $language = 'en_US')
     {
-        return $this->turnitinRepository->getEULAPage($version);
+        return $this->turnitinRepository->getEULAPage($version, $language);
     }
 
     /**

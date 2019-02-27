@@ -73,8 +73,10 @@ class TurnitinEulaComponent extends Manager
             $html[] = '</div>';
         }
 
+        $language = $this->getTranslator()->getLocale() == 'nl' ? 'nl-NL' : 'en-US';
+
         $html[] = '<div class="eula-info-page">';
-        $html[] = $this->getEulaService()->getEULAPage();
+        $html[] = $this->getEulaService()->getEULAPage('latest', $language);
         $html[] = '</div>';
 
         if(!$viewOnly)

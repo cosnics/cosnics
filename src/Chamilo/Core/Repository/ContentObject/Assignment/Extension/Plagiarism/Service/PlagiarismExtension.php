@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service;
 
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\EulaNotAcceptedException;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\EntryComponent;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\ExtensionComponent;
@@ -103,6 +104,11 @@ class PlagiarismExtension implements ExtensionInterface
         EntryComponent $entryComponent, Assignment $assignment, Entry $entry, User $user
     )
     {
+        if(!$this->getAssignmentServiceBridge()->canEditAssignment())
+        {
+            return null;
+        }
+
         $createUrl = $entryComponent->get_url(
             [
                 \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EXTENSION,
@@ -186,6 +192,11 @@ class PlagiarismExtension implements ExtensionInterface
      */
     public function buildButtonToolbarForEntityBrowser(ViewerComponent $viewerComponent, ButtonToolBar $buttonToolBar)
     {
+        if(!$this->getAssignmentServiceBridge()->canEditAssignment())
+        {
+            return;
+        }
+
         $browserUrl = $viewerComponent->get_url(
             [
                 \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EXTENSION,
@@ -213,5 +224,13 @@ class PlagiarismExtension implements ExtensionInterface
     protected function getEntryPlagiarismResultServiceBridge()
     {
         return $this->bridgeManager->getBridgeByInterface(EntryPlagiarismResultServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return AssignmentServiceBridgeInterface
+     */
+    protected function getAssignmentServiceBridge()
+    {
+        return $this->bridgeManager->getBridgeByInterface(AssignmentServiceBridgeInterface::class);
     }
 }
