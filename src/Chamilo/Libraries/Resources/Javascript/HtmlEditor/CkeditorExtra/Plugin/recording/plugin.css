@@ -1,26 +1,95 @@
-.quick-question {
-    padding: 8px;
-    margin: 10px;
-    background: #eee;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0 1px 1px #fff inset, 0 -1px 0px #ccc inset;
+* {
+    padding: 0;
+    margin: 0;
 }
 
-
-.a-question, .an-answer {
-    box-shadow: 0 1px 1px #ddd inset;
-    border: 1px solid #cccccc;
-    border-radius: 5px;
-    background: #fff;
+a {
+    color: #337ab7;
 }
 
-.a-question {
-    margin: 8px;
-    padding: 5px 8px;
+p {
+    margin-top: 1rem;
 }
 
-.an-answer {
-    margin: 8px;
-    padding: 6px;
+a:hover {
+    color: #23527c;
+}
+
+a:visited {
+    color: #8d75a3;
+}
+
+body {
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: sans-serif;
+    max-width: 28rem;
+    position: relative;
+}
+
+#icon {
+    margin: 0 auto;
+    text-align: center;
+    font-size: 5rem;
+}
+
+#controls {
+    display: block;
+    margin: 2rem;
+    text-align: center;
+
+}
+
+button {
+    font-size: 1.042em;
+    font-family: Open Sans, sans-serif;
+    padding: .708em 1.25em;
+    border-radius: 2em;
+    margin: 0 .5em;
+    border: 0;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+    background-color: #c72d1c;
+    color: white;
+}
+
+button:hover, button:focus {
+    outline: none;
+    background: #c72d1c;
+}
+
+button::-moz-focus-inner {
+    border: 0;
+}
+
+button:active {
+    background-color: #7d211a;
+}
+
+button:disabled {
+    pointer-events: none;
+    background: lightgray;
+}
+
+button:first-child {
+    margin-left: 0;
+}
+
+audio {
+    display: block;
+    width: 100%;
+    margin-top: 0.2rem;
+}
+
+li {
+    list-style: none;
+    margin-bottom: 1rem;
+}
+
+#formats {
+    margin-top: 0.5rem;
+    font-size: 80%;
 }
