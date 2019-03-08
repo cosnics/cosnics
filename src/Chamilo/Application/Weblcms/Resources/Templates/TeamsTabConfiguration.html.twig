@@ -10,29 +10,21 @@
 
 {% endif %}
 
-<form>
-    <button onclick="onClick()"> Install!</button>
-</form>
+<button onclick="onClick()" > Install!</button>
 
 <script type="text/javascript">
-    var baseUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
+        function onClick() {
+            var baseUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
+            microsoftTeams.initialize();
+            microsoftTeams.settings.setSettings({
+                entityId: "courses",
+                contentUrl: baseUrl + '?go=TeamsTabContent&application=Chamilo\\Application\\Weblcms',
+                suggestedDisplayName: "Chamilo",
+                websiteUrl: baseUrl,
+                removeUrl: "https://teams-get-started-sample.azurewebsites.net/tabremove.html",
+            });
+            microsoftTeams.settings.setValidityState(true);
 
-    microsoftTeams.initialize();
-    microsoftTeams.settings.registerOnSaveHandler(function (saveEvent) {
-
-        microsoftTeams.settings.setSettings({
-            entityId: "weblcms",
-            contentUrl: baseUrl + '?go=TeamsTabContent&application=Chamilo\\Application\\Weblcms',
-            suggestedDisplayName: "Chamilo",
-            websiteUrl: baseUrl,
-            removeUrl: "https://teams-get-started-sample.azurewebsites.net/tabremove.html",
-        });
-
-        saveEvent.notifySuccess();
-    });
-
-
-    function onClick() {
-        microsoftTeams.settings.setValidityState(true);
-    }
+            return false;
+        }
 </script>
