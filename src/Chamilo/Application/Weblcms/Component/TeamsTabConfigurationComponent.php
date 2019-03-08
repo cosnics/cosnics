@@ -18,10 +18,15 @@ class TeamsTabConfigurationComponent extends Manager implements NoAuthentication
 
     /**
      * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function run(): string
     {
-        return 'Hello World!';
+        return $this->getTwig()->render(
+            'Chamilo\Application\Weblcms:TeamsTabConfiguration.html.twig'
+        );
     }
 
     /**

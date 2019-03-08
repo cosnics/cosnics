@@ -1,0 +1,38 @@
+{% set appContext = 'Chamilo\\Application\\Weblcms' %}
+
+<script src="https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js"
+        integrity="sha384-wHgBQlRj8iDw76cpan9ViEoOBiIJid4ACaE6vA2gUJPtn15GJnMmUGS+fLxKBWeI"
+        crossorigin="anonymous"></script>
+
+{% if error %}
+
+    <div class="alert alert-danger">{{ error }}</div>
+
+{% endif %}
+
+<form>
+    <button onclick="onClick()"> Install!</button>
+</form>
+
+<script type="text/javascript">
+    var baseUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
+
+    microsoftTeams.initialize();
+    microsoftTeams.settings.registerOnSaveHandler(function (saveEvent) {
+
+        microsoftTeams.settings.setSettings({
+            entityId: "weblcms",
+            contentUrl: baseUrl + '?go=TeamsTabContent&application=Chamilo\\Application\\Weblcms',
+            suggestedDisplayName: "Chamilo",
+            websiteUrl: baseUrl,
+            removeUrl: "https://teams-get-started-sample.azurewebsites.net/tabremove.html",
+        });
+
+        saveEvent.notifySuccess();
+    });
+
+
+    function onClick() {
+        microsoftTeams.settings.setValidityState(true);
+    }
+</script>
