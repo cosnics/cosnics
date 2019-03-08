@@ -1,19 +1,17 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Component;
+namespace Chamilo\Application\Weblcms\Component;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\CourseTeamService;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
- * Class TabConfigurationComponent
- * @package Chamilo\Application\Weblcms\Tool\Implementation\Teams\Component
+ * Class TabContentComponent
+ * @todo: location
  */
-class TabConfigurationComponent extends Manager implements NoAuthenticationSupport
+class TeamsTabContentComponent extends Manager implements NoAuthenticationSupport
 {
 
     use ContainerAwareTrait;
