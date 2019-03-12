@@ -26,6 +26,7 @@ class BrowserComponent extends Manager implements TableSupport
      * @return \Chamilo\Libraries\Format\Response\Response|string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Exception
      */
     public function run()
     {
@@ -61,11 +62,24 @@ class BrowserComponent extends Manager implements TableSupport
         $table->setSearchForm($toolbarRenderer->getSearchForm());
 
         $html = array();
-
         $html[] = $this->render_header();
-        $html[] = $toolbarRenderer->render();
-        $html[] = $table->render();
+
+        if($this->getContentObjectPlagiarismChecker()->isInMaintenanceMode())
+        {
+            $html[] = '<div class="alert alert-warning">';
+            $html[] = $this->getTranslator()->trans('MaintenanceModeInfo', [], Manager::context());
+            $html[] = '</div>';
+        }
+        else
+        {
+
+            $html[] = $toolbarRenderer->render();
+            $html[] = $table->render();
+        }
+
         $html[] = $this->render_footer();
+
+
 
         return new Response(null, implode(PHP_EOL, $html));
     }

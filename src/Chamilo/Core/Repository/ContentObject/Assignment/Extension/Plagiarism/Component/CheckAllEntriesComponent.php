@@ -29,10 +29,7 @@ class CheckAllEntriesComponent extends Manager
      */
     function run()
     {
-        if (!$this->getAssignmentServiceBridge()->canEditAssignment())
-        {
-            throw new NotAllowedException();
-        }
+        $this->validateAccess();
 
         try
         {

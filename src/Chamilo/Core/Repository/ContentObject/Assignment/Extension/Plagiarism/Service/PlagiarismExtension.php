@@ -145,7 +145,8 @@ class PlagiarismExtension implements ExtensionInterface
                 'IN_PROGRESS' => $hasResult ? $submissionStatus->isInProgress() : false,
                 'SUCCESS' => $hasResult ? $submissionStatus->isReportGenerated() : false,
                 'FAILED' => $hasResult ? $submissionStatus->isFailed() : false,
-                'CAN_RETRY' => $hasResult ? $submissionStatus->canRetry() : false
+                'CAN_RETRY' => $hasResult ? $submissionStatus->canRetry() : false,
+                'MAINTENANCE_MODE' => $this->plagiarismChecker->isInMaintenanceMode()
             ]
         );
     }
@@ -159,6 +160,11 @@ class PlagiarismExtension implements ExtensionInterface
      */
     public function entryCreated(Assignment $assignment, Entry $entry, User $user)
     {
+        if($this->plagiarismChecker->isInMaintenanceMode())
+        {
+            return;
+        }
+
         if($this->getEntryPlagiarismResultServiceBridge()->checkForPlagiarismAfterSubmission())
         {
             if(!$this->plagiarismChecker->canCheckForPlagiarism($entry))
@@ -192,6 +198,11 @@ class PlagiarismExtension implements ExtensionInterface
      */
     public function buildButtonToolbarForEntityBrowser(ViewerComponent $viewerComponent, ButtonToolBar $buttonToolBar)
     {
+        if($this->plagiarismChecker->isInMaintenanceMode())
+        {
+            return;
+        }
+
         if(!$this->getAssignmentServiceBridge()->canEditAssignment())
         {
             return;

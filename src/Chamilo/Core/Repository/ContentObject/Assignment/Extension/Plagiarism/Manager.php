@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Servic
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\PlagiarismChecker;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus
@@ -80,5 +81,21 @@ abstract class Manager extends Application
     protected function getPlagiarismChecker()
     {
         return $this->getService(PlagiarismChecker::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
+    public function validateAccess(): void
+    {
+        if (!$this->getAssignmentServiceBridge()->canEditAssignment())
+        {
+            throw new NotAllowedException();
+        }
+
+        if ($this->getPlagiarismChecker()->isInMaintenanceMode())
+        {
+            throw new NotAllowedException();
+        }
     }
 }

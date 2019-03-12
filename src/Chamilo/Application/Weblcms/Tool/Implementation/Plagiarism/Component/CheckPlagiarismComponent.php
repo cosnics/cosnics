@@ -20,12 +20,18 @@ class CheckPlagiarismComponent extends Manager
      * @return \Chamilo\Libraries\Format\Response\Response|string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
     public function run()
     {
         if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
+        }
+
+        if($this->getContentObjectPlagiarismChecker()->isInMaintenanceMode())
+        {
+           throw new NotAllowedException();
         }
 
         if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())

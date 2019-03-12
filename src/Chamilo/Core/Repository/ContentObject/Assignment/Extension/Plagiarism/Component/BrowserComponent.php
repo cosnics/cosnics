@@ -30,10 +30,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     function run()
     {
-        if (!$this->getAssignmentServiceBridge()->canEditAssignment())
-        {
-            throw new NotAllowedException();
-        }
+        $this->validateAccess();
 
         $entityType = $this->getAssignmentServiceBridge()->getCurrentEntityType();
 

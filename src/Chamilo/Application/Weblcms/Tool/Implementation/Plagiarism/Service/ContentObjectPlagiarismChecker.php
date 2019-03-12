@@ -220,7 +220,7 @@ class ContentObjectPlagiarismChecker
         {
             throw new PlagiarismException(
                 sprintf(
-                    'The given content object %s has not been checked for plagiarism yet so the result can not be retrieved'
+                    'The plagiarism result with id %s could not be found', $contentObjectPlagiarismResultId
                 )
             );
         }
@@ -261,10 +261,19 @@ class ContentObjectPlagiarismChecker
      * @param string $redirectToURL
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
     public function getRedirectToEULAPageResponse(string $redirectToURL)
     {
         return $this->plagiarismChecker->getRedirectToEULAPageResponse($redirectToURL);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInMaintenanceMode()
+    {
+        return $this->plagiarismChecker->isInMaintenanceMode();
     }
 
 }

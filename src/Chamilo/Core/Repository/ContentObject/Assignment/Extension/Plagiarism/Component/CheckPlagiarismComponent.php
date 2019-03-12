@@ -28,10 +28,7 @@ class CheckPlagiarismComponent extends Manager
      */
     function run()
     {
-        if(!$this->getAssignmentServiceBridge()->canEditAssignment())
-        {
-            throw new NotAllowedException();
-        }
+        $this->validateAccess();
 
         $entry = $this->getExtensionComponent()->getEntry();
         if (!$entry instanceof Entry)

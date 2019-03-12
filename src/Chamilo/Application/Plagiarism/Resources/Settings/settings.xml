@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package context="Chamilo\Core\Home">
+<package context="Chamilo\Application\Plagiarism">
     <settings>
+        <category name="general">
+            <setting
+                    name="maintenance_mode"
+                    field="toggle"
+                    default="1">
+                <options type="static">
+                    <option
+                            name="maintenance_mode"
+                            value="0" />
+                </options>
+            </setting>
+        </category>
         <category name="turnitin">
             <setting name="turnitin_api_url" field="text" default="" />
             <setting name="turnitin_secret_key" field="text" default="" />
