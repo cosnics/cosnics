@@ -37,14 +37,9 @@
 
         <service
             id="chamilo.core.user.service.user_service"
-            class="Chamilo\Core\User\Service\UserService">
-            <argument
-                type="service"
-                id="chamilo.core.user.storage.repository.user_repository" />
-            <argument
-                type="service"
-                id="chamilo.libraries.hashing.hashing_utilities" />
-        </service>
+            alias="Chamilo\Core\User\Service\UserService" />
+
+        <service id="Chamilo\Core\User\Service\UserService" autowire="true" />
 
         <service
                 id="chamilo.core.user.service.password_generator"
@@ -53,8 +48,10 @@
 
         <service
             id="chamilo.core.user.storage.repository.user_repository"
-            class="Chamilo\Core\User\Storage\Repository\UserRepository">
+            alias="Chamilo\Core\User\Storage\Repository\UserRepository">
         </service>
+
+        <service id="Chamilo\Core\User\Storage\Repository\UserRepository" autowire="true" />
 
         <service
             id="chamilo.core.user.service.session_handler"
@@ -86,6 +83,8 @@
                 type="service"
                 id="chamilo.core.user.storage.repository.session_repository" />
         </service>
+
+        <service id="Chamilo\Core\User\Service\PasswordSecurity" autowire="true" />
 
     </services>
 </container>

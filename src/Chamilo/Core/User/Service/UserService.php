@@ -19,22 +19,22 @@ class UserService
      *
      * @var \Chamilo\Core\User\Storage\Repository\UserRepository
      */
-    private $userRepository;
+    protected $userRepository;
 
     /**
-     * @var HashingUtilities
+     * @var \Chamilo\Core\User\Service\PasswordSecurity
      */
-    protected $hashingUtilities;
+    protected $passwordSecurity;
 
     /**
      *
      * @param \Chamilo\Core\User\Storage\Repository\UserRepository $userRepository
-     * @param \Chamilo\Libraries\Hashing\HashingUtilities $hashingUtilities
+     * @param \Chamilo\Core\User\Service\PasswordSecurity $passwordSecurity
      */
-    public function __construct(UserRepository $userRepository, HashingUtilities $hashingUtilities)
+    public function __construct(UserRepository $userRepository, PasswordSecurity $passwordSecurity)
     {
         $this->userRepository = $userRepository;
-        $this->hashingUtilities = $hashingUtilities;
+        $this->passwordSecurity = $passwordSecurity;
     }
 
     /**
@@ -189,7 +189,7 @@ class UserService
         $user->set_email($emailAddress);
         $user->set_auth_source($authSource);
 
-        $user->set_password($this->hashingUtilities->hashString($password));
+        $this->passwordSecurity->setPasswordForUser($user, $password);
 
         if (!$this->userRepository->create($user))
         {

@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Form;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\PasswordSecurity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
@@ -46,11 +47,11 @@ class InvitationRegistrationForm extends FormValidator
 
     /**
      *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     * @return \Chamilo\Core\User\Service\PasswordSecurity
      */
-    public function getHashingUtilities()
+    public function getPasswordSecurity()
     {
-        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+        return $this->getService(PasswordSecurity::class);
     }
 
     /**
@@ -155,7 +156,9 @@ class InvitationRegistrationForm extends FormValidator
 
         $user = new User();
         $user->set_username($values[User::PROPERTY_USERNAME]);
-        $user->set_password($this->getHashingUtilities()->hashString($values[self::PASSWORD]));
+
+        $this->getPasswordSecurity()->setPasswordForUser($user, $values[self::PASSWORD]);
+
         $user->set_firstname($values[User::PROPERTY_FIRSTNAME]);
         $user->set_lastname($values[User::PROPERTY_LASTNAME]);
         $user->set_email($values[User::PROPERTY_EMAIL]);

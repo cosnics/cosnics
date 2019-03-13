@@ -4,13 +4,13 @@ namespace Chamilo\Core\User\Test\Unit\Service\UserImporter;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Domain\UserImporter\ImportUserData;
+use Chamilo\Core\User\Service\PasswordSecurity;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserInterface;
 use Chamilo\Core\User\Service\UserImporter\UserImporter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Translation\Translator;
@@ -43,9 +43,9 @@ class UserImporterTest extends ChamiloTestCase
     protected $configurationConsulterMock;
 
     /**
-     * @var HashingUtilities | \PHPUnit_Framework_MockObject_MockObject
+     * @var PasswordSecurity | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $hashingUtilitiesMock;
+    protected $passwordSecurityMock;
 
     /**
      * @var MailerInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -76,7 +76,7 @@ class UserImporterTest extends ChamiloTestCase
         $this->configurationConsulterMock = $this->getMockBuilder(ConfigurationConsulter::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->hashingUtilitiesMock = $this->getMockBuilder(HashingUtilities::class)
+        $this->passwordSecurityMock = $this->getMockBuilder(PasswordSecurity::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->mailerMock = $this->getMockBuilder(MailerInterface::class)
@@ -87,7 +87,7 @@ class UserImporterTest extends ChamiloTestCase
 
         $this->userImporter = new UserImporter(
             $this->importParserFactoryMock, $this->userRepositoryMock, $this->configurationConsulterMock,
-            $this->hashingUtilitiesMock, $this->mailerMock, $this->translatorMock
+            $this->passwordSecurityMock, $this->mailerMock, $this->translatorMock
         );
 
         $this->translatorMock->expects($this->any())
@@ -186,6 +186,9 @@ class UserImporterTest extends ChamiloTestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testImportUsersWithInvalidUsername()
     {
         $importUsersData = [];
@@ -205,6 +208,9 @@ class UserImporterTest extends ChamiloTestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testImportUsersWithInvalidAction()
     {
         $importUsersData = [];
@@ -224,6 +230,9 @@ class UserImporterTest extends ChamiloTestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testImportUsersWithInvalidActive()
     {
         $importUsersData = [];
