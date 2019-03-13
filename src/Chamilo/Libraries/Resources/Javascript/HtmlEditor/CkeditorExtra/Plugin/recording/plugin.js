@@ -1,14 +1,11 @@
-(function()
-{
-    function addQueryString(url, params)
-    {
+(function () {
+    function addQueryString(url, params) {
         var queryString = [];
 
         if (!params)
             return url;
-        else
-        {
-            for ( var i in params)
+        else {
+            for (var i in params)
                 queryString.push(i + "=" + encodeURIComponent(params[i]));
         }
 
@@ -16,11 +13,9 @@
     }
 
     var openRepoViewerCmd = {
-        exec : function(editor)
-        {
+        exec: function (editor) {
             var width = editor.config['filebrowserChamiloWindowWidth'] || editor.config.filebrowserWindowWidth || '30%';
-            var height = editor.config['filebrowserChamiloWindowHeight'] || editor.config.filebrowserWindowHeight
-                || '50%';
+            var height = editor.config['filebrowserChamiloWindowHeight'] || editor.config.filebrowserWindowHeight || '50%';
 
             var params = {};
             params.CKEditor = editor.name;
@@ -34,19 +29,16 @@
     };
 
     var openDialog = {
-        exec : function(editor)
-        {
+        exec: function (editor) {
             var element = editor.getSelection().getSelectedElement();
-            if (element.is('img') && element.data('cke-real-element-type') == 'chamilo')
-            {
+            if (element.is('img') && element.data('cke-real-element-type') == 'chamilo') {
                 var realElement = CKEDITOR.dom.element.createFromHtml(decodeURIComponent(element
                     .getAttribute('data-cke-realelement')), this.document);
                 var objectType = realElement.getAttribute('type');
 
                 var context = (objectType == 'video') ? 'Hogent' : 'Chamilo';
 
-                if (!CKEDITOR.dialog.exists(objectType + 'Dialog'))
-                {
+                if (!CKEDITOR.dialog.exists(objectType + 'Dialog')) {
                     CKEDITOR.dialog.add(objectType + 'Dialog', web_path + context + '/Core/Repository/ContentObject/' + toTitleCase(objectType)
                         + '/Resources/Javascript/HtmlEditor/Ckeditor/dialog.js');
                 }
@@ -56,48 +48,41 @@
         }
     };
 
-    function toTitleCase(str)
-    {
-        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    function toTitleCase(str) {
+        return str.replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
     }
 
-    function concatObject(obj)
-    {
+    function concatObject(obj) {
         str = '';
-        for (prop in obj)
-        {
+        for (prop in obj) {
             str += prop + " value :" + obj[prop] + "\n";
         }
         return (str);
     }
 
-    function setObject(href, objectId, objectType, objectSecurityCode, data)
-    {
-        if (!CKEDITOR.dialog.exists(objectType + 'Dialog'))
-        {
+    function setObject(href, objectId, objectType, objectSecurityCode, data) {
+        if (!CKEDITOR.dialog.exists(objectType + 'Dialog')) {
             CKEDITOR.dialog.add(objectType + 'Dialog', href);
         }
 
-        this.openDialog(objectType + 'Dialog', function(dialog)
-        {
+        this.openDialog(objectType + 'Dialog', function (dialog) {
             var object = this;
 
-            object.on('setVars', function(event)
-            {
+            object.on('setVars', function (event) {
                 object.setValueOf('info', 'security_code', objectSecurityCode);
                 object.setValueOf('info', 'source', objectId);
                 object.setValueOf('info', 'type', objectType);
             });
 
-            object.on('show', function(event)
-            {
+            object.on('show', function (event) {
                 object.fireOnce('setVars');
             });
         });
     }
 
-    function createChamiloFakeElement(editor, realElement, isResizable)
-    {
+    function createChamiloFakeElement(editor, realElement, isResizable) {
         return editor.createChamiloFakeParserElement(realElement, 'cke_chamilo_' + realElement.attributes.type,
             'chamilo', isResizable);
     }
@@ -106,47 +91,41 @@
 
     // Register a plugin named "chamilo".
     CKEDITOR.plugins.add(pluginName, {
-        lang : 'nl,en-gb',
-        icons : 'recording',
-        init : function(editor)
-        {
+        lang: 'nl,en-gb',
+        icons: 'recording',
+        init: function (editor) {
 
             editor._.chamiloFn = CKEDITOR.tools.addFunction(setObject, editor);
-            editor.on('destroy', function()
-            {
+            editor.on('destroy', function () {
                 CKEDITOR.tools.removeFunction(this._.chamiloFn);
             });
 
             editor.addCommand(pluginName, openRepoViewerCmd);
             editor.addCommand('dialog', openDialog);
             editor.ui.addButton && editor.ui.addButton('Recording', {
-                label : editor.lang.chamilo.label,
-                command : pluginName
+                label: editor.lang.recording.label,
+                command: pluginName
             });
 
             // If the "menu" plugin is loaded, register the menu items.
-            if (editor.addMenuItems)
-            {
+            if (editor.addMenuItems) {
                 editor.addMenuItems({
-                    recording : {
-                        label : editor.lang.chamilo.properties,
-                        command : 'dialog',
-                        group : 'recording'
+                    recording: {
+                        label: editor.lang.recording.properties,
+                        command: 'dialog',
+                        group: 'recording'
                     }
                 });
             }
 
-            editor.on('doubleclick', function(evt)
-            {
+            editor.on('doubleclick', function (evt) {
                 var element = evt.data.element;
 
-                if (element.is('img') && element.data('cke-real-element-type') == 'chamilo')
-                {
+                if (element.is('img') && element.data('cke-real-element-type') == 'chamilo') {
                     var realElement = CKEDITOR.dom.element.createFromHtml(decodeURIComponent(element
                         .getAttribute('data-cke-realelement')), this.document);
                     var objectType = realElement.getAttribute('type');
-                    if (!CKEDITOR.dialog.exists(objectType + 'Dialog'))
-                    {
+                    if (!CKEDITOR.dialog.exists(objectType + 'Dialog')) {
                         CKEDITOR.dialog.add(objectType + 'Dialog', web_path + 'Chamilo/Core/Repository/ContentObject/' + toTitleCase(objectType)
                             + '/Resources/Javascript/HtmlEditor/Ckeditor/dialog.js');
                     }
@@ -154,38 +133,31 @@
                     evt.data.dialog = objectType + 'Dialog';
                 }
 
-            });
+            }
+            );
 
             // If the "contextmenu" plugin is loaded, register the listeners.
-            if (editor.contextMenu)
-            {
-                editor.contextMenu.addListener(function(element, selection)
-                {
+            if (editor.contextMenu) {
+                editor.contextMenu.addListener(function (element, selection) {
                     if (element && element.is('img') && !element.isReadOnly()
-                        && element.data('cke-real-element-type') == 'chamilo')
-                    {
+                        && element.data('cke-real-element-type') == 'chamilo') {
                         return {
-                            chamilo : CKEDITOR.TRISTATE_OFF
+                            chamilo: CKEDITOR.TRISTATE_OFF
                         };
-                    }
-                    else
-                    {
+                    } else {
                         return null;
                     }
                 });
             }
         },
 
-        afterInit : function(editor)
-        {
+        afterInit: function (editor) {
             var dataProcessor = editor.dataProcessor, dataFilter = dataProcessor && dataProcessor.dataFilter;
 
-            if (dataFilter)
-            {
+            if (dataFilter) {
                 dataFilter.addRules({
-                    elements : {
-                        'resource' : function(element)
-                        {
+                    elements: {
+                        'resource': function (element) {
                             return createChamiloFakeElement(editor, element, true);
                         }
                     }
