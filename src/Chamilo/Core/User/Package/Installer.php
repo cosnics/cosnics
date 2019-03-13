@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Package;
 
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\PasswordSecurity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
@@ -30,11 +31,11 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     /**
      *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     * @return \Chamilo\Core\User\Service\PasswordSecurity
      */
-    public function getHashingUtilities()
+    public function getPasswordSecurity()
     {
-        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+        return $this->getService(PasswordSecurity::class);
     }
 
     /**
@@ -97,7 +98,9 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $user->set_lastname($values['admin_surname']);
         $user->set_firstname($values['admin_firstname']);
         $user->set_username($values['admin_username']);
-        $user->set_password($this->getHashingUtilities()->hashString($values['admin_password']));
+
+        $this->getPasswordSecurity()->setPasswordForUser($user, $values['admin_password']);
+
         $user->set_auth_source('Platform');
         $user->set_email($values['admin_email']);
         $user->set_status(User::STATUS_TEACHER);
@@ -126,7 +129,9 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $user->set_lastname(Translation::get('Anonymous'));
         $user->set_firstname(Translation::get('Mr'));
         $user->set_username('anonymous');
-        $user->set_password($this->getHashingUtilities()->hashString($values['admin_password']));
+
+        $this->getPasswordSecurity()->setPasswordForUser($user, $values['admin_password']);
+
         $user->set_auth_source('Platform');
         $user->set_email($values['admin_email']);
         $user->set_status(User::STATUS_STUDENT);
@@ -150,7 +155,9 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $user->set_lastname('Doe');
         $user->set_firstname('John');
         $user->set_username('JohnDoe');
-        $user->set_password($this->getHashingUtilities()->hashString('JohnDoe'));
+
+        $this->getPasswordSecurity()->setPasswordForUser($user, 'JohnDoe');
+
         $user->set_auth_source('Platform');
         $user->set_email('john.doe@nowhere.org');
         $user->set_status(User::STATUS_STUDENT);

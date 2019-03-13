@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Form;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\PasswordSecurity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Import;
@@ -65,11 +66,11 @@ class UserImportForm extends FormValidator
 
     /**
      *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     * @return \Chamilo\Core\User\Service\PasswordSecurity
      */
-    public function getHashingUtilities()
+    public function getPasswordSecurity()
     {
-        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+        return $this->getService(PasswordSecurity::class);
     }
 
     public function build_importing_form()
@@ -153,7 +154,7 @@ class UserImportForm extends FormValidator
                     $password = uniqid();
                 }
 
-                $user->set_password($this->getHashingUtilities()->hashString($password));
+                $this->getPasswordSecurity()->setPasswordForUser($user, $password);
 
                 $user->set_email($csvuser[User::PROPERTY_EMAIL]);
                 $user->set_status($csvuser[User::PROPERTY_STATUS]);
@@ -259,8 +260,7 @@ class UserImportForm extends FormValidator
                 $pass = $csvuser[User::PROPERTY_PASSWORD];
                 if ($pass)
                 {
-                    $pass = $this->getHashingUtilities()->hashString($pass);
-                    $user->set_password($pass);
+                    $this->getPasswordSecurity()->setPasswordForUser($user, $pass);
                 }
 
                 if (! $user->update())

@@ -185,7 +185,8 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
     private function create_new_password($user)
     {
         $password = Text::generate_password();
-        $user->set_password($this->getHashingUtilities()->hashString($password));
+        $this->getPasswordSecurity()->setPasswordForUser($user, $password);
+
         $user->update();
         $mail_subject = Translation::get('LoginRequest');
         $mail_body[] = '<div style="font-family:arial, sans-serif">';
