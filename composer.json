@@ -40,16 +40,16 @@
 		"kriswallsmith/assetic": "^1.4",
 		"ext-json": "*"
 	},
-	"require-dev" : {
-		"behat/behat" : "*",
-		"behat/mink" : "*",
-		"behat/mink-extension" : "*",
-		"behat/mink-goutte-driver" : "*",
-		"composer/composer" : "*@dev",
-		"fabpot/goutte" : "^3",
-		"nelmio/alice" : "^3.0@RC",
-		"phpunit/phpunit" : "7.2.6",
-		"phpstan/phpstan" : "0.11"
+	"require-dev": {
+		"behat/behat": "*",
+		"behat/mink": "*",
+		"behat/mink-extension": "*",
+		"behat/mink-goutte-driver": "*",
+		"composer/composer": "*@dev",
+		"fabpot/goutte": "^3",
+		"nelmio/alice": "^3.0@RC",
+		"phpunit/phpunit": "7.2.6",
+		"phpstan/phpstan": "0.11.3"
 	},
 	"repositories": [
 		{
