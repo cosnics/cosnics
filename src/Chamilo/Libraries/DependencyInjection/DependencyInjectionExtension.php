@@ -119,6 +119,17 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
                     array('event' => 'loadClassMetadata'));
             }
         }
+
+        $this->processPHPStanConfig($config, $container);
+    }
+
+
+    protected function processPHPStanConfig(array $configuration, ContainerBuilder $container)
+    {
+        if(!array_key_exists('phpstan', $configuration))
+        {
+            return;
+        }
     }
 
     /**
