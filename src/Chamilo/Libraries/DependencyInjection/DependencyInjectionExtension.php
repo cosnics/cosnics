@@ -130,6 +130,9 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         {
             return;
         }
+
+        var_dump($configuration['phpstan']);
+        exit;
     }
 
     /**

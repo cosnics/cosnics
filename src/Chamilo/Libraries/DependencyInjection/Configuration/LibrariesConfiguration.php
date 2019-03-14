@@ -66,8 +66,10 @@ class LibrariesConfiguration implements ConfigurationInterface
         $node
             ->children()
                 ->arrayNode('paths')
-                    ->requiresAtLeastOneElement()
-                    ->prototype('scalar')
+                    ->useAttributeAsKey('namespace')
+                    ->arrayPrototype()
+                        ->requiresAtLeastOneElement()
+                        ->prototype('scalar')
                 ->end()
             ->end();
 

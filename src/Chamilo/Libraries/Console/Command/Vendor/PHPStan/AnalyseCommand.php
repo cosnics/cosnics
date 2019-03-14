@@ -30,7 +30,7 @@ class AnalyseCommand extends \PHPStan\Command\AnalyseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $paths = ['src/Chamilo/Core/Group/Service', 'src/Chamilo/Core/Group/Repository'];
+        $paths = ['src/Chamilo/Core/Group/Service'];
         $input->setArgument('paths', $paths);
 
         return parent::execute($input, $output);
