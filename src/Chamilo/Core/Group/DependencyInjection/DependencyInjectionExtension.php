@@ -60,6 +60,8 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      * Loads the configuration for this package in the container
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
+     * @throws \Exception
      */
     public function loadContainerConfiguration(ContainerBuilder $container)
     {

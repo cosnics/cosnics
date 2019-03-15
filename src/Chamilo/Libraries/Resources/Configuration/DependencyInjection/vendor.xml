@@ -128,5 +128,7 @@
 
         <service id="symfony.component.filesystem.filesystem" class="Symfony\Component\Filesystem\Filesystem" />
 
+        <service id="Chamilo\Libraries\Console\Command\Vendor\PHPStan\PHPStanPackages" autowire="true" />
+
     </services>
 </container>

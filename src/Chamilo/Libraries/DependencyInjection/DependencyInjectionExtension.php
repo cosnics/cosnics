@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Console\Command\Vendor\PHPStan\PHPStanPackages;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\AuthenticationCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheServicesConstructorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
@@ -131,8 +132,13 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
             return;
         }
 
-        var_dump($configuration['phpstan']);
-        exit;
+        $paths = $configuration['phpstan']['paths'];
+
+        if($container->hasDefinition(PHPStanPackages::class))
+        {
+            $phpStanPackagesDefinition = $container->getDefinition(PHPStanPackages::class);
+            $phpStanPackagesDefinition->addMethodCall('setPaths', array($paths));
+        }
     }
 
     /**
