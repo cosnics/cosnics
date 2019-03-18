@@ -35,7 +35,7 @@ function startRecording() {
 	*/
 
     navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-        __log("getUserMedia() success, stream created, initializing WebAudioRecorder...");
+        //__log("getUserMedia() success, stream created, initializing WebAudioRecorder...");
 
         /*
             create an audio context after getUserMedia is called
@@ -72,16 +72,16 @@ function startRecording() {
             numChannels: 2, //2 is the default, mp3 encoding supports only 2
             onEncoderLoading: function (recorder, encoding) {
                 // show "loading encoder..." display
-                __log("Loading " + encoding + " encoder...");
+                //__log("Loading " + encoding + " encoder...");
             },
             onEncoderLoaded: function (recorder, encoding) {
                 // hide "loading encoder..." display
-                __log(encoding + " encoder loaded");
+                //__log(encoding + " encoder loaded");
             }
         });
 
         recorder.onComplete = function (recorder, blob) {
-            __log("Encoding complete");
+            //__log("Encoding complete");
             createDownloadLink(blob, recorder.encoding);
             //encodingTypeSelect.disabled = false;
         };
@@ -96,7 +96,7 @@ function startRecording() {
         //start the recording process
         recorder.startRecording();
 
-        __log("Recording started");
+        //__log("Recording started");
 
     }).catch(function (err) {
         //enable the record button if getUSerMedia() fails
@@ -123,7 +123,7 @@ function stopRecording() {
     //tell the recorder to finish the recording (stop recording + encode the recorded audio)
     recorder.finishRecording();
 
-    __log('Recording stopped');
+    //__log('Recording stopped');
 }
 
 function createDownloadLink(blob, encoding) {
@@ -139,7 +139,7 @@ function createDownloadLink(blob, encoding) {
 
     //link the a element to the blob
     link.href = url;
-    link.download = new Date().toISOString() + '.' + encoding;
+    link.download = window.location.hostname + '-' + new Date().toISOString() + '.' + encoding;
     link.innerHTML = link.download;
 
     //add the new audio and a elements to the li element
