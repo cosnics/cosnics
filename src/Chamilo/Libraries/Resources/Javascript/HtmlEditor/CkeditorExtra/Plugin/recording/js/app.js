@@ -139,7 +139,7 @@ function createDownloadLink(blob, encoding) {
 
     //link the a element to the blob
     link.href = url;
-    link.download = window.location.hostname + '-' + new Date().toISOString() + '.' + encoding;
+    link.download = 'rec-' + window.location.hostname + '-' + new Date().toISOString() + '.' + encoding;
     link.innerHTML = link.download;
 
     //add the new audio and a elements to the li element
@@ -148,6 +148,7 @@ function createDownloadLink(blob, encoding) {
 
     //add the li element to the ordered list
     recordingsList.appendChild(li);
+    link.click();
 }
 
 
