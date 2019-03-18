@@ -1,6 +1,8 @@
 chamilo.libraries:
   phpstan:
-    paths:
+    packages:
       Chamilo\Application\Plagiarism:
-        - 'Chamilo/Application/Plagiarism/Service'
-        - 'Chamilo/Application/Plagiarism/Domain'
+        level: 2
+        paths:
+          - 'Chamilo/Application/Plagiarism/Service'
+          - 'Chamilo/Application/Plagiarism/Domain'

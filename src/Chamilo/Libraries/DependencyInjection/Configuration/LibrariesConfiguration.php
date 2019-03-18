@@ -63,15 +63,20 @@ class LibrariesConfiguration implements ConfigurationInterface
         $builder = new TreeBuilder();
         $node = $builder->root('phpstan');
 
-        $node
-            ->children()
-                ->arrayNode('paths')
-                    ->useAttributeAsKey('namespace')
-                    ->arrayPrototype()
+        $node->children()
+            ->arrayNode('packages')
+            ->requiresAtLeastOneElement()
+            ->useAttributeAsKey('package')
+            ->arrayPrototype()
+                ->children()
+                    ->scalarNode('level')->end()
+                    ->arrayNode('paths')
                         ->requiresAtLeastOneElement()
                         ->prototype('scalar')
+                    ->end()
                 ->end()
-            ->end();
+            ->end()
+        ->end();
 
         return $node;
     }

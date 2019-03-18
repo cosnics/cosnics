@@ -124,7 +124,10 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $this->processPHPStanConfig($config, $container);
     }
 
-
+    /**
+     * @param array $configuration
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
     protected function processPHPStanConfig(array $configuration, ContainerBuilder $container)
     {
         if(!array_key_exists('phpstan', $configuration))
@@ -132,12 +135,12 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
             return;
         }
 
-        $paths = $configuration['phpstan']['paths'];
+        $packagesConfiguration = $configuration['phpstan']['packages'];
 
         if($container->hasDefinition(PHPStanPackages::class))
         {
             $phpStanPackagesDefinition = $container->getDefinition(PHPStanPackages::class);
-            $phpStanPackagesDefinition->addMethodCall('setPaths', array($paths));
+            $phpStanPackagesDefinition->addMethodCall('setPackagesFromConfiguration', array($packagesConfiguration));
         }
     }
 

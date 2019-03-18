@@ -11,77 +11,52 @@ namespace Chamilo\Libraries\Console\Command\Vendor\PHPStan;
 class PHPStanPackages
 {
     /**
-     * @var string[][]
+     * @var \Chamilo\Libraries\Console\Command\Vendor\PHPStan\PHPStanPackage[]
      */
-    protected $pathsPerNamespace;
+    protected $packages;
 
     /**
-     * @param array $pathsPerNamespace
+     * @param array $packagesConfiguration
      */
-    public function setPaths(array $pathsPerNamespace = array())
+    public function setPackagesFromConfiguration(array $packagesConfiguration = array())
     {
-        foreach ($pathsPerNamespace as $namespace => $paths)
+        foreach ($packagesConfiguration as $packageName => $packageConfiguration)
         {
-            foreach ($paths as $index => $path)
-            {
-                $pathsPerNamespace[$namespace][$index] = 'src/' . $path;
-            }
+            $this->packages[$packageName] =
+                new PHPStanPackage($packageName, $packageConfiguration['level'], $packageConfiguration['paths']);
         }
-
-        $this->pathsPerNamespace = $pathsPerNamespace;
     }
 
     /**
-     * @param string $namespace
-     * @param array $paths
+     * @return \Chamilo\Libraries\Console\Command\Vendor\PHPStan\PHPStanPackage[]
      */
-    public function setPathsForNamespace(string $namespace, array $paths = array())
+    public function getPackages()
     {
-        foreach ($paths as $index => $path)
-        {
-            $paths[$index] = 'src/' . $path;
-        }
-
-        $this->pathsPerNamespace[$namespace] = $paths;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAllPaths()
-    {
-        $allPaths = [];
-
-        foreach ($this->pathsPerNamespace as $paths)
-        {
-            $allPaths = array_merge($allPaths, $paths);
-        }
-
-        return $allPaths;
-    }
-
-    /**
-     * @param string $namespace
-     *
-     * @return array|string[]
-     */
-    public function getPathsForNamespace(string $namespace)
-    {
-        if (!array_key_exists($namespace, $this->pathsPerNamespace))
-        {
-            throw new \InvalidArgumentException(
-                sprintf('The given namespace %s could not be found in the paths list', $namespace)
-            );
-        }
-
-        return $this->pathsPerNamespace[$namespace];
+        return $this->packages;
     }
 
     /**
      * @return string[]
      */
-    public function getNamespaces()
+    public function getPackageNames()
     {
-        return array_keys($this->pathsPerNamespace);
+        return array_keys($this->packages);
+    }
+
+    /**
+     * @param $packageName
+     *
+     * @return \Chamilo\Libraries\Console\Command\Vendor\PHPStan\PHPStanPackage
+     */
+    public function getPackage($packageName)
+    {
+        if (!array_key_exists($packageName, $this->packages))
+        {
+            throw new \InvalidArgumentException(
+                sprintf('The given package name %s could not be found in the list of packages', $packageName)
+            );
+        }
+
+        return $this->packages[$packageName];
     }
 }
