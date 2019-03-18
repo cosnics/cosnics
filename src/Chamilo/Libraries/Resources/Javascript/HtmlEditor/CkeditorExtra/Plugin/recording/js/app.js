@@ -47,7 +47,7 @@ function startRecording() {
 
         //update the format
         //document.getElementById("formats").innerHTML = "Format: 2 channel " + encodingTypeSelect.options[encodingTypeSelect.selectedIndex].value + " @ " + audioContext.sampleRate / 1000 + "kHz";
-        document.getElementById("formats").innerHTML = "Format: 2 channel " + "mp3" + " @ " + audioContext.sampleRate / 1000 + "kHz";
+        //document.getElementById("formats").innerHTML = "Format: 2 channel " + "mp3" + " @ " + audioContext.sampleRate / 1000 + "kHz";
 
         //assign to gumStream for later use
         gumStream = stream;
