@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
@@ -49,9 +50,11 @@ class TrackingService
      * @param AssessmentTrackingService $assessmentTrackingService
      * @param ProgressCalculator $progressCalculator
      */
-    public function __construct(AttemptTrackingService $attemptTrackingService,
+    public function __construct(
+        AttemptTrackingService $attemptTrackingService,
         AttemptSummaryCalculator $attemptSummaryCalculator, AssessmentTrackingService $assessmentTrackingService,
-        ProgressCalculator $progressCalculator)
+        ProgressCalculator $progressCalculator
+    )
     {
         $this->attemptTrackingService = $attemptTrackingService;
         $this->attemptSummaryCalculator = $attemptSummaryCalculator;
@@ -128,6 +131,7 @@ class TrackingService
      * Sets the total time of a given attempt identified by the learning path child attempt id
      *
      * @param $treeNodeAttemptId
+     *
      * @throws ObjectNotExistException
      */
     public function setAttemptTotalTimeByTreeNodeAttemptId($treeNodeAttemptId)
@@ -190,8 +194,10 @@ class TrackingService
      * @param int $score
      * @param string $hint
      */
-    public function saveAnswerForQuestion(LearningPath $learningPath, User $user, TreeNode $treeNode,
-        $questionIdentifier, $answer = '', $score = 0, $hint = '')
+    public function saveAnswerForQuestion(
+        LearningPath $learningPath, User $user, TreeNode $treeNode,
+        $questionIdentifier, $answer = '', $score = 0, $hint = ''
+    )
     {
         $this->assessmentTrackingService->saveAnswerForQuestion(
             $learningPath,
@@ -200,7 +206,8 @@ class TrackingService
             $questionIdentifier,
             $answer,
             $score,
-            $hint);
+            $hint
+        );
     }
 
     /**
@@ -211,7 +218,8 @@ class TrackingService
      * @param TreeNode $treeNode
      * @param int $assessmentScore
      */
-    public function saveAssessmentScore(LearningPath $learningPath, User $user, TreeNode $treeNode, $assessmentScore = 0)
+    public function saveAssessmentScore(LearningPath $learningPath, User $user, TreeNode $treeNode, $assessmentScore = 0
+    )
     {
         $this->assessmentTrackingService->saveAssessmentScore($learningPath, $user, $treeNode, $assessmentScore);
     }
@@ -226,15 +234,18 @@ class TrackingService
      * @param null $treeNodeAttemptId
      * @param int $newScore
      */
-    public function changeAssessmentScore(LearningPath $learningPath, User $user, TreeNode $treeNode, $treeNodeAttemptId,
-        $newScore = 0)
+    public function changeAssessmentScore(
+        LearningPath $learningPath, User $user, TreeNode $treeNode, $treeNodeAttemptId,
+        $newScore = 0
+    )
     {
         $this->assessmentTrackingService->changeAssessmentScore(
             $learningPath,
             $user,
             $treeNode,
             $treeNodeAttemptId,
-            $newScore);
+            $newScore
+        );
     }
 
     /**
@@ -249,8 +260,10 @@ class TrackingService
      * @param int $score
      * @param string $feedback
      */
-    public function changeQuestionScoreAndFeedback(LearningPath $learningPath, User $user, TreeNode $treeNode,
-        $treeNodeAttemptId, $questionIdentifier, $score = 0, $feedback = '')
+    public function changeQuestionScoreAndFeedback(
+        LearningPath $learningPath, User $user, TreeNode $treeNode,
+        $treeNodeAttemptId, $questionIdentifier, $score = 0, $feedback = ''
+    )
     {
         $this->assessmentTrackingService->changeQuestionScoreAndFeedback(
             $learningPath,
@@ -259,7 +272,8 @@ class TrackingService
             $treeNodeAttemptId,
             $questionIdentifier,
             $score,
-            $feedback);
+            $feedback
+        );
     }
 
     /**
@@ -273,14 +287,17 @@ class TrackingService
      *
      * @return TreeNodeQuestionAttempt[]
      */
-    public function getQuestionAttempts(LearningPath $learningPath, User $user, TreeNode $treeNode,
-        $treeNodeAttemptId = null)
+    public function getQuestionAttempts(
+        LearningPath $learningPath, User $user, TreeNode $treeNode,
+        $treeNodeAttemptId = null
+    )
     {
         return $this->assessmentTrackingService->getQuestionAttempts(
             $learningPath,
             $user,
             $treeNode,
-            $treeNodeAttemptId);
+            $treeNodeAttemptId
+        );
     }
 
     /**
@@ -293,14 +310,17 @@ class TrackingService
      *
      * @return TreeNodeQuestionAttempt[]
      */
-    public function registerQuestionAttempts(LearningPath $learningPath, User $user, TreeNode $treeNode,
-        $questionIdentifiers = array())
+    public function registerQuestionAttempts(
+        LearningPath $learningPath, User $user, TreeNode $treeNode,
+        $questionIdentifiers = array()
+    )
     {
         return $this->assessmentTrackingService->registerQuestionAttempts(
             $learningPath,
             $user,
             $treeNode,
-            $questionIdentifiers);
+            $questionIdentifiers
+        );
     }
 
     /**
@@ -311,16 +331,20 @@ class TrackingService
      * @param User $user
      * @param TreeNode $treeNode
      * @param $treeNodeAttemptId
+     *
      * @return TreeNodeAttempt
      */
-    public function getTreeNodeAttemptById(LearningPath $learningPath, User $user, TreeNode $treeNode,
-        $treeNodeAttemptId)
+    public function getTreeNodeAttemptById(
+        LearningPath $learningPath, User $user, TreeNode $treeNode,
+        $treeNodeAttemptId
+    )
     {
         return $this->attemptTrackingService->getTreeNodeAttemptById(
             $learningPath,
             $user,
             $treeNode,
-            $treeNodeAttemptId);
+            $treeNodeAttemptId
+        );
     }
 
     /**
@@ -336,15 +360,18 @@ class TrackingService
      *
      * @throws NotAllowedException
      */
-    public function deleteTreeNodeAttemptById(LearningPath $learningPath, User $user, User $reportingUser,
-        TreeNode $treeNode, $treeNodeAttemptId)
+    public function deleteTreeNodeAttemptById(
+        LearningPath $learningPath, User $user, User $reportingUser,
+        TreeNode $treeNode, $treeNodeAttemptId
+    )
     {
         $this->attemptTrackingService->deleteTreeNodeAttemptById(
             $learningPath,
             $user,
             $reportingUser,
             $treeNode,
-            $treeNodeAttemptId);
+            $treeNodeAttemptId
+        );
     }
 
     /**
@@ -357,14 +384,17 @@ class TrackingService
      *
      * @throws NotAllowedException
      */
-    public function deleteTreeNodeAttemptsForTreeNode(LearningPath $learningPath, User $user, User $reportingUser,
-        TreeNode $treeNode)
+    public function deleteTreeNodeAttemptsForTreeNode(
+        LearningPath $learningPath, User $user, User $reportingUser,
+        TreeNode $treeNode
+    )
     {
         $this->attemptTrackingService->deleteTreeNodeAttemptsForTreeNode(
             $learningPath,
             $user,
             $reportingUser,
-            $treeNode);
+            $treeNode
+        );
     }
 
     /**
@@ -506,18 +536,34 @@ class TrackingService
         return $this->attemptSummaryCalculator->getMinimumScoreInTreeNode($learningPath, $user, $treeNode);
     }
 
+//    /**
+//     * Returns the score for the last attempt of the given user in the given TreeNode
+//     *
+//     * @param LearningPath $learningPath
+//     * @param User $user
+//     * @param TreeNode $treeNode
+//     *
+//     * @return string
+//     */
+//    public function getLastAttemptScoreForTreeNode(LearningPath $learningPath, User $user, TreeNode $treeNode)
+//    {
+//        return $this->attemptSummaryCalculator->getLastAttemptScoreForTreeNode($learningPath, $user, $treeNode);
+//    }
+
     /**
-     * Returns the score for the last attempt of the given user in the given TreeNode
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      *
-     * @param LearningPath $learningPath
-     * @param User $user
-     * @param TreeNode $treeNode
-     *
-     * @return string
+     * @return int
      */
-    public function getLastAttemptScoreForTreeNode(LearningPath $learningPath, User $user, TreeNode $treeNode)
+    public function getLastCompletedAttemptScoreForTreeNode(
+        LearningPath $learningPath, User $user, TreeNode $treeNode
+    )
     {
-        return $this->attemptSummaryCalculator->getLastAttemptScoreForTreeNode($learningPath, $user, $treeNode);
+        return $this->attemptSummaryCalculator->getLastCompletedAttemptScoreForTreeNode(
+            $learningPath, $user, $treeNode
+        );
     }
 
     /**
@@ -529,8 +575,10 @@ class TrackingService
      *
      * @return int
      */
-    public function countLearningPathAttemptsWithUsers(LearningPath $learningPath, TreeNode $treeNode = null,
-        Condition $condition = null)
+    public function countLearningPathAttemptsWithUsers(
+        LearningPath $learningPath, TreeNode $treeNode = null,
+        Condition $condition = null
+    )
     {
         return $this->attemptTrackingService->countLearningPathAttemptsWithUsers($learningPath, $treeNode, $condition);
     }
@@ -548,8 +596,10 @@ class TrackingService
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function getLearningPathAttemptsWithUser(LearningPath $learningPath, TreeNode $treeNode = null,
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array())
+    public function getLearningPathAttemptsWithUser(
+        LearningPath $learningPath, TreeNode $treeNode = null,
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+    )
     {
         return $this->attemptTrackingService->getLearningPathAttemptsWithUser(
             $learningPath,
@@ -557,7 +607,8 @@ class TrackingService
             $condition,
             $offset,
             $count,
-            $orderBy);
+            $orderBy
+        );
     }
 
     /**
@@ -586,8 +637,10 @@ class TrackingService
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function getTargetUsersWithLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode,
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array())
+    public function getTargetUsersWithLearningPathAttempts(
+        LearningPath $learningPath, TreeNode $treeNode,
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+    )
     {
         return $this->attemptTrackingService->getTargetUsersWithLearningPathAttempts(
             $learningPath,
@@ -595,7 +648,8 @@ class TrackingService
             $condition,
             $offset,
             $count,
-            $orderBy);
+            $orderBy
+        );
     }
 
     /**
@@ -647,7 +701,9 @@ class TrackingService
      */
     public function findTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode)
     {
-        return $this->attemptSummaryCalculator->findTargetUsersWithPartialLearningPathAttempts($learningPath, $treeNode);
+        return $this->attemptSummaryCalculator->findTargetUsersWithPartialLearningPathAttempts(
+            $learningPath, $treeNode
+        );
     }
 
     /**
@@ -662,7 +718,8 @@ class TrackingService
     {
         return $this->attemptSummaryCalculator->countTargetUsersWithPartialLearningPathAttempts(
             $learningPath,
-            $treeNode);
+            $treeNode
+        );
     }
 
     /**

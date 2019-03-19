@@ -129,7 +129,7 @@ class Exporter
                 $this->trackingService->getAverageScoreInTreeNode($learningPath, $user, $treeNodeChild),
                 $this->trackingService->getMaximumScoreInTreeNode($learningPath, $user, $treeNodeChild),
                 $this->trackingService->getMinimumScoreInTreeNode($learningPath, $user, $treeNodeChild),
-                $this->trackingService->getLastAttemptScoreForTreeNode($learningPath, $user, $treeNodeChild),
+                $this->trackingService->getLastCompletedAttemptScoreForTreeNode($learningPath, $user, $treeNodeChild),
                 $this->trackingService->getTotalTimeSpentInTreeNode($learningPath, $user, $treeNodeChild)
             );
         }

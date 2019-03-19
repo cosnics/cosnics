@@ -34,6 +34,11 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
      */
     protected $buttonToolbarRenderer;
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Exception
+     */
     function build()
     {
         if (!$this->canViewReporting())

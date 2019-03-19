@@ -276,7 +276,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
             );
 
             $informationValues[$translator->getTranslation('LastScore')] = $progressBarRenderer->render(
-                $trackingService->getLastAttemptScoreForTreeNode(
+                $trackingService->getLastCompletedAttemptScoreForTreeNode(
                     $this->learningPath,
                     $this->getReportingUser(),
                     $currentTreeNode
