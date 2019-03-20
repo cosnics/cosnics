@@ -63,6 +63,7 @@ abstract class Manager extends Application
     const PARAM_EXTRA = 'extra';
     const PARAM_PUBLICATION = 'publication';
     const PARAM_TEMPLATE_ID = 'template_id';
+    const PARAM_OFFICE365_GROUP_ID = 'group';
 
     // Actions
     const ACTION_VIEW_WEBLCMS_HOME = 'Home';

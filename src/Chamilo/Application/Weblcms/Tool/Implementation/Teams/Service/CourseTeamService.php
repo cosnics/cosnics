@@ -105,6 +105,27 @@ class CourseTeamService
     }
 
     /**
+     * @param string $teamId
+     * @return Course|null
+     */
+    public function getCourseByTeamId(string $teamId): ?Course
+    {
+        $courseTeamRelation = $this->courseTeamRelationRepository->findByTeamId($teamId);
+
+        if(!$courseTeamRelation instanceof CourseTeamRelation) {
+            return null;
+        }
+
+        $course = $this->courseService->getCourseById($courseTeamRelation->getCourseId());
+
+        if(! $course instanceof Course) {
+            return null;
+        }
+
+        return $course;
+    }
+
+    /**
      * @param Course $course
      * @throws GraphException
      */

@@ -36,6 +36,25 @@ class CourseTeamRelationRepository extends CommonDataClassRepository
     }
 
     /**
+     * @param string $teamId
+     * @return CourseTeamRelation|null
+     */
+    public function findByTeamId(string $teamId): ?CourseTeamRelation
+    {
+        $condition = $this->getConditionByTeamId($teamId);
+
+        $courseTeamRelation = $this->dataClassRepository->retrieve(
+            CourseTeamRelation::class, new DataClassRetrieveParameters($condition)
+        );
+
+        if(!$courseTeamRelation instanceof CourseTeamRelation) {
+            return null;
+        }
+
+        return $courseTeamRelation;
+    }
+
+    /**
      * @param Course $course
      * @return EqualityCondition
      */
@@ -46,6 +65,20 @@ class CourseTeamRelationRepository extends CommonDataClassRepository
                 CourseTeamRelation::class, CourseTeamRelation::PROPERTY_COURSE_ID
             ),
             new StaticConditionVariable((string) $course->getId())
+        );
+    }
+
+    /**
+     * @param Course $course
+     * @return EqualityCondition
+     */
+    protected function getConditionByTeamId(string $teamId): EqualityCondition
+    {
+        return new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseTeamRelation::class, CourseTeamRelation::PROPERTY_TEAM_ID
+            ),
+            new StaticConditionVariable($teamId)
         );
     }
 }
