@@ -1,35 +1,22 @@
 {% set appContext = 'Chamilo\\Application\\Weblcms' %}
-<html>
-<body>
-
-<div class="">
-    <div class="toolblock" style="width:100%;"><div class="row">
-            {% if LP_ACTIVE %}
-            <div class="col-md-4 col-sm-12">
-                <div id="tool_31" class="tool" style="display: block !important">
-                    <span class="ident ident-md ident-438f956fc2b7793f02051f33af0dc68c"></span>
-                    &nbsp;
-                    <a id="tool_text" href="{{ LP_URL }}" target="_blank">
-                        {{ LP_TRANSLATION }}
-                    </a>
-                    <div class="clear"></div>
-                </div>
-            </div>
-            {% endif %}
-            {% if ASSIGNMENT_ACTIVE %}
-            <div class="col-md-4 col-sm-12">
-                <div id="tool_9" class="tool" style="display: block !important">
-                    <span class="ident ident-md ident-52622085359b3092aeb1fcf78daa31d4"></span>
-                    &nbsp;
-                    <a id="tool_text" href="{{ ASSIGNMENT_URL }}" target="_blank">
-                        {{ ASSIGNMENT_TRANSLATION }}
-                    </a>
-                    <div class="clear"></div>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-    </div>
+<link rel="stylesheet"
+      href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css">
+<div class="ms-font-xxl" style="margin-bottom: 15px">
+    Cursus Tools
 </div>
-</body>
-</html>
+<div class="row">
+    {% for TOOL in TOOLS %}
+        {% if TOOL.ACTIVE %}
+            <div class="col-md-3 col-sm-6 col-xs-12 ms-font-m">
+                <div id="tool_31" class="tool" style="display: block !important">
+                    {{ TOOL.ICON | raw }}
+                    &nbsp;
+                    <a id="tool_text" href="{{ TOOL.URL }}" target="_blank">
+                        {{ TOOL.TITLE }}
+                    </a>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>

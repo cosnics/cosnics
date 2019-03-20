@@ -12,6 +12,7 @@ use Chamilo\Core\Install\Format\Structure\Header;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\IdentRenderer;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -45,7 +46,14 @@ class TeamsTabContentComponent extends Manager implements NoAuthenticationSuppor
             new DataClassRetrievesParameters(
                 new InCondition(
                     new PropertyConditionVariable(CourseTool::class_name(), CourseTool::PROPERTY_CONTEXT),
-                    ['Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', 'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'])
+                    [
+                        'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath',
+                        'Chamilo\Application\Weblcms\Tool\Implementation\Assignment',
+                        'Chamilo\Application\Weblcms\Tool\Implementation\Home',
+                        'Chamilo\Application\Weblcms\Tool\Implementation\Assessment',
+                        'Hogent\Application\Weblcms\Tool\Implementation\Bamaflex'
+                    ]
+                )
             )
         );
 
@@ -80,28 +88,31 @@ class TeamsTabContentComponent extends Manager implements NoAuthenticationSuppor
         $learningPathTool = null;
         $assignmentTool = null;
 
+        $tools = [];
+
         while ($tool = $course_tools->next_result()) {
             /**
              * @var CourseTool $tool
              */
-            if ($tool->get_name() === 'Assignment') {// && ) {
-                $assignmentTool = $tool;
-            }
+            $twigTool = [
+                "ACTIVE" => $this->toolIsVisible($tool, $course),
+                "URL" => $this->getToolUrl($tool, $course),
+                "TITLE" => Translation::get('TypeName', null, $tool->getContext()),
+                "ICON" => (new IdentRenderer($tool->getContext(), false, false))->render(),
+            ];
 
-            if ($tool->get_name() === 'LearningPath') {// && $this->toolIsActive($tool, $course)) {
-                $learningPathTool = $tool;
+            if ($tool->getContext() === 'Chamilo\Application\Weblcms\Tool\Implementation\Home') {
+                array_unshift($tools, $twigTool);
+            } else {
+                $tools[] = $twigTool;
             }
         }
 
         return $this->getTwig()->render(
             'Chamilo\Application\Weblcms:TeamsTabContent.html.twig',
             [
-                "LP_ACTIVE" => $this->toolIsActive($learningPathTool, $course),
-                "LP_URL" => $this->getToolUrl($learningPathTool, $course),
-                "LP_TRANSLATION" => Translation::get('TypeName', null, $learningPathTool->getContext()),
-                "ASSIGNMENT_ACTIVE" => $this->toolIsActive($assignmentTool, $course),
-                "ASSIGNMENT_URL" => $this->getToolUrl($assignmentTool, $course),
-                "ASSIGNMENT_TRANSLATION" => Translation::get('TypeName', null, $assignmentTool->getContext())
+
+                "TOOLS" => $tools
             ]
         );
     }
@@ -111,7 +122,7 @@ class TeamsTabContentComponent extends Manager implements NoAuthenticationSuppor
      * @param Course $course
      * @return bool
      */
-    protected function toolIsActive(?CourseTool $tool, Course $course): bool
+    protected function toolIsVisible(?CourseTool $tool, Course $course): bool
     {
         if (is_null($tool)) {
             return false;
@@ -120,10 +131,14 @@ class TeamsTabContentComponent extends Manager implements NoAuthenticationSuppor
         $course_settings_controller = CourseSettingsController::getInstance();
 
         return $course_settings_controller->get_course_setting(
-            $course,
-            CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
-            $tool->getId()
-        );
+                $course,
+                CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
+                $tool->getId()
+            ) &&
+            $course_settings_controller->get_course_setting(
+                $course,
+                CourseSetting::COURSE_SETTING_TOOL_VISIBLE,
+                $tool->getId());
     }
 
     /**
