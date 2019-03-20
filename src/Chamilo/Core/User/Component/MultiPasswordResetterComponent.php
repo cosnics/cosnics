@@ -61,7 +61,7 @@ class MultiPasswordResetterComponent extends Manager
                     (int) $id);
 
                 $password = Text::generate_password();
-                $user->set_password($this->getHashingUtilities()->hashString($password));
+                $this->getPasswordSecurity()->setPasswordForUser($user, $password);
 
                 if ($user->update())
                 {

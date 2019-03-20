@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Test\Unit\Domain\UserImporter;
 
 use Chamilo\Core\User\Domain\UserImporter\ImportUserData;
 use Chamilo\Core\User\Domain\UserImporter\ImportUserResult;
+use Chamilo\Core\User\Service\PasswordSecurity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Hashing\HashingUtilities;
@@ -268,15 +269,26 @@ class ImportUserDataTest extends ChamiloTestCase
         $this->assertFalse($this->importUserData->hasValidLanguage());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSetPropertiesForUser()
     {
-        /** @var HashingUtilities $hashingUtilitiesMock */
-        $hashingUtilitiesMock = $this->getMockBuilder(HashingUtilities::class)
+        /** @var PasswordSecurity|\PHPUnit\Framework\MockObject\MockObject $passwordSecurityMock */
+        $passwordSecurityMock = $this->getMockBuilder(PasswordSecurity::class)
             ->disableOriginalConstructor()->getMock();
 
-        $hashingUtilitiesMock->expects($this->once())
-            ->method('hashString')
-            ->will($this->returnArgument(0));
+        $passwordSecurityMock->expects($this->once())
+            ->method('setPasswordForUser')
+            ->will(
+                $this->returnCallback(
+                    function ($user, $password) {
+                        $user->set_password($password);
+
+                        return $user;
+                    }
+                )
+            );
 
         $action = 'A';
         $this->importUserData->setAction($action);
@@ -320,7 +332,7 @@ class ImportUserDataTest extends ChamiloTestCase
         $user = new User();
         $this->importUserData->setUser($user);
 
-        $this->importUserData->setPropertiesForUser($hashingUtilitiesMock);
+        $this->importUserData->setPropertiesForUser($passwordSecurityMock);
 
         $referenceDate = new \DateTime('2017-01-05 00:00:00');
 
@@ -344,38 +356,46 @@ class ImportUserDataTest extends ChamiloTestCase
      */
     public function testSetPropertiesForUserInvalidUser()
     {
-        /** @var HashingUtilities $hashingUtilitiesMock */
-        $hashingUtilitiesMock = $this->getMockBuilder(HashingUtilities::class)
+        /** @var PasswordSecurity $passwordSecurityMock */
+        $passwordSecurityMock = $this->getMockBuilder(PasswordSecurity::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->importUserData->setPropertiesForUser($hashingUtilitiesMock);
+        $this->importUserData->setPropertiesForUser($passwordSecurityMock);
     }
 
     public function testSetPropertiesForUserGeneratesPasswordWhenNotGiven()
     {
-        /** @var HashingUtilities | \PHPUnit_Framework_MockObject_MockObject $hashingUtilitiesMock */
-        $hashingUtilitiesMock = $this->getMockBuilder(HashingUtilities::class)
-            ->disableOriginalConstructor()->getMock();
-
-        $hashingUtilitiesMock->expects($this->once())
-            ->method('hashString')
-            ->will($this->returnArgument(0));
-
         $action = 'A';
         $this->importUserData->setAction($action);
 
         $user = new User();
         $this->importUserData->setUser($user);
 
-        $this->importUserData->setPropertiesForUser($hashingUtilitiesMock);
+        /** @var PasswordSecurity|\PHPUnit\Framework\MockObject\MockObject $passwordSecurityMock */
+        $passwordSecurityMock = $this->getMockBuilder(PasswordSecurity::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $passwordSecurityMock->expects($this->once())
+            ->method('setPasswordForUser')
+            ->will(
+                $this->returnCallback(
+                    function ($user, $password) {
+                        $user->set_password($password);
+
+                        return $user;
+                    }
+                )
+            );
+
+        $this->importUserData->setPropertiesForUser($passwordSecurityMock);
 
         $this->assertNotEmpty($user->get_password());
     }
 
     public function testSetPropertiesForUserNotNew()
     {
-        /** @var HashingUtilities | \PHPUnit_Framework_MockObject_MockObject $hashingUtilitiesMock */
-        $hashingUtilitiesMock = $this->getMockBuilder(HashingUtilities::class)
+        /** @var PasswordSecurity $passwordSecurityMock */
+        $passwordSecurityMock = $this->getMockBuilder(PasswordSecurity::class)
             ->disableOriginalConstructor()->getMock();
 
         $action = 'U';
@@ -387,7 +407,7 @@ class ImportUserDataTest extends ChamiloTestCase
         $user = new User();
         $this->importUserData->setUser($user);
 
-        $this->importUserData->setPropertiesForUser($hashingUtilitiesMock);
+        $this->importUserData->setPropertiesForUser($passwordSecurityMock);
 
         $this->assertEmpty($user->get_password());
         $this->assertEmpty($user->get_username());
@@ -395,8 +415,8 @@ class ImportUserDataTest extends ChamiloTestCase
 
     public function testSetPropertiesForUserNotifyReactivate()
     {
-        /** @var HashingUtilities | \PHPUnit_Framework_MockObject_MockObject $hashingUtilitiesMock */
-        $hashingUtilitiesMock = $this->getMockBuilder(HashingUtilities::class)
+        /** @var PasswordSecurity $passwordSecurityMock */
+        $passwordSecurityMock = $this->getMockBuilder(PasswordSecurity::class)
             ->disableOriginalConstructor()->getMock();
 
         $user = new User();
@@ -406,15 +426,15 @@ class ImportUserDataTest extends ChamiloTestCase
         $this->importUserData->setAction('U');
         $this->importUserData->setActive(1);
 
-        $this->importUserData->setPropertiesForUser($hashingUtilitiesMock);
+        $this->importUserData->setPropertiesForUser($passwordSecurityMock);
 
         $this->assertTrue($this->importUserData->mustNotifyUser());
     }
 
     public function testSetPropertiesForUserNotifyPasswordChange()
     {
-        /** @var HashingUtilities | \PHPUnit_Framework_MockObject_MockObject $hashingUtilitiesMock */
-        $hashingUtilitiesMock = $this->getMockBuilder(HashingUtilities::class)
+        /** @var PasswordSecurity $passwordSecurityMock */
+        $passwordSecurityMock = $this->getMockBuilder(PasswordSecurity::class)
             ->disableOriginalConstructor()->getMock();
 
         $user = new User();
@@ -425,7 +445,7 @@ class ImportUserDataTest extends ChamiloTestCase
         $this->importUserData->setActive(1);
         $this->importUserData->setPassword('blablabla');
 
-        $this->importUserData->setPropertiesForUser($hashingUtilitiesMock);
+        $this->importUserData->setPropertiesForUser($passwordSecurityMock);
 
         $this->assertTrue($this->importUserData->mustNotifyUser());
     }

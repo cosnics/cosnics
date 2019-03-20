@@ -22,6 +22,8 @@ class ImporterComponent extends Manager
 
     /**
      * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Exception
      */
     public function run()
     {
@@ -40,7 +42,7 @@ class ImporterComponent extends Manager
                 new ImportParserFactory(),
                 new UserRepository(),
                 $this->getConfigurationConsulter(),
-                $this->getHashingUtilities(),
+                $this->getPasswordSecurity(),
                 $this->getMailer(),
                 $this->getTranslator());
 
@@ -83,6 +85,7 @@ class ImporterComponent extends Manager
     /**
      *
      * @return MailerInterface
+     * @throws \Exception
      */
     protected function getMailer()
     {

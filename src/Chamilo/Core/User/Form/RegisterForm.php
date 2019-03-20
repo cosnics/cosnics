@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Form;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\PasswordSecurity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -52,11 +53,11 @@ class RegisterForm extends FormValidator
 
     /**
      *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     * @return \Chamilo\Core\User\Service\PasswordSecurity
      */
-    public function getHashingUtilities()
+    public function getPasswordSecurity()
     {
-        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+        return $this->getService(PasswordSecurity::class);
     }
 
     /**
@@ -220,7 +221,9 @@ class RegisterForm extends FormValidator
             $user->set_firstname($values[User::PROPERTY_FIRSTNAME]);
             $user->set_email($values[User::PROPERTY_EMAIL]);
             $user->set_username($values[User::PROPERTY_USERNAME]);
-            $user->set_password($this->getHashingUtilities()->hashString($password));
+
+            $this->getPasswordSecurity()->setPasswordForUser($user, $password);
+
             $this->unencryptedpass = $password;
             $user->set_official_code($values[User::PROPERTY_OFFICIAL_CODE]);
             $user->set_phone($values[User::PROPERTY_PHONE]);

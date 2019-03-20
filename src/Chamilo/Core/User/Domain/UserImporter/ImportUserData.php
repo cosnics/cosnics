@@ -2,8 +2,8 @@
 
 namespace Chamilo\Core\User\Domain\UserImporter;
 
+use Chamilo\Core\User\Service\PasswordSecurity;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
@@ -522,9 +522,9 @@ class ImportUserData extends ImportData
     /**
      * Sets the properties for the user associated with this imported data
      *
-     * @param HashingUtilities $hashingUtilities
+     * @param \Chamilo\Core\User\Service\PasswordSecurity $passwordSecurity
      */
-    public function setPropertiesForUser(HashingUtilities $hashingUtilities)
+    public function setPropertiesForUser(PasswordSecurity $passwordSecurity)
     {
         $user = $this->getUser();
         if (!$user instanceof User)
@@ -560,7 +560,7 @@ class ImportUserData extends ImportData
         if(!empty($password))
         {
             $this->setNotifyUser(true);
-            $user->set_password($hashingUtilities->hashString($password));
+            $passwordSecurity->setPasswordForUser($user, $password);
         }
 
         if(!empty($this->getEmail()))
