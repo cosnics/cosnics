@@ -144,3 +144,5 @@ DefaultTraversingOrderNotEnforce = "The default order of the steps could not be 
 FreeTraversingOrderSet = "The default order of the steps is no longer enforced"
 FreeTraversingOrderNotSet = "Could not disable the default order of the steps"
 ThisStepEnforcesDefaultTraversingOrder = "This step requires the users to complete each child-step in the given order. The students will not be able to view other steps before completing the previous steps."
+ScoreOverview = "Score overview of all the assignments and exercises in the learning path"
+Path = "Path"
