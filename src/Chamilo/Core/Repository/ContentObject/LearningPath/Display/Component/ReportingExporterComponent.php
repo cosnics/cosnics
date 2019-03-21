@@ -20,6 +20,7 @@ class ReportingExporterComponent extends BaseReportingComponent
     const EXPORT_USER_PROGRESS = 'UserProgress';
     const EXPORT_TREE_NODE_ATTEMPTS = 'TreeNodeAttempts';
     const EXPORT_TREE_NODE_CHILDREN_PROGRESS = 'TreeNodeChildrenProgress';
+    const EXPORT_SCORE_OVERVIEW = 'ScoreOverviewExport';
 
     /**
      * Runs this component
@@ -30,7 +31,9 @@ class ReportingExporterComponent extends BaseReportingComponent
         $temporaryDirectory = $pathBuilder->getTemporaryPath(Manager::context());
         Filesystem::create_dir($temporaryDirectory);
 
-        $exporter = new Exporter($this->getTrackingService());
+        $exporter = new Exporter(
+            $this->getTrackingService(), $this->getAutomaticNumberingService(), $this->getLearningPathService()
+        );
 
         $exportMode = $this->getRequest()->get(self::PARAM_EXPORT);
         $this->validateExportMode($exportMode);
@@ -39,10 +42,10 @@ class ReportingExporterComponent extends BaseReportingComponent
         $filename = '';
         $csvWriter = new CsvWriter($file);
 
-        switch($exportMode)
+        switch ($exportMode)
         {
             case self::EXPORT_USER_PROGRESS:
-                if(!$this->canViewReporting())
+                if (!$this->canViewReporting())
                 {
                     throw new NotAllowedException();
                 }
@@ -62,6 +65,12 @@ class ReportingExporterComponent extends BaseReportingComponent
                     $this->learningPath, $this->getCurrentTreeNode(), $this->getReportingUser(), $csvWriter
                 );
                 $filename = 'UserProgress.csv';
+                break;
+            case self::EXPORT_SCORE_OVERVIEW:
+                $exporter->exportScoreOverviewForUser(
+                    $this->learningPath, $this->getTree(), $this->getReportingUser(), $csvWriter
+                );
+                $filename = 'ScoreOverview.csv';
                 break;
         }
 
@@ -83,15 +92,17 @@ class ReportingExporterComponent extends BaseReportingComponent
      */
     protected function validateExportMode($exportMode)
     {
-        $exportModes =
-            [self::EXPORT_USER_PROGRESS, self::EXPORT_TREE_NODE_ATTEMPTS, self::EXPORT_TREE_NODE_CHILDREN_PROGRESS];
+        $exportModes = [
+            self::EXPORT_USER_PROGRESS, self::EXPORT_TREE_NODE_ATTEMPTS, self::EXPORT_TREE_NODE_CHILDREN_PROGRESS,
+            self::EXPORT_SCORE_OVERVIEW
+        ];
 
-        if(!in_array($exportMode, $exportModes))
+        if (!in_array($exportMode, $exportModes))
         {
             throw new \InvalidArgumentException(sprintf('The given export mode %s is not supported', $exportMode));
         }
 
-        if($exportMode == self::EXPORT_USER_PROGRESS && !$this->canEditCurrentTreeNode())
+        if ($exportMode == self::EXPORT_USER_PROGRESS && !$this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
         }
