@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" media="screen,projection" href="http://cosnics.dev.hogent.be/?application=Chamilo%5CLibraries%5CAjax&amp;go=resource&amp;theme=Aqua&amp;type=css&amp;modified=1552990390">
+
+    <title>Chamilo</title>
+</head>
+<body>
+
+<style>
+    .learning-path-print {
+        margin-top: 50px;
+    }
+
+    .learning-path-print .learning-path-title {
+        margin-bottom: 50px;
+    }
+
+    .learning-path-print h2.learning-path-tree-node-title {
+        margin-bottom: 30px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .learning-path-print .learning-path-index {
+        font-size: 18px;
+    }
+
+    .learning-path-print .learning-path-index ul {
+        list-style-type: none;
+    }
+
+    .learning-path-print .learning-path-index > ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    .learning-path-print .row {
+        margin-bottom: 30px;
+    }
+
+    .learning-path-print img {
+        max-width: 100%;
+    }
+
+    .learning-path-print .qr-code {
+        text-align: center;
+    }
+</style>
+
+{% macro renderTreeTitles(treeTitles) %}
+    <ul>
+        {% for treeTitle, subTitles in treeTitles %}
+            <li>
+                {{ treeTitle }}
+                {% if subTitles|length %}
+                    {% import _self as this %}
+                    {{ this.renderTreeTitles(subTitles) }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+{% import _self as this %}
+
+<div class="container learning-path-print">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="learning-path-title">{{ LEARNING_PATH_TITLE }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="learning-path-tree-node-title">Inhoudsopgave</h2>
+            <div class="learning-path-index">
+                {{ this.renderTreeTitles(TREE_TITLES) }}
+            </div>
+        </div>
+    </div>
+    {% for TREE_NODE in TREE_NODES %}
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="learning-path-tree-node-title">{{ TREE_NODE.title }}</h2>
+                {{ TREE_NODE.content|raw }}
+                <div class="qr-code">
+                    <img alt="qr_code" src="{{ TREE_NODE.qr_code }}" />
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

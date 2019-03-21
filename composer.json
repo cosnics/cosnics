@@ -38,7 +38,8 @@
 		"symfony/yaml": "^3.4",
 		"twig/twig": "2.4.8",
 		"kriswallsmith/assetic": "^1.4",
-		"ext-json": "*"
+		"ext-json": "*",
+		"endroid/qr-code": "^3.5"
 	},
 	"require-dev": {
 		"behat/behat": "*",

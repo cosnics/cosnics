@@ -26,6 +26,8 @@
             id="chamilo.libraries.format.twig.twig_factory"
             class="Chamilo\Libraries\Format\Twig\TwigEnvironmentFactory" />
 
+        <service id="Twig\Environment" alias="twig.environment" />
+
         <service
             id="twig.environment"
             class="Twig_Environment">
