@@ -92,7 +92,6 @@ class PrintableFormatRenderer
      *
      * // TODO: volgtijdelijkheid blokkeren
      * // TODO: inline resources
-     * // TODO:
      * @return array
      */
     protected function prepareTreeNodesForRendering(Tree $tree, string $viewerUrl)
