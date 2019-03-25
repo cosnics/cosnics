@@ -60,7 +60,7 @@ class ContentObjectResourceParser
 
     /**
      * @param \DOMElement $contentObjectDomElement
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|null
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|null|ContentObject
      */
     public function getContentObjectFromDomElement(\DOMElement $contentObjectDomElement)
     {

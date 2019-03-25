@@ -66,4 +66,9 @@ interface LearningPathDisplaySupport extends DisplaySupport
      * @return TrackingService
      */
     public function buildTrackingService();
+
+    /**
+     * @return string
+     */
+    public function getContextTitleForPrint();
 }

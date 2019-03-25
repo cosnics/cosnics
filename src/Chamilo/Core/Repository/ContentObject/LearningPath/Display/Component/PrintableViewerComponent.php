@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\PrintableFormatRenderer;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Printer\PrintableFormatRenderer;
 
 /**
  * Class PrintableViewerComponent
@@ -23,15 +23,23 @@ class PrintableViewerComponent extends Manager
     function run()
     {
         $viewUrl = $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_CHILD_ID => '__TREE_NODE_ID__')
+            array(
+                self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                self::PARAM_CHILD_ID => '__TREE_NODE_ID__'
+            )
         );
 
         $printableFormatRenderer = $this->getPrintableFormatRenderer();
-        return $printableFormatRenderer->render($this->getTree(), $viewUrl);
+
+        return $printableFormatRenderer->render(
+            $this->learningPath, $this->getUser(), $this->getTree(), $viewUrl, $this->getTrackingService(),
+            $this->canAuditLearningPath(),
+            $this->get_application()->getContextTitleForPrint()
+        );
     }
 
     /**
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Service\PrintableFormatRenderer
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Service\Printer\PrintableFormatRenderer
      */
     protected function getPrintableFormatRenderer()
     {
