@@ -139,6 +139,12 @@ class PrintableResourceRenderer
         {
             $this->addResourceNotificationElement($embeddingElement);
         }
+
+        $embeddingElements = $this->domXpath->query('//*[@data-oembed]');
+        foreach($embeddingElements as $embeddingElement)
+        {
+            $this->addResourceNotificationElement($embeddingElement);
+        }
     }
 
     /**
