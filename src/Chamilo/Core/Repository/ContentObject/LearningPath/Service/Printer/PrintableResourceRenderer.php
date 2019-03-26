@@ -58,6 +58,7 @@ class PrintableResourceRenderer
 
         $this->processOldResources();
         $this->processContentObjectPlaceholders();
+        $this->processEmbeddings();
 
         return $this->domDocument->saveHTML();
     }
@@ -125,11 +126,19 @@ class PrintableResourceRenderer
             return;
         }
 
-        $element = $this->getResourceNotificationElement($contentObject);
-        $element = $this->domDocument->importNode($element, true);
+        $this->addResourceNotificationElementForContentObject($contentObject, $contentObjectElement);
+    }
 
-        $contentObjectElement->parentNode->insertBefore($element, $contentObjectElement);
-        $contentObjectElement->parentNode->removeChild($contentObjectElement);
+    /**
+     * Processes the embedded urls to a printable format
+     */
+    protected function processEmbeddings()
+    {
+        $embeddingElements = $this->domXpath->query('//*[@data-oembed-url]');
+        foreach($embeddingElements as $embeddingElement)
+        {
+            $this->addResourceNotificationElement($embeddingElement);
+        }
     }
 
     /**
@@ -138,9 +147,11 @@ class PrintableResourceRenderer
      *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return \DOMElement
+     * @param \DOMElement $elementToReplace
+     *
+     * @return \DOMElement|\DOMNode
      */
-    protected function getResourceNotificationElement(ContentObject $contentObject)
+    protected function addResourceNotificationElementForContentObject(ContentObject $contentObject, \DOMElement $elementToReplace)
     {
         if ($contentObject instanceof File && $contentObject->is_image())
         {
@@ -149,7 +160,20 @@ class PrintableResourceRenderer
             );
         }
 
-        $domElement = $this->domDocument->createElement(
+        return $this->addResourceNotificationElement($elementToReplace);
+    }
+
+    /**
+     * Creates an alert box with a notification text that the resource is not printable and the website should be
+     * visited to view the full version.
+     *
+     * @param \DOMElement $elementToReplace
+     *
+     * @return \DOMElement|\DOMNode
+     */
+    protected function addResourceNotificationElement(\DOMElement $elementToReplace)
+    {
+        $notificationElement = $this->domDocument->createElement(
             'div',
             $this->translator->trans(
                 'CanNotPrintResourceNotification', [], 'Chamilo\Core\Repository\ContentObject\LearningPath\Display'
@@ -159,9 +183,13 @@ class PrintableResourceRenderer
         $classAttribute = $this->domDocument->createAttribute('class');
         $classAttribute->value = 'alert alert-info';
 
-        $domElement->appendChild($classAttribute);
+        $notificationElement->appendChild($classAttribute);
+        $notificationElement = $this->domDocument->importNode($notificationElement, true);
 
-        return $domElement;
+        $elementToReplace->parentNode->insertBefore($notificationElement, $elementToReplace);
+        $elementToReplace->parentNode->removeChild($elementToReplace);
+
+        return $notificationElement;
     }
 
 }
