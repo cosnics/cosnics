@@ -267,10 +267,10 @@ class EntryDownloader
      */
     public function downloadByRequest(ChamiloRequest $request)
     {
-        $entityType = $request->getFromUrl(Manager::PARAM_ENTITY_TYPE);
-        $entityIdentifiers = $request->getFromUrl(Manager::PARAM_ENTITY_ID);
+        $entityType = $request->getFromPostOrUrl(Manager::PARAM_ENTITY_TYPE);
+        $entityIdentifiers = $request->getFromPostOrUrl(Manager::PARAM_ENTITY_ID);
 
-        $entryIdentifiers = $request->getFromUrl(Manager::PARAM_ENTRY_ID);
+        $entryIdentifiers = $request->getFromPostOrUrl(Manager::PARAM_ENTRY_ID);
 
         if (!is_null($entryIdentifiers))
         {

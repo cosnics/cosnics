@@ -64,8 +64,8 @@ class EntryFeedbackNotificationJobProcessor extends AssignmentJobProcessor imple
     )
     {
         parent::__construct(
-            $assignmentService, $entityServiceManager, $treeNodeDataService, $publicationService, $courseService, $userService,
-            $contentObjectRepository, $filterManager, $notificationManager
+            $assignmentService, $entityServiceManager, $treeNodeDataService, $publicationService, $courseService,
+            $userService, $contentObjectRepository, $filterManager, $notificationManager
         );
 
         $this->feedbackService = $feedbackService;
