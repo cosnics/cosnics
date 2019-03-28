@@ -23,6 +23,9 @@
             <setting
                 name="brand_image"
                 field="image_uploader" />
+            <setting
+                    name="favicon"
+                    field="image_uploader" />
         </category>
         <category name="rights">
             <setting

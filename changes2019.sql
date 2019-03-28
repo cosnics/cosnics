@@ -1,0 +1,1 @@
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Menu', 'favicon', NULL, '0');

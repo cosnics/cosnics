@@ -624,3 +624,31 @@ JOIN tracking_weblcms_learning_path_tree_node_attempt TNA on LPAE.tree_node_atte
 
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES
   (null, 'Chamilo\\Core\\Queue\\Integration\\Chamilo\\Core\\Admin', 'Chamilo\\Core\\Queue\\Integration', NULL, 'AdminIntegration', 1, '1.0.0', 1);
+
+  ALTER TABLE `repository_learning_path_tree_node_data` ADD `configuration` TEXT NOT NULL AFTER `added_date`;
+ALTER TABLE `repository_learning_path_tree_node_data` ADD `configuration_class` VARCHAR(255) NOT NULL AFTER `configuration`;
+
+
+/** PLAGIARISM **/
+/** INSTALL PLAGIARISM APP **/
+CREATE TABLE `tracking_weblcms_assignment_entry_plagiarism_result` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `entry_id` INT(10) UNSIGNED NOT NULL ,
+  `external_id` VARCHAR(255) NOT NULL ,
+  `status` INT(10) UNSIGNED NOT NULL ,
+  `result` INT(10) UNSIGNED NULL ,
+  `error_code` VARCHAR(255) NULL ,
+  PRIMARY KEY (`id`),
+  INDEX (`entry_id`),
+  INDEX (`external_id`)) ENGINE = InnoDB;
+
+CREATE TABLE `tracking_weblcms_learning_path_assignment_entry_plagiarism` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `entry_id` INT(10) UNSIGNED NOT NULL ,
+  `external_id` VARCHAR(255) NOT NULL ,
+  `status` INT(10) UNSIGNED NOT NULL ,
+  `result` INT(10) UNSIGNED NULL ,
+  `error_code` VARCHAR(255) NULL ,
+  PRIMARY KEY (`id`),
+  INDEX (`entry_id`),
+  INDEX (`external_id`)) ENGINE = InnoDB;
