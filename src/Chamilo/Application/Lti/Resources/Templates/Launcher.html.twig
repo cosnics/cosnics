@@ -1,0 +1,31 @@
+{{ HEADER }}
+
+
+<form action="http://dev.hogent.be/extra/lti_provider/src/connect.php" method="POST" target="LTI-tool">
+    {% for key, value in LTI_PARAMETERS %}
+        <input type="hidden" name="{{ key }}" id="{{ key }}" value="{{ value }}">
+    {% endfor %}
+
+    <div style="margin-bottom: 20px;">
+        <div class="load_tab">
+            Deze tool moet in een nieuw browservenster geladen worden.
+            <div style="margin: 10px 0;">
+                <button class="btn" type="submit" data-expired_message="De sessie voor deze tool is verlopen. De pagina opnieuw laden om opnieuw toegang tot de tool te krijgen.">
+                    Buddycheck in een nieuw venster laden
+                </button>
+            </div>
+        </div>
+        <div class="tab_loaded" style="display: none;">
+            Deze tool is succesvol in een nieuw venster geladen. Deze pagina opnieuw laden om weer toegang tot de tool te krijgen.
+        </div>
+    </div>
+
+</form>
+
+
+
+<iframe id="LTI-tool" name="LTI-tool" width="800" height="600">
+
+</iframe>
+
+{{ FOOTER }}

@@ -1,10 +1,10 @@
 {
-    "name": "cosnics/application-plagiarism",
+    "name": "cosnics/application-lti",
     "version": "1.0.0",
-    "description": "Application Plagiarism",
+    "description": "Application LTI",
     "keywords": [
         "Application",
-        "Plagiarism"
+        "LTI"
     ],
     "homepage": "http://www.cosnics.org",
     "license": "MIT",
@@ -19,12 +19,13 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0"
+        "php": ">=7.0.0",
+        "imsglobal/lti": "3.0.2"
     },
     "extra": {
         "cosnics": {
-            "name": "Plagiarism",
-            "context": "Chamilo\\Application\\Plagiarism",
+            "name": "LTI",
+            "context": "Chamilo\\Application\\Lti",
             "type": "Chamilo\\Application",
             "install": {
                 "core": 0,
