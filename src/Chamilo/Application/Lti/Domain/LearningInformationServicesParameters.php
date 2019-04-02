@@ -76,74 +76,110 @@ class LearningInformationServicesParameters
 
     /**
      * @param string $personNameGiven
+     *
+     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
      */
-    public function setPersonNameGiven(string $personNameGiven): void
+    public function setPersonNameGiven(string $personNameGiven): LearningInformationServicesParameters
     {
         $this->personNameGiven = $personNameGiven;
+
+        return $this;
     }
 
     /**
      * @param string $personNameFamily
+     *
+     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
      */
-    public function setPersonNameFamily(string $personNameFamily): void
+    public function setPersonNameFamily(string $personNameFamily): LearningInformationServicesParameters
     {
         $this->personNameFamily = $personNameFamily;
+
+        return $this;
     }
 
     /**
      * @param string $personNameFull
+     *
+     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
      */
-    public function setPersonNameFull(string $personNameFull): void
+    public function setPersonNameFull(string $personNameFull): LearningInformationServicesParameters
     {
         $this->personNameFull = $personNameFull;
+
+        return $this;
     }
 
     /**
      * @param string $personContactEmailPrimary
+     *
+     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
      */
-    public function setPersonContactEmailPrimary(string $personContactEmailPrimary): void
+    public function setPersonContactEmailPrimary(string $personContactEmailPrimary): LearningInformationServicesParameters
     {
         $this->personContactEmailPrimary = $personContactEmailPrimary;
+
+        return $this;
     }
 
     /**
      * @param string $personSourcedId
+     *
+     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
      */
-    public function setPersonSourceDid(string $personSourcedId): void
+    public function setPersonSourceDid(string $personSourcedId): LearningInformationServicesParameters
     {
         $this->personSourcedId = $personSourcedId;
+
+        return $this;
     }
 
     /**
      * @param string $resultSourcedId
+     *
+     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
      */
-    public function setResultSourcedId(string $resultSourcedId): void
+    public function setResultSourcedId(string $resultSourcedId): LearningInformationServicesParameters
     {
         $this->resultSourcedId = $resultSourcedId;
+
+        return $this;
     }
 
     /**
      * @param string $outcomeServiceUrl
+     *
+     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
      */
-    public function setOutcomeServiceUrl(string $outcomeServiceUrl): void
+    public function setOutcomeServiceUrl(string $outcomeServiceUrl): LearningInformationServicesParameters
     {
         $this->outcomeServiceUrl = $outcomeServiceUrl;
+
+        return $this;
     }
 
     /**
      * @param string $courseOfferingSourcedId
+     *
+     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
      */
-    public function setCourseOfferingSourcedId(string $courseOfferingSourcedId): void
+    public function setCourseOfferingSourcedId(string $courseOfferingSourcedId): LearningInformationServicesParameters
     {
         $this->courseOfferingSourcedId = $courseOfferingSourcedId;
+
+        return $this;
     }
 
     /**
      * @param string $courseSectionSourcedId
+     *
+     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
      */
-    public function setCourseSectionSourcedId(string $courseSectionSourcedId): void
+    public function setCourseSectionSourcedId(string $courseSectionSourcedId): LearningInformationServicesParameters
     {
         $this->courseSectionSourcedId = $courseSectionSourcedId;
+
+        return $this;
     }
 
     /**

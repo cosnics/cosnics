@@ -33,7 +33,9 @@ class LauncherComponent extends Manager
             ->setContextTitle('Demo Cursus')
             ->setResourceLinkId('9d5d6098a0763716622ebb48921d548713d1bae8')
             ->setResourceLinkTitle('BuddyCheck')
-            ->addRole(new ContextRole(ContextRole::ROLE_INSTRUCTOR));
+            ->addRole(new ContextRole(ContextRole::ROLE_INSTRUCTOR))
+            ->getLearningInformationServicesParameters()
+                ->setResultSourcedId(6);
 
         $ltiApplication = new Application(
             'http://dev.hogent.be/extra/lti_provider/src/connect.php', 'thisismychamilokey',

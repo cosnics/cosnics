@@ -71,32 +71,9 @@ class LaunchParameters
     protected $roles;
 
     /**
-     * Recommended
-     *
-     * @var string
+     * @var \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
      */
-    protected $lisPersonNameGiven;
-
-    /**
-     * Recommended
-     *
-     * @var string
-     */
-    protected $lisPersonNameFamily;
-
-    /**
-     * Recommended
-     *
-     * @var string
-     */
-    protected $lisPersonNameFull;
-
-    /**
-     * Recommended
-     *
-     * @var string
-     */
-    protected $listPersonContactEmailPrimary;
+    protected $learningInformationServicesParameters;
 
     /**
      * Recommended
@@ -216,6 +193,14 @@ class LaunchParameters
     protected $customLaunchParameters;
 
     /**
+     * LaunchParameters constructor.
+     */
+    public function __construct()
+    {
+        $this->learningInformationServicesParameters = new LearningInformationServicesParameters();
+    }
+
+    /**
      * @param string $ltiMessageType
      *
      * @return LaunchParameters
@@ -300,51 +285,26 @@ class LaunchParameters
     }
 
     /**
-     * @param string $lisPersonNameGiven
+     * @param \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters $learningInformationServicesParameters
      *
-     * @return LaunchParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters
      */
-    public function setLisPersonNameGiven(string $lisPersonNameGiven): LaunchParameters
+    public function setLearningInformationServicesParameters(
+        \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters $learningInformationServicesParameters
+    ): LaunchParameters
     {
-        $this->lisPersonNameGiven = $lisPersonNameGiven;
+        $this->learningInformationServicesParameters = $learningInformationServicesParameters;
 
         return $this;
     }
 
     /**
-     * @param string $lisPersonNameFamily
-     *
-     * @return LaunchParameters
+     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
      */
-    public function setLisPersonNameFamily(string $lisPersonNameFamily): LaunchParameters
+    public function getLearningInformationServicesParameters(
+    ): \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
     {
-        $this->lisPersonNameFamily = $lisPersonNameFamily;
-
-        return $this;
-    }
-
-    /**
-     * @param string $lisPersonNameFull
-     *
-     * @return LaunchParameters
-     */
-    public function setLisPersonNameFull(string $lisPersonNameFull): LaunchParameters
-    {
-        $this->lisPersonNameFull = $lisPersonNameFull;
-
-        return $this;
-    }
-
-    /**
-     * @param string $listPersonContactEmailPrimary
-     *
-     * @return LaunchParameters
-     */
-    public function setListPersonContactEmailPrimary(string $listPersonContactEmailPrimary): LaunchParameters
-    {
-        $this->listPersonContactEmailPrimary = $listPersonContactEmailPrimary;
-
-        return $this;
+        return $this->learningInformationServicesParameters;
     }
 
     /**
@@ -610,10 +570,6 @@ class LaunchParameters
             'resource_link_description' => $this->resourceLinkDescription,
             'user_id' => $this->userId,
             'user_image' => $this->userImageUrl,
-            'lis_person_name_given' => $this->lisPersonNameGiven,
-            'lis_person_name_family' => $this->lisPersonNameFamily,
-            'lis_person_name_full' => $this->lisPersonNameFull,
-            'lis_person_contact_email_primary' => $this->listPersonContactEmailPrimary,
             'context_id' => $this->contextId,
             'context_type' => $this->contextType,
             'context_title' => $this->contextTitle,
@@ -632,6 +588,10 @@ class LaunchParameters
             'tool_consumer_instance_url' => $this->toolConsumerInstanceUrl,
             'tool_consumer_instance_contact_email' => $this->toolConsumerInstanceContactEmail
         ];
+
+        $basicLaunchParameters = array_merge(
+            $basicLaunchParameters, $this->learningInformationServicesParameters->toArray()
+        );
 
         $rolesArray = [];
         foreach ($this->roles as $role)

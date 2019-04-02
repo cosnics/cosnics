@@ -13,6 +13,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 abstract class Manager extends Application
 {
     const ACTION_LAUNCH = 'Launcher';
+    const ACTION_BASIC_OUTCOMES = 'BasicOutcomes';
+
     const DEFAULT_ACTION = self::ACTION_LAUNCH;
 
     /**
