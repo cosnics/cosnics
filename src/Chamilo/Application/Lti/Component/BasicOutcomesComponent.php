@@ -2,13 +2,17 @@
 
 namespace Chamilo\Application\Lti\Component;
 
+use Chamilo\Application\Lti\Domain\Application;
+use Chamilo\Application\Lti\Domain\Outcome\ResultMessage;
 use Chamilo\Application\Lti\Manager;
-use Chamilo\Application\Lti\Service\OAuthDataStore;
+use Chamilo\Application\Lti\Service\Security\OAuthDataStore;
+use Chamilo\Application\Lti\Service\Security\OAuthSecurity;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use IMSGlobal\LTI\OAuth\OAuthConsumer;
 use IMSGlobal\LTI\OAuth\OAuthRequest;
 use IMSGlobal\LTI\OAuth\OAuthServer;
 use IMSGlobal\LTI\OAuth\OAuthSignatureMethod_HMAC_SHA1;
+use IMSGlobal\LTI\OAuth\OAuthUtil;
 
 /**
  * Class BasicOutcomesComponent
@@ -22,12 +26,14 @@ class BasicOutcomesComponent extends Manager implements NoAuthenticationSupport
     /**
      *
      * @return string
+     * @throws \IMSGlobal\LTI\OAuth\OAuthException
      */
     function run()
     {
         $handle = fopen(__DIR__ . '/log.txt', 'a+');
 
-        foreach (apache_request_headers() as $name => $value) {
+        foreach (apache_request_headers() as $name => $value)
+        {
             $message = 'HEADER ' . $name . ': ' . $value . PHP_EOL;
             fwrite($handle, $message);
         }
@@ -37,17 +43,7 @@ class BasicOutcomesComponent extends Manager implements NoAuthenticationSupport
         fwrite($handle, PHP_EOL);
         fclose($handle);
 
-        $authorization = [];
-        $authorization['oauth_version'] = '1.0';
-        $authorization['oauth_nonce'] = 'b35834a8ed651f00ebbbe6cfcdc0d72c';
-        $authorization['oauth_timestamp'] = '1554209160';
-        $authorization['oauth_consumer_key'] = 'thisismychamilokey';
-        $authorization['oauth_body_hash'] = 'E7/bLcJuvHXIDfCgRxcutZeiEkA=';
-        $authorization['oauth_signature_method'] = 'HMAC-SHA1';
-        $authorization['oauth_signature'] = '57RKbLqsKAE5OXsX+ORH0EGCy10=';
-
-
-$body = <<< EOD
+        $body = <<< EOD
 <?xml version = "1.0" encoding = "UTF-8"?>
 <imsx_POXEnvelopeRequest xmlns = "http://www.imsglobal.org/services/ltiv1p1/xsd/imsoms_v1p0">
   <imsx_POXHeader>
@@ -74,24 +70,59 @@ $body = <<< EOD
 </imsx_POXEnvelopeRequest>
 EOD;
 
-        $store = new OAuthDataStore();
-        $server = new OAuthServer($store);
-        $method = new OAuthSignatureMethod_HMAC_SHA1();
-        $server->add_signature_method($method);
-        $request = OAuthRequest::from_request();
+        $ltiApplication = new Application(
+            'http://dev.hogent.be/extra/lti_provider/src/connect.php', 'thisismychamilokey',
+            '7Kts2OivnUnTZ6iCwdKgJSGJzYUqo3aD'
+        );
 
-        foreach($authorization as $key => $value)
+        $this->getRequest()->setMethod('POST');
+        $this->getRequest()->setContent($body);
+        $this->getRequest()->headers->set(
+            'Authorization',
+            'OAuth oauth_version="1.0",oauth_nonce="b35834a8ed651f00ebbbe6cfcdc0d72c",oauth_timestamp="1554273282",oauth_consumer_key="thisismychamilokey",oauth_body_hash="E7/bLcJuvHXIDfCgRxcutZeiEkA=",oauth_signature_method="HMAC-SHA1",oauth_signature="JgfbTdH8uyczUbyL1TjRJjw/cJI="'
+        );
+
+        $oauthSecurity = new OAuthSecurity();
+        $oauthSecurity->verifyRequest($ltiApplication, $this->getRequest());
+
+        $domDocument = new \DOMDocument();
+        if (!$domDocument->loadXML($body))
         {
-            $request->set_parameter($key, $value);
+            //TODO: fail
         }
-        $request->set_parameter('oauth_body_hash', base64_encode(sha1($body, true)), false);
-        var_dump($request);
-        var_dump($method->build_signature($request, new OAuthConsumer(
-            'thisismychamilokey', '7Kts2OivnUnTZ6iCwdKgJSGJzYUqo3aD'
-        ), ''));
-//        $request = new OAuthRequest('http://cosnics.dev.hogent.be:80/index.php?application=Chamilo%5CApplication%5CLti&go=BasicOutcomes', 'POST', $authorization); var_dump($request);
-        $res = $server->verify_request($request);
-        var_dump($res);
 
+        $domXPath = new \DOMXPath($domDocument);
+        $domXPath->registerNamespace('ims', 'http://www.imsglobal.org/services/ltiv1p1/xsd/imsoms_v1p0');
+
+        $resultActionNode = null;
+
+        $domNodeList = $domXPath->query('//ims:imsx_POXBody');
+        foreach ($domNodeList as $domNode)
+        {
+            /** @var \DOMElement $domNode */
+            $childNodes = $domNode->childNodes;
+            foreach ($childNodes as $childNode)
+            {
+                /** @var \DOMNode $childNode */
+                if ($childNode->nodeName == '#text')
+                {
+                    continue;
+                }
+
+                $resultActionNode = $childNode;
+                break;
+            }
+        }
+
+        $resultIdNode =
+            $domXPath->query('//ims:resultRecord/ims:sourcedGUID/ims:sourcedId', $resultActionNode)->item(0);
+        $resultScoreNode =
+            $domXPath->query('//ims:resultRecord/ims:result/ims:resultScore/ims:textString', $resultActionNode)->item(
+                0
+            );
+
+        $score = empty($resultScoreNode) ? 0.0 : floatval($resultScoreNode->textContent);
+        $resultMessage = new ResultMessage($resultIdNode->textContent, $resultActionNode->nodeName, $score);
+        var_dump($resultMessage);
     }
 }

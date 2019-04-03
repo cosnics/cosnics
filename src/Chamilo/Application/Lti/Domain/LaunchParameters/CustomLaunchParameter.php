@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Lti\Domain;
+namespace Chamilo\Application\Lti\Domain\LaunchParameters;
 
 /**
  * Class CustomLaunchParameter

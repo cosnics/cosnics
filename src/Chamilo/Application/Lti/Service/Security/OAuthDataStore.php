@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Lti\Service;
+namespace Chamilo\Application\Lti\Service\Security;
 
 use IMSGlobal\LTI\OAuth\OAuthConsumer;
 use IMSGlobal\LTI\OAuth\OAuthToken;
@@ -13,6 +13,21 @@ use IMSGlobal\LTI\OAuth\OAuthToken;
 class OAuthDataStore extends \IMSGlobal\LTI\OAuth\OAuthDataStore
 {
     /**
+     * @var \Chamilo\Application\Lti\Domain\Application
+     */
+    protected $application;
+
+    /**
+     * OAuthDataStore constructor.
+     *
+     * @param \Chamilo\Application\Lti\Domain\Application $application
+     */
+    public function __construct(\Chamilo\Application\Lti\Domain\Application $application)
+    {
+        $this->application = $application;
+    }
+
+    /**
      * Create an OAuthConsumer object for the tool consumer.
      *
      * @param string $consumerKey Consumer key value
@@ -22,7 +37,7 @@ class OAuthDataStore extends \IMSGlobal\LTI\OAuth\OAuthDataStore
     function lookup_consumer($consumerKey)
     {
         return new OAuthConsumer(
-            'thisismychamilokey', '7Kts2OivnUnTZ6iCwdKgJSGJzYUqo3aD'
+            $this->application->getKey(), $this->application->getSecret()
         );
     }
 

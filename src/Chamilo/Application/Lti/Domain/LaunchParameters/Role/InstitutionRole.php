@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Lti\Domain\Role;
+namespace Chamilo\Application\Lti\Domain\LaunchParameters\Role;
 
 /**
  * Class SystemRole

@@ -3,10 +3,10 @@
 namespace Chamilo\Application\Lti\Component;
 
 use Chamilo\Application\Lti\Domain\Application;
-use Chamilo\Application\Lti\Domain\Role\ContextRole;
+use Chamilo\Application\Lti\Domain\LaunchParameters\Role\ContextRole;
 use Chamilo\Application\Lti\Manager;
-use Chamilo\Application\Lti\Service\LaunchGenerator;
-use Chamilo\Application\Lti\Service\LaunchParametersGenerator;
+use Chamilo\Application\Lti\Service\Launch\LaunchGenerator;
+use Chamilo\Application\Lti\Service\Launch\LaunchParametersGenerator;
 
 /**
  * Class LauncherComponent

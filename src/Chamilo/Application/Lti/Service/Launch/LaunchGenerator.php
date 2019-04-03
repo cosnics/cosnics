@@ -1,9 +1,9 @@
 <?php
 
-namespace Chamilo\Application\Lti\Service;
+namespace Chamilo\Application\Lti\Service\Launch;
 
 use Chamilo\Application\Lti\Domain\Application;
-use Chamilo\Application\Lti\Domain\LaunchParameters;
+use Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters;
 use IMSGlobal\LTI\OAuth\OAuthConsumer;
 use IMSGlobal\LTI\OAuth\OAuthRequest;
 use IMSGlobal\LTI\OAuth\OAuthSignatureMethod_HMAC_SHA1;
@@ -37,7 +37,7 @@ class LaunchGenerator
 
     /**
      * @param \Chamilo\Application\Lti\Domain\Application $application
-     * @param \Chamilo\Application\Lti\Domain\LaunchParameters $launchParameters
+     * @param \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters $launchParameters
      *
      * @return string
      * @throws \Twig_Error_Loader

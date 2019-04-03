@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Lti\Domain;
+namespace Chamilo\Application\Lti\Domain\LaunchParameters;
 
 /**
  * Class LearningInformationServicesParameters
@@ -77,7 +77,7 @@ class LearningInformationServicesParameters
     /**
      * @param string $personNameGiven
      *
-     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters
      */
     public function setPersonNameGiven(string $personNameGiven): LearningInformationServicesParameters
     {
@@ -89,7 +89,7 @@ class LearningInformationServicesParameters
     /**
      * @param string $personNameFamily
      *
-     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters
      */
     public function setPersonNameFamily(string $personNameFamily): LearningInformationServicesParameters
     {
@@ -101,7 +101,7 @@ class LearningInformationServicesParameters
     /**
      * @param string $personNameFull
      *
-     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters
      */
     public function setPersonNameFull(string $personNameFull): LearningInformationServicesParameters
     {
@@ -113,7 +113,7 @@ class LearningInformationServicesParameters
     /**
      * @param string $personContactEmailPrimary
      *
-     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters
      */
     public function setPersonContactEmailPrimary(string $personContactEmailPrimary): LearningInformationServicesParameters
     {
@@ -125,7 +125,7 @@ class LearningInformationServicesParameters
     /**
      * @param string $personSourcedId
      *
-     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters
      */
     public function setPersonSourceDid(string $personSourcedId): LearningInformationServicesParameters
     {
@@ -137,7 +137,7 @@ class LearningInformationServicesParameters
     /**
      * @param string $resultSourcedId
      *
-     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters
      */
     public function setResultSourcedId(string $resultSourcedId): LearningInformationServicesParameters
     {
@@ -149,7 +149,7 @@ class LearningInformationServicesParameters
     /**
      * @param string $outcomeServiceUrl
      *
-     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters
      */
     public function setOutcomeServiceUrl(string $outcomeServiceUrl): LearningInformationServicesParameters
     {
@@ -161,7 +161,7 @@ class LearningInformationServicesParameters
     /**
      * @param string $courseOfferingSourcedId
      *
-     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters
      */
     public function setCourseOfferingSourcedId(string $courseOfferingSourcedId): LearningInformationServicesParameters
     {
@@ -173,7 +173,7 @@ class LearningInformationServicesParameters
     /**
      * @param string $courseSectionSourcedId
      *
-     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters
      */
     public function setCourseSectionSourcedId(string $courseSectionSourcedId): LearningInformationServicesParameters
     {

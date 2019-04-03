@@ -1,8 +1,8 @@
 <?php
 
-namespace Chamilo\Application\Lti\Domain;
+namespace Chamilo\Application\Lti\Domain\LaunchParameters;
 
-use Chamilo\Application\Lti\Domain\Role\Role;
+use Chamilo\Application\Lti\Domain\LaunchParameters\Role\Role;
 
 /**
  * Class LaunchParameters
@@ -15,6 +15,11 @@ class LaunchParameters
     const DOCUMENT_TARGET_WINDOW = 'window';
     const DOCUMENT_TARGET_IFRAME = 'iframe';
     const DOCUMENT_TARGET_FRAME = 'frame';
+
+    const CONTEXT_COURSE_TEMPLATE = 'urn:lti:context-type:ims/lis/CourseTemplate';
+    const CONTEXT_COURSE_OFFERING = 'urn:lti:context-type:ims/lis/CourseOffering';
+    const CONTEXT_COURSE_SECTION = 'urn:lti:context-type:ims/lis/CourseSection';
+    const CONTEXT_GROUP = 'urn:lti:context-type:ims/lis/Group';
 
     /**
      * Required
@@ -71,7 +76,7 @@ class LaunchParameters
     protected $roles;
 
     /**
-     * @var \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
+     * @var \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters
      */
     protected $learningInformationServicesParameters;
 
@@ -83,7 +88,7 @@ class LaunchParameters
     protected $contextId;
 
     /**
-     * @var \Chamilo\Application\Lti\Domain\ContextType
+     * @var string
      */
     protected $contextType;
 
@@ -285,12 +290,12 @@ class LaunchParameters
     }
 
     /**
-     * @param \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters $learningInformationServicesParameters
+     * @param \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters $learningInformationServicesParameters
      *
-     * @return \Chamilo\Application\Lti\Domain\LaunchParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters
      */
     public function setLearningInformationServicesParameters(
-        \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters $learningInformationServicesParameters
+        \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters $learningInformationServicesParameters
     ): LaunchParameters
     {
         $this->learningInformationServicesParameters = $learningInformationServicesParameters;
@@ -299,10 +304,10 @@ class LaunchParameters
     }
 
     /**
-     * @return \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters
      */
     public function getLearningInformationServicesParameters(
-    ): \Chamilo\Application\Lti\Domain\LearningInformationServicesParameters
+    ): \Chamilo\Application\Lti\Domain\LaunchParameters\LearningInformationServicesParameters
     {
         return $this->learningInformationServicesParameters;
     }
@@ -320,12 +325,25 @@ class LaunchParameters
     }
 
     /**
-     * @param \Chamilo\Application\Lti\Domain\ContextType $contextType
+     * @param string $contextType
      *
      * @return LaunchParameters
      */
-    public function setContextType(\Chamilo\Application\Lti\Domain\ContextType $contextType): LaunchParameters
+    public function setContextType(string $contextType): LaunchParameters
     {
+        $availableContextTypes = [
+            self::CONTEXT_COURSE_TEMPLATE, self::CONTEXT_COURSE_OFFERING, self::CONTEXT_COURSE_SECTION,
+            self::CONTEXT_GROUP
+        ];
+
+        if (!in_array($contextType, $availableContextTypes))
+        {
+            throw new \InvalidArgumentException(
+                'The given context type %s is not valid. Context type should be one of (%s)',
+                $contextType, implode(', ', $availableContextTypes)
+            );
+        }
+
         $this->contextType = $contextType;
 
         return $this;
@@ -502,7 +520,7 @@ class LaunchParameters
     /**
      * @param string $toolConsumerInstanceUrl
      *
-     * @return \Chamilo\Application\Lti\Domain\LaunchParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters
      */
     public function setToolConsumerInstanceUrl(string $toolConsumerInstanceUrl): LaunchParameters
     {
@@ -514,7 +532,7 @@ class LaunchParameters
     /**
      * @param string $toolConsumerInstanceContactEmail
      *
-     * @return \Chamilo\Application\Lti\Domain\LaunchParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters
      */
     public function setToolConsumerInstanceContactEmail(string $toolConsumerInstanceContactEmail): LaunchParameters
     {
@@ -524,9 +542,9 @@ class LaunchParameters
     }
 
     /**
-     * @param \Chamilo\Application\Lti\Domain\Role\Role $role
+     * @param \Chamilo\Application\Lti\Domain\LaunchParameters\Role\Role $role
      *
-     * @return \Chamilo\Application\Lti\Domain\LaunchParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters
      */
     public function addRole(Role $role): LaunchParameters
     {
@@ -536,9 +554,9 @@ class LaunchParameters
     }
 
     /**
-     * @param \Chamilo\Application\Lti\Domain\CustomLaunchParameter $customLaunchParameter
+     * @param \Chamilo\Application\Lti\Domain\LaunchParameters\CustomLaunchParameter $customLaunchParameter
      *
-     * @return \Chamilo\Application\Lti\Domain\LaunchParameters
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters
      */
     public function addCustomLaunchParameters(CustomLaunchParameter $customLaunchParameter): LaunchParameters
     {

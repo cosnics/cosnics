@@ -2,6 +2,8 @@
 
 namespace Chamilo\Application\Lti\Domain;
 
+use IMSGlobal\LTI\OAuth\OAuthConsumer;
+
 /**
  * Class Application
  *
@@ -61,5 +63,15 @@ class Application
     public function getSecret(): string
     {
         return $this->secret;
+    }
+
+    /**
+     * Transforms the application to an OAuth consumer for further use
+     *
+     * @return \IMSGlobal\LTI\OAuth\OAuthConsumer
+     */
+    public function toOAuthConsumer()
+    {
+        return new OAuthConsumer($this->getKey(), $this->getSecret());
     }
 }

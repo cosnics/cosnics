@@ -1,9 +1,8 @@
 <?php
 
-namespace Chamilo\Application\Lti\Service;
+namespace Chamilo\Application\Lti\Service\Launch;
 
-use Chamilo\Application\Lti\Domain\LaunchParameters;
-use Chamilo\Application\Lti\Domain\LearningInformationServicesParameters;
+use Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters;
 use Chamilo\Application\Lti\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Redirect;
@@ -54,9 +53,9 @@ class LaunchParametersGenerator
      * Generates a LaunchParameters object with values based on the current Chamilo configuration and user data
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Application\Lti\Domain\LaunchParameters|null $launchParameters
+     * @param \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters|null $launchParameters
      *
-     * @return \Chamilo\Application\Lti\Domain\LaunchParameters|null
+     * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters|null
      */
     public function generateLaunchParametersForUser(User $user, LaunchParameters $launchParameters = null)
     {
