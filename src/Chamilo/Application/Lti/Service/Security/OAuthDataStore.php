@@ -36,9 +36,7 @@ class OAuthDataStore extends \IMSGlobal\LTI\OAuth\OAuthDataStore
      */
     function lookup_consumer($consumerKey)
     {
-        return new OAuthConsumer(
-            $this->application->getKey(), $this->application->getSecret()
-        );
+        return $this->application->toOAuthConsumer();
     }
 
     /**

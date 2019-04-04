@@ -3,11 +3,11 @@
 namespace Chamilo\Application\Lti\Domain\Outcome;
 
 /**
- * Class ResultMessage
+ * Class OutcomeMessage
  *
  * @package Chamilo\Application\Lti\Domain\Outcome
  */
-class ResultMessage
+class OutcomeMessage
 {
     /**
      * @var string
@@ -27,7 +27,7 @@ class ResultMessage
     protected $score;
 
     /**
-     * ResultMessage constructor.
+     * OutcomeMessage constructor.
      *
      * @param string $id
      * @param string $action
@@ -62,5 +62,13 @@ class ResultMessage
     public function getScore(): float
     {
         return $this->score;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidScore()
+    {
+        return $this->score >= 0.0 && $this->score <= 1.0;
     }
 }
