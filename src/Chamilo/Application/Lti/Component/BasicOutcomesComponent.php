@@ -2,10 +2,8 @@
 
 namespace Chamilo\Application\Lti\Component;
 
-use Chamilo\Application\Lti\Domain\Application;
 use Chamilo\Application\Lti\Manager;
-use Chamilo\Application\Lti\Service\Outcome\MessageParser;
-use Chamilo\Application\Lti\Service\Security\OAuthSecurity;
+use Chamilo\Application\Lti\Service\Outcome\OutcomeWebservice;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 
 /**
@@ -18,9 +16,11 @@ class BasicOutcomesComponent extends Manager implements NoAuthenticationSupport
 {
 
     /**
-     *
      * @return string
-     * @throws \IMSGlobal\LTI\OAuth\OAuthException
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     function run()
     {
@@ -50,7 +50,7 @@ class BasicOutcomesComponent extends Manager implements NoAuthenticationSupport
     <replaceResultRequest>
       <resultRecord>
         <sourcedGUID>
-          <sourcedId>5</sourcedId>
+          <sourcedId>eyJpbnRlZ3JhdGlvbkNsYXNzIjoiQ2hhbWlsb1xcQXBwbGljYXRpb25cXEx0aVxcU2VydmljZVxcSW50ZWdyYXRpb25cXFRlc3RJbnRlZ3JhdGlvbiIsInJlc3VsdElkIjo1fQ==</sourcedId>
         </sourcedGUID>
         <result>
           <resultScore>
@@ -64,23 +64,18 @@ class BasicOutcomesComponent extends Manager implements NoAuthenticationSupport
 </imsx_POXEnvelopeRequest>
 EOD;
 
-        $ltiApplication = new Application(
-            'http://dev.hogent.be/extra/lti_provider/src/connect.php', 'thisismychamilokey',
-            '7Kts2OivnUnTZ6iCwdKgJSGJzYUqo3aD'
-        );
-
         $this->getRequest()->setMethod('POST');
         $this->getRequest()->setContent($body);
         $this->getRequest()->headers->set(
             'Authorization',
-            'OAuth oauth_version="1.0",oauth_nonce="b35834a8ed651f00ebbbe6cfcdc0d72c",oauth_timestamp="1554361370",oauth_consumer_key="thisismychamilokey",oauth_body_hash="E7/bLcJuvHXIDfCgRxcutZeiEkA=",oauth_signature_method="HMAC-SHA1",oauth_signature="4R%2BhohsAL1I8CkQQck00Ew69noI="'
+            'OAuth oauth_version="1.0",oauth_nonce="b35834a8ed651f00ebbbe6cfcdc0d72c",oauth_timestamp="1554446537",oauth_consumer_key="thisismychamilokey",oauth_body_hash="E7/bLcJuvHXIDfCgRxcutZeiEkA=",oauth_signature_method="HMAC-SHA1",oauth_signature="w65hyioHvdaW8mMDNVT6TBv0agg="'
         );
 
-        $oauthSecurity = new OAuthSecurity();
-        $oauthSecurity->verifyRequest($ltiApplication, $this->getRequest());
+        $this->getRequest()->query->set(self::PARAM_UUID, '951b6ec2-e454-4e1c-9abf-05f562bface9');
 
-        $outcomeMessageParser = new MessageParser();
-        $outcomeMessage = $outcomeMessageParser->parseMessage($body);
-        var_dump($outcomeMessage);
+        $outcomeWebservice = $this->getService(OutcomeWebservice::class);
+
+        echo '<pre>';
+        echo htmlentities($outcomeWebservice->handleRequest($this->getRequest()));
     }
 }

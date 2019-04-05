@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Chamilo\Application\Lti\Service\Outcome\MessageHandler\DeleteResultMessageHandler" autowire="true" />
+        <service id="Chamilo\Application\Lti\Service\Outcome\MessageHandler\ReadResultMessageHandler" autowire="true" />
+        <service id="Chamilo\Application\Lti\Service\Outcome\MessageHandler\ReplaceResultMessageHandler" autowire="true" />
+
+        <service id="Chamilo\Application\Lti\Service\Outcome\MessageHandler\MessageHandlerBuilder" autowire="true">
+            <call method="addMessageHandler">
+                <argument type="string">replaceResult</argument>
+                <argument type="service" id="Chamilo\Application\Lti\Service\Outcome\MessageHandler\ReplaceResultMessageHandler" />
+            </call>
+            <call method="addMessageHandler">
+                <argument type="string">deleteResult</argument>
+                <argument type="service" id="Chamilo\Application\Lti\Service\Outcome\MessageHandler\DeleteResultMessageHandler" />
+            </call>
+            <call method="addMessageHandler">
+                <argument type="string">readResult</argument>
+                <argument type="service" id="Chamilo\Application\Lti\Service\Outcome\MessageHandler\ReadResultMessageHandler" />
+            </call>
+        </service>
+
+        <service id="Chamilo\Application\Lti\Service\Outcome\MessageParser" autowire="true" />
+        <service id="Chamilo\Application\Lti\Service\Outcome\OutcomeWebservice" autowire="true" />
+        <service id="Chamilo\Application\Lti\Service\Outcome\IntegrationLocator" autowire="true" />
+
+        <service id="Chamilo\Application\Lti\Service\Security\OAuthSecurity" autowire="true" />
+
+        <service id="Chamilo\Application\Lti\Service\Integration\TestIntegration" autowire="true">
+            <tag name="Chamilo\Application\Lti\Service\Integration\IntegrationInterface" />
+        </service>
+
+        <service id="Chamilo\Application\Lti\Storage\Repository\LtiProviderRepository">
+            <factory service="doctrine.orm.entity_manager" method="getRepository" />
+            <argument>Chamilo\Application\Lti\Storage\Entity\LtiProvider</argument>
+        </service>
+
+        <service id="Chamilo\Application\Lti\Service\LtiProviderService" autowire="true" />
+
+    </services>
+</container>

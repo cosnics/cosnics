@@ -12,12 +12,22 @@ class OutcomeMessage
     /**
      * @var string
      */
-    protected $id;
+    protected $messageId;
 
     /**
      * @var string
      */
-    protected $action;
+    protected $integrationClass;
+
+    /**
+     * @var string
+     */
+    protected $resultId;
+
+    /**
+     * @var string
+     */
+    protected $operation;
 
     /**
      * Score between 0.0 and 1.0
@@ -29,31 +39,51 @@ class OutcomeMessage
     /**
      * OutcomeMessage constructor.
      *
-     * @param string $id
-     * @param string $action
+     * @param string $messageId
+     * @param string $integrationClass
+     * @param string $resultId
+     * @param string $operation
      * @param float $score
      */
-    public function __construct(string $id, string $action, float $score)
+    public function __construct(string $messageId, string $integrationClass, string $resultId, string $operation, float $score)
     {
-        $this->id = $id;
-        $this->action = $action;
+        $this->messageId = $messageId;
+        $this->resultId = $resultId;
+        $this->operation = $operation;
         $this->score = $score;
+        $this->integrationClass = $integrationClass;
     }
 
     /**
      * @return string
      */
-    public function getId(): string
+    public function getIntegrationClass(): string
     {
-        return $this->id;
+        return $this->integrationClass;
     }
 
     /**
      * @return string
      */
-    public function getAction(): string
+    public function getMessageId(): string
     {
-        return $this->action;
+        return $this->messageId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResultId(): string
+    {
+        return $this->resultId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOperation(): string
+    {
+        return $this->operation;
     }
 
     /**
@@ -70,5 +100,20 @@ class OutcomeMessage
     public function isValidScore()
     {
         return $this->score >= 0.0 && $this->score <= 1.0;
+    }
+
+    /**
+     * @param bool $success
+     * @param string $message
+     *
+     * @return array
+     */
+    public function getResponseParametersArray(bool $success, string $message)
+    {
+        return [
+            'RESPONSE_MESSAGE_ID' => uniqid(), 'REQUEST_MESSAGE_ID' => $this->getMessageId(),
+            'STATUS' => $success ? 'success' : 'failure', 'OPERATION' => $this->getOperation(),
+            'MESSAGE' => $message
+        ];
     }
 }

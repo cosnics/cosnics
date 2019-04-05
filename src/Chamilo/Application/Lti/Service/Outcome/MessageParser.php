@@ -29,7 +29,10 @@ class MessageParser
         $domXPath = new \DOMXPath($domDocument);
         $domXPath->registerNamespace('ims', 'http://www.imsglobal.org/services/ltiv1p1/xsd/imsoms_v1p0');
 
-        $resultActionNode = null;
+        $messageIdNode =
+            $domXPath->query('//ims:imsx_POXHeader/ims:imsx_POXRequestHeaderInfo/ims:imsx_messageIdentifier')->item(0);
+
+        $operationNode = null;
 
         $domNodeList = $domXPath->query('//ims:imsx_POXBody');
         foreach ($domNodeList as $domNode)
@@ -44,32 +47,61 @@ class MessageParser
                     continue;
                 }
 
-                $resultActionNode = $childNode;
+                $operationNode = $childNode;
                 break;
             }
         }
 
         $resultIdNode =
-            $domXPath->query('//ims:resultRecord/ims:sourcedGUID/ims:sourcedId', $resultActionNode)->item(0);
+            $domXPath->query('//ims:resultRecord/ims:sourcedGUID/ims:sourcedId', $operationNode)->item(0);
         $resultScoreNode =
-            $domXPath->query('//ims:resultRecord/ims:result/ims:resultScore/ims:textString', $resultActionNode)->item(
+            $domXPath->query('//ims:resultRecord/ims:result/ims:resultScore/ims:textString', $operationNode)->item(
                 0
             );
 
+        $messageId = empty($messageIdNode) ? null : $messageIdNode->textContent;
         $score = empty($resultScoreNode) ? 0.0 : floatval($resultScoreNode->textContent);
-        $action = $resultActionNode->nodeName;
-        $resultId = $resultIdNode->textContent;
+        $operation = empty($operationNode) ? null : $operationNode->nodeName;
+        $result = empty($resultIdNode) ? null : $resultIdNode->textContent;
 
-        if(empty($action))
+        if (empty($messageId))
         {
-            throw new ParseMessageException('The message does not contain an action');
+            throw new ParseMessageException('The message does not contain a valid messageIdentifier');
         }
 
-        if(empty($resultId))
+        if (empty($operation))
+        {
+            throw new ParseMessageException('The message does not contain an operation');
+        }
+
+        if (empty($result))
         {
             throw new ParseMessageException('The result sourcedId should not be empty');
         }
 
-        return new OutcomeMessage($resultId, $action, $score);
+        $operation = str_replace('Request', '', $operation);
+        $resultArray = json_decode(base64_decode($result), true);
+        if (empty($resultArray))
+        {
+            throw new ParseMessageException('The result sourcedID could not be parsed to a valid result');
+        }
+
+        if (empty($resultArray['integrationClass']))
+        {
+            throw new ParseMessageException(
+                'The integration handler could not be determined from the result sourcedID'
+            );
+        }
+
+        if (empty($resultArray['resultId']))
+        {
+            throw new ParseMessageException(
+                'The result id could not be determined from the result sourcedID'
+            );
+        }
+
+        return new OutcomeMessage(
+            $messageId, $resultArray['integrationClass'], $resultArray['resultId'], $operation, $score
+        );
     }
 }

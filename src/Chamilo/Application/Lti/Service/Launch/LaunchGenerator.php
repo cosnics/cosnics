@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Lti\Service\Launch;
 
-use Chamilo\Application\Lti\Domain\Application;
+use Chamilo\Application\Lti\Storage\Entity\LtiProvider;
 use Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters;
 use IMSGlobal\LTI\OAuth\OAuthConsumer;
 use IMSGlobal\LTI\OAuth\OAuthRequest;
@@ -36,7 +36,7 @@ class LaunchGenerator
     }
 
     /**
-     * @param \Chamilo\Application\Lti\Domain\Application $application
+     * @param \Chamilo\Application\Lti\Storage\Entity\LtiProvider $ltiProvider
      * @param \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters $launchParameters
      *
      * @return string
@@ -44,23 +44,23 @@ class LaunchGenerator
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function generateLaunchHtml(Application $application, LaunchParameters $launchParameters)
+    public function generateLaunchHtml(LtiProvider $ltiProvider, LaunchParameters $launchParameters)
     {
         $launchParametersAsArray = $launchParameters->toArray();
         $launchParametersAsArray['oauth_callback'] = 'about:blank';
 
         $launchParametersAsArray = array_merge(
-            $launchParametersAsArray, $this->generateSecurityParameters($application, $launchParametersAsArray)
+            $launchParametersAsArray, $this->generateSecurityParameters($ltiProvider, $launchParametersAsArray)
         );
 
         $showInIFrame = $launchParameters->canShowInIFrame();
-
+//
 //var_dump($launchParametersAsArray);
 
         return $this->twigRenderer->render(
             'Chamilo\Application\Lti:Launcher.html.twig', [
                 'LTI_PARAMETERS' => $launchParametersAsArray,
-                'LTI_URL' => $application->getLtiUrl(),
+                'LTI_URL' => $ltiProvider->getLtiUrl(),
                 'IFRAME_WIDTH' => $launchParametersAsArray['launch_presentation_width'],
                 'IFRAME_HEIGHT' => $launchParametersAsArray['launch_presentation_height'],
                 'SHOW_IN_IFRAME' => $showInIFrame
@@ -69,18 +69,18 @@ class LaunchGenerator
     }
 
     /**
-     * @param \Chamilo\Application\Lti\Domain\Application $application
+     * @param \Chamilo\Application\Lti\Storage\Entity\LtiProvider $ltiProvider
      * @param array $launchParametersAsArray
      *
      * @return array
      */
-    protected function generateSecurityParameters(Application $application, array $launchParametersAsArray)
+    protected function generateSecurityParameters(LtiProvider $ltiProvider, array $launchParametersAsArray)
     {
         $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
-        $consumer = new OAuthConsumer($application->getKey(), $application->getSecret());
+        $consumer = new OAuthConsumer($ltiProvider->getKey(), $ltiProvider->getSecret());
 
         $request = OAuthRequest::from_consumer_and_token(
-            $consumer, null, 'POST', $application->getLtiUrl(), $launchParametersAsArray
+            $consumer, null, 'POST', $ltiProvider->getLtiUrl(), $launchParametersAsArray
         );
 
         $request->sign_request($hmacMethod, $consumer, null);

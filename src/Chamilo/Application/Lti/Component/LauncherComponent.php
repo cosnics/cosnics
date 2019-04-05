@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Lti\Component;
 
-use Chamilo\Application\Lti\Domain\Application;
+use Chamilo\Application\Lti\Service\LtiProviderService;
 use Chamilo\Application\Lti\Domain\LaunchParameters\Role\ContextRole;
 use Chamilo\Application\Lti\Manager;
 use Chamilo\Application\Lti\Service\Launch\LaunchGenerator;
@@ -37,16 +37,17 @@ class LauncherComponent extends Manager
             ->getLearningInformationServicesParameters()
                 ->setResultSourcedId(6);
 
-        $ltiApplication = new Application(
-            'http://dev.hogent.be/extra/lti_provider/src/connect.php', 'thisismychamilokey',
-            '7Kts2OivnUnTZ6iCwdKgJSGJzYUqo3aD'
-        );
+        $ltiProviderService = $this->getService(LtiProviderService::class);
+//        $ltiProviderService->createLtiProvider('http://www.vanpouckesven.be/extra/lti_provider/src/connect.php', 'thisismychamilokey',
+//            '7Kts2OivnUnTZ6iCwdKgJSGJzYUqo3aD');
+
+        $ltiProvider = $ltiProviderService->getLtiProviderById(1);
 
         $launchGenerator = new LaunchGenerator($this->getTwig());
 
         $html = [];
         $html[] = $this->render_header();
-        $html[] = $launchGenerator->generateLaunchHtml($ltiApplication, $launchParameters);
+        $html[] = $launchGenerator->generateLaunchHtml($ltiProvider, $launchParameters);
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

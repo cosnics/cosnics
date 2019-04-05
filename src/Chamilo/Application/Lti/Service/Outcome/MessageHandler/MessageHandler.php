@@ -1,8 +1,12 @@
 <?php
 
-namespace Chamilo\Application\Lti\Service\Outcome;
+namespace Chamilo\Application\Lti\Service\Outcome\MessageHandler;
 
 use Chamilo\Application\Lti\Domain\Outcome\OutcomeMessage;
+use Chamilo\Application\Lti\Service\Integration\IntegrationInterface;
+use Chamilo\Application\Lti\Service\Integration\TestIntegration;
+use Chamilo\Application\Lti\Service\Outcome\IntegrationLocator;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 
 /**
  * @package Chamilo\Application\Lti\Service\Outcome
@@ -11,36 +15,56 @@ use Chamilo\Application\Lti\Domain\Outcome\OutcomeMessage;
 abstract class MessageHandler
 {
     /**
-     * @var \Chamilo\Application\Lti\Service\Outcome\IntegrationInterface[]
+     * @var \Twig_Environment
      */
-    protected $integrations;
+    protected $twig;
 
     /**
-     * @param \Chamilo\Application\Lti\Service\Outcome\IntegrationInterface $integration
+     * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
-    public function addIntegration(IntegrationInterface $integration)
+    protected $exceptionLogger;
+
+    /**
+     * @var \Chamilo\Application\Lti\Service\Outcome\IntegrationLocator
+     */
+    protected $integrationLocator;
+
+    /**
+     * MessageHandler constructor.
+     *
+     * @param \Twig_Environment $twig
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     * @param \Chamilo\Application\Lti\Service\Outcome\IntegrationLocator $integrationLocator
+     */
+    public function __construct(
+        \Twig_Environment $twig, ExceptionLoggerInterface $exceptionLogger, IntegrationLocator $integrationLocator
+    )
     {
-        $this->integrations[] = $integration;
+        $this->twig = $twig;
+        $this->exceptionLogger = $exceptionLogger;
+        $this->integrationLocator = $integrationLocator;
     }
 
     /**
-     * Handles an outcome message
+     * Handles a message and returns a response
      *
      * @param \Chamilo\Application\Lti\Domain\Outcome\OutcomeMessage $outcomeMessage
+     *
+     * @return string
      */
     public function handleMessage(OutcomeMessage $outcomeMessage)
     {
-        foreach ($this->integrations as $integration)
-        {
-            $this->callIntegration($integration, $outcomeMessage);
-        }
+        $integration = $this->integrationLocator->locateIntegration($outcomeMessage);
+        return $this->callIntegration($integration, $outcomeMessage);
     }
 
     /**
      * Executes the correct method on the integration for the given message
      *
-     * @param \Chamilo\Application\Lti\Service\Outcome\IntegrationInterface $integration
+     * @param \Chamilo\Application\Lti\Service\Integration\IntegrationInterface $integration
      * @param \Chamilo\Application\Lti\Domain\Outcome\OutcomeMessage $outcomeMessage
+     *
+     * @return string
      */
     abstract protected function callIntegration(
         IntegrationInterface $integration, OutcomeMessage $outcomeMessage

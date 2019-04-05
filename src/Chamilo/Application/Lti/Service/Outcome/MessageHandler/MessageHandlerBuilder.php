@@ -1,8 +1,8 @@
 <?php
 
-namespace Chamilo\Application\Lti\Service\Outcome;
+namespace Chamilo\Application\Lti\Service\Outcome\MessageHandler;
 
-use Chamilo\Application\Lti\Domain\Exception\UnsupportedActionException;
+use Chamilo\Application\Lti\Domain\Exception\UnsupportedOperationException;
 use Chamilo\Application\Lti\Domain\Outcome\OutcomeMessage;
 
 /**
@@ -17,28 +17,28 @@ class MessageHandlerBuilder
     protected $messageHandlers;
 
     /**
-     * Defines a message handler for a given action
+     * Defines a message handler for a given operation
      *
-     * @param string $action
-     * @param \Chamilo\Application\Lti\Service\Outcome\MessageHandler $messageHandler
+     * @param string $operation
+     * @param \Chamilo\Application\Lti\Service\Outcome\MessageHandler\MessageHandler $messageHandler
      */
-    public function addMessageHandler(string $action, MessageHandler $messageHandler)
+    public function addMessageHandler(string $operation, MessageHandler $messageHandler)
     {
-        $this->messageHandlers[$action] = $messageHandler;
+        $this->messageHandlers[$operation] = $messageHandler;
     }
 
     /**
      * @param \Chamilo\Application\Lti\Domain\Outcome\OutcomeMessage $message
      *
-     * @return \Chamilo\Application\Lti\Service\Outcome\MessageHandler
+     * @return \Chamilo\Application\Lti\Service\Outcome\MessageHandler\MessageHandler
      */
     public function buildMessageHandler(OutcomeMessage $message)
     {
-        if(!array_key_exists($message->getAction(), $this->messageHandlers))
+        if(!array_key_exists($message->getOperation(), $this->messageHandlers))
         {
-            throw new UnsupportedActionException($message->getAction());
+            throw new UnsupportedOperationException($message->getOperation());
         }
 
-        return $this->messageHandlers[$message->getAction()];
+        return $this->messageHandlers[$message->getOperation()];
     }
 }
