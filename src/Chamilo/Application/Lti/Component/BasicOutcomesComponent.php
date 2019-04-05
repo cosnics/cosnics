@@ -35,9 +35,9 @@ class BasicOutcomesComponent extends Manager implements NoAuthenticationSupport
         fwrite($handle, file_get_contents('php://input'));
         fwrite($handle, PHP_EOL);
         fwrite($handle, PHP_EOL);
-        fclose($handle);
 
-        $body = <<< EOD
+
+    /**    $body = <<< EOD
 <?xml version = "1.0" encoding = "UTF-8"?>
 <imsx_POXEnvelopeRequest xmlns = "http://www.imsglobal.org/services/ltiv1p1/xsd/imsoms_v1p0">
   <imsx_POXHeader>
@@ -71,11 +71,18 @@ EOD;
             'OAuth oauth_version="1.0",oauth_nonce="b35834a8ed651f00ebbbe6cfcdc0d72c",oauth_timestamp="1554446537",oauth_consumer_key="thisismychamilokey",oauth_body_hash="E7/bLcJuvHXIDfCgRxcutZeiEkA=",oauth_signature_method="HMAC-SHA1",oauth_signature="w65hyioHvdaW8mMDNVT6TBv0agg="'
         );
 
-        $this->getRequest()->query->set(self::PARAM_UUID, '951b6ec2-e454-4e1c-9abf-05f562bface9');
+        $this->getRequest()->query->set(self::PARAM_UUID, '951b6ec2-e454-4e1c-9abf-05f562bface9');**/
+
+
 
         $outcomeWebservice = $this->getService(OutcomeWebservice::class);
+        $result = $outcomeWebservice->handleRequest($this->getRequest());
 
-        echo '<pre>';
-        echo htmlentities($outcomeWebservice->handleRequest($this->getRequest()));
+        fwrite($handle, $result);
+        fwrite($handle, PHP_EOL);
+        fwrite($handle, PHP_EOL);
+        fclose($handle);
+
+        return $result;
     }
 }

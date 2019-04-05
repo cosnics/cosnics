@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Lti\Service\Outcome;
 
+use Chamilo\Application\Lti\Domain\Exception\LTIException;
 use Chamilo\Application\Lti\Domain\Exception\ParseMessageException;
 use Chamilo\Application\Lti\Domain\Outcome\OutcomeMessage;
 
@@ -13,6 +14,21 @@ use Chamilo\Application\Lti\Domain\Outcome\OutcomeMessage;
  */
 class MessageParser
 {
+    /**
+     * @var \Chamilo\Application\Lti\Service\Outcome\ResultIdEncoder
+     */
+    protected $resultIdEncoder;
+
+    /**
+     * MessageParser constructor.
+     *
+     * @param \Chamilo\Application\Lti\Service\Outcome\ResultIdEncoder $resultIdEncoder
+     */
+    public function __construct(\Chamilo\Application\Lti\Service\Outcome\ResultIdEncoder $resultIdEncoder)
+    {
+        $this->resultIdEncoder = $resultIdEncoder;
+    }
+
     /**
      * @param string $message
      *
@@ -80,24 +96,14 @@ class MessageParser
         }
 
         $operation = str_replace('Request', '', $operation);
-        $resultArray = json_decode(base64_decode($result), true);
-        if (empty($resultArray))
-        {
-            throw new ParseMessageException('The result sourcedID could not be parsed to a valid result');
-        }
 
-        if (empty($resultArray['integrationClass']))
+        try
         {
-            throw new ParseMessageException(
-                'The integration handler could not be determined from the result sourcedID'
-            );
+            $resultArray = $this->resultIdEncoder->decodeResultId($result);
         }
-
-        if (empty($resultArray['resultId']))
+        catch(LTIException $ex)
         {
-            throw new ParseMessageException(
-                'The result id could not be determined from the result sourcedID'
-            );
+            throw new ParseMessageException($ex->getMessage());
         }
 
         return new OutcomeMessage(

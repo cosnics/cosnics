@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Lti\Component;
 
+use Chamilo\Application\Lti\Service\Integration\TestIntegration;
 use Chamilo\Application\Lti\Service\LtiProviderService;
 use Chamilo\Application\Lti\Domain\LaunchParameters\Role\ContextRole;
 use Chamilo\Application\Lti\Manager;
@@ -25,25 +26,28 @@ class LauncherComponent extends Manager
      */
     function run()
     {
-        $launchParametersGenerator = new LaunchParametersGenerator($this->getTranslator(), $this->getPathBuilder(), $this->getConfigurationConsulter());
+        /** @var LaunchParametersGenerator $launchParametersGenerator */
+        $launchParametersGenerator = $this->getService(LaunchParametersGenerator::class);
 
-        $launchParameters = $launchParametersGenerator->generateLaunchParametersForUser($this->getUser());
-        $launchParameters->setContextId('9d5d6098a0763716622ebb48921d548713d1bae8')
-            ->setContextLabel('ALGCUR001')
-            ->setContextTitle('Demo Cursus')
-            ->setResourceLinkId('9d5d6098a0763716622ebb48921d548713d1bae8')
-            ->setResourceLinkTitle('BuddyCheck')
-            ->addRole(new ContextRole(ContextRole::ROLE_INSTRUCTOR))
-            ->getLearningInformationServicesParameters()
-                ->setResultSourcedId(6);
+        /** @var LaunchGenerator $launchGenerator */
+        $launchGenerator = $this->getService(LaunchGenerator::class);
 
+        /** @var LtiProviderService $ltiProviderService */
         $ltiProviderService = $this->getService(LtiProviderService::class);
 //        $ltiProviderService->createLtiProvider('http://www.vanpouckesven.be/extra/lti_provider/src/connect.php', 'thisismychamilokey',
 //            '7Kts2OivnUnTZ6iCwdKgJSGJzYUqo3aD');
 
         $ltiProvider = $ltiProviderService->getLtiProviderById(1);
 
-        $launchGenerator = new LaunchGenerator($this->getTwig());
+        $launchParameters = $launchParametersGenerator->generateLaunchParametersForUser($ltiProvider, $this->getUser());
+        $launchParameters->setContextId('9d5d6098a0763716622ebb48921d548713d1bae8')
+            ->setContextLabel('ALGCUR001')
+            ->setContextTitle('Demo Cursus')
+            ->setResourceLinkId('9d5d6098a0763716622ebb48921d548713d1bae8')
+            ->setResourceLinkTitle('BuddyCheck')
+            ->addRole(new ContextRole(ContextRole::ROLE_LEARNER));
+
+        $launchParametersGenerator->generateResultIdentifier($launchParameters, TestIntegration::class, 5);
 
         $html = [];
         $html[] = $this->render_header();

@@ -85,8 +85,7 @@ class OutcomeWebservice
         try
         {
             $ltiProvider = $this->getLtiProviderFromRequest($request);
-            // TODO: enable security
-//            $this->oauthSecurity->verifyRequest($this->getApplicationFromRequest($request), $request);
+            $this->oauthSecurity->verifyRequest($ltiProvider, $request);
             $outcomeMessage = $this->messageParser->parseMessage($request->getContent());
             $messageHandler = $this->messageHandlerBuilder->buildMessageHandler($outcomeMessage);
 

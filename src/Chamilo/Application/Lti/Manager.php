@@ -14,6 +14,7 @@ abstract class Manager extends Application
 {
     const ACTION_LAUNCH = 'Launcher';
     const ACTION_BASIC_OUTCOMES = 'BasicOutcomes';
+    const ACTION_RETURN = 'Return';
 
     const PARAM_UUID = 'uuid';
 

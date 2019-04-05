@@ -55,7 +55,7 @@ class LaunchGenerator
 
         $showInIFrame = $launchParameters->canShowInIFrame();
 //
-//var_dump($launchParametersAsArray);
+var_dump($launchParametersAsArray);
 
         return $this->twigRenderer->render(
             'Chamilo\Application\Lti:Launcher.html.twig', [
