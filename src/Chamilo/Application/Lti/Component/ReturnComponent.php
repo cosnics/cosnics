@@ -16,6 +16,6 @@ class ReturnComponent extends Manager
      */
     function run()
     {
-        var_dump($this->getRequest());
+        file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . 'log2.txt', var_export($this->getRequest(), true));
     }
 }

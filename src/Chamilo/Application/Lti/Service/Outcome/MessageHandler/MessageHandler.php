@@ -4,7 +4,6 @@ namespace Chamilo\Application\Lti\Service\Outcome\MessageHandler;
 
 use Chamilo\Application\Lti\Domain\Outcome\OutcomeMessage;
 use Chamilo\Application\Lti\Service\Integration\IntegrationInterface;
-use Chamilo\Application\Lti\Service\Integration\TestIntegration;
 use Chamilo\Application\Lti\Service\Outcome\IntegrationLocator;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 

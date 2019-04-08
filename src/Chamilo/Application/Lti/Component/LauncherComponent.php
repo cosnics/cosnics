@@ -34,10 +34,7 @@ class LauncherComponent extends Manager
 
         /** @var LtiProviderService $ltiProviderService */
         $ltiProviderService = $this->getService(LtiProviderService::class);
-//        $ltiProviderService->createLtiProvider('http://www.vanpouckesven.be/extra/lti_provider/src/connect.php', 'thisismychamilokey',
-//            '7Kts2OivnUnTZ6iCwdKgJSGJzYUqo3aD');
-
-        $ltiProvider = $ltiProviderService->getLtiProviderById(1);
+        $ltiProvider = $ltiProviderService->getLtiProviderById(2);
 
         $launchParameters = $launchParametersGenerator->generateLaunchParametersForUser($ltiProvider, $this->getUser());
         $launchParameters->setContextId('9d5d6098a0763716622ebb48921d548713d1bae8')
