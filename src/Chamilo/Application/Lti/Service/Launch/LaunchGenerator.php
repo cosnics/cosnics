@@ -2,11 +2,9 @@
 
 namespace Chamilo\Application\Lti\Service\Launch;
 
-use Chamilo\Application\Lti\Storage\Entity\LtiProvider;
 use Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters;
-use IMSGlobal\LTI\OAuth\OAuthConsumer;
-use IMSGlobal\LTI\OAuth\OAuthRequest;
-use IMSGlobal\LTI\OAuth\OAuthSignatureMethod_HMAC_SHA1;
+use Chamilo\Application\Lti\Service\Security\OAuthSecurity;
+use Chamilo\Application\Lti\Storage\Entity\LtiProvider;
 
 /**
  * Use this class to launch an LTI application.
@@ -26,13 +24,20 @@ class LaunchGenerator
     protected $twigRenderer;
 
     /**
+     * @var \Chamilo\Application\Lti\Service\Security\OAuthSecurity
+     */
+    protected $oauthSecurity;
+
+    /**
      * LaunchGenerator constructor.
      *
      * @param \Twig_Environment $twigRenderer
+     * @param \Chamilo\Application\Lti\Service\Security\OAuthSecurity $oauthSecurity
      */
-    public function __construct(\Twig_Environment $twigRenderer)
+    public function __construct(\Twig_Environment $twigRenderer, OAuthSecurity $oauthSecurity)
     {
         $this->twigRenderer = $twigRenderer;
+        $this->oauthSecurity = $oauthSecurity;
     }
 
     /**
@@ -48,9 +53,12 @@ class LaunchGenerator
     {
         $launchParametersAsArray = $launchParameters->toArray();
         $launchParametersAsArray['oauth_callback'] = 'about:blank';
+        $launchParametersAsArray['custom_opened_resource_id'] = 1070775;
 
         $launchParametersAsArray = array_merge(
-            $launchParametersAsArray, $this->generateSecurityParameters($ltiProvider, $launchParametersAsArray)
+            $launchParametersAsArray, $this->oauthSecurity->generateSecurityParametersForLaunch(
+                $ltiProvider, $launchParametersAsArray
+            )
         );
 
         $showInIFrame = $launchParameters->canShowInIFrame();
@@ -66,25 +74,5 @@ var_dump($launchParametersAsArray);
                 'SHOW_IN_IFRAME' => $showInIFrame
             ]
         );
-    }
-
-    /**
-     * @param \Chamilo\Application\Lti\Storage\Entity\LtiProvider $ltiProvider
-     * @param array $launchParametersAsArray
-     *
-     * @return array
-     */
-    protected function generateSecurityParameters(LtiProvider $ltiProvider, array $launchParametersAsArray)
-    {
-        $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
-        $consumer = new OAuthConsumer($ltiProvider->getKey(), $ltiProvider->getSecret());
-
-        $request = OAuthRequest::from_consumer_and_token(
-            $consumer, null, 'POST', $ltiProvider->getLtiUrl(), $launchParametersAsArray
-        );
-
-        $request->sign_request($hmacMethod, $consumer, null);
-
-        return $request->get_parameters();
     }
 }
