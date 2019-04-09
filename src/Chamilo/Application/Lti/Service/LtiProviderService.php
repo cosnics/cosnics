@@ -28,6 +28,22 @@ class LtiProviderService
     }
 
     /**
+     * @param \Chamilo\Application\Lti\Storage\Entity\LtiProvider $ltiProvider
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function saveLtiProvider(LtiProvider $ltiProvider)
+    {
+        if(empty($ltiProvider->getUuid()))
+        {
+            $ltiProvider->setUuid(UUID::v4());
+        }
+
+        $this->ltiProviderRepository->saveLtiProvider($ltiProvider);
+    }
+
+    /**
      * @param string $url
      * @param string $key
      * @param string $secret
@@ -35,7 +51,7 @@ class LtiProviderService
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function createLtiProvider(string $url, string $key, string $secret)
+    public function createLtiProviderFromData(string $url, string $key, string $secret)
     {
         $ltiProvider = new LtiProvider();
 
@@ -56,7 +72,7 @@ class LtiProviderService
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function updateLtiProvider(LtiProvider $ltiProvider, string $url, string $key, string $secret)
+    public function updateLtiProviderFromData(LtiProvider $ltiProvider, string $url, string $key, string $secret)
     {
         $ltiProvider->setLtiUrl($url);
         $ltiProvider->setKey($key);
@@ -94,6 +110,14 @@ class LtiProviderService
     public function getLtiProviderByUUID(string $uuid)
     {
         return $this->ltiProviderRepository->getLtiProviderByUUID($uuid);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function findLtiProviders()
+    {
+        return $this->ltiProviderRepository->findLtiProviders();
     }
 
 

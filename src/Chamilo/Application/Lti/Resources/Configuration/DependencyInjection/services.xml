@@ -45,5 +45,9 @@
 
         <service id="Chamilo\Application\Lti\Service\LtiProviderService" autowire="true" />
 
+        <service id="Chamilo\Application\Lti\Form\ProviderFormType" autowire="true">
+            <tag name="form.type" />
+        </service>
+
     </services>
 </container>

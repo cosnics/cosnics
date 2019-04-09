@@ -53,7 +53,6 @@ class LaunchGenerator
     {
         $launchParametersAsArray = $launchParameters->toArray();
         $launchParametersAsArray['oauth_callback'] = 'about:blank';
-        $launchParametersAsArray['custom_opened_resource_id'] = 1070775;
 
         $launchParametersAsArray = array_merge(
             $launchParametersAsArray, $this->oauthSecurity->generateSecurityParametersForLaunch(

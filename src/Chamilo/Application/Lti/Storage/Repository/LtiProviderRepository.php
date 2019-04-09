@@ -45,4 +45,12 @@ class LtiProviderRepository extends EntityRepository
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * @return LtiProvider[]
+     */
+    public function findLtiProviders()
+    {
+        return $this->findAll();
+    }
+
 }

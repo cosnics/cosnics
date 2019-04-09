@@ -1,0 +1,15 @@
+{% form_theme FORM 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{{ HEADER|raw }}
+
+{{ form_start(FORM) }}
+{{ form_rest(FORM) }}
+<div class="row">
+    <div class="col-md-10 col-md-push-2">
+        <button type="submit" class="btn btn-primary">{{ 'Save'|trans({}, 'Chamilo\\Libraries') }}</button>
+    </div>
+</div>
+
+{{ form_end(FORM) }}
+
+{{ FOOTER|raw }}

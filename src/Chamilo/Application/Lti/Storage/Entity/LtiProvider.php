@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Lti\Storage\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use IMSGlobal\LTI\OAuth\OAuthConsumer;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,6 +28,13 @@ class LtiProvider
      * @ORM\Id
      */
     protected $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    protected $name;
 
     /**
      * @var string
@@ -57,6 +65,21 @@ class LtiProvider
     protected $secret;
 
     /**
+     * @var \Chamilo\Application\Lti\Storage\Entity\LtiProviderCustomParameter[] | \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\Chamilo\Application\Lti\Storage\Entity\LtiProviderCustomParameter", mappedBy="ltiProvider")
+     */
+    protected $customParameters;
+
+    /**
+     * LtiProvider constructor.
+     */
+    public function __construct()
+    {
+        $this->customParameters = new ArrayCollection();
+    }
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -67,7 +90,23 @@ class LtiProvider
     /**
      * @return string
      */
-    public function getUuid(): string
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUuid(): ?string
     {
         return $this->uuid;
     }
@@ -108,7 +147,7 @@ class LtiProvider
     /**
      * @return string
      */
-    public function getLtiUrl(): string
+    public function getLtiUrl(): ?string
     {
         return $this->ltiUrl;
     }
@@ -116,7 +155,7 @@ class LtiProvider
     /**
      * @return string
      */
-    public function getKey(): string
+    public function getKey(): ?string
     {
         return $this->key;
     }
@@ -124,9 +163,33 @@ class LtiProvider
     /**
      * @return string
      */
-    public function getSecret(): string
+    public function getSecret(): ?string
     {
         return $this->secret;
+    }
+
+    /**
+     * @return \Chamilo\Application\Lti\Storage\Entity\LtiProviderCustomParameter[]|\Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getCustomParameters()
+    {
+        return $this->customParameters;
+    }
+
+    /**
+     * @param \Chamilo\Application\Lti\Storage\Entity\LtiProviderCustomParameter[]|\Doctrine\Common\Collections\ArrayCollection $customParameters
+     */
+    public function setCustomParameters($customParameters): void
+    {
+        $this->customParameters = $customParameters;
+    }
+
+    /**
+     * @param \Chamilo\Application\Lti\Storage\Entity\LtiProviderCustomParameter $ltiProviderCustomParameter
+     */
+    public function addCustomParameter(LtiProviderCustomParameter $ltiProviderCustomParameter)
+    {
+        $this->customParameters->add($ltiProviderCustomParameter);
     }
 
     /**
@@ -134,7 +197,7 @@ class LtiProvider
      *
      * @return \IMSGlobal\LTI\OAuth\OAuthConsumer
      */
-    public function toOAuthConsumer()
+    public function toOAuthConsumer(): OAuthConsumer
     {
         return new OAuthConsumer($this->getKey(), $this->getSecret());
     }

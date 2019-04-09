@@ -15,7 +15,12 @@ abstract class Manager extends Application
     const ACTION_LAUNCH = 'Launcher';
     const ACTION_BASIC_OUTCOMES = 'BasicOutcomes';
     const ACTION_RETURN = 'Return';
+    const ACTION_CREATE_PROVIDER = 'CreateProvider';
+    const ACTION_UPDATE_PROVIDER = 'UpdateProvider';
+    const ACTION_MANAGE_PROVIDERS = 'ManageProviders';
+    const ACTION_DELETE_PROVIDER = 'DeleteProvider';
 
+    const PARAM_PROVIDER_ID = 'ProviderId';
     const PARAM_UUID = 'uuid';
 
     const DEFAULT_ACTION = self::ACTION_LAUNCH;

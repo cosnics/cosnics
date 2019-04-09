@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Lti\Component;
 
+use Chamilo\Application\Lti\Domain\LaunchParameters\CustomLaunchParameter;
 use Chamilo\Application\Lti\Service\Integration\TestIntegration;
 use Chamilo\Application\Lti\Service\LtiProviderService;
 use Chamilo\Application\Lti\Domain\LaunchParameters\Role\ContextRole;
@@ -42,7 +43,8 @@ class LauncherComponent extends Manager
             ->setContextTitle('Demo Cursus')
             ->setResourceLinkId('9d5d6098a0763716622ebb48921d548713d1bae8')
             ->setResourceLinkTitle('BuddyCheck')
-            ->addRole(new ContextRole(ContextRole::ROLE_LEARNER));
+            ->addRole(new ContextRole(ContextRole::ROLE_LEARNER))
+            ->addCustomLaunchParameters(new CustomLaunchParameter('opened_resource_id', 1070775));
 
         $launchParametersGenerator->generateResultIdentifier($launchParameters, TestIntegration::class, 5);
 
