@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Lti\Service\Security;
 
-use Chamilo\Application\Lti\Storage\Entity\LtiProvider;
+use Chamilo\Application\Lti\Storage\Entity\Provider;
 use IMSGlobal\LTI\OAuth\OAuthException;
 use IMSGlobal\LTI\OAuth\OAuthRequest;
 use IMSGlobal\LTI\OAuth\OAuthServer;
@@ -20,18 +20,18 @@ use Symfony\Component\HttpFoundation\Request;
 class OAuthSecurity
 {
     /**
-     * @param \Chamilo\Application\Lti\Storage\Entity\LtiProvider $ltiProvider
+     * @param \Chamilo\Application\Lti\Storage\Entity\Provider $provider
      * @param array $launchParametersAsArray
      *
      * @return array
      */
-    public function generateSecurityParametersForLaunch(LtiProvider $ltiProvider, array $launchParametersAsArray)
+    public function generateSecurityParametersForLaunch(Provider $provider, array $launchParametersAsArray)
     {
         $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
-        $consumer = $ltiProvider->toOAuthConsumer();
+        $consumer = $provider->toOAuthConsumer();
 
         $request = OAuthRequest::from_consumer_and_token(
-            $consumer, null, 'POST', $ltiProvider->getLtiUrl(), $launchParametersAsArray
+            $consumer, null, 'POST', $provider->getLtiUrl(), $launchParametersAsArray
         );
 
         $request->sign_request($hmacMethod, $consumer, null);
@@ -40,12 +40,12 @@ class OAuthSecurity
     }
 
     /**
-     * @param \Chamilo\Application\Lti\Storage\Entity\LtiProvider $ltiProvider
+     * @param \Chamilo\Application\Lti\Storage\Entity\Provider $provider
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @throws \IMSGlobal\LTI\OAuth\OAuthException
      */
-    public function verifyRequest(LtiProvider $ltiProvider, Request $request)
+    public function verifyRequest(Provider $provider, Request $request)
     {
         $bodyContent = $request->getContent();
         $contentHash = base64_encode(sha1($bodyContent, true));
@@ -59,7 +59,7 @@ class OAuthSecurity
             $request->getSchemeAndHttpHost() . ':' . $request->getPort() . $request->getRequestUri(), $parameters
         );
 
-        $store = new OAuthDataStore($ltiProvider);
+        $store = new OAuthDataStore($provider);
         $server = new OAuthServer($store);
         $method = new OAuthSignatureMethod_HMAC_SHA1();
         $server->add_signature_method($method);

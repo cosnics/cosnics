@@ -4,7 +4,7 @@ namespace Chamilo\Application\Lti\Component;
 
 use Chamilo\Application\Lti\Domain\LaunchParameters\CustomLaunchParameter;
 use Chamilo\Application\Lti\Service\Integration\TestIntegration;
-use Chamilo\Application\Lti\Service\LtiProviderService;
+use Chamilo\Application\Lti\Service\ProviderService;
 use Chamilo\Application\Lti\Domain\LaunchParameters\Role\ContextRole;
 use Chamilo\Application\Lti\Manager;
 use Chamilo\Application\Lti\Service\Launch\LaunchGenerator;
@@ -33,11 +33,11 @@ class LauncherComponent extends Manager
         /** @var LaunchGenerator $launchGenerator */
         $launchGenerator = $this->getService(LaunchGenerator::class);
 
-        /** @var LtiProviderService $ltiProviderService */
-        $ltiProviderService = $this->getService(LtiProviderService::class);
-        $ltiProvider = $ltiProviderService->getLtiProviderById(2);
+        /** @var ProviderService $providerService */
+        $providerService = $this->getService(ProviderService::class);
+        $provider = $providerService->getProviderById(2);
 
-        $launchParameters = $launchParametersGenerator->generateLaunchParametersForUser($ltiProvider, $this->getUser());
+        $launchParameters = $launchParametersGenerator->generateLaunchParametersForUser($provider, $this->getUser());
         $launchParameters->setContextId('9d5d6098a0763716622ebb48921d548713d1bae8')
             ->setContextLabel('ALGCUR001')
             ->setContextTitle('Demo Cursus')
@@ -50,7 +50,7 @@ class LauncherComponent extends Manager
 
         $html = [];
         $html[] = $this->render_header();
-        $html[] = $launchGenerator->generateLaunchHtml($ltiProvider, $launchParameters);
+        $html[] = $launchGenerator->generateLaunchHtml($provider, $launchParameters);
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

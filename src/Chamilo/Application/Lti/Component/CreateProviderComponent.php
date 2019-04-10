@@ -4,7 +4,6 @@ namespace Chamilo\Application\Lti\Component;
 
 use Chamilo\Application\Lti\Form\ProviderFormType;
 use Chamilo\Application\Lti\Manager;
-use Chamilo\Application\Lti\Service\LtiProviderService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
@@ -38,14 +37,14 @@ class CreateProviderComponent extends \Chamilo\Application\Lti\Manager
         {
             try
             {
-                $this->getLtiProviderService()->saveLtiProvider($form->getData());
-                $message = 'LtiProviderCreated';
+                $this->getProviderService()->saveProvider($form->getData());
+                $message = 'ProviderCreated';
                 $success = true;
             }
             catch (\Exception $ex)
             {
                 $this->getExceptionLogger()->logException($ex);
-                $message = 'LtiProviderNotCreated';
+                $message = 'ProviderNotCreated';
                 $success = false;
             }
 
@@ -56,19 +55,12 @@ class CreateProviderComponent extends \Chamilo\Application\Lti\Manager
         }
 
         return $this->getTwig()->render(
-            Manager::context() . ':Provider/CreateProvider.html.twig', [
+            Manager::context() . ':Provider/ProviderForm.html.twig', [
                 'HEADER' => $this->render_header(),
                 'FORM' => $form->createView(),
+                'DEFAULT_CUSTOM_PARAMETERS_JSON' => json_encode([]),
                 'FOOTER' => $this->render_footer()
             ]
         );
-    }
-
-    /**
-     * @return \Chamilo\Application\Lti\Service\LtiProviderService
-     */
-    protected function getLtiProviderService()
-    {
-        return $this->getService(LtiProviderService::class);
     }
 }

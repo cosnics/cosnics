@@ -3,7 +3,7 @@
 namespace Chamilo\Application\Lti\Component;
 
 use Chamilo\Application\Lti\Manager;
-use Chamilo\Application\Lti\Service\LtiProviderService;
+use Chamilo\Application\Lti\Service\ProviderService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
@@ -34,7 +34,7 @@ class ManageProvidersComponent extends \Chamilo\Application\Lti\Manager
             Manager::context() . ':Provider/ManageProviders.html.twig', [
                 'HEADER' => $this->render_header(),
                 'LTI_PROVIDERS_JSON' => $this->getSerializer()->serialize(
-                    $this->getLtiProviderService()->findLTIProviders(), 'json'
+                    $this->getProviderService()->findProviders(), 'json'
                 ),
                 'CREATE_PROVIDER_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE_PROVIDER]),
                 'UPDATE_PROVIDER_URL' => $this->get_url(
@@ -49,10 +49,10 @@ class ManageProvidersComponent extends \Chamilo\Application\Lti\Manager
     }
 
     /**
-     * @return \Chamilo\Application\Lti\Service\LtiProviderService
+     * @return \Chamilo\Application\Lti\Service\ProviderService
      */
-    protected function getLtiProviderService()
+    protected function getProviderService()
     {
-        return $this->getService(LtiProviderService::class);
+        return $this->getService(ProviderService::class);
     }
 }

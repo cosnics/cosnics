@@ -6,7 +6,7 @@ use Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters;
 use Chamilo\Application\Lti\Manager;
 use Chamilo\Application\Lti\Service\Integration\IntegrationInterface;
 use Chamilo\Application\Lti\Service\Outcome\ResultIdEncoder;
-use Chamilo\Application\Lti\Storage\Entity\LtiProvider;
+use Chamilo\Application\Lti\Storage\Entity\Provider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Redirect;
 
@@ -63,21 +63,21 @@ class LaunchParametersGenerator
     /**
      * Generates a LaunchParameters object with values based on the current Chamilo configuration and user data
      *
-     * @param \Chamilo\Application\Lti\Storage\Entity\LtiProvider $ltiProvider
+     * @param \Chamilo\Application\Lti\Storage\Entity\Provider $provider
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters|null $launchParameters
      *
      * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters|null
      */
     public function generateLaunchParametersForUser(
-        LtiProvider $ltiProvider, User $user, LaunchParameters $launchParameters = null
+        Provider $provider, User $user, LaunchParameters $launchParameters = null
     )
     {
         $presentationReturnUrl = new Redirect(
             [
                 Manager::PARAM_CONTEXT => Manager::context(),
                 Manager::PARAM_ACTION => Manager::ACTION_RETURN,
-                Manager::PARAM_UUID => $ltiProvider->getUuid()
+                Manager::PARAM_UUID => $provider->getUuid()
             ]
         );
 
@@ -85,7 +85,7 @@ class LaunchParametersGenerator
             [
                 Manager::PARAM_CONTEXT => Manager::context(),
                 Manager::PARAM_ACTION => Manager::ACTION_BASIC_OUTCOMES,
-                Manager::PARAM_UUID => $ltiProvider->getUuid()
+                Manager::PARAM_UUID => $provider->getUuid()
             ]
         );
 

@@ -28,7 +28,7 @@
     }
 </style>
 
-<div id="ltiProviderManager">
+<div id="providerManager">
 
 <div class="row">
     <div class="col-md-12">
@@ -91,31 +91,31 @@
         };
 
         new Vue({
-            el: '#ltiProviderManager',
+            el: '#providerManager',
             data: {
                 providers: {{ LTI_PROVIDERS_JSON|raw }},
                 fields: fields,
                 search: ''
             },
             methods: {
-                getUpdateUrl: function(ltiProvider) {
+                getUpdateUrl: function(Provider) {
                     let updateTemplateUrl = "{{ UPDATE_PROVIDER_URL|raw }}";
-                    return updateTemplateUrl.replace('__ID__', ltiProvider.id);
+                    return updateTemplateUrl.replace('__ID__', Provider.id);
                 },
-                getDeleteUrl: function(ltiProvider) {
+                getDeleteUrl: function(Provider) {
                     let updateTemplateUrl = "{{ DELETE_PROVIDER_URL|raw }}";
-                    return updateTemplateUrl.replace('__ID__', ltiProvider.id);
+                    return updateTemplateUrl.replace('__ID__', Provider.id);
                 },
                 emptySearch: function() {
                     this.search = '';
                 },
-                confirmDelete: function(ltiProvider, event) {
+                confirmDelete: function(Provider, event) {
                     let vueInstance = this;
 
                     event.preventDefault();
                     this.$dialog.confirm("{{ 'DeleteProviderConfirm'|trans({}, appContext) }}")
                         .then(function() {
-                            window.location = vueInstance.getDeleteUrl(ltiProvider);
+                            window.location = vueInstance.getDeleteUrl(Provider);
                         });
                 }
             }

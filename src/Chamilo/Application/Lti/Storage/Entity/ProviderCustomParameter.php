@@ -2,16 +2,18 @@
 
 namespace Chamilo\Application\Lti\Storage\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @package Chamilo\Application\Lti\Domain
  * @author - Sven Vanpoucke - Hogeschool Gent
  *
- * @ORM\Entity(repositoryClass="Chamilo\Application\Lti\Storage\Repository\LtiProviderRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\Application\Lti\Storage\Repository\ProviderRepository")
  * @ORM\Table(
  *     name="lti_provider_custom_parameter"
  * )
  */
-class LtiProviderCustomParameter
+class ProviderCustomParameter
 {
     /**
      * @var int
@@ -37,12 +39,12 @@ class LtiProviderCustomParameter
     protected $value;
 
     /**
-     * @var \Chamilo\Application\Lti\Storage\Entity\LtiProvider
+     * @var \Chamilo\Application\Lti\Storage\Entity\Provider
      *
-     * @ORM\ManyToOne(targetEntity="\Chamilo\Application\Lti\Storage\Entity\LtiProvider", inversedBy="customParameters")
+     * @ORM\ManyToOne(targetEntity="\Chamilo\Application\Lti\Storage\Entity\Provider", inversedBy="customParameters")
      * @ORM\JoinColumn(name="lti_provider_id", referencedColumnName="id")
      */
-    protected $ltiProvider;
+    protected $provider;
 
     /**
      * @return int
@@ -55,7 +57,7 @@ class LtiProviderCustomParameter
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -71,7 +73,7 @@ class LtiProviderCustomParameter
     /**
      * @return string
      */
-    public function getValue(): string
+    public function getValue(): ?string
     {
         return $this->value;
     }
@@ -82,5 +84,21 @@ class LtiProviderCustomParameter
     public function setValue(string $value): void
     {
         $this->value = $value;
+    }
+
+    /**
+     * @return \Chamilo\Application\Lti\Storage\Entity\Provider
+     */
+    public function getProvider(): \Chamilo\Application\Lti\Storage\Entity\Provider
+    {
+        return $this->provider;
+    }
+
+    /**
+     * @param \Chamilo\Application\Lti\Storage\Entity\Provider $provider
+     */
+    public function setProvider(\Chamilo\Application\Lti\Storage\Entity\Provider $provider): void
+    {
+        $this->provider = $provider;
     }
 }

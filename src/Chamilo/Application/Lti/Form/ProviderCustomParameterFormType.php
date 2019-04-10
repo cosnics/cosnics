@@ -6,7 +6,6 @@ use Chamilo\Application\Lti\Manager;
 use Chamilo\Application\Lti\Storage\Entity\Provider;
 use Chamilo\Application\Lti\Storage\Entity\ProviderCustomParameter;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,7 +16,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  * @package Chamilo\Application\Lti\Form
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ProviderFormType extends AbstractType
+class ProviderCustomParameterFormType extends AbstractType
 {
     /**
      * @var Translator
@@ -43,21 +42,23 @@ class ProviderFormType extends AbstractType
             TextType::class,
             [
                 'required' => true,
-                'label' => $this->translator->trans('ProviderName', [], Manager::context()),
+                'label' => $this->translator->trans('ProviderParameterName', [], Manager::context()),
                 'constraints' => [
-                    new NotBlank([
-                        'message' => $this->translator->trans('NotBlank', [], 'Chamilo\Libraries')
-                    ])
+                    new NotBlank(
+                        [
+                            'message' => $this->translator->trans('NotBlank', [], 'Chamilo\Libraries')
+                        ]
+                    )
                 ]
             ]
         );
 
         $builder->add(
-            'ltiUrl',
+            'value',
             TextType::class,
             [
                 'required' => true,
-                'label' => $this->translator->trans('ProviderUrl', [], Manager::context()),
+                'label' => $this->translator->trans('ProviderParameterValue', [], Manager::context()),
                 'constraints' => [
                     new NotBlank([
                         'message' => $this->translator->trans('NotBlank', [], 'Chamilo\Libraries')
@@ -66,32 +67,6 @@ class ProviderFormType extends AbstractType
             ]
         );
 
-        $builder->add(
-            'key',
-            TextType::class,
-            [
-                'required' => false,
-                'label' => $this->translator->trans('ConsumerKey', [], Manager::context())
-            ]
-        );
-
-        $builder->add(
-            'secret',
-            TextType::class,
-            [
-                'required' => false,
-                'label' => $this->translator->trans('ConsumerSecret', [], Manager::context())
-            ]
-        );
-
-        $builder->add(
-            'customParameters',
-            CollectionType::class,
-            [
-                'entry_type' => ProviderCustomParameterFormType::class,
-                'allow_add' => true, 'allow_delete' => true, 'by_reference' => false
-            ]
-        );
     }
 
     /**
@@ -100,7 +75,7 @@ class ProviderFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Provider::class
+            'data_class' => ProviderCustomParameter::class
         ]);
     }
 

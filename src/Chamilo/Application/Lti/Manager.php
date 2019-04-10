@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Application\Lti;
 
+use Chamilo\Application\Lti\Service\ProviderService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 
 /**
  * @package Chamilo\Application\Plagiarism
@@ -40,5 +42,33 @@ abstract class Manager extends Application
         {
             $this->checkAuthorization(Manager::context());
         }
+    }
+
+    /**
+     * @return \Chamilo\Application\Lti\Storage\Entity\Provider
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    protected function getProviderFromRequest(): \Chamilo\Application\Lti\Storage\Entity\Provider
+    {
+        $providerId = $this->getRequest()->getFromUrl(self::PARAM_PROVIDER_ID);
+
+        try
+        {
+            $provider = $this->getProviderService()->getProviderById($providerId);
+        }
+        catch (\Exception $ex)
+        {
+            throw new ObjectNotExistException($this->getTranslator()->trans('Provider', [], Manager::context()), $providerId);
+        }
+
+        return $provider;
+    }
+
+    /**
+     * @return \Chamilo\Application\Lti\Service\ProviderService
+     */
+    protected function getProviderService()
+    {
+        return $this->getService(ProviderService::class);
     }
 }

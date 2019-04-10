@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package Chamilo\Application\Lti\Domain
  * @author - Sven Vanpoucke - Hogeschool Gent
  *
- * @ORM\Entity(repositoryClass="Chamilo\Application\Lti\Storage\Repository\LtiProviderRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\Application\Lti\Storage\Repository\ProviderRepository")
  * @ORM\Table(
  *     name="lti_provider",
  *     indexes={
@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     }
  * )
  */
-class LtiProvider
+class Provider
 {
     /**
      * @var int
@@ -65,14 +65,14 @@ class LtiProvider
     protected $secret;
 
     /**
-     * @var \Chamilo\Application\Lti\Storage\Entity\LtiProviderCustomParameter[] | \Doctrine\Common\Collections\ArrayCollection
+     * @var \Chamilo\Application\Lti\Storage\Entity\ProviderCustomParameter[] | \Doctrine\Common\Collections\ArrayCollection
      *
-     * @OneToMany(targetEntity="\Chamilo\Application\Lti\Storage\Entity\LtiProviderCustomParameter", mappedBy="ltiProvider")
+     * @ORM\OneToMany(targetEntity="\Chamilo\Application\Lti\Storage\Entity\ProviderCustomParameter", mappedBy="provider")
      */
     protected $customParameters;
 
     /**
-     * LtiProvider constructor.
+     * Provider constructor.
      */
     public function __construct()
     {
@@ -169,7 +169,7 @@ class LtiProvider
     }
 
     /**
-     * @return \Chamilo\Application\Lti\Storage\Entity\LtiProviderCustomParameter[]|\Doctrine\Common\Collections\ArrayCollection
+     * @return \Chamilo\Application\Lti\Storage\Entity\ProviderCustomParameter[]|\Doctrine\Common\Collections\ArrayCollection
      */
     public function getCustomParameters()
     {
@@ -177,7 +177,7 @@ class LtiProvider
     }
 
     /**
-     * @param \Chamilo\Application\Lti\Storage\Entity\LtiProviderCustomParameter[]|\Doctrine\Common\Collections\ArrayCollection $customParameters
+     * @param \Chamilo\Application\Lti\Storage\Entity\ProviderCustomParameter[]|\Doctrine\Common\Collections\ArrayCollection $customParameters
      */
     public function setCustomParameters($customParameters): void
     {
@@ -185,11 +185,20 @@ class LtiProvider
     }
 
     /**
-     * @param \Chamilo\Application\Lti\Storage\Entity\LtiProviderCustomParameter $ltiProviderCustomParameter
+     * @param \Chamilo\Application\Lti\Storage\Entity\ProviderCustomParameter $providerCustomParameter
      */
-    public function addCustomParameter(LtiProviderCustomParameter $ltiProviderCustomParameter)
+    public function addCustomParameter(ProviderCustomParameter $providerCustomParameter)
     {
-        $this->customParameters->add($ltiProviderCustomParameter);
+        $this->customParameters->add($providerCustomParameter);
+        $providerCustomParameter->setProvider($this);
+    }
+
+    /**
+     * @param \Chamilo\Application\Lti\Storage\Entity\ProviderCustomParameter $providerCustomParameter
+     */
+    public function removeCustomParameter(ProviderCustomParameter $providerCustomParameter)
+    {
+        $this->customParameters->removeElement($providerCustomParameter);
     }
 
     /**

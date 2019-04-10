@@ -3,7 +3,7 @@
 namespace Chamilo\Application\Lti\Service\Outcome;
 
 use Chamilo\Application\Lti\Manager;
-use Chamilo\Application\Lti\Service\LtiProviderService;
+use Chamilo\Application\Lti\Service\ProviderService;
 use Chamilo\Application\Lti\Domain\Exception\ParseMessageException;
 use Chamilo\Application\Lti\Domain\Exception\UnsupportedOperationException;
 use Chamilo\Application\Lti\Service\Outcome\MessageHandler\MessageHandlerBuilder;
@@ -28,9 +28,9 @@ class OutcomeWebservice
     protected $exceptionLogger;
 
     /**
-     * @var \Chamilo\Application\Lti\Service\LtiProviderService
+     * @var \Chamilo\Application\Lti\Service\ProviderService
      */
-    protected $ltiProviderService;
+    protected $providerService;
 
     /**
      * @var OAuthSecurity
@@ -52,7 +52,7 @@ class OutcomeWebservice
      *
      * @param \Twig_Environment $twig
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
-     * @param \Chamilo\Application\Lti\Service\LtiProviderService $ltiProviderService
+     * @param \Chamilo\Application\Lti\Service\ProviderService $providerService
      * @param \Chamilo\Application\Lti\Service\Security\OAuthSecurity $oauthSecurity
      * @param \Chamilo\Application\Lti\Service\Outcome\MessageHandler\MessageHandlerBuilder $messageHandlerBuilder
      * @param \Chamilo\Application\Lti\Service\Outcome\MessageParser $messageParser
@@ -60,7 +60,7 @@ class OutcomeWebservice
     public function __construct(
         \Twig_Environment $twig,
         \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger,
-        LtiProviderService $ltiProviderService, OAuthSecurity $oauthSecurity,
+        ProviderService $providerService, OAuthSecurity $oauthSecurity,
         MessageHandlerBuilder $messageHandlerBuilder, MessageParser $messageParser
     )
     {
@@ -69,7 +69,7 @@ class OutcomeWebservice
         $this->messageHandlerBuilder = $messageHandlerBuilder;
         $this->messageParser = $messageParser;
         $this->oauthSecurity = $oauthSecurity;
-        $this->ltiProviderService = $ltiProviderService;
+        $this->ProviderService = $providerService;
     }
 
     /**
@@ -84,8 +84,8 @@ class OutcomeWebservice
     {
         try
         {
-            $ltiProvider = $this->getLtiProviderFromRequest($request);
-            $this->oauthSecurity->verifyRequest($ltiProvider, $request);
+            $provider = $this->getProviderFromRequest($request);
+            $this->oauthSecurity->verifyRequest($provider, $request);
             $outcomeMessage = $this->messageParser->parseMessage($request->getContent());
             $messageHandler = $this->messageHandlerBuilder->buildMessageHandler($outcomeMessage);
 
@@ -136,10 +136,10 @@ class OutcomeWebservice
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return \Chamilo\Application\Lti\Storage\Entity\LtiProvider
+     * @return \Chamilo\Application\Lti\Storage\Entity\Provider
      */
-    protected function getLtiProviderFromRequest(Request $request)
+    protected function getProviderFromRequest(Request $request)
     {
-        return $this->ltiProviderService->getLtiProviderByUUID($request->get(Manager::PARAM_UUID));
+        return $this->ProviderService->getProviderByUUID($request->get(Manager::PARAM_UUID));
     }
 }

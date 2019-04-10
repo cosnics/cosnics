@@ -38,14 +38,18 @@
             <tag name="Chamilo\Application\Lti\Service\Integration\IntegrationInterface" />
         </service>
 
-        <service id="Chamilo\Application\Lti\Storage\Repository\LtiProviderRepository">
+        <service id="Chamilo\Application\Lti\Storage\Repository\ProviderRepository">
             <factory service="doctrine.orm.entity_manager" method="getRepository" />
-            <argument>Chamilo\Application\Lti\Storage\Entity\LtiProvider</argument>
+            <argument>Chamilo\Application\Lti\Storage\Entity\Provider</argument>
         </service>
 
-        <service id="Chamilo\Application\Lti\Service\LtiProviderService" autowire="true" />
+        <service id="Chamilo\Application\Lti\Service\ProviderService" autowire="true" />
 
         <service id="Chamilo\Application\Lti\Form\ProviderFormType" autowire="true">
+            <tag name="form.type" />
+        </service>
+
+        <service id="Chamilo\Application\Lti\Form\ProviderCustomParameterFormType" autowire="true">
             <tag name="form.type" />
         </service>
 

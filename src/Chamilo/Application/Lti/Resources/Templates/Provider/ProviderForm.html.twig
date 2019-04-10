@@ -1,0 +1,123 @@
+{% form_theme FORM 'bootstrap_3_horizontal_layout.html.twig' %}
+{% set appContext = 'Chamilo\\Application\\Lti' %}
+
+{{ HEADER|raw }}
+
+{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/Dialog/vuejs-dialog.min.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
+{{ getCss('Plugin/VueJs/BootstrapVue/bootstrap-vue.min.css', 'Chamilo\\Configuration') }}
+{{ getCss('Plugin/VueJs/Dialog/vuejs-dialog.min.css', 'Chamilo\\Configuration') }}
+
+<style>
+    h3.underlined {
+        border-bottom: 1px solid #cccccc;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+
+    button.add-custom-parameter {
+        margin-top: 10px;
+        margin-bottom: 40px;
+    }
+</style>
+
+
+<div id="providerCreator">
+    {{ form_start(FORM) }}
+
+    <h3 class="underlined">Provider</h3>
+
+    {{ form_row(FORM.name) }}
+    {{ form_row(FORM.ltiUrl) }}
+    {{ form_row(FORM.key) }}
+    {{ form_row(FORM.secret) }}
+
+    <h3 class="underlined">Additional parameters</h3>
+
+    <div class="row">
+            {{ form_label(FORM.customParameters) }}
+            {{ form_errors(FORM.customParameters) }}
+        <div class="col-md-10">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>{{ 'CustomParameterName'|trans({}, appContext) }}</th>
+                        <th>{{ 'CustomParameterValue'|trans({}, appContext) }}</th>
+                        <th style="width: 50px;" class="text-center"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="customParameter in customParameters">
+                        <td><input :name="'provider_form[customParameters][' + customParameter.index + '][name]'" type="text" required v-model="customParameter.name" class="form-control" /></td>
+                        <td><input :name="'provider_form[customParameters][' + customParameter.index + '][value]'" type="text" required v-model="customParameter.value" class="form-control" /></td>
+                        <td><button type="button" class="btn btn-sm btn-default" @click="deleteCustomParameter(customParameter)"><span class="fa fa-remove"></span></button></td>
+                    </tr>
+                    <tr v-if="customParameters.length == 0" class="text-center">
+                        <td colspan="3">{{ 'NoCustomParameters'|trans({}, appContext) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% do FORM.customParameters.setRendered %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-push-2">
+            <button type="button" class="btn btn-default add-custom-parameter" @click="addCustomParameter"><span class="fa fa-plus"></span> {{ 'AddParameter'|trans({}, appContext) }}</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-push-2">
+            <button type="submit" class="btn btn-primary"><span class="fa fa-save"></span> {{ 'Save'|trans({}, 'Chamilo\\Libraries') }}</button>
+        </div>
+    </div>
+</div>
+
+{{ form_end(FORM) }}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        window.Vue.use(VuejsDialog.main.default);
+
+        new Vue({
+            el: '#providerCreator',
+            data: {
+                customParameters: {{ DEFAULT_CUSTOM_PARAMETERS_JSON|raw }},
+                nextIndex: 0
+            },
+            mounted: function() {
+                let vueInstance = this;
+
+                this.customParameters.forEach(function(customParameter) {
+                    customParameter.index = vueInstance.nextIndex;
+                    vueInstance.nextIndex++;
+                });
+
+                this.$forceUpdate();
+            },
+            methods: {
+                addCustomParameter: function() {
+                    this.customParameters.push({'index': this.nextIndex, 'name': '', 'value': ''});
+                    this.nextIndex++;
+                },
+                deleteCustomParameter: function(customParameter) {
+                    let vueInstance = this;
+
+                    this.$dialog.confirm("{{ 'DeleteProviderCustomParameterConfirm'|trans({}, appContext) }}")
+                        .then(function() {
+                            let index = vueInstance.customParameters.indexOf(customParameter);
+                            vueInstance.customParameters.splice(index, 1);
+                        });
+                }
+            }
+        });
+
+    });
+</script>
+
+{{ FOOTER|raw }}
