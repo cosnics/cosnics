@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Lti\Storage\Repository;
 
 use Chamilo\Application\Lti\Storage\Entity\Provider;
+use Chamilo\Application\Lti\Storage\Entity\ProviderCustomParameter;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -20,6 +21,7 @@ class ProviderRepository extends EntityRepository
     public function saveProvider(Provider $provider)
     {
         $this->getEntityManager()->persist($provider);
+
         foreach($provider->getCustomParameters() as $customParameter)
         {
             $this->getEntityManager()->persist($customParameter);
@@ -36,6 +38,23 @@ class ProviderRepository extends EntityRepository
     public function getProviderByUUID(string $uuid)
     {
         return $this->findOneBy(['uuid' => $uuid]);
+    }
+
+    /**
+     * @param \Chamilo\Application\Lti\Storage\Entity\ProviderCustomParameter $customParameter
+     * @param bool $flush
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function deleteCustomParameter(ProviderCustomParameter $customParameter, $flush = true)
+    {
+        $this->getEntityManager()->remove($customParameter);
+
+        if($flush)
+        {
+            $this->getEntityManager()->flush();
+        }
     }
 
     /**

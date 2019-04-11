@@ -210,4 +210,18 @@ class Provider
     {
         return new OAuthConsumer($this->getKey(), $this->getSecret());
     }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function cloneCustomParameters()
+    {
+        $clonedCustomParameters = new ArrayCollection();
+        foreach($this->customParameters as $customParameter)
+        {
+            $clonedCustomParameters->add($customParameter);
+        }
+
+        return $clonedCustomParameters;
+    }
 }

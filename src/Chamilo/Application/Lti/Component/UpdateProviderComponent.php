@@ -32,6 +32,7 @@ class UpdateProviderComponent extends \Chamilo\Application\Lti\Manager
         }
 
         $provider = $this->getProviderFromRequest();
+        $originalParameters = $provider->cloneCustomParameters();
 
         $form = $this->getForm()->create(ProviderFormType::class, $provider);
         $form->handleRequest($this->getRequest());
@@ -40,14 +41,14 @@ class UpdateProviderComponent extends \Chamilo\Application\Lti\Manager
         {
             try
             {
-                $this->getProviderService()->saveProvider($form->getData());
-                $message = 'ProviderCreated';
+                $this->getProviderService()->updateProvider($form->getData(), $originalParameters);
+                $message = 'ProviderUpdated';
                 $success = true;
             }
             catch (\Exception $ex)
             {
                 $this->getExceptionLogger()->logException($ex);
-                $message = 'ProviderNotCreated';
+                $message = 'ProviderNotUpdated';
                 $success = false;
             }
 

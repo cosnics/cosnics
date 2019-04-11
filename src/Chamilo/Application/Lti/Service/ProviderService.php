@@ -5,6 +5,7 @@ namespace Chamilo\Application\Lti\Service;
 use Chamilo\Application\Lti\Storage\Entity\Provider;
 use Chamilo\Application\Lti\Storage\Repository\ProviderRepository;
 use Chamilo\Libraries\Utilities\UUID;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Application\Lti\Service\Launch
@@ -41,6 +42,28 @@ class ProviderService
         }
 
         $this->providerRepository->saveProvider($provider);
+    }
+
+    /**
+     * @param \Chamilo\Application\Lti\Storage\Entity\Provider $provider
+     * @param \Doctrine\Common\Collections\ArrayCollection $originalParameters
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function updateProvider(Provider $provider, ArrayCollection $originalParameters)
+    {
+        foreach ($originalParameters as $originalParameter)
+        {
+            if (false === $provider->getCustomParameters()->contains($originalParameter))
+            {
+                $originalParameter->clearProvider();
+                $this->providerRepository->deleteCustomParameter($originalParameter, false);
+            }
+        }
+
+        $this->providerRepository->saveProvider($provider);
+
     }
 
     /**
@@ -126,7 +149,7 @@ class ProviderService
     }
 
     /**
-     * @return mixed
+     * @return Provider[]
      */
     public function findProviders()
     {

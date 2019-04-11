@@ -90,6 +90,11 @@
             }
         };
 
+        let dialogOptions = {
+            okText: '{{ 'Ok'|trans({}, 'Chamilo\\Libraries') }}',
+            cancelText: '{{ 'Cancel'|trans({}, 'Chamilo\\Libraries') }}'
+        };
+
         new Vue({
             el: '#providerManager',
             data: {
@@ -113,7 +118,7 @@
                     let vueInstance = this;
 
                     event.preventDefault();
-                    this.$dialog.confirm("{{ 'DeleteProviderConfirm'|trans({}, appContext) }}")
+                    this.$dialog.confirm("{{ 'DeleteProviderConfirm'|trans({}, appContext) }}", dialogOptions)
                         .then(function() {
                             window.location = vueInstance.getDeleteUrl(Provider);
                         });

@@ -89,7 +89,7 @@ class ProviderCustomParameter
     /**
      * @return \Chamilo\Application\Lti\Storage\Entity\Provider
      */
-    public function getProvider(): \Chamilo\Application\Lti\Storage\Entity\Provider
+    public function getProvider(): ?\Chamilo\Application\Lti\Storage\Entity\Provider
     {
         return $this->provider;
     }
@@ -100,5 +100,13 @@ class ProviderCustomParameter
     public function setProvider(\Chamilo\Application\Lti\Storage\Entity\Provider $provider): void
     {
         $this->provider = $provider;
+    }
+
+    /**
+     * Clear the provider for removal
+     */
+    public function clearProvider()
+    {
+        $this->provider = null;
     }
 }
