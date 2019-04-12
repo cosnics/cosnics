@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -14,35 +15,42 @@ class CreatorComponent extends Manager
 {
     /**
      * Runs the component
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function run()
     {
-        $this->validateAccess();
+        throw new NotAllowedException();
 
-        $requestManager = $this->getRequestManager();
-        $contentObjectIds = $this->getContentObjectIds();
-        $failures = $requestManager->handInDocumentsByIds($contentObjectIds, $this->getUser(), $this->get_course_id());
-
-        if ($failures > 0)
-        {
-            $is_error_message = true;
-        }
-        else
-        {
-            $is_error_message = false;
-        }
-
-        $message = $this->get_result(
-            $failures,
-            count($contentObjectIds),
-            'SelectedRequestNotCreated',
-            'SelectedRequestsNotCreated',
-            'SelectedRequestCreated',
-            'SelectedRequestsCreated'
-        );
-
-        $parameters = array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE);
-        $this->redirect($message, $is_error_message, $parameters);
+//        $this->validateAccess();
+//
+//
+//
+//        $requestManager = $this->getRequestManager();
+//        $contentObjectIds = $this->getContentObjectIds();
+//        $failures = $requestManager->handInDocumentsByIds($contentObjectIds, $this->getUser(), $this->get_course_id());
+//
+//        if ($failures > 0)
+//        {
+//            $is_error_message = true;
+//        }
+//        else
+//        {
+//            $is_error_message = false;
+//        }
+//
+//        $message = $this->get_result(
+//            $failures,
+//            count($contentObjectIds),
+//            'SelectedRequestNotCreated',
+//            'SelectedRequestsNotCreated',
+//            'SelectedRequestCreated',
+//            'SelectedRequestsCreated'
+//        );
+//
+//        $parameters = array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE);
+//        $this->redirect($message, $is_error_message, $parameters);
     }
 
     /**

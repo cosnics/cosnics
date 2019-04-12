@@ -158,21 +158,21 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
                 );
             }
         }
-        else
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('AddDocument', null, self::EPHORUS_TRANSLATION_CONTEXT),
-                    Theme::getInstance()->getCommonImagePath('Action/Up'),
-                    $this->get_component()->get_url(
-                        array(
-                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::ACTION_CREATE,
-                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ENTRY_ID => $object->getId()
-                        )
-                    )
-                )
-            );
-        }
+//        else
+//        {
+//            $toolbar->add_item(
+//                new ToolbarItem(
+//                    Translation::get('AddDocument', null, self::EPHORUS_TRANSLATION_CONTEXT),
+//                    Theme::getInstance()->getCommonImagePath('Action/Up'),
+//                    $this->get_component()->get_url(
+//                        array(
+//                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::ACTION_CREATE,
+//                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ENTRY_ID => $object->getId()
+//                        )
+//                    )
+//                )
+//            );
+//        }
 
         return $toolbar->as_html();
     }
