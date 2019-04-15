@@ -78,7 +78,7 @@ class PlagiarismChecker implements PlagiarismCheckerInterface
         string $filename, SubmissionStatus $currentSubmissionStatus = null
     )
     {
-        if (!$this->canCheckForPlagiarism($title, $filePath))
+        if (!$this->canCheckForPlagiarism($filePath, $filename))
         {
             throw new PlagiarismException(
                 sprintf(
