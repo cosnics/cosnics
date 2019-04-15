@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
@@ -42,7 +43,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
         $learning_path = $this->learningPath;
 
-        if (! $learning_path)
+        if (!$learning_path)
         {
             throw new ObjectNotExistException($translator->getTranslation('LearningPath'));
         }
@@ -52,12 +53,14 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $trackingService->trackAttemptForUser(
             $this->learningPath,
             $this->getCurrentTreeNode(),
-            $this->getUser());
+            $this->getUser()
+        );
 
-        if (! $this->canAuditCurrentTreeNode() && $trackingService->isCurrentTreeNodeBlocked(
-            $learning_path,
-            $this->getUser(),
-            $this->getCurrentTreeNode()))
+        if (!$this->canAuditCurrentTreeNode() && $trackingService->isCurrentTreeNodeBlocked(
+                $learning_path,
+                $this->getUser(),
+                $this->getCurrentTreeNode()
+            ))
         {
             $html = array();
 
@@ -68,7 +71,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $responsibleNodes = $trackingService->getResponsibleNodesForBlockedTreeNode(
                 $learning_path,
                 $this->getUser(),
-                $this->getCurrentTreeNode());
+                $this->getCurrentTreeNode()
+            );
 
             $html[] = '<br /><br />';
             $html[] = '<ul>';
@@ -109,7 +113,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this,
             $this->getTrackingService(),
             $this->learningPath,
-            $this->getCurrentTreeNode());
+            $this->getCurrentTreeNode()
+        );
 
         return $embedder->run();
     }
@@ -163,7 +168,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
     public function render_footer()
     {
         $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'KeyboardNavigation.js');
+            Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'KeyboardNavigation.js'
+        );
 
         $html[] = parent::render_footer();
 
@@ -177,7 +183,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
     {
         $translator = Translation::getInstance();
 
-        if (! isset($this->buttonToolbar))
+        if (!isset($this->buttonToolbar))
         {
             $buttonToolbar = new ButtonToolBar();
             $this->buttonToolbar = $buttonToolbar;
@@ -186,13 +192,12 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $secondaryActions = new ButtonGroup();
             $tertiaryActions = new ButtonGroup();
 
-            if($this->canEditCurrentTreeNode())
+            if ($this->canEditCurrentTreeNode())
             {
                 $this->addCreatorButtons($primaryActions, $translator);
                 $this->addManageContentObjectButton($secondaryActions, $translator);
                 $this->addNodeSpecificButtons($primaryActions, $secondaryActions);
             }
-
 
             if ($this->canViewReporting() && $this->get_action() != self::ACTION_REPORTING)
             {
@@ -222,7 +227,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
             {
                 $application = $this->getApplicationFactory()->getApplication(
                     $integration_class_name::context(),
-                    new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                    new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+                );
                 $application->get_node_tabs($primaryActions, $secondaryActions, $this->getCurrentTreeNode());
             }
             catch (\Exception $exception)
@@ -265,7 +271,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $allowedTypes,
                 $parameters,
                 array(),
-                'btn-primary');
+                'btn-primary'
+            );
 
             /** @var ClassnameUtilities $classNameUtilities */
             $classNameUtilities = $this->getService('chamilo.libraries.architecture.classname_utilities');
@@ -276,8 +283,10 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $translator->getTranslation(
                     'CreateItem',
                     array('ITEM' => lcfirst($itemTranslation)),
-                    Manager::context()),
-                new FontAwesomeGlyph('plus'));
+                    Manager::context()
+                ),
+                new FontAwesomeGlyph('plus')
+            );
 
             $buttonGroup->addButton($actionButton);
 
@@ -287,18 +296,22 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $this,
                 $this->getUser()->getId(),
                 array(Section::class_name()),
-                $parameters);
+                $parameters
+            );
 
             $folderButton = $folderSelector->getActionButton(
                 $translator->getTranslation('CreateFolder', null, Manager::context()),
-                new FontAwesomeGlyph('plus'));
+                new FontAwesomeGlyph('plus')
+            );
 
             $folderButton->addSubButton(new SubButtonDivider());
             $folderButton->addSubButton(
                 new SubButton(
                     $translator->getTranslation('CopyFromOtherLearningPaths'),
                     new FontAwesomeGlyph('copy'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_COPY_SECTIONS))));
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_COPY_SECTIONS))
+                )
+            );
 
             $buttonGroup->addButton($folderButton);
         }
@@ -319,7 +332,9 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $editURL = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()));
+                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
+                )
+            );
 
             $editButton = new SplitDropdownButton($editTitle, $editImage, $editURL);
 
@@ -340,8 +355,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     protected function addDeleteButton($button, $translator)
     {
-        if (! $this->getCurrentTreeNode()->isRootNode() &&
-             $this->canEditTreeNode($this->getCurrentTreeNode()->getParentNode()))
+        if (!$this->getCurrentTreeNode()->isRootNode() &&
+            $this->canEditTreeNode($this->getCurrentTreeNode()->getParentNode()))
         {
             $button->addSubButton(
                 new SubButton(
@@ -350,9 +365,13 @@ class ViewerComponent extends BaseHtmlTreeComponent
                     $this->get_url(
                         array(
                             self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
-                            self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId())),
+                            self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
+                        )
+                    ),
                     SubButton::DISPLAY_ICON_AND_LABEL,
-                    true));
+                    true
+                )
+            );
         }
     }
 
@@ -368,7 +387,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         {
             if ($this->getCurrentTreeNode()->hasChildNodes())
             {
-                if (! $this->getCurrentTreeNode()->isRootNode())
+                if (!$this->getCurrentTreeNode()->isRootNode())
                 {
                     $button->addSubButton(new SubButtonDivider());
                 }
@@ -380,7 +399,11 @@ class ViewerComponent extends BaseHtmlTreeComponent
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_MANAGE,
-                                self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()))));
+                                self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
+                            )
+                        )
+                    )
+                );
             }
         }
     }
@@ -465,7 +488,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
     protected function addMoveButton(SplitDropdownButton $button, Translation $translator)
     {
         if ($this->getCurrentTreeNode()->isRootNode() ||
-             ! $this->canEditTreeNode($this->getCurrentTreeNode()->getParentNode()))
+            !$this->canEditTreeNode($this->getCurrentTreeNode()->getParentNode()))
         {
             return;
         }
@@ -476,7 +499,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
             '#',
             Button::DISPLAY_ICON_AND_LABEL,
             false,
-            'mover-open');
+            'mover-open'
+        );
 
         $button->addSubButton($moveButton);
     }
@@ -493,11 +517,13 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $url = $this->get_url(
             array(
                 self::PARAM_ACTION => self::ACTION_REPORTING,
-                self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()));
+                self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
+            )
+        );
 
         $icon = new FontAwesomeGlyph('pie-chart');
 
-        if (! $this->canViewReporting() )
+        if (!$this->canViewReporting())
         {
             $splitDropDownButton = new SplitDropdownButton($label, $icon, $url);
         }
@@ -509,17 +535,22 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS,
-                        self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId())));
+                        self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
+                    )
+                )
+            );
 
             $splitDropDownButton->addSubButton(new SubButton($label, $icon, $url));
         }
 
         $this->addActivityButton($splitDropDownButton, $translator);
 
-        if($this->canEditCurrentTreeNode())
+        if ($this->canEditCurrentTreeNode())
         {
             $this->addStudentViewButton($splitDropDownButton, $translator);
         }
+
+        $this->addPrintButton($splitDropDownButton, $translator);
 
         $buttonGroup->addButton($splitDropDownButton);
     }
@@ -538,7 +569,34 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_ACTIVITY,
-                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId())));
+                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
+                )
+            )
+        );
+
+        $button->addSubButton($extraButton);
+    }
+
+    /**
+     * Adds the activity button
+     *
+     * @param SplitDropdownButton $button
+     * @param Translation $translator
+     */
+    protected function addPrintButton(SplitDropdownButton $button, $translator)
+    {
+        $extraButton = new SubButton(
+            $translator->getTranslation('Print', null, Manager::context()),
+            new FontAwesomeGlyph('print'),
+            $this->get_url(
+                array(
+                    self::PARAM_ACTION => self::ACTION_VIEW_PRINTABLE_FORMAT,
+                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
+                )
+            ),
+            SubButton::DISPLAY_ICON_AND_LABEL,
+            false, null, '_blank'
+        );
 
         $button->addSubButton($extraButton);
     }
@@ -557,7 +615,10 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_SHOW_STUDENT_VIEW,
-                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId())));
+                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
+                )
+            )
+        );
 
         $button->addSubButton($extraButton);
     }
@@ -576,10 +637,13 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 array(
                     self::PARAM_ACTION => self::ACTION_MOVE_DIRECTLY,
                     self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId(),
-                    self::PARAM_CONTENT_OBJECT_ID => $this->getCurrentContentObject()->getId())),
+                    self::PARAM_CONTENT_OBJECT_ID => $this->getCurrentContentObject()->getId()
+                )
+            ),
             $this->getTree(),
             $this->getCurrentTreeNode(),
-            $this->getAutomaticNumberingService());
+            $this->getAutomaticNumberingService()
+        );
 
         $html = array();
 

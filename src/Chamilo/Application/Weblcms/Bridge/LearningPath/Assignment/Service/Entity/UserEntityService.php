@@ -3,14 +3,18 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
@@ -32,6 +36,11 @@ class UserEntityService implements EntityServiceInterface
     protected $translator;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService
+     */
+    protected $entryPlagiarismResultService;
+
+    /**
      * @var array
      */
     protected $targetUsersCache = [];
@@ -41,49 +50,49 @@ class UserEntityService implements EntityServiceInterface
      *
      * @param AssignmentService $assignmentService
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService $entryPlagiarismResultService
      */
-    public function __construct(AssignmentService $assignmentService, Translator $translator)
+    public function __construct(
+        AssignmentService $assignmentService, Translator $translator,
+        EntryPlagiarismResultService $entryPlagiarismResultService
+    )
     {
         $this->assignmentService = $assignmentService;
         $this->translator = $translator;
+        $this->entryPlagiarismResultService = $entryPlagiarismResultService;
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int $offset
-     * @param int $count
-     * @param array $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function retrieveEntities(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null,
-        $offset = null, $count = null,
-        $orderProperty = []
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, FilterParameters $filterParameters
     )
     {
         return $this->assignmentService->findTargetUsersForTreeNodeData(
             $contentObjectPublication, $treeNodeData, $this->getTargetUserIdsForPublication($contentObjectPublication),
-            $condition, $offset, $count, $orderProperty
+            $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countEntities(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, FilterParameters $filterParameters
     )
     {
         return $this->assignmentService->countTargetUsersForTreeNodeData(
-            $contentObjectPublication, $treeNodeData, $this->getTargetUserIdsForPublication($contentObjectPublication)
+            $contentObjectPublication, $treeNodeData, $this->getTargetUserIdsForPublication($contentObjectPublication), $filterParameters
         );
     }
 
@@ -114,6 +123,40 @@ class UserEntityService implements EntityServiceInterface
     {
         return $this->assignmentService->findTargetUsersWithEntriesForTreeNodeData(
             $contentObjectPublication, $treeNodeData, $this->getTargetUserIdsForPublication($contentObjectPublication)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     *
+     * @return int
+     */
+    public function countEntriesWithPlagiarismResult(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
+        FilterParameters $filterParameters
+    )
+    {
+        return $this->entryPlagiarismResultService->countUserEntriesWithPlagiarismResult(
+            $contentObjectPublication, $treeNodeData, $filterParameters
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesWithPlagiarismResult(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
+        FilterParameters $filterParameters
+    )
+    {
+        return $this->entryPlagiarismResultService->findUserEntriesWithPlagiarismResult(
+            $contentObjectPublication, $treeNodeData, $filterParameters
         );
     }
 
@@ -181,6 +224,23 @@ class UserEntityService implements EntityServiceInterface
         $entityTableParameters->setEntityHasMultipleMembers(false);
 
         return new EntityTable($application, $entityTableParameters);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTable
+     */
+    public function getEntryPlagiarismResultTable(
+        Application $application,
+        EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
+    )
+    {
+        $entryPlagiarismResultTableParameters->setEntityClass(User::class);
+        $entryPlagiarismResultTableParameters->setEntityProperties([User::PROPERTY_FIRSTNAME, User::PROPERTY_LASTNAME]);
+
+        return new EntryPlagiarismResultTable($application, $entryPlagiarismResultTableParameters);
     }
 
     /**

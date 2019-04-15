@@ -2,7 +2,11 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\ExportFormat\ScoreOverviewExportFormat;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\ExportFormat\TreeNodeChildrenUserProgressExportFormat;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\ExportFormat\UsersProgressExportFormat;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\ExportFormat\UserTreeNodeAttemptExportFormat;
@@ -26,13 +30,30 @@ class Exporter
     protected $trackingService;
 
     /**
+     * @var \Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService
+     */
+    protected $automaticNumberingService;
+
+    /**
+     * @var \Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService
+     */
+    protected $learningPathService;
+
+    /**
      * Exporter constructor.
      *
      * @param TrackingService $trackingService
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService $automaticNumberingService
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService $learningPathService
      */
-    public function __construct(TrackingService $trackingService)
+    public function __construct(
+        TrackingService $trackingService, AutomaticNumberingService $automaticNumberingService,
+        LearningPathService $learningPathService
+    )
     {
         $this->trackingService = $trackingService;
+        $this->automaticNumberingService = $automaticNumberingService;
+        $this->learningPathService = $learningPathService;
     }
 
     /**
@@ -129,11 +150,51 @@ class Exporter
                 $this->trackingService->getAverageScoreInTreeNode($learningPath, $user, $treeNodeChild),
                 $this->trackingService->getMaximumScoreInTreeNode($learningPath, $user, $treeNodeChild),
                 $this->trackingService->getMinimumScoreInTreeNode($learningPath, $user, $treeNodeChild),
-                $this->trackingService->getLastAttemptScoreForTreeNode($learningPath, $user, $treeNodeChild),
+                $this->trackingService->getLastCompletedAttemptScoreForTreeNode($learningPath, $user, $treeNodeChild),
                 $this->trackingService->getTotalTimeSpentInTreeNode($learningPath, $user, $treeNodeChild)
             );
         }
 
         $exportWriter->writeExportedObjects($treeNodeChildProgressExportObjects);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree $tree
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\Writer\WriterInterface $exportWriter
+     */
+    public function exportScoreOverviewForUser(
+        LearningPath $learningPath, Tree $tree, User $user, WriterInterface $exportWriter
+    )
+    {
+        $scoreOverviewRows = [];
+        $treeNodes = $tree->getTreeNodes();
+
+        foreach ($treeNodes as $treeNode)
+        {
+            if(!$treeNode->supportsScore())
+            {
+                continue;
+            }
+
+            $contentObject = $treeNode->getContentObject();
+
+            $scoreOverviewRows[] = new ScoreOverviewExportFormat(
+                Translation::getInstance()->getTranslation(
+                    'TypeName', null,
+                    ClassnameUtilities::getInstance()->getNamespaceParent($contentObject->context(), 2)
+                ),
+                $this->automaticNumberingService->getAutomaticNumberedTitleForTreeNode($treeNode),
+                $this->learningPathService->renderPathForTreeNode($treeNode),
+                $this->trackingService->countTreeNodeAttempts($learningPath, $user, $treeNode),
+                $this->trackingService->getAverageScoreInTreeNode($learningPath, $user, $treeNode),
+                $this->trackingService->getMaximumScoreInTreeNode($learningPath, $user, $treeNode),
+                $this->trackingService->getMinimumScoreInTreeNode($learningPath, $user, $treeNode),
+                $this->trackingService->getLastCompletedAttemptScoreForTreeNode($learningPath, $user, $treeNode)
+            );
+        }
+
+        $exportWriter->writeExportedObjects($scoreOverviewRows);
     }
 }

@@ -53,7 +53,8 @@ class PublisherComponent extends Manager implements PublisherCustomPublicationFo
             $course,
             $this->get_url(),
             $is_course_admin,
-            $selectedContentObjects, $this->getTranslator(), $this->getPublicationRepository()
+            $selectedContentObjects, $this->getTranslator(), $this->getPublicationRepository(),
+            $this->getRegistrationConsulter()
         );
     }
 

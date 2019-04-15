@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\DependencyInjection\Configuration;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -45,11 +46,16 @@ class DoctrineORMMappingsConfiguration implements ConfigurationInterface
     {
         $rootNode = $this->treeBuilder->root('mappings');
 
-        $rootNode->children()->arrayNode('default')->requiresAtLeastOneElement()->prototype('scalar')->cannotBeEmpty()->end()->end()->arrayNode(
-            'custom')->prototype('array')->cannotBeEmpty()->children()->enumNode('type')->values(
-            array('annotation', 'xml', 'yaml', 'php', 'staticphp'))->isRequired()->cannotBeEmpty()->end()->scalarNode(
-            'namespace')->isRequired()->cannotBeEmpty()->end()->arrayNode('paths')->requiresAtLeastOneElement()->prototype(
-            'scalar')->cannotBeEmpty()->end()->isRequired()->end()->end()->end()->end();
+        $rootNode->children()->arrayNode('default')->requiresAtLeastOneElement()->prototype('scalar')->cannotBeEmpty()
+            ->end()->end()->arrayNode(
+            'custom'
+        )->prototype('array')->cannotBeEmpty()->children()->enumNode('type')->values(
+            array('annotation', 'xml', 'yaml', 'php', 'staticphp')
+        )->isRequired()->cannotBeEmpty()->end()->scalarNode(
+            'namespace'
+        )->isRequired()->cannotBeEmpty()->end()->arrayNode('paths')->requiresAtLeastOneElement()->prototype(
+            'scalar'
+        )->cannotBeEmpty()->end()->isRequired()->end()->end()->end()->end();
 
         return $rootNode;
     }

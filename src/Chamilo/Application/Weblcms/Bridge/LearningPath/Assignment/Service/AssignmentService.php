@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -100,27 +101,20 @@ class AssignmentService extends
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
      * @param int[] $userIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetUsersForTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [],
-        $condition = null, $offset = null, $count = null,
-        $orderProperty = null
+        FilterParameters $filterParameters
     )
     {
         return $this->assignmentRepository->findTargetUsersForTreeNodeData(
             $contentObjectPublication,
             $treeNodeData,
             $userIds,
-            $condition,
-            $offset,
-            $count,
-            $orderProperty
+            $filterParameters
         );
     }
 
@@ -128,15 +122,15 @@ class AssignmentService extends
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
      * @param int[] $userIds
-     * @param Condition $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countTargetUsersForTreeNodeData(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [], $condition = null
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [], FilterParameters $filterParameters
     )
     {
-        return $this->findTargetUsersForTreeNodeData($contentObjectPublication, $treeNodeData, $userIds, $condition)
+        return $this->findTargetUsersForTreeNodeData($contentObjectPublication, $treeNodeData, $userIds, $filterParameters)
             ->count();
     }
 
@@ -184,26 +178,20 @@ class AssignmentService extends
      * @param ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param int[] $courseGroupIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetCourseGroupsForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
-        $courseGroupIds = [], $condition = null, $offset = null, $count = null, $orderProperty = null
+        $courseGroupIds = [], FilterParameters $filterParameters
     )
     {
         return $this->assignmentRepository->findTargetCourseGroupsForContentObjectPublication(
             $contentObjectPublication,
             $treeNodeData,
             $courseGroupIds,
-            $condition,
-            $offset,
-            $count,
-            $orderProperty
+            $filterParameters
         );
     }
 
@@ -212,17 +200,17 @@ class AssignmentService extends
      * @param ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param int[] $courseGroupIds
-     * @param Condition $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countTargetCourseGroupsForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
-        $courseGroupIds = [], $condition = null
+        $courseGroupIds = [], FilterParameters $filterParameters
     )
     {
         return $this->findTargetCourseGroupsForContentObjectPublication(
-            $contentObjectPublication, $treeNodeData, $courseGroupIds, $condition
+            $contentObjectPublication, $treeNodeData, $courseGroupIds, $filterParameters
         )->count();
     }
 
@@ -270,26 +258,20 @@ class AssignmentService extends
      * @param ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param int[] $platformGroupIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetPlatformGroupsForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $platformGroupIds = [],
-        $condition = null, $offset = null, $count = null, $orderProperty = null
+        FilterParameters $filterParameters
     )
     {
         return $this->assignmentRepository->findTargetPlatformGroupsForContentObjectPublication(
             $contentObjectPublication,
             $treeNodeData,
             $platformGroupIds,
-            $condition,
-            $offset,
-            $count,
-            $orderProperty
+            $filterParameters
         );
     }
 
@@ -298,17 +280,17 @@ class AssignmentService extends
      * @param ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param int[] $platformGroupIds
-     * @param Condition $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countTargetPlatformGroupsForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $platformGroupIds = [],
-        $condition = null
+        FilterParameters $filterParameters
     )
     {
         return $this->findTargetPlatformGroupsForContentObjectPublication(
-            $contentObjectPublication, $treeNodeData, $platformGroupIds, $condition
+            $contentObjectPublication, $treeNodeData, $platformGroupIds, $filterParameters
         )->count();
     }
 

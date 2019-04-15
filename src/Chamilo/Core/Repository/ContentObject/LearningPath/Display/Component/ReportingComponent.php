@@ -109,6 +109,14 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
             );
         }
 
+        if ($this->getCurrentTreeNode()->isRootNode())
+        {
+            $panelHtml = array();
+            $panelHtml[] = $this->renderScoreOverview();
+            $html[] =
+                $panelRenderer->render($translator->getTranslation('ScoreOverview'), implode(PHP_EOL, $panelHtml));
+        }
+
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'KeyboardNavigation.js'
         );
@@ -276,7 +284,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
             );
 
             $informationValues[$translator->getTranslation('LastScore')] = $progressBarRenderer->render(
-                $trackingService->getLastAttemptScoreForTreeNode(
+                $trackingService->getLastCompletedAttemptScoreForTreeNode(
                     $this->learningPath,
                     $this->getReportingUser(),
                     $currentTreeNode
@@ -454,6 +462,67 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
     //
     // return $toolbar;
     // }
+
+    /**
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    protected function renderScoreOverview()
+    {
+        $scoreData = [];
+
+        $trackingService = $this->getTrackingService();
+        $tree = $this->getTree();
+        $user = $this->getUser();
+
+        foreach ($tree->getTreeNodes() as $treeNode)
+        {
+            if ($treeNode->supportsScore())
+            {
+                $reportingUrl = $this->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_REPORTING,
+                        Manager::PARAM_CHILD_ID => $treeNode->getId()
+                    )
+                );
+
+                $scoreData[] = [
+                    'type' => $treeNode->getContentObject()->get_icon_image(),
+                    'title' => $this->getAutomaticNumberingService()->getAutomaticNumberedTitleForTreeNode($treeNode),
+                    'reporting_url' => $reportingUrl,
+                    'path' => $this->getLearningPathService()->renderPathForTreeNode($treeNode),
+                    'number_of_attempts' =>
+                        $trackingService->countTreeNodeAttempts($this->learningPath, $user, $treeNode),
+                    'minimum_score' => $trackingService->getMinimumScoreInTreeNode(
+                        $this->learningPath, $user, $treeNode
+                    ),
+                    'maximum_score' => $trackingService->getMaximumScoreInTreeNode(
+                        $this->learningPath, $user, $treeNode
+                    ),
+                    'average_score' => $trackingService->getAverageScoreInTreeNode(
+                        $this->learningPath, $user, $treeNode
+                    ),
+                    'last_score' => $trackingService->getLastCompletedAttemptScoreForTreeNode(
+                        $this->learningPath, $user, $treeNode
+                    )
+                ];
+            }
+        }
+
+        $exportUrl = $this->get_url(
+            [
+                self::PARAM_ACTION => self::ACTION_EXPORT_REPORTING,
+                ReportingExporterComponent::PARAM_EXPORT => ReportingExporterComponent::EXPORT_SCORE_OVERVIEW
+            ]
+        );
+
+        return $this->getTwig()->render(
+            Manager::context() . ':ScoreOverviewReporting.html.twig',
+            ['SCORE_DATA' => $scoreData, 'EXPORT_URL' => $exportUrl]
+        );
+    }
 
     /**
      * Returns the condition

@@ -168,28 +168,55 @@ class AttemptSummaryCalculator
         return $minimumScore;
     }
 
+//    /**
+//     * Returns the score for the last attempt of the given user in the given TreeNode
+//     *
+//     * @param LearningPath $learningPath
+//     * @param User $user
+//     * @param TreeNode $treeNode
+//     *
+//     * @return string
+//     */
+//    public function getLastAttemptScoreForTreeNode(
+//        LearningPath $learningPath, User $user, TreeNode $treeNode
+//    )
+//    {
+//        $treeNodeAttempts = $this->attemptService->getTreeNodeAttemptsForTreeNode($learningPath, $user, $treeNode);
+//        $treeNodeAttempt = array_pop($treeNodeAttempts);
+//
+//        if (!$treeNodeAttempt instanceof TreeNodeAttempt)
+//        {
+//            return 0;
+//        }
+//
+//        return (int) $treeNodeAttempt->get_score();
+//    }
+
     /**
-     * Returns the score for the last attempt of the given user in the given TreeNode
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      *
-     * @param LearningPath $learningPath
-     * @param User $user
-     * @param TreeNode $treeNode
-     *
-     * @return string
+     * @return int
      */
-    public function getLastAttemptScoreForTreeNode(
+    public function getLastCompletedAttemptScoreForTreeNode(
         LearningPath $learningPath, User $user, TreeNode $treeNode
     )
     {
         $treeNodeAttempts = $this->attemptService->getTreeNodeAttemptsForTreeNode($learningPath, $user, $treeNode);
-        $treeNodeAttempt = array_pop($treeNodeAttempts);
 
-        if (!$treeNodeAttempt instanceof TreeNodeAttempt)
+        do
         {
-            return 0;
-        }
+            $treeNodeAttempt = array_pop($treeNodeAttempts);
 
-        return (int) $treeNodeAttempt->get_score();
+            if ($treeNodeAttempt instanceof TreeNodeAttempt && $treeNodeAttempt->isCompleted())
+            {
+                return (int) $treeNodeAttempt->get_score();
+            }
+        }
+        while($treeNodeAttempt instanceof TreeNodeAttempt);
+
+        return 0;
     }
 
     /**

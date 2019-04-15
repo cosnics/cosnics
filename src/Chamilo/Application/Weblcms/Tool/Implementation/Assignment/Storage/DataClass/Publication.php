@@ -13,6 +13,7 @@ class Publication extends DataClass
 {
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_ENTITY_TYPE = 'entity_type';
+    const PROPERTY_CHECK_FOR_PLAGIARISM = 'check_for_plagiarism';
 
     /**
      * Get the default properties
@@ -24,7 +25,8 @@ class Publication extends DataClass
         return parent::get_default_property_names(
             array(
                 self::PROPERTY_PUBLICATION_ID,
-                self::PROPERTY_ENTITY_TYPE
+                self::PROPERTY_ENTITY_TYPE,
+                self::PROPERTY_CHECK_FOR_PLAGIARISM
             )
         );
     }
@@ -71,6 +73,22 @@ class Publication extends DataClass
     public function setEntityType($entityType)
     {
         $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCheckForPlagiarism()
+    {
+        return $this->get_default_property(self::PROPERTY_CHECK_FOR_PLAGIARISM);
+    }
+
+    /**
+     * @param bool $checkForPlagiarism
+     */
+    public function setCheckForPlagiarism(bool $checkForPlagiarism)
+    {
+        $this->set_default_property(self::PROPERTY_CHECK_FOR_PLAGIARISM, $checkForPlagiarism);
     }
 
     public static function get_table_name()

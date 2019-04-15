@@ -1,0 +1,141 @@
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Display' %}
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css" media="print, screen,projection" href="https://chamilo.hogent.be/index.php?application=Chamilo%5CLibraries%5CAjax&amp;go=resource&amp;theme=Aqua&amp;type=css">
+
+    <title>Chamilo</title>
+</head>
+<body>
+
+<style>
+    .learning-path-print {
+        margin-top: 50px;
+    }
+
+    .learning-path-print .learning-path-title {
+        margin-bottom: 50px;
+        text-align: center;
+    }
+
+    .learning-path-print h2.learning-path-tree-node-title {
+        margin-bottom: 30px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .learning-path-print .learning-path-index {
+        font-size: 18px;
+    }
+
+    .learning-path-print .learning-path-index ul {
+        list-style-type: none;
+    }
+
+    .learning-path-print .learning-path-index > ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    .learning-path-print .row {
+        margin-bottom: 30px;
+    }
+
+    .learning-path-print img {
+        max-width: 100%;
+    }
+
+    .learning-path-print .qr-code {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .learning-path-print .alert {
+        font-weight: bold;
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .learning-path-print .alert-view-online {
+        margin: 15px 0;
+    }
+</style>
+
+{% macro renderTreeTitles(treeTitles) %}
+    <ul>
+        {% for treeTitle, subTitles in treeTitles %}
+            <li>
+                {{ treeTitle }}
+                {% if subTitles|length %}
+                    {% import _self as this %}
+                    {{ this.renderTreeTitles(subTitles) }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+{% import _self as this %}
+
+<div class="container learning-path-print">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="learning-path-title">
+                {{ CONTEXT_TITLE }}<br />
+                {{ LEARNING_PATH_TITLE }}
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="learning-path-tree-node-title">Inhoudsopgave</h2>
+            <div class="learning-path-index">
+                {{ this.renderTreeTitles(TREE_TITLES) }}
+            </div>
+        </div>
+    </div>
+    {% for TREE_NODE in TREE_NODES %}
+        <div class="row" style="page-break-before: always">
+            <div class="col-md-12">
+                <h2 class="learning-path-tree-node-title">{{ TREE_NODE.title }} ({{ TREE_NODE.type }})</h2>
+
+                {% if TREE_NODE.blocked %}
+                    <div class="alert alert-danger">
+                        {{ 'NotAllowedToViewOfflineNotification'|trans({}, appContext) }}
+                    </div>
+                {% else %}
+                    {{ TREE_NODE.content|raw }}
+                {% endif %}
+
+                {% if not TREE_NODE.can_view_offline %}
+                <div class="alert alert-info alert-view-online">
+                    {{ 'CanNotBeViewedOfflineNotification'|trans({}, appContext) }}
+                </div>
+                {% endif %}
+                <div class="qr-code">
+                    <img alt="qr_code" src="{{ TREE_NODE.qr_code }}" />
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+<script type="application/javascript">
+    window.onload = function() {
+        window.print();
+    }
+</script>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

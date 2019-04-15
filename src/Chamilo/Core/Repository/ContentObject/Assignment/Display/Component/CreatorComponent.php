@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
@@ -59,6 +60,15 @@ class CreatorComponent extends Manager
             if ($entry instanceof Entry)
             {
                 $this->getNotificationServiceBridge()->createNotificationForNewEntry($this->getUser(), $entry);
+
+                try
+                {
+                    $this->getExtensionManager()->entryCreated($this->getAssignment(), $entry, $this->getUser());
+                }
+                catch(\Exception $ex)
+                {
+                    $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
+                }
 
                 $this->redirect(
                     Translation::get('EntryCreated'),

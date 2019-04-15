@@ -445,12 +445,12 @@ class TrackingServiceTest extends ChamiloTestCase
 
     public function testGetLastAttemptScoreForTreeNode()
     {
-        $this->attemptSummaryCalculatorMock->expects($this->once())->method('getLastAttemptScoreForTreeNode')->with(
+        $this->attemptSummaryCalculatorMock->expects($this->once())->method('getLastCompletedAttemptScoreForTreeNode')->with(
             $this->learningPath,
             $this->user,
             $this->treeNode);
 
-        $this->trackingService->getLastAttemptScoreForTreeNode($this->learningPath, $this->user, $this->treeNode);
+        $this->trackingService->getLastCompletedAttemptScoreForTreeNode($this->learningPath, $this->user, $this->treeNode);
     }
 
     public function testCountLearningPathAttemptsWithUsers()

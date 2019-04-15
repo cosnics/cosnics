@@ -306,4 +306,11 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         return true;
     }
 
+    /**
+     * @return string
+     */
+    public function getContextTitleForPrint()
+    {
+        // TODO: Implement getContextTitleForPrint() method.
+    }
 }

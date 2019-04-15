@@ -10,6 +10,10 @@ namespace Chamilo\Libraries\Format\Table;
  */
 abstract class TableDataProvider extends TableComponent
 {
+    /**
+     * @var \Chamilo\Libraries\Storage\Parameters\FilterParameters
+     */
+    protected $filterParameters;
 
     /**
      * Returns the data as a resultset
@@ -29,4 +33,20 @@ abstract class TableDataProvider extends TableComponent
      * @return integer
      */
     abstract public function count_data($condition);
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Parameters\FilterParameters
+     */
+    public function getFilterParameters(): \Chamilo\Libraries\Storage\Parameters\FilterParameters
+    {
+        return $this->filterParameters;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     */
+    public function setFilterParameters(\Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters): void
+    {
+        $this->filterParameters = $filterParameters;
+    }
 }

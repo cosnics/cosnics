@@ -9,10 +9,6 @@
         <service id="Chamilo\Application\Plagiarism\Service\Turnitin\WebhookManager" autowire="true" />
         <service id="Chamilo\Application\Plagiarism\Service\Turnitin\EulaService" autowire="true" />
 
-
-        <service id="Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface"
-                 class="Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\DefaultUserConverter" autowire="true" />
-
         <service id="Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepositoryFactory" autowire="true" />
 
         <service id="Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository" autowire="true">

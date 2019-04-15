@@ -10,6 +10,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -47,26 +48,19 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $userIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetUsersForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, array $userIds, $condition = null, $offset = null,
-        $count = null,
-        $orderBy = []
+        ContentObjectPublication $contentObjectPublication, array $userIds, FilterParameters $filterParameters
     )
     {
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_USER,
-            $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
+            $this->getTargetEntitiesCondition(User::class_name(), $userIds),
             $this->getContentObjectPublicationCondition($contentObjectPublication),
-            $offset,
-            $count,
-            $orderBy,
+            $filterParameters,
             $this->getDataClassPropertiesForUser(),
             User::class_name(),
             $this->getTargetBaseVariable(User::class_name())
@@ -118,26 +112,19 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $groupIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetCourseGroupsForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, array $groupIds, $condition = null, $offset = null,
-        $count = null,
-        $orderBy = []
+        ContentObjectPublication $contentObjectPublication, array $groupIds, FilterParameters $filterParameters
     )
     {
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_COURSE_GROUP,
-            $this->getTargetEntitiesCondition(CourseGroup::class_name(), $groupIds, $condition),
+            $this->getTargetEntitiesCondition(CourseGroup::class_name(), $groupIds),
             $this->getContentObjectPublicationCondition($contentObjectPublication),
-            $offset,
-            $count,
-            $orderBy,
+            $filterParameters,
             $this->getDataClassPropertiesForCourseGroup(),
             CourseGroup::class_name(),
             $this->getTargetBaseVariable(CourseGroup::class_name())
@@ -187,26 +174,19 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $groupIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetPlatformGroupsForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, array $groupIds, $condition = null, $offset = null,
-        $count = null,
-        $orderBy = []
+        ContentObjectPublication $contentObjectPublication, array $groupIds, FilterParameters $filterParameters
     )
     {
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_PLATFORM_GROUP,
-            $this->getTargetEntitiesCondition(Group::class_name(), $groupIds, $condition),
+            $this->getTargetEntitiesCondition(Group::class_name(), $groupIds),
             $this->getContentObjectPublicationCondition($contentObjectPublication),
-            $offset,
-            $count,
-            $orderBy,
+            $filterParameters,
             $this->getDataClassPropertiesForPlatformGroups(),
             Group::class_name(),
             $this->getTargetBaseVariable(Group::class_name())

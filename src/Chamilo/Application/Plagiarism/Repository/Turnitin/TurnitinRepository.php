@@ -112,12 +112,14 @@ class TurnitinRepository
     /**
      * @param string $versionId
      *
+     * @param string $language
+     *
      * @return string
-     * @throws \Exception
+     * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
-    public function getEULAPage($versionId = 'latest')
+    public function getEULAPage($versionId = 'latest', $language = 'en-US')
     {
-        $url = sprintf('eula/%s/view', $versionId);
+        $url = sprintf('eula/%s/view?lang=%s', $versionId, $language);
         $request = new TurnitinRequest('GET', $url, $this->getSecretKey());
 
         return $this->handleRequest($request);

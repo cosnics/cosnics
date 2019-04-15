@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Manage
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\PlagiarismChecker;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -24,9 +25,12 @@ class ViewPlagiarismResultComponent extends Manager
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     function run()
     {
+        $this->validateAccess();
+
         $entry = $this->getExtensionComponent()->getEntry();
         if (!$entry instanceof Entry)
         {
@@ -98,5 +102,4 @@ class ViewPlagiarismResultComponent extends Manager
             ExtensionComponent::PARAM_EXTENSION
         );
     }
-
 }

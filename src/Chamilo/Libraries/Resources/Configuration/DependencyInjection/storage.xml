@@ -23,5 +23,7 @@
                 type="service"
                 id="chamilo.libraries.architecture.classname_utilities" />
         </service>
+
+        <service id="Chamilo\Libraries\Storage\Query\FilterParametersTranslator" autowire="true" />
     </services>
 </container>
