@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Platform\Configuration\Cache;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
+use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineArrayCacheService;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -22,7 +23,7 @@ use Chamilo\Libraries\Storage\Cache\DataClassCache;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LocalSettingCacheService extends DoctrinePhpFileCacheService implements UserBasedCacheInterface
+class LocalSettingCacheService extends DoctrineArrayCacheService implements UserBasedCacheInterface
 {
 
     /**
