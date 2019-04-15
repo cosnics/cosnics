@@ -52,16 +52,14 @@ class PlagiarismChecker
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\User\Storage\DataClass\User $submitter
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
      *
      * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
-     * @throws \Exception
      */
     public function checkEntryForPlagiarism(
-        Assignment $assignment, Entry $entry,
-        EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
+        Entry $entry, User $submitter, EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
     )
     {
         if (!$this->canCheckForPlagiarism($entry))
@@ -92,11 +90,10 @@ class PlagiarismChecker
             /** @var File $contentObject */
             $contentObject = $this->contentObjectRepository->findById($entry->getContentObjectId());
 
-            $assignmentOwner = $this->userService->findUserByIdentifier($assignment->get_owner_id());
             $entryOwner = $this->userService->findUserByIdentifier($entry->getUserId());
 
             $newStatus = $this->plagiarismChecker->checkForPlagiarism(
-                $entryOwner, $assignmentOwner, $contentObject->get_title(),
+                $entryOwner, $submitter, $contentObject->get_title(),
                 $contentObject->get_full_path(), $contentObject->get_filename(), $currentSubmissionStatus
             );
 

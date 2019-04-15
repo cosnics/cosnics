@@ -174,8 +174,11 @@ class PlagiarismExtension implements ExtensionInterface
 
             try
             {
+                $assignmentUser = new User();
+                $assignmentUser->setId($assignment->get_owner_id());
+
                 $this->plagiarismChecker->checkEntryForPlagiarism(
-                    $assignment, $entry, $this->getEntryPlagiarismResultServiceBridge()
+                    $entry, $assignmentUser, $this->getEntryPlagiarismResultServiceBridge()
                 );
             }
             catch (EulaNotAcceptedException $eulaNotAcceptedException)
@@ -186,7 +189,7 @@ class PlagiarismExtension implements ExtensionInterface
                 $this->eulaService->acceptEULA($assignmentUser);
 
                 $this->plagiarismChecker->checkEntryForPlagiarism(
-                    $assignment, $entry, $this->getEntryPlagiarismResultServiceBridge()
+                    $entry, $assignmentUser, $this->getEntryPlagiarismResultServiceBridge()
                 );
             }
         }
