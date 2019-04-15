@@ -149,7 +149,7 @@ class SubmissionService
                 throw new InvalidConfigurationException();
             }
 
-            if (!$this->eulaService->userHasAcceptedEULA($submitter))
+            if (!$this->eulaService->userHasAcceptedEULA($owner))
             {
                 throw new EulaNotAcceptedException();
             }
