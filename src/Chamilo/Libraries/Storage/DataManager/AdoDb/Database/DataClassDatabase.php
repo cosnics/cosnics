@@ -354,10 +354,14 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
+     * @param string $dataClassStorageUnitName
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param string[] $propertiesToUpdate
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::update()
+     * @return boolean
+     * @throws \Exception
      */
-    public function update($dataClassStorageUnitName, Condition $condition = null, $propertiesToUpdate)
+    public function update($dataClassStorageUnitName, Condition $condition, $propertiesToUpdate)
     {
         $queryBuilder = new QueryBuilder();
         $queryBuilder->update($dataClassStorageUnitName, $this->getAlias($dataClassStorageUnitName));

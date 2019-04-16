@@ -8,7 +8,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class MsSqlDoctrinePdoConnection extends \Doctrine\DBAL\Driver\PDOConnection
+class MsSqlDoctrinePdoConnection extends \Doctrine\DBAL\Driver\PDOConnection implements \Doctrine\DBAL\Driver\Connection
 {
 
     /**

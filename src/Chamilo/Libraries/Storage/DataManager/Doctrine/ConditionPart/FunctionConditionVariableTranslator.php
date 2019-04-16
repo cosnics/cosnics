@@ -15,10 +15,11 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate($enableAliasing = true)
     {
         $strings = array();
         switch ($this->getConditionVariable()->get_function())
@@ -52,9 +53,9 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
             $strings[] = ' ';
         }
 
-        $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $this->getConditionVariable()->get_condition_variable());
+        $strings[] = $this->getConditionPartTranslatorService()->translate(
+            $this->getDataClassDatabase(), $this->getConditionVariable()->get_condition_variable(), $enableAliasing
+        );
 
         if ($this->getConditionVariable()->get_function() !== FunctionConditionVariable::DISTINCT)
         {
@@ -71,5 +72,13 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
         }
 
         return $value;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
     }
 }

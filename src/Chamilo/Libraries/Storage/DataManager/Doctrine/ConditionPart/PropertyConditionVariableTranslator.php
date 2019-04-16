@@ -14,25 +14,34 @@ class PropertyConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate($enableAliasing = true)
     {
-        $className = $this->getPropertyConditionVariable()->get_class();
-        $alias = $this->getDataClassDatabase()->getAlias($className::get_table_name());
+        $className = $this->getConditionVariable()->get_class();
+
+        if ($enableAliasing)
+        {
+            $alias = $this->getDataClassDatabase()->getAlias($className::get_table_name());
+        }
+        else
+        {
+            $alias = null;
+        }
 
         return $this->getDataClassDatabase()->escapeColumnName(
-            $this->getPropertyConditionVariable()->get_property(),
-            $alias);
+            $this->getConditionVariable()->get_property(), $alias
+        );
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
      */
-    public function getPropertyConditionVariable()
+    public function getConditionVariable()
     {
-        return $this->getConditionVariable();
+        return parent::getConditionVariable();
     }
 }

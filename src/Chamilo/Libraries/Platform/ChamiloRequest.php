@@ -76,7 +76,7 @@ class ChamiloRequest extends Request
      */
     public function getFromPostOrUrl($key, $default = null)
     {
-        if (null !== $result = $this->getFromPOST($key))
+        if (null !== $result = $this->getFromPost($key))
         {
             return $result;
         }

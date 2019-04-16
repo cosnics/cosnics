@@ -23,6 +23,8 @@
                     method="getConnection"/>
         </service>
 
+        <service id="Doctrine\DBAL\Connection" alias="doctrine.dbal.connection" />
+
         <!-- Database Layer -->
         <service
                 id="chamilo.libraries.storage.data_manager.doctrine.database.data_class_database"

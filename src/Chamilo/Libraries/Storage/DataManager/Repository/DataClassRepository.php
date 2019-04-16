@@ -366,8 +366,11 @@ class DataClassRepository
             new StaticConditionVariable($dataClass->getId())
         );
 
+        $defaultProperties = $dataClass->getDefaultProperties();
+        unset($defaultProperties[DataClass::PROPERTY_ID]);
+
         $result = $this->getDataClassDatabase()->update(
-            $dataClassTableName, $condition, $dataClass->get_default_properties()
+            $dataClassTableName, $condition, $defaultProperties
         );
 
         if ($dataClass instanceof CompositeDataClass && $dataClass::is_extended() && $result === true)
@@ -631,8 +634,8 @@ class DataClassRepository
      *
      * @param mixed $function
      *
-     * @throws \Exception
      * @return mixed
+     * @throws \Exception
      */
     public function transactional($function)
     {
@@ -667,8 +670,8 @@ class DataClassRepository
      * @param string $dataClassName
      * @param integer $identifier
      *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function determineDataClassType($dataClassName, $identifier)
     {

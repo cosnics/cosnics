@@ -55,7 +55,7 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
      *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements
      */
-    private function getElements()
+    protected function getElements()
     {
         $elements = new AdvancedElementFinderElements();
 

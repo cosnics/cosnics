@@ -52,7 +52,7 @@ class ComparisonCondition extends Condition
     /**
      * Gets the DataClass property
      *
-     * @var string
+     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     private $name;
 
@@ -66,7 +66,7 @@ class ComparisonCondition extends Condition
     /**
      * The value against which we're comparing
      *
-     * @var string
+     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     private $value;
 
@@ -105,7 +105,7 @@ class ComparisonCondition extends Condition
     /**
      * Gets the DataClass property
      *
-     * @return string
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function get_name()
     {
@@ -125,7 +125,7 @@ class ComparisonCondition extends Condition
     /**
      * Gets the value against which we're comparing
      *
-     * @return string
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function get_value()
     {
@@ -165,17 +165,23 @@ class ComparisonCondition extends Condition
         switch ($this->get_operator())
         {
             case self::LESS_THAN :
-                $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
-                $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+                $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() :
+                    $this->get_value();
+                $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() :
+                    $this->get_name();
                 break;
             case self::LESS_THAN_OR_EQUAL :
-                $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
-                $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+                $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() :
+                    $this->get_value();
+                $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() :
+                    $this->get_name();
                 break;
             case self::EQUAL :
                 $parts = array();
-                $parts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
-                $parts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
+                $parts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() :
+                    $this->get_name();
+                $parts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() :
+                    $this->get_value();
 
                 sort($parts);
 
@@ -186,8 +192,10 @@ class ComparisonCondition extends Condition
 
                 break;
             default :
-                $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
-                $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
+                $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() :
+                    $this->get_name();
+                $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() :
+                    $this->get_value();
                 break;
         }
 

@@ -14,10 +14,11 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate($enableAliasing = true)
     {
         $strings = array();
 
@@ -25,9 +26,9 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
 
         $strings[] = '(';
 
-        $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $this->getConditionVariable()->get_condition_variable());
+        $strings[] = $this->getConditionPartTranslatorService()->translate(
+            $this->getDataClassDatabase(), $this->getConditionVariable()->get_condition_variable(), $enableAliasing
+        );
         $strings[] = ', ';
         $strings[] = "'" . $this->getConditionVariable()->get_format() . "'";
         $strings[] = ')';
@@ -40,5 +41,13 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
         {
             return implode('', $strings);
         }
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\DateFormatConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
     }
 }

@@ -21,8 +21,10 @@ class DataClassDistinctParameters extends DataClassPropertyParameters
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $dataClassProperties
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      */
-    public function __construct(Condition $condition = null, DataClassProperties $dataClassProperties = null,
-        Joins $joins = null, $orderBy = array())
+    public function __construct(
+        Condition $condition = null, DataClassProperties $dataClassProperties = null, Joins $joins = null,
+        $orderBy = array()
+    )
     {
         DataClassParameters::__construct($condition, $joins, $dataClassProperties, $orderBy);
     }
@@ -42,6 +44,7 @@ class DataClassDistinctParameters extends DataClassPropertyParameters
      * Set the property of the DataClass object to be used as a parameter
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $properties
+     *
      * @deprecated Use DataClassProperties and setDataClassProperties() now
      */
     public function set_property($properties)

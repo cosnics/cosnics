@@ -14,10 +14,11 @@ class InequalityConditionTranslator extends ConditionTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate($enableAliasing = true)
     {
         switch ($this->getCondition()->get_operator())
         {
@@ -37,10 +38,18 @@ class InequalityConditionTranslator extends ConditionTranslator
                 die('Unknown operator for inequality condition');
         }
 
-        return $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $this->getCondition()->get_name()) . ' ' . $operator . ' ' . $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $this->getCondition()->get_value());
+        return $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+            ) . ' ' . $operator . ' ' . $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $this->getCondition()->get_value(), $enableAliasing
+            );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\InequalityCondition
+     */
+    public function getCondition()
+    {
+        return parent::getCondition();
     }
 }

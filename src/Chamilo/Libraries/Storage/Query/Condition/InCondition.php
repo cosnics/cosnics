@@ -25,7 +25,7 @@ class InCondition extends Condition
     /**
      * The list of values that defines the selection
      *
-     * @var string
+     * @var string[]
      */
     private $values;
 
@@ -71,7 +71,7 @@ class InCondition extends Condition
     /**
      * Gets the list of values that defines the selection
      *
-     * @return string
+     * @return string[]
      */
     public function get_values()
     {
@@ -106,7 +106,8 @@ class InCondition extends Condition
     {
         $hashParts = parent::getHashParts();
 
-        $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+        $hashParts[] =
+            $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
 
         $values = $this->get_values();
         ksort($values);

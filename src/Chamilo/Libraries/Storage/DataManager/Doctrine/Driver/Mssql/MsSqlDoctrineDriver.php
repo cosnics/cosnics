@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql;
 
+use Doctrine\DBAL\Driver\AbstractSQLServerDriver;
+
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql
@@ -8,7 +10,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class MsSqlDoctrineDriver implements \Doctrine\DBAL\Driver
+class MsSqlDoctrineDriver extends AbstractSQLServerDriver
 {
 
     /**
@@ -62,38 +64,10 @@ class MsSqlDoctrineDriver implements \Doctrine\DBAL\Driver
 
     /**
      *
-     * @see \Doctrine\DBAL\Driver::getDatabasePlatform()
-     */
-    public function getDatabasePlatform()
-    {
-        return new \Doctrine\DBAL\Platforms\SQLServer2008Platform();
-    }
-
-    /**
-     *
-     * @see \Doctrine\DBAL\Driver::getSchemaManager()
-     */
-    public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
-    {
-        return new \Doctrine\DBAL\Schema\SQLServerSchemaManager($conn);
-    }
-
-    /**
-     *
      * @see \Doctrine\DBAL\Driver::getName()
      */
     public function getName()
     {
         return 'pdo_mssql';
-    }
-
-    /**
-     *
-     * @see \Doctrine\DBAL\Driver::getDatabase()
-     */
-    public function getDatabase(\Doctrine\DBAL\Connection $conn)
-    {
-        $params = $conn->getParams();
-        return $params['dbname'];
     }
 }

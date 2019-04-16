@@ -17,7 +17,7 @@ class SubselectCondition extends Condition
     /**
      * The DataClass property
      *
-     * @var string
+     * @var \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
      */
     private $name;
 
@@ -31,7 +31,7 @@ class SubselectCondition extends Condition
     /**
      * The DataClass property of the object used in the subselect
      *
-     * @var string
+     * @var  \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
      */
     private $value;
 
@@ -45,29 +45,30 @@ class SubselectCondition extends Condition
     /**
      * The condition for the subselect
      *
-     * @var \libraries\storage\Condition
+     * @var \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     private $condition;
 
     /**
      * An optional DataManager used in case subselect refers to a different context
      *
-     * @var \libraries\storage\data_manager\DataManager
+     * @var \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     private $data_manager;
 
     /**
      * Constructor
      *
-     * @param $name string
-     * @param $value string
-     * @param $storageUnitValue string
-     * @param $condition \libraries\storage\Condition
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $name
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $value
+     * @param string $storageUnitValue
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param $storageUnitName string
-     * @param $data_manager \libraries\storage\data_manager\DataManager
+     * @param \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
      */
-    public function __construct($name, $value, $storageUnitValue, $condition = null, $storageUnitName = null,
-        $data_manager = null)
+    public function __construct(
+        $name, $value, $storageUnitValue, $condition = null, $storageUnitName = null, $data_manager = null
+    )
     {
         $this->name = $name;
         $this->value = $value;
@@ -80,7 +81,7 @@ class SubselectCondition extends Condition
     /**
      * Gets the DataClass property
      *
-     * @return string
+     * @return  \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
      */
     public function get_name()
     {
@@ -90,7 +91,7 @@ class SubselectCondition extends Condition
     /**
      * Gets the DataClass property of the object used in the subselect
      *
-     * @return string
+     * @return  \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
      */
     public function get_value()
     {
@@ -119,6 +120,7 @@ class SubselectCondition extends Condition
 
     /**
      * Gets the condition for the subselect
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_condition()
     {
@@ -127,6 +129,7 @@ class SubselectCondition extends Condition
 
     /**
      * Gets the optional DataManager used in case subselect refers to a different context
+     * @return \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public function get_data_manager()
     {
@@ -141,8 +144,10 @@ class SubselectCondition extends Condition
     {
         $hashParts = parent::getHashParts();
 
-        $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
-        $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
+        $hashParts[] =
+            $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+        $hashParts[] =
+            $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
         $hashParts[] = $this->get_storage_unit_value();
         $hashParts[] = $this->get_storage_unit_name();
         $hashParts[] = ($this->get_data_manager() ? $this->get_data_manager()->class_name() : null);

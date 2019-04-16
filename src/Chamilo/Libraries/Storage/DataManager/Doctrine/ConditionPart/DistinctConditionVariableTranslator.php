@@ -12,14 +12,16 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
+     * @throws \Exception
      */
-    public function translate()
+    public function translate($enableAliasing = true)
     {
-        $distinctConditionVariable = $this->getDistinctConditionVariable();
+        $distinctConditionVariable = $this->getConditionVariable();
 
-        if (! $distinctConditionVariable->hasConditionVariables())
+        if (!$distinctConditionVariable->hasConditionVariables())
         {
             throw new \Exception('A DistinctConditionVariable needs to have one or more ConditionVariables');
         }
@@ -32,9 +34,9 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
 
         foreach ($distinctConditionVariable->getConditionVariables() as $conditionVariable)
         {
-            $distinctStrings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(),
-                $conditionVariable);
+            $distinctStrings[] = $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $conditionVariable, $enableAliasing
+            );
         }
 
         $strings[] = implode(', ', $distinctStrings);
@@ -46,8 +48,8 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable
      */
-    public function getDistinctConditionVariable()
+    public function getConditionVariable()
     {
-        return $this->getConditionPart();
+        return parent::getConditionVariable();
     }
 }

@@ -23,84 +23,9 @@ interface DataClassDatabaseInterface
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     * @param boolean $autoAssignIdentifier
-     * @return boolean
-     */
-    public function create(DataClass $dataClass, $autoAssignIdentifier = true);
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param string[] $record
-     * @return boolean
-     */
-    public function createRecord($dataClassName, $record);
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
-     * @return string[]
-     */
-    public function retrieve($dataClassName, DataClassRetrieveParameters $parameters);
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     * @return string[][]
-     */
-    public function retrieves($dataClassName, DataClassRetrievesParameters $parameters);
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
-     * @return string[]
-     */
-    public function record($dataClassName, RecordRetrieveParameters $parameters);
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     * @return string[][]
-     */
-    public function records($dataClassName, RecordRetrievesParameters $parameters);
-
-    /**
-     *
-     * @param string $dataClassStorageUnitName
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param string[] $propertiesToUpdate
-     * @throws Exception
-     * @return boolean
-     */
-    public function update($dataClassStorageUnitName, Condition $condition = null, $propertiesToUpdate);
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @throws Exception
-     * @return boolean
-     */
-    public function updates($dataClassName, DataClassProperties $properties, Condition $condition = null);
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @return boolean
-     */
-    public function delete($dataClassName, Condition $condition = null);
-
-    /**
-     *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
+     *
      * @return integer
      */
     public function count($dataClassName, DataClassCountParameters $parameters);
@@ -109,39 +34,63 @@ interface DataClassDatabaseInterface
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
+     *
      * @return integer[]
      */
     public function countGrouped($dataClassName, DataClassCountGroupedParameters $parameters);
 
     /**
      *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     * @param boolean $autoAssignIdentifier
+     *
+     * @return boolean
+     */
+    public function create(DataClass $dataClass, $autoAssignIdentifier = true);
+
+    /**
+     *
+     * @param string $dataClassName
+     * @param string[] $record
+     *
+     * @return boolean
+     */
+    public function createRecord($dataClassName, $record);
+
+    /**
+     *
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return boolean
+     */
+    public function delete($dataClassName, Condition $condition = null);
+
+    /**
+     *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
+     *
      * @return string[]
      */
     public function distinct($dataClassName, DataClassDistinctParameters $parameters);
 
     /**
      *
-     * @param mixed $function
-     * @throws Exception
-     * @return mixed
+     * @param string $columnName
+     * @param string $storageUnitAlias
+     *
+     * @return string
      */
-    public function transactional($function);
+    public function escapeColumnName($columnName, $storageUnitAlias = null);
 
     /**
      *
      * @param string $dataClassStorageUnitName
+     *
      * @return string
      */
     public function getAlias($dataClassStorageUnitName);
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @return string
-     */
-    public function translateCondition(Condition $condition = null);
 
     /**
      *
@@ -149,15 +98,84 @@ interface DataClassDatabaseInterface
      * @param string $type
      * @param boolean $quote
      * @param boolean $escapeWildcards
+     *
      * @return string
      */
     public function quote($value, $type = null, $quote = true, $escapeWildcards = false);
 
     /**
      *
-     * @param string $columnName
-     * @param string $storageUnitAlias
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
+     *
+     * @return string[]
+     */
+    public function record($dataClassName, RecordRetrieveParameters $parameters);
+
+    /**
+     *
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
+     *
+     * @return string[][]
+     */
+    public function records($dataClassName, RecordRetrievesParameters $parameters);
+
+    /**
+     *
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     *
+     * @return string[]
+     */
+    public function retrieve($dataClassName, DataClassRetrieveParameters $parameters);
+
+    /**
+     *
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     *
+     * @return string[][]
+     */
+    public function retrieves($dataClassName, DataClassRetrievesParameters $parameters);
+
+    /**
+     *
+     * @param mixed $function
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function transactional($function);
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param boolean $enableAliasing
+     *
      * @return string
      */
-    public function escapeColumnName($columnName, $storageUnitAlias = null);
+    public function translateCondition(Condition $condition, bool $enableAliasing = true);
+
+    /**
+     *
+     * @param string $dataClassStorageUnitName
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param string[] $propertiesToUpdate
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function update($dataClassStorageUnitName, Condition $condition, $propertiesToUpdate);
+
+    /**
+     *
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function updates($dataClassName, DataClassProperties $properties, Condition $condition);
 }

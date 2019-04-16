@@ -13,23 +13,24 @@ class SubselectConditionTranslator extends ConditionTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate($enableAliasing = true)
     {
         $string = array();
 
-        $string[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $this->getCondition()->get_name());
+        $string[] = $this->getConditionPartTranslatorService()->translate(
+            $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+        );
 
         $string[] = 'IN (';
         $string[] = 'SELECT';
 
-        $string[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $this->getCondition()->get_value());
+        $string[] = $this->getConditionPartTranslatorService()->translate(
+            $this->getDataClassDatabase(), $this->getCondition()->get_value(), $enableAliasing
+        );
 
         $string[] = 'FROM';
 
@@ -46,14 +47,21 @@ class SubselectConditionTranslator extends ConditionTranslator
         if ($this->getCondition()->get_condition())
         {
             $string[] = 'WHERE ';
-            $string[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(),
-                $this->getCondition()->get_condition(),
-                $alias);
+            $string[] = $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $this->getCondition()->get_condition(), $enableAliasing
+            );
         }
 
         $string[] = ')';
 
         return implode(' ', $string);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\SubselectCondition
+     */
+    public function getCondition()
+    {
+        return parent::getCondition();
     }
 }

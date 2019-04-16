@@ -15,17 +15,18 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate($enableAliasing = true)
     {
         $strings = array();
 
         $strings[] = '(';
-        $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $this->getConditionVariable()->get_left());
+        $strings[] = $this->getConditionPartTranslatorService()->translate(
+            $this->getDataClassDatabase(), $this->getConditionVariable()->get_left(), $enableAliasing
+        );
 
         switch ($this->getConditionVariable()->get_operator())
         {
@@ -49,11 +50,19 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
                 break;
         }
 
-        $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $this->getConditionVariable()->get_right());
+        $strings[] = $this->getConditionPartTranslatorService()->translate(
+            $this->getDataClassDatabase(), $this->getConditionVariable()->get_right(), $enableAliasing
+        );
         $strings[] = ')';
 
         return implode(' ', $strings);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
     }
 }

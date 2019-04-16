@@ -20,7 +20,7 @@ class PatternMatchCondition extends Condition
     /**
      * The DataClass property
      *
-     * @var string
+     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     private $name;
 
@@ -48,10 +48,10 @@ class PatternMatchCondition extends Condition
     /**
      * Constructor
      *
-     * @param $name string
-     * @param $pattern string
-     * @param $storageUnit string
-     * @param $isAlias boolean
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $name
+     * @param string $pattern
+     * @param string $storageUnit
+     * @param boolean $isAlias
      */
     public function __construct($name, $pattern, $storageUnit = null, $isAlias = false)
     {
@@ -64,7 +64,7 @@ class PatternMatchCondition extends Condition
     /**
      * Gets the DataClass property
      *
-     * @return string
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function get_name()
     {
@@ -109,7 +109,8 @@ class PatternMatchCondition extends Condition
     {
         $hashParts = parent::getHashParts();
 
-        $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+        $hashParts[] =
+            $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
         $hashParts[] = $this->get_pattern();
         $hashParts[] = $this->get_storage_unit();
         $hashParts[] = $this->is_alias();

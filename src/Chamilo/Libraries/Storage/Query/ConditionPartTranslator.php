@@ -38,8 +38,10 @@ abstract class ConditionPartTranslator
      * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
      */
-    public function __construct(ConditionPartTranslatorServiceInterface $conditionPartTranslatorService,
-        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart)
+    public function __construct(
+        ConditionPartTranslatorServiceInterface $conditionPartTranslatorService,
+        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart
+    )
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
         $this->dataClassDatabase = $dataClassDatabase;
@@ -60,7 +62,8 @@ abstract class ConditionPartTranslator
      * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface $conditionPartTranslatorService
      */
     public function setConditionPartTranslatorService(
-        ConditionPartTranslatorServiceInterface $conditionPartTranslatorService)
+        ConditionPartTranslatorServiceInterface $conditionPartTranslatorService
+    )
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
     }
@@ -102,8 +105,9 @@ abstract class ConditionPartTranslator
     }
 
     /**
+     * @param boolean $enableAliasing
      *
      * @return string
      */
-    abstract public function translate();
+    abstract public function translate($enableAliasing = true);
 }

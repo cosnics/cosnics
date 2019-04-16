@@ -97,9 +97,9 @@ class ParametersProcessor
      *
      * @return string
      */
-    protected function translateConditionPart(DataClassDatabase $dataClassDatabase, ConditionPart $conditionPart)
+    protected function translate(DataClassDatabase $dataClassDatabase, ConditionPart $conditionPart)
     {
-        return $this->getConditionPartTranslatorService()->translateConditionPart($dataClassDatabase, $conditionPart);
+        return $this->getConditionPartTranslatorService()->translate($dataClassDatabase, $conditionPart);
     }
 
     /**
@@ -269,7 +269,7 @@ class ParametersProcessor
     {
         if ($condition instanceof Condition)
         {
-            $queryBuilder->where($this->translateConditionPart($dataClassDatabase, $condition));
+            $queryBuilder->where($this->translate($dataClassDatabase, $condition));
         }
 
         return $queryBuilder;
@@ -289,7 +289,7 @@ class ParametersProcessor
     {
         if ($condition instanceof Condition)
         {
-            $queryBuilder->having($this->translateConditionPart($dataClassDatabase, $condition));
+            $queryBuilder->having($this->translate($dataClassDatabase, $condition));
         }
 
         return $queryBuilder;
@@ -314,7 +314,7 @@ class ParametersProcessor
         {
             foreach ($joins->get() as $join)
             {
-                $joinCondition = $this->translateConditionPart($dataClassDatabase, $join->get_condition());
+                $joinCondition = $this->translate($dataClassDatabase, $join->get_condition());
                 $joinDataClassName = $join->get_data_class();
 
                 switch ($join->get_type())
@@ -363,7 +363,7 @@ class ParametersProcessor
         {
             foreach ($groupBy->get() as $groupByVariable)
             {
-                $queryBuilder->addGroupBy($this->translateConditionPart($dataClassDatabase, $groupByVariable));
+                $queryBuilder->addGroupBy($this->translate($dataClassDatabase, $groupByVariable));
             }
         }
 
@@ -388,7 +388,7 @@ class ParametersProcessor
         {
             foreach ($properties->get() as $conditionVariable)
             {
-                $queryBuilder->addSelect($this->translateConditionPart($dataClassDatabase, $conditionVariable));
+                $queryBuilder->addSelect($this->translate($dataClassDatabase, $conditionVariable));
             }
         }
 
@@ -442,7 +442,7 @@ class ParametersProcessor
         foreach ($orderByCollection as $orderBy)
         {
             $queryBuilder->addOrderBy(
-                $this->translateConditionPart($dataClassDatabase, $orderBy->getConditionVariable()),
+                $this->translate($dataClassDatabase, $orderBy->getConditionVariable()),
                 ($orderBy->get_direction() == SORT_DESC ? 'DESC' : 'ASC')
             );
         }

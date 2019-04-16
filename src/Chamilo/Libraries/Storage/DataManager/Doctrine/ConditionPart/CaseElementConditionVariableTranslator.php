@@ -16,10 +16,11 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate($enableAliasing = true)
     {
         $strings = array();
 
@@ -28,9 +29,9 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
         if ($conditionVariable->get_condition() instanceof Condition)
         {
             $strings[] = 'WHEN ';
-            $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(),
-                $conditionVariable->get_condition());
+            $strings[] = $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $conditionVariable->get_condition(), $enableAliasing
+            );
             $strings[] = ' THEN ';
         }
         else
@@ -41,5 +42,13 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
         $strings[] = $conditionVariable->get_statement();
 
         return implode('', $strings);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
     }
 }
