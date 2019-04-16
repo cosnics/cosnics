@@ -18,7 +18,7 @@ class StaticConditionVariableTranslator extends ConditionVariableTranslator
      *
      * @return string
      */
-    public function translate($enableAliasing = true)
+    public function translate(bool $enableAliasing = true)
     {
         $value = $this->getConditionVariable()->get_value();
 

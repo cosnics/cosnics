@@ -7,15 +7,17 @@ use Chamilo\Libraries\Storage\Query\ConditionTranslator;
  *
  * @package Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
  */
 class AggregateConditionTranslator extends ConditionTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate(bool $enableAliasing = true)
     {
         $string = '';
 
@@ -25,11 +27,11 @@ class AggregateConditionTranslator extends ConditionTranslator
         foreach ($this->getCondition()->get_conditions() as $key => $condition)
         {
             $count ++;
-            $translation = $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(),
-                $condition);
+            $translation = $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $condition, $enableAliasing
+            );
 
-            if (! empty($translation))
+            if (!empty($translation))
             {
                 $conditionTranslations[] = $translation;
             }
@@ -41,5 +43,13 @@ class AggregateConditionTranslator extends ConditionTranslator
         }
 
         return $string;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\MultipleAggregateCondition
+     */
+    public function getCondition()
+    {
+        return parent::getCondition();
     }
 }

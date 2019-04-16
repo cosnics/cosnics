@@ -72,9 +72,4 @@ class ConditionPartCache
     {
         $this->cache[$conditionPart->hash()] = $value;
     }
-
-    public static function reset()
-    {
-        $this->cache = array();
-    }
 }

@@ -7,20 +7,22 @@ use Chamilo\Libraries\Storage\Query\ConditionTranslator;
  *
  * @package Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
  */
 class PatternMatchConditionTranslator extends ConditionTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate(bool $enableAliasing = true)
     {
-        return $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $this->getCondition()->get_name()) . ' LIKE ' .
-             $this->getDataClassDatabase()->quote($this->searchString($this->getCondition()->get_pattern()));
+        return $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+            ) . ' LIKE ' .
+            $this->getDataClassDatabase()->quote($this->searchString($this->getCondition()->get_pattern()));
     }
 
     /**
@@ -29,6 +31,7 @@ class PatternMatchConditionTranslator extends ConditionTranslator
      * Should be suitable for any SQL flavor.
      *
      * @param string $string
+     *
      * @return string
      */
     public function searchString($string)
@@ -41,6 +44,15 @@ class PatternMatchConditionTranslator extends ConditionTranslator
          * escaped with the SQL equivalent _. ======================================================================
          */
         $string = preg_replace_callback('/([%\'\\\\_])/e', "'\\\\\\\\' . '\\1'", $string);
+
         return preg_replace(array('/(?<!\\\\)\*/', '/(?<!\\\\)\?/'), array('%', '_'), $string);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition
+     */
+    public function getCondition()
+    {
+        return parent::getCondition();
     }
 }

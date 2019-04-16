@@ -17,7 +17,7 @@ class PatternMatchConditionTranslator extends ConditionTranslator
      *
      * @return string
      */
-    public function translate($enableAliasing = true)
+    public function translate(bool $enableAliasing = true)
     {
         return $this->getConditionPartTranslatorService()->translate(
                 $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing

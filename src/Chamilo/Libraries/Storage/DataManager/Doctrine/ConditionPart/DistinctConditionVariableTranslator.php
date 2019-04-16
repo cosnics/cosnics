@@ -17,7 +17,7 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
      * @return string
      * @throws \Exception
      */
-    public function translate($enableAliasing = true)
+    public function translate(bool $enableAliasing = true)
     {
         $distinctConditionVariable = $this->getConditionVariable();
 

@@ -8,15 +8,18 @@ use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
  * @package Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CaseConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate(bool $enableAliasing = true)
     {
         $strings = array();
 
@@ -24,9 +27,9 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
 
         foreach ($this->getConditionVariable()->get_case_elements() as $caseElement)
         {
-            $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(),
-                $caseElement);
+            $strings[] = $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $caseElement, $enableAliasing
+            );
         }
 
         $strings[] = ' END';
@@ -41,5 +44,13 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
         }
 
         return $value;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\CaseConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
     }
 }

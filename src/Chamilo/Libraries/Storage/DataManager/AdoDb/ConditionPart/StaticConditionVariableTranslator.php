@@ -7,15 +7,18 @@ use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
  *
  * @package Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class StaticConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate(bool $enableAliasing = true)
     {
         $value = $this->getConditionVariable()->get_value();
 
@@ -25,5 +28,13 @@ class StaticConditionVariableTranslator extends ConditionVariableTranslator
         }
 
         return $value;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
     }
 }

@@ -19,7 +19,7 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
      *
      * @return string
      */
-    public function translate($enableAliasing = true)
+    public function translate(bool $enableAliasing = true)
     {
         $strings = array();
         switch ($this->getConditionVariable()->get_function())

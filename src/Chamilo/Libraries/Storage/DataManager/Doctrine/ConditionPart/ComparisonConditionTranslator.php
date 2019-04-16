@@ -18,7 +18,7 @@ class ComparisonConditionTranslator extends ConditionTranslator
      *
      * @return string
      */
-    public function translate($enableAliasing = true)
+    public function translate(bool $enableAliasing = true)
     {
         if ($this->getCondition()->get_operator() == ComparisonCondition::EQUAL &&
             is_null($this->getCondition()->get_value()))

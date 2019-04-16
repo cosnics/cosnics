@@ -17,7 +17,7 @@ class InConditionTranslator extends ConditionTranslator
      *
      * @return string
      */
-    public function translate($enableAliasing = true)
+    public function translate(bool $enableAliasing = true)
     {
         $values = $this->getCondition()->get_values();
 

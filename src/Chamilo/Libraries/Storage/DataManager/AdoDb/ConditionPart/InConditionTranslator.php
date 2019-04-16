@@ -7,19 +7,21 @@ use Chamilo\Libraries\Storage\Query\ConditionTranslator;
  *
  * @package Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
  */
 class InConditionTranslator extends ConditionTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate(bool $enableAliasing = true)
     {
         $values = $this->getCondition()->get_values();
 
-        if (! is_array($values))
+        if (!is_array($values))
         {
             if (is_scalar($values))
             {
@@ -32,7 +34,8 @@ class InConditionTranslator extends ConditionTranslator
             else
             {
                 throw new \InvalidArgumentException(
-                    'An InCondition only accepts an array or a scalar as input for the values');
+                    'An InCondition only accepts an array or a scalar as input for the values'
+                );
             }
         }
 
@@ -40,9 +43,9 @@ class InConditionTranslator extends ConditionTranslator
         {
             $where_clause = array();
 
-            $where_clause[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(),
-                $this->getCondition()->get_name()) . ' IN (';
+            $where_clause[] = $this->getConditionPartTranslatorService()->translate(
+                    $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+                ) . ' IN (';
 
             $placeholders = array();
 
@@ -62,5 +65,13 @@ class InConditionTranslator extends ConditionTranslator
         }
 
         return $value;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\InCondition
+     */
+    public function getCondition()
+    {
+        return parent::getCondition();
     }
 }

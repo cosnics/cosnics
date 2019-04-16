@@ -109,5 +109,5 @@ abstract class ConditionPartTranslator
      *
      * @return string
      */
-    abstract public function translate($enableAliasing = true);
+    abstract public function translate(bool $enableAliasing = true);
 }

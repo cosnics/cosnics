@@ -98,6 +98,7 @@ class ConditionVariableCache
 
     public static function reset()
     {
-        $this->cache = array();
+        $instance = self::getInstance();
+        $instance->cache = array();
     }
 }

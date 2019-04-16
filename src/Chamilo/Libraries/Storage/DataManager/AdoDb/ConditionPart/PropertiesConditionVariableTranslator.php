@@ -6,27 +6,39 @@ use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart
+ * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class PropertiesConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate(bool $enableAliasing = true)
     {
-        $className = $this->getPropertiesConditionVariable()->get_class();
-        return $this->getDataClassDatabase()->getAlias($className::get_table_name()) . '.*';
+        $className = $this->getConditionVariable()->get_class();
+
+        if ($enableAliasing)
+        {
+            return $this->getDataClassDatabase()->getAlias($className::get_table_name()) . '.*';
+        }
+        else
+        {
+            return '*';
+        }
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable
      */
-    public function getPropertiesConditionVariable()
+    public function getConditionVariable()
     {
-        return $this->getConditionVariable();
+        return parent::getConditionVariable();
     }
 }

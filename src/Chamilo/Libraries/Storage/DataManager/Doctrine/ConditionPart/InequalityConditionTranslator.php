@@ -18,7 +18,7 @@ class InequalityConditionTranslator extends ConditionTranslator
      *
      * @return string
      */
-    public function translate($enableAliasing = true)
+    public function translate(bool $enableAliasing = true)
     {
         switch ($this->getCondition()->get_operator())
         {

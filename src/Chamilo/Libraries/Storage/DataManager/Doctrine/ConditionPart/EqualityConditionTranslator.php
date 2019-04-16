@@ -17,7 +17,7 @@ class EqualityConditionTranslator extends ConditionTranslator
      *
      * @return string
      */
-    public function translate($enableAliasing = true)
+    public function translate(bool $enableAliasing = true)
     {
         if (is_null($this->getCondition()->get_value()))
         {

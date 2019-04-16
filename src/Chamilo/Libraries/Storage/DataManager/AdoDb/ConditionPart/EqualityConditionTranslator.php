@@ -7,27 +7,37 @@ use Chamilo\Libraries\Storage\Query\ConditionTranslator;
  *
  * @package Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
  */
 class EqualityConditionTranslator extends ConditionTranslator
 {
 
     /**
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
+     * @return string
      */
-    public function translate()
+    public function translate(bool $enableAliasing = true)
     {
         if (is_null($this->getCondition()->get_value()))
         {
-            return $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(),
-                $this->getCondition()->get_name()) . ' IS NULL';
+            return $this->getConditionPartTranslatorService()->translate(
+                    $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+                ) . ' IS NULL';
         }
 
-        return $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $this->getCondition()->get_name()) . ' = ' . $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $this->getCondition()->get_value());
+        return $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+            ) . ' = ' . $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $this->getCondition()->get_value(), $enableAliasing
+            );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
+     */
+    public function getCondition()
+    {
+        return parent::getCondition();
     }
 }
