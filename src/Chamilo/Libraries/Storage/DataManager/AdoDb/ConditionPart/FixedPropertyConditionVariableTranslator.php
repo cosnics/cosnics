@@ -18,12 +18,19 @@ class FixedPropertyConditionVariableTranslator extends PropertyConditionVariable
      */
     public function translate(bool $enableAliasing = true)
     {
-        $class_name = $this->getConditionVariable()->get_class();
+        $className = $this->getConditionVariable()->get_class();
 
-        $table_alias = $this->getDataClassDatabase()->getAlias($class_name::get_table_name());
+        if ($enableAliasing)
+        {
+            $tableAlias = $this->getDataClassDatabase()->getAlias($className::get_table_name());
+        }
+        else
+        {
+            $tableAlias = null;
+        }
 
         return $this->getDataClassDatabase()->escapeColumnName(
-                $this->getConditionVariable()->get_property(), $table_alias
+                $this->getConditionVariable()->get_property(), $tableAlias
             ) . ' AS ' . $this->getConditionVariable()->get_alias();
     }
 
