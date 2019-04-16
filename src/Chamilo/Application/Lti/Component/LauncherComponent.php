@@ -35,7 +35,7 @@ class LauncherComponent extends Manager
 
         /** @var ProviderService $providerService */
         $providerService = $this->getService(ProviderService::class);
-        $provider = $providerService->getProviderById(18);
+        $provider = $providerService->getProviderById(3);
 
         $launchParameters = $launchParametersGenerator->generateLaunchParametersForUser($provider, $this->getUser());
         $launchParameters->setContextId('9d5d6098a0763716622ebb48921d548713d1bae8')
@@ -46,7 +46,7 @@ class LauncherComponent extends Manager
             ->addRole(new ContextRole(ContextRole::ROLE_INSTRUCTOR))
             ->addCustomLaunchParameters(new CustomLaunchParameter('opened_resource_id', 1070775));
 
-        $launchParametersGenerator->generateResultIdentifier($launchParameters, TestIntegration::class, 5);
+        $launchParametersGenerator->generateAndAddResultIdentifier($launchParameters, TestIntegration::class, 5);
 
         $html = [];
         $html[] = $this->render_header();

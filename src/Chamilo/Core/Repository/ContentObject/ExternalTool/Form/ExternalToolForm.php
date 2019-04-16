@@ -139,7 +139,7 @@ class ExternalToolForm extends ContentObjectForm
 
         $this->initializeContainer();
 
-        $providersArray[- 1] = '-- ' . Translation::get('SelectExistingProvider') . ' --';
+        $providersArray[- 1] = '-- ' . Translation::get('DefineYourOwnToolOrSelectExisting') . ' --';
 
         /** @var ProviderService $providerService */
         $providerService = $this->getService(ProviderService::class);

@@ -24,7 +24,7 @@ class OAuthDataStore extends \IMSGlobal\LTI\OAuth\OAuthDataStore
      */
     public function __construct(\Chamilo\Application\Lti\Storage\Entity\Provider $provider)
     {
-        $this->Provider = $provider;
+        $this->provider = $provider;
     }
 
     /**
@@ -36,7 +36,7 @@ class OAuthDataStore extends \IMSGlobal\LTI\OAuth\OAuthDataStore
      */
     function lookup_consumer($consumerKey)
     {
-        return $this->Provider->toOAuthConsumer();
+        return $this->provider->toOAuthConsumer();
     }
 
     /**

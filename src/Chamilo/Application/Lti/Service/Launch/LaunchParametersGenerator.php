@@ -103,9 +103,11 @@ class LaunchParametersGenerator
             ->setPersonContactEmailPrimary($user->get_email())
             ->setOutcomeServiceUrl($basicOutcomesServicesUrl->getUrl());
 
+        $locale = $this->translator->getLocale();
+
         $launchParameters
             ->setLaunchPresentationDocumentTarget(LaunchParameters::DOCUMENT_TARGET_IFRAME)
-            ->setLaunchPresentationLocale($this->translator->getLocale())
+            ->setLaunchPresentationLocale($locale . '_' . strtoupper($locale))
             ->setLaunchPresentationReturnUrl($presentationReturnUrl->getUrl())
             ->setToolConsumerInfoProductFamilyCode('cosnics')
             ->setToolConsumerInfoVersion('1.0')
@@ -130,7 +132,7 @@ class LaunchParametersGenerator
      * @param string $integrationClass
      * @param string $resultId
      */
-    public function generateResultIdentifier(
+    public function generateAndAddResultIdentifier(
         LaunchParameters $launchParameters, string $integrationClass, string $resultId
     )
     {
