@@ -1,7 +1,11 @@
 <?php
 namespace Chamilo\Core\Group\DependencyInjection;
 
+use Chamilo\Core\Group\DependencyInjection\CompilerPass\GroupEventListenerCompilerPass;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
+use Chamilo\Libraries\DependencyInjection\Interfaces\IConfigurableExtension;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Config\FileLocator;
@@ -9,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  *
@@ -16,7 +21,8 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class DependencyInjectionExtension extends Extension implements ExtensionInterface
+class DependencyInjectionExtension extends Extension implements ExtensionInterface, ICompilerPassExtension,
+    IConfigurableExtension
 {
 
     /**
@@ -50,5 +56,32 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function getAlias()
     {
         return 'chamilo.core.group';
+    }
+
+    /**
+     * Registers the compiler passes in the container
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    public function registerCompilerPasses(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new GroupEventListenerCompilerPass());
+    }
+
+    /**
+     * Loads the configuration for this package in the container
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    public function loadContainerConfiguration(ContainerBuilder $container)
+    {
+        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
+
+        $loader = new YamlFileLoader(
+            $container,
+            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Group'))
+        );
+
+        $loader->load('Config.yml');
     }
 }

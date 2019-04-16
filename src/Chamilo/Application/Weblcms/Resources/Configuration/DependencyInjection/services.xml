@@ -37,6 +37,7 @@
                  class="Chamilo\Application\Weblcms\Service\RightsService">
             <argument type="service" id="chamilo.application.weblcms.service.weblcms_rights"/>
             <argument type="service" id="chamilo.application.weblcms.service.course_settings"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Storage\Repository\RightsLocationRepository"/>
             <call method="setCourseService">
                 <argument type="service" id="chamilo.application.weblcms.service.course"/>
             </call>
@@ -57,14 +58,11 @@
         <service id="chamilo.application.weblcms.storage.repository.publication_repository"
                  class="Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository"/>
 
-        <service id="chamilo.application.weblcms.storage.repository.rights_location_repository"
-                 class="Chamilo\Application\Weblcms\Storage\Repository\RightsLocationRepository">
-            <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository"/>
-        </service>
+        <service id="Chamilo\Application\Weblcms\Storage\Repository\RightsLocationRepository" autowire="true" />
 
         <service id="chamilo.application.weblcms.service.rights_location_fixer.rights_location_fixer"
                  class="Chamilo\Application\Weblcms\Service\RightsLocationFixer\RightsLocationFixer">
-            <argument type="service" id="chamilo.application.weblcms.storage.repository.rights_location_repository"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Storage\Repository\RightsLocationRepository"/>
             <argument type="service" id="chamilo.application.weblcms.storage.repository.course_repository"/>
             <argument type="service" id="chamilo.application.weblcms.storage.repository.publication_repository"/>
         </service>
@@ -80,6 +78,10 @@
 
         <service id="Chamilo\Application\Weblcms\Service\CourseUserCategoryService" autowire="true"/>
         <service id="Chamilo\Application\Weblcms\Repository\CourseUserCategoryRepository" autowire="true"/>
+
+        <service id="Chamilo\Application\Weblcms\Service\GroupEventListener" autowire="true">
+            <tag name="Chamilo\Core\Group\Service\GroupEventListenerInterface" />
+        </service>
 
     </services>
 </container>

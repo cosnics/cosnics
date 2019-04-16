@@ -1650,7 +1650,9 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param int $count
      * @param \libraries\storage\OrderBy[] $order_property
      *
-     * @return \application\weblcms\course\RecordResultSet
+     * @return RecordResultSet
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\DBALException
      */
     public static function retrieve_all_course_users($course_id, $condition = null, $offset = null, $count = null,
         $order_property = null)

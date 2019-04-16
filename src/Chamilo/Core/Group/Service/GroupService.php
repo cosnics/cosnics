@@ -22,65 +22,79 @@ class GroupService
     /**
      * @var \Chamilo\Core\Group\Storage\Repository\GroupRepository
      */
-    private $groupRepository;
+    protected $groupRepository;
 
     /**
      * @var \Chamilo\Core\Group\Service\GroupMembershipService
      */
-    private $groupMembershipService;
+    protected $groupMembershipService;
+
+    /**
+     * @var \Chamilo\Core\Group\Service\GroupsTreeTraverser
+     */
+    protected $groupsTreeTraverser;
 
     /**
      * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
      */
-    private $userSubscribedGroups = array();
+    protected $userSubscribedGroups = array();
 
     /**
      * @var integer[][]
      */
-    private $userSubscribedGroupIdentifiers = array();
+    protected $userSubscribedGroupIdentifiers = array();
 
     /**
      * @var \Chamilo\Libraries\Storage\DataClass\PropertyMapper
      */
-    private $propertyMapper;
+    protected $propertyMapper;
 
     /**
      * @var integer[][]
      */
-    private $groupUserIdentifiers = array();
+    protected $groupUserIdentifiers = array();
 
     /**
      * @var integer[][]
      */
-    private $subGroupIdentifiers = array();
+    protected $subGroupIdentifiers = array();
 
     /**
      * @var integer[]
      */
-    private $subGroupsCount = array();
+    protected $subGroupsCount = array();
 
     /**
      * @var integer[]
      */
-    private $groupUsersCount = array();
+    protected $groupUsersCount = array();
 
     /**
      * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
      */
-    private $subGroups = array();
+    protected $subGroups = array();
+
+    /**
+     * @var \Chamilo\Core\Group\Service\GroupEventNotifier
+     */
+    protected $groupEventNotifier;
 
     /**
      * @param \Chamilo\Core\Group\Storage\Repository\GroupRepository $groupRepository
      * @param \Chamilo\Core\Group\Service\GroupMembershipService $groupMembershipService
      * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
+     * @param \Chamilo\Core\Group\Service\GroupEventNotifier $groupEventNotifier
      */
     public function __construct(
-        GroupRepository $groupRepository, GroupMembershipService $groupMembershipService, PropertyMapper $propertyMapper
+        GroupRepository $groupRepository, GroupMembershipService $groupMembershipService,
+        PropertyMapper $propertyMapper,
+        GroupEventNotifier $groupEventNotifier
     )
     {
         $this->groupRepository = $groupRepository;
         $this->groupMembershipService = $groupMembershipService;
         $this->propertyMapper = $propertyMapper;
+        $this->groupEventNotifier = $groupEventNotifier;
     }
 
     /**
@@ -94,75 +108,6 @@ class GroupService
         return $this->getGroupRepository()->countGroups($condition);
     }
 
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $recursiveSubgroups
-     *
-     * @return integer
-     */
-    public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false)
-    {
-        $cacheKey = md5(serialize([$group->getId(), $recursiveSubgroups]));
-
-        if (!array_key_exists($cacheKey, $this->subGroupsCount))
-        {
-            if ($group->getRightValue() == $group->getLeftValue() + 1)
-            {
-                $this->subGroupsCount[$cacheKey] = 0;
-            }
-            elseif ($group->getRightValue() == $group->getLeftValue() + 3)
-            {
-                $this->subGroupsCount[$cacheKey] = 1;
-            }
-            else
-            {
-                if ($recursiveSubgroups)
-                {
-                    $this->subGroupsCount[$cacheKey] = ($group->getRightValue() - $group->getLeftValue() - 1) / 2;
-                }
-                else
-                {
-
-                    $this->subGroupsCount[$cacheKey] =
-                        $this->getGroupRepository()->countSubGroupsForGroup($group, false);
-                }
-            }
-        }
-
-        return $this->subGroupsCount[$cacheKey];
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $includeSubGroups
-     * @param boolean $recursiveSubgroups
-     *
-     * @return integer
-     * @throws \Exception
-     */
-    public function countUsersForGroup(Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false)
-    {
-        $cacheKey = md5(serialize([$group->getId(), $includeSubGroups, $recursiveSubgroups]));
-
-        if (!array_key_exists($cacheKey, $this->groupUsersCount))
-        {
-            if ($includeSubGroups)
-            {
-                $groupIdentifiers = $this->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
-            }
-            else
-            {
-                $groupIdentifiers = array();
-            }
-
-            $groupIdentifiers[] = $group->getId();
-
-            $this->groupUsersCount[$cacheKey] =
-                $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifiers($groupIdentifiers);
-        }
-
-        return $this->groupUsersCount[$cacheKey];
-    }
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
@@ -172,7 +117,13 @@ class GroupService
      */
     public function createGroup(Group $group)
     {
-        return $this->getGroupRepository()->createGroup($group);
+        $success = $this->getGroupRepository()->createGroup($group);
+        if ($success)
+        {
+            $this->groupEventNotifier->afterCreate($group);
+        }
+
+        return $success;
     }
 
     /**
@@ -183,6 +134,9 @@ class GroupService
      */
     public function deleteGroup(Group $group)
     {
+        $subGroupIds = [];
+        $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group, true, true);
+
         $deletedGroups = $this->getGroupRepository()->deleteGroup($group);
 
         if (!$deletedGroups instanceof DataClassIterator)
@@ -190,10 +144,17 @@ class GroupService
             return false;
         }
 
-        if (!$this->getGroupMembershipService()->unsubscribeUsersFromGroups($deletedGroups))
+        foreach($deletedGroups as $deletedGroup)
+        {
+            $subGroupIds[] = $deletedGroup->getId();
+        }
+
+        if (!$this->getGroupMembershipService()->removeUsersFromGroupsByIdsAfterRemoval($subGroupIds))
         {
             return false;
         }
+
+        $this->groupEventNotifier->afterDelete($group, $subGroupIds, $impactedUserIds);
 
         return true;
     }
@@ -203,68 +164,12 @@ class GroupService
      *
      * @return integer[]
      * @throws \Exception
+     *
+     * @deprecated (use tree traverser)
      */
     public function findAllSubscribedGroupIdentifiersForUserIdentifier(int $userIdentifier)
     {
-        if (!array_key_exists($userIdentifier, $this->userSubscribedGroupIdentifiers))
-        {
-            $directlySubscribedGroupNestingValues =
-                $this->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
-
-            if (count($directlySubscribedGroupNestingValues) > 0)
-            {
-                $this->userSubscribedGroupIdentifiers[$userIdentifier] =
-                    $this->getGroupRepository()->findGroupIdentifiersForDirectlySubscribedGroupNestingValues(
-                        $directlySubscribedGroupNestingValues
-                    );
-            }
-            else
-            {
-                $this->userSubscribedGroupIdentifiers[$userIdentifier] = array();
-            }
-        }
-
-        return $this->userSubscribedGroupIdentifiers[$userIdentifier];
-    }
-
-    /**
-     * @param integer $userIdentifier
-     *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
-     * @throws \Exception
-     */
-    public function findAllSubscribedGroupsForUserIdentifier(int $userIdentifier)
-    {
-        if (!array_key_exists($userIdentifier, $this->userSubscribedGroups))
-        {
-            $directlySubscribedGroupNestingValues =
-                $this->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
-
-            if (count($directlySubscribedGroupNestingValues) > 0)
-            {
-                $this->userSubscribedGroups[$userIdentifier] =
-                    $this->getGroupRepository()->findGroupsForDirectlySubscribedGroupNestingValues(
-                        $directlySubscribedGroupNestingValues
-                    );
-            }
-            else
-            {
-                $this->userSubscribedGroups[$userIdentifier] = new DataClassIterator(Group::class, []);
-            }
-        }
-
-        return $this->userSubscribedGroups[$userIdentifier];
-    }
-
-    /**
-     * @param integer $userIdentifier
-     *
-     * @return string[][]
-     * @throws \Exception
-     */
-    public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(int $userIdentifier)
-    {
-        return $this->getGroupRepository()->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
+        return $this->groupsTreeTraverser->findAllSubscribedGroupIdentifiersForUserIdentifier($userIdentifier);
     }
 
     /**
@@ -313,7 +218,7 @@ class GroupService
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findGroups($condition, $offset = 0, $count = - 1, $orderProperty = null)
     {
@@ -324,13 +229,13 @@ class GroupService
      *
      * @param integer[] $groupIdentifiers
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findGroupsByIdentifiers($groupIdentifiers)
     {
         if (empty($groupIdentifiers))
         {
-            return [];
+            return new DataClassIterator(Group::class, []);
         }
 
         return $this->groupRepository->findGroupsByIdentifiersOrderedByName($groupIdentifiers);
@@ -340,126 +245,13 @@ class GroupService
      * @param string $searchQuery
      * @param integer $parentIdentifier
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findGroupsForSearchQueryAndParentIdentifier(string $searchQuery = null, int $parentIdentifier = 0)
     {
         return $this->getGroupRepository()->findGroupsForSearchQueryAndParentIdentifier(
             $searchQuery, $parentIdentifier
         );
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $includeSelf
-     *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
-     */
-    public function findParentGroupsForGroup(Group $group, bool $includeSelf = true)
-    {
-        return $this->getGroupRepository()->findParentGroupsForGroup($group, $includeSelf);
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $recursiveSubgroups
-     *
-     * @return integer[]
-     * @throws \Exception
-     */
-    public function findSubGroupIdentifiersForGroup(Group $group, bool $recursiveSubgroups = false)
-    {
-        $cacheKey = md5(serialize([$group->getId(), $recursiveSubgroups]));
-
-        if (!array_key_exists($cacheKey, $this->subGroupIdentifiers))
-        {
-            $subGroupIdentifiers =
-                $this->getGroupRepository()->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
-
-            if (!is_array($subGroupIdentifiers))
-            {
-                $subGroupIdentifiers = array();
-            }
-
-            $this->subGroupIdentifiers[$cacheKey] = $subGroupIdentifiers;
-        }
-
-        return $this->subGroupIdentifiers[$cacheKey];
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $recursiveSubgroups
-     *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
-     */
-    public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false)
-    {
-        $cacheKey = md5(serialize([$group->getId(), $recursiveSubgroups]));
-
-        if (!array_key_exists($cacheKey, $this->subGroups))
-        {
-            $subGroups = $this->getGroupRepository()->findSubGroupsForGroup($group, $recursiveSubgroups);
-
-            $this->subGroups[$cacheKey] =
-                $this->getPropertyMapper()->mapDataClassByProperty($subGroups, Group::PROPERTY_ID);
-        }
-
-        return $this->subGroups[$cacheKey];
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $includeSubGroups
-     * @param boolean $recursiveSubgroups
-     *
-     * @return integer[]
-     * @throws \Exception
-     */
-    public function findUserIdentifiersForGroup(
-        Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false
-    )
-    {
-        $cacheKey = md5(serialize([$group->getId(), $includeSubGroups, $recursiveSubgroups]));
-
-        if (!array_key_exists($cacheKey, $this->groupUserIdentifiers))
-        {
-            if ($includeSubGroups)
-            {
-                $groupIdentifiers = $this->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
-            }
-            else
-            {
-                $groupIdentifiers = array();
-            }
-
-            $groupIdentifiers[] = $group->getId();
-
-            $this->groupUserIdentifiers[$cacheKey] =
-                $this->getGroupMembershipService()->findSubscribedUserIdentifiersForGroupIdentifiers($groupIdentifiers);
-        }
-
-        return $this->groupUserIdentifiers[$cacheKey];
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $includeSelf
-     *
-     * @return string
-     */
-    public function getFullyQualifiedNameForGroup(Group $group, bool $includeSelf = true)
-    {
-        $parentGroups = $this->findParentGroupsForGroup($group, $includeSelf);
-
-        $names = array();
-
-        foreach ($parentGroups as $parentGroup)
-        {
-            $names[] = $parentGroup->get_name();
-        }
-
-        return implode(' <span class="visible">></span> ', array_reverse($names));
     }
 
     /**
@@ -494,10 +286,12 @@ class GroupService
      *
      * @return string
      * @todo This should be rewritten when implementing the new NestedSetDataClassRepository for Group objects
+     *
+     * @deprecated (use tree traverser)
      */
     public function getGroupPath(Group $group)
     {
-        return $group->get_fully_qualified_name();
+        return $this->groupsTreeTraverser->getGroupPath($group);
     }
 
     /**
@@ -521,17 +315,12 @@ class GroupService
      *
      * @return integer
      * @throws \Exception
+     *
+     * @deprecated (use tree traverser)
      */
     public function getHighestGroupQuotumForUser(User $user)
     {
-        $userGroupIdentifiers = $this->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());
-
-        if (count($userGroupIdentifiers) == 0)
-        {
-            return 0;
-        }
-
-        return $this->getGroupRepository()->getHighestGroupQuotumForUserGroupIdentifiers($userGroupIdentifiers);
+        return $this->groupsTreeTraverser->getHighestGroupQuotumForUser($user);
     }
 
     /**
@@ -539,17 +328,12 @@ class GroupService
      *
      * @return integer
      * @throws \Exception
+     *
+     * @deprecated (use tree traverser)
      */
     public function getLowestGroupQuotumForUser(User $user)
     {
-        $userGroupIdentifiers = $this->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());
-
-        if (count($userGroupIdentifiers) == 0)
-        {
-            return 0;
-        }
-
-        return $this->getGroupRepository()->getLowestGroupQuotumForUserGroupIdentifiers($userGroupIdentifiers);
+        return $this->groupsTreeTraverser->getLowestGroupQuotumForUser($user);
     }
 
     /**
@@ -577,12 +361,35 @@ class GroupService
      */
     public function moveGroup(Group $group, int $parentGroupIdentifier)
     {
-        return $this->getGroupRepository()->moveGroup($group, $parentGroupIdentifier);
+        $oldParentGroup = $this->findGroupByIdentifier($group->getParentId());
+        $newParentGroup = $this->findGroupByIdentifier($parentGroupIdentifier);
+
+        if (!$oldParentGroup instanceof Group || !$newParentGroup instanceof Group)
+        {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The old parent (%s) or the new parent (%s) of the group (%s) are not referencing a valid group so the group can not be moved',
+                    $group->getParentId(), $parentGroupIdentifier, $group->getId()
+                )
+            );
+        }
+
+        $success = $this->getGroupRepository()->moveGroup($group, $parentGroupIdentifier);
+        if (!$success)
+        {
+            return false;
+        }
+
+        $this->groupEventNotifier->afterMove($group, $oldParentGroup, $newParentGroup);
+
+        return true;
     }
 
     /**
      * @param string $groupCode
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Exception
      */
     public function subscribeUserToGroupByCode($groupCode, User $user)
     {

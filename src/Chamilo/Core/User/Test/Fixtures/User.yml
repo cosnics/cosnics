@@ -1,0 +1,24 @@
+Chamilo\Core\User\Storage\DataClass\User:
+  user{1..10}:
+    id: <current()>
+    lastname: <lastname()>
+    firstname: <firstname()>
+    username: <username()>
+    password: 2
+    auth_source: "platform"
+    email: <email()>
+    status: 1
+    platformadmin: <boolean()>
+    official_code: <ean8()>
+    phone: <phoneNumber()>
+    picture_uri: <word()>
+    creator_id: 1
+    disk_quota: <randomNumber()>
+    database_quota: <randomNumber()>
+    activation_date: <unixTime()>
+    expiration_date: <unixTime()>
+    registration_date: <unixTime()>
+    active: <boolean()>
+    security_token: <randomNumber()>
+    approved: <boolean()>
+    term_date: <unixTime()>

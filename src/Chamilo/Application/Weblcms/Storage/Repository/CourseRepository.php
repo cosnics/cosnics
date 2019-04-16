@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\CourseRepositoryInterface;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -146,6 +147,79 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         return $courses->as_array();
+    }
+
+    /**
+     * @param array $groupIdentifiers
+     *
+     * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course[]
+     */
+    public function findCoursesWhereAtLeastOneGroupIsDirectlySubscribed(array $groupIdentifiers = array())
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
+        );
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
+            $groupIdentifiers
+        );
+
+        $condition = new AndCondition($conditions);
+
+        $joins = new Joins();
+        $joins->add(
+            new Join(
+                CourseEntityRelation::class,
+                new EqualityCondition(
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_ID),
+                    new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID)
+                )
+            )
+        );
+
+        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
+            Course::class_name(),
+            new DataClassRetrievesParameters($condition, null, null, array(), $joins)
+        );
+
+        return $courses->as_array();
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param int $entityType
+     * @param array $entityIdentifiers
+     *
+     * @return int
+     */
+    public function countCourseEntityRelationsByCourseAndEntityTypeAndIdentifiers(
+        Course $course, int $entityType, array $entityIdentifiers = array()
+    )
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($course->getId())
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE),
+            $entityType
+        );
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
+            $entityIdentifiers
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return DataManager::count(CourseEntityRelation::class, new DataClassCountParameters($condition));
     }
 
     /**
@@ -446,5 +520,17 @@ class CourseRepository implements CourseRepositoryInterface
     public function findSubscribedCourseIdsForUser(User $user)
     {
         return DataManager::getSubscribedCourseIdentifiersByRelation($user);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\RecordResultSet
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function findAllUsersFromCourse(Course $course)
+    {
+        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_course_users($course->getId());
     }
 }

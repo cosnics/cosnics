@@ -90,5 +90,9 @@
             <argument type="service" id="twig.environment" />
         </service>
 
+        <service id="Chamilo\Libraries\Console\Command\Vendor\PHPStan\AnalyseCommand" autowire="true">
+            <tag name="chamilo.libraries.console.command" />
+        </service>
+
     </services>
 </container>

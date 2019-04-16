@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Group\Storage\Repository;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -193,5 +194,41 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->deletes(GroupRelUser::class, $condition);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     *
+     * @return boolean
+     */
+    public function emptyGroup(Group $group)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($group->getId())
+        );
+
+        return $this->getDataClassRepository()->deletes(GroupRelUser::class, $condition);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\GroupRelUser $groupUserRelation
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function createGroupUserRelation(GroupRelUser $groupUserRelation)
+    {
+        return $this->dataClassRepository->create($groupUserRelation);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\GroupRelUser $groupUserRelation
+     *
+     * @return bool
+     */
+    public function deleteGroupUserRelation(GroupRelUser $groupUserRelation)
+    {
+        return $this->dataClassRepository->delete($groupUserRelation);
     }
 }

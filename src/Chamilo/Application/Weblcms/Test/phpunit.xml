@@ -7,6 +7,9 @@
         <testsuite name="Source">
             <directory>Source</directory>
         </testsuite>
+        <testsuite name="Integration">
+            <directory>Integration</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist>

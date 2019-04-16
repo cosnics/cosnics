@@ -66,7 +66,7 @@ abstract class ResultSet
     /**
      * Returns an array representation of this result set.
      *
-     * @return mixed[]
+     * @return array
      */
     public function as_array()
     {

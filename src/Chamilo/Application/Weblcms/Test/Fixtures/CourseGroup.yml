@@ -1,0 +1,39 @@
+Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup:
+  course_group (template):
+    parent_id: 0
+    left_value: 0
+    right_value: 0
+    course_code: 1
+    max_number_of_course_group_per_member: 0
+    max_number_of_members: 20
+    self_registration_allowed: 1
+    self_unregistration_allowed: 1
+    name: <word()>
+    random_registration_done: 0
+    description: <word()>
+    group_id: 0
+  course_group1 (extends course_group):
+    id: 1
+    parent_id: 0
+    left_value: 1
+    right_value: 10
+  course_group2 (extends course_group):
+    id: 2
+    parent_id: 1
+    left_value: 2
+    right_value: 7
+  course_group3 (extends course_group):
+    id: 3
+    parent_id: 2
+    left_value: 3
+    right_value: 4
+  course_group4 (extends course_group):
+    id: 4
+    parent_id: 2
+    left_value: 5
+    right_value: 6
+  course_group5 (extends course_group):
+    id: 5
+    parent_id: 1
+    left_value: 8
+    right_value: 9

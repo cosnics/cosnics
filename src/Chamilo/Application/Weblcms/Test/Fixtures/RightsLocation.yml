@@ -1,0 +1,45 @@
+Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation:
+  rights_location_root:
+    id: 1
+    left_value: 1
+    right_value: 8
+    parent_id: 0
+    inherit: 0
+    locked: 0
+    identifier: 0
+    tree_identifier: 1
+    type: 0
+    tree_type: 1
+  rights_location_tool_assignment:
+    id: 2
+    left_value: 2
+    right_value: 7
+    parent_id: 1
+    inherit: 1
+    locked: 0
+    identifier: 5
+    tree_identifier: 1
+    type: 3
+    tree_type: 1
+  rights_location_category:
+    id: 3
+    left_value: 3
+    right_value: 6
+    parent_id: 2
+    inherit: 1
+    locked: 0
+    identifier: 1
+    tree_identifier: 1
+    type: 4
+    tree_type: 1
+  rights_location_publication:
+    id: 4
+    left_value: 4
+    right_value: 5
+    parent_id: 3
+    inherit: 1
+    locked: 0
+    identifier: 1
+    tree_identifier: 1
+    type: 5
+    tree_type: 1

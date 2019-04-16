@@ -1,0 +1,19 @@
+Chamilo\Core\Group\Storage\DataClass\GroupRelUser:
+  group_group_rel_user_1{1..8}:
+    group_id: 8
+    user_id: '@user<current()>->id'
+  group_group_rel_user_2{5..10}:
+    group_id: 9
+    user_id: '@user<current()>->id'
+  group_group_rel_user_3{1..3}:
+    group_id: 5
+    user_id: '@user<current()>->id'
+  group_group_rel_user_4{8..10}:
+    group_id: 6
+    user_id: '@user<current()>->id'
+  group_group_rel_user_5{3..7}:
+    group_id: 10
+    user_id: '@user<current()>->id'
+  group_group_rel_user_6{2..7}:
+    group_id: 7
+    user_id: '@user<current()>->id'

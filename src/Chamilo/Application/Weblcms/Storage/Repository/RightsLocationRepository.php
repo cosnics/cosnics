@@ -4,11 +4,17 @@ namespace Chamilo\Application\Weblcms\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation;
+use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -53,6 +59,55 @@ class RightsLocationRepository extends CommonDataClassRepository
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param int $entityType
+     * @param array $entityIds
+     *
+     * @throws \Exception
+     */
+    public function removeEntitiesFromRightsByIds(Course $course, int $entityType, array $entityIds = array())
+    {
+        $locationCondition = new EqualityCondition(
+            new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_TREE_IDENTIFIER),
+            new StaticConditionVariable($course->getId())
+        );
+
+        $locationIds = $this->dataClassRepository->distinct(
+            RightsLocation::class,
+            new DataClassDistinctParameters(
+                $locationCondition,
+                new DataClassProperties(
+                    new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_ID)
+                )
+            )
+        );
+
+        $conditions = [];
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_LOCATION_ID
+            ), $locationIds
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
+            ), new StaticConditionVariable($entityType)
+        );
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_ID
+            ), $entityIds
+        );
+
+        $condition = new AndCondition($conditions);
+
+        $this->dataClassRepository->deletes(CourseEntityRelation::class, $condition);
+    }
+
+    /**
      * Creates a rights location directly into the database.
      *
      * WARNING: DO NOT USE THIS, DO NOT EVER USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING AND NEED
@@ -85,6 +140,5 @@ class RightsLocationRepository extends CommonDataClassRepository
     {
         return $this->dataClassRepository->update($rightsLocation);
     }
-
 
 }

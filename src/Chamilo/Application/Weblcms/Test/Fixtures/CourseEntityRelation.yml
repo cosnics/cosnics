@@ -1,0 +1,21 @@
+Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation:
+  course_entity_relation_1{1..5}:
+    course_id: 1
+    status: 1
+    entity_type: 1
+    entity_id: '@user<current()>->id'
+  course_entity_relation_2:
+    course_id: 1
+    status: 1
+    entity_type: 2
+    entity_id: 4
+  course_entity_relation_3:
+    course_id: 2
+    status: 1
+    entity_type: 2
+    entity_id: 7
+  course_entity_relation_4:
+    course_id: 2
+    status: 1
+    entity_type: 2
+    entity_id: 3
