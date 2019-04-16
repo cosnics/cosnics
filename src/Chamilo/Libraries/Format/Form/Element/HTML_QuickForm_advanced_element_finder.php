@@ -352,20 +352,20 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         if ($this->default_values)
         {
-            $default_values_text = 'defaultValues: ' . json_encode($this->default_values->as_array()) . ', ';
+            $defaultValuesText = 'defaultValues: ' . json_encode($this->default_values->as_array()) . ', ';
         }
 
-        $configuration_json = '';
+        $configurationJson = '';
 
         foreach ($this->configuration as $name => $value)
         {
-            $configuration_json .= ' ' . $name . ': ' . $value . ', ';
+            $configurationJson .= ' ' . $name . ': ' . $value . ', ';
         }
 
-        $configuration_json = substr($configuration_json, 0, strlen($configuration_json) - 2);
+        $configurationJson = substr($configurationJson, 0, strlen($configurationJson) - 2);
 
-        $html[] = '$("#' . $id . '").advelementfinder({ name: "' . $safe_name . '", ' . $default_values_text .
-             'elementTypes: ' . json_encode($this->element_types->as_array()) . ',' . $configuration_json . '});';
+        $html[] = '$("#' . $id . '").advelementfinder({ name: "' . $safe_name . '", ' . $defaultValuesText .
+             'elementTypes: ' . json_encode($this->element_types->as_array()) . ',' . $configurationJson . '});';
 
         $html[] = '</script>';
 

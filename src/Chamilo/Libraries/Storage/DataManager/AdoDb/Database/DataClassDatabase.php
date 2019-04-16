@@ -637,9 +637,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::translateCondition()
      */
-    public function translateCondition(Condition $condition = null)
+    public function translateCondition(Condition $condition, bool $enableAliasing = true)
     {
-        return $this->getConditionPartTranslatorService()->translateCondition($this, $condition);
+        return $this->getConditionPartTranslatorService()->translateCondition($this, $condition, $enableAliasing);
     }
 
     /**
