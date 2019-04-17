@@ -10,6 +10,8 @@ use Chamilo\Core\Repository\ContentObject\ExternalTool\Storage\DataClass\Externa
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Libraries\Format\Structure\Toolbar;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Platform\Translation;
 use Hogent\Extension\Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 
@@ -38,6 +40,33 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
 
         return $browser_types;
+    }
+
+    /**
+     * Adds extra actions to the toolbar in different components
+     *
+     * @param $toolbar Toolbar
+     * @param array $publication
+     *
+     * @return Toolbar
+     */
+    public function add_content_object_publication_actions($toolbar, $publication)
+    {
+        $toolbar->insert_item(
+            new ToolbarItem(
+                $this->getTranslator()->trans('BrowseSubmitters', [], Manager::context()),
+                $this->getThemeUtilities()->getCommonImagePath('Action/Browser'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                    )
+                ),
+                ToolbarItem::DISPLAY_ICON
+            ), 0
+        );
+
+        return $toolbar;
     }
 
     /**

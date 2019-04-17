@@ -3,10 +3,9 @@
 namespace Chamilo\Application\Lti\Service\Launch;
 
 use Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters;
+use Chamilo\Application\Lti\Domain\Provider\ProviderInterface;
 use Chamilo\Application\Lti\Manager;
-use Chamilo\Application\Lti\Service\Integration\IntegrationInterface;
 use Chamilo\Application\Lti\Service\Outcome\ResultIdEncoder;
-use Chamilo\Application\Lti\Storage\Entity\Provider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Redirect;
 
@@ -63,29 +62,21 @@ class LaunchParametersGenerator
     /**
      * Generates a LaunchParameters object with values based on the current Chamilo configuration and user data
      *
-     * @param \Chamilo\Application\Lti\Storage\Entity\Provider $provider
+     * @param \Chamilo\Application\Lti\Domain\Provider\ProviderInterface $provider
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters|null $launchParameters
      *
      * @return \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters|null
      */
     public function generateLaunchParametersForUser(
-        Provider $provider, User $user, LaunchParameters $launchParameters = null
+        ProviderInterface $provider, User $user, LaunchParameters $launchParameters = null
     )
     {
         $presentationReturnUrl = new Redirect(
             [
                 Manager::PARAM_CONTEXT => Manager::context(),
                 Manager::PARAM_ACTION => Manager::ACTION_RETURN,
-                Manager::PARAM_UUID => $provider->getUuid()
-            ]
-        );
-
-        $basicOutcomesServicesUrl = new Redirect(
-            [
-                Manager::PARAM_CONTEXT => Manager::context(),
-                Manager::PARAM_ACTION => Manager::ACTION_BASIC_OUTCOMES,
-                Manager::PARAM_UUID => $provider->getUuid()
+                Manager::PARAM_UUID => $provider->getUniqueId()
             ]
         );
 
@@ -100,8 +91,7 @@ class LaunchParametersGenerator
             ->setPersonNameGiven($user->get_firstname())
             ->setPersonNameFamily($user->get_lastname())
             ->setPersonNameFull($user->get_fullname())
-            ->setPersonContactEmailPrimary($user->get_email())
-            ->setOutcomeServiceUrl($basicOutcomesServicesUrl->getUrl());
+            ->setPersonContactEmailPrimary($user->get_email());
 
         $locale = $this->translator->getLocale();
 
@@ -128,14 +118,26 @@ class LaunchParametersGenerator
      * Generates the result identifier for a given integration class and result id and adds it to the launch parameters
      *
      *
+     * @param \Chamilo\Application\Lti\Domain\Provider\ProviderInterface $provider
      * @param \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters $launchParameters
      * @param string $integrationClass
      * @param string $resultId
      */
     public function generateAndAddResultIdentifier(
-        LaunchParameters $launchParameters, string $integrationClass, string $resultId
+        ProviderInterface $provider, LaunchParameters $launchParameters, string $integrationClass, string $resultId
     )
     {
+        $basicOutcomesServicesUrl = new Redirect(
+            [
+                Manager::PARAM_CONTEXT => Manager::context(),
+                Manager::PARAM_ACTION => Manager::ACTION_BASIC_OUTCOMES,
+                Manager::PARAM_UUID => $provider->getUniqueId()
+            ]
+        );
+
+        $launchParameters->getLearningInformationServicesParameters()
+            ->setOutcomeServiceUrl($basicOutcomesServicesUrl->getUrl());
+
         $launchParameters->getLearningInformationServicesParameters()
             ->setResultSourcedId($this->resultIdEncoder->encodeResultId($integrationClass, $resultId));
     }

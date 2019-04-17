@@ -6,25 +6,24 @@ use IMSGlobal\LTI\OAuth\OAuthConsumer;
 use IMSGlobal\LTI\OAuth\OAuthToken;
 
 /**
- * Class OAuthDataStore
  * @package Chamilo\Application\Lti\Service
  * @author - Sven Vanpoucke - Hogeschool Gent
  */
 class OAuthDataStore extends \IMSGlobal\LTI\OAuth\OAuthDataStore
 {
     /**
-     * @var \Chamilo\Application\Lti\Storage\Entity\Provider
+     * @var \IMSGlobal\LTI\OAuth\OAuthConsumer
      */
-    protected $provider;
+    protected $oAuthConsumer;
 
     /**
      * OAuthDataStore constructor.
-     *
-     * @param \Chamilo\Application\Lti\Storage\Entity\Provider $provider
+    $oAuthConsumer
+     * @param \IMSGlobal\LTI\OAuth\OAuthConsumer $oAuthConsumer
      */
-    public function __construct(\Chamilo\Application\Lti\Storage\Entity\Provider $provider)
+    public function __construct(OAuthConsumer $oAuthConsumer)
     {
-        $this->provider = $provider;
+        $this->oAuthConsumer = $oAuthConsumer;
     }
 
     /**
@@ -36,7 +35,7 @@ class OAuthDataStore extends \IMSGlobal\LTI\OAuth\OAuthDataStore
      */
     function lookup_consumer($consumerKey)
     {
-        return $this->provider->toOAuthConsumer();
+        return $this->oAuthConsumer;
     }
 
     /**

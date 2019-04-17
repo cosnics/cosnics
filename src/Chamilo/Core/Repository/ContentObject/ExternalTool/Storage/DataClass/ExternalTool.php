@@ -2,20 +2,19 @@
 
 namespace Chamilo\Core\Repository\ContentObject\ExternalTool\Storage\DataClass;
 
+use Chamilo\Application\Lti\Domain\Provider\ProviderInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\ExternalTool\Storage\DataClass
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ExternalTool extends ContentObject
+class ExternalTool extends ContentObject implements ProviderInterface
 {
     const PROPERTY_LTI_PROVIDER_ID = 'lti_provider_id';
     const PROPERTY_UUID = 'uuid';
-    const PROPERTY_EXTERNAL_TOOL_URL = 'lti_url';
+    const PROPERTY_LAUNCH_URL = 'lti_url';
     const PROPERTY_KEY = 'consumer_key';
     const PROPERTY_SECRET = 'consumer_secret';
     const PROPERTY_CUSTOM_PARAMETERS = 'custom_parameters';
@@ -23,7 +22,7 @@ class ExternalTool extends ContentObject
     public static function get_additional_property_names()
     {
         return array(
-            self::PROPERTY_LTI_PROVIDER_ID, self::PROPERTY_UUID, self::PROPERTY_EXTERNAL_TOOL_URL, self::PROPERTY_KEY,
+            self::PROPERTY_LTI_PROVIDER_ID, self::PROPERTY_UUID, self::PROPERTY_LAUNCH_URL, self::PROPERTY_KEY,
             self::PROPERTY_SECRET, self::PROPERTY_CUSTOM_PARAMETERS
         );
     }
@@ -69,19 +68,19 @@ class ExternalTool extends ContentObject
     /**
      * @return string
      */
-    public function getExternalToolUrl()
+    public function getLaunchUrl()
     {
-        return $this->get_additional_property(self::PROPERTY_EXTERNAL_TOOL_URL);
+        return $this->get_additional_property(self::PROPERTY_LAUNCH_URL);
     }
 
     /**
-     * @param string $externalToolUrl
+     * @param string $launchUrl
      *
      * @return $this
      */
-    public function setExternalToolUrl(string $externalToolUrl = null)
+    public function setLaunchUrl(string $launchUrl = null)
     {
-        $this->set_additional_property(self::PROPERTY_EXTERNAL_TOOL_URL, $externalToolUrl);
+        $this->set_additional_property(self::PROPERTY_LAUNCH_URL, $launchUrl);
         return $this;
     }
 
@@ -175,5 +174,21 @@ class ExternalTool extends ContentObject
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUniqueId()
+    {
+        return $this->getUuid();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidCustomProvider()
+    {
+        return !empty($this->getLaunchUrl());
     }
 }

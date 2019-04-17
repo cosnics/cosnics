@@ -3,8 +3,8 @@
 namespace Chamilo\Application\Lti\Service\Launch;
 
 use Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters;
+use Chamilo\Application\Lti\Domain\Provider\ProviderInterface;
 use Chamilo\Application\Lti\Service\Security\OAuthSecurity;
-use Chamilo\Application\Lti\Storage\Entity\Provider;
 
 /**
  * Use this class to launch an LTI application.
@@ -41,7 +41,7 @@ class LaunchGenerator
     }
 
     /**
-     * @param \Chamilo\Application\Lti\Storage\Entity\Provider $provider
+     * @param \Chamilo\Application\Lti\Domain\Provider\ProviderInterface $provider
      * @param \Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters $launchParameters
      *
      * @return string
@@ -49,7 +49,7 @@ class LaunchGenerator
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function generateLaunchHtml(Provider $provider, LaunchParameters $launchParameters)
+    public function generateLaunchHtml(ProviderInterface $provider, LaunchParameters $launchParameters)
     {
         $launchParametersAsArray = $launchParameters->toArray();
         $launchParametersAsArray['oauth_callback'] = 'about:blank';
@@ -67,7 +67,7 @@ var_dump($launchParametersAsArray);
         return $this->twigRenderer->render(
             'Chamilo\Application\Lti:Launcher.html.twig', [
                 'LTI_PARAMETERS' => $launchParametersAsArray,
-                'LTI_URL' => $provider->getLtiUrl(),
+                'LTI_URL' => $provider->getLaunchUrl(),
                 'IFRAME_WIDTH' => $launchParametersAsArray['launch_presentation_width'],
                 'IFRAME_HEIGHT' => $launchParametersAsArray['launch_presentation_height'],
                 'SHOW_IN_IFRAME' => $showInIFrame

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\ExternalTool\Display;
 
+use Chamilo\Core\Repository\ContentObject\ExternalTool\Display\Bridge\Interfaces\ExternalToolServiceBridgeInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
@@ -15,13 +16,13 @@ abstract class Manager extends Application
 
     const PARAM_ACTION = 'ExternalToolAction';
 
-    const ACTION_VIEWER =  'Viewer';
+    const ACTION_VIEWER = 'Viewer';
     const DEFAULT_ACTION = self::ACTION_VIEWER;
 
     /**
-     * @var \Chamilo\Core\Repository\ContentObject\ExternalTool\Display\DisplayParameters
+     * @var ExternalToolServiceBridgeInterface
      */
-    protected $displayParameters;
+    protected $externalToolServiceBridge;
 
     /**
      * Manager constructor.
@@ -32,21 +33,8 @@ abstract class Manager extends Application
     {
         parent::__construct($applicationConfiguration);
 
-        $displayParameters = $applicationConfiguration->get(self::CONFIG_DISPLAY_PARAMETERS);
-        if(!$displayParameters instanceof DisplayParameters || !$displayParameters->isValid())
-        {
-            throw new \RuntimeException('The given display parameters in the launch configuration are not valid');
-        }
-
-        $this->displayParameters = $displayParameters;
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\ContentObject\ExternalTool\Display\DisplayParameters|string
-     */
-    public function getDisplayParameters()
-    {
-        return $this->displayParameters;
+        $this->externalToolServiceBridge =
+            $this->getBridgeManager()->getBridgeByInterface(ExternalToolServiceBridgeInterface::class);
     }
 
     /**
@@ -54,6 +42,14 @@ abstract class Manager extends Application
      */
     public function getExternalTool()
     {
-        return $this->getDisplayParameters()->getExternalTool();
+        return $this->getExternalToolServiceBridge()->getExternalTool();
+    }
+
+    /**
+     * @return ExternalToolServiceBridgeInterface
+     */
+    public function getExternalToolServiceBridge()
+    {
+        return $this->externalToolServiceBridge;
     }
 }

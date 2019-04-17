@@ -78,7 +78,7 @@ class ProviderService
     {
         $provider = new Provider();
 
-        $provider->setLtiUrl($url);
+        $provider->setLaunchUrl($url);
         $provider->setKey($key);
         $provider->setSecret($secret);
         $provider->setUuid(UUID::v4());
@@ -97,7 +97,7 @@ class ProviderService
      */
     public function updateProviderFromData(Provider $provider, string $url, string $key, string $secret)
     {
-        $provider->setLtiUrl($url);
+        $provider->setLaunchUrl($url);
         $provider->setKey($key);
         $provider->setSecret($secret);
 

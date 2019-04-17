@@ -2,15 +2,14 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\ExternalTool\Component;
 
+use Chamilo\Application\Weblcms\Bridge\ExternalTool\ExternalToolServiceBridge;
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExternalTool\Manager;
-use Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Core\Repository\ContentObject\ExternalTool\Display\DisplayParameters;
-use Chamilo\Core\Repository\ContentObject\ExternalTool\Storage\DataClass\ExternalTool;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
-class DisplayComponent extends Manager
+class DisplayComponent extends Manager implements DelegateComponent
 {
     /**
      * @return string
@@ -22,21 +21,14 @@ class DisplayComponent extends Manager
         $contentObjectPublication = $this->getContentObjectPublication();
         $this->validateAccess($contentObjectPublication);
 
-        $contentObject = $contentObjectPublication->get_content_object();
-        if (!$contentObject instanceof ExternalTool)
-        {
-            throw new \RuntimeException(
-                'The given publication does not reference a valid external tool and can therefor not be displayed'
-            );
-        }
+        $bridge = new ExternalToolServiceBridge();
+        $bridge->setContentObjectPublication($contentObjectPublication);
+        $bridge->setCourse($this->get_course());
+        $bridge->setHasEditRight($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $contentObjectPublication));
 
-        $parameters = new DisplayParameters();
-        $parameters->setExternalTool($contentObject);
+        $this->getBridgeManager()->addBridge($bridge);
 
-        $configuration = new ApplicationConfiguration(
-            $this->getRequest(), $this->getUser(), $this,
-            [\Chamilo\Core\Repository\ContentObject\ExternalTool\Display\Manager::CONFIG_DISPLAY_PARAMETERS => $parameters]
-        );
+        $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
 
         $applicationFactory = $this->getApplicationFactory();
         $application = $applicationFactory->getApplication(\Chamilo\Core\Repository\ContentObject\ExternalTool\Display\Manager::context(), $configuration);

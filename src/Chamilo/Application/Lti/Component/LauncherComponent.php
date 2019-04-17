@@ -46,7 +46,7 @@ class LauncherComponent extends Manager
             ->addRole(new ContextRole(ContextRole::ROLE_INSTRUCTOR))
             ->addCustomLaunchParameters(new CustomLaunchParameter('opened_resource_id', 1070775));
 
-        $launchParametersGenerator->generateAndAddResultIdentifier($launchParameters, TestIntegration::class, 5);
+        $launchParametersGenerator->generateAndAddResultIdentifier($provider, $launchParameters, TestIntegration::class, 5);
 
         $html = [];
         $html[] = $this->render_header();

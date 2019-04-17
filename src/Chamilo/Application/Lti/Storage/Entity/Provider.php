@@ -2,8 +2,8 @@
 
 namespace Chamilo\Application\Lti\Storage\Entity;
 
+use Chamilo\Application\Lti\Domain\Provider\ProviderInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use IMSGlobal\LTI\OAuth\OAuthConsumer;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     }
  * )
  */
-class Provider
+class Provider implements ProviderInterface
 {
     /**
      * @var int
@@ -48,7 +48,7 @@ class Provider
      *
      * @ORM\Column(name="lti_url", type="string", length=255)
      */
-    protected $ltiUrl;
+    protected $launchUrl;
 
     /**
      * @var string
@@ -120,11 +120,11 @@ class Provider
     }
 
     /**
-     * @param string $ltiUrl
+     * @param string $launchUrl
      */
-    public function setLtiUrl(string $ltiUrl): void
+    public function setLaunchUrl(string $launchUrl): void
     {
-        $this->ltiUrl = $ltiUrl;
+        $this->launchUrl = $launchUrl;
     }
 
     /**
@@ -147,9 +147,9 @@ class Provider
     /**
      * @return string
      */
-    public function getLtiUrl(): ?string
+    public function getLaunchUrl(): ?string
     {
-        return $this->ltiUrl;
+        return $this->launchUrl;
     }
 
     /**
@@ -202,16 +202,6 @@ class Provider
     }
 
     /**
-     * Transforms the application to an OAuth consumer for further use
-     *
-     * @return \IMSGlobal\LTI\OAuth\OAuthConsumer
-     */
-    public function toOAuthConsumer(): OAuthConsumer
-    {
-        return new OAuthConsumer($this->getKey(), $this->getSecret());
-    }
-
-    /**
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function cloneCustomParameters()
@@ -223,5 +213,13 @@ class Provider
         }
 
         return $clonedCustomParameters;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUniqueId()
+    {
+        return $this->getUuid();
     }
 }

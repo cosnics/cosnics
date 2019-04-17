@@ -49,14 +49,14 @@ class ExternalToolForm extends ContentObjectForm
         if ($ltiProviderId > - 1)
         {
             $externalTool->setLtiProviderId($ltiProviderId);
-            $externalTool->setExternalToolUrl(null);
+            $externalTool->setLaunchUrl(null);
             $externalTool->setKey(null);
             $externalTool->setSecret(null);
         }
         else
         {
             $externalTool->setLtiProviderId(null);
-            $externalTool->setExternalToolUrl($values[ExternalTool::PROPERTY_EXTERNAL_TOOL_URL]);
+            $externalTool->setLaunchUrl($values[ExternalTool::PROPERTY_LAUNCH_URL]);
             $externalTool->setKey($values[ExternalTool::PROPERTY_KEY]);
             $externalTool->setSecret($values[ExternalTool::PROPERTY_SECRET]);
         }
@@ -120,7 +120,7 @@ class ExternalToolForm extends ContentObjectForm
             $defaults[ExternalTool::PROPERTY_LTI_PROVIDER_ID] = $externalTool->getLtiProviderId();
         }
 
-        $defaults[ExternalTool::PROPERTY_EXTERNAL_TOOL_URL] = $externalTool->getExternalToolUrl();
+        $defaults[ExternalTool::PROPERTY_LAUNCH_URL] = $externalTool->getLaunchUrl();
         $defaults[ExternalTool::PROPERTY_KEY] = $externalTool->getKey();
         $defaults[ExternalTool::PROPERTY_SECRET] = $externalTool->getSecret();
 
@@ -158,7 +158,7 @@ class ExternalToolForm extends ContentObjectForm
         $this->addElement('category', Translation::get('DefineNewProvider'));
 
         $this->addElement('html', '<div id="new-lti-provider">');
-        $this->add_textfield(ExternalTool::PROPERTY_EXTERNAL_TOOL_URL, Translation::get('ExternalToolUrl'), false);
+        $this->add_textfield(ExternalTool::PROPERTY_LAUNCH_URL, Translation::get('ExternalToolUrl'), false);
         $this->add_textfield(ExternalTool::PROPERTY_KEY, Translation::get('ConsumerKey'), false);
         $this->add_textfield(ExternalTool::PROPERTY_SECRET, Translation::get('ConsumerSecret'), false);
         $this->addElement('html', '</div>');
