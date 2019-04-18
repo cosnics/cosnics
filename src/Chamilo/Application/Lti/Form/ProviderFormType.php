@@ -53,7 +53,7 @@ class ProviderFormType extends AbstractType
         );
 
         $builder->add(
-            'ltiUrl',
+            'launchUrl',
             TextType::class,
             [
                 'required' => true,

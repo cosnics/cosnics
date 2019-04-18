@@ -2,8 +2,10 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\ExternalTool;
 
+use Chamilo\Application\Weblcms\Bridge\ExternalTool\Service\LTIIntegration;
 use Chamilo\Core\Repository\ContentObject\ExternalTool\Display\Bridge\Interfaces\ExternalToolServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\ExternalTool\Storage\DataClass\ExternalTool;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\ExternalTool
@@ -11,6 +13,11 @@ use Chamilo\Core\Repository\ContentObject\ExternalTool\Storage\DataClass\Externa
  */
 class ExternalToolServiceBridge implements ExternalToolServiceBridgeInterface
 {
+    /**
+     * @var \Chamilo\Application\Weblcms\Bridge\ExternalTool\Service\ExternalToolResultService
+     */
+    protected $externalToolResultService;
+
     /**
      * @var \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course
      */
@@ -25,6 +32,18 @@ class ExternalToolServiceBridge implements ExternalToolServiceBridgeInterface
      * @var bool
      */
     protected $hasEditRight;
+
+    /**
+     * ExternalToolServiceBridge constructor.
+     *
+     * @param \Chamilo\Application\Weblcms\Bridge\ExternalTool\Service\ExternalToolResultService $externalToolResultService
+     */
+    public function __construct(
+        \Chamilo\Application\Weblcms\Bridge\ExternalTool\Service\ExternalToolResultService $externalToolResultService
+    )
+    {
+        $this->externalToolResultService = $externalToolResultService;
+    }
 
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
@@ -138,7 +157,7 @@ class ExternalToolServiceBridge implements ExternalToolServiceBridgeInterface
      */
     public function getLTIIntegrationClass()
     {
-        return null;
+        return LTIIntegration::class;
     }
 
     /**
@@ -146,9 +165,13 @@ class ExternalToolServiceBridge implements ExternalToolServiceBridgeInterface
      *
      * @return int
      */
-    public function getOrCreateResultIdentifierForCurrentUser()
+    public function getOrCreateResultIdentifierForUser(User $user)
     {
-        return null;
+        $externalToolResult = $this->externalToolResultService->getOrCreateResultForUser(
+            $this->contentObjectPublication, $user
+        );
+
+        return $externalToolResult->getId();
     }
 
     /**
@@ -158,6 +181,6 @@ class ExternalToolServiceBridge implements ExternalToolServiceBridgeInterface
      */
     public function supportsOutcomesService()
     {
-        return false;
+        return true;
     }
 }

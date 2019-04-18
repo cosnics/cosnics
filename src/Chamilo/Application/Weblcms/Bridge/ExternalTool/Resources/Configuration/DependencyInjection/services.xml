@@ -6,6 +6,12 @@
     <services>
 
         <service id="Chamilo\Application\Weblcms\Bridge\ExternalTool\ExternalToolServiceBridge" autowire="true"/>
+        <service id="Chamilo\Application\Weblcms\Bridge\ExternalTool\Service\ExternalToolResultService" autowire="true"/>
+        <service id="Chamilo\Application\Weblcms\Bridge\ExternalTool\Storage\Repository\ExternalToolRepository" autowire="true"/>
+
+        <service id="Chamilo\Application\Weblcms\Bridge\ExternalTool\Service\LTIIntegration" autowire="true">
+            <tag name="Chamilo\Application\Lti\Service\Integration\IntegrationInterface" />
+        </service>
 
 
     </services>

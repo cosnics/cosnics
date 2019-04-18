@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\ExternalTool\Display\Bridge\Interfaces;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+
 /**
  * @package Chamilo\Core\Repository\ContentObject\ExternalTool\Display\Bridge
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -60,9 +62,11 @@ interface ExternalToolServiceBridgeInterface
     /**
      * Returns the result identifier for the current user. This identifier is used for the basic outcomes LTI webservice.
      *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return int
      */
-    public function getOrCreateResultIdentifierForCurrentUser();
+    public function getOrCreateResultIdentifierForUser(User $user);
 
     /**
      * Returns whether or not the outcomes service is supported

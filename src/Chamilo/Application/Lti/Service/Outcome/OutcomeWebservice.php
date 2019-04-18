@@ -69,7 +69,7 @@ class OutcomeWebservice
         $this->messageHandlerBuilder = $messageHandlerBuilder;
         $this->messageParser = $messageParser;
         $this->oauthSecurity = $oauthSecurity;
-        $this->ProviderService = $providerService;
+        $this->providerService = $providerService;
     }
 
     /**
@@ -140,6 +140,6 @@ class OutcomeWebservice
      */
     protected function getProviderFromRequest(Request $request)
     {
-        return $this->ProviderService->getProviderByUUID($request->get(Manager::PARAM_UUID));
+        return $this->providerService->getProviderByUUID($request->get(Manager::PARAM_UUID));
     }
 }

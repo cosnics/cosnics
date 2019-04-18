@@ -21,7 +21,7 @@ class DisplayComponent extends Manager implements DelegateComponent
         $contentObjectPublication = $this->getContentObjectPublication();
         $this->validateAccess($contentObjectPublication);
 
-        $bridge = new ExternalToolServiceBridge();
+        $bridge = $this->getExternalToolServiceBridge();
         $bridge->setContentObjectPublication($contentObjectPublication);
         $bridge->setCourse($this->get_course());
         $bridge->setHasEditRight($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $contentObjectPublication));
@@ -43,5 +43,21 @@ class DisplayComponent extends Manager implements DelegateComponent
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $this->addBrowserBreadcrumb($breadcrumbtrail);
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function get_additional_parameters()
+    {
+        return array(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+    }
+
+    /**
+     * @return ExternalToolServiceBridge
+     */
+    public function getExternalToolServiceBridge()
+    {
+        return $this->getService(ExternalToolServiceBridge::class);
     }
 }
