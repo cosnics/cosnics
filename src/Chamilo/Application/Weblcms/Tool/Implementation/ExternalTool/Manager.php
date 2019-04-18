@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\ExternalTool\Storage\DataClass\Externa
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Platform\Translation;
@@ -27,6 +28,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     IntroductionTextSupportInterface
 {
     const ACTION_DISPLAY = 'display';
+    const ACTION_VIEW_RESULT = 'view_result';
 
     /**
      * @var \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
@@ -54,7 +56,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $toolbar->insert_item(
             new ToolbarItem(
-                $this->getTranslator()->trans('BrowseSubmitters', [], Manager::context()),
+                $this->getTranslator()->trans('LaunchExternalTool', [], Manager::context()),
                 $this->getThemeUtilities()->getCommonImagePath('Action/Browser'),
                 $this->get_url(
                     array(
@@ -64,6 +66,20 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 ),
                 ToolbarItem::DISPLAY_ICON
             ), 0
+        );
+
+        $toolbar->insert_item(
+            new ToolbarItem(
+                $this->getTranslator()->trans('ViewResults', [], Manager::context()),
+                new FontAwesomeGlyph('bar-chart'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULT,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                    )
+                ),
+                ToolbarItem::DISPLAY_ICON
+            ), 1
         );
 
         return $toolbar;
