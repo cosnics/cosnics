@@ -230,7 +230,7 @@ class CourseGroupEntity implements NestedRightsEntity
     /**
      * Retrieves the type for the advanced element finder for the simple rights editor
      */
-    public function get_element_finder_type()
+    public static function get_element_finder_type()
     {
         return new AdvancedElementFinderElementType(
             'course_groups',

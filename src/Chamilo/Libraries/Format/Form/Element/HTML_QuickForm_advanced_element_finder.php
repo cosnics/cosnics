@@ -151,7 +151,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      */
     public function setWidth($width)
     {
-        $this->height = $width;
+        $this->width = $width;
     }
 
     /**

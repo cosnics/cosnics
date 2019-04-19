@@ -61,10 +61,8 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
 
         // Add user category
         $user_category = new AdvancedElementFinderElement(
-            'users',
-            'category',
-            Translation::get('Users'),
-            Translation::get('Users'));
+            'users', 'category', Translation::get('Users'), Translation::get('Users')
+        );
         $elements->add_element($user_category);
 
         $users = $this->retrieveUsers();
@@ -92,12 +90,11 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
         $this->userCount = DataManager::count(User::class_name(), new DataClassCountParameters($condition));
 
         $parameters = new DataClassRetrievesParameters(
-            $condition,
-            100,
-            $this->getOffset(),
-            array(
+            $condition, 100, $this->getOffset(), array(
                 new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))));
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)),
+            )
+        );
 
         return DataManager::retrieves(User::class_name(), $parameters);
     }
@@ -116,17 +113,19 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
         if ($searchQuery && $searchQuery != '')
         {
             $conditions[] = Utilities::query_to_condition(
-                $searchQuery,
-                array(
+                $searchQuery, array(
                     new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
                     new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)));
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE)
+                )
+            );
         }
 
         // Only include active users
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE),
-            new StaticConditionVariable(1));
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE), new StaticConditionVariable(1)
+        );
 
         return new AndCondition($conditions);
     }
@@ -140,7 +139,7 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
     {
         $offset = Request::post(self::PARAM_OFFSET);
 
-        if (! isset($offset) || is_null($offset))
+        if (!isset($offset) || is_null($offset))
         {
             $offset = 0;
         }
@@ -152,15 +151,14 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
      * Returns the advanced element finder element for the given user
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement
      */
     protected function getElementForUser(User $user)
     {
         return new AdvancedElementFinderElement(
-            'user_' . $user->get_id(),
-            'type type_user',
-            $user->get_fullname(),
-            $user->get_official_code());
+            'user_' . $user->get_id(), 'type type_user', $user->get_fullname(), $user->get_official_code()
+        );
     }
 
     public function set_user_count($userCount)

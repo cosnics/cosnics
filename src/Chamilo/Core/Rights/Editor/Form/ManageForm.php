@@ -199,7 +199,7 @@ class ManageForm extends FormValidator
         
         foreach ($this->entities as $entity)
         {
-            $types->add_element_type($entity->get_element_finder_type());
+            $types->add_element_type($entity::get_element_finder_type());
         }
         $this->addElement('category');
         $this->addElement('category', ' ', 'entity_selector_box');

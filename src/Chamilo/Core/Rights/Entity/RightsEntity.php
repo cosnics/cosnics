@@ -21,7 +21,7 @@ interface RightsEntity
 
     public function get_search_properties();
 
-    public function get_element_finder_type();
+    public static function get_element_finder_type();
 
     public function get_element_finder_element($id);
 }
