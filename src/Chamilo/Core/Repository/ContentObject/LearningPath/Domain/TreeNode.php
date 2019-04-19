@@ -525,6 +525,8 @@ class TreeNode
                 $contentObject, 'Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes'
             ) || is_a(
                 $contentObject, 'Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment'
+            )  || is_a(
+                $contentObject, 'Chamilo\Core\Repository\ContentObject\ExternalTool\Storage\DataClass\ExternalTool'
             );
     }
 }

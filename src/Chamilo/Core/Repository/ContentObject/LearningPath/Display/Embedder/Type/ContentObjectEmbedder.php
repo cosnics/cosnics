@@ -22,4 +22,12 @@ class ContentObjectEmbedder extends Embedder
         
         return $content_object_display;
     }
+
+    /**
+     * @return bool
+     */
+    public function supportMultipleAttempts()
+    {
+        return true;
+    }
 }

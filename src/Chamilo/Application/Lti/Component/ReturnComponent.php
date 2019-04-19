@@ -9,6 +9,8 @@ use Chamilo\Application\Lti\Manager;
  */
 class ReturnComponent extends Manager
 {
+    const PARAM_ERROR_MESSAGE = 'lti_errormsg';
+    const PARAM_ERROR_LOG = 'lti_errorlog';
 
     /**
      *
@@ -16,6 +18,18 @@ class ReturnComponent extends Manager
      */
     function run()
     {
-        file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . 'log2.txt', var_export($this->getRequest(), true));
+        $ltiErrorLog = $this->getRequest()->getFromUrl(self::PARAM_ERROR_LOG);
+        if(!empty($ltiErrorLog))
+        {
+            $this->getExceptionLogger()->logException(new \Exception($ltiErrorLog));
+        }
+
+        $ltiErrorMessage = $this->getRequest()->getFromUrl(self::PARAM_ERROR_MESSAGE);
+        if(!empty($ltiErrorMessage))
+        {
+            return '<div class="alert alert-error">' . $ltiErrorMessage . '</div>';
+        }
+
+        return null;
     }
 }

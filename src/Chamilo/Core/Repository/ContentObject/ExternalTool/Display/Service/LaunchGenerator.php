@@ -88,7 +88,7 @@ class LaunchGenerator
 
         $role = $externalToolServiceBridge->isCourseInstructorInTool() ? ContextRole::ROLE_INSTRUCTOR :
             ContextRole::ROLE_LEARNER;
-        $role = ContextRole::ROLE_LEARNER;
+//        $role = ContextRole::ROLE_LEARNER;
 
         $launchParameters = $this->launchParametersGenerator->generateLaunchParametersForUser($provider, $user);
         $launchParameters->setContextId($externalToolServiceBridge->getContextIdentifier())
