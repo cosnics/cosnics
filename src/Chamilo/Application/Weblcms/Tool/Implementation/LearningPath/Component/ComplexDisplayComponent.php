@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EntryPlagiarismRe
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EphorusServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\FeedbackServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\ExternalTool\ExternalToolServiceBridge;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
@@ -166,12 +167,11 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         /** @var LearningPath $learningPath */
         $learningPath = $this->publication->getContentObject();
 
+        $hasEditRight = $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+
         /** @var AssignmentServiceBridge $assignmentServiceBridge */
         $assignmentServiceBridge = $this->getService(AssignmentServiceBridge::class);
-
-        $assignmentServiceBridge->setCanEditAssignment(
-            $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication)
-        );
+        $assignmentServiceBridge->setCanEditAssignment($hasEditRight);
 
         $assignmentServiceBridge->setContentObjectPublication($this->publication);
         $assignmentServiceBridge->setLearningPathTrackingService($this->trackingService);
@@ -201,6 +201,13 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         /** @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EntryPlagiarismResultServiceBridge $entryPlagiarismResultServiceBridge */
         $entryPlagiarismResultServiceBridge = $this->getService(EntryPlagiarismResultServiceBridge::class);
         $this->getBridgeManager()->addBridge($entryPlagiarismResultServiceBridge);
+
+        /** @var ExternalToolServiceBridge $externalToolServiceBridge */
+        $externalToolServiceBridge = $this->getService(ExternalToolServiceBridge::class);
+        $externalToolServiceBridge->setContentObjectPublication($this->publication);
+        $externalToolServiceBridge->setCourse($this->get_course());
+        $externalToolServiceBridge->setHasEditRight($hasEditRight);
+        $this->getBridgeManager()->addBridge($externalToolServiceBridge);
     }
 
     public function get_root_content_object()
