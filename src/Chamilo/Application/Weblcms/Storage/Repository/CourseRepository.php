@@ -447,4 +447,14 @@ class CourseRepository implements CourseRepositoryInterface
     {
         return DataManager::getSubscribedCourseIdentifiersByRelation($user);
     }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return bool
+     */
+    public function deleteCourse(Course $course)
+    {
+        return $course->delete();
+    }
 }
