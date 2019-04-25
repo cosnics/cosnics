@@ -6,8 +6,10 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -97,6 +99,20 @@ class GroupRepository extends CommonDataClassRepository
             new StaticConditionVariable($groupCode));
 
         return $this->dataClassRepository->retrieve(Group::class, new DataClassRetrieveParameters($condition));
+    }
+    /**
+     * @param array $groupCodes
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|Group[]
+     */
+    public function findGroupsByCodes(array $groupCodes)
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE),
+            $groupCodes
+        );
+
+        return $this->dataClassRepository->retrieves(Group::class, new DataClassRetrievesParameters($condition));
     }
 
     /**

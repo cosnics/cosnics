@@ -51,6 +51,18 @@ class PublicationRepository implements PublicationRepositoryInterface
     }
 
     /**
+     * Finds publications for a given course and tool
+     *
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return ContentObjectPublication[]
+     */
+    public function findPublicationsByCourse(Course $course)
+    {
+        return $this->findPublicationsByCondition($this->getPublicationConditionForCourse($course));
+    }
+
+    /**
      * Finds publications for a given course, tool and category
      *
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
@@ -89,7 +101,22 @@ class PublicationRepository implements PublicationRepositoryInterface
     {
         $conditions = array();
 
-        $conditions[] = new ComparisonCondition(
+        $conditions[] = $this->getPublicationConditionForCourse($course);
+        $conditions[] = $this->getPublicationConditionForTool($tool);
+
+        return new AndCondition($conditions);
+    }
+
+    /**
+     * Returns a condition to retrieve ContentObjectPublication objects by a given course
+     *
+     * @param Course $course
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     */
+    protected function getPublicationConditionForCourse(Course $course)
+    {
+        return new ComparisonCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class_name(),
                 ContentObjectPublication::PROPERTY_COURSE_ID
@@ -97,10 +124,6 @@ class PublicationRepository implements PublicationRepositoryInterface
             ComparisonCondition::EQUAL,
             new StaticConditionVariable($course->get_id())
         );
-
-        $conditions[] = $this->getPublicationConditionForTool($tool);
-
-        return new AndCondition($conditions);
     }
 
     /**
@@ -307,10 +330,24 @@ class PublicationRepository implements PublicationRepositoryInterface
     /**
      * Finds publication categories for a given course and tool
      *
+     * @param Course $course
+     *
+     * @return ContentObjectPublicationCategory[]
+     */
+    public function findPublicationCategoriesByCourse(Course $course)
+    {
+        return $this->findPublicationCategoriesByCondition(
+            $this->getPublicationCategoryConditionForCourse($course)
+        );
+    }
+
+    /**
+     * Finds publication categories for a given course and tool
+     *
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param string $tool
      *
-     * @return ContentObjectPublicationCategory[]
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory[]|mixed[]
      */
     public function findPublicationCategoriesByCourseAndTool(Course $course, $tool)
     {
@@ -326,7 +363,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      * @param string $tool
      * @param int $categoryId
      *
-     * @return ContentObjectPublication[]
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory[]|mixed[]
      */
     public function findPublicationCategoriesByParentCategoryId(Course $course, $tool, $categoryId)
     {
@@ -358,14 +395,7 @@ class PublicationRepository implements PublicationRepositoryInterface
     {
         $conditions = array();
 
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_COURSE
-            ),
-            ComparisonCondition::EQUAL,
-            new StaticConditionVariable($course->get_id())
-        );
+        $conditions[] = $this->getPublicationConditionForCourse($course);
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
@@ -380,11 +410,28 @@ class PublicationRepository implements PublicationRepositoryInterface
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition
+     */
+    protected function getPublicationCategoryConditionForCourse(Course $course)
+    {
+        return new ComparisonCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::PROPERTY_COURSE
+            ),
+            ComparisonCondition::EQUAL,
+            new StaticConditionVariable($course->get_id())
+        );
+    }
+
+    /**
      * Finds publications by a given condition
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return ContentObjectPublication[]
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory[]|mixed[]
      */
     protected function findPublicationCategoriesByCondition(Condition $condition)
     {

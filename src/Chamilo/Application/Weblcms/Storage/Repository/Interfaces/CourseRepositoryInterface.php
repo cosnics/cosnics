@@ -164,4 +164,11 @@ interface CourseRepositoryInterface
      * @return int[]
      */
     public function findSubscribedCourseIdsForUser(User $user);
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return bool
+     */
+    public function deleteCourse(Course $course);
 }
