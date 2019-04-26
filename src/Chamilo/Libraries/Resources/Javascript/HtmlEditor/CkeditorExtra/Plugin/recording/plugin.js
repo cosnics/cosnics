@@ -12,7 +12,7 @@
         return url + ((url.indexOf("?") != -1) ? "&" : "?") + queryString.join("&");
     }
 
-    var openRepoViewerCmd = {
+    var openRecordingViewerCmd = {
         exec: function (editor) {
             var width = editor.config['filebrowserChamiloWindowWidth'] || editor.config.filebrowserWindowWidth || '30%';
             var height = editor.config['filebrowserChamiloWindowHeight'] || editor.config.filebrowserWindowHeight || '50%';
@@ -27,40 +27,6 @@
             openPopup(url, width, height);
         }
     };
-
-    var openDialog = {
-        exec: function (editor) {
-            var element = editor.getSelection().getSelectedElement();
-            if (element.is('img') && element.data('cke-real-element-type') == 'chamilo') {
-                var realElement = CKEDITOR.dom.element.createFromHtml(decodeURIComponent(element
-                    .getAttribute('data-cke-realelement')), this.document);
-                var objectType = realElement.getAttribute('type');
-
-                var context = (objectType == 'video') ? 'Hogent' : 'Chamilo';
-
-                if (!CKEDITOR.dialog.exists(objectType + 'Dialog')) {
-                    CKEDITOR.dialog.add(objectType + 'Dialog', web_path + context + '/Core/Repository/ContentObject/' + toTitleCase(objectType)
-                        + '/Resources/Javascript/HtmlEditor/Ckeditor/dialog.js');
-                }
-
-                editor.openDialog(objectType + 'Dialog');
-            }
-        }
-    };
-
-    function toTitleCase(str) {
-        return str.replace(/\w\S*/g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        });
-    }
-
-    function concatObject(obj) {
-        str = '';
-        for (prop in obj) {
-            str += prop + " value :" + obj[prop] + "\n";
-        }
-        return (str);
-    }
 
     function setObject(href, objectId, objectType, objectSecurityCode, data) {
         if (!CKEDITOR.dialog.exists(objectType + 'Dialog')) {
@@ -89,7 +55,7 @@
 
     var pluginName = 'recording';
 
-    // Register a plugin named "chamilo".
+    // Register a plugin named "recording".
     CKEDITOR.plugins.add(pluginName, {
         lang: 'nl,en-gb',
         icons: 'recording',
@@ -100,8 +66,7 @@
                 CKEDITOR.tools.removeFunction(this._.chamiloFn);
             });
 
-            editor.addCommand(pluginName, openRepoViewerCmd);
-            editor.addCommand('dialog', openDialog);
+            editor.addCommand(pluginName, openRecordingViewerCmd);
             editor.ui.addButton && editor.ui.addButton('Recording', {
                 label: editor.lang.recording.label,
                 command: pluginName
@@ -117,24 +82,6 @@
                     }
                 });
             }
-
-            editor.on('doubleclick', function (evt) {
-                var element = evt.data.element;
-
-                if (element.is('img') && element.data('cke-real-element-type') == 'chamilo') {
-                    var realElement = CKEDITOR.dom.element.createFromHtml(decodeURIComponent(element
-                        .getAttribute('data-cke-realelement')), this.document);
-                    var objectType = realElement.getAttribute('type');
-                    if (!CKEDITOR.dialog.exists(objectType + 'Dialog')) {
-                        CKEDITOR.dialog.add(objectType + 'Dialog', web_path + 'Chamilo/Core/Repository/ContentObject/' + toTitleCase(objectType)
-                            + '/Resources/Javascript/HtmlEditor/Ckeditor/dialog.js');
-                    }
-
-                    evt.data.dialog = objectType + 'Dialog';
-                }
-
-            }
-            );
 
             // If the "contextmenu" plugin is loaded, register the listeners.
             if (editor.contextMenu) {
