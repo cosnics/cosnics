@@ -1,0 +1,14 @@
+.plagiarism-status-success
+{
+    color: green;
+}
+
+.plagiarism-status-failed
+{
+    color: red;
+}
+
+.plagiarism-status-in-progress
+{
+    color: #406e8e;
+}

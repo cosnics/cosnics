@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Compo
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -12,24 +13,30 @@ use Chamilo\Libraries\Translation\Translation;
 class CreatorComponent extends Manager
 {
 
+    /**
+     * @return string|void
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function run()
     {
-        $contentObjectIds = $this->getContentObjectIdsFromSelectedEntries();
+//        $contentObjectIds = $this->getContentObjectIdsFromSelectedEntries();
 
-        $requestManager = $this->getRequestManager();
-        $failures = $requestManager->handInDocumentsByIds($contentObjectIds, $this->getUser());
+        throw new NotAllowedException();
 
-        $message = $this->get_result(
-            $failures,
-            count($contentObjectIds),
-            'SelectedRequestNotCreated',
-            'SelectedRequestsNotCreated',
-            'SelectedRequestCreated',
-            'SelectedRequestsCreated',
-            self::EPHORUS_TRANSLATION_CONTEXT
-        );
-
-        $this->redirect($message, $failures > 0, [self::PARAM_ACTION => self::ACTION_BROWSE]);
+//        $requestManager = $this->getRequestManager();
+//        $failures = $requestManager->handInDocumentsByIds($contentObjectIds, $this->getUser());
+//
+//        $message = $this->get_result(
+//            $failures,
+//            count($contentObjectIds),
+//            'SelectedRequestNotCreated',
+//            'SelectedRequestsNotCreated',
+//            'SelectedRequestCreated',
+//            'SelectedRequestsCreated',
+//            self::EPHORUS_TRANSLATION_CONTEXT
+//        );
+//
+//        $this->redirect($message, $failures > 0, [self::PARAM_ACTION => self::ACTION_BROWSE]);
     }
 
     /**

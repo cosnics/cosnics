@@ -30,6 +30,7 @@ class ContentObjectPublicationHandler extends \Chamilo\Application\Weblcms\Publi
             $assignmentPublication = new Publication();
             $assignmentPublication->setPublicationId($publication->getId());
             $assignmentPublication->setEntityType(Entry::ENTITY_TYPE_USER);
+            $assignmentPublication->setCheckForPlagiarism(false);
 
             if (! $assignmentPublication->create())
             {

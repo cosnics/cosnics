@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter;
+namespace Chamilo\Application\Plagiarism\Service\UserConverter;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 

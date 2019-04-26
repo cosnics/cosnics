@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User;
 
 use Chamilo\Core\User\Component\UserApproverComponent;
+use Chamilo\Core\User\Service\PasswordSecurity;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
@@ -216,5 +217,13 @@ abstract class Manager extends Application
     public function getAuthenticationValidator()
     {
         return $this->getService(AuthenticationValidator::class);
+    }
+
+    /**
+     * @return PasswordSecurity
+     */
+    public function getPasswordSecurity()
+    {
+        return $this->getService(PasswordSecurity::class);
     }
 }

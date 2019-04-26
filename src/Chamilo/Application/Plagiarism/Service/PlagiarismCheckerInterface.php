@@ -52,4 +52,9 @@ interface PlagiarismCheckerInterface
      * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
      */
     public function getRedirectToEULAPageResponse(string $redirectToURL);
+
+    /**
+     * @return bool
+     */
+    public function isInMaintenanceMode();
 }

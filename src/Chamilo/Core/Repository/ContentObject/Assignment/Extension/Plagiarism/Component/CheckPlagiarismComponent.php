@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Manage
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\PlagiarismChecker;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism
@@ -23,9 +24,12 @@ class CheckPlagiarismComponent extends Manager
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     function run()
     {
+        $this->validateAccess();
+
         $entry = $this->getExtensionComponent()->getEntry();
         if (!$entry instanceof Entry)
         {
@@ -37,7 +41,7 @@ class CheckPlagiarismComponent extends Manager
         try
         {
             $this->getPlagiarismChecker()->checkEntryForPlagiarism(
-                $this->getExtensionComponent()->getAssignment(), $entry, $this->getEntryPlagiarismResultServiceBridge()
+                $entry, $this->getUser(), $this->getEntryPlagiarismResultServiceBridge()
             );
 
             $this->redirect(
@@ -64,30 +68,6 @@ class CheckPlagiarismComponent extends Manager
         }
 
         return null;
-    }
-
-    /**
-     * @return PlagiarismChecker
-     */
-    protected function getPlagiarismChecker()
-    {
-        return $this->getService(PlagiarismChecker::class);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Architecture\Application\Application|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\ExtensionComponent
-     */
-    protected function getExtensionComponent()
-    {
-        return $this->get_application();
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface
-     */
-    protected function getEntryPlagiarismResultServiceBridge()
-    {
-        return $this->getBridgeManager()->getBridgeByInterface(EntryPlagiarismResultServiceBridgeInterface::class);
     }
 
     /**

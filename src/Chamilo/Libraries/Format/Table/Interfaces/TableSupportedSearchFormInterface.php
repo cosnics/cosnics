@@ -24,4 +24,11 @@ interface TableSupportedSearchFormInterface
      * @param \Chamilo\Libraries\Format\Table\Table $table
      */
     public function registerSearchFormParametersInTable(Table $table);
+
+    /**
+     * Returns the search string for the form
+     *
+     * @return string
+     */
+    public function getQuery();
 }

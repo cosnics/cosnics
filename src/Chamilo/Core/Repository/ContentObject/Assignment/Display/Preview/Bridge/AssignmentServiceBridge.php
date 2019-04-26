@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Translation\Translation;
@@ -64,11 +65,11 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface::countEntitiesByEntityType()
      *
      * @param $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
-    public function countEntitiesByEntityType($entityType, Condition $condition = null)
+    public function countEntitiesByEntityType($entityType, FilterParameters $filterParameters)
     {
         return 10;
     }
@@ -498,16 +499,11 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
 
     /**
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int|null $offset
-     * @param int|null $count
-     * @param array $order_property
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return mixed
      */
-    public function findEntitiesByEntityType(
-        int $entityType, Condition $condition = null, int $offset = null, int $count = null, array $order_property = []
-    )
+    public function findEntitiesByEntityType(int $entityType, FilterParameters $filterParameters)
     {
         $users = array();
 

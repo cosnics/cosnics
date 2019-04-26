@@ -3,15 +3,12 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service;
 
 use Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException;
-use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
 use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
-use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -55,16 +52,14 @@ class PlagiarismChecker
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\User\Storage\DataClass\User $submitter
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
      *
      * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
-     * @throws \Exception
      */
     public function checkEntryForPlagiarism(
-        Assignment $assignment, Entry $entry,
-        EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
+        Entry $entry, User $submitter, EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
     )
     {
         if (!$this->canCheckForPlagiarism($entry))
@@ -95,11 +90,10 @@ class PlagiarismChecker
             /** @var File $contentObject */
             $contentObject = $this->contentObjectRepository->findById($entry->getContentObjectId());
 
-            $assignmentOwner = $this->userService->findUserByIdentifier($assignment->get_owner_id());
             $entryOwner = $this->userService->findUserByIdentifier($entry->getUserId());
 
             $newStatus = $this->plagiarismChecker->checkForPlagiarism(
-                $entryOwner, $assignmentOwner, $contentObject->get_title(),
+                $entryOwner, $submitter, $contentObject->get_title(),
                 $contentObject->get_full_path(), $contentObject->get_filename(), $currentSubmissionStatus
             );
 
@@ -164,7 +158,10 @@ class PlagiarismChecker
         if (!$entryPlagiarismResult instanceof EntryPlagiarismResult)
         {
             throw new PlagiarismException(
-                sprintf('The given entry %s has not been checked for plagiarism yet so the result can not be retrieved')
+                sprintf(
+                    'The given entry %s has not been checked for plagiarism yet so the result can not be retrieved',
+                    $entry->getId()
+                )
             );
         }
 
@@ -198,6 +195,14 @@ class PlagiarismChecker
     public function getRedirectToEULAPageResponse(string $redirectToURL)
     {
         return $this->plagiarismChecker->getRedirectToEULAPageResponse($redirectToURL);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInMaintenanceMode()
+    {
+        return $this->plagiarismChecker->isInMaintenanceMode();
     }
 
 }

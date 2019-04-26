@@ -18,6 +18,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -140,36 +141,30 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     /**
      *
      * @param integer $entityType
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     *
-     * @return integer
+     * @return int
      */
-    public function countEntitiesByEntityType($entityType, Condition $condition = null)
+    public function countEntitiesByEntityType($entityType, FilterParameters $filterParameters)
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
 
-        return $entityService->countEntities($this->contentObjectPublication, $condition);
+        return $entityService->countEntities($this->contentObjectPublication, $filterParameters);
     }
 
     /**
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int|null $offset
-     * @param int|null $count
-     * @param array $order_property
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
-     * @return mixed
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findEntitiesByEntityType(
-        int $entityType, Condition $condition = null, int $offset = null, int $count = null, array $order_property = []
+        int $entityType, FilterParameters $filterParameters
     )
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
 
-        return $entityService->retrieveEntities(
-            $this->contentObjectPublication, $condition, $offset, $count, $order_property
-        );
+        return $entityService->retrieveEntities($this->contentObjectPublication, $filterParameters);
     }
 
     /**
@@ -310,6 +305,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function getUsersForEntity(int $entityType, int $entityId)
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
+
         return $entityService->getUsersForEntity($entityId);
     }
 

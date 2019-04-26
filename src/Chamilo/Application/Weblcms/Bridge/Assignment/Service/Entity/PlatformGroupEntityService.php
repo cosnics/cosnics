@@ -3,15 +3,19 @@
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\EntryPlagiarismResultService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
@@ -38,6 +42,11 @@ class PlatformGroupEntityService implements EntityServiceInterface
     protected $userService;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Service\EntryPlagiarismResultService
+     */
+    protected $entryPlagiarismResultService;
+
+    /**
      * @var array
      */
     protected $targetPlatformGroupIds = [];
@@ -46,47 +55,47 @@ class PlatformGroupEntityService implements EntityServiceInterface
      * UserEntityService constructor.
      *
      * @param AssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\EntryPlagiarismResultService $entryPlagiarismResultService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\User\Service\UserService $userService
      */
-    public function __construct(AssignmentService $assignmentService, Translator $translator, UserService $userService)
+    public function __construct(
+        AssignmentService $assignmentService, EntryPlagiarismResultService $entryPlagiarismResultService,
+        Translator $translator, UserService $userService
+    )
     {
         $this->assignmentService = $assignmentService;
         $this->translator = $translator;
         $this->userService = $userService;
+        $this->entryPlagiarismResultService = $entryPlagiarismResultService;
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int $offset
-     * @param int $count
-     * @param array $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
     public function retrieveEntities(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = []
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
     )
     {
         return $this->assignmentService->findTargetPlatformGroupsForContentObjectPublication(
             $contentObjectPublication, $this->getTargetPlatformGroupIds($contentObjectPublication),
-            $condition, $offset, $count, $orderProperty
+            $filterParameters
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
-    public function countEntities(ContentObjectPublication $contentObjectPublication, Condition $condition = null)
+    public function countEntities(ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters)
     {
         return $this->assignmentService->countTargetPlatformGroupsForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetPlatformGroupIds($contentObjectPublication)
+            $contentObjectPublication, $this->getTargetPlatformGroupIds($contentObjectPublication), $filterParameters
         );
     }
 
@@ -116,6 +125,36 @@ class PlatformGroupEntityService implements EntityServiceInterface
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findEntriesWithPlagiarismResult(
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
+    )
+    {
+        return $this->entryPlagiarismResultService->findPlatformGroupEntriesWithPlagiarismResult(
+            $contentObjectPublication, $filterParameters
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     *
+     * @return int
+     */
+    public function countEntriesWithPlagiarismResult(
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters
+    )
+    {
+        return $this->entryPlagiarismResultService->countPlatformGroupEntriesWithPlagiarismResult(
+            $contentObjectPublication, $filterParameters
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
      * @return int[]
      */
@@ -127,6 +166,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
         {
             $this->targetPlatformGroupIds[$id] = [];
 
+            /** @var \Chamilo\Libraries\Storage\ResultSet\ResultSet $platformGroups */
             $platformGroups = DataManager::retrieve_publication_target_platform_groups(
                 $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
             );
@@ -180,6 +220,22 @@ class PlatformGroupEntityService implements EntityServiceInterface
     }
 
     /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTable
+     */
+    public function getEntryPlagiarismResultTable(
+        Application $application, EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
+    )
+    {
+        $entryPlagiarismResultTableParameters->setEntityClass(Group::class);
+        $entryPlagiarismResultTableParameters->setEntityProperties([Group::PROPERTY_NAME]);
+
+        return new EntryPlagiarismResultTable($application, $entryPlagiarismResultTableParameters);
+    }
+
+    /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
      *
@@ -222,6 +278,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
     public function isUserPartOfEntity(User $user, ContentObjectPublication $contentObjectPublication, $entityId)
     {
         $availableEntityIdentifiers = $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $user);
+
         return in_array($entityId, $availableEntityIdentifiers);
     }
 
@@ -246,7 +303,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
      */
     public function renderEntityName(DataClass $entity)
     {
-        if(!$entity instanceof Group)
+        if (!$entity instanceof Group)
         {
             throw new \InvalidArgumentException('The given entity must be of the type ' . Group::class);
         }
@@ -272,7 +329,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
     public function renderEntityNameById($entityId)
     {
         $entity = DataManager::retrieve_by_id(Group::class, $entityId);
-        if(!$entity instanceof Group)
+        if (!$entity instanceof Group)
         {
             throw new \InvalidArgumentException('The given platform group with id ' . $entityId . ' does not exist');
         }

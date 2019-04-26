@@ -35,6 +35,11 @@ class LearningPathService
     protected $treeNodeDataService;
 
     /**
+     * @var \Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService
+     */
+    protected $automaticNumberingService;
+
+    /**
      * @var Tree[]
      */
     protected $cachedTrees;
@@ -45,15 +50,17 @@ class LearningPathService
      * @param ContentObjectRepository $contentObjectRepository
      * @param TreeBuilder $treeBuilder
      * @param TreeNodeDataService $treeNodeDataService
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService $automaticNumberingService
      */
     public function __construct(
         ContentObjectRepository $contentObjectRepository, TreeBuilder $treeBuilder,
-        TreeNodeDataService $treeNodeDataService
+        TreeNodeDataService $treeNodeDataService, AutomaticNumberingService $automaticNumberingService
     )
     {
         $this->contentObjectRepository = $contentObjectRepository;
         $this->treeBuilder = $treeBuilder;
         $this->treeNodeDataService = $treeNodeDataService;
+        $this->automaticNumberingService = $automaticNumberingService;
     }
 
     /**
@@ -386,5 +393,23 @@ class LearningPathService
         }
 
         return $treeNodes;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     *
+     * @return string
+     */
+    public function renderPathForTreeNode(TreeNode $treeNode)
+    {
+        $pathParts = [];
+
+        $parentNodes = $treeNode->getParentNodes();
+        foreach($parentNodes as $parentNode)
+        {
+            $pathParts[] = $this->automaticNumberingService->getAutomaticNumberedTitleForTreeNode($parentNode);
+        }
+
+        return implode(' > ', $pathParts);
     }
 }

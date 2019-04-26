@@ -25,7 +25,7 @@ class SubmissionService
     protected $turnitinRepository;
 
     /**
-     * @var \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface
+     * @var \Chamilo\Application\Plagiarism\Service\UserConverter\UserConverterInterface
      */
     protected $userConverter;
 
@@ -48,14 +48,14 @@ class SubmissionService
      * TurnitinService constructor.
      *
      * @param \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository
-     * @param \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter
+     * @param \Chamilo\Application\Plagiarism\Service\UserConverter\UserConverterInterface $userConverter
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\EulaService $eulaService
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\WebhookManager $webhookManager
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionStatusParser $submissionStatusParser
      */
     public function __construct(
         \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository $turnitinRepository,
-        \Chamilo\Application\Plagiarism\Service\Turnitin\UserConverter\UserConverterInterface $userConverter,
+        \Chamilo\Application\Plagiarism\Service\UserConverter\UserConverterInterface $userConverter,
         EulaService $eulaService, WebhookManager $webhookManager, SubmissionStatusParser $submissionStatusParser
     )
     {

@@ -14,7 +14,7 @@
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"require": {
-		"php": ">=7.1.0",
+		"php": ">=7.2.0",
 		"chamilo/pear-libraries": "*",
 		"doctrine/cache": "1.7.1",
 		"doctrine/dbal": "2.7.1",
@@ -38,8 +38,10 @@
 		"symfony/yaml": "^3.4",
 		"twig/twig": "2.4.8",
 		"kriswallsmith/assetic": "^1.4",
-		"ext-json": "*"
-	},
+		"ext-json": "*",
+		"endroid/qr-code": "^3.5",
+      "ext-dom": "*"
+    },
 	"require-dev": {
 		"behat/behat": "*",
 		"behat/mink": "*",
@@ -48,7 +50,8 @@
 		"composer/composer": "*@dev",
 		"fabpot/goutte": "^3",
 		"nelmio/alice": "^3.0@RC",
-		"phpunit/phpunit": "7.2.6"
+		"phpunit/phpunit": "7.2.6",
+		"phpstan/phpstan": "0.11.3"
 	},
 	"repositories": [
 		{

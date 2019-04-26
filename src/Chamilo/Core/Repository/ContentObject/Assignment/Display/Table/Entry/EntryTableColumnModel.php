@@ -45,7 +45,7 @@ class EntryTableColumnModel extends RecordTableColumnModel implements TableColum
 
         $this->add_column(
             new DataClassPropertyTableColumn(
-                $this->getEntryTableParameters()->getScoreClassName(), Score::PROPERTY_SCORE, 'Score'
+                $this->getEntryTableParameters()->getScoreClassName(), Score::PROPERTY_SCORE, Translation::get('Score')
             )
         );
 

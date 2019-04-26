@@ -11,6 +11,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -141,26 +142,18 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $userIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetUsersForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, $userIds = [], $condition = null, $offset = null,
-        $count = null,
-        $orderProperty = null
+        ContentObjectPublication $contentObjectPublication, $userIds = [], FilterParameters $filterParameters
     )
     {
         return $this->assignmentRepository->findTargetUsersForContentObjectPublication(
             $contentObjectPublication,
             $userIds,
-            $condition,
-            $offset,
-            $count,
-            $orderProperty
+            $filterParameters
         );
     }
 
@@ -168,15 +161,15 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $userIds
-     * @param Condition $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countTargetUsersForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, $userIds = [], $condition = null
+        ContentObjectPublication $contentObjectPublication, $userIds = [], FilterParameters $filterParameters
     )
     {
-        return $this->findTargetUsersForContentObjectPublication($contentObjectPublication, $userIds, $condition)
+        return $this->findTargetUsersForContentObjectPublication($contentObjectPublication, $userIds, $filterParameters)
             ->count();
     }
 
@@ -222,25 +215,18 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $courseGroupIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetCourseGroupsForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, $courseGroupIds = [], $condition = null, $offset = null,
-        $count = null, $orderProperty = null
+        ContentObjectPublication $contentObjectPublication, $courseGroupIds = [], FilterParameters $filterParameters
     )
     {
         return $this->assignmentRepository->findTargetCourseGroupsForContentObjectPublication(
             $contentObjectPublication,
             $courseGroupIds,
-            $condition,
-            $offset,
-            $count,
-            $orderProperty
+            $filterParameters
         );
     }
 
@@ -248,16 +234,16 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $courseGroupIds
-     * @param Condition $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countTargetCourseGroupsForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, $courseGroupIds = [], $condition = null
+        ContentObjectPublication $contentObjectPublication, $courseGroupIds = [], FilterParameters $filterParameters
     )
     {
         return $this->findTargetCourseGroupsForContentObjectPublication(
-            $contentObjectPublication, $courseGroupIds, $condition
+            $contentObjectPublication, $courseGroupIds, $filterParameters
         )->count();
     }
 
@@ -302,25 +288,16 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $platformGroupIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function findTargetPlatformGroupsForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, $platformGroupIds = [], $condition = null, $offset = null,
-        $count = null, $orderProperty = null
+        ContentObjectPublication $contentObjectPublication, $platformGroupIds = [], FilterParameters $filterParameters
     )
     {
         return $this->assignmentRepository->findTargetPlatformGroupsForContentObjectPublication(
-            $contentObjectPublication,
-            $platformGroupIds,
-            $condition,
-            $offset,
-            $count,
-            $orderProperty
+            $contentObjectPublication, $platformGroupIds, $filterParameters
         );
     }
 
@@ -328,16 +305,16 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $platformGroupIds
-     * @param Condition $condition
+     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
      *
      * @return int
      */
     public function countTargetPlatformGroupsForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, $platformGroupIds = [], $condition = null
+        ContentObjectPublication $contentObjectPublication, $platformGroupIds = [], FilterParameters $filterParameters
     )
     {
         return $this->findTargetPlatformGroupsForContentObjectPublication(
-            $contentObjectPublication, $platformGroupIds, $condition
+            $contentObjectPublication, $platformGroupIds, $filterParameters
         )->count();
     }
 

@@ -71,6 +71,14 @@ class DataClassProperties implements Hashable
     }
 
     /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->properties);
+    }
+
+    /**
      * Merges the given dataclass properties into this one
      *
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassPropertiesToMerge

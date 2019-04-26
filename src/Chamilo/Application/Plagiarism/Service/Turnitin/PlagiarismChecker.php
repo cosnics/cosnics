@@ -8,6 +8,7 @@ use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\InvalidFileExceptio
 use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
 use Chamilo\Application\Plagiarism\Service\PlagiarismCheckerInterface;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -34,21 +35,29 @@ class PlagiarismChecker implements PlagiarismCheckerInterface
     protected $userService;
 
     /**
+     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     */
+    protected $configurationConsulter;
+
+    /**
      * PlagiarismChecker constructor.
      *
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionService $submissionService
      * @param \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository $contentObjectRepository
      * @param \Chamilo\Core\User\Service\UserService $userService
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
         \Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionService $submissionService,
         \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository $contentObjectRepository,
-        UserService $userService
+        UserService $userService,
+        ConfigurationConsulter $configurationConsulter
     )
     {
         $this->submissionService = $submissionService;
         $this->contentObjectRepository = $contentObjectRepository;
         $this->userService = $userService;
+        $this->configurationConsulter = $configurationConsulter;
     }
 
     /**
@@ -69,9 +78,18 @@ class PlagiarismChecker implements PlagiarismCheckerInterface
         string $filename, SubmissionStatus $currentSubmissionStatus = null
     )
     {
+        if (!$this->canCheckForPlagiarism($filePath, $filename))
+        {
+            throw new PlagiarismException(
+                sprintf(
+                    'The given file %s can not be checked for plagiarism', $filePath
+                )
+            );
+        }
+
         if (empty($currentSubmissionStatus) || empty($currentSubmissionStatus->getSubmissionId()))
         {
-            return $this->requestNewPlagiarismCheck($owner, $submitter, $title, $filePath, $filename);
+            return $this->requestNewPlagiarismCheck($submitter, $owner, $title, $filePath, $filename);
         }
 
         if ($currentSubmissionStatus->isUploadInProgress())
@@ -275,6 +293,15 @@ class PlagiarismChecker implements PlagiarismCheckerInterface
      */
     public function canCheckForPlagiarism(string $filePath, string $filename)
     {
-        return $this->submissionService->canUploadFile($filePath, $filename);
+        return !$this->isInMaintenanceMode() &&
+            $this->submissionService->canUploadFile($filePath, $filename);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInMaintenanceMode()
+    {
+        return $this->configurationConsulter->getSetting(['Chamilo\Application\Plagiarism', 'maintenance_mode']) == 1;
     }
 }

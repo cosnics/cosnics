@@ -644,6 +644,14 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     }
 
     /**
+     * @return string
+     */
+    public function getContextTitleForPrint()
+    {
+        return $this->get_course()->get_title() . ' (' . $this->get_course()->get_visual_code() . ')';
+    }
+
+    /**
      * Returns the currently selected LearningPath
      *
      * @return LearningPath | ContentObject

@@ -6,11 +6,11 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Domain\UserImporter\ImportUserData;
 use Chamilo\Core\User\Domain\UserImporter\ImportUserResult;
 use Chamilo\Core\User\Domain\UserImporter\UserImporterResult;
+use Chamilo\Core\User\Service\PasswordSecurity;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -39,11 +39,6 @@ class UserImporter
     protected $configurationConsulter;
 
     /**
-     * @var HashingUtilities
-     */
-    protected $hashingUtilities;
-
-    /**
      * @var MailerInterface
      */
     protected $mailer;
@@ -54,27 +49,32 @@ class UserImporter
     protected $translator;
 
     /**
+     * @var \Chamilo\Core\User\Service\PasswordSecurity
+     */
+    private $passwordSecurity;
+
+    /**
      * UserImporter constructor.
      *
      * @param ImportParserFactory $userImportParserFactory
      * @param UserRepository $userRepository
      * @param ConfigurationConsulter $configurationConsulter
-     * @param HashingUtilities $hashingUtilities
-     * @param MailerInterface $mailer
-     * @param Translator $translator
+     * @param \Chamilo\Core\User\Service\PasswordSecurity $passwordSecurity
+     * @param \Chamilo\Libraries\Mail\Mailer\MailerInterface $mailer
+     * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(
         ImportParserFactory $userImportParserFactory, UserRepository $userRepository,
-        ConfigurationConsulter $configurationConsulter, HashingUtilities $hashingUtilities,
+        ConfigurationConsulter $configurationConsulter, PasswordSecurity $passwordSecurity,
         MailerInterface $mailer, Translator $translator
     )
     {
         $this->userImportParserFactory = $userImportParserFactory;
         $this->userRepository = $userRepository;
         $this->configurationConsulter = $configurationConsulter;
-        $this->hashingUtilities = $hashingUtilities;
         $this->mailer = $mailer;
         $this->translator = $translator;
+        $this->passwordSecurity = $passwordSecurity;
     }
 
     /**
@@ -86,6 +86,7 @@ class UserImporter
      * @param bool $sendMailToNewUsers
      *
      * @return UserImporterResult
+     * @throws \Exception
      */
     public function importUsersFromFile(User $currentUser, UploadedFile $file, $sendMailToNewUsers = false)
     {
@@ -138,6 +139,8 @@ class UserImporter
      * @param ImportUserData[] $importUsersData
      * @param UserImporterResult $userImporterResult
      * @param bool $sendMailToNewUsers
+     *
+     * @throws \Exception
      */
     protected function createUsers(
         User $currentUser, $importUsersData, UserImporterResult $userImporterResult, $sendMailToNewUsers = false
@@ -154,7 +157,7 @@ class UserImporter
 
             if (!$importUserData->isDelete())
             {
-                $importUserData->setPropertiesForUser($this->hashingUtilities);
+                $importUserData->setPropertiesForUser($this->passwordSecurity);
             }
 
             $user = $importUserData->getUser();

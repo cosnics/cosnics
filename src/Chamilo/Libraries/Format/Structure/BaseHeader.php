@@ -1,6 +1,8 @@
 <?php
+
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLoader;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
@@ -75,7 +77,10 @@ class BaseHeader implements HeaderInterface
      * @param string $languageCode
      * @param string $textDirection
      */
-    public function __construct($viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid', $languageCode = 'en', $textDirection = 'ltr')
+    public function __construct(
+        $viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid', $languageCode = 'en',
+        $textDirection = 'ltr'
+    )
     {
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;
@@ -217,13 +222,14 @@ class BaseHeader implements HeaderInterface
     protected function addDefaultHeaders()
     {
         $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
+        $fileConfigurationLocator = new FileConfigurationLocator($pathBuilder);
 
-        $fileConfigurationConsulter = new ConfigurationConsulter(
-            new FileConfigurationLoader(
-                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))));
+        $fileConfigurationConsulter =
+            new ConfigurationConsulter(new FileConfigurationLoader($fileConfigurationLocator));
 
         $configurablePathBuilder = new ConfigurablePathBuilder(
-            $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage')));
+            $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
+        );
 
         $theme = Theme::getInstance()->getTheme();
 
@@ -237,11 +243,11 @@ class BaseHeader implements HeaderInterface
         $this->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
 
-
         $stylesheetCacheService = new StylesheetCacheService(
             $pathBuilder,
             $configurablePathBuilder,
-            Theme::getInstance());
+            Theme::getInstance()
+        );
 
         $cssModified = $stylesheetCacheService->getLastModificationTime();
         $cssModified = $cssModified ? $cssModified : time();
@@ -252,16 +258,36 @@ class BaseHeader implements HeaderInterface
         $this->addCssFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
 
         $this->addLink($pathBuilder->getBasePath(true), 'top');
+
+        try
+        {
+            if ($fileConfigurationLocator->isAvailable())
+            {
+                $favicon = Configuration::getInstance()->get_setting(array('Chamilo\Core\Menu', 'favicon'));
+            }
+        }
+        catch (\Exception $ex)
+        {
+
+        }
+
+        if (empty($favicon))
+        {
+            $favicon = Theme::getInstance()->getCommonImagePath('Favicon', 'ico');
+        }
+
         $this->addLink(
-            Theme::getInstance()->getCommonImagePath('Favicon', 'ico'),
+            $favicon,
             'shortcut icon',
             null,
-            'image/x-icon');
+            'image/x-icon'
+        );
 
         $this->addExceptionLogger($fileConfigurationConsulter);
 
         $this->addHtmlHeader(
-            '<script type="text/javascript">var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>');
+            '<script type="text/javascript">var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>'
+        );
 
         $javascriptCacheService = new JavascriptCacheService($pathBuilder, $configurablePathBuilder);
 
@@ -309,7 +335,8 @@ class BaseHeader implements HeaderInterface
     public function addJavascriptCDNFiles()
     {
         $this->addJavascriptFile(
-            'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML');
+            'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML'
+        );
     }
 
     /**
@@ -360,7 +387,7 @@ class BaseHeader implements HeaderInterface
 
         $html[] = '<!DOCTYPE html>';
         $html[] = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $this->getLanguageCode() . '" lang="' .
-             $this->getLanguageCode() . '">';
+            $this->getLanguageCode() . '">';
         $html[] = '<head>';
 
         $htmlHeaders = $this->getHtmlHeaders();

@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -68,7 +69,9 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                 $entityType = $this->getAssignmentPublication($contentObjectPublication)->getEntityType();
 
                 $entitiesCount =
-                    $this->getEntityServiceManager()->getEntityServiceByType($entityType)->countEntities($contentObjectPublication);
+                    $this->getEntityServiceManager()->getEntityServiceByType($entityType)->countEntities(
+                        $contentObjectPublication, new FilterParameters()
+                    );
 
                 $entitiesWithEntriesCount =
                     $this->getAssignmentService()->countDistinctEntriesByContentObjectPublicationAndEntityType(

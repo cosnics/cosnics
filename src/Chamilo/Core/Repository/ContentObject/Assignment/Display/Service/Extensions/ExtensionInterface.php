@@ -4,8 +4,10 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Exten
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\EntryComponent;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\ViewerComponent;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 
 /**
  * Interface ExtensionInterface
@@ -34,4 +36,17 @@ interface ExtensionInterface
      * @return string
      */
     public function extendEntryViewerParts(EntryComponent $entryComponent, Assignment $assignment, Entry $entry, User $user);
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function entryCreated(Assignment $assignment, Entry $entry, User $user);
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\ViewerComponent $viewerComponent
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $buttonToolBar
+     */
+    public function buildButtonToolbarForEntityBrowser(ViewerComponent $viewerComponent, ButtonToolBar $buttonToolBar);
 }

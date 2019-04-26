@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Authentication\Platform;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Core\User\Service\PasswordSecurity;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -33,6 +34,11 @@ class PlatformAuthentication extends Authentication
     protected $hashingUtilities;
 
     /**
+     * @var \Chamilo\Core\User\Service\PasswordSecurity
+     */
+    private $passwordSecurity;
+
+    /**
      * Authentication constructor.
      *
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
@@ -40,14 +46,16 @@ class PlatformAuthentication extends Authentication
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Libraries\Hashing\HashingUtilities $hashingUtilities
+     * @param \Chamilo\Core\User\Service\PasswordSecurity $passwordSecurity
      */
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
-        UserService $userService, HashingUtilities $hashingUtilities
+        UserService $userService, HashingUtilities $hashingUtilities, PasswordSecurity $passwordSecurity
     )
     {
         parent::__construct($configurationConsulter, $translator, $request, $userService);
         $this->hashingUtilities = $hashingUtilities;
+        $this->passwordSecurity = $passwordSecurity;
     }
 
     /**
@@ -65,9 +73,12 @@ class PlatformAuthentication extends Authentication
 
         $password = $this->request->getFromPost(self::PARAM_PASSWORD);
 
-        $passwordHash = $this->hashingUtilities->hashString($password);
+        if($this->passwordSecurity->isPasswordValidForUser($user, $password))
+        {
+            return $user;
+        }
 
-        if ($user->get_password() == $passwordHash)
+        if($this->isPasswordValidWithOldHashingMethod($user, $password))
         {
             return $user;
         }
@@ -75,6 +86,27 @@ class PlatformAuthentication extends Authentication
         throw new AuthenticationException(
             $this->translator->trans('UsernameOrPasswordIncorrect', [], 'Chamilo\Libraries')
         );
+    }
+
+    /**
+     * Checks if the password is still valid with the old hashing method and silently converts the password to a new password
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string $password
+     *
+     * @return bool
+     */
+    protected function isPasswordValidWithOldHashingMethod(User $user, string $password)
+    {
+        $passwordHash = $this->hashingUtilities->hashString($password);
+
+        if ($user->get_password() == $passwordHash)
+        {
+            $this->passwordSecurity->convertPasswordForUser($user, $password);
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -120,7 +152,7 @@ class PlatformAuthentication extends Authentication
         }
 
         // Set the password
-        $user->set_password($this->hashingUtilities->hashString($newPassword));
+        $this->passwordSecurity->setPasswordForUser($user, $newPassword);
 
         return $user->update();
     }

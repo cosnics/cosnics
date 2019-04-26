@@ -69,6 +69,17 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
                 }
 
                 return null;
+            case UserProgressTableColumnModel::COLUMN_LAST_SCORE:
+                $trackingService = $this->getTrackingService();
+                $learningPath = $this->getLearningPath();
+                $currentTreeNode = $this->getCurrentTreeNode();
+
+                $user = new User();
+                $user->setId($record[TreeNodeAttempt::PROPERTY_USER_ID]);
+
+                return '<div class="text-right">' . $trackingService->getLastCompletedAttemptScoreForTreeNode(
+                    $learningPath, $user, $currentTreeNode
+                ) . '%</div>';
 
             case User::PROPERTY_FIRSTNAME:
             case User::PROPERTY_LASTNAME:

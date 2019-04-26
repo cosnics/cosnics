@@ -1,0 +1,20 @@
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Extension\\Plagiarism' %}
+
+{{ HEADER|raw }}
+
+<div style="margin-top: 20px;">
+
+    {% if COUNT == 0 %}
+    <div class="alert alert-info" style="margin-top: 20px;">
+        {{ 'NoEntriesCheckedWarning'|trans({}, appContext) }}
+    </div>
+    {% endif %}
+
+    {{ TOOLBAR|raw }}
+    <div style="margin-top: 30px;">
+    {{ TABLE|raw }}
+    </div>
+
+</div>
+
+{{ FOOTER|raw }}

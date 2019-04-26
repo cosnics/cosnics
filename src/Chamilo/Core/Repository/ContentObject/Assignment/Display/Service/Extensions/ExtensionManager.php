@@ -4,8 +4,10 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Exten
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\EntryComponent;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\ViewerComponent;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Extensions
@@ -65,5 +67,30 @@ class ExtensionManager implements ExtensionInterface
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function entryCreated(Assignment $assignment, Entry $entry, User $user)
+    {
+        foreach($this->extensions as $extension)
+        {
+            $extension->entryCreated($assignment, $entry, $user);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\ViewerComponent $viewerComponent
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $buttonToolBar
+     */
+    public function buildButtonToolbarForEntityBrowser(ViewerComponent $viewerComponent, ButtonToolBar $buttonToolBar)
+    {
+        foreach($this->extensions as $extension)
+        {
+            $extension->buildButtonToolbarForEntityBrowser($viewerComponent, $buttonToolBar);
+        }
     }
 }

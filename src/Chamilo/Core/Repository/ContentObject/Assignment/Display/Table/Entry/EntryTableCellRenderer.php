@@ -27,21 +27,21 @@ use Chamilo\Libraries\Utilities\Utilities;
 class EntryTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
-    public function render_cell($column, $entry)
+    public function render_cell($column, $contentObject)
     {
         if ($column instanceof ActionsTableColumn && $this instanceof TableCellRendererActionsColumnSupport)
         {
-            return $this->get_actions($entry);
+            return $this->get_actions($contentObject);
         }
 
         switch ($column->get_name())
         {
             case ContentObject::PROPERTY_TITLE :
-                $title = strip_tags($entry[ContentObject::PROPERTY_TITLE]);
+                $title = strip_tags($contentObject[ContentObject::PROPERTY_TITLE]);
                 $title =
                     StringUtilities::getInstance()->createString($title)->safeTruncate(50, ' &hellip;')->__toString();
 
-                $isUser = $entry[Entry::PROPERTY_USER_ID] == $this->getEntryTableParameters()->getUser()->getId();
+                $isUser = $contentObject[Entry::PROPERTY_USER_ID] == $this->getEntryTableParameters()->getUser()->getId();
                 $assignment = $this->getEntryTableParameters()->getAssignment();
 
                 if ($isUser || $assignment->get_visibility_submissions() == 1 ||
@@ -50,7 +50,7 @@ class EntryTableCellRenderer extends RecordTableCellRenderer implements TableCel
                     $url = $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
-                            Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
+                            Manager::PARAM_ENTRY_ID => $contentObject[Entry::PROPERTY_ID]
                         )
                     );
 
@@ -62,21 +62,21 @@ class EntryTableCellRenderer extends RecordTableCellRenderer implements TableCel
                 }
                 break;
             case ContentObject::PROPERTY_DESCRIPTION :
-                $description = strip_tags($entry[ContentObject::PROPERTY_DESCRIPTION]);
+                $description = strip_tags($contentObject[ContentObject::PROPERTY_DESCRIPTION]);
 
                 return StringUtilities::getInstance()->createString($description)->safeTruncate(100, ' &hellip;')
                     ->__toString();
                 break;
             case Entry::PROPERTY_SUBMITTED :
-                if (is_null($entry[Entry::PROPERTY_SUBMITTED]))
+                if (is_null($contentObject[Entry::PROPERTY_SUBMITTED]))
                 {
                     return '-';
                 }
 
-                return $this->formatDate($entry[Entry::PROPERTY_SUBMITTED]);
+                return $this->formatDate($contentObject[Entry::PROPERTY_SUBMITTED]);
                 break;
             case Score::PROPERTY_SCORE:
-                $score = $entry[Score::PROPERTY_SCORE];
+                $score = $contentObject[Score::PROPERTY_SCORE];
                 if(is_null($score))
                 {
                     return null;
@@ -85,12 +85,12 @@ class EntryTableCellRenderer extends RecordTableCellRenderer implements TableCel
                 return $score . '%';
             case EntryTableColumnModel::PROPERTY_FEEDBACK_COUNT :
                 return $this->getEntryTableParameters()->getFeedbackServiceBridge()->countFeedbackByEntryIdentifier(
-                    $entry[Entry::PROPERTY_ID]
+                    $contentObject[Entry::PROPERTY_ID]
                 );
                 break;
         }
 
-        return parent::render_cell($column, $entry);
+        return parent::render_cell($column, $contentObject);
     }
 
     public function render_id_cell($row)

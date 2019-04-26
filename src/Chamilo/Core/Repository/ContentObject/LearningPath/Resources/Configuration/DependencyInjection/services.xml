@@ -36,6 +36,8 @@
                       id="chamilo.core.repository.content_object.learning_path.service.tree_builder"/>
             <argument type="service"
                       id="chamilo.core.repository.content_object.learning_path.service.tree_node_data_service"/>
+            <argument type="service"
+                      id="chamilo.core.repository.content_object.learning_path.service.automatic_numbering_service"/>
         </service>
 
         <service
@@ -123,5 +125,7 @@
                       id="chamilo.core.repository.content_object.learning_path.service.automatic_numbering_service"/>
         </service>
 
+        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\Printer\PrintableResourceRenderer" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\Printer\PrintableFormatRenderer" autowire="true" />
     </services>
 </container>

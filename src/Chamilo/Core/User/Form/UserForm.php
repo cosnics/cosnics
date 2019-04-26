@@ -5,6 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\PasswordSecurity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
@@ -68,11 +69,11 @@ class UserForm extends FormValidator
 
     /**
      *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     * @return \Chamilo\Core\User\Service\PasswordSecurity
      */
-    public function getHashingUtilities()
+    public function getPasswordSecurity()
     {
-        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+        return $this->getService(PasswordSecurity::class);
     }
 
     /**
@@ -324,8 +325,7 @@ class UserForm extends FormValidator
         if ($values['pw']['pass'] != '2')
         {
             $this->unencryptedpass = $values['pw']['pass'] == '1' ? Text::generate_password() : $values['pw'][User::PROPERTY_PASSWORD];
-            $password = $this->getHashingUtilities()->hashString($this->unencryptedpass);
-            $user->set_password($password);
+            $this->getPasswordSecurity()->setPasswordForUser($user, $this->unencryptedpass);
         }
 
         if ($_FILES[User::PROPERTY_PICTURE_URI] && file_exists($_FILES[User::PROPERTY_PICTURE_URI]['tmp_name']))
@@ -404,7 +404,9 @@ class UserForm extends FormValidator
             $user->set_firstname($values[User::PROPERTY_FIRSTNAME]);
             $user->set_email($values[User::PROPERTY_EMAIL]);
             $user->set_username($values[User::PROPERTY_USERNAME]);
-            $user->set_password($this->getHashingUtilities()->hashString($password));
+
+            $this->getPasswordSecurity()->setPasswordForUser($user, $password);
+
             $this->unencryptedpass = $password;
 
             if ($values['ExpirationDateforever'] != 0)
