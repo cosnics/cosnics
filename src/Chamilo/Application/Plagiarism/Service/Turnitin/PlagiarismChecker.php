@@ -89,7 +89,7 @@ class PlagiarismChecker implements PlagiarismCheckerInterface
 
         if (empty($currentSubmissionStatus) || empty($currentSubmissionStatus->getSubmissionId()))
         {
-            return $this->requestNewPlagiarismCheck($owner, $submitter, $title, $filePath, $filename);
+            return $this->requestNewPlagiarismCheck($submitter, $owner, $title, $filePath, $filename);
         }
 
         if ($currentSubmissionStatus->isUploadInProgress())
