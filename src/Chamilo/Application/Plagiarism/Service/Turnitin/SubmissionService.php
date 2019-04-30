@@ -10,6 +10,7 @@ use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
 use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Spipu\Html2Pdf\Tag\Sub;
 
 /**
@@ -119,6 +120,7 @@ class SubmissionService
         try
         {
             $submissionId = $this->createSubmission($submitter, $owner, $title, $extractTextOnly);
+            $filename = StringUtilities::getInstance()->createString($filename)->toAscii();
             $this->uploadFileForSubmission($submissionId, $filePath, $filename);
 
             return $submissionId;
