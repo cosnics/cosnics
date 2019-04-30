@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service;
 
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\EulaNotAcceptedException;
+use Chamilo\Application\Plagiarism\Service\Turnitin\EulaService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\EntryComponent;
@@ -57,12 +58,14 @@ class PlagiarismExtension implements ExtensionInterface
      * PlagiarismExtension constructor.
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\PlagiarismChecker $plagiarismChecker
+     * @param \Chamilo\Application\Plagiarism\Service\Turnitin\EulaService $eulaService
      * @param \Chamilo\Libraries\Architecture\Bridge\BridgeManager $bridgeManager
      * @param \Twig_Environment $twig
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      */
     public function __construct(
         \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\PlagiarismChecker $plagiarismChecker,
+        EulaService $eulaService,
         \Chamilo\Libraries\Architecture\Bridge\BridgeManager $bridgeManager, \Twig_Environment $twig,
         ExceptionLoggerInterface $exceptionLogger
     )
@@ -71,6 +74,7 @@ class PlagiarismExtension implements ExtensionInterface
         $this->bridgeManager = $bridgeManager;
         $this->twig = $twig;
         $this->exceptionLogger = $exceptionLogger;
+        $this->eulaService = $eulaService;
     }
 
     /**
