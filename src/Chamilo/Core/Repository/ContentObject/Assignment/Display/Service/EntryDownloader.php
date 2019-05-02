@@ -384,7 +384,7 @@ class EntryDownloader
             }
             catch(\Exception $ex)
             {
-                continue;
+                $entityName = $entry->getEntityId();
             }
 
 //            $entityFolder = $this->getOrCreateFolderByEntity(
