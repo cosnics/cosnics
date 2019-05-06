@@ -120,7 +120,7 @@ class SubmissionService
         try
         {
             $submissionId = $this->createSubmission($submitter, $owner, $title, $extractTextOnly);
-            $filename = StringUtilities::getInstance()->createString($filename)->toAscii();
+            $filename = urlencode($filename); //StringUtilities::getInstance()->createString($filename)->toAscii();
             $this->uploadFileForSubmission($submissionId, $filePath, $filename);
 
             return $submissionId;
