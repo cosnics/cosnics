@@ -105,7 +105,7 @@ abstract class Application
             throw new NotAllowedException();
         }
 
-        return $this->getAuthorizationChecker()->checkAuthorization($this->getUser(), $context, $action);
+        $this->getAuthorizationChecker()->checkAuthorization($this->getUser(), $context, $action);
     }
 
     /**
