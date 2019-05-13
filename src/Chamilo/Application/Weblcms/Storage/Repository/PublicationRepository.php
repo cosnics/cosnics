@@ -395,7 +395,7 @@ class PublicationRepository implements PublicationRepositoryInterface
     {
         $conditions = array();
 
-        $conditions[] = $this->getPublicationConditionForCourse($course);
+        $conditions[] = $this->getPublicationCategoryConditionForCourse($course);
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
