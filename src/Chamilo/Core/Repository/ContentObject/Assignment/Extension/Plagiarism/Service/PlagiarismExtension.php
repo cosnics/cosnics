@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Extensions\
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -55,6 +56,11 @@ class PlagiarismExtension implements ExtensionInterface
     protected $twig;
 
     /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    protected $userService;
+
+    /**
      * PlagiarismExtension constructor.
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\PlagiarismChecker $plagiarismChecker
@@ -62,12 +68,14 @@ class PlagiarismExtension implements ExtensionInterface
      * @param \Chamilo\Libraries\Architecture\Bridge\BridgeManager $bridgeManager
      * @param \Twig_Environment $twig
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     * @param \Chamilo\Core\User\Service\UserService $userService
      */
     public function __construct(
         \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\PlagiarismChecker $plagiarismChecker,
         EulaService $eulaService,
         \Chamilo\Libraries\Architecture\Bridge\BridgeManager $bridgeManager, \Twig_Environment $twig,
-        ExceptionLoggerInterface $exceptionLogger
+        ExceptionLoggerInterface $exceptionLogger,
+        UserService $userService
     )
     {
         $this->plagiarismChecker = $plagiarismChecker;
@@ -75,6 +83,7 @@ class PlagiarismExtension implements ExtensionInterface
         $this->twig = $twig;
         $this->exceptionLogger = $exceptionLogger;
         $this->eulaService = $eulaService;
+        $this->userService = $userService;
     }
 
     /**
@@ -176,20 +185,16 @@ class PlagiarismExtension implements ExtensionInterface
                 return;
             }
 
+            $assignmentUser = $this->userService->findUserByIdentifier($assignment->get_owner_id());
+
             try
             {
-                $assignmentUser = new User();
-                $assignmentUser->setId($assignment->get_owner_id());
-
                 $this->plagiarismChecker->checkEntryForPlagiarism(
                     $entry, $assignmentUser, $this->getEntryPlagiarismResultServiceBridge()
                 );
             }
             catch (EulaNotAcceptedException $eulaNotAcceptedException)
             {
-                $assignmentUser = new User();
-                $assignmentUser->setId($assignment->get_owner_id());
-
                 $this->eulaService->acceptEULA($assignmentUser);
 
                 $this->plagiarismChecker->checkEntryForPlagiarism(
