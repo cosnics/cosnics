@@ -63,6 +63,21 @@ class CalendarEventForm extends ContentObjectForm
             'required'
         );
 
+        $this->addRule(
+            CalendarEvent::PROPERTY_START_DATE,
+            Translation::getInstance()->getTranslation('StartDateShouldNotBeInPast'),
+            'callback',
+            function($startDate) {
+                $dateObject = new \DateTime();
+                $dateObject->setTimestamp(strtotime($startDate));
+
+                $lastYearDate = new \DateTime();
+                $lastYearDate->sub(new \DateInterval('P1Y'));
+
+                return $dateObject >= $lastYearDate;
+            }
+        );
+
         $end_date = array();
         $end_date[] = $this->createElement(
             'text',
