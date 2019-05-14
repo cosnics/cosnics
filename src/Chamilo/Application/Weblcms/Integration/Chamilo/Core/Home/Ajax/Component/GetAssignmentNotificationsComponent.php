@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Ajax\Compone
 
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Ajax\Manager;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Service\AssignmentNotificationsService;
 use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Service\CourseUserCategoryService;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
@@ -46,39 +47,11 @@ class GetAssignmentNotificationsComponent extends Manager
     protected function buildContextPaths()
     {
         $courseTypeId = $this->getRequest()->getFromUrl(self::PARAM_COURSE_TYPE_ID);
-        if ($courseTypeId > - 1)
-        {
-            $courseType = new CourseType();
-            $courseType->setId($courseTypeId);
+        $courseCategoryId = $this->getRequest()->getFromUrl(self::PARAM_USER_COURSE_CATEGORY_ID);
 
-            $courseCategoryId = $this->getRequest()->getFromUrl(self::PARAM_USER_COURSE_CATEGORY_ID);
-            if ($courseCategoryId > 0)
-            {
-                $courseUserCategory = new CourseUserCategory();
-                $courseUserCategory->setId($courseCategoryId);
-
-                $courses = $this->getCourseUserCategoryService()->getCoursesForUserByCourseUserCategoryAndCourseType(
-                    $this->getUser(), $courseUserCategory, $courseType
-                );
-            }
-            else
-            {
-                $courses = $this->getCourseService()->getCoursesInCourseTypeForUser($this->getUser(), $courseType);
-            }
-
-            $contextPaths = [];
-
-            foreach($courses as $course)
-            {
-                $contextPaths[] = 'Chamilo\\Application\\Weblcms::Tool:Assignment::Course:' . $course->getId();
-                // TODO: FIX THIS FOR LEARNING PATHS CORRECTLY
-                $contextPaths[] = 'Chamilo\\Application\\Weblcms::Tool:LearningPath::Course:' . $course->getId();
-            }
-
-            return $contextPaths;
-        }
-
-        return ['Assignment'];
+        return $this->getAssignmentNotificationsService()->buildContextPaths(
+            $this->getUser(), $courseTypeId, $courseCategoryId
+        );
     }
 
     /**
@@ -103,5 +76,13 @@ class GetAssignmentNotificationsComponent extends Manager
     protected function getCourseService()
     {
         return $this->getService(CourseService::class);
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Service\AssignmentNotificationsService
+     */
+    protected function getAssignmentNotificationsService()
+    {
+        return new AssignmentNotificationsService($this->getCourseUserCategoryService(), $this->getCourseService());
     }
 }
