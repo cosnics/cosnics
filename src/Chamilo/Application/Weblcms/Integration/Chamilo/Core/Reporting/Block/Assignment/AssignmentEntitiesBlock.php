@@ -9,6 +9,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableColumnModel;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -110,7 +111,7 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
             $assignmentPublication->getEntityType() : Entry::ENTITY_TYPE_USER;
 
         $entityService = $this->getEntityServiceForEntityType($entityType);
-        $entities = $entityService->retrieveEntities($contentObjectPublication);
+        $entities = $entityService->retrieveEntities($contentObjectPublication, new FilterParameters());
 
         $count = 0;
 

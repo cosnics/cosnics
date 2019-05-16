@@ -246,28 +246,6 @@ class AttemptSummaryCalculatorTest extends ChamiloTestCase
                 $this->tree->getTreeNodeById(12)));
     }
 
-    public function testGetLastAttemptScoreForTreeNode()
-    {
-        $this->mockGetTreeNodeAttemptsForTreeNodes([$this->tree->getTreeNodeById(12)]);
-
-        $this->assertEquals(
-            80,
-            $this->attemptSummaryCalculator->getLastAttemptScoreForTreeNode(
-                $this->learningPath,
-                $this->user,
-                $this->tree->getTreeNodeById(12)));
-    }
-
-    public function testGetLastAttemptScoreForTreeNodeWithoutAttempts()
-    {
-        $this->assertEquals(
-            0,
-            $this->attemptSummaryCalculator->getLastAttemptScoreForTreeNode(
-                $this->learningPath,
-                $this->user,
-                $this->tree->getTreeNodeById(12)));
-    }
-
     public function testFindTargetUsersWithoutLearningPathAttempts()
     {
         $treeNode = $this->tree->getTreeNodeById(4);
