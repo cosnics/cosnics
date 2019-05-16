@@ -123,14 +123,13 @@ class CourseSettingsController
      * Abstract function to handle the settings for a given object with the given values
      * 
      * @param $base_object DataClass
-     * @param $values string[string]
+     * @param $values string[]
      * @param $action string - [OPTIONAL] - default create
-     * @param $load_default boolean [OPTIONAL] - default true
      * @param boolean $force [OPTIONAL] - default false - Sets the values even if the base object is not allowed to.
      * @return boolean
      */
     public function handle_settings_for_object_with_given_values(DataClass $base_object, $values, 
-        $action = self :: SETTING_ACTION_CREATE, $force = false)
+        $action = self::SETTING_ACTION_CREATE, $force = false)
     {
         $succes = true;
         

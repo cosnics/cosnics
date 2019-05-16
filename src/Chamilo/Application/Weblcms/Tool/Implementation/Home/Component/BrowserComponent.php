@@ -11,7 +11,7 @@ class BrowserComponent extends Manager
     public function run()
     {
         $courseTools = $this->get_visible_tools();
-        
+
         $introductionAllowed = CourseSettingsController::getInstance()->get_course_setting(
             $this->get_course(), 
             \Chamilo\Application\Weblcms\CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT);
