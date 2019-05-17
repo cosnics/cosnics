@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\AssignmentR
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -170,7 +171,7 @@ class AssignmentInformationBlock extends AssignmentReportingManager
     private function count_submitters()
     {
         $entityService = $this->getEntityServiceForEntityType($this->assignmentPublication->getEntityType());
-        return $entityService->countEntities($this->contentObjectPublication);
+        return $entityService->countEntities($this->contentObjectPublication, new FilterParameters());
     }
 
     public function retrieve_data()

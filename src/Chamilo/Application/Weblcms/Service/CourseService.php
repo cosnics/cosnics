@@ -127,6 +127,16 @@ class CourseService implements CourseServiceInterface
     }
 
     /**
+     * @param string $visualCode
+     *
+     * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course
+     */
+    public function getCourseByVisualCode(string $visualCode)
+    {
+        return $this->courseRepository->findCourseByVisualCode($visualCode);
+    }
+
+    /**
      * Returns the courses by id
      * 
      * @param array $courseIds
@@ -219,6 +229,17 @@ class CourseService implements CourseServiceInterface
     {
         $subscribedCourseIds = $this->getSubscribedCourseIdsForUser($user);
         return $this->courseRepository->findCoursesByCourseTypeAndSubscribedCourseIds($courseType, $subscribedCourseIds);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     */
+    public function deleteCourse(Course $course)
+    {
+        if(!$this->courseRepository->deleteCourse($course))
+        {
+            throw new \RuntimeException('Could not delete the course from the database');
+        }
     }
 
     /**

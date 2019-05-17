@@ -112,6 +112,11 @@ class PlagiarismChecker implements PlagiarismCheckerInterface
             return $this->retryPlagiarismCheck($currentSubmissionStatus, $filePath, $filename);
         }
 
+        if($currentSubmissionStatus->isReportGenerated())
+        {
+            return $currentSubmissionStatus;
+        }
+
         throw new PlagiarismException(
             sprintf(
                 'The given submission status is not in a valid state and can not be processed (%s)',

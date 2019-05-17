@@ -132,6 +132,16 @@ class PublicationService implements PublicationServiceInterface
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication[]
+     */
+    public function getPublicationsByCourse(Course $course)
+    {
+        return $this->publicationRepository->findPublicationsByCourse($course);
+    }
+
+    /**
      * Returns the publications for a giventool
      *
      * @param string $tool
@@ -340,6 +350,18 @@ class PublicationService implements PublicationServiceInterface
      * PublicationCategory Functionality *
      * **************************************************************************************************************
      */
+
+    /**
+     * Returns the categories for a given course and tool
+     *
+     * @param Course $course
+     *
+     * @return ContentObjectPublicationCategory[]
+     */
+    public function getPublicationCategoriesForCourse(Course $course)
+    {
+        return $this->publicationRepository->findPublicationCategoriesByCourse($course);
+    }
     
     /**
      * Returns the categories for a given course and tool

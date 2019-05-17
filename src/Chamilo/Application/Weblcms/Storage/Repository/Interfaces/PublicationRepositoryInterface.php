@@ -35,6 +35,15 @@ interface PublicationRepositoryInterface
     public function findPublicationsByCourseAndTool(Course $course, $tool);
 
     /**
+     * Finds publications for a given course and tool
+     *
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return ContentObjectPublication[]
+     */
+    public function findPublicationsByCourse(Course $course);
+
+    /**
      * Finds publications for a given course, tool and category
      * 
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
@@ -96,6 +105,15 @@ interface PublicationRepositoryInterface
      * @return Group[]
      */
     public function findTargetPlatformGroupsForPublication(ContentObjectPublication $publication);
+
+    /**
+     * Finds publication categories for a given course and tool
+     *
+     * @param Course $course
+     *
+     * @return ContentObjectPublicationCategory[]
+     */
+    public function findPublicationCategoriesByCourse(Course $course);
 
     /**
      * Finds publication categories for a given course and tool

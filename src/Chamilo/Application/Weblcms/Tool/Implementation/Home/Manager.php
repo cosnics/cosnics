@@ -9,10 +9,13 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     IntroductionTextSupportInterface
 {
     const PARAM_TOOL = 'target_tool';
+
     const ACTION_CHANGE_TOOL_VISIBILITY = 'ToolVisibilityChanger';
     const ACTION_MAKE_TOOL_VISIBLE = 'ToolVisible';
     const ACTION_MAKE_TOOL_INVISIBLE = 'ToolInvisible';
     const ACTION_DELETE_LINKS = 'LinksDeleter';
+    const ACTION_OPEN_COURSE_FOR_STUDENTS = 'OpenCourseForStudents';
+
     const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**
@@ -22,5 +25,13 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public function render_header($visible_tools = null, $show_introduction_text = false)
     {
         return Application::render_header();
+    }
+
+    /**
+     * @return string
+     */
+    public function getOpenCourseUrl()
+    {
+        return $this->get_url([self::PARAM_ACTION => self::ACTION_OPEN_COURSE_FOR_STUDENTS]);
     }
 }

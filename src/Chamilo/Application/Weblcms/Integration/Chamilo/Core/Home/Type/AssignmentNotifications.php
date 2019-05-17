@@ -5,6 +5,9 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Service\AssignmentNotificationsService;
+use Chamilo\Application\Weblcms\Service\CourseService;
+use Chamilo\Application\Weblcms\Service\CourseUserCategoryService;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Notification\Service\NotificationManager;
@@ -80,7 +83,9 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
                 'VIEW_NOTIFICATION_URL' => $viewNotificationUrl,
                 'BLOCK_ID' => $this->getBlock()->getId(),
                 'HIDDEN' => !$this->getBlock()->isVisible(),
-                'ADMIN_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email'])
+                'ADMIN_EMAIL' => $this->getConfigurationConsulter()->getSetting(
+                    ['Chamilo\Core\Admin', 'administrator_email']
+                )
             ]
         );
     }
@@ -97,11 +102,14 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
         $this->loadSettings();
 
         $title = '<span style="display: flex; align-items: center;">' . $this->getTranslator()->trans(
-            'AssignmentNotifications', [], 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home'
-        );
+                'AssignmentNotifications', [], 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home'
+            );
 
-        $notificationCount = $this->getNotificationManager()->countUnseenNotificationsByContextPathForUser(
-            'Assignment', $this->get_user()
+        $notificationCount = $this->getNotificationManager()->countUnseenNotificationsByContextPathsForUser(
+            $this->getAssignmentNotificationsService()->buildContextPaths(
+                $this->get_user(), $this->courseTypeId, $this->userCourseCategoryId
+            ),
+            $this->get_user()
         );
 
         if ($notificationCount > 0)
@@ -132,7 +140,7 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
                 return Translation::get('NoSuchCourseType');
             }
         }
-        elseif($course_type_id === 0)
+        elseif ($course_type_id === 0)
         {
             $course_type_title = Translation::get('NoCourseType');
         }
@@ -148,7 +156,8 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
 
             $course_user_category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
                 \Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory::class_name(),
-                $user_course_category_id);
+                $user_course_category_id
+            );
 
             if ($course_user_category)
             {
@@ -200,14 +209,14 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
      */
     private function loadSettings()
     {
-        if($this->settingsLoaded)
+        if ($this->settingsLoaded)
         {
             return;
         }
 
         $courseTypeIds = json_decode($this->getBlock()->getSetting(self::CONFIGURATION_COURSE_TYPE));
 
-        if (! is_array($courseTypeIds))
+        if (!is_array($courseTypeIds))
         {
             $courseTypeIds = array($courseTypeIds);
         }
@@ -232,5 +241,29 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
     protected function getNotificationManager()
     {
         return $this->getService(NotificationManager::class);
+    }
+
+    /**
+     * @return CourseUserCategoryService
+     */
+    protected function getCourseUserCategoryService()
+    {
+        return $this->getService(CourseUserCategoryService::class);
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getService(CourseService::class);
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Service\AssignmentNotificationsService
+     */
+    protected function getAssignmentNotificationsService()
+    {
+        return new AssignmentNotificationsService($this->getCourseUserCategoryService(), $this->getCourseService());
     }
 }
