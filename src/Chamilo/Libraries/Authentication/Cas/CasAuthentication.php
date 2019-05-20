@@ -1,15 +1,14 @@
 <?php
-
 namespace Chamilo\Libraries\Authentication\Cas;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use phpCAS;
 use Symfony\Component\Translation\Translator;
 
@@ -28,9 +27,45 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
     protected $settings;
 
     /**
-     * @var boolean
+     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
-    protected $hasBeenInitialized = false;
+    protected $sessionUtilities;
+
+    /**
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
+     *
+     * @throws \Exception
+     */
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
+        UserService $userService, SessionUtilities $sessionUtilities
+    )
+    {
+        parent::__construct($configurationConsulter, $translator, $request, $userService);
+        $this->sessionUtilities = $sessionUtilities;
+
+        $this->initializeClient();
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    public function getSessionUtilities(): \Chamilo\Libraries\Platform\Session\SessionUtilities
+    {
+        return $this->sessionUtilities;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
+     */
+    public function setSessionUtilities(\Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities): void
+    {
+        $this->sessionUtilities = $sessionUtilities;
+    }
 
     /**
      *
@@ -38,7 +73,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
      */
     public function login()
     {
-        if(!$this->isAuthSourceActive())
+        if (!$this->isAuthSourceActive())
         {
             return null;
         }
@@ -54,120 +89,57 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
             return null;
         }
 
-        if (!$this->hasBeenInitialized)
-        {
-            $this->initializeClient();
-        }
+        phpCAS::forceAuthentication();
 
         $userAttributes = phpCAS::getAttributes();
+        $userName = phpCAS::getUser();
 
-        $casUserLogin = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_user_login'));
-        $casValidationString = $this->configurationConsulter->getSetting(
-            array('Chamilo\Core\Admin', 'cas_validation_string')
-        );
-
-        if ($casUserLogin == 'email')
+        if ($userName)
         {
-            if ((is_numeric($userAttributes['person_number']) && $userAttributes['person_number'] > 0) ||
-                strpos($userAttributes['person_number'], $casValidationString) !== false)
+            $user = $this->userService->findUserByUsername($userName);
 
+            if (!$user instanceof User)
             {
-                $user = $this->userService->getUserByOfficialCode(
-                    $userAttributes['person_number']
-                );
-
-                if (!$user instanceof User)
-                {
-                    $user = $this->registerUser();
-                }
-
-                return $user;
+                $user = $this->registerUser();
             }
-            elseif (is_numeric($userAttributes['person_number']) && $userAttributes['person_number'] == - 1)
+
+            if ($userAttributes && isset($userAttributes['surrogatePrincipal']))
             {
-
-                $user = $this->userService->findUserByUsername($userAttributes['email']);
-
-                if (!$user instanceof User)
-                {
-                    $user = $this->registerUser();
-                }
-
-                return $user;
+                $surrogateUserName = array_pop($userAttributes['surrogatePrincipal']);
+                $surrogateUser = $this->userService->findUserByUsername($surrogateUserName);
+                $this->getSessionUtilities()->register('_as_admin', $surrogateUser->getId());
             }
-            else
-            {
-                throw new AuthenticationException(
-                    $this->translator->trans(
-                        'CasAuthenticationError',
-                        array(
-                            'PLATFORM' => $this->configurationConsulter->getSetting(
-                                array('Chamilo\Core\Admin', 'site_name')
-                            )
-                        ),
-                        'Chamilo\Libraries'
-                    )
-                );
-            }
+
+            return $user;
         }
         else
         {
-            if (strpos($userAttributes['email'], $casValidationString) !== false)
-            {
-                $user = $this->userService->findUserByUsername($userAttributes['login']);
-
-                if (!$user instanceof User)
-                {
-                    $user = $this->registerUser();
-                }
-
-                return $user;
-            }
-            else
-            {
-                throw new AuthenticationException(
-                    $this->translator->trans(
-                        'CasAuthenticationError',
-                        array(
-                            'PLATFORM' => $this->configurationConsulter->getSetting(
-                                array('Chamilo\Core\Admin', 'site_name')
-                            )
-                        ),
-                        'Chamilo\Libraries'
+            throw new AuthenticationException(
+                $this->translator->trans(
+                    'CasAuthenticationError', array(
+                    'PLATFORM' => $this->configurationConsulter->getSetting(
+                        array('Chamilo\Core\Admin', 'site_name')
                     )
-                );
-            }
+                ), 'Chamilo\Libraries'
+                )
+            );
         }
     }
 
     /**
      *
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      * @throws \Exception
      */
     protected function registerUser()
     {
-        if (!$this->hasBeenInitialized)
-        {
-            $this->initializeClient();
-        }
-
+        $userName = phpCAS::getUser();
         $userAttributes = phpCAS::getAttributes();
 
         $user = new User();
 
-        $casUserLogin = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_user_login'));
-
-        if ($casUserLogin === 'login')
-        {
-            $user->set_username($userAttributes['login']);
-        }
-        else
-        {
-            $user->set_username($userAttributes['email']);
-        }
-
+        $user->set_username($userName);
         $user->set_password('PLACEHOLDER');
         $user->set_status(User::STATUS_STUDENT);
         $user->set_auth_source('Cas');
@@ -189,30 +161,10 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
-     * @throws \Exception
      */
     public function logout(User $user)
     {
-        if (!$this->isConfigured())
-        {
-            throw new AuthenticationException(Translation::get('CheckCASConfiguration'));
-        }
-        else
-        {
-            Event::trigger(
-                'Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user)
-            );
-
-            if (!$this->hasBeenInitialized)
-            {
-                $this->initializeClient();
-            }
-
-            // Do the logout
-            phpCAS::logout();
-        }
+        phpCAS::logout();
     }
 
     /**
@@ -250,8 +202,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
         foreach ($settings as $setting => $value)
         {
             if ((empty($value) || !isset($value)) && !in_array(
-                    $setting,
-                    array('uri', 'certificate', 'log', 'enable_log')
+                    $setting, array('uri', 'certificate', 'log', 'enable_log')
                 ))
             {
                 return false;
@@ -268,67 +219,47 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
     {
         if (!$this->isConfigured())
         {
-            throw new \Exception(Translation::get('CheckCASConfiguration'));
+            throw new \Exception($this->getTranslator()->trans('CheckCASConfiguration'));
         }
         else
         {
-            try
+            $settings = $this->getConfiguration();
+
+            // initialize phpCAS
+            if ($settings['enable_log'])
             {
-                $settings = $this->getConfiguration();
-
-                // initialize phpCAS
-                if ($settings['enable_log'])
-                {
-                    phpCAS::setDebug($settings['log']);
-                }
-
-                $uri = ($settings['uri'] ? $settings['uri'] : '');
-
-                $casVersion = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_version'));
-
-                if ($casVersion == 'SAML_VERSION_1_1')
-                {
-                    phpCAS::client(
-                        SAML_VERSION_1_1,
-                        $settings['host'],
-                        (int) $settings['port'],
-                        (string) $settings['uri'],
-                        false
-                    );
-                }
-                else
-                {
-                    phpCAS::client(
-                        CAS_VERSION_2_0,
-                        $settings['host'],
-                        (int) $settings['port'],
-                        (string) $settings['uri'],
-                        false
-                    );
-                }
-
-                $this->hasBeenInitialized = true;
-
-                $casCheckCertificate = $this->configurationConsulter->getSetting(
-                    array('Chamilo\Core\Admin', 'cas_check_certificate')
-                );
-
-                // SSL validation for the CAS server
-                if ($casCheckCertificate == '1')
-                {
-                    phpCAS::setCasServerCACert($settings['certificate']);
-                }
-                else
-                {
-                    phpCAS::setNoCasServerValidation();
-                }
-
-                // force CAS authentication
-                phpCAS::forceAuthentication();
+                phpCAS::setDebug($settings['log']);
             }
-            catch (\Exception $exception)
+
+            $uri = ($settings['uri'] ? $settings['uri'] : '');
+
+            $casVersion = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_version'));
+
+            if ($casVersion == 'SAML_VERSION_1_1')
             {
-                $this->initializeClient();
+                phpCAS::client(
+                    SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
+                );
+            }
+            else
+            {
+                phpCAS::client(
+                    CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
+                );
+            }
+
+            $casCheckCertificate = $this->configurationConsulter->getSetting(
+                array('Chamilo\Core\Admin', 'cas_check_certificate')
+            );
+
+            // SSL validation for the CAS server
+            if ($casCheckCertificate == '1')
+            {
+                phpCAS::setCasServerCACert($settings['certificate']);
+            }
+            else
+            {
+                phpCAS::setNoCasServerValidation();
             }
         }
     }

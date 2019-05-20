@@ -46,14 +46,14 @@ abstract class Authentication implements AuthenticationInterface
      * @param \Chamilo\Core\User\Service\UserService $userService
      */
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request, UserService $userService
+        ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
+        UserService $userService
     )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
         $this->request = $request;
         $this->userService = $userService;
-
     }
 
     /**
@@ -75,28 +75,44 @@ abstract class Authentication implements AuthenticationInterface
     {
         $username = $this->request->getFromPost(self::PARAM_LOGIN);
 
-        if(empty($username))
+        if (empty($username))
         {
             return null;
         }
 
         $user = $this->userService->getUserByUsernameOrEmail($username);
-        if(!$user instanceof User)
+        if (!$user instanceof User)
         {
             throw new AuthenticationException($this->translator->trans('InvalidUsername', [], 'Chamilo\Libraries'));
         }
 
-        if($user->getAuthenticationSource() != $this->getAuthenticationType())
+        if ($user->getAuthenticationSource() != $this->getAuthenticationType())
         {
             return null;
         }
 
-        if(!$this->isAuthSourceActive())
+        if (!$this->isAuthSourceActive())
         {
             throw new AuthenticationException($this->translator->trans('AuthSourceNotActive', [], 'Chamilo\Libraries'));
         }
 
         return $user;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): \Symfony\Component\Translation\Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(\Symfony\Component\Translation\Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 
 }
