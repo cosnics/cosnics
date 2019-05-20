@@ -6,6 +6,7 @@ var recorder; 						//WebAudioRecorder object
 var input; 							//MediaStreamAudioSourceNode  we'll be recording
 var encodingType; 					//holds selected encoding for resulting audio (file)
 var encodeAfterRecord = true;       // when to encode
+var blob;
 
 // shim for AudioContext when it's not avb. 
 var AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -127,6 +128,7 @@ function stopRecording() {
 }
 
 function createDownloadLink(blob, encoding) {
+    this.blob = blob;
 
     var url = URL.createObjectURL(blob);
     var au = document.createElement('audio');
@@ -148,7 +150,42 @@ function createDownloadLink(blob, encoding) {
 
     //add the li element to the ordered list
     recordingsList.appendChild(li);
-    link.click();
+    //save the file local (simulating a click event)
+    //link.click();
+
+    var self = this;
+
+    var postBlob = function (event) {
+        var ajaxUri = 'http://127.0.0.1/' + 'index.php';
+        var parameters = {
+            'application': 'Chamilo\\Core\\Repository\\Ajax',
+            'go': 'html_editor_file_upload',
+            'upload': self.blob
+        };
+
+        var fd = new FormData();
+        fd.append('application', 'Chamilo\\Core\\Repository\\Ajax');
+        fd.append('go', 'html_editor_file_upload');
+        fd.append('upload', self.blob, link.download);
+
+        $.ajax({
+            type: "POST",
+            url: ajaxUri,
+            data: fd,
+            async: false,
+            processData: false,
+            contentType: false
+        }).success(function (json) {
+            if (json.result_code == 200) {
+                console.log('success');
+                rendition = json.properties.rendition;
+            }
+        }).error(function (error) {
+            console.log('error');
+        });
+    };
+
+    document.getElementById("submitbutton").addEventListener("click", postBlob, false);
 }
 
 
