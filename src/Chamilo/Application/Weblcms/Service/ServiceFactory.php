@@ -1,15 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Service;
 
-use Chamilo\Application\Weblcms\CourseSettingsController;
-use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseSettingsServiceInterface;
 use Chamilo\Application\Weblcms\Service\Interfaces\PublicationServiceInterface;
 use Chamilo\Application\Weblcms\Service\Interfaces\RightsServiceInterface;
-use Chamilo\Application\Weblcms\Storage\Repository\CourseRepository;
-use Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 /**
  * Service factory for Weblcms services
@@ -18,6 +13,8 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
  */
 class ServiceFactory
 {
+    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+
     const SERVICE_COURSE = 'course_service';
     const SERVICE_RIGHTS = 'rights_service';
     const SERVICE_PUBLICATION = 'publication_service';
@@ -42,6 +39,7 @@ class ServiceFactory
      */
     public function __construct()
     {
+        $this->initializeContainer();
         $this->services = array();
     }
 
@@ -52,7 +50,7 @@ class ServiceFactory
      */
     public static function getInstance()
     {
-        if (! isset(self::$instance))
+        if (!isset(self::$instance))
         {
             self::$instance = new self();
         }
@@ -67,19 +65,7 @@ class ServiceFactory
      */
     public function getCourseService()
     {
-        if (! isset($this->services[self::SERVICE_COURSE]))
-        {
-            $courseService = new CourseService(
-                new CourseRepository(),
-                $this->getCourseSettingsService(),
-                $this->getUserService());
-
-            $this->services[self::SERVICE_COURSE] = $courseService;
-
-            $courseService->setRightsService($this->getRightsService());
-        }
-
-        return $this->services[self::SERVICE_COURSE];
+        return $this->getService('chamilo.application.weblcms.service.course');
     }
 
     /**
@@ -89,16 +75,7 @@ class ServiceFactory
      */
     public function getRightsService()
     {
-        if (! isset($this->services[self::SERVICE_RIGHTS]))
-        {
-            $rightsService = new RightsService(WeblcmsRights::getInstance(), $this->getCourseSettingsService());
-            $this->services[self::SERVICE_RIGHTS] = $rightsService;
-
-            $rightsService->setCourseService($this->getCourseService());
-            $rightsService->setPublicationService($this->getPublicationService());
-        }
-
-        return $this->services[self::SERVICE_RIGHTS];
+        return $this->getService('chamilo.application.weblcms.service.rights');
     }
 
     /**
@@ -108,16 +85,7 @@ class ServiceFactory
      */
     public function getPublicationService()
     {
-        if (! isset($this->services[self::SERVICE_PUBLICATION]))
-        {
-            $publicationService = new PublicationService(new PublicationRepository());
-            $this->services[self::SERVICE_PUBLICATION] = $publicationService;
-
-            $publicationService->setCourseService($this->getCourseService());
-            $publicationService->setRightsService($this->getRightsService());
-        }
-
-        return $this->services[self::SERVICE_PUBLICATION];
+        return $this->getService('chamilo.application.weblcms.service.publication');
     }
 
     /**
@@ -127,13 +95,7 @@ class ServiceFactory
      */
     public function getCourseSettingsService()
     {
-        if (! isset($this->services[self::SERVICE_COURSE_SETTINGS]))
-        {
-            $courseSettingsService = new CourseSettingsService(CourseSettingsController::getInstance());
-            $this->services[self::SERVICE_COURSE_SETTINGS] = $courseSettingsService;
-        }
-
-        return $this->services[self::SERVICE_COURSE_SETTINGS];
+        return $this->getService('chamilo.application.weblcms.service.course_settings');
     }
 
     /**
@@ -142,8 +104,6 @@ class ServiceFactory
      */
     public function getUserService()
     {
-        $containerBuilder = DependencyInjectionContainerBuilder::getInstance();
-        $container = $containerBuilder->createContainer();
-        return $container->get('chamilo.core.user.service.user_service');
+        return $this->getUserService();
     }
 }

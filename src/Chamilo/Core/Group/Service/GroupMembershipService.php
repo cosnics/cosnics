@@ -33,16 +33,13 @@ class GroupMembershipService
     /**
      * @param \Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository $groupMembershipRepository
      * @param \Chamilo\Core\Group\Service\GroupEventNotifier $groupEventNotifier
-     * @param \Chamilo\Core\Group\Service\GroupsTreeTraverser $groupsTreeTraverser
      */
     public function __construct(
-        GroupMembershipRepository $groupMembershipRepository, GroupEventNotifier $groupEventNotifier,
-        GroupsTreeTraverser $groupsTreeTraverser
+        GroupMembershipRepository $groupMembershipRepository, GroupEventNotifier $groupEventNotifier
     )
     {
         $this->groupMembershipRepository = $groupMembershipRepository;
         $this->groupEventNotifier = $groupEventNotifier;
-        $this->groupsTreeTraverser = $groupsTreeTraverser;
     }
 
     /**

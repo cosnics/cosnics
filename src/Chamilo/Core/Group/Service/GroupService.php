@@ -88,13 +88,14 @@ class GroupService
     public function __construct(
         GroupRepository $groupRepository, GroupMembershipService $groupMembershipService,
         PropertyMapper $propertyMapper,
-        GroupEventNotifier $groupEventNotifier
+        GroupEventNotifier $groupEventNotifier, GroupsTreeTraverser $groupsTreeTraverser
     )
     {
         $this->groupRepository = $groupRepository;
         $this->groupMembershipService = $groupMembershipService;
         $this->propertyMapper = $propertyMapper;
         $this->groupEventNotifier = $groupEventNotifier;
+        $this->groupsTreeTraverser = $groupsTreeTraverser;
     }
 
     /**

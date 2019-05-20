@@ -3,7 +3,9 @@
 namespace Chamilo\Core\Group\Service;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Repository\GroupRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 
 /**
@@ -69,6 +71,20 @@ class GroupsTreeTraverser
     protected $subGroups = array();
 
     /**
+     * @param \Chamilo\Core\Group\Storage\Repository\GroupRepository $groupRepository
+     * @param \Chamilo\Core\Group\Service\GroupMembershipService $groupMembershipService
+     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
+     */
+    public function __construct(
+        GroupRepository $groupRepository, GroupMembershipService $groupMembershipService, PropertyMapper $propertyMapper
+    )
+    {
+        $this->groupRepository = $groupRepository;
+        $this->groupMembershipService = $groupMembershipService;
+        $this->propertyMapper = $propertyMapper;
+    }
+
+    /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param boolean $recursiveSubgroups
      *
@@ -97,8 +113,7 @@ class GroupsTreeTraverser
                 else
                 {
 
-                    $this->subGroupsCount[$cacheKey] =
-                        $this->groupRepository->countSubGroupsForGroup($group, false);
+                    $this->subGroupsCount[$cacheKey] = $this->groupRepository->countSubGroupsForGroup($group, false);
                 }
             }
         }
@@ -218,10 +233,9 @@ class GroupsTreeTraverser
     public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true)
     {
         $cacheKey = md5(serialize([$group->getId(), $includeSelf]));
-        if(!array_key_exists($cacheKey, $this->parentGroupIdentifiers))
+        if (!array_key_exists($cacheKey, $this->parentGroupIdentifiers))
         {
-            $parentGroupIdentifiers =
-                $this->groupRepository->findParentGroupIdentifiersForGroup($group, $includeSelf);
+            $parentGroupIdentifiers = $this->groupRepository->findParentGroupIdentifiersForGroup($group, $includeSelf);
 
             if (!is_array($parentGroupIdentifiers))
             {
@@ -258,8 +272,7 @@ class GroupsTreeTraverser
 
         if (!array_key_exists($cacheKey, $this->subGroupIdentifiers))
         {
-            $subGroupIdentifiers =
-                $this->groupRepository->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
+            $subGroupIdentifiers = $this->groupRepository->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
 
             if (!is_array($subGroupIdentifiers))
             {
@@ -286,8 +299,7 @@ class GroupsTreeTraverser
         {
             $subGroups = $this->groupRepository->findSubGroupsForGroup($group, $recursiveSubgroups);
 
-            $this->subGroups[$cacheKey] =
-                $this->propertyMapper->mapDataClassByProperty($subGroups, Group::PROPERTY_ID);
+            $this->subGroups[$cacheKey] = $this->propertyMapper->mapDataClassByProperty($subGroups, Group::PROPERTY_ID);
         }
 
         return $this->subGroups[$cacheKey];
