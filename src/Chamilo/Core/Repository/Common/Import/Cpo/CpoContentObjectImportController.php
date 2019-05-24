@@ -385,11 +385,17 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function process_includes($content_object_node)
     {
+        $currentId = $content_object_node->getAttribute('id');
+
         $include_list = $this->dom_xpath->query('includes/include', $content_object_node);
         foreach ($include_list as $include_node)
         {
             $id_ref = $include_node->getAttribute('idref');
-            
+            if($id_ref == $currentId)
+            {
+                continue;
+            }
+
             if (! $this->get_content_object_id_cache_id($id_ref))
             {
                 $content_object_node_list = $this->dom_xpath->query(
