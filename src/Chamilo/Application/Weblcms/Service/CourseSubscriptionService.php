@@ -35,6 +35,12 @@ class CourseSubscriptionService
      */
     public function subscribeGroupToCourse(Group $group, Course $course, $status = CourseEntityRelation::STATUS_TEACHER)
     {
+        $courseEntityRelation = $this->findCourseEntityRelationForCourseAndGroup($group, $course);
+        if($courseEntityRelation instanceof CourseEntityRelation)
+        {
+            return;
+        }
+
         $courseEntityRelation = new CourseEntityRelation();
 
         $courseEntityRelation->set_course_id($course->getId());
