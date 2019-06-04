@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Core\Repository\Form\CourseExporterFormHandler;
 use Chamilo\Core\Repository\Form\CourseExporterFormType;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Symfony\Component\Form\FormInterface;
 
 /**
@@ -58,9 +59,18 @@ class CourseExporterComponent extends Manager
      */
     protected function handleForm(FormInterface $form)
     {
-        $formHandler = new CourseExporterFormHandler($this->getPublicationService());
-        $formHandler->setUser($this->getUser());
-        return $formHandler->handle($form, $this->getRequest());
+        try
+        {
+            $formHandler = new CourseExporterFormHandler($this->getPublicationService());
+            $formHandler->setUser($this->getUser());
+
+            return $formHandler->handle($form, $this->getRequest());
+        }
+        catch(UserException $ex)
+        {
+            $this->getExceptionLogger()->logException($ex);
+            throw $ex;
+        }
     }
 
     /**
