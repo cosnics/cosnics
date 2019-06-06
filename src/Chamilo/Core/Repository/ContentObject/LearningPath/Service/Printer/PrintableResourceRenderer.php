@@ -51,8 +51,13 @@ class PrintableResourceRenderer
      *
      * @return string
      */
-    public function renderResourcesInContent(string $htmlContent)
+    public function renderResourcesInContent(string $htmlContent = null)
     {
+        if(empty($htmlContent))
+        {
+            return $htmlContent;
+        }
+
         $this->domDocument = $this->resourceParser->getDomDocument($htmlContent);
         $this->domXpath = $this->resourceParser->getDomXPath($this->domDocument);
 
