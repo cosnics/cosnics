@@ -38,7 +38,6 @@ class CourseSubscriptionService
         $courseEntityRelation = $this->findCourseEntityRelationForCourseAndGroup($group, $course);
         if($courseEntityRelation instanceof CourseEntityRelation)
         {
-            echo $courseEntityRelation->getId();
             return;
         }
 
