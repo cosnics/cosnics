@@ -1,9 +1,11 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Application\Weblcms\Service
@@ -36,7 +38,7 @@ class CourseSubscriptionService
     public function subscribeGroupToCourse(Group $group, Course $course, $status = CourseEntityRelation::STATUS_TEACHER)
     {
         $courseEntityRelation = $this->findCourseEntityRelationForCourseAndGroup($group, $course);
-        if($courseEntityRelation instanceof CourseEntityRelation)
+        if ($courseEntityRelation instanceof CourseEntityRelation)
         {
             return;
         }
@@ -48,9 +50,45 @@ class CourseSubscriptionService
         $courseEntityRelation->setEntityType(CourseEntityRelation::ENTITY_TYPE_GROUP);
         $courseEntityRelation->set_status($status);
 
-        if(!$this->courseSubscriptionRepository->createCourseEntityRelation($courseEntityRelation))
+        if (!$this->courseSubscriptionRepository->createCourseEntityRelation($courseEntityRelation))
         {
-            throw new \RuntimeException('The course entity relation could not be created');
+            throw new \RuntimeException(
+                sprintf(
+                    'The course entity relation for group %s with course %s could not be created', $group->getId(),
+                    $course->getId()
+                )
+            );
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param int $status
+     */
+    public function subscribeUserToCourse(User $user, Course $course, $status = CourseEntityRelation::STATUS_TEACHER)
+    {
+        $courseEntityRelation = $this->findCourseEntityRelationForCourseAndUser($user, $course);
+        if ($courseEntityRelation instanceof CourseEntityRelation)
+        {
+            return;
+        }
+
+        $courseEntityRelation = new CourseEntityRelation();
+
+        $courseEntityRelation->set_course_id($course->getId());
+        $courseEntityRelation->setEntityId($user->getId());
+        $courseEntityRelation->setEntityType(CourseEntityRelation::ENTITY_TYPE_USER);
+        $courseEntityRelation->set_status($status);
+
+        if (!$this->courseSubscriptionRepository->createCourseEntityRelation($courseEntityRelation))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'The course entity relation for user %s with course %s could not be created', $user->getId(),
+                    $course->getId()
+                )
+            );
         }
     }
 
@@ -61,9 +99,35 @@ class CourseSubscriptionService
     public function removeGroupFromCourse(Group $group, Course $course)
     {
         $courseEntityRelation = $this->findCourseEntityRelationForCourseAndGroup($group, $course);
-        if($courseEntityRelation instanceof CourseEntityRelation)
+        if ($courseEntityRelation instanceof CourseEntityRelation)
         {
             $this->deleteCourseEntityRelation($courseEntityRelation);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     */
+    public function removeUserFromCourse(User $user, Course $course)
+    {
+        $courseEntityRelation = $this->findCourseEntityRelationForCourseAndUser($user, $course);
+        if ($courseEntityRelation instanceof CourseEntityRelation)
+        {
+            $this->deleteCourseEntityRelation($courseEntityRelation);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     */
+    public function removeEveryoneFromCourse(Course $course)
+    {
+        if (!$this->courseSubscriptionRepository->removeEveryoneFromCourse($course))
+        {
+            throw new \RuntimeException(
+                sprintf('The course entities could not be removed from course %s', $course->getId())
+            );
         }
     }
 
@@ -72,15 +136,34 @@ class CourseSubscriptionService
      */
     public function deleteCourseEntityRelation(CourseEntityRelation $courseEntityRelation)
     {
-        if(!$this->courseSubscriptionRepository->deleteCourseEntityRelation($courseEntityRelation))
+        if (!$this->courseSubscriptionRepository->deleteCourseEntityRelation($courseEntityRelation))
         {
-            throw new \RuntimeException('The course entity relation could not be created');
+            throw new \RuntimeException(
+                sprintf('The course entity relation with id %s could not be deleted', $courseEntityRelation->getId())
+            );
         }
     }
 
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
     public function findCourseEntityRelationForCourseAndGroup(Group $group, Course $course)
     {
         return $this->courseSubscriptionRepository->findCourseEntityRelationForCourseAndGroup($group, $course);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function findCourseEntityRelationForCourseAndUser(User $user, Course $course)
+    {
+        return $this->courseSubscriptionRepository->findCourseEntityRelationForCourseAndUser($user, $course);
     }
 
 }
