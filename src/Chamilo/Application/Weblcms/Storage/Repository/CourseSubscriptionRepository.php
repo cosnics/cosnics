@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Storage\Repository;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -62,8 +63,46 @@ class CourseSubscriptionRepository
      */
     public function findCourseEntityRelationForCourseAndGroup(Group $group, Course $course)
     {
+        return $this->findCourseEntityRelation($course, $group->getId(), CourseEntityRelation::ENTITY_TYPE_GROUP);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function findCourseEntityRelationForCourseAndUser(User $user, Course $course)
+    {
+        return $this->findCourseEntityRelation($course, $user->getId(), CourseEntityRelation::ENTITY_TYPE_USER);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return bool
+     */
+    public function removeEveryoneFromCourse(Course $course)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($course->getId())
+        );
+
+        return $this->dataClassRepository->deletes(CourseEntityRelation::class, $condition);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param int $entityId
+     * @param int $entityType
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    protected function findCourseEntityRelation(Course $course, int $entityId, int $entityType)
+    {
         $parameters = new DataClassRetrieveParameters(
-            $this->getCourseEntityRelationCondition($course, $group->getId(), CourseEntityRelation::ENTITY_TYPE_GROUP)
+            $this->getCourseEntityRelationCondition($course, $entityId, $entityType)
         );
 
         return $this->dataClassRepository->retrieve(CourseEntityRelation::class, $parameters);
