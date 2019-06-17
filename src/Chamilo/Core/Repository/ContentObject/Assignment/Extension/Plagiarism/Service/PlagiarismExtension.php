@@ -117,7 +117,7 @@ class PlagiarismExtension implements ExtensionInterface
         EntryComponent $entryComponent, Assignment $assignment, Entry $entry, User $user
     )
     {
-        if(!$this->getAssignmentServiceBridge()->canEditAssignment())
+        if(!$this->isPlagiarismEnabled())
         {
             return null;
         }
@@ -173,14 +173,14 @@ class PlagiarismExtension implements ExtensionInterface
      */
     public function entryCreated(Assignment $assignment, Entry $entry, User $user)
     {
-        if($this->plagiarismChecker->isInMaintenanceMode())
+        if(!$this->isPlagiarismEnabled())
         {
             return;
         }
 
-        if($this->getEntryPlagiarismResultServiceBridge()->checkForPlagiarismAfterSubmission())
+        if ($this->getEntryPlagiarismResultServiceBridge()->checkForPlagiarismAfterSubmission())
         {
-            if(!$this->plagiarismChecker->canCheckForPlagiarism($entry))
+            if (!$this->plagiarismChecker->canCheckForPlagiarism($entry))
             {
                 return;
             }
@@ -210,12 +210,7 @@ class PlagiarismExtension implements ExtensionInterface
      */
     public function buildButtonToolbarForEntityBrowser(ViewerComponent $viewerComponent, ButtonToolBar $buttonToolBar)
     {
-        if($this->plagiarismChecker->isInMaintenanceMode())
-        {
-            return;
-        }
-
-        if(!$this->getAssignmentServiceBridge()->canEditAssignment())
+        if(!$this->isPlagiarismEnabled())
         {
             return;
         }
@@ -255,5 +250,15 @@ class PlagiarismExtension implements ExtensionInterface
     protected function getAssignmentServiceBridge()
     {
         return $this->bridgeManager->getBridgeByInterface(AssignmentServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isPlagiarismEnabled()
+    {
+        return !$this->plagiarismChecker->isInMaintenanceMode() &&
+            $this->getAssignmentServiceBridge()->canEditAssignment() &&
+            $this->getEntryPlagiarismResultServiceBridge()->isPlagiarismEnabled();
     }
 }

@@ -1,39 +1,49 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces;
+namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
+use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\Parameters\FilterParameters;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
- * Interface EntryPlagiarismResultServiceBridge
+ * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge
  *
- * @package Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Interfaces
+ * @author Sven Vanpoucke - Hogeschool Gent
  */
-interface EntryPlagiarismResultServiceBridgeInterface
+class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultServiceBridgeInterface
 {
+
     /**
      * @return bool
      */
-    public function checkForPlagiarismAfterSubmission();
+    public function checkForPlagiarismAfterSubmission()
+    {
+        return false;
+    }
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return EntryPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
-    public function findEntryPlagiarismResultByEntry(Entry $entry);
+    public function findEntryPlagiarismResultByEntry(Entry $entry)
+    {
+        // TODO: Implement findEntryPlagiarismResultByEntry() method.
+    }
 
     /**
      * @param string $externalId
      *
      * @return EntryPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
-    public function findEntryPlagiarismResultByExternalId(string $externalId);
+    public function findEntryPlagiarismResultByExternalId(string $externalId)
+    {
+        // TODO: Implement findEntryPlagiarismResultByExternalId() method.
+    }
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
@@ -41,14 +51,20 @@ interface EntryPlagiarismResultServiceBridgeInterface
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult
      */
-    public function createEntryPlagiarismResultForEntry(Entry $entry, string $externalId);
+    public function createEntryPlagiarismResultForEntry(Entry $entry, string $externalId)
+    {
+        // TODO: Implement createEntryPlagiarismResultForEntry() method.
+    }
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
-    public function updateEntryPlagiarismResult(EntryPlagiarismResult $entryPlagiarismResult);
+    public function updateEntryPlagiarismResult(EntryPlagiarismResult $entryPlagiarismResult)
+    {
+        // TODO: Implement updateEntryPlagiarismResult() method.
+    }
 
     /**
      * @param int $entityType
@@ -56,7 +72,10 @@ interface EntryPlagiarismResultServiceBridgeInterface
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findEntriesWithPlagiarismResult(int $entityType, FilterParameters $filterParameters);
+    public function findEntriesWithPlagiarismResult(int $entityType, FilterParameters $filterParameters)
+    {
+        return [];
+    }
 
     /**
      * @param int $entityType
@@ -64,7 +83,10 @@ interface EntryPlagiarismResultServiceBridgeInterface
      *
      * @return int
      */
-    public function countEntriesWithPlagiarismResult(int $entityType, FilterParameters $filterParameters);
+    public function countEntriesWithPlagiarismResult(int $entityType, FilterParameters $filterParameters)
+    {
+        return 0;
+    }
 
     /**
      * @param int $entityType
@@ -74,11 +96,18 @@ interface EntryPlagiarismResultServiceBridgeInterface
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTable
      */
     public function getEntryPlagiarismResultTable(
-        int $entityType, Application $application, EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
-    );
+        int $entityType, Application $application,
+        EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
+    )
+    {
+        // TODO: Implement getEntryPlagiarismResultTable() method.
+    }
 
     /**
      * @return bool
      */
-    public function isPlagiarismEnabled();
+    public function isPlagiarismEnabled()
+    {
+        return false;
+    }
 }

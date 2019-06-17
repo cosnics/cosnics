@@ -26,6 +26,13 @@
                         var coId = ev.data.dataTransfer.getData("data-co-id");
                         var type = ev.data.dataTransfer.getData("data-type");
                         var securityCode = ev.data.dataTransfer.getData("data-security-code");
+                        var renderInline = (ev.editor.config["render_resource_inline"] ? 1 : 0);
+
+                        // Always show inline version for these objects, no matter how the config is set
+                        if(type === 'audio' || type === 'video' || type === 'image')
+                        {
+                            renderInline = 1;
+                        }
 
                         var html = '';
                         if(type === 'image') {
@@ -41,7 +48,7 @@
                                 'data-co-id="' + coId + '" ' +
                                 'data-security-code="' + securityCode + '" ' +
                                 'data-type="'+type+'"' +
-                                'data-render-inline"' + (ev.editor.config["render_resource_inline"] ? 1 : 0) +'"' +
+                                'data-render-inline"' + renderInline +'"' +
                                 '></div><br>';
                         }
                         ev.data.dataValue = html;

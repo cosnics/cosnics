@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge\AssignmentServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge\EntryPlagiarismResultServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge\EphorusServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge\FeedbackServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge\NotificationServiceBridge;
@@ -37,5 +38,6 @@ class ViewerComponent extends Manager
         $this->getBridgeManager()->addBridge(new FeedbackServiceBridge());
         $this->getBridgeManager()->addBridge(new NotificationServiceBridge());
         $this->getBridgeManager()->addBridge(new EphorusServiceBridge());
+        $this->getBridgeManager()->addBridge(new EntryPlagiarismResultServiceBridge());
     }
 }

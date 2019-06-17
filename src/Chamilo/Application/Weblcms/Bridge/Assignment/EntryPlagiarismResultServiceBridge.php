@@ -185,4 +185,12 @@ class EntryPlagiarismResultServiceBridge implements
         return $entityService->getEntryPlagiarismResultTable($application, $entryPlagiarismResultTableParameters);
     }
 
+    /**
+     * @return bool
+     */
+    public function isPlagiarismEnabled()
+    {
+        return true;
+    }
+
 }

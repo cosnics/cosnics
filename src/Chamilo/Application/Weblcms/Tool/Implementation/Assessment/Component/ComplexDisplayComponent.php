@@ -10,7 +10,9 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Exceptions\InvalidUserException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -62,6 +64,11 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
     public function run()
     {
+        if(!$this->getUserService()->isUserCurrentLoggedInUser($this->getUser()))
+        {
+            throw new InvalidUserException();
+        }
+
         // Retrieving assessment
         if (Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
         {
@@ -174,6 +181,14 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
                 $context,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
         }
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getService(UserService::class);
     }
 
     /**

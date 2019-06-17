@@ -5,6 +5,7 @@ namespace Chamilo\Core\User\Service;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Hashing\HashingUtilities;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
  *
@@ -27,14 +28,23 @@ class UserService
     protected $passwordSecurity;
 
     /**
+     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    protected $sessionUtilities;
+
+    /**
      *
      * @param \Chamilo\Core\User\Storage\Repository\UserRepository $userRepository
      * @param \Chamilo\Core\User\Service\PasswordSecurity $passwordSecurity
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      */
-    public function __construct(UserRepository $userRepository, PasswordSecurity $passwordSecurity)
+    public function __construct(
+        UserRepository $userRepository, PasswordSecurity $passwordSecurity, SessionUtilities $sessionUtilities
+    )
     {
         $this->userRepository = $userRepository;
         $this->passwordSecurity = $passwordSecurity;
+        $this->sessionUtilities = $sessionUtilities;
     }
 
     /**
@@ -56,7 +66,7 @@ class UserService
     public function getUserFullNameById($identifier)
     {
         $user = $this->findUserByIdentifier($identifier);
-        if(!$user instanceof User)
+        if (!$user instanceof User)
         {
             return null;
         }
@@ -167,7 +177,7 @@ class UserService
             'officialCode' => $officialCode, 'emailAddress' => $emailAddress, 'password' => $password
         ];
 
-        foreach($requiredParameters as $parameterName => $parameterValue)
+        foreach ($requiredParameters as $parameterName => $parameterValue)
         {
             if (empty($parameterValue))
             {
@@ -197,6 +207,19 @@ class UserService
         }
 
         return $user;
+    }
+
+    /**
+     * Validates whether or not the currently logged in user (determined by the session) is the same as the given
+     * user. This function is used to check if any manipulations to the user object were made.
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return bool
+     */
+    public function isUserCurrentLoggedInUser(User $user)
+    {
+        return $this->sessionUtilities->get('_uid') == $user->getId();
     }
 
     /**
