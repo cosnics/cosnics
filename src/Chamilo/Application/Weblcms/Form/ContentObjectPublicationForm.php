@@ -952,7 +952,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
 
         $body .= Translation::get('NewPublicationMailDescription') . ' ' . $this->course->get_title() . ' : <a href="' .
-             $link . '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
+             $link . '" target="_blank">' . $content_object->get_title() . '</a><br />--<br />';
         $body .= $content_object->get_description();
         $body .= '--<br />';
         $body .= $user->get_fullname() . ' - ' . $this->course->get_visual_code() . ' - ' . $this->course->get_title() .
