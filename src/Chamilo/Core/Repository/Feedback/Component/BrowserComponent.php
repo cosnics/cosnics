@@ -3,12 +3,15 @@
 namespace Chamilo\Core\Repository\Feedback\Component;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
+use Chamilo\Core\Repository\Common\Includes\ContentObjectIncluder;
 use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\Form\FeedbackForm;
 use Chamilo\Core\Repository\Feedback\Generator\ActionsGenerator;
 use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -52,8 +55,22 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $values = $form->exportValues();
 
-            $feedback = $this->feedbackServiceBridge->createFeedback($this->getUser(), $values[Feedback::PROPERTY_COMMENT]);
-            $success = $feedback instanceof Feedback;
+            $feedbackContentObject = new \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback();
+            $feedbackContentObject->set_owner_id($this->getUser()->getId());
+            $feedbackContentObject->set_description($values[Feedback::PROPERTY_COMMENT]);
+            $feedbackContentObject->set_title('Feedback');
+            $feedbackContentObject->set_state(ContentObject::STATE_INACTIVE);
+            $success = $feedbackContentObject->create();
+
+            $this->getContentObjectIncluder()->scanForResourcesAndIncludeContentObjects($feedbackContentObject);
+
+            if($success)
+            {
+                $feedback =
+                    $this->feedbackServiceBridge->createFeedback($this->getUser(), $feedbackContentObject);
+
+                $success = $feedback instanceof Feedback;
+            }
 
             $this->notifyNewFeedback($feedback);
 
@@ -191,11 +208,39 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     protected function renderFeedbackContent(Feedback $feedback)
     {
-        $content = $feedback->get_comment();
+        $feedbackContentObject = null;
+
+        try
+        {
+            $feedbackContentObject =
+                $this->getContentObjectRepository()->findById($feedback->getFeedbackContentObjectId());
+        }
+        catch(\Exception $ex)
+        {
+
+        }
+
+        if($feedbackContentObject instanceof \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback)
+        {
+            $content = $feedbackContentObject->get_description();
+        }
+        else
+        {
+            //old school
+            $content = $feedback->get_comment();
+        }
 
         $descriptionRenderer = new ContentObjectResourceRenderer($this, $content);
 
         return $descriptionRenderer->run();
+    }
+
+    /**
+     * @return ContentObjectRepository
+     */
+    protected function getContentObjectRepository()
+    {
+        return $this->getService(ContentObjectRepository::class);
     }
 
     /**
@@ -377,5 +422,13 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         return $this->pagerRenderer;
+    }
+
+    /**
+     * @return ContentObjectIncluder
+     */
+    protected function getContentObjectIncluder()
+    {
+        return $this->getService(ContentObjectIncluder::class);
     }
 }

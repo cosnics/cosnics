@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\feedback
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Feedback"
+Title = "Onderwerp"
+Description = "Bericht"
+FeedbackToolBrowserComponent = "Aankondigingen"
+FeedbackToolIntroductionPublisherComponent = "Publiceer introductietekst"
+FeedbackToolPublisherComponent = "Publiceer aankondiging"
+FeedbackToolUpdaterComponent = "Bewerk aankondiging"
+FeedbackToolViewerComponent = "Bekijk aankondiging"

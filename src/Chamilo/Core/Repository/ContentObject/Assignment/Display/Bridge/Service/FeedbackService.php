@@ -100,22 +100,25 @@ abstract class FeedbackService
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $feedback
+     * @param \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
-    public function createFeedback(User $user, $feedback, Entry $entry)
+    public function createFeedback(
+        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject,
+        Entry $entry
+    )
     {
         $feedbackObject = $this->createFeedbackInstance();
         $feedbackObject->setEntryId($entry->getId());
 
         $feedbackObject->set_user_id($user->getId());
-        $feedbackObject->set_comment($feedback);
         $feedbackObject->set_creation_date(time());
         $feedbackObject->set_modification_date(time());
+        $feedbackObject->setFeedbackContentObjectId($feedbackContentObject->getId());
 
-        if(!$this->feedbackRepository->createFeedback($feedbackObject))
+        if (!$this->feedbackRepository->createFeedback($feedbackObject))
         {
             throw new \RuntimeException('Could not create feedback in the database');
         }
@@ -130,7 +133,7 @@ abstract class FeedbackService
      */
     public function updateFeedback(Feedback $feedback)
     {
-        if(!$this->feedbackRepository->updateFeedback($feedback))
+        if (!$this->feedbackRepository->updateFeedback($feedback))
         {
             throw new \RuntimeException('Could not update feedback in the database');
         }
@@ -141,7 +144,7 @@ abstract class FeedbackService
      */
     public function deleteFeedback(Feedback $feedback)
     {
-        if(!$this->feedbackRepository->deleteFeedback($feedback))
+        if (!$this->feedbackRepository->deleteFeedback($feedback))
         {
             throw new \RuntimeException('Could not delete feedback in the database');
         }

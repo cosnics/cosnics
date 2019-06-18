@@ -55,19 +55,21 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $feedback
+     * @param string $feedbackContentObject
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
-    public function createFeedback(User $user, $feedback)
+    public function createFeedback(
+        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
+    )
     {
-        $feedback = $this->assignmentFeedbackServiceBridge->createFeedback($user, $feedback, $this->entry);
-        if($feedback instanceof \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback)
+        $feedbackContentObject = $this->assignmentFeedbackServiceBridge->createFeedback($user, $feedbackContentObject, $this->entry);
+        if($feedbackContentObject instanceof \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback)
         {
-            $this->notificationServiceBridge->createNotificationForNewFeedback($user, $this->entry, $feedback);
+            $this->notificationServiceBridge->createNotificationForNewFeedback($user, $this->entry, $feedbackContentObject);
         }
 
-        return $feedback;
+        return $feedbackContentObject;
     }
 
     /**

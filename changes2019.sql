@@ -23,3 +23,10 @@ CREATE TABLE `tracking_user_admin_user_visit`
     PRIMARY KEY (`id`),
     KEY `admin_user_id` (`admin_user_id`, `user_visit_id`, `visit_date`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+
+ALTER TABLE `tracking_weblcms_assignment_feedback` ADD `feedback_content_object_id` INT(10) UNSIGNED NOT NULL AFTER `comment`, ADD INDEX (`feedback_content_object_id`);
+ALTER TABLE `tracking_weblcms_learning_path_assignment_feedback` ADD `feedback_content_object_id` INT(10) UNSIGNED NOT NULL AFTER `comment`, ADD INDEX (`feedback_content_object_id`);
+ALTER TABLE `portfolio_feedback` ADD `feedback_content_object_id` INT(10) UNSIGNED NOT NULL AFTER `comment`, ADD INDEX (`feedback_content_object_id`);
+ALTER TABLE `repository_wiki_page_feedback` ADD `feedback_content_object_id` INT(10) UNSIGNED NOT NULL AFTER `comment`, ADD INDEX (`feedback_content_object_id`);
+ALTER TABLE `weblcms_feedback` ADD `feedback_content_object_id` INT(10) UNSIGNED NOT NULL AFTER `comment`, ADD INDEX (`feedback_content_object_id`);

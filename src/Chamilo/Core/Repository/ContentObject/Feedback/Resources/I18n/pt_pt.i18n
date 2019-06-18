@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\feedback
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Feedback"
+Title = "Subject"
+Description = "Message"
+FeedbackToolBrowserComponent = ""
+FeedbackToolIntroductionPublisherComponent = ""
+FeedbackToolPublisherComponent = ""
+FeedbackToolUpdaterComponent = ""
+FeedbackToolViewerComponent = ""
