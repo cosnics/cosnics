@@ -52,7 +52,7 @@ button {
     text-decoration: none;
     font-weight: 600;
     white-space: nowrap;
-    background-color: #c72d1c;
+    background-color: #1c8e16;
     color: white;
 }
 
@@ -94,7 +94,18 @@ li {
     font-size: 80%;
 }
 
-#submitbutton {
-    margin-top: 50px;
-    background-color: #00bb00;
+.blink {
+    animation: blink 2s steps(5, start) infinite;
+    -webkit-animation: blink 1s steps(5, start) infinite;
+    color: red;
+}
+@keyframes blink {
+    to {
+        visibility: hidden;
+    }
+}
+@-webkit-keyframes blink {
+    to {
+        visibility: hidden;
+    }
 }

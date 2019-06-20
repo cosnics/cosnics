@@ -109,6 +109,9 @@ function startRecording() {
     //disable the record button
     recordButton.disabled = true;
     stopButton.disabled = false;
+
+    //Blinking
+    document.getElementById("icon").setAttribute("class", "blink");
 }
 
 function stopRecording() {
@@ -125,10 +128,53 @@ function stopRecording() {
     recorder.finishRecording();
 
     //__log('Recording stopped');
+
+    //Blinking
+    document.getElementById("icon").removeAttribute("class");
 }
+
+
+function postBlob(blobdata, linkDownload) {
+    linkDownload = prompt("Save to repo", linkDownload.toString()) + '.mp3';
+
+    var ajaxUri = 'http://127.0.0.1/' + 'index.php';
+    var parameters = {
+        'application': 'Chamilo\\Core\\Repository\\Ajax',
+        'go': 'html_editor_file_upload',
+        'upload': blobdata
+    };
+
+    var fd = new FormData();
+    fd.append('application', 'Chamilo\\Core\\Repository\\Ajax');
+    fd.append('go', 'html_editor_file_upload');
+    fd.append('upload', blobdata, linkDownload);
+
+    $.ajax({
+        type: "POST",
+        url: ajaxUri,
+        data: fd,
+        async: false,
+        processData: false,
+        contentType: false
+    }).success(function (json) {
+        if (json.result_code == 200) {
+            console.log('success');
+            rendition = json.properties.rendition;
+            fd = null;
+        }
+    }).error(function (error) {
+        console.log('error');
+    });
+
+    //Disable save button
+    //document.getElementsByName(linkDownload).disabled = true;
+}
+
 
 function createDownloadLink(blob, encoding) {
     this.blob = blob;
+
+    var self = this;
 
     var url = URL.createObjectURL(blob);
     var au = document.createElement('audio');
@@ -142,50 +188,24 @@ function createDownloadLink(blob, encoding) {
     //link the a element to the blob
     link.href = url;
     link.download = 'rec-' + window.location.hostname + '-' + new Date().toISOString() + '.' + encoding;
+    link.id = link.download;
     link.innerHTML = link.download;
+
+    //save to repo button
+    var button = document.createElement('button');
+    button.innerHTML = "Save to Repository";
+    button.id = link.download;
+    button.addEventListener('click', function () {
+        postBlob(blob, link.download)
+    }, false);
 
     //add the new audio and a elements to the li element
     li.appendChild(au);
     li.appendChild(link);
+    li.appendChild(button);
 
     //add the li element to the ordered list
     recordingsList.appendChild(li);
-    //save the file local (simulating a click event)
-    //link.click();
-
-    var self = this;
-
-    var postBlob = function (event) {
-        var ajaxUri = 'http://127.0.0.1/' + 'index.php';
-        var parameters = {
-            'application': 'Chamilo\\Core\\Repository\\Ajax',
-            'go': 'html_editor_file_upload',
-            'upload': self.blob
-        };
-
-        var fd = new FormData();
-        fd.append('application', 'Chamilo\\Core\\Repository\\Ajax');
-        fd.append('go', 'html_editor_file_upload');
-        fd.append('upload', self.blob, link.download);
-
-        $.ajax({
-            type: "POST",
-            url: ajaxUri,
-            data: fd,
-            async: false,
-            processData: false,
-            contentType: false
-        }).success(function (json) {
-            if (json.result_code == 200) {
-                console.log('success');
-                rendition = json.properties.rendition;
-            }
-        }).error(function (error) {
-            console.log('error');
-        });
-    };
-
-    document.getElementById("submitbutton").addEventListener("click", postBlob, false);
 }
 
 
