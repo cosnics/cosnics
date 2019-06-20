@@ -49,6 +49,11 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
             case Attributes::PROPERTY_APPLICATION :
                 return Translation::get('TypeName', null, $object->get_application());
             case Attributes::PROPERTY_LOCATION :
+                if($object->get_url())
+                {
+                    return '<a href="' . $object->get_url() . '" target="_blank">' . $object->get_location() . '</a>';
+                }
+
                 return $object->get_location();
             case Attributes::PROPERTY_DATE :
                 return date('Y-m-d, H:i', $object->get_date());

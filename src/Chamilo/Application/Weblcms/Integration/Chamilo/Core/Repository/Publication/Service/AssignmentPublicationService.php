@@ -1,27 +1,46 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
+
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service\AssignmentService;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\File\Redirect;
 
 /**
+ * Class with common functionality for URL and location building for publications of content objects in assignments (both in learning paths and regular)
+ *
  * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AssignmentPublicationService
+abstract class AssignmentPublicationService implements AssignmentPublicationServiceInterface
 {
     /**
-     * @var AssignmentService
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service\AssignmentService
      */
     protected $assignmentService;
 
     /**
-     * @var ContentObjectRepository
+     * @var \Chamilo\Application\Weblcms\Service\PublicationService
+     */
+    protected $publicationService;
+
+    /**
+     * @var \Chamilo\Application\Weblcms\Service\CourseService
+     */
+    protected $courseService;
+
+    /**
+     * @var \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
+     */
+    protected $treeNodeDataService;
+
+    /**
+     * @var \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository
      */
     protected $contentObjectRepository;
 
@@ -34,189 +53,104 @@ class AssignmentPublicationService
      * AssignmentPublicationService constructor.
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service\AssignmentService $assignmentService
+     * @param \Chamilo\Application\Weblcms\Service\PublicationService $publicationService
+     * @param \Chamilo\Application\Weblcms\Service\CourseService $courseService
      * @param \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository $contentObjectRepository
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService $treeNodeDataService
      * @param string $publicationContext
      */
     public function __construct(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service\AssignmentService $assignmentService, ContentObjectRepository $contentObjectRepository, $publicationContext
+        AssignmentService $assignmentService,
+        \Chamilo\Application\Weblcms\Service\PublicationService $publicationService,
+        \Chamilo\Application\Weblcms\Service\CourseService $courseService,
+        ContentObjectRepository $contentObjectRepository, TreeNodeDataService $treeNodeDataService,
+        string $publicationContext
     )
     {
-        $this->assignmentService = $assignmentService;
-        $this->contentObjectRepository = $contentObjectRepository;
+        $this->publicationService = $publicationService;
+        $this->courseService = $courseService;
         $this->publicationContext = $publicationContext;
+        $this->assignmentService = $assignmentService;
+        $this->treeNodeDataService = $treeNodeDataService;
+        $this->contentObjectRepository = $contentObjectRepository;
     }
 
     /**
      * @return string
      */
-    public function getPublicationContext(): string
+    public function getPublicationContext()
     {
         return $this->publicationContext;
     }
 
     /**
-     * Checks whether or not one of the given content objects are used as attachment in entries
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes $attributes
+     * @param string $prefix
      *
-     * @param array $contentObjectIds
-     *
-     * @return bool
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
      */
-    public function areContentObjectsPublished($contentObjectIds = array())
+    protected function addLocationForEntry(Entry $entry, Attributes $attributes, string $prefix)
     {
-        return $this->assignmentService->countEntryAttachmentsByAttachmentIds($contentObjectIds) > 0;
-    }
+        $location = $prefix . $entry->getContentObject()->get_title();
+        $url = null;
 
-    /**
-     * Deletes the attachments for entries by a given content object id
-     *
-     * @param int $contentObjectId
-     */
-    public function deleteContentObjectPublicationsByObjectId($contentObjectId)
-    {
-        $this->assignmentService->deleteEntryAttachmentsByAttachmentId($contentObjectId);
-    }
-
-    /**
-     * Deletes a specific entry attachment
-     *
-     * @param int $publicationId
-     */
-    public function deleteContentObjectPublicationsByPublicationId($publicationId)
-    {
-        $entryAttachment = $this->assignmentService->findEntryAttachmentById($publicationId);
-        if ($entryAttachment instanceof EntryAttachment)
+        if($entry instanceof \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry)
         {
-            $this->assignmentService->deleteEntryAttachment($entryAttachment);
+            $publication = $this->publicationService->getPublication($entry->getContentObjectPublicationId());
+            $course = $this->courseService->getCourseById($publication->get_course_id());
+
+            $location = $prefix . $course->get_title() . ' > ' . $publication->get_content_object()->get_title();
+
+            $redirect = new Redirect(
+                [
+                    \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(),
+                    \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
+                    \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->getId(),
+                    \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Assignment',
+                    \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $publication->getId(),
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY,
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_ENTRY,
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE => $entry->getEntityType(),
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID => $entry->getEntityId(),
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTRY_ID => $entry->getId()
+                ]
+            );
+
+            $url = $redirect->getUrl();
         }
-    }
-
-    /**
-     * Updates the content object id in the given entry attachment
-     *
-     * @param int $publicationId
-     * @param int $newContentObjectId
-     */
-    public function updateContentObjectId($publicationId, $newContentObjectId)
-    {
-        $entryAttachment = $this->assignmentService->findEntryAttachmentById($publicationId);
-        if ($entryAttachment instanceof EntryAttachment)
+        elseif($entry instanceof \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry)
         {
-            $entryAttachment->setAttachmentId($newContentObjectId);
-            $this->assignmentService->updateEntryAttachment($entryAttachment);
-        }
-    }
+            $publication = $this->publicationService->getPublication($entry->getContentObjectPublicationId());
+            $course = $this->courseService->getCourseById($publication->get_course_id());
+            $treeNode = $this->treeNodeDataService->getTreeNodeDataById($entry->getTreeNodeDataId());
+            $treeNodeContentObject = $this->contentObjectRepository->findById($treeNode->getContentObjectId());
 
-    /**
-     * Returns the ContentObject publication attributes for a given entry attachment id
-     *
-     * @param int $publicationId
-     *
-     * @return Attributes
-     */
-    public function getContentObjectPublicationAttributes($publicationId)
-    {
-        $entryAttachment = $this->assignmentService->findEntryAttachmentById($publicationId);
-        if (!$entryAttachment instanceof EntryAttachment)
-        {
-            return null;
-        }
+            $location = $prefix . $course->get_title() . ' > ' . $publication->get_content_object()->get_title() . ' > '
+                . $treeNodeContentObject->get_title();
 
-        return $this->getAttributesForEntryAttachment($entryAttachment);
-    }
+            $redirect = new Redirect(
+                [
+                    \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(),
+                    \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
+                    \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->getId(),
+                    \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'LearningPath',
+                    \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $publication->getId(),
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
+                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $entry->getTreeNodeDataId(),
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_ENTRY,
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE => $entry->getEntityType(),
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID => $entry->getEntityId(),
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTRY_ID => $entry->getId()
+                ]
+            );
 
-    /**
-     * Returns the ContentObject publication attributes for a given content object (identified by id)
-     *
-     * @param int $contentObjectId
-     *
-     * @return Attributes[]
-     */
-    public function getContentObjectPublicationAttributesForContentObject($contentObjectId)
-    {
-        return $this->getAttributesForEntryAttachments(
-            $this->assignmentService->findEntryAttachmentsByAttachmentId($contentObjectId)
-        );
-    }
-
-    /**
-     * Returns the ContentObject publication attributes for a given user (identified by id)
-     *
-     * @param int $userId
-     *
-     * @return Attributes[]
-     */
-    public function getContentObjectPublicationAttributesForUser($userId)
-    {
-        return $this->getAttributesForEntryAttachments(
-            $this->assignmentService->findEntryAttachmentsByUserId($userId)
-        );
-    }
-
-    /**
-     * Counts the ContentObject publication attributes for a given content object (identified by id)
-     *
-     * @param int $contentObjectId
-     *
-     * @return int
-     */
-    public function countContentObjectPublicationAttributesForContentObject($contentObjectId)
-    {
-        return $this->assignmentService->countEntryAttachmentsByAttachmentIds([$contentObjectId]);
-    }
-
-    /**
-     * Counts the ContentObject publication attributes for a given user (identified by id)
-     *
-     * @param int $userId
-     *
-     * @return int
-     */
-    public function countContentObjectPublicationAttributesForUser($userId)
-    {
-        return $this->assignmentService->countEntryAttachmentsByUserId($userId);
-    }
-
-    /**
-     * @param EntryAttachment[] $entryAttachments
-     *
-     * @return Attributes[]
-     */
-    protected function getAttributesForEntryAttachments($entryAttachments = [])
-    {
-        $attributes = [];
-
-        foreach ($entryAttachments as $entryAttachment)
-        {
-            $attributes[] = $this->getAttributesForEntryAttachment($entryAttachment);
+            $url = $redirect->getUrl();
         }
 
-        return $attributes;
-    }
-
-    /**
-     * Builds the publication attributes for the given learning path child
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment $entryAttachment
-     *
-     * @return Attributes
-     */
-    protected function getAttributesForEntryAttachment(EntryAttachment $entryAttachment)
-    {
-        $entry = $this->assignmentService->findEntryByIdentifier($entryAttachment->getEntryId());
-        $contentObject = $this->contentObjectRepository->findById($entryAttachment->getAttachmentId());
-
-        $attributes = new Attributes();
-        $attributes->setId($entryAttachment->getId());
-        $attributes->set_application('Chamilo\Application\Weblcms');
-        $attributes->setPublicationContext($this->publicationContext);
-        $attributes->set_publisher_id($contentObject->get_owner_id());
-        $attributes->set_date($contentObject->get_creation_date());
-        $attributes->set_location(Translation::getInstance()->getTranslation('EntryAttachment') . ': ' . $entry->getContentObject()->get_title());
-        $attributes->set_url(null);
-        $attributes->set_title($contentObject->get_title());
-        $attributes->set_content_object_id($entryAttachment->getAttachmentId());
-
-        return $attributes;
+        $attributes->set_location($location);
+        $attributes->set_url($url);
     }
 
 }

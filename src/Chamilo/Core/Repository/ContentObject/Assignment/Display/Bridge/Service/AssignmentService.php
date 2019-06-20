@@ -7,6 +7,8 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Repository\AssignmentRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
+use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service
@@ -178,13 +180,53 @@ abstract class AssignmentService
     }
 
     /**
+     * @param array $contentObjectIds
+     *
+     * @return int
+     */
+    public function countContentObjectsUsedAsEntryByContentObjectIds(array $contentObjectIds = [])
+    {
+        return $this->assignmentRepository->countContentObjectsUsedAsEntryByContentObjectIds($contentObjectIds);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesByContentObject(ContentObject $contentObject)
+    {
+        return $this->assignmentRepository->findEntriesByContentObject($contentObject);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return int
+     */
+    public function countEntriesByUser(User $user)
+    {
+        return $this->assignmentRepository->countEntriesByUser($user);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesByUser(User $user)
+    {
+        return $this->assignmentRepository->findEntriesByUser($user);
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return bool
      */
     public function isContentObjectOwnerSameAsSubmitter(ContentObject $contentObject)
     {
-        $entries = $this->assignmentRepository->findEntriesByContentObjectId($contentObject);
+        $entries = $this->assignmentRepository->findEntriesByContentObject($contentObject);
         foreach($entries as $entry)
         {
             if($entry->getUserId() == $contentObject->get_owner_id())

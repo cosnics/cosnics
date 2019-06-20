@@ -1008,11 +1008,43 @@ abstract class AssignmentRepository
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | Entry[]
      */
-    public function findEntriesByContentObjectId(ContentObject $contentObject)
+    public function findEntriesByContentObject(ContentObject $contentObject)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($contentObject->getId())
+        );
+
+        return $this->dataClassRepository->retrieves(
+            $this->getEntryClassName(), new DataClassRetrievesParameters($condition)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return int
+     */
+    public function countEntriesByUser(User $user)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId())
+        );
+
+        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters($condition));
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesByUser(User $user)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId())
         );
 
         return $this->dataClassRepository->retrieves(

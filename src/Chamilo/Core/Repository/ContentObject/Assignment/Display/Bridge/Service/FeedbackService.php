@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Servic
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Repository\FeedbackRepository;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -148,6 +149,46 @@ abstract class FeedbackService
         {
             throw new \RuntimeException('Could not delete feedback in the database');
         }
+    }
+
+    /**
+     * @param array $contentObjectIds
+     *
+     * @return int
+     */
+    public function countFeedbackByContentObjectIds(array $contentObjectIds = [])
+    {
+        return $this->feedbackRepository->countFeedbackByContentObjectIds($contentObjectIds);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findFeedbackByContentObject(ContentObject $contentObject)
+    {
+        return $this->feedbackRepository->findFeedbackByContentObject($contentObject);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findFeedbackByUser(User $user)
+    {
+        return $this->feedbackRepository->findFeedbackByUser($user);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return int
+     */
+    public function countFeedbackByUser(User $user)
+    {
+        return $this->feedbackRepository->countFeedbackByUser($user);
     }
 
 }

@@ -54,7 +54,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 {
-
+    /** @var ContentObject */
     private $object;
 
     private $tabs;
@@ -98,7 +98,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $this->getWorkspace()
                 ) && \Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::is_content_object_editable(
                     $this->object->getId()
-                );
+                ) && $this->object->isActive();
 
             $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($this->object);
 
@@ -172,6 +172,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $html[] = '<br />' . $this->buttonToolbarRenderer->render();
             }
 
+            if (!$this->object->isActive())
+            {
+                $html[] = '<div class="alert alert-warning">' .
+                    $this->getTranslator()->trans('ObjectNotActiveWarning', [], Manager::context()) . '</div>';
+            }
+
             $html[] = $display->render();
             $html[] = $this->tabs->render();
             $html[] = $this->render_footer();
@@ -208,6 +214,13 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $contentObjectDeletionAllowed = DataManager::content_object_deletion_allowed($contentObject);
 
             $isRecycled = $contentObject->get_state() == ContentObject::STATE_RECYCLED;
+
+            if (!$contentObject->isActive())
+            {
+                $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+
+                return $this->buttonToolbarRenderer;
+            }
 
             if ($contentObject->is_latest_version())
             {

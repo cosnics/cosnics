@@ -1925,7 +1925,7 @@ class ContentObject extends CompositeDataClass
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID)));
 
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins(array($join)));
-        return DataManager::retrieve_content_objects(ContentObject::class_name(), $parameters)->as_array();
+        return DataManager::retrieve_content_objects(ContentObject::class_name(), $parameters, true)->as_array();
     }
 
     /**
@@ -2029,6 +2029,14 @@ class ContentObject extends CompositeDataClass
             self::STATE_RECYCLED + self::STATE_INACTIVE,
             self::STATE_AUTOSAVE + self::STATE_INACTIVE,
             self::STATE_BACKUP + self::STATE_INACTIVE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return in_array($this->get_state(), self::get_active_status_types());
     }
 
     public static function is_available($type)
