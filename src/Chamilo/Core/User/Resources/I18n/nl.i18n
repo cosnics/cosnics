@@ -432,3 +432,7 @@ ImportUserCouldNotDeleteUserFromDatabase = "De bestaande gebruiker kon niet gede
 ImportUserCouldNotChangeLanguage = "De taal van de gebruiker kon niet aangepast worden."
 ImportUserMailSent = "Er werd een e-mail verzonden naar deze gebruiker."
 ImportUserMailNotSent = "Het is niet mogelijk om een e-mail te verzenden naar deze gebruiker."
+Invitation = "Uitnodiging"
+InvitationMessage = "Je bent uitgenodigd door <strong>{INVITED_BY_USER}</strong> om deel te nemen aan het leerplatform <a href="{SITE_URL}" target="_blank">{SITE_URL}</a>. Klik op de knop om de uitnodiging te accepteren, je account te registreren en toegang te krijgen tot het platform. De uitnodiging is geldig tot <em>{VALID_UNTIL}</em>."
+UserWrote = "{INVITED_BY_USER} schreef:"
+AcceptInvitation = "Accepteer de uitnodiging"

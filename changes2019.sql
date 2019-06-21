@@ -23,3 +23,15 @@ CREATE TABLE `tracking_user_admin_user_visit`
     PRIMARY KEY (`id`),
     KEY `admin_user_id` (`admin_user_id`, `user_visit_id`, `visit_date`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `user_invite` (
+`id` INT(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT ,
+ `user_id` INT(10) UNSIGNED ZEROFILL NOT NULL ,
+ `invited_by_user_id` INT(10) UNSIGNED ZEROFILL NOT NULL ,
+ `valid_until` INT(10) UNSIGNED ZEROFILL NOT NULL ,
+ `secret_key` VARCHAR(100) NOT NULL ,
+ PRIMARY KEY (`id`),
+ INDEX (`user_id`),
+ INDEX (`secret_key`)
+) ENGINE = InnoDB;

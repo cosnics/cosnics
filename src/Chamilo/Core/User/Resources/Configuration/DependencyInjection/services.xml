@@ -85,6 +85,7 @@
         </service>
 
         <service id="Chamilo\Core\User\Service\PasswordSecurity" autowire="true" />
+        <service id="Chamilo\Core\User\Service\UserInviteService" autowire="true" />
 
     </services>
 </container>

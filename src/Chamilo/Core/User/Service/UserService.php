@@ -165,16 +165,18 @@ class UserService
      * @param string $emailAddress
      * @param string $password
      * @param string $authSource
+     * @param bool $active
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function createUser(
-        $firstName, $lastName, $username, $officialCode, $emailAddress, $password, $authSource = 'Platform'
+        $firstName, $lastName, $username, $officialCode, $emailAddress, $password = null, $authSource = 'Platform',
+        $active = true
     )
     {
         $requiredParameters = [
             'firstName' => $firstName, 'lastName' => $lastName, 'username' => $username,
-            'officialCode' => $officialCode, 'emailAddress' => $emailAddress, 'password' => $password
+            'officialCode' => $officialCode, 'emailAddress' => $emailAddress
         ];
 
         foreach ($requiredParameters as $parameterName => $parameterValue)
@@ -183,6 +185,11 @@ class UserService
             {
                 throw new \InvalidArgumentException('The ' . $parameterName . ' can not be empty');
             }
+        }
+
+        if(empty($password))
+        {
+            $password = uniqid();
         }
 
         if (!$this->isUsernameAvailable($username))
@@ -198,6 +205,7 @@ class UserService
         $user->set_official_code($officialCode);
         $user->set_email($emailAddress);
         $user->set_auth_source($authSource);
+        $user->set_active($active);
 
         $this->passwordSecurity->setPasswordForUser($user, $password);
 
@@ -207,6 +215,38 @@ class UserService
         }
 
         return $user;
+    }
+
+    /**
+     * @return string
+     */
+    public function generateUniqueUsername()
+    {
+        do
+        {
+            $username = $this->generateUsername();
+            $user = $this->getUserByUsernameOrEmail($username);
+        }
+        while($user instanceof User);
+
+        return $username;
+    }
+
+    /**
+     * @return string
+     */
+    protected function generateUsername()
+    {
+        $username = '';
+
+        for($i = 0; $i < 3; $i++)
+        {
+            $username .= chr(rand(97, 122));
+        }
+
+        $username .= rand(100, 999);
+
+        return $username;
     }
 
     /**
