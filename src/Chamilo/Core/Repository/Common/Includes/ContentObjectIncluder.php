@@ -52,8 +52,13 @@ class ContentObjectIncluder
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param string $content
      */
-    protected function processNewResources(ContentObject $contentObject, string $content)
+    protected function processNewResources(ContentObject $contentObject, string $content = null)
     {
+        if(empty($content))
+        {
+            return;
+        }
+
         $resourceContentObjects = $this->contentObjectResourceParser->getContentObjects($content);
         foreach($resourceContentObjects as $resourceContentObject)
         {
@@ -67,8 +72,13 @@ class ContentObjectIncluder
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param string $content
      */
-    protected function processOldResources(ContentObject $contentObject, string $content)
+    protected function processOldResources(ContentObject $contentObject, string $content = null)
     {
+        if(empty($content))
+        {
+            return;
+        }
+
         $domDocument = $this->contentObjectResourceParser->getDomDocument($content);
         $domXpath = $this->contentObjectResourceParser->getDomXPath($domDocument);
 
