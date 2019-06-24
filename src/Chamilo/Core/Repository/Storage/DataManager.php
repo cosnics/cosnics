@@ -268,7 +268,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        return self::retrieve_content_objects($object::class_name(), $parameters);
+        return self::retrieve_content_objects($object::class_name(), $parameters, true);
     }
 
     public static function retrieve_external_sync($condition)
