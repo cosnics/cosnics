@@ -188,7 +188,7 @@ class UserInviteService
     protected function sendInvitationEmail(User $invitedByUser, User $invitedUser, UserInvite $userInvite = null, string $personalMessage = '')
     {
         $siteUrl = $this->pathBuilder->getBasePath(true);
-        $subject = $this->translator->trans('InviteUserMailSubject', ['SITE_URL' => $siteUrl], 'Chamilo\Core\User');
+        $subject = $this->translator->trans('InviteUserMailSubject', ['{SITE_URL}' => $siteUrl], 'Chamilo\Core\User');
 
         $content = $this->twig->render(
             'Chamilo\Core\User:InviteUser.eml.html.twig',
@@ -199,7 +199,6 @@ class UserInviteService
                 'LOGO' => $this->configurationConsulter->getSetting(['Chamilo\Core\Menu', 'brand_image'])
             ]
         );
-
 
 
 //        $mail = new Mail(

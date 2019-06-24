@@ -87,5 +87,9 @@
         <service id="Chamilo\Core\User\Service\PasswordSecurity" autowire="true" />
         <service id="Chamilo\Core\User\Service\UserInviteService" autowire="true" />
 
+        <service id="Chamilo\Core\User\Form\Type\AcceptInviteFormType" autowire="true">
+            <tag name="form.type" />
+        </service>
+
     </services>
 </container>
