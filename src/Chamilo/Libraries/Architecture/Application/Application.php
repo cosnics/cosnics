@@ -250,9 +250,9 @@ abstract class Application
      * @param string $pageTitle
      * @return string
      */
-    public function render_header($pageTitle = '')
+    public function render_header($pageTitle = null)
     {
-        if (! $pageTitle)
+        if (is_null($pageTitle))
         {
             $pageTitle = $this->renderPageTitle();
         }

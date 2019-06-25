@@ -435,3 +435,5 @@ InvitationMessage = "You have been invited by <strong>{INVITED_BY_USER}</strong>
 UserWrote = "{INVITED_BY_USER} wrote:"
 AcceptInvitation = "Accept the invitation"
 InviteUserMailSubject = "You have been invited to join {SITE_URL}"
+ActivateYourAccount = "Activate your account"
+PasswordRepeat = "Repeat password"

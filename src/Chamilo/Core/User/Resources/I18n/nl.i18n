@@ -437,3 +437,5 @@ InvitationMessage = "Je bent uitgenodigd door <strong>{INVITED_BY_USER}</strong>
 UserWrote = "{INVITED_BY_USER} schreef:"
 AcceptInvitation = "Accepteer de uitnodiging"
 InviteUserMailSubject = "Je bent uitgenodigd om deel te nemen aan het leerplatform {SITE_URL}"
+ActivateYourAccount = "Activeer je account"
+PasswordRepeat = "Herhaal wachtwoord"
