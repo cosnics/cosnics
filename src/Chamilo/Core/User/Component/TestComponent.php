@@ -15,8 +15,12 @@ class TestComponent extends Manager
     /**
      *
      * @return string
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Core\User\Domain\UserInvite\Exceptions\UserAlreadyExistsException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     function run()
     {

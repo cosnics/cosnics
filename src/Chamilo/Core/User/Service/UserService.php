@@ -187,7 +187,7 @@ class UserService
             }
         }
 
-        if(empty($password))
+        if (empty($password))
         {
             $password = uniqid();
         }
@@ -205,6 +205,12 @@ class UserService
         $user->set_official_code($officialCode);
         $user->set_email($emailAddress);
         $user->set_auth_source($authSource);
+
+        if($active)
+        {
+            $user->set_activation_date(time());
+        }
+
         $user->set_active($active);
 
         $this->passwordSecurity->setPasswordForUser($user, $password);
@@ -212,6 +218,78 @@ class UserService
         if (!$this->userRepository->create($user))
         {
             throw new \RuntimeException('Could not create the user');
+        }
+
+        return $user;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string|null $firstName
+     * @param string|null $lastName
+     * @param string|null $username
+     * @param null $officialCode
+     * @param string|null $emailAddress
+     * @param string|null $password
+     * @param string|null $authSource
+     * @param bool|null $active
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function updateUserByValues(
+        User $user, string $firstName = null, string $lastName = null, string $username = null, $officialCode = null,
+        string $emailAddress = null, string $password = null, string $authSource = null,
+        bool $active = null
+    )
+    {
+        if (!empty($firstName))
+        {
+            $user->set_firstname($firstName);
+        }
+
+        if (!empty($lastName))
+        {
+            $user->set_lastname($lastName);
+        }
+
+        if (!empty($username))
+        {
+            $user->set_username($username);
+        }
+
+        if (!empty($officialCode))
+        {
+            $user->set_official_code($officialCode);
+        }
+
+        if (!empty($emailAddress))
+        {
+            $user->set_email($emailAddress);
+        }
+
+        if (!empty($authSource))
+        {
+            $user->set_auth_source($authSource);
+        }
+
+        if (!is_null($active))
+        {
+            if($active && $user->get_active() == false)
+            {
+                $user->set_activation_date(time());
+            }
+
+            $user->set_active($active);
+        }
+
+        if (!empty($password))
+        {
+            $this->passwordSecurity->setPasswordForUser($user, $password);
+        }
+
+        if (!$this->userRepository->update($user))
+        {
+            throw new \RuntimeException('Could not update the user');
         }
 
         return $user;
@@ -227,7 +305,7 @@ class UserService
             $username = $this->generateUsername();
             $user = $this->getUserByUsernameOrEmail($username);
         }
-        while($user instanceof User);
+        while ($user instanceof User);
 
         return $username;
     }
@@ -239,7 +317,7 @@ class UserService
     {
         $username = '';
 
-        for($i = 0; $i < 3; $i++)
+        for ($i = 0; $i < 3; $i ++)
         {
             $username .= chr(rand(97, 122));
         }

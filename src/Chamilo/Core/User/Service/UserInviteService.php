@@ -2,9 +2,12 @@
 
 namespace Chamilo\Core\User\Service;
 
+use Chamilo\Core\User\Component\AcceptInviteComponent;
 use Chamilo\Core\User\Domain\UserInvite\Exceptions\UserAlreadyExistsException;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserInvite;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 
 /**
@@ -91,14 +94,71 @@ class UserInviteService
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public function inviteUser(User $invitedByUser, string $userEmail, string $personalMessage = '')
     {
         $this->validateUserEmail($userEmail);
-//        $user = $this->createUserByEmail($userEmail);
-        $user = $this->userService->findUserByIdentifier(2);
-//        $userInvite = $this->createUserInvite($invitedByUser, $user);
+        $user = $this->createUserByEmail($userEmail);
+//        $user = $this->userService->findUserByIdentifier(2);
+        $userInvite = $this->createUserInvite($invitedByUser, $user);
         $this->sendInvitationEmail($invitedByUser, $user, $userInvite, $personalMessage);
+
+        return $user;
+    }
+
+    /**
+     * @param string $securityKey
+     *
+     * @return UserInvite
+     * @throws \Exception
+     */
+    public function getUserInviteBySecurityKey(string $securityKey = null)
+    {
+        if (empty($securityKey))
+        {
+            throw new \InvalidArgumentException('The given security key can not be empty');
+        }
+
+        $userInvite = $this->userInviteRepository->getUserInviteBySecurityKey($securityKey);
+        if ($userInvite->isValid())
+        {
+            return $userInvite;
+        }
+        else
+        {
+            $this->userInviteRepository->deleteUserInvite($userInvite);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\UserInvite $userInvite
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $email
+     * @param string $password
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function acceptInvitation(
+        UserInvite $userInvite, string $firstName, string $lastName, string $email, string $password
+    )
+    {
+        $user = $this->userService->findUserByIdentifier($userInvite->getUserId());
+        if (!$user instanceof User)
+        {
+            throw new \RuntimeException(
+                'The given user with id %s could not be found. The invitation can not be completed'
+            );
+        }
+
+        $this->userService->updateUserByValues(
+            $user, $firstName, $lastName, $email, null, $email, $password, null, true
+        );
+
+        $this->userInviteRepository->deleteUserInvite($userInvite);
 
         return $user;
     }
@@ -110,7 +170,7 @@ class UserInviteService
      */
     protected function validateUserEmail(string $userEmail)
     {
-        if(!$this->isStringValidEmail($userEmail))
+        if (!$this->isStringValidEmail($userEmail))
         {
             throw new \InvalidArgumentException(sprintf('The given email %s is invalid', $userEmail));
         }
@@ -140,7 +200,7 @@ class UserInviteService
     protected function createUserByEmail(string $userEmail): \Chamilo\Core\User\Storage\DataClass\User
     {
         $username = $this->userService->generateUniqueUsername();
-        $user = $this->userService->createUser('InvitedUser', 'InvitedUser', $username, $username, $userEmail);
+        $user = $this->userService->createUser('Invited User', 'Invited User', $username, $username, $userEmail);
         if (!$user instanceof User)
         {
             throw new \RuntimeException('The invited user could not be created for email ' . $userEmail);
@@ -164,7 +224,7 @@ class UserInviteService
         $invite = new UserInvite();
         $invite->setUserId($invitedUser->getId());
         $invite->setInvitedByUserId($invitedByUser->getId());
-        $invite->setSecurityKey(hash('sha256', uniqid() . $invite->getId() . uniqid()));
+        $invite->setSecurityKey(hash('sha256', uniqid() . $invitedUser->getId() . uniqid()));
         $invite->setValidUntil($validUntil);
 
         if (!$this->userInviteRepository->createUserInvite($invite))
@@ -185,10 +245,22 @@ class UserInviteService
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    protected function sendInvitationEmail(User $invitedByUser, User $invitedUser, UserInvite $userInvite = null, string $personalMessage = '')
+    protected function sendInvitationEmail(
+        User $invitedByUser, User $invitedUser, UserInvite $userInvite = null, string $personalMessage = ''
+    )
     {
         $siteUrl = $this->pathBuilder->getBasePath(true);
         $subject = $this->translator->trans('InviteUserMailSubject', ['{SITE_URL}' => $siteUrl], 'Chamilo\Core\User');
+
+        $redirect = new Redirect(
+            [
+                Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
+                Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_ACCEPT_INVITE,
+                AcceptInviteComponent::PARAM_SECURITY_KEY => $userInvite->getSecurityKey()
+            ]
+        );
+
+        $inviteUrl = $redirect->getUrl();
 
         $content = $this->twig->render(
             'Chamilo\Core\User:InviteUser.eml.html.twig',
@@ -196,10 +268,10 @@ class UserInviteService
                 'INVITED_USER' => $invitedUser, 'INVITED_BY_USER' => $invitedByUser, 'USER_INVITE' => $userInvite,
                 'SITE_URL' => $siteUrl, 'SUBJECT' => $subject,
                 'PERSONAL_MESSAGE' => $personalMessage,
-                'LOGO' => $this->configurationConsulter->getSetting(['Chamilo\Core\Menu', 'brand_image'])
+                'LOGO' => $this->configurationConsulter->getSetting(['Chamilo\Core\Menu', 'brand_image']),
+                'ACCEPT_INVITE_URL' => $inviteUrl
             ]
         );
-
 
 //        $mail = new Mail(
 //            $subject, $content, [$invitedUser->get_email()], true, [], [], $invitedByUser->get_fullname(),
@@ -207,7 +279,6 @@ class UserInviteService
 //        );
 
         echo($content);
-
 //        $this->mailer->sendMail($mail);
     }
 

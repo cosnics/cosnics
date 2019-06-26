@@ -120,4 +120,13 @@ class UserInvite extends DataClass
         return 'user_invite';
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function isValid()
+    {
+        return $this->getValidUntil() > new \DateTime();
+    }
+
 }

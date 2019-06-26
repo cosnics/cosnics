@@ -36,6 +36,10 @@
     .register_container .register_container_body {
     }
 
+    .register_container .register_container_body .help-block{
+        color: lightcoral;
+    }
+
     .register_container .register_container_body .input-group-addon {
         background-color: white;
     }
@@ -69,20 +73,35 @@
 
     body {
         /*background-color: #eaf0f5;*/
-        background: url('bg3.svg');
+        background: url('Chamilo/Core/User/Resources/Images/Aqua/UserInviteBackground.svg');
         background-size: 100% auto;
+    }
+
+    .invalid-invite {
+        max-width: 720px;
+        background: rgba(220, 53, 69, 1);
+        margin: auto;
+        padding: 20px 34px;
+        font-size: 16px;
+        color: white;
+        text-align: center;
     }
 </style>
 
+{% if INVALID_INVITE %}
+    <div class="invalid-invite">
+        {{ 'InvalidInviteMessage'|trans({}, appContext) }}
+    </div>
+{% else %}
 <div class="register_container">
     <div class="register_container_header">
         <div class="text-right logo">
-            <img src="data:image/png;base64,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" alt="logo"/>
+            <img src="{{ BRAND_IMAGE }}" alt="logo"/>
         </div>
         <div class="register_header_text">
             <h1 >{{ 'ActivateYourAccount'|trans({}, appContext) }}</h1>
             <div class="register_header_description">
-                Welkom bij de elektronische leeromgeving van de Hogeschool Gent. Alvorens je verder kan gaan in het platform hebben we nog een aantal gegevens van je nodig zodat we je account kunnen aanmaken.
+                {{ 'AcceptInviteWelcomeMessage'|trans({'{SITE_NAME}': SITE_NAME}, appContext) }}
             </div>
         </div>
     </div>
@@ -94,12 +113,14 @@
                     <span class="input-group-addon"><span class="fa fa-user"></span></span>
                     {{ form_widget(FORM.first_name) }}
                 </div>
+                {{ form_errors(FORM.first_name) }}
             </div>
             <div class="col-md-6">
                 <div class="input-group">
                     <span class="input-group-addon"><span class="fa fa-user"></span></span>
                     {{ form_widget(FORM.last_name) }}
                 </div>
+                {{ form_errors(FORM.last_name) }}
             </div>
         </div>
         <div class="form-group">
@@ -108,6 +129,7 @@
                     <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
                     {{ form_widget(FORM.email) }}
                 </div>
+                {{ form_errors(FORM.email) }}
             </div>
         </div>
         <div class="password">
@@ -117,6 +139,7 @@
                         <span class="input-group-addon"><span class="fa fa-lock"></span></span>
                         {{ form_widget(FORM.password.first) }}
                     </div>
+                    {{ form_errors(FORM.password.first) }}
                 </div>
             </div>
             <div class="form-group">
@@ -125,14 +148,17 @@
                         <span class="input-group-addon"><span class="fa fa-lock"></span></span>
                         {{ form_widget(FORM.password.second) }}
                     </div>
+                    {{ form_errors(FORM.password.first) }}
                 </div>
             </div>
         </div>
         <div class="buttons text-center">
             <button type="submit" class="btn btn-success">{{ 'Reg'|trans({}, appContext) }}</button>
         </div>
+        {{ form_errors(FORM) }}
         {{ form_end(FORM) }}
     </div>
 </div>
+{% endif %}
 
 {{ FOOTER|raw }}
