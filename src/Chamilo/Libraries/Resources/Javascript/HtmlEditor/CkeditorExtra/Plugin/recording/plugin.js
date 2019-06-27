@@ -28,24 +28,12 @@
         }
     };
 
-    function setObject(href, objectId, objectType, objectSecurityCode, data) {
+    function setObject(href, objectId, objectSecurityCode, objectType) {
         if (!CKEDITOR.dialog.exists(objectType + 'Dialog')) {
             CKEDITOR.dialog.add(objectType + 'Dialog', href);
         }
 
-        this.openDialog(objectType + 'Dialog', function (dialog) {
-            var object = this;
-
-            object.on('setVars', function (event) {
-                object.setValueOf('info', 'security_code', objectSecurityCode);
-                object.setValueOf('info', 'source', objectId);
-                object.setValueOf('info', 'type', objectType);
-            });
-
-            object.on('show', function (event) {
-                object.fireOnce('setVars');
-            });
-        });
+        this.insertHtml('<div class="align-center" data-co-id="' + objectId.toString() + '" data-render-inline="1" data-security-code="' + objectSecurityCode + '" data-type="' + objectType + '"></div>');
     }
 
     function createChamiloFakeElement(editor, realElement, isResizable) {

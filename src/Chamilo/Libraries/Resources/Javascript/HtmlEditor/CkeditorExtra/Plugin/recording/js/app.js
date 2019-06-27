@@ -20,6 +20,13 @@ var stopButton = document.getElementById("stopButton");
 recordButton.addEventListener("click", startRecording);
 stopButton.addEventListener("click", stopRecording);
 
+//Parameters
+function getURLParameter (name) {
+    let url = new URL(name);
+    return url.searchParams.get("CKEditorFuncNum");
+}
+//console.log(getURLParameter(window.location));
+
 function startRecording() {
     console.log("startRecording() called");
 
@@ -134,20 +141,25 @@ function stopRecording() {
 }
 
 
-function postBlob(blobdata, linkDownload) {
+
+function postBlob(blobData, linkDownload) {
     linkDownload = prompt("Save to repo", linkDownload.toString()) + '.mp3';
 
-    var ajaxUri = 'http://127.0.0.1/' + 'index.php';
+    let serverHost = window.location.href.toString().split(window.location.host)[0] + window.location.host;
+
+    let jsonResponse;
+
+    var ajaxUri = serverHost + '/index.php';
     var parameters = {
         'application': 'Chamilo\\Core\\Repository\\Ajax',
         'go': 'html_editor_file_upload',
-        'upload': blobdata
+        'upload': blobData
     };
 
     var fd = new FormData();
     fd.append('application', 'Chamilo\\Core\\Repository\\Ajax');
     fd.append('go', 'html_editor_file_upload');
-    fd.append('upload', blobdata, linkDownload);
+    fd.append('upload', blobData, linkDownload);
 
     $.ajax({
         type: "POST",
@@ -157,10 +169,8 @@ function postBlob(blobdata, linkDownload) {
         processData: false,
         contentType: false
     }).success(function (json) {
-        if (json.result_code == 200) {
-            console.log('success');
-            rendition = json.properties.rendition;
-            fd = null;
+        if (json.uploaded === 1) {
+            jsonResponse = json;
         }
     }).error(function (error) {
         console.log('error');
@@ -168,6 +178,10 @@ function postBlob(blobdata, linkDownload) {
 
     //Disable save button
     //document.getElementsByName(linkDownload).disabled = true;
+
+    //Example: src/Chamilo/Core/Repository/Processor/Ckeditor/Processor.php
+    window.opener.CKEDITOR.tools.callFunction(parseInt(getURLParameter(window.location)), window.location.href.toString(), jsonResponse['co-id'], jsonResponse['security-code'].toString(),'audio');
+    window.close();
 }
 
 
