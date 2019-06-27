@@ -26,10 +26,10 @@ CREATE TABLE `tracking_user_admin_user_visit`
 
 
 CREATE TABLE `user_invite` (
-`id` INT(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT ,
- `user_id` INT(10) UNSIGNED ZEROFILL NOT NULL ,
- `invited_by_user_id` INT(10) UNSIGNED ZEROFILL NOT NULL ,
- `valid_until` INT(10) UNSIGNED ZEROFILL NOT NULL ,
+`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
+ `user_id` INT(10) UNSIGNED NOT NULL ,
+ `invited_by_user_id` INT(10) UNSIGNED NOT NULL ,
+ `valid_until` INT(10) UNSIGNED NOT NULL ,
  `secret_key` VARCHAR(100) NOT NULL ,
  PRIMARY KEY (`id`),
  INDEX (`user_id`),

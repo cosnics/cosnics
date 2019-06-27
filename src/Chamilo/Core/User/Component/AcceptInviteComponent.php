@@ -17,6 +17,7 @@ use Chamilo\Libraries\Format\Structure\Page;
 class AcceptInviteComponent extends Manager implements NoAuthenticationSupport
 {
     const PARAM_SECURITY_KEY = 'SecurityKey';
+    const PARAM_LANGUAGE = 'lang';
 
     /**
      *
@@ -28,26 +29,39 @@ class AcceptInviteComponent extends Manager implements NoAuthenticationSupport
      */
     function run()
     {
+        $lang = $this->getRequest()->getFromUrl(self::PARAM_LANGUAGE);
+        if(!empty($lang) && in_array($lang, ['en', 'nl']))
+        {
+            $this->getTranslator()->setLocale($lang);
+        }
+
         try
         {
             $userInvite = $this->getInviteService()->getUserInviteBySecurityKey(
                 $this->getRequest()->getFromUrl(self::PARAM_SECURITY_KEY)
             );
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             $userInvite = null;
         }
 
-        $form = $this->getForm()->create(AcceptInviteFormType::class);
+        $form = $this->getForm()->create(
+            AcceptInviteFormType::class,
+            [
+                AcceptInviteFormType::ELEMENT_EMAIL => $this->getInviteService()->getDefaultEmailFromUserInvite(
+                    $userInvite
+                )
+            ]
+        );
 
-        if($userInvite instanceof UserInvite)
+        if ($userInvite instanceof UserInvite)
         {
             $formHandler = $this->getFormHandler();
             $formHandler->setUserInvite($userInvite);
             $formHandled = $formHandler->handle($form, $this->getRequest());
 
-            if($formHandled)
+            if ($formHandled)
             {
                 $user = $formHandler->getUser();
                 $sessionUtilities = $this->getSessionUtilities();
@@ -68,7 +82,7 @@ class AcceptInviteComponent extends Manager implements NoAuthenticationSupport
                 'HEADER' => $this->render_header(''), 'FOOTER' => $this->render_footer(), 'FORM' => $form->createView(),
                 'SITE_NAME' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'site_name']),
                 'BRAND_IMAGE' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Menu', 'brand_image']),
-                'INVALID_INVITE' => !($userInvite instanceof UserInvite)
+                'INVALID_INVITE' => !($userInvite instanceof UserInvite), 'INVITE_URL' => $this->get_url()
             ]
         );
     }
@@ -87,5 +101,10 @@ class AcceptInviteComponent extends Manager implements NoAuthenticationSupport
     protected function getInviteService()
     {
         return $this->getService(UserInviteService::class);
+    }
+
+    public function get_additional_parameters()
+    {
+        return [self::PARAM_SECURITY_KEY];
     }
 }

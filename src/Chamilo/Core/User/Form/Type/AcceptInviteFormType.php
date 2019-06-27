@@ -29,20 +29,13 @@ class AcceptInviteFormType extends \Symfony\Component\Form\AbstractType
     protected $translator;
 
     /**
-     * @var \Chamilo\Core\User\Service\UserService
-     */
-    protected $userService;
-
-    /**
      * AcceptInviteFormType constructor.
      *
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\User\Service\UserService $userService
      */
-    public function __construct(\Symfony\Component\Translation\Translator $translator, UserService $userService)
+    public function __construct(\Symfony\Component\Translation\Translator $translator)
     {
         $this->translator = $translator;
-        $this->userService = $userService;
     }
 
     /**
@@ -79,7 +72,8 @@ class AcceptInviteFormType extends \Symfony\Component\Form\AbstractType
                 'attr' => [
                     'placeholder' => $this->translator->trans('Email', [], self::TRANSLATION_CONTEXT),
                     'autocomplete' => 'new-password',
-                    'minlength' => 3
+                    'minlength' => 3,
+                    'disabled' => 'disabled'
                 ],
                 'constraints' => new Length(['min' => 3])
             ]

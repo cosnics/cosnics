@@ -91,5 +91,9 @@
             <tag name="form.type" />
         </service>
 
+        <service id="Chamilo\Core\User\Form\Type\InviteFormType" autowire="true">
+            <tag name="form.type" />
+        </service>
+
     </services>
 </container>

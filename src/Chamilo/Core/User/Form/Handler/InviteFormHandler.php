@@ -3,6 +3,7 @@
 namespace Chamilo\Core\User\Form\Handler;
 
 use Chamilo\Core\User\Form\Type\AcceptInviteFormType;
+use Chamilo\Core\User\Form\Type\InviteFormType;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserInvite;
 use Chamilo\Libraries\Format\Form\FormHandler;
@@ -11,24 +12,20 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @package Chamilo\Core\User\Form\Handler
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AcceptInviteFormHandler extends FormHandler
+class InviteFormHandler extends FormHandler
 {
-    /**
-     * @var \Chamilo\Core\User\Storage\DataClass\UserInvite
-     */
-    protected $userInvite;
-
-    /**
-     * @var User
-     */
-    protected $user;
-
     /**
      * @var \Chamilo\Core\User\Service\UserInviteService
      */
     protected $userInviteService;
+
+    /**
+     * @var \Chamilo\Core\User\Storage\DataClass\User
+     */
+    protected $user;
 
     /**
      * AcceptInviteFormHandler constructor.
@@ -41,11 +38,11 @@ class AcceptInviteFormHandler extends FormHandler
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\UserInvite $userInvite
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    public function setUserInvite(\Chamilo\Core\User\Storage\DataClass\UserInvite $userInvite): void
+    public function setUser(\Chamilo\Core\User\Storage\DataClass\User $user): void
     {
-        $this->userInvite = $userInvite;
+        $this->user = $user;
     }
 
     /**
@@ -57,9 +54,9 @@ class AcceptInviteFormHandler extends FormHandler
      */
     public function handle(FormInterface $form, Request $request): bool
     {
-        if (!$this->userInvite instanceof UserInvite)
+        if (!$this->user instanceof User)
         {
-            throw new \RuntimeException('The user has not been set so the form can not be handled');
+            throw new \InvalidArgumentException('The invite form handler can only work with a valid current user');
         }
 
         if (!parent::handle($form, $request))
@@ -69,27 +66,11 @@ class AcceptInviteFormHandler extends FormHandler
 
         $data = $form->getData();
 
-        $this->user = $this->userInviteService->acceptInvitation(
-            $this->userInvite, $data[AcceptInviteFormType::ELEMENT_FIRST_NAME],
-            $data[AcceptInviteFormType::ELEMENT_LAST_NAME], $data[AcceptInviteFormType::ELEMENT_PASSWORD]
+        $this->userInviteService->inviteUser(
+            $this->user, $data[InviteFormType::ELEMENT_EMAIL], $data[InviteFormType::ELEMENT_PERSONAL_MESSAGE]
         );
 
         return true;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        if (empty($this->user))
-        {
-            throw new \RuntimeException(
-                'Could not find the updated user. Please make sure the form is validated first'
-            );
-        }
-
-        return $this->user;
     }
 
     protected function rollBackModel(FormInterface $form)

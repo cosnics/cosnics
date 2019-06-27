@@ -100,7 +100,6 @@ class UserInviteService
     {
         $this->validateUserEmail($userEmail);
         $user = $this->createUserByEmail($userEmail);
-//        $user = $this->userService->findUserByIdentifier(2);
         $userInvite = $this->createUserInvite($invitedByUser, $user);
         $this->sendInvitationEmail($invitedByUser, $user, $userInvite, $personalMessage);
 
@@ -134,6 +133,26 @@ class UserInviteService
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\UserInvite|null $userInvite
+     *
+     * @return string
+     */
+    public function getDefaultEmailFromUserInvite(UserInvite $userInvite = null)
+    {
+        if(!$userInvite instanceof UserInvite)
+        {
+            return null;
+        }
+
+        $user = $this->userService->findUserByIdentifier($userInvite->getUserId());
+        if($user instanceof User)
+        {
+            return $user->get_email();
+        }
+
+        return null;
+    }
+    /**
      * @param \Chamilo\Core\User\Storage\DataClass\UserInvite $userInvite
      * @param string $firstName
      * @param string $lastName
@@ -143,7 +162,7 @@ class UserInviteService
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function acceptInvitation(
-        UserInvite $userInvite, string $firstName, string $lastName, string $email, string $password
+        UserInvite $userInvite, string $firstName, string $lastName, string $password
     )
     {
         $user = $this->userService->findUserByIdentifier($userInvite->getUserId());
@@ -155,7 +174,7 @@ class UserInviteService
         }
 
         $this->userService->updateUserByValues(
-            $user, $firstName, $lastName, $email, null, $email, $password, null, true
+            $user, $firstName, $lastName, null, null, null, $password, null, true
         );
 
         $this->userInviteRepository->deleteUserInvite($userInvite);
@@ -199,8 +218,8 @@ class UserInviteService
      */
     protected function createUserByEmail(string $userEmail): \Chamilo\Core\User\Storage\DataClass\User
     {
-        $username = $this->userService->generateUniqueUsername();
-        $user = $this->userService->createUser('Invited User', 'Invited User', $username, $username, $userEmail);
+        $officialCode = $this->userService->generateUniqueUsername();
+        $user = $this->userService->createUser('Invited User', 'Invited User', $userEmail, $officialCode, $userEmail);
         if (!$user instanceof User)
         {
             throw new \RuntimeException('The invited user could not be created for email ' . $userEmail);
@@ -278,7 +297,7 @@ class UserInviteService
 //            $invitedByUser->get_email()
 //        );
 
-        echo($content);
+//        echo($content);
 //        $this->mailer->sendMail($mail);
     }
 

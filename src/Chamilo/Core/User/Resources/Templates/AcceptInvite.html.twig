@@ -29,8 +29,14 @@
     }
 
     .register_container .register_container_header h1 {
-        margin: 0 0 24px;
+        margin: 0 0 40px;
         font-size: 24px;
+    }
+
+    .register_container .register_container_header .register_header_description {
+        border-top: 1px dotted #dddddd;
+        border-bottom: 1px dotted #dddddd;
+        padding: 20px 0;
     }
 
     .register_container .register_container_body {
@@ -86,6 +92,20 @@
         color: white;
         text-align: center;
     }
+
+    .language-selector a,
+    .language-selector a:visited,
+    .language-selector a:hover {
+        color: white;
+    }
+
+    .language-selector a:hover {
+        color: #bbb;
+    }
+
+    .language-selector {
+        margin-top: -15px;
+    }
 </style>
 
 {% if INVALID_INVITE %}
@@ -95,8 +115,13 @@
 {% else %}
 <div class="register_container">
     <div class="register_container_header">
-        <div class="text-right logo">
-            <img src="{{ BRAND_IMAGE }}" alt="logo"/>
+        <div class="row">
+            <div class="col-sm-6 language-selector">
+                <a href="{{ INVITE_URL }}&lang=nl">NL</a> | <a href="{{ INVITE_URL }}&lang=en">EN</a>
+            </div>
+            <div class="col-sm-6 text-right logo">
+                <img src="{{ BRAND_IMAGE }}" alt="logo"/>
+            </div>
         </div>
         <div class="register_header_text">
             <h1 >{{ 'ActivateYourAccount'|trans({}, appContext) }}</h1>
