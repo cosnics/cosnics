@@ -17,15 +17,15 @@
             height: 100%;
         }
 
-        body {
-            background-color: #eeeeee;
-        }
+        /*body {*/
+        /*    background-color: #eeeeee;*/
+        /*}*/
 
         .container {
-            background-color: white;
-            height: 100%;
-            padding: 20px 15px;
-            border: 1px solid #dddddd;
+            /*background-color: white;*/
+            /*height: 100%;*/
+            /*padding: 20px 15px;*/
+            /*border: 1px solid #dddddd;*/
         }
 
         .row {
@@ -33,7 +33,7 @@
         }
 
         .logo-row {
-            background-color: #406e8e;
+            /*background-color: #406e8e;*/
             padding: 10px 6px;
             margin-bottom: 40px;
         }
@@ -43,7 +43,7 @@
         }
 
         .logo-row .title-col {
-            color: white;
+            /*color: white;*/
         }
 
         .logo-row .title-col h1 {
@@ -73,7 +73,7 @@
             <h1>{{ 'Invitation'|trans({}, appContext) }}</h1>
         </div>
         <div class="col-sm-6 logo-col">
-            <img alt="logo" src="{{ LOGO }}" />
+{#            <img alt="logo" src="{{ LOGO }}" />#}
         </div>
     </div>
 
@@ -85,6 +85,7 @@
 
     {% if PERSONAL_MESSAGE %}
     <div class="row">
+        <p>
         <div class="col-sm-12">
             <div class="personal-message-metadata">
                 {{ 'UserWrote'|trans({'{INVITED_BY_USER}': INVITED_BY_USER.get_fullname()}, appContext) }}
@@ -93,6 +94,7 @@
                 {{ PERSONAL_MESSAGE|nl2br }}
             </div>
         </div>
+        </p>
     </div>
     {% endif %}
 

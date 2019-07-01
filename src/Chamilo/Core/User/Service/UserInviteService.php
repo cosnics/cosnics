@@ -102,6 +102,8 @@ class UserInviteService
         $this->validateUserEmail($userEmail);
         $user = $this->createUserByEmail($userEmail);
         $userInvite = $this->createUserInvite($invitedByUser, $user);
+//        $user = $this->userService->findUserByIdentifier(2);
+//        $userInvite = $this->userInviteRepository->getUserInviteBySecurityKey('59f7b3e215c0497ba75588c71990635a7f31e27b267fe19aa341077c815e65ca');
         $this->sendInvitationEmail($invitedByUser, $user, $userInvite, $personalMessage);
 
         return $user;
@@ -333,6 +335,8 @@ class UserInviteService
                 'ACCEPT_INVITE_URL' => $inviteUrl
             ]
         );
+
+//        echo $content;
 
         $mail = new Mail(
             $subject, $content, [$invitedUser->get_email()], true, [], [], $invitedByUser->get_fullname(),
