@@ -9,6 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\UserInvite;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
  * @package Chamilo\Core\User\Service
@@ -96,7 +97,7 @@ class UserInviteService
      * @throws \Twig_Error_Syntax
      * @throws \Exception
      */
-    public function inviteUser(User $invitedByUser, string $userEmail, string $personalMessage = '')
+    public function inviteUser(User $invitedByUser, string $userEmail, string $personalMessage = null)
     {
         $this->validateUserEmail($userEmail);
         $user = $this->createUserByEmail($userEmail);
@@ -120,13 +121,9 @@ class UserInviteService
         }
 
         $userInvite = $this->userInviteRepository->getUserInviteBySecurityKey($securityKey);
-        if ($userInvite->isValid())
+        if ($userInvite->isOpen())
         {
             return $userInvite;
-        }
-        else
-        {
-            $this->userInviteRepository->deleteUserInvite($userInvite);
         }
 
         return null;
@@ -139,32 +136,42 @@ class UserInviteService
      */
     public function getDefaultEmailFromUserInvite(UserInvite $userInvite = null)
     {
-        if(!$userInvite instanceof UserInvite)
+        if (!$userInvite instanceof UserInvite)
         {
             return null;
         }
 
         $user = $this->userService->findUserByIdentifier($userInvite->getUserId());
-        if($user instanceof User)
+        if ($user instanceof User)
         {
             return $user->get_email();
         }
 
         return null;
     }
+
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\UserInvite $userInvite
      * @param string $firstName
      * @param string $lastName
-     * @param string $email
      * @param string $password
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @throws \Exception
      */
     public function acceptInvitation(
         UserInvite $userInvite, string $firstName, string $lastName, string $password
     )
     {
+        if (!$userInvite->isOpen())
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'The given user invite with id %s is no longer valid and should not be accepted',
+                    $userInvite->getId()
+                )
+            );
+        }
         $user = $this->userService->findUserByIdentifier($userInvite->getUserId());
         if (!$user instanceof User)
         {
@@ -177,9 +184,43 @@ class UserInviteService
             $user, $firstName, $lastName, null, null, null, $password, null, true
         );
 
-        $this->userInviteRepository->deleteUserInvite($userInvite);
+        $userInvite->setStatus(UserInvite::STATUS_ACCEPTED);
+        if (!$this->userInviteRepository->updateUserInvite($userInvite))
+        {
+            throw new \InvalidArgumentException(
+                'Could not change the status of the user invite ' . $userInvite->getId()
+            );
+        }
 
         return $user;
+    }
+
+    /**
+     * Returns the invites made by the given user
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function getInvitesFromUser(User $user)
+    {
+        $invites = $this->userInviteRepository->getUserInvitesFromUser($user);
+
+        foreach ($invites as $index => $existingInvite)
+        {
+            if ($existingInvite['status'] == UserInvite::STATUS_INVITED)
+            {
+                if ($existingInvite['valid_until'] < time())
+                {
+                    $invites[$index]['status'] = UserInvite::STATUS_EXPIRED;
+                }
+            }
+
+            $invites[$index]['valid_until'] =
+                DatetimeUtilities::format_locale_date(null, $existingInvite['valid_until']);
+        }
+
+        return $invites;
     }
 
     /**
@@ -245,6 +286,7 @@ class UserInviteService
         $invite->setInvitedByUserId($invitedByUser->getId());
         $invite->setSecurityKey(hash('sha256', uniqid() . $invitedUser->getId() . uniqid()));
         $invite->setValidUntil($validUntil);
+        $invite->setStatus(UserInvite::STATUS_INVITED);
 
         if (!$this->userInviteRepository->createUserInvite($invite))
         {
@@ -265,7 +307,7 @@ class UserInviteService
      * @throws \Twig_Error_Syntax
      */
     protected function sendInvitationEmail(
-        User $invitedByUser, User $invitedUser, UserInvite $userInvite = null, string $personalMessage = ''
+        User $invitedByUser, User $invitedUser, UserInvite $userInvite = null, string $personalMessage = null
     )
     {
         $siteUrl = $this->pathBuilder->getBasePath(true);
@@ -292,13 +334,12 @@ class UserInviteService
             ]
         );
 
-//        $mail = new Mail(
-//            $subject, $content, [$invitedUser->get_email()], true, [], [], $invitedByUser->get_fullname(),
-//            $invitedByUser->get_email()
-//        );
+        $mail = new Mail(
+            $subject, $content, [$invitedUser->get_email()], true, [], [], $invitedByUser->get_fullname(),
+            $invitedByUser->get_email()
+        );
 
-//        echo($content);
-//        $this->mailer->sendMail($mail);
+        $this->mailer->sendMail($mail);
     }
 
 }

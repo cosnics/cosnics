@@ -31,7 +31,9 @@ CREATE TABLE `user_invite` (
  `invited_by_user_id` INT(10) UNSIGNED NOT NULL ,
  `valid_until` INT(10) UNSIGNED NOT NULL ,
  `secret_key` VARCHAR(100) NOT NULL ,
+ `status` INT(10) UNSIGNED NOT NULL ,
  PRIMARY KEY (`id`),
  INDEX (`user_id`),
- INDEX (`secret_key`)
+ INDEX (`secret_key`),
+ INDEX (`invited_by_user_id`)
 ) ENGINE = InnoDB;

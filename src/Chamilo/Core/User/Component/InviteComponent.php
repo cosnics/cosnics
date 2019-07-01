@@ -7,7 +7,6 @@ use Chamilo\Core\User\Form\Handler\InviteFormHandler;
 use Chamilo\Core\User\Form\Type\InviteFormType;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserInviteService;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\NoPackageBreadcrumbGenerator;
 
@@ -42,6 +41,7 @@ class InviteComponent extends Manager
             {
                 $formData = $form->getData();
                 $success = true;
+                $form = $this->getForm()->create(InviteFormType::class);
             }
         }
         catch (UserAlreadyExistsException $exception)
@@ -51,12 +51,16 @@ class InviteComponent extends Manager
             $formData = $form->getData();
         }
 
+        $existingInvites = $this->getInviteService()->getInvitesFromUser($this->getUser());
+
+
         return $this->getTwig()->render(
             Manager::context() . ':InviteBrowser.html.twig',
             [
                 'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(), 'FORM' => $form->createView(),
                 'INVALID_EMAIL' => $invalidEmail, 'SUCCESS' => $success,
-                'USER_EMAIL' => $formData[InviteFormType::ELEMENT_EMAIL]
+                'USER_EMAIL' => $formData[InviteFormType::ELEMENT_EMAIL],
+                'EXISTING_INVITES_JSON' => $this->getSerializer()->serialize($existingInvites->getArrayCopy(), 'json')
             ]
         );
     }
