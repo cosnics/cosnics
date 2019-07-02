@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\User\Service;
 
+use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Component\AcceptInviteComponent;
 use Chamilo\Core\User\Domain\UserInvite\Exceptions\UserAlreadyExistsException;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -53,6 +55,11 @@ class UserInviteService
     protected $configurationConsulter;
 
     /**
+     * @var \Chamilo\Core\Group\Service\GroupService
+     */
+    protected $groupService;
+
+    /**
      * UserInviteService constructor.
      *
      * @param \Chamilo\Core\User\Storage\Repository\UserInviteRepository $userInviteRepository
@@ -62,13 +69,15 @@ class UserInviteService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Core\Group\Service\GroupService $groupService
      */
     public function __construct(
         \Chamilo\Core\User\Storage\Repository\UserInviteRepository $userInviteRepository,
         \Chamilo\Core\User\Service\UserService $userService, \Twig_Environment $twig,
         \Chamilo\Libraries\Mail\Mailer\MailerInterface $mailer, \Symfony\Component\Translation\Translator $translator,
         \Chamilo\Libraries\File\PathBuilder $pathBuilder,
-        \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+        \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter,
+        GroupService $groupService
     )
     {
         $this->userInviteRepository = $userInviteRepository;
@@ -78,6 +87,7 @@ class UserInviteService
         $this->translator = $translator;
         $this->pathBuilder = $pathBuilder;
         $this->configurationConsulter = $configurationConsulter;
+        $this->groupService = $groupService;
     }
 
     /**
@@ -103,7 +113,10 @@ class UserInviteService
         $user = $this->createUserByEmail($userEmail);
         $userInvite = $this->createUserInvite($invitedByUser, $user);
 //        $user = $this->userService->findUserByIdentifier(2);
-//        $userInvite = $this->userInviteRepository->getUserInviteBySecurityKey('59f7b3e215c0497ba75588c71990635a7f31e27b267fe19aa341077c815e65ca');
+//        $userInvite = $this->userInviteRepository->getUserInviteBySecurityKey(
+//            '59f7b3e215c0497ba75588c71990635a7f31e27b267fe19aa341077c815e65ca'
+//        );
+        $this->addUserToExternalGroup($user);
         $this->sendInvitationEmail($invitedByUser, $user, $userInvite, $personalMessage);
 
         return $user;
@@ -296,6 +309,28 @@ class UserInviteService
         }
 
         return $invite;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    protected function addUserToExternalGroup(User $user)
+    {
+        $externalUsersGroupId =
+            $this->configurationConsulter->getSetting(['Chamilo\Core\User', 'external_users_group_id']);
+
+        if (empty($externalUsersGroupId))
+        {
+            return;
+        }
+
+        $externalUsersGroup = $this->groupService->getGroupByIdentifier($externalUsersGroupId);
+        if(!$externalUsersGroup instanceof Group)
+        {
+            return;
+        }
+
+        $this->groupService->subscribeUserToGroup($externalUsersGroup, $user);
     }
 
     /**

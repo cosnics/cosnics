@@ -7,6 +7,7 @@ use Chamilo\Core\User\Form\Handler\InviteFormHandler;
 use Chamilo\Core\User\Form\Type\InviteFormType;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserInviteService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\NoPackageBreadcrumbGenerator;
 
@@ -24,9 +25,15 @@ class InviteComponent extends Manager
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     function run()
     {
+        if(!$this->areInvitesAllowed())
+        {
+            throw new NotAllowedException();
+        }
+
         $form = $this->getForm()->create(InviteFormType::class);
         $success = $invalidEmail = false;
         $formData = [];
@@ -97,5 +104,10 @@ class InviteComponent extends Manager
     public function get_breadcrumb_generator()
     {
         return new NoPackageBreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+    }
+
+    protected function areInvitesAllowed()
+    {
+        return $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'allow_invites']) == 1;
     }
 }

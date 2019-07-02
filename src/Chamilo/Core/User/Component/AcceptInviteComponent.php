@@ -7,6 +7,7 @@ use Chamilo\Core\User\Form\Type\AcceptInviteFormType;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserInviteService;
 use Chamilo\Core\User\Storage\DataClass\UserInvite;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\Page;
 
@@ -29,6 +30,11 @@ class AcceptInviteComponent extends Manager implements NoAuthenticationSupport
      */
     function run()
     {
+        if(!$this->areInvitesAllowed())
+        {
+            throw new NotAllowedException();
+        }
+
         $lang = $this->getRequest()->getFromUrl(self::PARAM_LANGUAGE);
         if(!empty($lang) && in_array($lang, ['en', 'nl']))
         {
@@ -106,5 +112,10 @@ class AcceptInviteComponent extends Manager implements NoAuthenticationSupport
     public function get_additional_parameters()
     {
         return [self::PARAM_SECURITY_KEY];
+    }
+
+    protected function areInvitesAllowed()
+    {
+        return $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'allow_invites']) == 1;
     }
 }
