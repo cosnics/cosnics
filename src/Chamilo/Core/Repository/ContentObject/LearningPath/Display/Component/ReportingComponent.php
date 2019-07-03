@@ -2,6 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\AssignmentServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\AssignmentConfiguration;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeAttempt\TreeNodeAttemptTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgress\TreeNodeProgressTable;
@@ -475,7 +479,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         $trackingService = $this->getTrackingService();
         $tree = $this->getTree();
-        $user = $this->getUser();
+        $user = $this->getReportingUser();
 
         foreach ($tree->getTreeNodes() as $treeNode)
         {
@@ -487,6 +491,8 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
                         Manager::PARAM_CHILD_ID => $treeNode->getId()
                     )
                 );
+
+                $lastResultUrl = $this->getLastResultUrl($treeNode);
 
                 $scoreData[] = [
                     'type' => $treeNode->getContentObject()->get_icon_image(),
@@ -506,7 +512,8 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
                     ),
                     'last_score' => $trackingService->getLastCompletedAttemptScoreForTreeNode(
                         $this->learningPath, $user, $treeNode
-                    )
+                    ),
+                    'last_result_url' => $lastResultUrl
                 ];
             }
         }
@@ -522,6 +529,54 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
             Manager::context() . ':ScoreOverviewReporting.html.twig',
             ['SCORE_DATA' => $scoreData, 'EXPORT_URL' => $exportUrl]
         );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     *
+     * @return string|null
+     */
+    protected function getLastResultUrl(TreeNode $treeNode)
+    {
+        $user = $this->getReportingUser();
+
+        if($treeNode->getContentObject() instanceof Assessment)
+        {
+            $treeNodeAttempts = $this->trackingService->getTreeNodeAttempts($this->learningPath, $user, $treeNode);
+            $lastAttempt = array_pop($treeNodeAttempts);
+
+            return $this->get_url(
+                array(
+                    Manager::PARAM_ACTION => Manager::ACTION_VIEW_ASSESSMENT_RESULT,
+                    Manager::PARAM_CHILD_ID => $treeNode->getId(),
+                    Manager::PARAM_ITEM_ATTEMPT_ID => $lastAttempt->getId()
+                )
+            );
+        }
+
+        if($treeNode->getContentObject() instanceof Assignment)
+        {
+            /** @var AssignmentConfiguration $configuration */
+            $configuration = $treeNode->getConfiguration(new AssignmentConfiguration());
+
+            if($configuration->getEntityType() != 0)
+            {
+                return null;
+            }
+
+            return $this->get_url(
+                array(
+                    Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                    Manager::PARAM_CHILD_ID => $treeNode->getId(),
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION =>
+                        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_ENTRY,
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE => 0,
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID => $user->getId()
+                )
+            );
+        }
+
+        return null;
     }
 
     /**
