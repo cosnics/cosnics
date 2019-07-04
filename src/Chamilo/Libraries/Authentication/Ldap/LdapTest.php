@@ -30,6 +30,7 @@ class LdapTest
 
         $settings = $this->getConfiguration();
 
+        echo '<p>Connecting to LDAP server</p>';
         $ldapConnect = ldap_connect($settings['host'], $settings['port']);
 
         if ($ldapConnect)
