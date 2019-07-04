@@ -31,11 +31,13 @@ class LdapTest
         $settings = $this->getConfiguration();
 
         echo '<p>Connecting to LDAP server</p>';
+        flush();
         $ldapConnect = ldap_connect($settings['host'], $settings['port']);
 
         if ($ldapConnect)
         {
             echo '<p>Connected to LDAP server</p>';
+            flush();
 
             $username = $this->getRequest()->getFromUrl('username');
             $password = $this->getRequest()->getFromUrl('password');
@@ -43,26 +45,31 @@ class LdapTest
             ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
 
             echo '<p>Protocol option set</p>';
+            flush();
 
             $filter = '(uid=' . $username . ')';
 
             ldap_bind($ldapConnect, $settings['rdn'], $settings['password']);
 
             echo '<p>Bound to LDAP with credentials</p>';
+            flush();
 
             $search_result = ldap_search($ldapConnect, $settings['search_dn'], $filter);
 
             echo '<p>Search for username based on UID filter</p>';
+            flush();
 
             $info = ldap_get_entries($ldapConnect, $search_result);
 
             echo '<p>Finding entries with the search result</p>';
+            flush();
 
             var_dump($info);
 
             $dn = ($info[0]["dn"]);
 
             echo '<p>First Entry</p>';
+            flush();
 
             var_dump($dn);
 
@@ -73,6 +80,7 @@ class LdapTest
 
             $result = @ldap_bind($ldapConnect, $dn, $password);
             echo '<p>Result of logging in</p>';
+            flush();
 
             var_dump($result);
 
