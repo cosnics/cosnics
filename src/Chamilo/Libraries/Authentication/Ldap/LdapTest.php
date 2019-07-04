@@ -36,6 +36,7 @@ class LdapTest
 
         if ($ldapConnect)
         {
+            ldap_set_option($ldapConnect, LDAP_OPT_NETWORK_TIMEOUT, 10);
             echo '<p>Connected to LDAP server</p>';
             flush();
 
