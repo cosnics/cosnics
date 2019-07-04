@@ -1,14 +1,6 @@
 <?php
 
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-
-$autoloader = require __DIR__ . '/../../../../../vendor/autoload.php';
-
-$container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-$container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
-
-$ldapTest = new LdapTest();
-$ldapTest->run();
+namespace Chamilo\Libraries\Authentication\Ldap;
 
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
