@@ -51,9 +51,10 @@ class LdapTest
 
             $filter = '(uid=' . $username . ')';
 
-            ldap_bind($ldapConnect, $settings['rdn'], $settings['password']);
+            $success = ldap_bind($ldapConnect, $settings['rdn'], $settings['password']);
 
             echo '<p>Bound to LDAP with credentials</p>';
+            var_dump($success);
             flush();
 
             $search_result = ldap_search($ldapConnect, $settings['search_dn'], $filter);
