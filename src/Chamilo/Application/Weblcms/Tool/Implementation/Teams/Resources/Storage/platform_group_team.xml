@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="weblcms_platform_group_team">
+    <properties>
+        <property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+        <property name="course_id" type="integer" unsigned="1" notnull="1"/>
+        <property name="team_id" type="text" notnull="1" length="50"/>
+        <property name="name" type="text" notnull="1" length="50"/>
+    </properties>
+    <index name="course_id">
+        <indexproperty name="course_id"/>
+    </index>
+</object>
