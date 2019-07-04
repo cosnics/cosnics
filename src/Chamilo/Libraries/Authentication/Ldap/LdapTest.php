@@ -37,6 +37,7 @@ class LdapTest
         if ($ldapConnect)
         {
             ldap_set_option($ldapConnect, LDAP_OPT_NETWORK_TIMEOUT, 10);
+            ldap_set_option($ldapConnect, LDAP_OPT_TIMELIMIT, 10);
             echo '<p>Connected to LDAP server</p>';
             flush();
 
@@ -79,6 +80,7 @@ class LdapTest
             $ldapConnect = ldap_connect($settings['host'], $settings['port']);
             ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
             ldap_set_option($ldapConnect, LDAP_OPT_NETWORK_TIMEOUT, 10);
+            ldap_set_option($ldapConnect, LDAP_OPT_TIMELIMIT, 10);
 
             $result = @ldap_bind($ldapConnect, $dn, $password);
             echo '<p>Result of logging in</p>';
