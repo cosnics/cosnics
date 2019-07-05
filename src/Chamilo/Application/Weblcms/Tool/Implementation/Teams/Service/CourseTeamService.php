@@ -35,6 +35,7 @@ class CourseTeamService
 
     /**
      * CourseTeamService constructor.
+     *
      * @param CourseTeamRelationRepository $courseTeamRelationRepository
      * @param TeamService $teamService
      * @param CourseServiceInterface $courseService
@@ -42,7 +43,8 @@ class CourseTeamService
     public function __construct(
         CourseTeamRelationRepository $courseTeamRelationRepository,
         TeamService $teamService,
-        CourseServiceInterface $courseService)
+        CourseServiceInterface $courseService
+    )
     {
         $this->courseTeamRelationRepository = $courseTeamRelationRepository;
         $this->teamService = $teamService;
@@ -52,6 +54,7 @@ class CourseTeamService
     /**
      * @param User $owner
      * @param Course $course
+     *
      * @return Team
      * @throws CourseTeamAlreadyExistsException
      * @throws AzureUserNotExistsException
@@ -59,11 +62,14 @@ class CourseTeamService
      */
     public function createTeam(User $owner, Course $course): Team
     {
-        if(!is_null($this->getTeam($course))) {
+        if (!is_null($this->getTeam($course)))
+        {
             throw new CourseTeamAlreadyExistsException($course);
         }
 
-        $team = $this->teamService->createTeamByName($owner, $course->get_title());
+        $team = $this->teamService->createTeamByName(
+            $owner, $course->get_title() . ' (' . $course->get_visual_code() . ')'
+        );
 
         $courseTeamRelation = new CourseTeamRelation();
         $courseTeamRelation->setCourseId($course->getId());
@@ -83,6 +89,7 @@ class CourseTeamService
 
     /**
      * @param Course $course
+     *
      * @return Team|null
      * @throws GraphException
      */
@@ -90,22 +97,27 @@ class CourseTeamService
     {
         $courseTeamRelation = $this->courseTeamRelationRepository->findByCourse($course);
 
-        if(!$courseTeamRelation instanceof CourseTeamRelation) {
+        if (!$courseTeamRelation instanceof CourseTeamRelation)
+        {
             return null;
         }
 
         $team = $this->teamService->getTeam($courseTeamRelation->getTeamId());
 
-        if(is_null($team)) {
+        if (is_null($team))
+        {
             //team was deleted
             $this->courseTeamRelationRepository->delete($courseTeamRelation);
+
             return null;
         }
+
         return $team;
     }
 
     /**
      * @param Course $course
+     *
      * @throws GraphException
      */
     public function removeTeamUsersNotInCourse(Course $course)
@@ -123,6 +135,7 @@ class CourseTeamService
 
     /**
      * @param Course $course
+     *
      * @throws GraphException
      * @throws AzureUserNotExistsException
      */
@@ -134,36 +147,42 @@ class CourseTeamService
 
     /**
      * @param Course $course
+     *
      * @throws GraphException
      * @throws AzureUserNotExistsException
      */
     public function addCourseStudentsToTeam(Course $course)
     {
         $team = $this->getTeam($course);
-        if(is_null($team)) {
+        if (is_null($team))
+        {
             return;
         }
 
         $students = $this->courseService->getStudentsFromCourse($course);
-        foreach ($students as $student) {
+        foreach ($students as $student)
+        {
             $this->teamService->addMember($student, $team);
         }
     }
 
     /**
      * @param Course $course
+     *
      * @throws GraphException
      * @throws AzureUserNotExistsException
      */
     public function addCourseTeachersToTeam(Course $course)
     {
         $team = $this->getTeam($course);
-        if(is_null($team)) {
+        if (is_null($team))
+        {
             return;
         }
 
         $teachers = $this->courseService->getTeachersFromCourse($course);
-        foreach ($teachers as $teacher) {
+        foreach ($teachers as $teacher)
+        {
             $this->teamService->addOwner($teacher, $team);
         }
     }

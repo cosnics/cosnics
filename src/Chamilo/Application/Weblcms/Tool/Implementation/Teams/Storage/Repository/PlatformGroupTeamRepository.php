@@ -8,6 +8,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\Plat
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -182,7 +184,39 @@ class PlatformGroupTeamRepository
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, [], $joins);
 
         return $this->dataClassRepository->records(PlatformGroupTeam::class, $parameters);
+    }
 
+    /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|Group[]
+     */
+    public function findGroupsForPlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                PlatformGroupTeamRelation::class, PlatformGroupTeamRelation::PROPERTY_PLATFORM_GROUP_TEAM_ID
+            ),
+            new StaticConditionVariable($platformGroupTeam->getId())
+        );
+
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                PlatformGroupTeamRelation::class,
+                new EqualityCondition(
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
+                    new PropertyConditionVariable(
+                        PlatformGroupTeamRelation::class, PlatformGroupTeamRelation::PROPERTY_GROUP_ID
+                    )
+                )
+            )
+        );
+
+        $parameters = new DataClassRetrievesParameters($condition, null, null, [], $joins);
+
+        return $this->dataClassRepository->retrieves(Group::class, $parameters);
     }
 
 }

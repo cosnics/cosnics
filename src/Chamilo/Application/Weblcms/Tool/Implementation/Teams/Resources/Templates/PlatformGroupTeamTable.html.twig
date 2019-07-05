@@ -1,0 +1,51 @@
+{% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Teams' %}
+
+{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
+
+{{ getCss('Plugin/VueJS/BootstrapVue/bootstrap-vue.min.css', 'Chamilo\\Configuration') }}
+
+<div class="platform-group-team-browser">
+    <b-table striped bordered :items="platformGroups" :fields="fields" :filter="filterText"
+             show-empty empty-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
+             empty-filtered-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
+    >
+        <template slot="actions" slot-scope="data">
+
+        </template>
+    </b-table>
+</div>
+
+<script type="text/javascript">
+    (function () {
+
+        var fields = {
+            'name': {
+                'label': '{{ 'PlatformGroupTeamName'|trans({}, appContext) }}',
+                'sortable': true
+            },
+            'platform_groups': {
+                'label': '{{ 'PlatformGroups'|trans({}, appContext) }}',
+                'sortable': true
+            },
+            'actions': {
+                'label': ''
+            }
+        };
+
+        var platformGroups = [];
+
+        $(window).on('load', function () {
+            new Vue({
+                el: '.platform-group-team-browser',
+                data: {
+                    filterText: null,
+                    platformGroups: platformGroups,
+                    fields: fields
+                }
+            });
+        });
+    })();
+</script>
