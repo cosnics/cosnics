@@ -35,6 +35,7 @@ class VisitPlatformGroupTeamComponent extends Manager
         catch (\Exception $ex)
         {
             $message = 'TeamCanNotBeVisited';
+            $this->getExceptionLogger()->logException($ex);
         }
 
         throw new UserException($this->getTranslator()->trans($message, [], Manager::context()));

@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeamRelation;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\PlatformGroupTeamRepository;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
@@ -175,6 +176,37 @@ class PlatformGroupTeamService
         }
 
         return $team->getWebUrl();
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function getPlatformGroupTeamsForCourse(Course $course)
+    {
+        $platformGroupTeamsData =
+            $this->platformGroupTeamRepository->findPlatformGroupTeamsWithPlatformGroupsForCourse($course);
+
+        $data = [];
+
+        foreach ($platformGroupTeamsData as $row)
+        {
+            $id = $row[PlatformGroupTeam::PROPERTY_ID];
+
+            if (!array_key_exists($id, $data))
+            {
+                $data[$id] = ['id' => $id, 'name' => $row[PlatformGroupTeam::PROPERTY_NAME], 'groups' => []];
+            }
+
+            $data[$id]['groups'][] = [
+                'name' => $row[PlatformGroupTeamRepository::ALIAS_GROUP_NAME],
+                'code' => $row[PlatformGroupTeamRepository::ALIAS_GROUP_CODE]
+            ];
+        }
+
+        return $data;
     }
 
     /**

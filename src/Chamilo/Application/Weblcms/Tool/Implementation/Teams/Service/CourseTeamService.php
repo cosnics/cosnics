@@ -116,6 +116,17 @@ class CourseTeamService
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     *
+     * @return bool
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     */
+    public function courseHasTeam(Course $course)
+    {
+        return $this->getTeam($course) instanceof Team;
+    }
+
+    /**
      * @param Course $course
      *
      * @throws GraphException

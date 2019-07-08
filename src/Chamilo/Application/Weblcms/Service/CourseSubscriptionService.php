@@ -166,4 +166,15 @@ class CourseSubscriptionService
         return $this->courseSubscriptionRepository->findCourseEntityRelationForCourseAndUser($user, $course);
     }
 
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param int|null $status
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findGroupsDirectlySubscribedToCourse(Course $course, int $status = null)
+    {
+        return $this->courseSubscriptionRepository->findGroupsDirectlySubscribedToCourse($course, $status);
+    }
+
 }

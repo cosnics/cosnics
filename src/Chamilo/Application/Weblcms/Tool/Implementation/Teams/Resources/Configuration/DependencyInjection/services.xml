@@ -4,5 +4,11 @@
     <services>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\CourseTeamService" autowire="true" />
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\PlatformGroupTeamService" autowire="true" />
+
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Type\CreatePlatformGroupTeamType" autowire="true">
+            <tag name="form.type" />
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler\CreatePlatformGroupTeamFormHandler" autowire="true" />
     </services>
 </container>

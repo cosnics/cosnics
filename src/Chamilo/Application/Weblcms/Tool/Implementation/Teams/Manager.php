@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\CourseTeamService;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\PlatformGroupTeamService;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -31,6 +32,14 @@ class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     protected function getPlatformGroupTeamService()
     {
         return $this->getService(PlatformGroupTeamService::class);
+    }
+
+    /**
+     * @return CourseTeamService
+     */
+    protected function getCourseTeamService(): CourseTeamService
+    {
+        return $this->getService(CourseTeamService::class);
     }
 
     /**

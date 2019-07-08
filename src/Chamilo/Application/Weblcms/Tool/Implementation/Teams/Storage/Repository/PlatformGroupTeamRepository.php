@@ -9,19 +9,21 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Composer\Util\Platform;
 
 class PlatformGroupTeamRepository
 {
+    const ALIAS_GROUP_NAME = 'GroupName';
+    const ALIAS_GROUP_CODE = 'GroupCode';
+
     /**
      * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
@@ -178,8 +180,13 @@ class PlatformGroupTeamRepository
 
         $properties = new DataClassProperties();
         $properties->add(new PropertiesConditionVariable(PlatformGroupTeam::class));
-        $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
-        $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE));
+
+        $properties->add(
+            new FixedPropertyConditionVariable(Group::class, Group::PROPERTY_NAME, self::ALIAS_GROUP_NAME)
+        );
+        $properties->add(
+            new FixedPropertyConditionVariable(Group::class, Group::PROPERTY_CODE, self::ALIAS_GROUP_CODE)
+        );
 
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, [], $joins);
 

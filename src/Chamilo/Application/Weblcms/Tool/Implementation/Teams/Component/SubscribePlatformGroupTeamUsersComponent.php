@@ -31,6 +31,7 @@ class SubscribePlatformGroupTeamUsersComponent extends Manager
         {
             $message = 'PlatformGroupUsersNotAddedToTeam';
             $success = false;
+            $this->getExceptionLogger()->logException($ex);
         }
 
         $this->redirect(

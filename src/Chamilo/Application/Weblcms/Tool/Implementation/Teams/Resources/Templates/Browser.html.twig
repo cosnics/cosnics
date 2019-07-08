@@ -2,24 +2,53 @@
 
 {% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Teams' %}
 
-<a target="_blank" href="{{ TEAM_URL }}" class="btn btn-primary btn-lg">{{ 'GoToTeam'|trans({}, appContext) }}</a>
+<h3 class="title-underline">{{ 'CourseTeam'|trans({}, appContext) }}</h3>
 
-{% if IS_TEACHER %}
-    <div class="alert alert-info" role="alert" style="margin-top: 10px">
-        {{ 'UserSyncExplanation'|trans({}, appContext) }}
-        <div style="margin-top: 5px">
-            <a href="{{ SUBSCRIBE_ALL_COURSE_USERS_URL }}"
-               class="btn btn-info">{{ 'SubscribeAllCourseUsers'|trans({}, appContext) }}
-            </a>
-        <a href="{{ REMOVE_TEAM_USERS_URL }}"
-           class="btn btn-warning">{{ 'RemoveTeamUsersNotInCourse'|trans({}, appContext) }}
-        </a>
+{% if COURSE_HAS_TEAM %}
+
+    <div class="text-center">
+        <a target="_blank" href="{{ TEAM_URL }}" class="btn btn-primary btn-lg">{{ 'GoToTeam'|trans({}, appContext) }}</a>
+    </div>
+
+    {% if IS_TEACHER %}
+        <div class="alert alert-info" role="alert" style="margin-top: 30px">
+            {{ 'UserSyncExplanation'|trans({}, appContext) }}
+            <div style="margin-top: 10px">
+                <a href="{{ SUBSCRIBE_ALL_COURSE_USERS_URL }}"
+                   class="btn btn-info">{{ 'SubscribeAllCourseUsers'|trans({}, appContext) }}
+                </a>
+                <a href="{{ REMOVE_TEAM_USERS_URL }}"
+                   class="btn btn-warning">{{ 'RemoveTeamUsersNotInCourse'|trans({}, appContext) }}
+                </a>
+            </div>
 
         </div>
+    {% endif %}
 
-    </div>
+{% else %}
+
+    {% if IS_TEACHER %}
+        <div class="text-center">
+            <a href="{{ CREATE_TEAM_URL }}" class="btn btn-primary btn-lg">{{ 'CreateTeam'|trans({}, appContext) }}</a>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            {{ 'TeamNotActivated'|trans({}, appContext) }}
+        </div>
+    {% endif %}
+
 {% endif %}
 
-{#{% include appContext ~ ':PlatformGroupTeamTable.html.twig' %}#}
+{#<div style="margin-top: 40px">#}
+{#    <h3 class="title-underline">{{ 'PlatformGroupTeams'|trans({}, appContext) }}</h3>#}
+{#{% include appContext ~ ':PlatformGroupTeamTable.html.twig'#}
+{#    with {#}
+{#        'CREATE_PLATFORM_GROUP_TEAM_URL': CREATE_PLATFORM_GROUP_TEAM_URL,#}
+{#        'SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS_URL': SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS_URL,#}
+{#        'REMOVE_TEAM_USERS_NOT_IN_GROUPS_URL': REMOVE_TEAM_USERS_NOT_IN_GROUPS_URL,#}
+{#        'VISIT_PLATFORM_GROUP_TEAM_URL': VISIT_PLATFORM_GROUP_TEAM_URL#}
+{#    }#}
+{#%}#}
+{#</div>#}
 
 {{ FOOTER|raw }}

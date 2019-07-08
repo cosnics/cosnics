@@ -7,8 +7,17 @@
 
 {{ getCss('Plugin/VueJS/BootstrapVue/bootstrap-vue.min.css', 'Chamilo\\Configuration') }}
 
+<style>
+    .platform-group-table {
+        margin-top: 30px;
+    }
+</style>
+
 <div class="platform-group-team-browser">
-    <b-table striped bordered :items="platformGroups" :fields="fields" :filter="filterText"
+
+    <a href="{{ CREATE_PLATFORM_GROUP_TEAM_URL }}" class="btn btn-default">{{ 'CreatePlatformGroupTeam'|trans({}, appContext) }}</a>
+
+    <b-table class="platform-group-table" striped bordered :items="platformGroups" :fields="fields" :filter="filterText"
              show-empty empty-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
              empty-filtered-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
     >
