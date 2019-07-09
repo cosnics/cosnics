@@ -5,7 +5,7 @@
 	<title>Fancytree - Example</title>
 
 	<script src="../lib/jquery.js"></script>
-	<script src="../lib/jquery-ui.custom.js"></script>
+	<script src="../src/jquery-ui-dependencies/jquery.fancytree.ui-deps.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
 	<script src="../src/jquery.fancytree.js"></script>
@@ -37,7 +37,7 @@
 				// pass the result as `data.result` attribute:
 				data.result = {url: "ajax-sub2.json"};
 			}
-		// }).bind("fancytreeactivate", function(event, data){
+		// }).on("fancytreeactivate", function(event, data){
 		// 	$.ui.fancytree.debug("fancytreeactivate: event=", event, ", data=", data);
 		// 	return false;
 		});

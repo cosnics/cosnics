@@ -124,6 +124,8 @@ class CourseSubscriptionRepository
         $properties->add(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME));
         $properties->add(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION));
         $properties->add(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_CODE));
+        $properties->add(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_LEFT_VALUE));
+        $properties->add(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_RIGHT_VALUE));
 
         $properties->add(
             new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_STATUS)

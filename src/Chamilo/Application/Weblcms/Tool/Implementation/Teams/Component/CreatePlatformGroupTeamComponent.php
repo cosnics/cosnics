@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler\CreatePla
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Type\CreatePlatformGroupTeamType;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager;
 use Chamilo\Core\Group\Ajax\Component\GetGroupChildrenJSONComponent;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 
@@ -81,8 +82,19 @@ class CreatePlatformGroupTeamComponent extends Manager
      */
     protected function getDirectlySubscribedPlatformGroups()
     {
-        return $this->getCourseSubscriptionService()->findGroupsDirectlySubscribedToCourse($this->get_course())
+        $groups = $this->getCourseSubscriptionService()->findGroupsDirectlySubscribedToCourse($this->get_course())
             ->getArrayCopy();
+
+        foreach($groups as $index => $group)
+        {
+            $leftValue = $group[Group::PROPERTY_LEFT_VALUE];
+            $rightValue = $group[Group::PROPERTY_RIGHT_VALUE];
+
+            $hasChildren = $leftValue != ($rightValue - 1);
+            $groups[$index]['has_children'] = $hasChildren;
+        }
+
+        return $groups;
     }
 
     /**
