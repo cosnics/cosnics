@@ -61,9 +61,7 @@
 <div class="platform-group-team-creator">
     {{ form_start(FORM) }}
 
-    {{ form_row(FORM.name) }}
-
-    <div class="row">
+    <div class="form-group">
         <label for="create_platform_group_team_name" class="col-sm-2 control-label required">{{ 'PlatformGroups'|trans({}, appContext) }}</label>
         <div class="platform-group-selector col-sm-10">
             <table id="platform-group-tree" class="table table-striped fancytree-colorize-selected">
@@ -75,12 +73,16 @@
                 <thead>
                 <tr>
                     <th></th>
-                    <th>Naam</th>
-                    <th>Code</th>
+                    <th>{{ 'Name'|trans({}, 'Chamilo\\Core\\Group') }}</th>
+                    <th>{{ 'Code'|trans({}, 'Chamilo\\Core\\Group') }}</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr> <td></td> <td class="fancytree-clickable"></td> <td></td></tr>
+                <tr>
+                    <td></td>
+                    <td class="fancytree-clickable"></td>
+                    <td></td>
+                </tr>
                 </tbody>
             </table>
 
@@ -92,6 +94,15 @@
         </div>
     </div>
 
+    {{ form_row(FORM.name, {'attr': {"v-model": 'teamName'}}) }}
+    {{ form_row(FORM.platform_groups, {'attr': {':value': 'selectedPlatformGroupIds'}}) }}
+
+
+    <div class="form-group">
+        <div class="col-sm-10 col-sm-push-2">
+            <button type="submit" class="btn btn-primary" :disabled="!canCreate()">{{ 'CreatePlatformGroupTeam'|trans({}, appContext) }}</button>
+        </div>
+    </div>
 
     {{ form_end(FORM) }}
 </div>
@@ -102,25 +113,44 @@
 
             var platformGroups = {{ PLATFORM_GROUPS_JSON|raw }};
             var getGroupChildrenUrl = '{{ GET_GROUP_CHILDREN_URL|raw }}';
+            var courseMetadata = '{{ TEAM_NAME_COURSE_METADATA }}';
 
             new Vue({
                 el: '.platform-group-team-creator',
                 data: {
                     platformGroups: platformGroups,
-                    selectedTreeNodes: []
+                    selectedTreeNodes: [],
+                    teamName: ''
                 },
                 methods: {
-                    deselectNode: function(selectedTreeNode) {
+                    deselectNode: function (selectedTreeNode) {
                         selectedTreeNode.setSelected(false);
+                    },
+                    canCreate: function () {
+                        if (this.selectedTreeNodes.length === 0) {
+                            return false;
+                        }
+
+                        return this.teamName.length > 0;
                     }
                 },
-                mounted: function() {
+                computed: {
+                    selectedPlatformGroupIds: function() {
+                        var platformGroupIds = [];
+                        this.selectedTreeNodes.forEach(function(treeNode) {
+                            platformGroupIds.push(treeNode.key);
+                        });
+
+                        return JSON.stringify(platformGroupIds);
+                    }
+                },
+                mounted: function () {
                     var vueInstance = this;
 
-                    var convertData = function(groups) {
+                    var convertData = function (groups) {
                         var treeData = [];
 
-                        groups.forEach(function(group) {
+                        groups.forEach(function (group) {
                             treeData.push({
                                 title: group.name,
                                 key: group.id,
@@ -134,10 +164,10 @@
                     };
 
                     $('#platform-group-tree').fancytree({
-                        source: function(event, data) {
+                        source: function (event, data) {
                             return vueInstance.platformGroups;
                         },
-                        lazyLoad: function(event, data) {
+                        lazyLoad: function (event, data) {
                             data.result = {
                                 url: getGroupChildrenUrl,
                                 data: {'groupId': data.node.key},
@@ -145,7 +175,7 @@
                                 method: 'POST'
                             };
                         },
-                        postProcess: function(event, data) {
+                        postProcess: function (event, data) {
                             data.result = convertData(data.response);
                         },
                         checkbox: true,
@@ -160,15 +190,22 @@
                             nodeColumnIdx: 1,
                             indentation: 30
                         },
-                        renderColumns: function(event, data) {
+                        renderColumns: function (event, data) {
                             var node = data.node;
                             var $tdList = $(node.tr).find(">td");
 
                             $tdList.eq(2).text(node.data.code);
                         },
-                        select: function(event, data) {
+                        select: function (event, data) {
                             vueInstance.selectedTreeNodes = data.tree.getSelectedNodes();
-                            console.log(vueInstance.selectedTreeNodes);
+
+                            if (vueInstance.selectedTreeNodes.length === 1) {
+                                vueInstance.teamName = vueInstance.selectedTreeNodes[0].title + ' - ' + courseMetadata
+                            }
+
+                            if (vueInstance.selectedTreeNodes.length === 0) {
+                                vueInstance.teamName = '';
+                            }
                         },
                         clickFolderMode: 2,
                         icon: false

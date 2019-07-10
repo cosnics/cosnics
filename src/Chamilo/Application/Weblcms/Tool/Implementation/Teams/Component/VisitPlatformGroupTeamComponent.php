@@ -24,7 +24,7 @@ class VisitPlatformGroupTeamComponent extends Manager
 
         try
         {
-            $visitTeamUrl = $this->getPlatformGroupTeamService()->getVisitTeamUrl($platformGroupTeam);
+            $visitTeamUrl = $this->getPlatformGroupTeamService()->getVisitTeamUrl($this->getUser(), $platformGroupTeam);
 
             return new RedirectResponse($visitTeamUrl);
         }

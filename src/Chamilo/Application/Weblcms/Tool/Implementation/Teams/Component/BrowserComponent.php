@@ -24,13 +24,14 @@ class BrowserComponent extends Manager
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      * @throws GraphException
+     * @throws \Exception
      */
     public function run(): string
     {
         $courseTeamService = $this->getCourseTeamService();
         $hasTeam = $courseTeamService->courseHasTeam($this->get_course());
 
-        $hasTeam = true;
+//        $hasTeam = true;
 
         return $this->render(
             [

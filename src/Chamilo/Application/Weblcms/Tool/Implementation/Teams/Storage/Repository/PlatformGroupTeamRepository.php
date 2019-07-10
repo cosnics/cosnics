@@ -52,6 +52,16 @@ class PlatformGroupTeamRepository
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
+     *
+     * @return bool
+     */
+    public function updatePlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
+    {
+        return $this->dataClassRepository->update($platformGroupTeam);
+    }
+
+    /**
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeamRelation $platformGroupTeamRelation
      *
      * @return bool

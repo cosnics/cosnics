@@ -12,6 +12,11 @@ use Chamilo\Libraries\Architecture\Exceptions\UserException;
  */
 class SubscribePlatformGroupTeamUsersComponent extends Manager
 {
+    /**
+     * @return string|void
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
     public function run()
     {
         $platformGroupTeam = $this->getPlatformGroupTeamFromRequest();

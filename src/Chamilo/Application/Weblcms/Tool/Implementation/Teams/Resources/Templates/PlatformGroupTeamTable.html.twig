@@ -11,17 +11,56 @@
     .platform-group-table {
         margin-top: 30px;
     }
+
+    .platform-group-table tbody tr td {
+        vertical-align: middle;
+    }
+
+    table th.sorting {
+        color: #337ab7;
+        cursor: pointer;
+    }
+
+    .platform-group-table .actions-column {
+        text-align: center;
+        width: 20px;
+        white-space: nowrap;
+    }
 </style>
 
 <div class="platform-group-team-browser">
 
-    <a href="{{ CREATE_PLATFORM_GROUP_TEAM_URL }}" class="btn btn-default">{{ 'CreatePlatformGroupTeam'|trans({}, appContext) }}</a>
+    {% if IS_TEACHER %}
+        <a href="{{ CREATE_PLATFORM_GROUP_TEAM_URL }}" class="btn btn-default">{{ 'CreatePlatformGroupTeam'|trans({}, appContext) }}</a>
+    {% endif %}
 
     <b-table class="platform-group-table" striped bordered :items="platformGroups" :fields="fields" :filter="filterText"
              show-empty empty-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
              empty-filtered-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
     >
+        <template slot="platform_groups" slot-scope="data">
+            <select class="form-control input-sm" name="platform_groups">
+                <option v-for="platformGroup in data.item.groups">
+                    {{ '{{ platformGroup.name }}' }} ({{ '{{ platformGroup.code }}' }})
+                </option>
+            </select>
+        </template>
         <template slot="actions" slot-scope="data">
+
+            <a :href="visitTeamUrl(data.item)" type="button" class="btn btn-default btn-sm">{{ 'VisitTeam'|trans({}, appContext) }}</a>
+
+            {% if IS_TEACHER %}
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ 'Synchronize'|trans({}, appContext) }}
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a :href="addUsersUrl(data.item)">{{ 'AddUsersNotInTeam'|trans({}, appContext) }}</a></li>
+                        <li><a :href="removeUsersUrl(data.item)">{{ 'RemoveUsersNotInGroups'|trans({}, appContext) }}</a></li>
+                    </ul>
+                </div>
+            {% endif %}
 
         </template>
     </b-table>
@@ -37,14 +76,18 @@
             },
             'platform_groups': {
                 'label': '{{ 'PlatformGroups'|trans({}, appContext) }}',
-                'sortable': true
+                'sortable': false
             },
             'actions': {
-                'label': ''
+                'label': '',
+                'class': 'actions-column'
             }
         };
 
-        var platformGroups = [];
+        var platformGroups = {{ PLATFORM_GROUP_TEAMS_JSON|raw }};
+        var visitTeamUrlTemplate = '{{ VISIT_PLATFORM_GROUP_TEAM_URL|raw }}';
+        var addUsersUrlTemplate = '{{ SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS_URL|raw }}';
+        var removeUsersUrlTemplate = '{{ REMOVE_TEAM_USERS_NOT_IN_GROUPS_URL|raw }}';
 
         $(window).on('load', function () {
             new Vue({
@@ -52,7 +95,24 @@
                 data: {
                     filterText: null,
                     platformGroups: platformGroups,
-                    fields: fields
+                    fields: fields,
+                    visitTeamUrlTemplate: visitTeamUrlTemplate,
+                    addUsersUrlTemplate: addUsersUrlTemplate,
+                    removeUsersUrlTemplate: removeUsersUrlTemplate
+                },
+                methods: {
+                    visitTeamUrl: function(team) {
+                        return this.addTeamToUrl(this.visitTeamUrlTemplate, team);
+                    },
+                    addUsersUrl: function(team) {
+                        return this.addTeamToUrl(this.addUsersUrlTemplate, team);
+                    },
+                    removeUsersUrl: function(team) {
+                        return this.addTeamToUrl(this.removeUsersUrlTemplate, team);
+                    },
+                    addTeamToUrl: function(urlTemplate, team) {
+                        return urlTemplate.replace('__PLATFORM_GROUP_TEAM_ID__', team.id);
+                    }
                 }
             });
         });

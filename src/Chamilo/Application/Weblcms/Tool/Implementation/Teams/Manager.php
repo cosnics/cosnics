@@ -50,7 +50,12 @@ class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     protected function getPlatformGroupTeamFromRequest()
     {
         $platformGroupTeamId = $this->getRequest()->getFromUrl(self::PARAM_PLATFORM_GROUP_TEAM_ID);
-        $platformGroupTeam = $this->getPlatformGroupTeamService()->findPlatformGroupTeamById($platformGroupTeamId);
+        $platformGroupTeam = null;
+
+        if(!empty($platformGroupTeamId))
+        {
+            $platformGroupTeam = $this->getPlatformGroupTeamService()->findPlatformGroupTeamById($platformGroupTeamId);
+        }
 
         if (!$platformGroupTeam instanceof PlatformGroupTeam)
         {

@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\CourseTeamAlreadyExistsException;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\TooManyUsersException;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\CourseTeamRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\CourseTeamRelationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -59,12 +60,22 @@ class CourseTeamService
      * @throws CourseTeamAlreadyExistsException
      * @throws AzureUserNotExistsException
      * @throws GraphException
+     * @throws \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\TooManyUsersException
      */
     public function createTeam(User $owner, Course $course): Team
     {
         if (!is_null($this->getTeam($course)))
         {
             throw new CourseTeamAlreadyExistsException($course);
+        }
+
+        $students = $this->courseService->getStudentsFromCourse($course);
+        $teachers = $this->courseService->getTeachersFromCourse($course);
+
+        $userCount = count($students) + count($teachers);
+        if($userCount >= TeamService::MAX_USERS)
+        {
+            throw new TooManyUsersException();
         }
 
         $team = $this->teamService->createTeamByName(

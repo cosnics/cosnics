@@ -37,3 +37,21 @@ CREATE TABLE `user_invite` (
  INDEX (`secret_key`),
  INDEX (`invited_by_user_id`)
 ) ENGINE = InnoDB;
+
+CREATE TABLE `weblcms_platform_group_team` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `course_id` int(10) UNSIGNED NOT NULL,
+  `team_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `wpgt_course_id` (`course_id`);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `weblcms_platform_group_team_relation` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `platform_group_team_id` int(10) UNSIGNED NOT NULL,
+  `group_id` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `wpgtr_platform_group_team_id` (`platform_group_team_id`),
+  KEY `wpgtr_group_id` (`group_id`);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

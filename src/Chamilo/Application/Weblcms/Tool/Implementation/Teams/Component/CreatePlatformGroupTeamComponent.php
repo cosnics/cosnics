@@ -53,7 +53,9 @@ class CreatePlatformGroupTeamComponent extends Manager
                         'PLATFORM_GROUPS_JSON' => $this->getSerializer()->serialize(
                             $this->getDirectlySubscribedPlatformGroups(), 'json'
                         ),
-                        'GET_GROUP_CHILDREN_URL' => GetGroupChildrenJSONComponent::getAjaxUrl()
+                        'GET_GROUP_CHILDREN_URL' => GetGroupChildrenJSONComponent::getAjaxUrl(),
+                        'TEAM_NAME_COURSE_METADATA' => $this->get_course()->get_title() . ' (' .
+                            $this->get_course()->get_visual_code() . ')'
                     ]
                 );
             }
@@ -85,7 +87,7 @@ class CreatePlatformGroupTeamComponent extends Manager
         $groups = $this->getCourseSubscriptionService()->findGroupsDirectlySubscribedToCourse($this->get_course())
             ->getArrayCopy();
 
-        foreach($groups as $index => $group)
+        foreach ($groups as $index => $group)
         {
             $leftValue = $group[Group::PROPERTY_LEFT_VALUE];
             $rightValue = $group[Group::PROPERTY_RIGHT_VALUE];

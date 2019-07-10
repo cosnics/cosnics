@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\TooManyUsersException;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeamRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\PlatformGroupTeamRepository;
@@ -30,6 +31,11 @@ class PlatformGroupTeamService
     protected $groupService;
 
     /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    protected $userService;
+
+    /**
      * @var TeamService
      */
     protected $teamService;
@@ -39,16 +45,18 @@ class PlatformGroupTeamService
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\PlatformGroupTeamRepository $platformGroupTeamRepository
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
+     * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService $teamService
      */
     public function __construct(
         \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\PlatformGroupTeamRepository $platformGroupTeamRepository,
-        \Chamilo\Core\Group\Service\GroupService $groupService,
+        \Chamilo\Core\Group\Service\GroupService $groupService, \Chamilo\Core\User\Service\UserService $userService,
         \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService $teamService
     )
     {
         $this->platformGroupTeamRepository = $platformGroupTeamRepository;
         $this->groupService = $groupService;
+        $this->userService = $userService;
         $this->teamService = $teamService;
     }
 
@@ -60,9 +68,31 @@ class PlatformGroupTeamService
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @throws \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\TooManyUsersException
      */
     public function createTeamForSelectedGroups(User $owner, Course $course, string $teamName, $groupIds = [])
     {
+        $userCount = 0;
+
+        foreach ($groupIds as $groupId)
+        {
+            $group = $this->groupService->getGroupByIdentifier($groupId);
+
+            if (!$group instanceof Group)
+            {
+                continue;
+            }
+
+            $groups[] = $group;
+
+            $userCount += $group->count_users(true, true);
+        }
+
+        if ($userCount >= TeamService::MAX_USERS)
+        {
+            throw new TooManyUsersException();
+        }
+
         $team = $this->teamService->createTeamByName($owner, $teamName);
 
         $platformGroupTeam = new PlatformGroupTeam();
@@ -79,19 +109,10 @@ class PlatformGroupTeamService
 
         $groups = [];
 
-        foreach ($groupIds as $groupId)
+        foreach ($groups as $group)
         {
-            $group = $this->groupService->getGroupByIdentifier($groupId);
-
-            if (!$group instanceof Group)
-            {
-                continue;
-            }
-
-            $groups[] = $group;
-
             $platformGroupTeamRelation = new PlatformGroupTeamRelation();
-            $platformGroupTeamRelation->setGroupId($groupId);
+            $platformGroupTeamRelation->setGroupId($group->getId());
             $platformGroupTeamRelation->setPlatformGroupTeamId($platformGroupTeam->getId());
 
             if (!$this->platformGroupTeamRepository->createPlatformGroupTeamRelation($platformGroupTeamRelation))
@@ -101,7 +122,6 @@ class PlatformGroupTeamService
                 );
             }
         }
-//        $this->addGroupUsersToTeam($team, $groups);
     }
 
     /**
@@ -113,7 +133,7 @@ class PlatformGroupTeamService
     {
         $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
         $team = $this->getTeam($platformGroupTeam);
-        $this->addGroupUsersToTeam($team, $groups);
+        $this->addGroupUsersToTeam($team, $groups->getArrayCopy());
     }
 
     /**
@@ -126,24 +146,16 @@ class PlatformGroupTeamService
         $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
         $team = $this->getTeam($platformGroupTeam);
 
-        $groupUserIds = $groupUsers = [];
+        $userIds = [];
 
         foreach ($groups as $group)
         {
-            $groupUserIds[] = array_merge($groupUserIds, $group->get_users(true, true));
+            $userIds = array_merge($userIds, $group->get_users(true, true));
         }
 
-        $groupUserIds = array_unique($groupUserIds);
+        $users = $this->userService->findUsersByIdentifiers($userIds);
 
-        foreach ($groupUserIds as $groupUserId)
-        {
-            $user = new User();
-            $user->setId($groupUserId);
-
-            $groupUsers[] = $user;
-        }
-
-        $this->teamService->removeTeamMembersNotInArray($team, $groupUsers);
+        $this->teamService->removeTeamMembersNotInArray($team, $users);
     }
 
     /**
@@ -157,14 +169,18 @@ class PlatformGroupTeamService
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
      *
      * @return string
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    public function getVisitTeamUrl(PlatformGroupTeam $platformGroupTeam)
+    public function getVisitTeamUrl(User $user, PlatformGroupTeam $platformGroupTeam)
     {
         $team = $this->getTeam($platformGroupTeam);
+
         if (!$team instanceof Team)
         {
             throw new \RuntimeException(
@@ -173,6 +189,11 @@ class PlatformGroupTeamService
                     $platformGroupTeam->getTeamId()
                 )
             );
+        }
+
+        if (!$this->teamService->isOwner($user, $team))
+        {
+            $this->teamService->addMember($user, $team);
         }
 
         return $team->getWebUrl();
@@ -197,6 +218,17 @@ class PlatformGroupTeamService
 
             if (!array_key_exists($id, $data))
             {
+                $newTeamName = $this->updateTeamNameById(
+                    $id, $row[PlatformGroupTeam::PROPERTY_TEAM_ID], $row[PlatformGroupTeam::PROPERTY_NAME]
+                );
+
+                if (!$newTeamName)
+                {
+                    continue;
+                }
+
+                $row[PlatformGroupTeam::PROPERTY_NAME] = $newTeamName;
+
                 $data[$id] = ['id' => $id, 'name' => $row[PlatformGroupTeam::PROPERTY_NAME], 'groups' => []];
             }
 
@@ -206,7 +238,46 @@ class PlatformGroupTeamService
             ];
         }
 
-        return $data;
+        return array_values($data);
+    }
+
+    /**
+     * Helper method for the record iterator above. Cleans up deleted teams and updates team names when changed
+     *
+     * @param int $platformGroupId
+     * @param string $teamId
+     * @param string $currentName
+     *
+     * @return null|string
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     */
+    protected function updateTeamNameById(int $platformGroupId, string $teamId, string $currentName)
+    {
+        $team = $this->teamService->getTeam($teamId);
+        if (!$team instanceof Team)
+        {
+            $platformGroupTeam = $this->findPlatformGroupTeamById($platformGroupId);
+            $this->deleteRemovedTeam($platformGroupTeam);
+
+            return null;
+        }
+
+        $teamName = $team->getProperties()['displayName'];
+
+        if ($teamName != $currentName)
+        {
+            $platformGroupTeam = $this->findPlatformGroupTeamById($platformGroupId);
+            $platformGroupTeam->setName($teamName);
+            if (!$this->platformGroupTeamRepository->updatePlatformGroupTeam($platformGroupTeam))
+            {
+                throw new \RuntimeException(
+                    'Could not update the platform group team with id ' . $platformGroupTeam->getId()
+                );
+            }
+        }
+
+        return $teamName;
     }
 
     /**
@@ -221,8 +292,7 @@ class PlatformGroupTeamService
 
         if (is_null($team))
         {
-            $this->platformGroupTeamRepository->deleteRelationsForPlatformGroupTeam($platformGroupTeam);
-            $this->platformGroupTeamRepository->deletePlatformGroupTeam($platformGroupTeam);
+            $this->deletePlatformGroupTeam($platformGroupTeam);
 
             return null;
         }
@@ -231,27 +301,37 @@ class PlatformGroupTeamService
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
+     */
+    protected function deleteRemovedTeam(PlatformGroupTeam $platformGroupTeam)
+    {
+        $this->platformGroupTeamRepository->deleteRelationsForPlatformGroupTeam($platformGroupTeam);
+        $this->platformGroupTeamRepository->deletePlatformGroupTeam($platformGroupTeam);
+    }
+
+    /**
      * @param \Microsoft\Graph\Model\Team $team
      * @param array $groups
      */
     protected function addGroupUsersToTeam(Team $team, array $groups = [])
     {
+        $userIds = [];
+
         foreach ($groups as $group)
         {
-            $userIds = $group->get_users(true, true);
-            foreach ($userIds as $userId)
+            $userIds = array_merge($userIds, $group->get_users(true, true));
+        }
+
+        $users = $this->userService->findUsersByIdentifiers($userIds);
+
+        foreach ($users as $user)
+        {
+            try
             {
-                $user = new User();
-                $user->setId($userId);
-
-                try
-                {
-                    $this->teamService->addMember($user, $team);
-                }
-                catch (AzureUserNotExistsException $exception)
-                {
-
-                }
+                $this->teamService->addMember($user, $team);
+            }
+            catch (AzureUserNotExistsException $exception)
+            {
             }
         }
     }

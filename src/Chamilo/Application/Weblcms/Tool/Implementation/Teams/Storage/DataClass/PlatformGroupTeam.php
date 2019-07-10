@@ -33,7 +33,7 @@ class PlatformGroupTeam extends DataClass
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getTeamId()
     {
@@ -60,11 +60,11 @@ class PlatformGroupTeam extends DataClass
     }
 
     /**
-     * @param int $teamId
+     * @param string $teamId
      *
      * @return $this
      */
-    public function setTeamId(int $teamId)
+    public function setTeamId(string $teamId)
     {
         $this->set_default_property(self::PROPERTY_TEAM_ID, $teamId);
         return $this;

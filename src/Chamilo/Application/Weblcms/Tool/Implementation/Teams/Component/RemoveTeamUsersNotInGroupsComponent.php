@@ -37,6 +37,7 @@ class RemoveTeamUsersNotInGroupsComponent extends Manager
             $message = 'TeamUsersNotInGroupsNotRemoved';
             $success = false;
             $this->getExceptionLogger()->logException($ex);
+            var_dump($ex->getMessage());
         }
 
         $this->redirect(

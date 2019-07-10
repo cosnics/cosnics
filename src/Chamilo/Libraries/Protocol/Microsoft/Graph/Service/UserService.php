@@ -1,8 +1,10 @@
 <?php
+
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository;
 
 /**
@@ -86,7 +88,8 @@ class UserService
         $azureActiveDirectoryUserIdentifier = $this->getLocalSetting()->get(
             'external_user_id',
             'Chamilo\Libraries\Protocol\Microsoft\Graph',
-            $user);
+            $user
+        );
 
         if (empty($azureActiveDirectoryUserIdentifier))
         {
@@ -101,7 +104,8 @@ class UserService
                 'external_user_id',
                 $azureActiveDirectoryUserIdentifier,
                 'Chamilo\Libraries\Protocol\Microsoft\Graph',
-                $user);
+                $user
+            );
         }
 
         return $azureActiveDirectoryUserIdentifier;
@@ -109,13 +113,20 @@ class UserService
 
     /**
      * @param User[] $users
+     *
      * @return string[]
      */
-    public function getAzureUserIdentifiers(array $users):array
+    public function getAzureUserIdentifiers(array $users): array
     {
         $azureIds = [];
-        foreach ($users as $user) {
-            $azureIds[] = $this->getAzureUserIdentifier($user);
+        foreach ($users as $user)
+        {
+            $azureUserId = $this->getAzureUserIdentifier($user);
+
+            if (!empty($azureUserId))
+            {
+                $azureIds[] = $azureUserId;
+            }
         }
 
         return $azureIds;
