@@ -2,16 +2,13 @@
 
 namespace Chamilo\Libraries\Authentication\Cas;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\Translation\Translation;
 use phpCAS;
-use Symfony\Component\Translation\Translator;
 
 /**
  *
