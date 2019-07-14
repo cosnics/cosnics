@@ -3,12 +3,14 @@
 namespace Chamilo\Libraries\Authentication\Ldap;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Session\Session;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -123,6 +125,9 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
      */
     public function logout(User $user)
     {
+        Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
+        Session::destroy();
+
         $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
         $redirect->toUrl();
         exit();
