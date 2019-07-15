@@ -173,6 +173,8 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
         $user->set_lastname($userAttributes['last_name']);
         $user->set_firstname($userAttributes['first_name']);
         $user->set_official_code($userAttributes['person_number']);
+        $user->set_expiration_date(0);
+        $user->set_active(1);
 
         if (!$user->create())
         {
