@@ -30,12 +30,18 @@ class BrowserComponent extends Manager
     {
         $courseTeamService = $this->getCourseTeamService();
         $hasTeam = $courseTeamService->courseHasTeam($this->get_course());
+        $courseTeamName = null;
 
-//        $hasTeam = true;
+        if($hasTeam)
+        {
+            $courseTeam = $courseTeamService->getTeam($this->get_course());
+            $courseTeamName = $courseTeam->getProperties()['displayName'];
+        }
 
         return $this->render(
             [
                 'COURSE_HAS_TEAM' => $hasTeam,
+                'COURSE_TEAM_NAME' => $courseTeamName,
                 'IS_TEACHER' => $this->get_course()->is_course_admin($this->getUser()),
                 'TEAM_URL' => $this->getUrlWithAction(self::ACTION_GO_TO_TEAM),
                 'REMOVE_TEAM_USERS_URL' => $this->getUrlWithAction(self::ACTION_REMOVE_TEAM_USERS_NOT_IN_COURSE),

@@ -4,53 +4,76 @@
 
 <h3 class="title-underline">{{ 'CourseTeam'|trans({}, appContext) }}</h3>
 
-{% if COURSE_HAS_TEAM %}
+<style>
+    .course-table .actions-column {
+        text-align: center;
+        width: 20px;
+        white-space: nowrap;
+    }
 
-    <div class="text-center">
-        <a target="_blank" href="{{ TEAM_URL }}" class="btn btn-primary btn-lg">{{ 'GoToTeam'|trans({}, appContext) }}</a>
-    </div>
+    .course-table tbody tr td {
+        vertical-align: middle;
+    }
 
-    {% if IS_TEACHER %}
-        <div class="alert alert-info" role="alert" style="margin-top: 30px">
-            {{ 'UserSyncExplanation'|trans({}, appContext) }}
-            <div style="margin-top: 10px">
-                <a href="{{ SUBSCRIBE_ALL_COURSE_USERS_URL }}"
-                   class="btn btn-info">{{ 'SubscribeAllCourseUsers'|trans({}, appContext) }}
-                </a>
-                <a href="{{ REMOVE_TEAM_USERS_URL }}"
-                   class="btn btn-warning">{{ 'RemoveTeamUsersNotInCourse'|trans({}, appContext) }}
-                </a>
-            </div>
+    .course-table {
+        margin-top: 30px;
+    }
 
-        </div>
-    {% endif %}
+</style>
 
-{% else %}
 
-    {% if IS_TEACHER %}
-        <div class="text-center">
-            <a href="{{ CREATE_TEAM_URL }}" class="btn btn-primary btn-lg">{{ 'CreateTeam'|trans({}, appContext) }}</a>
-        </div>
-    {% else %}
-        <div class="alert alert-info">
-            {{ 'TeamNotActivated'|trans({}, appContext) }}
-        </div>
-    {% endif %}
-
+{% if IS_TEACHER and not COURSE_HAS_TEAM %}
+    <a href="{{ CREATE_TEAM_URL }}" class="btn btn-default">{{ 'CreateTeam'|trans({}, appContext) }}</a>
 {% endif %}
 
-{#<div style="margin-top: 40px">#}
-{#    <h3 class="title-underline">{{ 'PlatformGroupTeams'|trans({}, appContext) }}</h3>#}
-{#{% include appContext ~ ':PlatformGroupTeamTable.html.twig'#}
-{#    with {#}
-{#        'CREATE_PLATFORM_GROUP_TEAM_URL': CREATE_PLATFORM_GROUP_TEAM_URL,#}
-{#        'SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS_URL': SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS_URL,#}
-{#        'REMOVE_TEAM_USERS_NOT_IN_GROUPS_URL': REMOVE_TEAM_USERS_NOT_IN_GROUPS_URL,#}
-{#        'VISIT_PLATFORM_GROUP_TEAM_URL': VISIT_PLATFORM_GROUP_TEAM_URL,#}
-{#        'PLATFORM_GROUP_TEAMS_JSON': PLATFORM_GROUP_TEAMS_JSON,#}
-{#        'IS_TEACHER': IS_TEACHER#}
-{#    }#}
-{#%}#}
-{#</div>#}
+<table class="course-table table table-striped table-bordered">
+    <thead>
+    <tr>
+        <th>{{ 'CourseTeamName'|trans({}, appContext) }}</th>
+        <th class="actions-column"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        {% if COURSE_HAS_TEAM %}
+        <td>{{ COURSE_TEAM_NAME }}</td>
+        <td class="actions-column">
+            <a href="{{ TEAM_URL }}" type="button" class="btn btn-default btn-sm">{{ 'VisitTeam'|trans({}, appContext) }}</a>
+
+            {% if IS_TEACHER %}
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ 'Synchronize'|trans({}, appContext) }}
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="{{ SUBSCRIBE_ALL_COURSE_USERS_URL }}">{{ 'SubscribeAllCourseUsers'|trans({}, appContext) }}</a></li>
+                        <li><a href="{{ REMOVE_TEAM_USERS_URL }}">{{ 'RemoveTeamUsersNotInCourse'|trans({}, appContext) }}</a></li>
+                    </ul>
+                </div>
+            {% endif %}
+        </td>
+        {% else %}
+        <td colspan="2" class="text-center">
+            {{ 'TeamNotActivated'|trans({}, appContext) }}
+        </td>
+        {% endif %}
+    </tr>
+
+    </tbody>
+</table>
+
+<div style="margin-top: 40px">
+    <h3 class="title-underline">{{ 'PlatformGroupTeams'|trans({}, appContext) }}</h3>
+    {% include appContext ~ ':PlatformGroupTeamTable.html.twig'
+        with {
+        'CREATE_PLATFORM_GROUP_TEAM_URL': CREATE_PLATFORM_GROUP_TEAM_URL,
+        'SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS_URL': SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS_URL,
+        'REMOVE_TEAM_USERS_NOT_IN_GROUPS_URL': REMOVE_TEAM_USERS_NOT_IN_GROUPS_URL,
+        'VISIT_PLATFORM_GROUP_TEAM_URL': VISIT_PLATFORM_GROUP_TEAM_URL,
+        'PLATFORM_GROUP_TEAMS_JSON': PLATFORM_GROUP_TEAMS_JSON,
+        'IS_TEACHER': IS_TEACHER
+    } %}
+</div>
 
 {{ FOOTER|raw }}

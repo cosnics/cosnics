@@ -38,6 +38,9 @@
              show-empty empty-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
              empty-filtered-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
     >
+        <template slot="name" slot-scope="data">
+            <a :href="visitTeamUrl(data.item)">{{ '{{ data.item.name }}' }}</a>
+        </template>
         <template slot="platform_groups" slot-scope="data">
             <select class="form-control input-sm" name="platform_groups">
                 <option v-for="platformGroup in data.item.groups">

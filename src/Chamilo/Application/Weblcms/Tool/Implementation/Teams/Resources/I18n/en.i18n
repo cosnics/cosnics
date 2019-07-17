@@ -7,6 +7,7 @@ TeamNotActivated = "This team is not yet activated. Please contact the course ad
 TeamCreated = "Team Created"
 TeamAlreadyExists = "Team already exists for course"
 TeamUsersSynced = "Team users synced"
+CourseTeamName = "Team name"
 RemoveTeamUsersNotInCourse = "Remove users from team that are not subscribed to course"
 UserSyncExplanation = "When a user clicks on the link above, he will automaticly be subscribed to the team"
 SubscribeAllCourseUsers = "Add all course users to team"
