@@ -359,4 +359,11 @@ interface AssignmentServiceBridgeInterface
      * @return bool
      */
     public function isContentObjectAttachedToEntry(Entry $entry, ContentObject $contentObject);
+
+    /**
+     * @param int $learningPathAttemptId
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|Entry
+     */
+    public function findEntryForLearningPathAttempt(int $learningPathAttemptId);
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="tracking_weblcms_lp_attempt_rel_assignment_entry">
+    <properties>
+        <property
+                name="id"
+                type="integer"
+                unsigned="1"
+                notnull="1"
+                autoincrement="true"/>
+        <property
+                name="tree_node_attempt_id"
+                type="integer"
+                unsigned="1"
+                notnull="1"/>
+        <property
+                name="entry_id"
+                type="integer"
+                unsigned="1"
+                notnull="1"/>
+    </properties>
+    <index name="tree_node_attempt_id">
+        <indexproperty name="tree_node_attempt_id"/>
+    </index>
+    <index name="entry_id">
+        <indexproperty name="entry_id"/>
+    </index>
+</object>

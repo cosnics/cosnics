@@ -22,36 +22,50 @@ CREATE TABLE `tracking_user_admin_user_visit`
     `visit_date`    int(10) UNSIGNED NOT NULL,
     PRIMARY KEY (`id`),
     KEY `admin_user_id` (`admin_user_id`, `user_visit_id`, `visit_date`)
-) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 
-CREATE TABLE `user_invite` (
-`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
- `user_id` INT(10) UNSIGNED NOT NULL ,
- `invited_by_user_id` INT(10) UNSIGNED NOT NULL ,
- `valid_until` INT(10) UNSIGNED NOT NULL ,
- `secret_key` VARCHAR(100) NOT NULL ,
- `status` INT(10) UNSIGNED NOT NULL ,
- PRIMARY KEY (`id`),
- INDEX (`user_id`),
- INDEX (`secret_key`),
- INDEX (`invited_by_user_id`)
+CREATE TABLE `user_invite`
+(
+    `id`                 INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `user_id`            INT(10) UNSIGNED NOT NULL,
+    `invited_by_user_id` INT(10) UNSIGNED NOT NULL,
+    `valid_until`        INT(10) UNSIGNED NOT NULL,
+    `secret_key`         VARCHAR(100)     NOT NULL,
+    `status`             INT(10) UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX (`user_id`),
+    INDEX (`secret_key`),
+    INDEX (`invited_by_user_id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE `weblcms_platform_group_team` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `course_id` int(10) UNSIGNED NOT NULL,
-  `team_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `wpgt_course_id` (`course_id`);
+CREATE TABLE `weblcms_platform_group_team`
+(
+    `id`        int(10) UNSIGNED                    NOT NULL AUTO_INCREMENT,
+    `course_id` int(10) UNSIGNED                    NOT NULL,
+    `team_id`   varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+    `name`      varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `wpgt_course_id` (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `weblcms_platform_group_team_relation` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `platform_group_team_id` int(10) UNSIGNED NOT NULL,
-  `group_id` int(10) UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `wpgtr_platform_group_team_id` (`platform_group_team_id`),
-  KEY `wpgtr_group_id` (`group_id`);
+CREATE TABLE `weblcms_platform_group_team_relation`
+(
+    `id`                     int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `platform_group_team_id` int(10) UNSIGNED NOT NULL,
+    `group_id`               int(10) UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `wpgtr_platform_group_team_id` (`platform_group_team_id`),
+    KEY `wpgtr_group_id` (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `chamilo`.`tracking_weblcms_lp_attempt_rel_assignment_entry`
+(
+    `id`                       INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `tree_node_attempt_id` INT(10)          NOT NULL,
+    `entry_id`                 INT(10)          NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX (`tree_node_attempt_id`),
+    INDEX (`entry_id`)
+) ENGINE = InnoDB;

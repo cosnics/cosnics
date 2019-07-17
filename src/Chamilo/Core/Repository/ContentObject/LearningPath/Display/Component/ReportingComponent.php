@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\AssignmentServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\AssignmentConfiguration;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
@@ -540,11 +541,16 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
     {
         $user = $this->getReportingUser();
 
+        $treeNodeAttempts = $this->trackingService->getTreeNodeAttempts($this->learningPath, $user, $treeNode);
+        $lastAttempt = array_pop($treeNodeAttempts);
+
+        if(empty($lastAttempt))
+        {
+            return null;
+        }
+
         if($treeNode->getContentObject() instanceof Assessment)
         {
-            $treeNodeAttempts = $this->trackingService->getTreeNodeAttempts($this->learningPath, $user, $treeNode);
-            $lastAttempt = array_pop($treeNodeAttempts);
-
             return $this->get_url(
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_VIEW_ASSESSMENT_RESULT,
@@ -558,10 +564,21 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         {
             /** @var AssignmentConfiguration $configuration */
             $configuration = $treeNode->getConfiguration(new AssignmentConfiguration());
+            $entityType = $configuration->getEntityType();
 
-            if($configuration->getEntityType() != 0)
+            if($entityType != 0)
             {
-                return null;
+                $entry = $this->getAssignmentServiceBridge()->findEntryForLearningPathAttempt($lastAttempt);
+                if(!$entry instanceof Entry)
+                {
+                    return null;
+                }
+
+                $entityId = $entry->getEntityId();
+            }
+            else
+            {
+                $entityId = $user->getId();
             }
 
             return $this->get_url(
@@ -570,13 +587,21 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
                     Manager::PARAM_CHILD_ID => $treeNode->getId(),
                     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION =>
                         \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_ENTRY,
-                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE => 0,
-                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID => $user->getId()
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE => $entityType,
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID => $entityId
                 )
             );
         }
 
         return null;
+    }
+
+    /**
+     * @return AssignmentServiceBridgeInterface
+     */
+    protected function getAssignmentServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(AssignmentServiceBridgeInterface::class);
     }
 
     /**
