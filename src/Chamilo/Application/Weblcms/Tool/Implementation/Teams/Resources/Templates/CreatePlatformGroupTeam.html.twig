@@ -16,47 +16,9 @@
         padding-top: 7px;
     }
 
-    .selected-parent-groups {
-        margin-bottom: 10px;
-    }
-
-    .group-title {
-        margin-left: 10px;
-    }
-
-    table.fancytree-container tbody tr td,
-    table.fancytree-container thead tr th {
-        padding: 10px 17px;
-    }
-
-    .fancytree-icon,
-    .fancytree-checkbox {
-        font-size: 15px;
-    }
-
-    .selected-platform-groups {
-        margin-left: -5px;
-        margin-top: 20px;
-    }
-
-    .selected-platform-group {
-        margin: 0 5px;
-        padding: 6px;
-        background-color: #17a2b8;
-        border-radius: 4px;
-        color: white;
-    }
-
-    .deselect-node {
-        margin-left: 10px;
-        cursor: pointer;
-    }
-
-    .fancytree-clickable {
-        cursor: pointer;
-    }
-
 </style>
+
+{% include 'Chamilo\\Core\\Group:PlatformGroupSelector.html.twig' %}
 
 <div class="platform-group-team-creator">
     {{ form_start(FORM) }}
@@ -64,33 +26,11 @@
     <div class="form-group">
         <label for="create_platform_group_team_name" class="col-sm-2 control-label required">{{ 'PlatformGroups'|trans({}, appContext) }}</label>
         <div class="platform-group-selector col-sm-10">
-            <table id="platform-group-tree" class="table table-striped fancytree-colorize-selected">
-                <colgroup>
-                    <col width="30px"></col>
-                    <col width="*"></col>
-                    <col width="*"></col>
-                </colgroup>
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>{{ 'Name'|trans({}, 'Chamilo\\Core\\Group') }}</th>
-                    <th>{{ 'Code'|trans({}, 'Chamilo\\Core\\Group') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td></td>
-                    <td class="fancytree-clickable"></td>
-                    <td></td>
-                </tr>
-                </tbody>
-            </table>
-
-            <div class="selected-platform-groups">
-                <span class="selected-platform-group" v-for="selectedTreeNode in selectedTreeNodes">
-                    {{ '{{ selectedTreeNode.data.selectedLabel }}' }} <span @click="deselectNode(selectedTreeNode)" class="fa fa-times deselect-node"></span>
-                </span>
-            </div>
+            <platform-group-selector
+                    :platform-groups="platformGroups"
+                    :get-group-children-url="getGroupChildrenUrl"
+                    v-on:selection-changed="selectionChanged"
+            ></platform-group-selector>
         </div>
     </div>
 
@@ -119,99 +59,43 @@
                 el: '.platform-group-team-creator',
                 data: {
                     platformGroups: platformGroups,
-                    selectedTreeNodes: [],
+                    getGroupChildrenUrl: getGroupChildrenUrl,
+                    selectedGroups: [],
                     teamName: ''
                 },
                 methods: {
-                    deselectNode: function (selectedTreeNode) {
-                        selectedTreeNode.setSelected(false);
-                    },
                     canCreate: function () {
-                        if (this.selectedTreeNodes.length === 0) {
+                        if (this.selectedGroups.length === 0) {
                             return false;
                         }
 
                         return this.teamName.length > 0;
+                    },
+                    selectionChanged: function(selectedGroups) {
+                        this.selectedGroups = selectedGroups;
+                        this.proposeTeamName();
+                    },
+                    proposeTeamName: function() {
+                        var vueInstance = this;
+
+                        if (vueInstance.selectedGroups.length === 1) {
+                            vueInstance.teamName = vueInstance.selectedGroups[0].name + ' - ' + courseMetadata
+                        }
+
+                        if (vueInstance.selectedGroups.length === 0) {
+                            vueInstance.teamName = '';
+                        }
                     }
                 },
                 computed: {
                     selectedPlatformGroupIds: function() {
                         var platformGroupIds = [];
-                        this.selectedTreeNodes.forEach(function(treeNode) {
-                            platformGroupIds.push(treeNode.key);
+                        this.selectedGroups.forEach(function(group) {
+                            platformGroupIds.push(group.id);
                         });
 
                         return JSON.stringify(platformGroupIds);
                     }
-                },
-                mounted: function () {
-                    var vueInstance = this;
-
-                    var convertData = function (groups) {
-                        var treeData = [];
-
-                        groups.forEach(function (group) {
-                            treeData.push({
-                                title: group.name,
-                                key: group.id,
-                                folder: true,
-                                lazy: group.has_children,
-                                code: group.code,
-                                selectedLabel: group.name + ' (' + group.code + ') '
-                            });
-                        });
-                        return treeData;
-                    };
-
-                    $('#platform-group-tree').fancytree({
-                        source: function (event, data) {
-                            return vueInstance.platformGroups;
-                        },
-                        lazyLoad: function (event, data) {
-                            data.result = {
-                                url: getGroupChildrenUrl,
-                                data: {'groupId': data.node.key},
-                                cache: false,
-                                method: 'POST'
-                            };
-                        },
-                        postProcess: function (event, data) {
-                            data.result = convertData(data.response);
-                        },
-                        checkbox: true,
-                        selectMode: 2,
-                        glyph: {
-                            preset: 'awesome4',
-                            map: {}
-                        },
-                        extensions: ['glyph', 'table'],
-                        table: {
-                            checkboxColumnIdx: 0,
-                            nodeColumnIdx: 1,
-                            indentation: 30
-                        },
-                        renderColumns: function (event, data) {
-                            var node = data.node;
-                            var $tdList = $(node.tr).find(">td");
-
-                            $tdList.eq(2).text(node.data.code);
-                        },
-                        select: function (event, data) {
-                            vueInstance.selectedTreeNodes = data.tree.getSelectedNodes();
-
-                            if (vueInstance.selectedTreeNodes.length === 1) {
-                                vueInstance.teamName = vueInstance.selectedTreeNodes[0].title + ' - ' + courseMetadata
-                            }
-
-                            if (vueInstance.selectedTreeNodes.length === 0) {
-                                vueInstance.teamName = '';
-                            }
-                        },
-                        clickFolderMode: 2,
-                        icon: false
-                    });
-
-
                 }
             });
 

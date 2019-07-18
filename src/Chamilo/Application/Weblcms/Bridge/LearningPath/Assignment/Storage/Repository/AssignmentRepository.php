@@ -503,7 +503,7 @@ class AssignmentRepository extends
                         LearningPathTreeNodeAttempt::class, LearningPathTreeNodeAttempt::PROPERTY_ID
                     ),
                     new PropertyConditionVariable(
-                        LearningPathAttemptEntryRelation::class, LearningPathAttemptEntryRelation::PROPERTY_ENTRY_ID
+                        LearningPathAttemptEntryRelation::class, LearningPathAttemptEntryRelation::PROPERTY_TREE_NODE_ATTEMPT_ID
                     )
                 )
             )

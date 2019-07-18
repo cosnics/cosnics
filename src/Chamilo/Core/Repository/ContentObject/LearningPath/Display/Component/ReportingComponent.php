@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry;
@@ -542,7 +543,12 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         $user = $this->getReportingUser();
 
         $treeNodeAttempts = $this->trackingService->getTreeNodeAttempts($this->learningPath, $user, $treeNode);
-        $lastAttempt = array_pop($treeNodeAttempts);
+
+        do
+        {
+            $lastAttempt = array_pop($treeNodeAttempts);
+        }
+        while($lastAttempt instanceof LearningPathTreeNodeAttempt && !$lastAttempt->isCompleted());
 
         if(empty($lastAttempt))
         {
@@ -568,7 +574,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
             if($entityType != 0)
             {
-                $entry = $this->getAssignmentServiceBridge()->findEntryForLearningPathAttempt($lastAttempt);
+                $entry = $this->getAssignmentServiceBridge()->findEntryForLearningPathAttempt($lastAttempt->getId());
                 if(!$entry instanceof Entry)
                 {
                     return null;
