@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Group\Storage\Repository;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\DataClass\GroupClosureTable;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -21,7 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class GroupRepository extends CommonDataClassRepository
+class GroupRepository extends ClosureTableRepository
 {
 
     /**
@@ -151,5 +152,70 @@ class GroupRepository extends CommonDataClassRepository
     public function findGroupByIdentifier($groupId)
     {
         return $this->dataClassRepository->retrieveById(Group::class, $groupId);
+    }
+
+    /*****************************************************************************************************************
+     * Fallback functionality for dataclass methods                                                                  *
+     *****************************************************************************************************************/
+
+    /**
+     * @param DataClass $dataClass
+     *
+     * @return bool
+     */
+    public function create(DataClass $dataClass)
+    {
+        return $dataClass->create();
+    }
+
+    /**
+     * @param DataClass $dataClass
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function update(DataClass $dataClass)
+    {
+        return $dataClass->update();
+    }
+
+    /**
+     * @param DataClass $dataClass
+     *
+     * @return bool
+     */
+    public function delete(DataClass $dataClass)
+    {
+        return $dataClass->delete();
+    }
+
+    public function testClosureTable()
+    {
+//        $condition = new EqualityCondition(
+//            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+//            new StaticConditionVariable(0)
+//        );
+//
+//        $root = $this->dataClassRepository->retrieve(Group::class, new DataClassRetrieveParameters($condition));
+//        $this->addChildToParent(GroupClosureTable::class, $root, 0);
+//        $this->addChildren($root);
+var_dump($this->getAllParentsByChildId(Group::class, GroupClosureTable::class, 33));
+
+$group = new Group();
+$group->setId(31);
+//
+//$this->deleteChildFromTree(GroupClosureTable::class, $group);
+
+//        $this->moveChildToNewParent(GroupClosureTable::class, $group, 2);
+    }
+
+    public function addChildren(Group $group)
+    {
+        $children = $group->get_children(false);
+        foreach($children as $child)
+        {
+            $this->addChildToParent(GroupClosureTable::class, $child, $group->getId());
+            $this->addChildren($child);
+        }
     }
 }

@@ -112,4 +112,9 @@ class GroupService
     {
         return $this->groupRepository->findDirectChildrenFromGroup($group);
     }
+
+    public function testClosureTable()
+    {
+        return $this->groupRepository->testClosureTable();
+    }
 }

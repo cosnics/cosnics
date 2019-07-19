@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="group_group">
+    <properties>
+        <property
+                name="parent_id"
+                type="integer"
+                unsigned="1"
+                notnull="1" />
+        <property
+                name="child_id"
+                type="integer"
+                unsigned="1"
+                notnull="1" />
+        <property
+                name="depth"
+                type="integer"
+                unsigned="1"
+                notnull="1" />
+    </properties>
+    <index name="parent_id">
+        <indexproperty name="parent_id" />
+    </index>
+    <index name="child_id">
+        <indexproperty name="child_id" />
+    </index>
+    <index name="depth">
+        <indexproperty name="depth" />
+    </index>
+</object>

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Menu\GroupMenu;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Table\Group\GroupTable;
@@ -77,7 +78,17 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $output;
         $html[] = $this->render_footer();
 
+        $this->getGroupService()->testClosureTable();
+
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->getService(GroupService::class);
     }
 
     public function get_user_html()

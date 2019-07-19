@@ -35,6 +35,19 @@ interface DataClassDatabaseInterface
     public function createRecord($dataClassName, $record);
 
     /**
+     * @param string $insertIntoDataClassName
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $columns
+     * @param string $selectFromDataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     *
+     * @return bool
+     */
+    public function insertIntoSelectFrom(
+        string $insertIntoDataClassName, DataClassProperties $columns,
+        string $selectFromDataClassName, RecordRetrievesParameters $recordRetrievesParameters
+    );
+
+    /**
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
