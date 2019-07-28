@@ -115,7 +115,7 @@ class ContentObjectPublicationMailer
         $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
 
         $body .= $this->getTranslation('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' .
-             $link . '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
+             $link . '" target="_blank">' . $content_object->get_title() . '</a><br />--<br />';
         
         $body .= $content_object->get_description();
         $body .= '--<br />';

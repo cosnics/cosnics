@@ -8,8 +8,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\Translation\Translator;
@@ -192,9 +190,6 @@ class AuthenticationValidator
      */
     public function logout(User $user)
     {
-        Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
-        Session::destroy();
-
         foreach($this->authentications as $authentication)
         {
             if($authentication->getAuthenticationType() == $user->getAuthenticationSource())

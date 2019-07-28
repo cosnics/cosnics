@@ -52,7 +52,7 @@ class DisplayComponent extends Manager implements DelegateComponent
         $this->buildBridges($publication);
 
         $configuration = new ApplicationConfiguration(
-            $this->get_application()->getRequest(), $this->get_application()->getUser(), $this
+            $this->get_application()->getRequest(), $this->getUser(), $this
         );
 
         $applicationFactory = $this->getApplicationFactory();

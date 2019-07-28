@@ -2,10 +2,12 @@
 
 namespace Chamilo\Libraries\Authentication\SecurityToken;
 
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  *
@@ -66,7 +68,8 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
      */
     public function logout(User $user)
     {
-
+        Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
+        Session::destroy();
     }
 
     /**

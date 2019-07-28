@@ -249,6 +249,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters $entryTableParameters
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
+     * @throws \Exception
      */
     public function getEntryTableForEntityTypeAndId(Application $application, EntryTableParameters $entryTableParameters
     )
@@ -365,8 +366,6 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @param string $ipAdress
      *
      * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createEntry(
         TreeNode $treeNode, TreeNodeAttempt $treeNodeAttempt, $entityType, $entityId, $userId, $contentObjectId,
@@ -381,11 +380,33 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
 
         $this->learningPathTrackingService->setActiveAttemptCompleted($learningPath, $treeNode, $user);
 
-        return $this->assignmentService->createEntry(
+        $entry = $this->assignmentService->createEntry(
             $this->contentObjectPublication, $treeNode->getTreeNodeData(), $treeNodeAttempt, $entityType, $entityId,
             $userId,
             $contentObjectId, $ipAdress
         );
+
+        $this->assignmentService->createLearningPathAttemptEntryRelation($treeNodeAttempt, $entry);
+
+        if($entityType != \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::ENTITY_TYPE_USER)
+        {
+            $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+            $users = $entityService->getUsersForEntity($entityId);
+
+            foreach($users as $user)
+            {
+                if($user->getId() == $userId)
+                {
+                    continue;
+                }
+
+                $attempt = $this->learningPathTrackingService->getActiveAttempt($learningPath, $treeNode, $user);
+                $this->learningPathTrackingService->setActiveAttemptCompleted($learningPath, $treeNode, $user);
+                $this->assignmentService->createLearningPathAttemptEntryRelation($attempt, $entry);
+            }
+        }
+
+        return $entry;
     }
 
     /**
@@ -522,12 +543,16 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
         /** @var \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath */
         $learningPath = $this->contentObjectPublication->getContentObject();
 
-        $entryUser = new User();
-        $entryUser->setId($entry->getUserId());
+        $attempts = $this->assignmentService->findLearningPathAttemptsByEntry($entry);
+        foreach($attempts as $attempt)
+        {
+            $attemptUser = new User();
+            $attemptUser->setId($attempt->getUserId());
 
-        $this->learningPathTrackingService->changeAssessmentScore(
-            $learningPath, $entryUser, $treeNode, $entry->getTreeNodeAttemptId(), $score->getScore()
-        );
+            $this->learningPathTrackingService->changeAssessmentScore(
+                $learningPath, $attemptUser, $treeNode, $attempt->getId(), $score->getScore()
+            );
+        }
 
         return $score;
     }
@@ -543,7 +568,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     {
         $this->assignmentService->updateScore($score);
 
-        /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry $entry */
+        /** @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry */
         $entry = $this->findEntryByIdentifier($score->getEntryId());
         if (!$entry instanceof Entry)
         {
@@ -553,12 +578,16 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
         /** @var \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath */
         $learningPath = $this->contentObjectPublication->getContentObject();
 
-        $entryUser = new User();
-        $entryUser->setId($entry->getEntityId());
+        $attempts = $this->assignmentService->findLearningPathAttemptsByEntry($entry);
+        foreach($attempts as $attempt)
+        {
+            $attemptUser = new User();
+            $attemptUser->setId($attempt->getUserId());
 
-        $this->learningPathTrackingService->changeAssessmentScore(
-            $learningPath, $entryUser, $treeNode, $entry->getTreeNodeAttemptId(), $score->getScore()
-        );
+            $this->learningPathTrackingService->changeAssessmentScore(
+                $learningPath, $attemptUser, $treeNode, $attempt->getId(), $score->getScore()
+            );
+        }
     }
 
     /**
@@ -702,5 +731,15 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function isContentObjectAttachedToEntry(Entry $entry, ContentObject $contentObject)
     {
         return $this->assignmentService->isContentObjectAttachedToEntry($entry, $contentObject);
+    }
+
+    /**
+     * @param int $learningPathAttemptId
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry
+     */
+    public function findEntryForLearningPathAttempt(int $learningPathAttemptId)
+    {
+        return $this->assignmentService->findEntryForLearningPathAttempt($learningPathAttemptId);
     }
 }

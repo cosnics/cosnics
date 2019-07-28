@@ -61,6 +61,9 @@ abstract class Manager extends Application
     const ACTION_QUICK_LANG = 'QuickLanguage';
     const ACTION_ACCESS_ANONYMOUSLY = 'AnonymousAccess';
 
+    const ACTION_INVITE = 'Invite';
+    const ACTION_ACCEPT_INVITE = 'AcceptInvite';
+
     // Default action
     const DEFAULT_ACTION = self::ACTION_BROWSE_USERS;
 

@@ -4,8 +4,8 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<title>Fancytree - Example: Forms</title>
 
-	<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
-	<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+	<link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+	<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
@@ -25,7 +25,6 @@
 <script type="text/javascript">
 	$(function(){
 		$("#tree").fancytree({
-			aria: true,
 			checkbox: true,
 			selectMode: 2,
 			source: [
@@ -41,7 +40,6 @@
 			]
 		});
 		$("#tree2").fancytree({
-			aria: true,
 			checkbox: false,
 			selectMode: 3,
 			source: [
@@ -114,17 +112,17 @@ $(function(){
 		<br>
 		<fieldset>
 			<legend>Radioboxes</legend>
-			<input type="radio" name="rb1" value="foo" checked> Foo
-			<input type="radio" name="rb1" value="bar"> Bar
-			<input type="radio" name="rb1" value="baz"> Baz
+			<label><input type="radio" name="rb1" value="foo" checked> Foo</label>
+			<label><input type="radio" name="rb1" value="bar"> Bar</label>
+			<label><input type="radio" name="rb1" value="baz"> Baz</label>
 		</fieldset>
 		<br>
 		<fieldset>
 			<legend>Checkboxes</legend>
-			<input type="checkbox" name="cb1" value="John" checked>John
-			<input type="checkbox" name="cb1" value="Paul">Paul
-			<input type="checkbox" name="cb1" value="George">George
-			<input type="checkbox" name="cb1" value="Ringo">Ringo
+			<label><input type="checkbox" name="cb1" value="John" checked>John</label>
+			<label><input type="checkbox" name="cb1" value="Paul">Paul</label>
+			<label><input type="checkbox" name="cb1" value="George">George</label>
+			<label><input type="checkbox" name="cb1" value="Ringo">Ringo</label>
 		</fieldset>
 		<br>
 		<fieldset>

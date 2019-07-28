@@ -46,6 +46,9 @@ class Mailer extends AbstractMailer
      * Sends a single mail
      *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
+     *
+     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws \Exception
      */
     public function sendMail(Mail $mail)
     {

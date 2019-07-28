@@ -1,0 +1,189 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Core\\User' %}
+{% form_theme FORM 'bootstrap_3_horizontal_layout.html.twig' %}
+
+<style>
+
+    .register_container {
+        max-width: 600px;
+        background-color: rgba(64, 110, 142, 0.9);
+        margin: 30px auto;
+        /*border: 1px solid #dddddd;*/
+        color: #666666;
+        padding: 50px;
+    }
+
+    .register_container .register_container_header {
+        color: white;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 50px;
+        font-size: 15px;
+    }
+
+    .register_container .register_container_header .logo {
+        margin-bottom: 50px;
+        margin-right: -25px;
+        margin-top: -25px;
+    }
+
+    .register_container .register_container_header h1 {
+        margin: 0 0 40px;
+        font-size: 24px;
+    }
+
+    .register_container .register_container_header .register_header_description {
+        border-top: 1px dotted #dddddd;
+        border-bottom: 1px dotted #dddddd;
+        padding: 20px 0;
+    }
+
+    .register_container .register_container_body {
+    }
+
+    .register_container .register_container_body .help-block{
+        color: lightcoral;
+    }
+
+    .register_container .register_container_body .input-group-addon {
+        background-color: white;
+    }
+
+    .register_container .register_container_body .input-group .form-control:last-child {
+        border-left: none;
+    }
+
+    .register_container .register_container_body .form-control,
+    .register_container .register_container_body .input-group-addon {
+        border-radius: 0;
+    }
+
+    .register_container .register_container_body .password {
+        margin-top: 50px;
+    }
+
+    .register_container .btn {
+        margin-top: 0;
+        width: 100%;
+        background-color: #7cc67c;
+        border-radius: 0;
+        font-weight: bold;
+        border: none;
+    }
+
+    .register_container ::placeholder {
+        color: #888888;
+        opacity: 1; /* Firefox */
+    }
+
+    body {
+        /*background-color: #eaf0f5;*/
+        background: url('Chamilo/Core/User/Resources/Images/Aqua/UserInviteBackground.svg');
+        background-size: 100% auto;
+    }
+
+    .invalid-invite {
+        max-width: 720px;
+        background: rgba(220, 53, 69, 1);
+        margin: auto;
+        padding: 20px 34px;
+        font-size: 16px;
+        color: white;
+        text-align: center;
+    }
+
+    .language-selector a,
+    .language-selector a:visited,
+    .language-selector a:hover {
+        color: white;
+    }
+
+    .language-selector a:hover {
+        color: #bbb;
+    }
+
+    .language-selector {
+        margin-top: -15px;
+    }
+</style>
+
+{% if INVALID_INVITE %}
+    <div class="invalid-invite">
+        {{ 'InvalidInviteMessage'|trans({}, appContext) }}
+    </div>
+{% else %}
+<div class="register_container">
+    <div class="register_container_header">
+        <div class="row">
+            <div class="col-sm-6 language-selector">
+                <a href="{{ INVITE_URL }}&lang=nl">NL</a> | <a href="{{ INVITE_URL }}&lang=en">EN</a>
+            </div>
+            <div class="col-sm-6 text-right logo">
+                <img src="{{ BRAND_IMAGE }}" alt="logo"/>
+            </div>
+        </div>
+        <div class="register_header_text">
+            <h1 >{{ 'ActivateYourAccount'|trans({}, appContext) }}</h1>
+            <div class="register_header_description">
+                {{ 'AcceptInviteWelcomeMessage'|trans({'{SITE_NAME}': SITE_NAME}, appContext) }}
+            </div>
+        </div>
+    </div>
+    <div class="register_container_body">
+        {{ form_start(FORM) }}
+        <div class="form-group">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="fa fa-user"></span></span>
+                    {{ form_widget(FORM.first_name) }}
+                </div>
+                {{ form_errors(FORM.first_name) }}
+            </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="fa fa-user"></span></span>
+                    {{ form_widget(FORM.last_name) }}
+                </div>
+                {{ form_errors(FORM.last_name) }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+                    {{ form_widget(FORM.email) }}
+                </div>
+                {{ form_errors(FORM.email) }}
+            </div>
+        </div>
+        <div class="password">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="fa fa-lock"></span></span>
+                        {{ form_widget(FORM.password.first) }}
+                    </div>
+                    {{ form_errors(FORM.password.first) }}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="fa fa-lock"></span></span>
+                        {{ form_widget(FORM.password.second) }}
+                    </div>
+                    {{ form_errors(FORM.password.first) }}
+                </div>
+            </div>
+        </div>
+        <div class="buttons text-center">
+            <button type="submit" class="btn btn-success">{{ 'Reg'|trans({}, appContext) }}</button>
+        </div>
+        {{ form_errors(FORM) }}
+        {{ form_end(FORM) }}
+    </div>
+</div>
+{% endif %}
+
+{{ FOOTER|raw }}

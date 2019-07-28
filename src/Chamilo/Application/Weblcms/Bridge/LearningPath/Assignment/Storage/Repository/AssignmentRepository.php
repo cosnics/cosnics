@@ -3,6 +3,8 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\LearningPathAttemptEntryRelation;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -10,10 +12,14 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Join;
+use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -216,7 +222,8 @@ class AssignmentRepository extends
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findTargetPlatformGroupsWithEntriesForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $platformGroupIds, $condition = null, $offset = null,
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $platformGroupIds,
+        $condition = null, $offset = null,
         $count = null,
         $orderBy = []
     )
@@ -434,6 +441,84 @@ class AssignmentRepository extends
             $entityType, $entityIdentifier,
             $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
         );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\LearningPathAttemptEntryRelation $learningPathAttemptEntryRelation
+     *
+     * @return bool
+     */
+    public function createLearningPathAttemptEntryRelation(
+        LearningPathAttemptEntryRelation $learningPathAttemptEntryRelation
+    )
+    {
+        return $this->dataClassRepository->create($learningPathAttemptEntryRelation);
+    }
+
+    /**
+     * @param int $learningPathAttemptId
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function findEntryForLearningPathAttempt(int $learningPathAttemptId)
+    {
+        $joins = new Joins();
+        $joins->add(
+            new Join(
+                LearningPathAttemptEntryRelation::class,
+                new EqualityCondition(
+                    new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID),
+                    new PropertyConditionVariable(
+                        LearningPathAttemptEntryRelation::class, LearningPathAttemptEntryRelation::PROPERTY_ENTRY_ID
+                    )
+                )
+            )
+        );
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                LearningPathAttemptEntryRelation::class, LearningPathAttemptEntryRelation::PROPERTY_TREE_NODE_ATTEMPT_ID
+            ),
+            new StaticConditionVariable($learningPathAttemptId)
+        );
+
+        $parameters = new DataClassRetrieveParameters($condition, [], $joins);
+
+        return $this->dataClassRepository->retrieve($this->getEntryClassName(), $parameters);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|LearningPathTreeNodeAttempt[]
+     */
+    public function findLearningPathAttemptsByEntry(Entry $entry)
+    {
+        $joins = new Joins();
+        $joins->add(
+            new Join(
+                LearningPathAttemptEntryRelation::class,
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        LearningPathTreeNodeAttempt::class, LearningPathTreeNodeAttempt::PROPERTY_ID
+                    ),
+                    new PropertyConditionVariable(
+                        LearningPathAttemptEntryRelation::class, LearningPathAttemptEntryRelation::PROPERTY_TREE_NODE_ATTEMPT_ID
+                    )
+                )
+            )
+        );
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                LearningPathAttemptEntryRelation::class, LearningPathAttemptEntryRelation::PROPERTY_ENTRY_ID
+            ),
+            new StaticConditionVariable($entry->getId())
+        );
+
+        $parameters = new DataClassRetrievesParameters($condition, null, null, [], $joins);
+
+        return $this->dataClassRepository->retrieves(LearningPathTreeNodeAttempt::class, $parameters);
     }
 
     /**

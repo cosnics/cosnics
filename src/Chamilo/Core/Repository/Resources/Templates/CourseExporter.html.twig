@@ -1,0 +1,18 @@
+{{ HEADER|raw }}
+
+{% form_theme FORM 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% set appContext = 'Chamilo\\Core\\Repository' %}
+
+<div class="alert alert-info">{{ 'ExportCourseInfo'|trans({}, appContext) }}</div>
+
+{{ form_start(FORM) }}
+{{ form_row(FORM.course) }}
+<div class="row">
+    <div class="col-md-10 col-md-push-2">
+        <button type="submit" class="btn btn-primary">{{ 'ExportCourse'|trans({}, appContext) }}</button>
+    </div>
+</div>
+{{ form_end(FORM) }}
+
+{{ FOOTER|raw }}

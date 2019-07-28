@@ -8,5 +8,9 @@
             id="chamilo.core.repository.service.workspace_extension_manager"
             class="Chamilo\Core\Repository\Service\WorkspaceExtensionManager">
         </service>
+
+        <service id="Chamilo\Core\Repository\Form\CourseExporterFormType" autowire="true">
+            <tag name="form.type" />
+        </service>
     </services>
 </container>

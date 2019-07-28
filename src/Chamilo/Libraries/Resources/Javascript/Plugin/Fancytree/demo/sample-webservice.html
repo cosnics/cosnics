@@ -5,7 +5,7 @@
 	<title>Fancytree - Webservice Example</title>
 
 	<script src="../lib/jquery.js"></script>
-	<script src="../lib/jquery-ui.custom.js"></script>
+	<script src="../src/jquery-ui-dependencies/jquery.fancytree.ui-deps.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
 	<script src="../src/jquery.fancytree.js"></script>
@@ -21,7 +21,7 @@
 		$(function(){
 			$("#taxonTree").fancytree({
 				source: {
-					url: "http://www.itis.gov/ITISWebService/jsonservice/getKingdomNames",
+					url: "//www.itis.gov/ITISWebService/jsonservice/getKingdomNames",
 					data: {
 						jsonp: "itis_data"
 					},
@@ -31,7 +31,7 @@
 				},
 				lazyLoad: function(event, data) {
 					data.result = {
-						url: "http://www.itis.gov/ITISWebService/jsonservice/getHierarchyDownFromTSN",
+						url: "//www.itis.gov/ITISWebService/jsonservice/getHierarchyDownFromTSN",
 						data: {
 							jsonp: "itis_data",
 							tsn: data.node.key
@@ -100,7 +100,7 @@ $(function(){
 		</a>
 		and convert the provided JSON data to Fancytree format.
 		<br>
-		See the <a href="http://wwwendt.de/tech/fancytree/demo/taxonomy-browser/">Taxonomy Browser</a>
+		See the <a href="https://wwWendt.de/tech/fancytree/demo/taxonomy-browser/">Taxonomy Browser</a>
 		for a more sophisticated example.
 	</div>
 	<div>

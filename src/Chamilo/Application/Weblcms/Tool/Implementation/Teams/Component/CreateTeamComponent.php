@@ -21,6 +21,7 @@ class CreateTeamComponent extends Manager
      * @return string|void
      * @throws NotAllowedException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function run()
     {

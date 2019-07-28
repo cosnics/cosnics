@@ -199,7 +199,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $this->addNodeSpecificButtons($primaryActions, $secondaryActions);
             }
 
-            if ($this->canViewReporting() && $this->get_action() != self::ACTION_REPORTING)
+            if ($this->get_action() != self::ACTION_REPORTING)
             {
                 $this->addReportingButtons($tertiaryActions, $translator);
             }

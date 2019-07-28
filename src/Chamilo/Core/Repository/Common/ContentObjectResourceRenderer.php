@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Common;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
@@ -85,11 +86,14 @@ class ContentObjectResourceRenderer
              */
             $object = $this->contentObjectResourceParser->getContentObjectFromDomElement($placeholder);
 
-            if(empty($object)) {
+            if (empty($object))
+            {
                 continue;
             }
 
-            $parameters = $this->contentObjectResourceParser->getContentObjectParametersFromDomElement($placeholder, $this->dom_xpath);
+            $parameters = $this->contentObjectResourceParser->getContentObjectParametersFromDomElement(
+                $placeholder, $this->dom_xpath
+            );
 
             $fragment = $this->getFragment($object, $parameters);
 
@@ -130,9 +134,10 @@ class ContentObjectResourceRenderer
             {
                 $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                     ContentObject::class_name(),
-                    $source);
+                    $source
+                );
 
-                if (! $object instanceof ContentObject)
+                if (!$object instanceof ContentObject)
                 {
                     continue;
                 }
@@ -154,20 +159,27 @@ class ContentObjectResourceRenderer
     /**
      * @param $object
      * @param $parameters
+     *
      * @return \DOMDocumentFragment
      */
     protected function getFragment($object, $parameters)
     {
         $renderResourceInline = $parameters['data-render-inline'];
-        if(isset($renderResourceInline) && $renderResourceInline != '') {
-            $renderResourceInline = filter_var(    $renderResourceInline, FILTER_VALIDATE_BOOLEAN);
-        } else {
+        if (isset($renderResourceInline) && $renderResourceInline != '')
+        {
+            $renderResourceInline = filter_var($renderResourceInline, FILTER_VALIDATE_BOOLEAN);
+        }
+        else
+        {
             $renderResourceInline = true;
         }
 
-        if(!$renderResourceInline) {
+        if (!$renderResourceInline)
+        {
             $type = ContentObjectRendition::VIEW_FULL_THUMBNAIL;
-        } else {
+        }
+        else
+        {
             $type = ContentObjectRendition::VIEW_INLINE;
         }
 
@@ -175,7 +187,8 @@ class ContentObjectResourceRenderer
             $object,
             ContentObjectRendition::FORMAT_HTML,
             $type,
-            $this->context)->render($parameters);
+            $this->context
+        )->render($parameters);
 
         $rendition = new DOMDocument();
         $rendition->loadHTML($descriptionRendition);

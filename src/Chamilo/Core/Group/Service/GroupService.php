@@ -102,4 +102,14 @@ class GroupService
             }
         }
     }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     *
+     * @return Group[]
+     */
+    public function findDirectChildrenFromGroup(Group $group)
+    {
+        return $this->groupRepository->findDirectChildrenFromGroup($group);
+    }
 }

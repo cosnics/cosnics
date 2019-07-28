@@ -5,7 +5,7 @@
 	<title>Fancytree - Example</title>
 
 	<script src="../lib/jquery.js"></script>
-	<script src="../lib/jquery-ui.custom.js"></script>
+	<script src="../src/jquery-ui-dependencies/jquery.fancytree.ui-deps.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
 	<script src="../src/jquery.fancytree.js"></script>
@@ -39,7 +39,7 @@ $(function(){
 			$("#echoFocused").text("-");
 		},
 		lazyLoad: function(event, data){
-			// Simulate a slow ajax request
+			// Simulate a slow Ajax request
 			var dfd = new $.Deferred();
 			data.result = dfd.promise();
 			window.setTimeout(function(){
@@ -60,38 +60,31 @@ $(function(){
 		label: "Disable",
 		id: "btnDisable",
 		code: function(){
-			if( $("#tree").fancytree("option", "disabled") ){
-				$("#tree").fancytree("enable");
-				$("#btnDisable").text("Disable");
-			}else{
-				$("#tree").fancytree("disable");
-				$("#btnDisable").text("Enable");
-			}
+			var tree = $("#tree").fancytree("getTree"),
+				wasEnabled = !tree.options.disabled;
 
+			tree.enable(!wasEnabled);
+			$("#btnDisable").text(wasEnabled ? "Enable" : "Disable");
 		}
 	});
 	addSampleButton({
 		label: "Expand all",
 		newline: false,
 		code: function(){
-			$("#tree").visit(function(node){
-				node.setExpanded();
-			});
+			$("#tree").fancytree("getTree").expandAll();
 		}
 	});
 	addSampleButton({
 		label: "Collapse all",
 		newline: false,
 		code: function(){
-			$("#tree").visit(function(node){
-				node.setExpanded(false);
-			});
+			$("#tree").fancytree("getTree").expandAll(false);
 		}
 	});
 	addSampleButton({
 		label: "Toggle expand",
 		code: function(){
-			$("#tree").visit(function(node){
+			$("#tree").fancytree("getTree").visit(function(node){
 				node.toggleExpanded();
 			});
 		}

@@ -149,4 +149,12 @@ class EntryPlagiarismResultServiceBridge implements
             $this->treeNode, $entityType, $filterParameters
         );
     }
+
+    /**
+     * @return bool
+     */
+    public function isPlagiarismEnabled()
+    {
+        return true;
+    }
 }

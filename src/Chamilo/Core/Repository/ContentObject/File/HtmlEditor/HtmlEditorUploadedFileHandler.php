@@ -28,11 +28,14 @@ class HtmlEditorUploadedFileHandler
         $uploadedFileHandler = new UploadedFileHandler();
         $file = $uploadedFileHandler->handle($uploadedFile, $user);
 
+        $type = $file->determine_type();
+        $type = $type == 'default' ? 'file' : $type;
+
         return new HtmlEditorContentObjectPlaceholder(
             $file->get_filename(),
             $file->getId(),
             $file->calculate_security_code(),
-            $file->is_image() ? 'image' : 'file',
+            $type,
             $this->getThumbnailUrl($file));
     }
 

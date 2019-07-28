@@ -76,4 +76,9 @@ interface EntryPlagiarismResultServiceBridgeInterface
     public function getEntryPlagiarismResultTable(
         int $entityType, Application $application, EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
     );
+
+    /**
+     * @return bool
+     */
+    public function isPlagiarismEnabled();
 }

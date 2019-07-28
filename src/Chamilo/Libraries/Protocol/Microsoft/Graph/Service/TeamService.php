@@ -14,6 +14,8 @@ use Microsoft\Graph\Model\Team;
  */
 class TeamService
 {
+    const MAX_USERS = 5000;
+
     /**
      * @var TeamRepository
      */

@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Viewer;
 
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Exceptions\InvalidUserException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
@@ -107,6 +109,19 @@ abstract class Manager extends Application
             self::PARAM_ACTION,
             (Request::get(self::PARAM_ACTION) ? Request::get(self::PARAM_ACTION) : self::ACTION_CREATOR)
         );
+
+        if(!$this->getUserService()->isUserCurrentLoggedInUser($this->getUser()))
+        {
+            throw new InvalidUserException();
+        }
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getService(UserService::class);
     }
 
     public function render_header()
