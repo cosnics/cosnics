@@ -16,11 +16,13 @@ interface FeedbackServiceBridgeInterface
 {
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $feedback
+     * @param \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
      *
      * @return \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
      */
-    public function createFeedback(User $user, $feedback);
+    public function createFeedback(
+        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
+    );
 
     /**
      * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback

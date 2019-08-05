@@ -9,6 +9,7 @@ class Feedback extends DataClass
     const PROPERTY_COMMENT = 'comment';
     const PROPERTY_CREATION_DATE = 'creation_date';
     const PROPERTY_MODIFICATION_DATE = 'modification_date';
+    const PROPERTY_FEEDBACK_CONTENT_OBJECT_ID = 'feedback_content_object_id';
 
     private $user;
 
@@ -23,6 +24,7 @@ class Feedback extends DataClass
         $extended_property_names[] = self::PROPERTY_COMMENT;
         $extended_property_names[] = self::PROPERTY_CREATION_DATE;
         $extended_property_names[] = self::PROPERTY_MODIFICATION_DATE;
+        $extended_property_names[] = self::PROPERTY_FEEDBACK_CONTENT_OBJECT_ID;
 
         return parent::get_default_property_names($extended_property_names);
     }
@@ -107,5 +109,24 @@ class Feedback extends DataClass
     public function set_modification_date($modification_date)
     {
         $this->set_default_property(self::PROPERTY_MODIFICATION_DATE, $modification_date);
+    }
+
+    /**
+     * @return int
+     */
+    public function getFeedbackContentObjectId()
+    {
+        return $this->get_default_property(self::PROPERTY_FEEDBACK_CONTENT_OBJECT_ID);
+    }
+
+    /**
+     * @param int $feedbackContentObjectId
+     *
+     * @return $this
+     */
+    public function setFeedbackContentObjectId(int $feedbackContentObjectId)
+    {
+        $this->set_default_property(self::PROPERTY_FEEDBACK_CONTENT_OBJECT_ID, $feedbackContentObjectId);
+        return $this;
     }
 }

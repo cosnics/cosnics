@@ -7,5 +7,10 @@
             <argument type="service" id="symfony.component.translation.translator" />
             <tag name="form.type" />
         </service>
+
+        <service id="Chamilo\Core\Repository\Feedback\Infrastructure\Service\FeedbackMigration" autowire="true" />
+        <service id="Chamilo\Core\Repository\Console\Command\FeedbackMigrationCommand" autowire="true">
+            <tag name="chamilo.libraries.console.command" />
+        </service>
     </services>
 </container>

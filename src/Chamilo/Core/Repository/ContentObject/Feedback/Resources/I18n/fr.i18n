@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\feedback
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Feedback"
+Title = "Sujet"
+Description = "Message"
+FeedbackToolBrowserComponent = "Parcourir les annonces"
+FeedbackToolIntroductionPublisherComponent = "Publier une introduction"
+FeedbackToolPublisherComponent = "Publier une annonce"
+FeedbackToolUpdaterComponent = "Modifier une annonce"
+FeedbackToolViewerComponent = "Voir une annonce"

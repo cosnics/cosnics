@@ -69,3 +69,74 @@ CREATE TABLE `chamilo`.`tracking_weblcms_lp_attempt_rel_assignment_entry`
     INDEX (`tree_node_attempt_id`),
     INDEX (`entry_id`)
 ) ENGINE = InnoDB;
+
+ALTER TABLE `tracking_weblcms_assignment_feedback` ADD `feedback_content_object_id` INT(10) UNSIGNED NOT NULL AFTER `comment`, ADD INDEX (`feedback_content_object_id`);
+ALTER TABLE `tracking_weblcms_learning_path_assignment_feedback` ADD `feedback_content_object_id` INT(10) UNSIGNED NOT NULL AFTER `comment`, ADD INDEX (`feedback_content_object_id`);
+ALTER TABLE `portfolio_feedback` ADD `feedback_content_object_id` INT(10) UNSIGNED NOT NULL AFTER `comment`, ADD INDEX (`feedback_content_object_id`);
+ALTER TABLE `repository_wiki_page_feedback` ADD `feedback_content_object_id` INT(10) UNSIGNED NOT NULL AFTER `comment`, ADD INDEX (`feedback_content_object_id`);
+ALTER TABLE `weblcms_feedback` ADD `feedback_content_object_id` INT(10) UNSIGNED NOT NULL AFTER `comment`, ADD INDEX (`feedback_content_object_id`);
+
+ALTER TABLE `repository_content_object`
+    ADD `feedback_id` INT(10) UNSIGNED NOT NULL AFTER `content_hash`,
+    ADD INDEX (`feedback_id`);
+
+
+/** CHANGE 49 TO TEMPLATE ID FOR FEEDBACK CONTENT OBJECT **/
+/** tracking_weblcms_assignment_feedback **/
+INSERT INTO `repository_content_object`
+    (SELECT NULL, FB.user_id, UUID(), 0, 49, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
+            FB.comment, NULL, FB.id FROM `tracking_weblcms_assignment_feedback` FB);
+
+UPDATE `tracking_weblcms_assignment_feedback` FB
+JOIN `repository_content_object` CO on CO.feedback_id = FB.id
+SET FB.feedback_content_object_id = CO.id;
+
+UPDATE `repository_content_object` SET feedback_id = 0 WHERE feedback_id > 0;
+
+/** tracking_weblcms_learning_path_assignment_feedback **/
+INSERT INTO `repository_content_object`
+    (SELECT NULL, FB.user_id, UUID(), 0, 49, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
+            FB.comment, NULL, FB.id FROM `tracking_weblcms_learning_path_assignment_feedback` FB);
+
+UPDATE `tracking_weblcms_learning_path_assignment_feedback` FB
+    JOIN `repository_content_object` CO on CO.feedback_id = FB.id
+SET FB.feedback_content_object_id = CO.id;
+
+UPDATE `repository_content_object` SET feedback_id = 0 WHERE feedback_id > 0;
+
+/** portfolio_feedback **/
+INSERT INTO `repository_content_object`
+    (SELECT NULL, FB.user_id, UUID(), 0, 49, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
+            FB.comment, NULL, FB.id FROM `portfolio_feedback` FB);
+
+UPDATE `portfolio_feedback` FB
+    JOIN `repository_content_object` CO on CO.feedback_id = FB.id
+SET FB.feedback_content_object_id = CO.id;
+
+UPDATE `repository_content_object` SET feedback_id = 0 WHERE feedback_id > 0;
+
+/** repository_wiki_page_feedback **/
+INSERT INTO `repository_content_object`
+    (SELECT NULL, FB.user_id, UUID(), 0, 49, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
+            FB.comment, NULL, FB.id FROM `repository_wiki_page_feedback` FB);
+
+UPDATE `repository_wiki_page_feedback` FB
+    JOIN `repository_content_object` CO on CO.feedback_id = FB.id
+SET FB.feedback_content_object_id = CO.id;
+
+UPDATE `repository_content_object` SET feedback_id = 0 WHERE feedback_id > 0;
+
+/** weblcms_feedback **/
+INSERT INTO `repository_content_object`
+    (SELECT NULL, FB.user_id, UUID(), 0, 49, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
+            FB.comment, NULL, FB.id FROM `weblcms_feedback` FB);
+
+UPDATE `weblcms_feedback` FB
+    JOIN `repository_content_object` CO on CO.feedback_id = FB.id
+SET FB.feedback_content_object_id = CO.id;
+
+UPDATE `repository_content_object` SET feedback_id = 0 WHERE feedback_id > 0;
+
+ALTER TABLE repository_content_object DROP feedback_id;
+
+/** run php console chamilo:repository:feedback_migration **/
