@@ -29,11 +29,10 @@
     };
 
     function setObject(href, objectId, objectSecurityCode, objectType) {
-        if (!CKEDITOR.dialog.exists(objectType + 'Dialog')) {
-            CKEDITOR.dialog.add(objectType + 'Dialog', href);
-        }
+        html = '<div class="align-center" data-co-id="' + objectId.toString() + '" data-render-inline="1" data-security-code="' + objectSecurityCode + '" data-type="' + objectType + '"></div>';
+        html += '<p>&nbsp;</p>';
 
-        this.insertHtml('<div class="align-center" data-co-id="' + objectId.toString() + '" data-render-inline="1" data-security-code="' + objectSecurityCode + '" data-type="' + objectType + '"></div>');
+        this.insertHtml(html);
     }
 
     function createChamiloFakeElement(editor, realElement, isResizable) {
