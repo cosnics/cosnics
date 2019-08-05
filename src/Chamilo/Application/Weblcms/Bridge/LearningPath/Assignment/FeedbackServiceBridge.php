@@ -133,14 +133,17 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $feedback
+     * @param \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
-    public function createFeedback(User $user, $feedback, Entry $entry)
+    public function createFeedback(
+        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject,
+        Entry $entry
+    )
     {
-        return $this->feedbackService->createFeedback($user, $feedback, $entry);
+        return $this->feedbackService->createFeedback($user, $feedbackContentObject, $entry);
     }
 
     /**

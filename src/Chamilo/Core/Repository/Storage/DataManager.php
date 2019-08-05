@@ -73,9 +73,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::count($type, $parameters);
     }
 
-    public static function retrieve_content_objects($type, $parameters = null)
+    public static function retrieve_content_objects($type, $parameters = null, $includeInactiveContentObjects = false)
     {
-        return self::retrieves($type, self::prepare_parameters(self::ACTION_RETRIEVES, $type, $parameters));
+        $parameters = $includeInactiveContentObjects ? $parameters :
+            self::prepare_parameters(self::ACTION_RETRIEVES, $type, $parameters);
+
+        return self::retrieves($type, $parameters);
     }
 
     public static function retrieve_complex_content_object_items($type, $parameters = null)
@@ -265,7 +268,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        return self::retrieve_content_objects($object::class_name(), $parameters);
+        return self::retrieve_content_objects($object::class_name(), $parameters, true);
     }
 
     public static function retrieve_external_sync($condition)

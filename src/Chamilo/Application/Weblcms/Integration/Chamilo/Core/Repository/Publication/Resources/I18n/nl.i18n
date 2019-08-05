@@ -5,3 +5,5 @@
 
 TypeName = "Repository"
 EntryAttachment = "Bijlage bij inzending van een opdracht"
+Entry = "Inzending in opdracht"
+EntryFeedback = "Feedback bij inzending van een opdracht"

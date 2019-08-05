@@ -5,3 +5,5 @@
 
 TypeName = "Repository"
 EntryAttachment = "Attachment for assignment entry"
+Entry = "Entry in assignment"
+EntryFeedback = "Feedback for assignment entry"

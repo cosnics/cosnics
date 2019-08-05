@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Feedback">
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Feedback</translation>
+            <translation language="nl">Feedback</translation>
+        </variable>
+    </translations>
+</template>
