@@ -700,3 +700,4 @@ ImportCourseEntitiesRetryFailedResultsData = "Show import file for failed course
 NotificationFilterCourse = "Hide all notifications for the course <b>{COURSE_TITLE}</b>"
 NotificationFilterTool = "Hide all notifications for the <b>{TOOL}</b> tool in the course <b>{COURSE_TITLE}</b>"
 SortName = "Sort name"
+Others = "Others"
