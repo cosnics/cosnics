@@ -312,6 +312,6 @@ class CourseListComponent extends Manager implements DelegateComponent
      */
     public function show_empty_courses()
     {
-        return true;
+        return false;
     }
 }
