@@ -1,6 +1,10 @@
-CKEDITOR.plugins.setLang( 'recording', 'en',
+CKEDITOR.plugins.setLang('recording', 'en',
     {
         label: 'Create an mp3 recording',
-        insertRecording: 'Recording tool'
+        record: 'Record',
+        stop: 'Stop',
+        insert: 'Insert',
+        download: 'Download',
+        recordings: 'Choose your recording below'
     }
 );
