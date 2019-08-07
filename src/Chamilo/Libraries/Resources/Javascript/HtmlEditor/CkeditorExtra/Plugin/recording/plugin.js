@@ -22,6 +22,11 @@
             params.CKEditorFuncNum = editor._.chamiloFn;
             if (!params.langCode)
                 params.langCode = editor.langCode;
+            params.record = editor.lang.recording.record;
+            params.stop = editor.lang.recording.stop;
+            params.insert = editor.lang.recording.insert;
+            params.download = editor.lang.recording.download;
+            params.recordings = editor.lang.recording.recordings;
 
             var url = addQueryString('Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/recording/html', params);
             openPopup(url, width, height);
@@ -44,7 +49,7 @@
 
     // Register a plugin named "recording".
     CKEDITOR.plugins.add(pluginName, {
-        lang: 'nl,en-gb',
+        lang: 'nl,en',
         icons: 'recording',
         init: function (editor) {
 
