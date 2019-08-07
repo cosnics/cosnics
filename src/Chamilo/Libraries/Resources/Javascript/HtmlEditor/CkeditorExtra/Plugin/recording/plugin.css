@@ -44,9 +44,7 @@ button {
     font-size: 1.042em;
     font-family: Open Sans, sans-serif;
     padding: .708em 1.25em;
-    border-radius: 2em;
     margin: 0 .5em;
-    border: 0;
     display: inline-block;
     cursor: pointer;
     text-decoration: none;
@@ -54,6 +52,50 @@ button {
     white-space: nowrap;
     background-color: #1c8e16;
     color: white;
+
+    width: 120px;
+
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+#insert {
+    font-size: 1.042em;
+    font-family: Open Sans, sans-serif;
+    padding: .708em 1.25em;
+    margin: 0 .5em;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+    background-color: #1c8e16;
+    color: white;
+
+    width: 200px;
+
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+#download {
+    font-size: 1.042em;
+    font-family: Open Sans, sans-serif;
+    padding: .708em 1.25em;
+    margin: 0 .5em;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: normal;
+    white-space: nowrap;
+
+    color: #333;
+    background-color: #f7f7f7;
+
+    width: 200px;
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 button:hover, button:focus {
