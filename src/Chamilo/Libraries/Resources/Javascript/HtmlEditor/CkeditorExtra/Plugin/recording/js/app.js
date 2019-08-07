@@ -209,7 +209,7 @@ function createDownloadLink(blob, encoding) {
     link.href = url;
     link.download = 'rec-' + window.location.hostname + '-' + new Date().toISOString() + '.' + encoding;
     link.id = link.download;
-    link.innerHTML = link.download;
+    //link.innerHTML = link.download;
 
     //save to repo button
     var button = document.createElement('button');
@@ -229,7 +229,7 @@ function createDownloadLink(blob, encoding) {
 
     //add the new audio and a elements to the li element
     li.appendChild(au);
-    //li.appendChild(link);
+    li.appendChild(link);
     li.appendChild(button);
     li.appendChild(buttondownl);
 
