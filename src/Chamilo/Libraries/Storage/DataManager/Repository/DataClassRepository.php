@@ -642,8 +642,7 @@ class DataClassRepository
      *
      * @param mixed $function
      *
-     * @return mixed
-     * @throws Exception
+     * @return bool
      */
     public function transactional($function)
     {

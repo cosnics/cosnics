@@ -6,6 +6,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupClosureTable;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -24,6 +25,25 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class GroupRepository extends ClosureTableRepository
 {
+    /**
+     * @var \Chamilo\Core\Group\Storage\Repository\GroupSubscriptionRepository
+     */
+    protected $groupSubscriptionRepository;
+
+    /**
+     * GroupRepository constructor.
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param \Chamilo\Core\Group\Storage\Repository\GroupSubscriptionRepository $groupSubscriptionRepository
+     */
+    public function __construct(
+        \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository,
+        \Chamilo\Core\Group\Storage\Repository\GroupSubscriptionRepository $groupSubscriptionRepository
+    )
+    {
+        parent::__construct($dataClassRepository);
+        $this->groupSubscriptionRepository = $groupSubscriptionRepository;
+    }
 
     /**
      * Finds a GroupRelUser object by a given group code and user id
@@ -35,80 +55,10 @@ class GroupRepository extends ClosureTableRepository
      */
     public function findGroupRelUserByGroupCodeAndUserId($groupCode, $userId)
     {
-        $conditions = array();
+        $user = new User();
+        $user->setId($userId);
 
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-            new StaticConditionVariable($userId)
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE),
-            new StaticConditionVariable($groupCode)
-        );
-
-        $condition = new AndCondition($conditions);
-
-        $joins = new Joins();
-
-        $joins->add(
-            new Join(
-                Group::class,
-                new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)
-                )
-            )
-        );
-
-        return $this->dataClassRepository->retrieve(
-            GroupRelUser::class,
-            new DataClassRetrieveParameters($condition, array(), $joins)
-        );
-    }
-
-    /**
-     *
-     * @param int $groupId
-     * @param int $userId
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|GroupRelUser
-     */
-    public function findGroupRelUserByGroupAndUserId($groupId, $userId)
-    {
-        $conditions = array();
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-            new StaticConditionVariable($userId)
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($groupId)
-        );
-
-        $condition = new AndCondition($conditions);
-
-        return $this->dataClassRepository->retrieve(
-            GroupRelUser::class,
-            new DataClassRetrieveParameters($condition, array())
-        );
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|Group[]
-     */
-    public function findDirectChildrenFromGroup(Group $group)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($group->getId())
-        );
-
-        return $this->dataClassRepository->retrieves(Group::class, new DataClassRetrievesParameters($condition));
+        return $this->groupSubscriptionRepository->findGroupRelUserByGroupCodeAndUserId($groupCode, $user);
     }
 
     /**
@@ -189,33 +139,166 @@ class GroupRepository extends ClosureTableRepository
         return $dataClass->delete();
     }
 
-    public function testClosureTable()
+    /*****************************************************************************************************************
+     * Closure Table Functionality                                                                                   *
+     *****************************************************************************************************************/
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function getRootGroup()
     {
-//        $condition = new EqualityCondition(
-//            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-//            new StaticConditionVariable(0)
-//        );
-//
-//        $root = $this->dataClassRepository->retrieve(Group::class, new DataClassRetrieveParameters($condition));
-//        $this->addChildToParent(GroupClosureTable::class, $root, 0);
-//        $this->addChildren($root);
-var_dump($this->getAllParentsByChildId(Group::class, GroupClosureTable::class, 33));
-
-$group = new Group();
-$group->setId(31);
-//
-//$this->deleteChildFromTree(GroupClosureTable::class, $group);
-
-//        $this->moveChildToNewParent(GroupClosureTable::class, $group, 2);
+        return $this->dataClassRepository->retrieve(
+            Group::class,
+            new DataClassRetrieveParameters(
+                new EqualityCondition(
+                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                    new StaticConditionVariable(0)
+                )
+            )
+        );
     }
 
-    public function addChildren(Group $group)
+    /**
+     * Creates a new group and adds the group to the closure table
+     *
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     *
+     * @return bool
+     */
+    public function createGroup(Group $group)
     {
-        $children = $group->get_children(false);
-        foreach($children as $child)
+        $success = $this->dataClassRepository->create($group);
+        if (!$success)
         {
-            $this->addChildToParent(GroupClosureTable::class, $child, $group->getId());
-            $this->addChildren($child);
+            return false;
         }
+
+        return $this->addGroupToClosureTable($group);
     }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     *
+     * @return bool
+     */
+    public function deleteGroup(Group $group)
+    {
+        $success = $this->dataClassRepository->delete($group);
+        if (!$success)
+        {
+            return false;
+        }
+
+        return $this->deleteChildFromTree(GroupClosureTable::class, $group);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param int $newParentId
+     *
+     * @return bool|void
+     */
+    public function moveGroup(Group $group, int $newParentId)
+    {
+        $group->set_parent_id($newParentId);
+        if (!$this->dataClassRepository->update($group))
+        {
+            return false;
+        }
+
+        return $this->moveChildToNewParent(GroupClosureTable::class, $group, $newParentId);
+    }
+
+    /**
+     * Adds an existing group to the closure table
+     *
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     *
+     * @return bool
+     */
+    public function addGroupToClosureTable(Group $group)
+    {
+        return $this->addChildToParent(GroupClosureTable::class, $group, $group->get_parent_id());
+    }
+
+    /**
+     * Returns all the child groups for a given group. Has the possibility to include the given group.
+     *
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param bool $includeSelf
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|Group[]
+     */
+    public function getAllChildrenForGroup(Group $group, bool $includeSelf = true)
+    {
+        return $this->getAllChildrenByParentId(Group::class, GroupClosureTable::class, $group->getId(), $includeSelf);
+    }
+
+    /**
+     * Returns the identifiers of all the children for a given group. Has the possibility to include the given group.
+     *
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param bool $includeSelf
+     *
+     * @return int[]|string[]
+     */
+    public function getAllChildIdsForGroup(Group $group, bool $includeSelf = true)
+    {
+        return $this->getAllChildIdsByParentId(GroupClosureTable::class, $group->getId(), $includeSelf);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|Group[]
+     */
+    public function getDirectChildrenOfGroup(Group $group)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($group->getId())
+        );
+
+        return $this->dataClassRepository->retrieves(Group::class, new DataClassRetrievesParameters($condition));
+    }
+
+    /**
+     * Returns all the parent groups for a given group. Has the possibility to include the given group.
+     *
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param bool $includeSelf
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|Group[]
+     */
+    public function getAllParentsForGroup(Group $group, bool $includeSelf = true)
+    {
+        return $this->getAllParentsByChildId(Group::class, GroupClosureTable::class, $group->getId(), $includeSelf);
+    }
+
+    /**
+     * Returns all the parent ids for a given group. Has the possibility to include the given group.
+     *
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param bool $includeSelf
+     *
+     * @return int[]|string[]
+     */
+    public function getAllParentIdsForGroup(Group $group, bool $includeSelf = true)
+    {
+        return $this->getAllParentIdsByChildId(GroupClosureTable::class, $group->getId(), $includeSelf);
+    }
+
+    /**
+     * Returns the direct parent group of a given group
+     *
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|Group
+     */
+    public function getDirectParentOfGroup(Group $group)
+    {
+        return $this->dataClassRepository->retrieveById(Group::class, $group->get_parent_id());
+    }
+
 }

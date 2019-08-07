@@ -22,6 +22,13 @@ class GroupService
     protected $groupRepository;
 
     /**
+     * This is temporarily used for BC issues
+     *
+     * @var \Chamilo\Core\Group\Service\GroupSubscriptionService
+     */
+    protected $groupSubscriptionService;
+
+    /**
      * GroupService constructor.
      *
      * @param \Chamilo\Core\Group\Storage\Repository\GroupRepository $groupRepository
@@ -29,6 +36,20 @@ class GroupService
     public function __construct(\Chamilo\Core\Group\Storage\Repository\GroupRepository $groupRepository)
     {
         $this->groupRepository = $groupRepository;
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Service\GroupSubscriptionService $groupSubscriptionService
+     *
+     * @return \Chamilo\Core\Group\Service\GroupService
+     */
+    public function setGroupSubscriptionService(
+        \Chamilo\Core\Group\Service\GroupSubscriptionService $groupSubscriptionService
+    ): \Chamilo\Core\Group\Service\GroupService
+    {
+        $this->groupSubscriptionService = $groupSubscriptionService;
+
+        return $this;
     }
 
     /**
@@ -76,8 +97,7 @@ class GroupService
      */
     public function subscribeUserToGroupByCode($groupCode, User $user)
     {
-        $group = $this->findGroupByCode($groupCode);
-        $this->subscribeUserToGroup($group, $user);
+        $this->groupSubscriptionService->subscribeUserToGroupByCode($groupCode, $user);
     }
 
     /**
@@ -86,21 +106,7 @@ class GroupService
      */
     public function subscribeUserToGroup(Group $group, User $user)
     {
-        $groupRelation = $this->groupRepository->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
-
-        if (!$groupRelation instanceof GroupRelUser)
-        {
-            $groupRelation = new GroupRelUser();
-            $groupRelation->set_user_id($user->getId());
-            $groupRelation->set_group_id($group->getId());
-
-            if (!$this->groupRepository->create($groupRelation))
-            {
-                throw new \RuntimeException(
-                    sprintf('Could not subscribe the user %s to the group %s', $user->getId(), $group->getId())
-                );
-            }
-        }
+        $this->groupSubscriptionService->subscribeUserToGroup($group, $user);
     }
 
     /**
@@ -110,11 +116,6 @@ class GroupService
      */
     public function findDirectChildrenFromGroup(Group $group)
     {
-        return $this->groupRepository->findDirectChildrenFromGroup($group);
-    }
-
-    public function testClosureTable()
-    {
-        return $this->groupRepository->testClosureTable();
+        return $this->groupRepository->getDirectChildrenOfGroup($group);
     }
 }

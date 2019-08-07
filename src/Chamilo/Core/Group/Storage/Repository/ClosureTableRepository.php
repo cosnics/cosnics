@@ -9,7 +9,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -49,10 +48,13 @@ class ClosureTableRepository
      * @param string $dataClass
      * @param string $closureTableClass
      * @param int $parentId
+     * @param bool $includeSelf
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    protected function getAllChildrenByParentId(string $dataClass, string $closureTableClass, int $parentId)
+    protected function getAllChildrenByParentId(
+        string $dataClass, string $closureTableClass, int $parentId, bool $includeSelf = true
+    )
     {
         $joins = new Joins();
 
@@ -66,46 +68,8 @@ class ClosureTableRepository
             )
         );
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parentId)
-        );
-
+        $condition = $this->buildGetChildrenConditionByParentId($closureTableClass, $parentId, $includeSelf);
         $orderBy[] = new OrderBy(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_DEPTH));
-
-        $properties = new DataClassRetrievesParameters($condition, null, null, $orderBy, $joins);
-
-        return $this->dataClassRepository->retrieves($dataClass, $properties);
-    }
-
-    /**
-     * @param string $dataClass
-     * @param string $closureTableClass
-     * @param int $childId
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    protected function getAllParentsByChildId(string $dataClass, string $closureTableClass, int $childId)
-    {
-        $joins = new Joins();
-
-        $joins->add(
-            new Join(
-                $closureTableClass,
-                new EqualityCondition(
-                    new PropertyConditionVariable($dataClass, DataClass::PROPERTY_ID),
-                    new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_PARENT_ID)
-                )
-            )
-        );
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_CHILD_ID),
-            new StaticConditionVariable($childId)
-        );
-
-        $orderBy[] =
-            new OrderBy(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_DEPTH), SORT_DESC);
 
         $properties = new DataClassRetrievesParameters($condition, null, null, $orderBy, $joins);
 
@@ -121,6 +85,28 @@ class ClosureTableRepository
      */
     protected function getAllChildIdsByParentId(string $closureTableClass, int $parentId, bool $includeSelf = true)
     {
+        $condition = $this->buildGetChildrenConditionByParentId($closureTableClass, $parentId, $includeSelf);
+        $orderBy[] = new OrderBy(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_DEPTH));
+
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_CHILD_ID));
+
+        $distinctParameters = new DataClassDistinctParameters($condition, $properties, null, $orderBy);
+
+        return $this->dataClassRepository->distinct($closureTableClass, $distinctParameters);
+    }
+
+    /**
+     * @param string $closureTableClass
+     * @param int $parentId
+     * @param bool $includeSelf
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     */
+    protected function buildGetChildrenConditionByParentId(
+        string $closureTableClass, int $parentId, bool $includeSelf = true
+    )
+    {
         $conditions = [];
 
         $conditions[] = new EqualityCondition(
@@ -138,13 +124,57 @@ class ClosureTableRepository
             );
         }
 
-        $condition = new AndCondition($conditions);
+        return new AndCondition($conditions);
+    }
 
+    /**
+     * @param string $dataClass
+     * @param string $closureTableClass
+     * @param int $childId
+     * @param bool $includeSelf
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    protected function getAllParentsByChildId(
+        string $dataClass, string $closureTableClass, int $childId, bool $includeSelf = true
+    )
+    {
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                $closureTableClass,
+                new EqualityCondition(
+                    new PropertyConditionVariable($dataClass, DataClass::PROPERTY_ID),
+                    new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_PARENT_ID)
+                )
+            )
+        );
+
+        $condition = $this->buildGetParentsConditionByParentId($closureTableClass, $childId, $includeSelf);
         $orderBy[] =
-            new OrderBy(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_DEPTH));
+            new OrderBy(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_DEPTH), SORT_DESC);
+
+        $properties = new DataClassRetrievesParameters($condition, null, null, $orderBy, $joins);
+
+        return $this->dataClassRepository->retrieves($dataClass, $properties);
+    }
+
+    /**
+     * @param string $closureTableClass
+     * @param int $childId
+     * @param bool $includeSelf
+     *
+     * @return int[]|string[]
+     */
+    protected function getAllParentIdsByChildId(string $closureTableClass, int $childId, bool $includeSelf = true)
+    {
+        $condition = $this->buildGetParentsConditionByParentId($closureTableClass, $childId, $includeSelf);
+        $orderBy[] =
+            new OrderBy(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_DEPTH), SORT_DESC);
 
         $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_CHILD_ID));
+        $properties->add(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_PARENT_ID));
 
         $distinctParameters = new DataClassDistinctParameters($condition, $properties, null, $orderBy);
 
@@ -156,9 +186,11 @@ class ClosureTableRepository
      * @param int $childId
      * @param bool $includeSelf
      *
-     * @return int[]|string[]
+     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
-    protected function getAllParentIdsByChildId(string $closureTableClass, int $childId, bool $includeSelf = true)
+    protected function buildGetParentsConditionByParentId(
+        string $closureTableClass, int $childId, bool $includeSelf = true
+    )
     {
         $conditions = [];
 
@@ -177,17 +209,7 @@ class ClosureTableRepository
             );
         }
 
-        $condition = new AndCondition($conditions);
-
-        $orderBy[] =
-            new OrderBy(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_DEPTH), SORT_DESC);
-
-        $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_PARENT_ID));
-
-        $distinctParameters = new DataClassDistinctParameters($condition, $properties, null, $orderBy);
-
-        return $this->dataClassRepository->distinct($closureTableClass, $distinctParameters);
+        return new AndCondition($conditions);
     }
 
     /**
@@ -267,64 +289,78 @@ class ClosureTableRepository
      * @param string $closureTableClass
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $child
      * @param int $newParentId
+     *
+     * @return bool
      */
     protected function moveChildToNewParent(string $closureTableClass, DataClass $child, int $newParentId)
     {
-//        // Delete the relations between the parents of the group and the children of the group
-        $childIds = $this->getAllChildIdsByParentId($closureTableClass, $child->getId());
-        $parentIds = $this->getAllParentIdsByChildId($closureTableClass, $child->getId(), false);
+        return $this->dataClassRepository->transactional(
+            function () use ($closureTableClass, $child, $newParentId) {
+                // Delete the relations between the parents of the group and the children of the group
+                $childIds = $this->getAllChildIdsByParentId($closureTableClass, $child->getId());
+                $parentIds = $this->getAllParentIdsByChildId($closureTableClass, $child->getId(), false);
 
-        // Delete the relations between the parents of the group and the children of the group
-        $conditions = [];
+                // Delete the relations between the parents of the group and the children of the group
+                $conditions = [];
 
-        $conditions[] = $condition = new InCondition(
-            new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_CHILD_ID), $childIds
+                $conditions[] = new InCondition(
+                    new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_CHILD_ID), $childIds
+                );
+
+                $conditions[] = new InCondition(
+                    new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_PARENT_ID), $parentIds
+                );
+
+                $condition = new AndCondition($conditions);
+
+                if(!$this->dataClassRepository->deletes($closureTableClass, $condition))
+                {
+                    return false;
+                }
+
+                // INSERT SUBTREE INTO NEW PARENTS. Because cross join is not possible in the framework we retrieve the parents
+                // and insert the subtree into each parent
+
+                $newParentIds = $this->getAllParentIdsByChildId($closureTableClass, $newParentId);
+                $currentDepth = count($newParentIds);
+                foreach ($newParentIds as $newParentId)
+                {
+                    $columns = new DataClassProperties();
+                    $columns->add(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_PARENT_ID));
+                    $columns->add(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_CHILD_ID));
+                    $columns->add(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_DEPTH));
+
+                    $properties = new DataClassProperties();
+                    $properties->add(new StaticConditionVariable($newParentId));
+                    $properties->add(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_CHILD_ID));
+
+                    $properties->add(
+                        new OperationConditionVariable(
+                            new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_DEPTH),
+                            OperationConditionVariable::ADDITION,
+                            new StaticConditionVariable($currentDepth)
+                        )
+                    );
+
+                    $condition = new EqualityCondition(
+                        new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_PARENT_ID),
+                        new StaticConditionVariable($child->getId())
+                    );
+
+                    $recordRetrievesParameters = new RecordRetrievesParameters($properties, $condition);
+
+                    if(!$this->dataClassRepository->insertIntoSelectFrom(
+                        $closureTableClass, $columns, $closureTableClass, $recordRetrievesParameters
+                    ))
+                    {
+                        return false;
+                    }
+
+                    $currentDepth --;
+                }
+
+                return true;
+            }
         );
-
-        $conditions[] = $condition = new InCondition(
-            new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_PARENT_ID), $parentIds
-        );
-
-        $condition = new AndCondition($conditions);
-
-        $this->dataClassRepository->deletes($closureTableClass, $condition);
-
-        // INSERT SUBTREE INTO NEW PARENTS. Because cross join is not possible in the framework we retrieve the parents
-        // and insert the subtree into each parent
-
-        $newParentIds = $this->getAllParentIdsByChildId($closureTableClass, $newParentId);
-        $currentDepth = count($newParentIds);
-        foreach ($newParentIds as $newParentId)
-        {
-            $columns = new DataClassProperties();
-            $columns->add(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_PARENT_ID));
-            $columns->add(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_CHILD_ID));
-            $columns->add(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_DEPTH));
-
-            $properties = new DataClassProperties();
-            $properties->add(new StaticConditionVariable($newParentId));
-            $properties->add(new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_CHILD_ID));
-
-            $properties->add(
-                new OperationConditionVariable(
-                    new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_DEPTH),
-                    OperationConditionVariable::ADDITION,
-                    new StaticConditionVariable($currentDepth)
-                )
-            );
-
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_PARENT_ID),
-                new StaticConditionVariable($child->getId())
-            );
-
-            $recordRetrievesParameters = new RecordRetrievesParameters($properties, $condition);
-
-            $this->dataClassRepository->insertIntoSelectFrom(
-                $closureTableClass, $columns, $closureTableClass, $recordRetrievesParameters
-            );
-
-            $currentDepth --;
-        }
     }
 }
