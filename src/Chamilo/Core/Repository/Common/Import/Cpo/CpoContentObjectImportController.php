@@ -693,6 +693,11 @@ class CpoContentObjectImportController extends ContentObjectImportController
         return $this->temporary_directory . '/data/';
     }
 
+    public function getTemporaryDirectory()
+    {
+        return $this->temporary_directory;
+    }
+
     /**
      * Parses the content object type from a given xpath element.
      * Is backwards compatible with the cpo exports from

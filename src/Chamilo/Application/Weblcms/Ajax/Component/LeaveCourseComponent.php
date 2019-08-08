@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Ajax\Component;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @author Sven Vanpoucke
  * @package application.weblcms
  */
-class LeaveCourseComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
+class LeaveCourseComponent extends \Chamilo\Application\Weblcms\Ajax\Manager implements NoVisitTraceComponentInterface
 {
     const PARAM_COURSE_VISIT_TRACKER_ID = 'course_visit_tracker_id';
 

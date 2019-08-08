@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Ajax\Component;
 use Assetic\Asset\AssetCollection;
 use Assetic\Filter\CssImportFilter;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Utilities\CssFileAsset;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CkeditorCssComponent extends \Chamilo\Libraries\Ajax\Manager implements NoAuthenticationSupport
+class CkeditorCssComponent extends \Chamilo\Libraries\Ajax\Manager implements NoAuthenticationSupport, NoVisitTraceComponentInterface
 {
 
     /**
