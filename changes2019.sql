@@ -44,8 +44,8 @@ CREATE TABLE `weblcms_platform_group_team`
 (
     `id`        int(10) UNSIGNED                    NOT NULL AUTO_INCREMENT,
     `course_id` int(10) UNSIGNED                    NOT NULL,
-    `team_id`   varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-    `name`      varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+    `team_id`   varchar(47) COLLATE utf8_unicode_ci NOT NULL,
+    `name`      varchar(47) COLLATE utf8_unicode_ci NOT NULL,
     PRIMARY KEY (`id`),
     KEY `wpgt_course_id` (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -60,7 +60,7 @@ CREATE TABLE `weblcms_platform_group_team_relation`
     KEY `wpgtr_group_id` (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `chamilo`.`tracking_weblcms_lp_attempt_rel_assignment_entry`
+CREATE TABLE `tracking_weblcms_lp_attempt_rel_assignment_entry`
 (
     `id`                       INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
     `tree_node_attempt_id` INT(10)          NOT NULL,
@@ -81,10 +81,10 @@ ALTER TABLE `repository_content_object`
     ADD INDEX (`feedback_id`);
 
 
-/** CHANGE 49 TO TEMPLATE ID FOR FEEDBACK CONTENT OBJECT **/
+/** CHANGE 47 TO TEMPLATE ID FOR FEEDBACK CONTENT OBJECT **/
 /** tracking_weblcms_assignment_feedback **/
 INSERT INTO `repository_content_object`
-    (SELECT NULL, FB.user_id, UUID(), 0, 49, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
+    (SELECT NULL, FB.user_id, UUID(), 0, 47, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
             FB.comment, NULL, FB.id FROM `tracking_weblcms_assignment_feedback` FB);
 
 UPDATE `tracking_weblcms_assignment_feedback` FB
@@ -95,7 +95,7 @@ UPDATE `repository_content_object` SET feedback_id = 0 WHERE feedback_id > 0;
 
 /** tracking_weblcms_learning_path_assignment_feedback **/
 INSERT INTO `repository_content_object`
-    (SELECT NULL, FB.user_id, UUID(), 0, 49, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
+    (SELECT NULL, FB.user_id, UUID(), 0, 47, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
             FB.comment, NULL, FB.id FROM `tracking_weblcms_learning_path_assignment_feedback` FB);
 
 UPDATE `tracking_weblcms_learning_path_assignment_feedback` FB
@@ -106,7 +106,7 @@ UPDATE `repository_content_object` SET feedback_id = 0 WHERE feedback_id > 0;
 
 /** portfolio_feedback **/
 INSERT INTO `repository_content_object`
-    (SELECT NULL, FB.user_id, UUID(), 0, 49, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
+    (SELECT NULL, FB.user_id, UUID(), 0, 47, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
             FB.comment, NULL, FB.id FROM `portfolio_feedback` FB);
 
 UPDATE `portfolio_feedback` FB
@@ -117,7 +117,7 @@ UPDATE `repository_content_object` SET feedback_id = 0 WHERE feedback_id > 0;
 
 /** repository_wiki_page_feedback **/
 INSERT INTO `repository_content_object`
-    (SELECT NULL, FB.user_id, UUID(), 0, 49, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
+    (SELECT NULL, FB.user_id, UUID(), 0, 47, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
             FB.comment, NULL, FB.id FROM `repository_wiki_page_feedback` FB);
 
 UPDATE `repository_wiki_page_feedback` FB
@@ -128,7 +128,7 @@ UPDATE `repository_content_object` SET feedback_id = 0 WHERE feedback_id > 0;
 
 /** weblcms_feedback **/
 INSERT INTO `repository_content_object`
-    (SELECT NULL, FB.user_id, UUID(), 0, 49, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
+    (SELECT NULL, FB.user_id, UUID(), 0, 47, FB.creation_date, FB.modification_date, 1, 1, NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Feedback\\Storage\\DataClass\\Feedback', 'Feedback',
             FB.comment, NULL, FB.id FROM `weblcms_feedback` FB);
 
 UPDATE `weblcms_feedback` FB

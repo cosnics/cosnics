@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Ajax\Component;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit;
 use Chamilo\Core\User\Manager;
+use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Request;
 
@@ -14,7 +15,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LeaveComponent extends \Chamilo\Core\User\Ajax\Manager
+class LeaveComponent extends \Chamilo\Core\User\Ajax\Manager implements NoVisitTraceComponentInterface
 {
 
     public function run()
