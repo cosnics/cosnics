@@ -923,3 +923,8 @@ div.panel del {
 	margin-bottom: 35px;
 	border-bottom: 1px solid #dddddd;
 }
+
+table th.sorting {
+	color: #337ab7;
+	cursor: pointer;
+}
