@@ -60,7 +60,7 @@ CREATE TABLE `weblcms_platform_group_team_relation`
     KEY `wpgtr_group_id` (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `chamilo`.`tracking_weblcms_lp_attempt_rel_assignment_entry`
+CREATE TABLE `tracking_weblcms_lp_attempt_rel_assignment_entry`
 (
     `id`                       INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
     `tree_node_attempt_id` INT(10)          NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE `chamilo`.`tracking_weblcms_lp_attempt_rel_assignment_entry`
     INDEX (`entry_id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE `cosnics`.`group_closure_table` (
+CREATE TABLE `group_closure_table` (
     `parent_id` INT(10) UNSIGNED NOT NULL ,
     `child_id` INT(10) UNSIGNED NOT NULL ,
     `depth` INT(10) UNSIGNED NOT NULL ,

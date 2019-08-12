@@ -78,8 +78,6 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $output;
         $html[] = $this->render_footer();
 
-        $this->getGroupService()->testClosureTable();
-
         return implode(PHP_EOL, $html);
     }
 

@@ -9,10 +9,20 @@
                 id="chamilo.core.group.service.group_service"
                 class="Chamilo\Core\Group\Service\GroupService">
             <argument type="service" id="chamilo.core.group.storage.repository.group_repository" />
+            <call method="setGroupSubscriptionService">
+                <argument type="service" id="Chamilo\Core\Group\Service\GroupSubscriptionService" />
+            </call>
         </service>
+
+        <service id="Chamilo\Core\Group\Service\GroupSubscriptionService" autowire="true" />
+        <service id="Chamilo\Core\Group\Service\GroupClosureTableGenerator" autowire="true" />
 
         <service alias="chamilo.core.group.service.group_service"
                  id="Chamilo\Core\Group\Service\GroupService" />
+
+        <service id="Chamilo\Core\Group\Console\Command\GenerateGroupClosureTableCommand" autowire="true">
+            <tag name="chamilo.libraries.console.command" />
+        </service>
 
     </services>
 </container>
