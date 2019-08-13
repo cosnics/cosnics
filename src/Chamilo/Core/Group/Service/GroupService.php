@@ -62,7 +62,7 @@ class GroupService
     /**
      * @param string $groupCode
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group
      */
     public function findGroupByCode($groupCode)
     {
@@ -198,6 +198,16 @@ class GroupService
      */
     public function moveGroup(Group $group, int $newParentId)
     {
+        // LEGACY CODE: make sure that the group is also moved using the move in the dataclass. We use this to
+        // make sure that the nested sets are used as a backup until the refactoring is done.
+        if(!$group->move($newParentId))
+        {
+            throw new \RuntimeException(sprintf('Could not move the group with id %s', $newParentId));
+        }
+
+        $group->set_parent_id($newParentId);
+        $this->updateGroup($group);
+
         return $this->groupRepository->moveGroup($group, $newParentId);
     }
 
@@ -222,12 +232,37 @@ class GroupService
      */
     public function createGroup(Group $group)
     {
-        if(!$this->groupRepository->createGroup($group))
+        // LEGACY CODE: make sure that the group is created using the create dataclass. We use
+        // create from dataclass to make sure that the nested sets are used as backup until the refactoring is done.
+
+        if (!$group->create())
         {
-            throw new \RuntimeException(sprintf('Could not create the group with id %s in the database', $group->getId()));
+            throw new \RuntimeException(
+                sprintf('Could not create the group with id %s in the database', $group->getId())
+            );
+        }
+
+        if (!$this->groupRepository->createGroup($group))
+        {
+            throw new \RuntimeException(
+                sprintf('Could not create the group with id %s in the database', $group->getId())
+            );
         }
 
         return $group;
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     */
+    public function updateGroup(Group $group)
+    {
+        if (!$this->groupRepository->updateGroup($group))
+        {
+            throw new \RuntimeException(
+                sprintf('Could not update the group with id %s in the database', $group->getId())
+            );
+        }
     }
 
     /**
@@ -237,9 +272,21 @@ class GroupService
      */
     public function deleteGroup(Group $group)
     {
-        if(!$this->groupRepository->deleteGroup($group))
+        // LEGACY CODE: make sure that the group is deleted using the delete dataclass. We use
+        // delete from dataclass to make sure that the nested sets are used as backup until the refactoring is done.
+
+        if (!$group->delete())
         {
-            throw new \RuntimeException(sprintf('Could not delete the group with id %s in the database', $group->getId()));
+            throw new \RuntimeException(
+                sprintf('Could not delete the group with id %s in the database', $group->getId())
+            );
+        }
+
+        if (!$this->groupRepository->deleteGroup($group))
+        {
+            throw new \RuntimeException(
+                sprintf('Could not delete the group with id %s in the database', $group->getId())
+            );
         }
 
         return $group;

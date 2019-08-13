@@ -66,7 +66,7 @@ class GroupSearchForm extends FormValidator
     /**
      * Creates a new search form
      *
-     * @param RepositoryManager $manager The repository manager in which this search form will be displayed
+     * @param \Chamilo\Libraries\Architecture\Application\Application $manager The repository manager in which this search form will be displayed
      * @param string $url The location to which the search request should be posted.
      */
     public function __construct($manager, $url)

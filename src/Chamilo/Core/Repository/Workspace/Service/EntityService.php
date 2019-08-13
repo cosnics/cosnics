@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Service;
 
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
@@ -15,6 +16,20 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class EntityService
 {
+    /**
+     * @var GroupSubscriptionService
+     */
+    protected $groupSubscriptionService;
+
+    /**
+     * EntityService constructor.
+     *
+     * @param GroupSubscriptionService $groupSubscriptionService
+     */
+    public function __construct(GroupSubscriptionService $groupSubscriptionService)
+    {
+        $this->groupSubscriptionService = $groupSubscriptionService;
+    }
 
     /**
      *
@@ -28,7 +43,7 @@ class EntityService
         $entities[UserEntity::ENTITY_TYPE] = array($user->get_id());
         $entities[PlatformGroupEntity::ENTITY_TYPE] = array();
         
-        $userGroupIdentifiers = $user->get_groups(true);
+        $userGroupIdentifiers = $this->groupSubscriptionService->findAllGroupIdsForUser($user);
         
         foreach ($userGroupIdentifiers as $userGroupIdentifier)
         {

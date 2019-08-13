@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\UserExporter;
 
 use Chamilo\Application\Weblcms\UserExporter\UserExportExtender;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -16,6 +17,10 @@ class CourseUserExportExtender implements UserExportExtender
     const EXPORT_COLUMN_SUBSCRIPTION_STATUS = 'subscription_status';
     const EXPORT_COLUMN_SUBSCRIPTION_TYPE = 'subscription_type';
     const EXPORT_COLUMN_PLATFORM_GROUPS = 'platform_groups';
+    /**
+     * @var GroupSubscriptionService
+     */
+    protected $groupSubscriptionService;
 
     /**
      * The platform groups that are subscribed to the course, inclusively the subgroups
@@ -26,10 +31,11 @@ class CourseUserExportExtender implements UserExportExtender
 
     /**
      * The constructor
-     * 
+     *
      * @param int $course_id
+     * @param GroupSubscriptionService $groupSubscriptionService
      */
-    public function __construct($course_id)
+    public function __construct($course_id, GroupSubscriptionService $groupSubscriptionService)
     {
         $course_platform_groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_subscribed_platform_groups(
             array($course_id));
@@ -40,6 +46,8 @@ class CourseUserExportExtender implements UserExportExtender
         {
             $this->course_platform_groups[$course_platform_group->get_id()] = $course_platform_group;
         }
+
+        $this->groupSubscriptionService = $groupSubscriptionService;
     }
 
     /**
@@ -101,7 +109,7 @@ class CourseUserExportExtender implements UserExportExtender
     {
         $user_platform_groups_in_course = array();
         
-        $user_subscribed_group_ids = $user->get_groups(true);
+        $user_subscribed_group_ids = $this->groupSubscriptionService->findAllGroupIdsForUser($user);
         foreach ($user_subscribed_group_ids as $user_subscribed_group_id)
         {
             if (array_key_exists($user_subscribed_group_id, $this->course_platform_groups))

@@ -164,13 +164,28 @@ class GroupRepository extends ClosureTableRepository
      */
     public function createGroup(Group $group)
     {
-        $success = $this->dataClassRepository->create($group);
-        if (!$success)
+        // LEGACY CODE: make sure that the group is not already created using the create dataclass. We use
+        // double code to make sure that the nested sets are used as backup until the refactoring is done.
+        if(!$group->is_identified())
         {
-            return false;
+            $success = $this->dataClassRepository->create($group);
+            if (!$success)
+            {
+                return false;
+            }
         }
 
         return $this->addGroupToClosureTable($group);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     *
+     * @return bool
+     */
+    public function updateGroup(Group $group)
+    {
+        return $this->dataClassRepository->update($group);
     }
 
     /**
@@ -197,12 +212,6 @@ class GroupRepository extends ClosureTableRepository
      */
     public function moveGroup(Group $group, int $newParentId)
     {
-        $group->set_parent_id($newParentId);
-        if (!$this->dataClassRepository->update($group))
-        {
-            return false;
-        }
-
         return $this->moveChildToNewParent(GroupClosureTable::class, $group, $newParentId);
     }
 

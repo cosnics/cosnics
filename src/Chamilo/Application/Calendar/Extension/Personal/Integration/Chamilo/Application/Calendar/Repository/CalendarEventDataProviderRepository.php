@@ -23,6 +23,20 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class CalendarEventDataProviderRepository
 {
+    /**
+     * @var \Chamilo\Core\Group\Service\GroupSubscriptionService
+     */
+    protected $groupSubscriptionService;
+
+    /**
+     * CalendarEventDataProviderRepository constructor.
+     *
+     * @param \Chamilo\Core\Group\Service\GroupSubscriptionService $groupSubscriptionService
+     */
+    public function __construct(\Chamilo\Core\Group\Service\GroupSubscriptionService $groupSubscriptionService)
+    {
+        $this->groupSubscriptionService = $groupSubscriptionService;
+    }
 
     /**
      * Returns the base data class retrieves parameters to retrieve own publications for a given user
@@ -49,7 +63,7 @@ class CalendarEventDataProviderRepository
      */
     public function getSharedPublicationsRecordRetrievesParameters(User $user)
     {
-        $user_groups = $user->get_groups(true);
+        $user_groups = $this->groupSubscriptionService->findAllGroupIdsForUser($user);
         
         $conditions = array();
         $conditions[] = new EqualityCondition(

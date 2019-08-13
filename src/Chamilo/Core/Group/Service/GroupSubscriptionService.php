@@ -5,6 +5,7 @@ namespace Chamilo\Core\Group\Service;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 
 /**
  * Class GroupSubscriptionService
@@ -21,20 +22,26 @@ class GroupSubscriptionService
      * @var \Chamilo\Core\Group\Service\GroupService
      */
     protected $groupService;
+    /**
+     * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
+     */
+    private $exceptionLogger;
 
     /**
      * GroupSubscriptionService constructor.
      *
      * @param \Chamilo\Core\Group\Storage\Repository\GroupSubscriptionRepository $groupSubscriptionRepository
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      */
     public function __construct(
         \Chamilo\Core\Group\Storage\Repository\GroupSubscriptionRepository $groupSubscriptionRepository,
-        GroupService $groupService
+        GroupService $groupService, ExceptionLoggerInterface $exceptionLogger
     )
     {
         $this->groupSubscriptionRepository = $groupSubscriptionRepository;
         $this->groupService = $groupService;
+        $this->exceptionLogger = $exceptionLogger;
     }
 
     /**
@@ -98,12 +105,12 @@ class GroupSubscriptionService
     public function removeUserFromGroup(Group $group, User $user)
     {
         $groupUserRelation = $this->findGroupUserRelation($group, $user);
-        if(!$groupUserRelation instanceof GroupRelUser)
+        if (!$groupUserRelation instanceof GroupRelUser)
         {
             return;
         }
 
-        if(!$this->groupSubscriptionRepository->deleteGroupUserRelation($groupUserRelation))
+        if (!$this->groupSubscriptionRepository->deleteGroupUserRelation($groupUserRelation))
         {
             throw new \RuntimeException(
                 sprintf('Could not remove the user %s from group %s', $user->getId(), $group->getId())
@@ -188,7 +195,53 @@ class GroupSubscriptionService
      */
     public function findAllGroupIdsForUser(User $user)
     {
-        return $this->groupSubscriptionRepository->findAllGroupIdsForUser($user);
+        $oldGroupIds = $user->get_groups(true);
+        $newGroupIds = $this->groupSubscriptionRepository->findAllGroupIdsForUser($user);
+
+        $this->findAllGroupIdsForUserSanityCheck($user, $oldGroupIds, $newGroupIds);
+
+        return $oldGroupIds;
+    }
+
+    /**
+     * Temporary sanity check method to verify the group ids from the old and tested system versus the group ids from the
+     * new system
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param array $oldGroupIds
+     * @param array $newGroupIds
+     */
+    protected function findAllGroupIdsForUserSanityCheck(User $user, array $oldGroupIds = [], array $newGroupIds = [])
+    {
+        try
+        {
+            if ($oldGroupIds != $newGroupIds)
+            {
+                throw new \RuntimeException(
+                    sprintf(
+                        'The count of group ids in the old and new user groups is not equal for user %s', $user->getId()
+                    )
+                );
+            }
+
+            foreach ($oldGroupIds as $oldGroupId)
+            {
+                if (!in_array($oldGroupId, $newGroupIds))
+                {
+                    throw new \RuntimeException(
+                        sprintf(
+                            'The given group id %s could not be found in the new group ids for user %s', $oldGroupId,
+                            $user->getId()
+                        )
+                    );
+                }
+            }
+        }
+        catch (\Exception $ex)
+        {
+//            var_dump($ex->getMessage());
+            $this->exceptionLogger->logException($ex);
+        }
     }
 
     /**

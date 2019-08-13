@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
@@ -10,8 +11,6 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -30,9 +29,9 @@ class DeleterComponent extends Manager
 
         $this->set_parameter(self::PARAM_GROUP_ID, $ids);
 
-        $user = $this->get_user();
+        $user = $this->getUser();
 
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -42,30 +41,43 @@ class DeleterComponent extends Manager
         $redirect = new Redirect(
             array(
                 Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
-                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER));
-        $trail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Administration')));
+                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
+            )
+        );
+        $trail->add(
+            new Breadcrumb($redirect->getUrl(), $this->getTranslator()->trans('Administration', [], Manager::context()))
+        );
 
         $redirect = new Redirect(
             array(
                 Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
                 \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
                 DynamicTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
-                    self::package())));
-        $trail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Group')));
+                    self::package()
+                )
+            )
+        );
+        $trail->add(
+            new Breadcrumb($redirect->getUrl(), $this->getTranslator()->trans('Group', [], Manager::context()))
+        );
 
         $trail->add(
             new Breadcrumb(
                 $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
-                Translation::get('GroupList')));
+                $this->getTranslator()->trans('GroupList', [], Manager::context())
+            )
+        );
 
-        $trail->add(new Breadcrumb($this->get_url(), Translation::get('DeleteGroup')));
+        $trail->add(
+            new Breadcrumb($this->get_url(), $this->getTranslator()->trans('DeleteGroup', [], Manager::context()))
+        );
         $trail->add_help('group general');
 
         $failures = 0;
 
-        if (! empty($ids))
+        if (!empty($ids))
         {
-            if (! is_array($ids))
+            if (!is_array($ids))
             {
                 $ids = array($ids);
             }
@@ -74,18 +86,25 @@ class DeleterComponent extends Manager
             {
                 $group = $this->retrieve_group($id);
 
-                if (! $group->delete())
+                try
                 {
-                    $failures ++;
-                }
-                else
-                {
+                    $this->getGroupService()->deleteGroup($group);
+
                     Event::trigger(
                         'Delete',
                         Manager::context(),
                         array(
-                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_REFERENCE_ID => $group->get_id(),
-                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_USER_ID => $user->get_id()));
+                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_REFERENCE_ID => $group->getId(
+                            ),
+                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_USER_ID => $user->getId(
+                            )
+                        )
+                    );
+                }
+                catch (\Exception $ex)
+                {
+                    $failures ++;
+                    $this->getExceptionLogger()->logException($ex);
                 }
             }
 
@@ -93,34 +112,38 @@ class DeleterComponent extends Manager
             {
                 if (count($ids) == 1)
                 {
-                    $message = Translation::get(
+                    $message = $this->getTranslator()->trans(
                         'ObjectNotDeleted',
-                        array('OBJECT' => Translation::get('SelectedGroup')),
-                        Utilities::COMMON_LIBRARIES);
+                        array('OBJECT' => $this->getTranslator()->trans('SelectedGroup', [], Manager::context())),
+                        Utilities::COMMON_LIBRARIES
+                    );
                 }
                 else
                 {
-                    $message = Translation::get(
+                    $message = $this->getTranslator()->trans(
                         'ObjectsNotDeleted',
-                        array('OBJECT' => Translation::get('SelectedGroups')),
-                        Utilities::COMMON_LIBRARIES);
+                        array('OBJECT' => $this->getTranslator()->trans('SelectedGroups', [], Manager::context())),
+                        Utilities::COMMON_LIBRARIES
+                    );
                 }
             }
             else
             {
                 if (count($ids) == 1)
                 {
-                    $message = Translation::get(
+                    $message = $this->getTranslator()->trans(
                         'ObjectDeleted',
-                        array('OBJECT' => Translation::get('SelectedGroup')),
-                        Utilities::COMMON_LIBRARIES);
+                        array('{OBJECT}' => $this->getTranslator()->trans('SelectedGroup', [], Manager::context())),
+                        Utilities::COMMON_LIBRARIES
+                    );
                 }
                 else
                 {
-                    $message = Translation::get(
+                    $message = $this->getTranslator()->trans(
                         'ObjectsDeleted',
-                        array('OBJECT' => Translation::get('SelectedGroups')),
-                        Utilities::COMMON_LIBRARIES);
+                        array('{OBJECT}' => $this->getTranslator()->trans('SelectedGroups', [], Manager::context())),
+                        Utilities::COMMON_LIBRARIES
+                    );
                 }
             }
 
@@ -128,13 +151,17 @@ class DeleterComponent extends Manager
                 $message,
                 ($failures ? true : false),
                 array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS),
-                array(self::PARAM_GROUP_ID));
+                array(self::PARAM_GROUP_ID)
+            );
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectsSelected', null, Utilities::COMMON_LIBRARIES)));
+                htmlentities($this->getTranslator()->trans('NoObjectsSelected', null, Utilities::COMMON_LIBRARIES))
+            );
         }
+
+        return null;
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
@@ -142,14 +169,20 @@ class DeleterComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
-                Translation::get('BrowserComponent')));
+                $this->getTranslator()->trans('BrowserComponent', [], Manager::context())
+            )
+        );
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID))),
-                Translation::get('ViewerComponent')));
+                        self::PARAM_GROUP_ID => $this->getRequest()->getFromUrl(self::PARAM_GROUP_ID)
+                    )
+                ),
+                $this->getTranslator()->trans('ViewerComponent', [], Manager::context())
+            )
+        );
         $breadcrumbtrail->add_help('group general');
     }
 }

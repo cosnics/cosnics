@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Ajax;
 
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Libraries\Architecture\AjaxManager;
 
 /**
@@ -12,4 +13,11 @@ use Chamilo\Libraries\Architecture\AjaxManager;
  */
 abstract class Manager extends AjaxManager
 {
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
+    }
 }

@@ -372,7 +372,7 @@ class GroupSubscriptionRepository
         );
 
         return $this->dataClassRepository->distinct(
-            GroupClosureTable::class, new DataClassDistinctParameters($condition, $distinctProperties)
+            GroupClosureTable::class, new DataClassDistinctParameters($condition, $distinctProperties, $joins)
         );
     }
 

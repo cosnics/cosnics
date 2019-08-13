@@ -24,7 +24,7 @@ class BlockListComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $rightsRepository = new RightsRepository();
+        $rightsRepository = new RightsRepository($this->getGroupSubscriptionService());
         $homeRepository = new HomeRepository();
         $homeService = new HomeService($homeRepository, new ElementRightsService($rightsRepository));
         $blockTypeRightsService = new BlockTypeRightsService($rightsRepository, new HomeRepository());

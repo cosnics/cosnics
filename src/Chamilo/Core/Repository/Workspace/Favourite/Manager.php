@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Favourite;
 
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -43,5 +44,13 @@ abstract class Manager extends Application
     public function getCurrentWorkspaceIdentifier()
     {
         return $this->getRequest()->query->get(\Chamilo\Core\Repository\Workspace\Manager::PARAM_WORKSPACE_ID);
+    }
+
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
     }
 }

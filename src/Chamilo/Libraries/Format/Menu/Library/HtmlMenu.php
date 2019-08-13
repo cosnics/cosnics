@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Menu\Library;
 
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuRenderer;
+
 /**
  * Originaly a PEAR library
  *

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Rights;
 
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataManager;
@@ -8,6 +9,7 @@ use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\RightsLocationEntityRight;
 use Chamilo\Core\Rights\RightsUtil;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -18,6 +20,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class Rights extends RightsUtil
 {
+    use DependencyInjectionContainerTrait;
+
     const VIEW_RIGHT = '1';
 
     private static $instance;
@@ -35,8 +39,17 @@ class Rights extends RightsUtil
         if (! isset(self::$instance))
         {
             self::$instance = new self();
+            self::$instance->initializeContainer();
         }
         return self::$instance;
+    }
+
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
     }
 
     public static function get_available_rights()
@@ -138,7 +151,7 @@ class Rights extends RightsUtil
                 }
             }
 
-            $user_group_ids = $user->get_groups(true);
+            $user_group_ids = $this->getGroupSubscriptionService()->findAllGroupIdsForUser($user);
 
             foreach ($user_group_ids as $user_group_id)
             {
@@ -205,7 +218,7 @@ class Rights extends RightsUtil
         if (! isset(self::$authorized_users[$user->get_id()]))
         {
             $location_entity_right_ids = array();
-            $user_group_ids = $user->get_groups(true);
+            $user_group_ids = $this->getGroupSubscriptionService()->findAllGroupIdsForUser($user);
 
             foreach ($user_group_ids as $user_group_id)
             {

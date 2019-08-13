@@ -5,6 +5,9 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\PlatformGroupEnt
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\UserEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
@@ -138,15 +141,20 @@ class UserEntityHelper
     {
         $entities = array();
 
+        /** @var User $user */
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
             \Chamilo\Core\User\Storage\DataClass\User::class_name(),
             $entity_id);
 
         if ($user instanceof \Chamilo\Core\User\Storage\DataClass\User)
         {
-            $entities[UserEntity::ENTITY_TYPE][] = $user->get_id();
+            $entities[UserEntity::ENTITY_TYPE][] = $user->getId();
 
-            $group_ids = $user->get_groups(true);
+            $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+            /** @var GroupSubscriptionService $groupSubscriptionService */
+            $groupSubscriptionService = $container->get(GroupSubscriptionService::class);
+
+            $group_ids = $groupSubscriptionService->findAllGroupIdsForUser($user);
 
             foreach ($group_ids as $group_id)
             {

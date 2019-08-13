@@ -7,6 +7,7 @@
             <argument type="service" id="chamilo.application.weblcms.storage.repository.course_repository" />
             <argument type="service" id="chamilo.application.weblcms.service.course_settings" />
             <argument type="service" id="chamilo.core.user.storage.repository.user_repository" />
+            <argument type="service" id="Chamilo\Core\Group\Service\GroupSubscriptionService" />
             <call method="setRightsService">
                 <argument type="service" id="chamilo.application.weblcms.service.rights" />
             </call>

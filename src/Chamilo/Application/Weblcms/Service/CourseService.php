@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
@@ -9,6 +10,7 @@ use Chamilo\Application\Weblcms\Service\Interfaces\RightsServiceInterface;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\CourseRepositoryInterface;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\Interfaces\UserRepositoryInterface;
@@ -19,31 +21,35 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * Service class to manage weblcms courses.
- * 
+ *
  * @package application\weblcms
  * @author Tom Goethals - Hogeschool Gent
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class CourseService implements CourseServiceInterface
 {
+    /**
+     * @var GroupSubscriptionService
+     */
+    protected $groupSubscriptionService;
 
     /**
      * The course repository
-     * 
+     *
      * @var CourseRepositoryInterface
      */
     private $courseRepository;
 
     /**
      * The course settings service
-     * 
+     *
      * @var CourseSettingsServiceInterface
      */
     private $courseSettingsService;
 
     /**
      * The rights service
-     * 
+     *
      * @var RightsServiceInterface
      */
     private $rightsService;
@@ -56,22 +62,27 @@ class CourseService implements CourseServiceInterface
 
     /**
      * Constructor
-     * 
+     *
      * @param CourseRepositoryInterface $courseRepository
      * @param CourseSettingsServiceInterface $courseSettingsService
      * @param UserRepositoryInterface $userRepository
+     * @param GroupSubscriptionService $groupSubscriptionService
      */
-    public function __construct(CourseRepositoryInterface $courseRepository, 
-        CourseSettingsServiceInterface $courseSettingsService, UserRepositoryInterface $userRepository)
+    public function __construct(
+        CourseRepositoryInterface $courseRepository,
+        CourseSettingsServiceInterface $courseSettingsService, UserRepositoryInterface $userRepository,
+        GroupSubscriptionService $groupSubscriptionService
+    )
     {
         $this->courseRepository = $courseRepository;
         $this->courseSettingsService = $courseSettingsService;
         $this->userRepository = $userRepository;
+        $this->groupSubscriptionService = $groupSubscriptionService;
     }
 
     /**
      * Sets the rights service
-     * 
+     *
      * @param RightsServiceInterface $rightsService
      */
     public function setRightsService(RightsServiceInterface $rightsService)
@@ -84,10 +95,10 @@ class CourseService implements CourseServiceInterface
      * Course Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns a course by a given id
-     * 
+     *
      * @param int $courseId
      *
      * @return Course
@@ -101,7 +112,7 @@ class CourseService implements CourseServiceInterface
      * Returns a course for a given user by a given visual code.
      * Checks if the course exists and the user has
      * the correct rights for the course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $visualCode
      *
@@ -113,16 +124,16 @@ class CourseService implements CourseServiceInterface
     public function getCourseByVisualCodeForUser(User $user, $visualCode)
     {
         $course = $this->courseRepository->findCourseByVisualCode($visualCode);
-        if (! $course)
+        if (!$course)
         {
             throw new ObjectNotExistException('Course', $visualCode);
         }
-        
-        if (! $this->rightsService->canUserViewCourse($user, $course))
+
+        if (!$this->rightsService->canUserViewCourse($user, $course))
         {
             throw new NotAllowedException();
         }
-        
+
         return $course;
     }
 
@@ -138,7 +149,7 @@ class CourseService implements CourseServiceInterface
 
     /**
      * Returns the courses by id
-     * 
+     *
      * @param array $courseIds
      *
      * @return Course[]
@@ -150,6 +161,7 @@ class CourseService implements CourseServiceInterface
 
     /**
      * @param int $courseTypeId
+     *
      * @return Course[]
      */
     public function getCoursesByCourseTypeId(int $courseTypeId): array
@@ -159,7 +171,7 @@ class CourseService implements CourseServiceInterface
 
     /**
      * Returns all the courses for the given user
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return Course[]
@@ -171,7 +183,7 @@ class CourseService implements CourseServiceInterface
 
     /**
      * Returns every course in which a user is subscribed and that is visible
-     * 
+     *
      * @param User $user
      *
      * @return Course[]
@@ -180,9 +192,9 @@ class CourseService implements CourseServiceInterface
     {
         $coursesWhereUserIsTeacher = $this->getCoursesWhereUserIsTeacher($user);
         $coursesWhereUserIsStudent = $this->getCoursesWhereUserIsStudent($user);
-        
+
         $visibleCoursesWhereUserIsStudent = array();
-        
+
         foreach ($coursesWhereUserIsStudent as $courseWhereUserIsStudent)
         {
             if ($this->courseSettingsService->isCourseVisible($courseWhereUserIsStudent))
@@ -190,13 +202,13 @@ class CourseService implements CourseServiceInterface
                 $visibleCoursesWhereUserIsStudent[] = $courseWhereUserIsStudent;
             }
         }
-        
+
         return array_merge($coursesWhereUserIsTeacher, $visibleCoursesWhereUserIsStudent);
     }
 
     /**
      * Returns the courses for the given user where the user is a teacher
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return Course[]
@@ -208,7 +220,7 @@ class CourseService implements CourseServiceInterface
 
     /**
      * Returns the courses for the given user where the user is a student
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return Course[]
@@ -217,7 +229,6 @@ class CourseService implements CourseServiceInterface
     {
         return $this->courseRepository->findCoursesWhereUserIsStudent($user);
     }
-
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -228,7 +239,10 @@ class CourseService implements CourseServiceInterface
     public function getCoursesInCourseTypeForUser(User $user, CourseType $courseType)
     {
         $subscribedCourseIds = $this->getSubscribedCourseIdsForUser($user);
-        return $this->courseRepository->findCoursesByCourseTypeAndSubscribedCourseIds($courseType, $subscribedCourseIds);
+
+        return $this->courseRepository->findCoursesByCourseTypeAndSubscribedCourseIds(
+            $courseType, $subscribedCourseIds
+        );
     }
 
     /**
@@ -236,7 +250,7 @@ class CourseService implements CourseServiceInterface
      */
     public function deleteCourse(Course $course)
     {
-        if(!$this->courseRepository->deleteCourse($course))
+        if (!$this->courseRepository->deleteCourse($course))
         {
             throw new \RuntimeException('Could not delete the course from the database');
         }
@@ -247,10 +261,10 @@ class CourseService implements CourseServiceInterface
      * Course Subscription Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Checks if the user is subscribed to a course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
@@ -259,29 +273,31 @@ class CourseService implements CourseServiceInterface
     public function isUserSubscribedToCourse(User $user, Course $course)
     {
         $courseUserSubscription = $this->courseRepository->findCourseUserSubscriptionByCourseAndUser(
-            $course->getId(), 
-            $user->getId());
-        
+            $course->getId(),
+            $user->getId()
+        );
+
         if ($courseUserSubscription)
         {
             return true;
         }
-        
+
         $courseGroupSubscriptions = $this->courseRepository->findCourseGroupSubscriptionsByCourseAndGroups(
-            $course->getId(), 
-            $user->get_groups(true));
-        
+            $course->getId(),
+            $this->groupSubscriptionService->findAllGroupIdsForUser($user)
+        );
+
         if (count($courseGroupSubscriptions) > 0)
         {
             return true;
         }
-        
+
         return false;
     }
 
     /**
      * Checks if the user is subscribed as a teacher in the course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
@@ -294,7 +310,7 @@ class CourseService implements CourseServiceInterface
 
     /**
      * Checks if the user is subscribed as a student in the course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
@@ -307,7 +323,7 @@ class CourseService implements CourseServiceInterface
 
     /**
      * Returns an array of users who are subscribed (directly or through groups) as a teacher in a given course
-     * 
+     *
      * @param Course $course
      *
      * @return User[]
@@ -319,7 +335,7 @@ class CourseService implements CourseServiceInterface
 
     /**
      * Returns an array of users who are subscribed (directly or through groups) as a student in a given course
-     * 
+     *
      * @param Course $course
      *
      * @return User[]
@@ -344,10 +360,10 @@ class CourseService implements CourseServiceInterface
      * Tool Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the tool registration for a given tool
-     * 
+     *
      * @param string $toolName
      *
      * @return CourseTool
@@ -359,7 +375,7 @@ class CourseService implements CourseServiceInterface
 
     /**
      * Returns the tools that a given user has access to in the course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
@@ -368,7 +384,7 @@ class CourseService implements CourseServiceInterface
     public function getToolsFromCourseForUser(User $user, Course $course)
     {
         $userTools = array();
-        
+
         $toolRegistrations = $this->courseRepository->findToolRegistrations();
         foreach ($toolRegistrations as $toolRegistration)
         {
@@ -377,7 +393,7 @@ class CourseService implements CourseServiceInterface
                 $userTools[] = $toolRegistration->get_name();
             }
         }
-        
+
         return $userTools;
     }
 
@@ -386,32 +402,36 @@ class CourseService implements CourseServiceInterface
      * Helper Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Helper function to check if a user is subscribed to the course with a given status
-     * 
+     *
      * @param User $user
      * @param Course $course
      * @param int $status
      *
      * @return bool
      */
-    protected function isUserSubscribedToCourseWithStatus(User $user, Course $course, 
-        $status = CourseEntityRelation::STATUS_TEACHER)
+    protected function isUserSubscribedToCourseWithStatus(
+        User $user, Course $course,
+        $status = CourseEntityRelation::STATUS_TEACHER
+    )
     {
         $courseUserSubscription = $this->courseRepository->findCourseUserSubscriptionByCourseAndUser(
-            $course->getId(), 
-            $user->getId());
-        
+            $course->getId(),
+            $user->getId()
+        );
+
         if ($courseUserSubscription && $courseUserSubscription->get_status() == $status)
         {
             return true;
         }
-        
+
         $courseGroupSubscriptions = $this->courseRepository->findCourseGroupSubscriptionsByCourseAndGroups(
-            $course->getId(), 
-            $user->get_groups(true));
-        
+            $course->getId(),
+            $this->groupSubscriptionService->findAllGroupIdsForUser($user)
+        );
+
         foreach ($courseGroupSubscriptions as $courseGroupSubscription)
         {
             if ($courseGroupSubscription->get_status() == $status)
@@ -419,7 +439,7 @@ class CourseService implements CourseServiceInterface
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -433,31 +453,32 @@ class CourseService implements CourseServiceInterface
     protected function getUsersFromCourseByStatus(Course $course, $status = CourseEntityRelation::STATUS_STUDENT)
     {
         $userIds = array();
-        
+
         $directlySubscribedUsers = $this->courseRepository->findUsersByStatus($course->getId(), $status);
         while ($directlySubscribedUser = $directlySubscribedUsers->next_result())
         {
             $userIds[] = $directlySubscribedUser[User::PROPERTY_ID];
         }
-        
+
         $groups = $this->courseRepository->findDirectSubscribedGroupsByStatus($course->getId(), $status);
-        
+
         while ($group = $groups->next_result())
         {
-            if (! $group instanceof Group)
+            if (!$group instanceof Group)
             {
                 $group = new Group($group);
             }
-            
+
             $userIds = array_merge($userIds, $group->get_users(true, true));
         }
-        
+
         if (count($userIds) == 0)
         {
             return array();
         }
-        
+
         return $this->userRepository->findUsers(
-            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds));
+            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds)
+        );
     }
 }

@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\UserExporter\CourseUserExportExtender;
 use Chamilo\Application\Weblcms\UserExporter\Renderer\ExcelUserExportRenderer;
 use Chamilo\Application\Weblcms\UserExporter\UserExporter;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -41,7 +42,7 @@ class ExporterComponent extends Manager
         $exporter = new UserExporter(
             new ExcelUserExportRenderer(),
             array(
-                new CourseUserExportExtender($this->get_course_id()),
+                new CourseUserExportExtender($this->get_course_id(), $this->getGroupSubscriptionService()),
                 new CourseGroupUserExportExtender($this->get_course_id())
             )
         );
@@ -56,6 +57,14 @@ class ExporterComponent extends Manager
         );
 
         Filesystem::remove($file_path);
+    }
+
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
     }
 
     /**

@@ -2,6 +2,9 @@
 namespace Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass;
 
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataManager;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -15,7 +18,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass\Publication
 {
-    
+    use DependencyInjectionContainerTrait;
+
     // Properties
     const PROPERTY_PUBLISHER = 'publisher_id';
     const PROPERTY_PUBLISHED = 'published';
@@ -258,7 +262,7 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
 
     /**
      *
-     * @param \core\user\storage\data_class\User $user
+     * @param User $user
      * @return boolean
      */
     public function is_target($user)
@@ -268,12 +272,16 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
             return false;
         }
         
-        $user_id = $user->get_id();
+        $user_id = $user->getId();
         
         $target_users = $this->get_target_users();
         $target_groups = $this->get_target_groups();
-        
-        $user_groups = $user->get_groups(true);
+
+        $this->initializeContainer();
+        /** @var GroupSubscriptionService $groupSubscriptionService */
+        $groupSubscriptionService = $this->getService(GroupSubscriptionService::class);
+
+        $user_groups = $groupSubscriptionService->findAllGroupIdsForUser($user);
         
         if (in_array($user_id, $target_users))
         {

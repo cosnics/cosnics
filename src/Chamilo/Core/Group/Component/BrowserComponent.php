@@ -81,14 +81,6 @@ class BrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return GroupService
-     */
-    protected function getGroupService()
-    {
-        return $this->getService(GroupService::class);
-    }
-
     public function get_user_html()
     {
         $html = array();

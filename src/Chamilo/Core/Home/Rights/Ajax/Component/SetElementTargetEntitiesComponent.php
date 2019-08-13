@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Rights\Ajax\Component;
 
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Home\Renderer\Type\Basic\BlockRendererFactory;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Ajax\Manager;
@@ -47,7 +48,7 @@ class SetElementTargetEntitiesComponent extends Manager
         $elementId = intval($this->getPostDataValue(self::PARAM_ELEMENT_ID));
         $targetEntities = $this->getTargetEntitiesFromRequest();
         
-        $elementRightsService = new ElementRightsService(new RightsRepository());
+        $elementRightsService = new ElementRightsService(new RightsRepository($this->getGroupSubscriptionService()));
         $homeService = new HomeService(new HomeRepository(), $elementRightsService);
         $element = $homeService->getElementByIdentifier($elementId);
         
@@ -71,6 +72,14 @@ class SetElementTargetEntitiesComponent extends Manager
         {
             JsonAjaxResult::bad_request($ex->getMessage());
         }
+    }
+
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
     }
 
     /**

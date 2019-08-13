@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Form\GroupForm;
@@ -23,7 +24,7 @@ class EditorComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -34,7 +35,7 @@ class EditorComponent extends Manager
         {
             $group = $this->retrieve_group($id);
 
-            if (! $this->get_user()->is_platform_admin())
+            if (!$this->get_user()->is_platform_admin())
             {
                 throw new NotAllowedException();
             }
@@ -43,7 +44,11 @@ class EditorComponent extends Manager
                 GroupForm::TYPE_EDIT,
                 $group,
                 $this->get_url(array(self::PARAM_GROUP_ID => $id)),
-                $this->get_user());
+                $this->getUser(),
+                $this->getGroupService(),
+                $this->getExceptionLogger(),
+                $this->getTranslator()
+            );
 
             if ($form->validate())
             {
@@ -52,17 +57,21 @@ class EditorComponent extends Manager
                 $message = $success ? Translation::get(
                     'ObjectUpdated',
                     array('OBJECT' => Translation::get('Group')),
-                    Utilities::COMMON_LIBRARIES) : Translation::get(
+                    Utilities::COMMON_LIBRARIES
+                ) : Translation::get(
                     'ObjectNotUpdated',
                     array('OBJECT' => Translation::get('Group')),
-                    Utilities::COMMON_LIBRARIES);
+                    Utilities::COMMON_LIBRARIES
+                );
 
                 $this->redirect(
                     $message,
                     ($success ? false : true),
                     array(
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => $group->get_id()));
+                        self::PARAM_GROUP_ID => $group->get_id()
+                    )
+                );
             }
             else
             {
@@ -78,7 +87,8 @@ class EditorComponent extends Manager
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES)));
+                htmlentities(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES))
+            );
         }
     }
 
@@ -87,14 +97,20 @@ class EditorComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
-                Translation::get('BrowserComponent')));
+                Translation::get('BrowserComponent')
+            )
+        );
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID))),
-                Translation::get('ViewerComponent')));
+                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID)
+                    )
+                ),
+                Translation::get('ViewerComponent')
+            )
+        );
         $breadcrumbtrail->add_help('group general');
     }
 

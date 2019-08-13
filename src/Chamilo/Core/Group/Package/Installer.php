@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Package;
 
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 
 /**
@@ -34,8 +35,24 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $group->set_name($values['organization_name']);
         $group->set_parent(0);
         $group->set_code(strtolower($values['organization_name']));
-        $group->create();
 
-        return true;
+        try
+        {
+            $this->getGroupService()->createGroup($group);
+            return true;
+        }
+        catch(\Exception $ex)
+        {
+            $this->getExceptionLogger()->logException($ex);
+            return false;
+        }
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->getService(GroupService::class);
     }
 }

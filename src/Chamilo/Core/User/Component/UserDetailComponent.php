@@ -3,7 +3,9 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Redirect;
@@ -194,9 +196,9 @@ class UserDetailComponent extends Manager
         $table->setCellAttributes(1, 0, array('style' => 'width: 150px;'));
         $table->setHeaderContents(1, 1, Translation::get('GroupName'));
 
-        $groups = $user->get_groups();
+        $groups = $this->getGroupSubscriptionService()->findAllGroupsForUser($user);
 
-        if (! $groups || $groups->size() == 0)
+        if (! $groups || count($groups) == 0)
         {
             $table->setCellContents(2, 0, Translation::get('NoGroups'));
             $table->setCellAttributes(2, 0, array('colspan' => 2, 'style' => 'text-align: center;'));
@@ -205,7 +207,7 @@ class UserDetailComponent extends Manager
         {
             $i = 2;
 
-            while ($group = $groups->next_result())
+            foreach($groups as $group)
             {
                 $redirect = new Redirect(
                     array(
@@ -224,6 +226,14 @@ class UserDetailComponent extends Manager
 
         $table->altRowAttributes(1, array('class' => 'row_odd'), array('class' => 'row_even'), true);
         return $table->toHtml();
+    }
+
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
     }
 
     public function getButtonToolbarRenderer($user)

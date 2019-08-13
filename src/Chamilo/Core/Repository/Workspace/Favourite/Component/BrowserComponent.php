@@ -73,7 +73,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         if (! isset($this->entityService))
         {
-            $this->entityService = new EntityService();
+            $this->entityService = new EntityService($this->getGroupSubscriptionService());
         }
         
         return $this->entityService;

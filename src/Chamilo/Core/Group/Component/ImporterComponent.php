@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Form\GroupImportForm;
@@ -21,21 +22,24 @@ class ImporterComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
 
-        $form = new GroupImportForm($this->get_url());
+        $form = new GroupImportForm(
+            $this->get_url(), $this->getGroupService(), $this->getTranslator(), $this->getExceptionLogger()
+        );
 
         if ($form->validate())
         {
             $success = $form->import_groups();
             $this->redirect(
                 Translation::get($success ? 'GroupXMLProcessed' : 'GroupXMLNotProcessed') . '<br />' .
-                     $form->get_failed_elements(),
-                    ($success ? false : true),
-                    array(Application::PARAM_ACTION => self::ACTION_IMPORT));
+                $form->get_failed_elements(),
+                ($success ? false : true),
+                array(Application::PARAM_ACTION => self::ACTION_IMPORT)
+            );
         }
         else
         {

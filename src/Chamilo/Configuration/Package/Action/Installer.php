@@ -8,6 +8,7 @@ use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
@@ -21,6 +22,7 @@ use DOMDocument;
  */
 abstract class Installer extends Action
 {
+    use DependencyInjectionContainerTrait;
 
     /**
      * Form values passed on from the installation wizard
@@ -33,6 +35,7 @@ abstract class Installer extends Action
     public function __construct($form_values)
     {
         parent::__construct();
+        $this->initializeContainer();
 
         $this->form_values = $form_values;
     }

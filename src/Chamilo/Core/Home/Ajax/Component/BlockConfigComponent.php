@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
@@ -41,40 +42,45 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
     public function run()
     {
         $userId = DataManager::determine_user_id();
-        
+
         if ($userId === false)
         {
             JsonAjaxResult::not_allowed();
         }
-        
+
         $block = intval($this->getPostDataValue(self::PARAM_BLOCK));
         $data = $this->getPostDataValue(self::PARAM_DATA);
-        
+
         $block = DataManager::retrieve_by_id(Block::class_name(), $block);
-        
+
         /** @var Element $block */
         if ($block->getUserId() == $userId)
         {
             $postedValues = $this->getPostDataValue(self::PARAM_DATA);
-            
+
             // $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer :: TYPE_BASIC, $this);
             // $renderer = $rendererFactory->getRenderer();
-            
-            $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));
-            
+
+            $homeService = new HomeService(
+                new HomeRepository(),
+                new ElementRightsService(new RightsRepository($this->getGroupSubscriptionService()))
+            );
+
             $blockRendererFactory = new BlockRendererFactory(
-                $this, 
-                $homeService, 
-                $block, 
-                BlockRendererFactory::SOURCE_AJAX);
-            
+                $this,
+                $homeService,
+                $block,
+                BlockRendererFactory::SOURCE_AJAX
+            );
+
             $blockRenderer = $blockRendererFactory->getRenderer();
-            
+
             $contentObjectPublicationService = new ContentObjectPublicationService(
-                new ContentObjectPublicationRepository(new PublicationRepository()));
-            
+                new ContentObjectPublicationRepository(new PublicationRepository())
+            );
+
             if ($blockRenderer instanceof ConfigurableInterface ||
-                 $blockRenderer instanceof ContentObjectPublicationBlockInterface)
+                $blockRenderer instanceof ContentObjectPublicationBlockInterface)
             {
                 if ($blockRenderer instanceof ConfigurableInterface)
                 {
@@ -83,29 +89,30 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
                         $block->setSetting($configurationVariable, $postedValues[$configurationVariable]);
                     }
                 }
-                
+
                 if ($blockRenderer instanceof ContentObjectPublicationBlockInterface)
                 {
                     foreach ($blockRenderer->getContentObjectConfigurationVariables() as $configurationVariable)
                     {
                         $contentObjectPublicationService->setOnlyContentObjectForElement(
-                            $block, 
-                            $postedValues[$configurationVariable]);
+                            $block,
+                            $postedValues[$configurationVariable]
+                        );
                     }
                 }
-                
+
                 if (isset($postedValues[Block::PROPERTY_TITLE]))
                 {
                     $block->setTitle($postedValues[Block::PROPERTY_TITLE]);
                 }
-                
-                if (! $block->update())
+
+                if (!$block->update())
                 {
                     JsonAjaxResult::general_error();
                 }
                 else
                 {
-                    
+
                     $result = new JsonAjaxResult(200);
                     $result->set_property(self::PROPERTY_BLOCK, $blockRenderer->toHtml());
                     $result->display();
@@ -121,4 +128,5 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
             JsonAjaxResult::not_allowed();
         }
     }
+
 }

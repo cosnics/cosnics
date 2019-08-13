@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Service;
 
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
@@ -8,6 +9,7 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository
 use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 /**
  *
@@ -471,9 +473,13 @@ class RightsService
     {
         if (is_null(static::$instance))
         {
+            $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+            /** @var GroupSubscriptionService $groupSubscriptionService */
+            $groupSubscriptionService = $container->get(GroupSubscriptionService::class);
+
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $entityRelationService = new EntityRelationService(new EntityRelationRepository());
-            $entityService = new EntityService();
+            $entityService = new EntityService($groupSubscriptionService);
             $workspaceService = new WorkspaceService(new WorkspaceRepository());
             
             self::$instance = new static(

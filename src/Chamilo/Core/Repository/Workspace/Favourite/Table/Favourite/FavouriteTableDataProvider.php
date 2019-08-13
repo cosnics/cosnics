@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Favourite\Table\Favourite;
 
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\EntityService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 /**
  *
@@ -61,10 +63,19 @@ class FavouriteTableDataProvider extends WorkspaceTableDataProvider
     {
         if (! isset($this->entityService))
         {
-            $this->entityService = new EntityService();
+            $this->entityService = new EntityService($this->getGroupSubscriptionService());
         }
         
         return $this->entityService;
+    }
+
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        return $container->get(GroupSubscriptionService::class);
     }
 
     /**

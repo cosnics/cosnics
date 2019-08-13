@@ -8,6 +8,7 @@ use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Librarie
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -89,7 +90,7 @@ class CalendarEventDataProvider extends MixedCalendar
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, $fromDate,
         $toDate)
     {
-        $repository = new CalendarEventDataProviderRepository();
+        $repository = new CalendarEventDataProviderRepository($this->getGroupSubscriptionService());
         $dataClassRetrievesParameters = $repository->getPublicationsRecordRetrievesParameters(
             $calendarRendererProvider->getDataUser());
 
@@ -112,11 +113,19 @@ class CalendarEventDataProvider extends MixedCalendar
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, $fromDate,
         $toDate)
     {
-        $repository = new CalendarEventDataProviderRepository();
+        $repository = new CalendarEventDataProviderRepository($this->getGroupSubscriptionService());
         $recordRetrievesParameters = $repository->getSharedPublicationsRecordRetrievesParameters(
             $calendarRendererProvider->getDataUser());
 
         return $this->getEventsByParameters($calendarRendererProvider, $recordRetrievesParameters, $fromDate, $toDate);
+    }
+
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
     }
 
     /**

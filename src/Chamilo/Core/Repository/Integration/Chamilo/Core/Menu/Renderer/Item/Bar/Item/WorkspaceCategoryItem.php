@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Menu\Renderer\Item\Bar\Item\CategoryItem;
 use Chamilo\Core\Menu\Renderer\Item\Renderer;
 use Chamilo\Core\Repository\Workspace\Manager;
@@ -36,6 +37,14 @@ class WorkspaceCategoryItem extends CategoryItem
         return isset($currentWorkspace);
     }
 
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
+    }
+
     public function render()
     {
         if (! $this->canViewMenuItem($this->getMenuRenderer()->get_user()))
@@ -47,7 +56,7 @@ class WorkspaceCategoryItem extends CategoryItem
         $sub_html = array();
         
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
-        $entityService = new EntityService();
+        $entityService = new EntityService($this->getGroupSubscriptionService());
         $workspaces = $workspaceService->getWorkspaceFavouritesByUser(
             $entityService, 
             $this->getMenuRenderer()->get_user());

@@ -3,11 +3,13 @@ namespace Chamilo\Application\Weblcms\Request\Rights;
 
 use Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\RightsUtil;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -19,6 +21,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class Rights extends RightsUtil
 {
+    use DependencyInjectionContainerTrait;
+
     const VIEW_RIGHT = '1';
 
     private static $instance;
@@ -29,13 +33,14 @@ class Rights extends RightsUtil
 
     /**
      *
-     * @return \application\weblcms\request\rights\Rights
+     * @return Rights
      */
     static function getInstance()
     {
         if (! isset(self::$instance))
         {
             self::$instance = new self();
+            self::$instance->initializeContainer();
         }
         return self::$instance;
     }
@@ -140,8 +145,8 @@ class Rights extends RightsUtil
                     }
                 }
             }
-            
-            $user_group_ids = $user->get_groups(true);
+
+            $user_group_ids = $this->getGroupSubscriptionService()->findAllGroupIdsForUser($user);
             
             foreach ($user_group_ids as $user_group_id)
             {
@@ -203,6 +208,14 @@ class Rights extends RightsUtil
         return self::$target_users[$user->get_id()];
     }
 
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
+    }
+
     function is_target_user(\Chamilo\Core\User\Storage\DataClass\User $user, $target_user_id)
     {
         return in_array($target_user_id, $this->get_target_users($user));
@@ -213,7 +226,7 @@ class Rights extends RightsUtil
         if (! isset(self::$authorized_users[$user->get_id()]))
         {
             $location_entity_right_ids = array();
-            $user_group_ids = $user->get_groups(true);
+            $user_group_ids = $this->getGroupSubscriptionService()->findAllGroupIdsForUser($user);
             
             foreach ($user_group_ids as $user_group_id)
             {
