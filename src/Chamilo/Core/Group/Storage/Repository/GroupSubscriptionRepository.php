@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -111,6 +112,11 @@ class GroupSubscriptionRepository
             GroupRelUser::class,
             new DataClassRetrieveParameters($condition, array())
         );
+    }
+
+    public function clearCache()
+    {
+        return $this->dataClassRepository->getDataClassRepositoryCache()->truncate(GroupRelUser::class);
     }
 
     /**
@@ -336,8 +342,13 @@ class GroupSubscriptionRepository
             )
         );
 
+        $orderBy[] =
+            new OrderBy(
+                new PropertyConditionVariable(GroupClosureTable::class, GroupClosureTable::PROPERTY_DEPTH), SORT_DESC
+            );
+
         return $this->dataClassRepository->retrieves(
-            Group::class, new DataClassRetrievesParameters($condition, null, null, [], $joins, true)
+            Group::class, new DataClassRetrievesParameters($condition, null, null, $orderBy, $joins, true)
         );
     }
 
@@ -371,8 +382,13 @@ class GroupSubscriptionRepository
             new PropertyConditionVariable(GroupClosureTable::class, GroupClosureTable::PROPERTY_PARENT_ID)
         );
 
+        $orderBy[] =
+            new OrderBy(
+                new PropertyConditionVariable(GroupClosureTable::class, GroupClosureTable::PROPERTY_DEPTH), SORT_DESC
+            );
+
         return $this->dataClassRepository->distinct(
-            GroupClosureTable::class, new DataClassDistinctParameters($condition, $distinctProperties, $joins)
+            GroupClosureTable::class, new DataClassDistinctParameters($condition, $distinctProperties, $joins, $orderBy)
         );
     }
 

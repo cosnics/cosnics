@@ -85,6 +85,8 @@ class GroupSubscriptionService
                     sprintf('Could not subscribe the user %s to group %s', $user->getId(), $group->getId())
                 );
             }
+
+            $this->groupSubscriptionRepository->clearCache();
         }
     }
 
@@ -116,6 +118,8 @@ class GroupSubscriptionService
                 sprintf('Could not remove the user %s from group %s', $user->getId(), $group->getId())
             );
         }
+
+        $this->groupSubscriptionRepository->clearCache();
     }
 
     /**
@@ -201,6 +205,18 @@ class GroupSubscriptionService
         $this->findAllGroupIdsForUserSanityCheck($user, $oldGroupIds, $newGroupIds);
 
         return $oldGroupIds;
+    }
+
+    /**
+     * Temporary method used for testing the new functionality to findAllGroupIds. This does not do a sanity check
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return int[]
+     */
+    public function findAllGroupIdsForUserTempNew(User $user)
+    {
+        return $this->groupSubscriptionRepository->findAllGroupIdsForUser($user);
     }
 
     /**

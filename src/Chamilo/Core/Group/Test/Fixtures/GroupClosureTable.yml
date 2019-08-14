@@ -1,0 +1,25 @@
+Chamilo\Core\Group\Storage\DataClass\GroupClosureTable:
+  ct_root_group:
+    parent_id: 1
+    child_id: 1
+    depth: 0
+  ct_sub_groups_level1_root{2..5}:
+    parent_id: <current()>
+    child_id: <current()>
+    depth: 0
+  ct_sub_groups_level1{2..5}:
+    parent_id: 1
+    child_id: <current()>
+    depth: 1
+  ct_sub_group_level2_root:
+    parent_id: 6
+    child_id: 6
+    depth: 0
+  ct_sub_group_level2_d1:
+    parent_id: 5
+    child_id: 6
+    depth: 1
+  ct_sub_group_level2_d2:
+    parent_id: 1
+    child_id: 6
+    depth: 2

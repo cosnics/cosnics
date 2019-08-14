@@ -1,0 +1,55 @@
+Chamilo\Core\Group\Storage\DataClass\Group:
+  root_group:
+    id: 1
+    name: "Cosnics"
+    description: ""
+    code: "COSNICS"
+    sort: 1
+    left_value: 1
+    right_value: 12
+    parent_id: 0
+  sub_group1:
+    id: 2
+    name: <word()>
+    description: ""
+    code: <word()>
+    sort: 1
+    left_value: 2
+    right_value: 3
+    parent_id: 1
+  sub_group2:
+    id: 3
+    name: <word()>
+    description: ""
+    code: <word()>
+    sort: 2
+    left_value: 4
+    right_value: 5
+    parent_id: 1
+  sub_group3:
+    id: 4
+    name: <word()>
+    description: ""
+    code: <word()>
+    sort: 3
+    left_value: 6
+    right_value: 7
+    parent_id: 1
+  sub_group4:
+    id: 5
+    name: <word()>
+    description: ""
+    code: <word()>
+    sort: 4
+    left_value: 8
+    right_value: 11
+    parent_id: 1
+  sub_group5:
+    id: 6
+    name: <word()>
+    description: ""
+    code: <word()>
+    sort: 1
+    left_value: 9
+    right_value: 10
+    parent_id: 5

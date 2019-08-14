@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="group_group">
+<object name="group_closure_table">
     <properties>
         <property
                 name="parent_id"

@@ -1,0 +1,19 @@
+Chamilo\Core\Group\Storage\DataClass\GroupRelUser:
+  group_user1:
+    user_id: 1
+    group_id: 2
+  group_user2:
+    user_id: 1
+    group_id: 3
+  group_user3:
+    user_id: 5
+    group_id: 4
+  group_user5:
+    user_id: 1
+    group_id: 6
+  group_user6:
+    user_id: 5
+    group_id: 6
+  group_user7:
+    user_id: 7
+    group_id: 4
