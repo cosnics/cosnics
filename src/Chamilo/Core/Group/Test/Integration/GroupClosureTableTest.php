@@ -109,154 +109,154 @@ class GroupClosureTableTest extends ChamiloFixturesBasedTestCase
         ];
     }
 
-//    public function testGetAllChildIdsFromRootGroup()
-//    {
-//        $rootGroup = $this->groupService->getRootGroup();
-//        $childIds = $this->groupService->getAllChildIdsForGroup($rootGroup);
-//
-//        $this->assertCount(6, $childIds);
-//    }
-//
-//    public function testGetAllChildIdsFromSubgroup()
-//    {
-//        $subGroup = $this->groupService->getGroupByIdentifier(5);
-//        $childIds = $this->groupService->getAllChildIdsForGroup($subGroup);
-//
-//        $this->assertCount(2, $childIds);
-//        $this->assertEquals([5, 6], $childIds);
-//    }
-//
-//    public function testGetAllChildIdsFromSubgroupExcludeSelf()
-//    {
-//        $subGroup = $this->groupService->getGroupByIdentifier(5);
-//        $this->assertCount(1, $this->groupService->getAllChildIdsForGroup($subGroup, false));
-//    }
-//
-//    public function testGetAllChildrenForGroup()
-//    {
-//        $rootGroup = $this->groupService->getRootGroup();
-//        $children = $this->groupService->getAllChildrenForGroup($rootGroup);
-//
-//        $this->assertCount(6, $children);
-//    }
-//
-//    public function testGetAllChildrenForGroupFromSubgroup()
-//    {
-//        $subGroup = $this->groupService->getGroupByIdentifier(5);
-//        $this->assertCount(2, $this->groupService->getAllChildrenForGroup($subGroup));
-//    }
-//
-//    public function testGetAllChildrenForGroupFromSubgroupExcludeSelf()
-//    {
-//        $subGroup = $this->groupService->getGroupByIdentifier(5);
-//        $this->assertCount(1, $this->groupService->getAllChildrenForGroup($subGroup, false));
-//    }
-//
-//    public function testFindDirectChildrenFromGroup()
-//    {
-//        $rootGroup = $this->groupService->getRootGroup();
-//        $directChildren = $this->groupService->findDirectChildrenFromGroup($rootGroup);
-//
-//        $this->assertCount(4, $directChildren);
-//    }
-//
-//    public function testGetAllParentsForGroup()
-//    {
-//        $subGroup = $this->groupService->getGroupByIdentifier(6);
-//        $this->assertCount(3, $this->groupService->getAllParentsForGroup($subGroup));
-//    }
-//
-//    public function testGetAllParentsForGroupExcludeSelf()
-//    {
-//        $subGroup = $this->groupService->getGroupByIdentifier(6);
-//        $this->assertCount(2, $this->groupService->getAllParentsForGroup($subGroup, false));
-//    }
-//
-//    public function testGetAllParentIdsForGroup()
-//    {
-//        $subGroup = $this->groupService->getGroupByIdentifier(6);
-//        $parentIds = $this->groupService->getAllParentIdsForGroup($subGroup);
-//        $this->assertCount(3, $parentIds);
-//        $this->assertEquals([1, 5, 6], $parentIds);
-//    }
-//
-//    public function testGetAllParentIdsForGroupExcludeSelf()
-//    {
-//        $subGroup = $this->groupService->getGroupByIdentifier(6);
-//        $this->assertCount(2, $this->groupService->getAllParentIdsForGroup($subGroup, false));
-//    }
-//
-//    public function testGetDirectParentForGroup()
-//    {
-//        $subGroup = $this->groupService->getGroupByIdentifier(6);
-//        $this->assertEquals(5, $this->groupService->getDirectParentOfGroup($subGroup)->getId());
-//    }
-//
-//    public function testCreateGroup()
-//    {
-//        $group = new Group();
-//        $group->set_name('TestSubGroup500');
-//        $group->set_parent_id(6);
-//        $group->set_code(strtoupper($group->get_name()));
-//
-//        $this->groupService->createGroup($group);
-//
-//        $this->assertCount(4, $this->groupService->getAllParentIdsForGroup($group));
-//    }
-//
-//    public function testUpdateGroup()
-//    {
-//        $group = $this->groupService->getGroupByIdentifier(6);
-//        $group->set_name('ChangedGroupName');
-//
-//        $this->groupService->updateGroup($group);
-//
-//        $this->getTestDataClassRepository()->getDataClassRepositoryCache()->truncate(Group::class);
-//
-//        $group = $this->groupService->getGroupByIdentifier(6);
-//        $this->assertEquals('ChangedGroupName', $group->get_name());
-//    }
-//
-//    public function testDeleteGroup()
-//    {
-//        $group = $this->groupService->getGroupByIdentifier(6);
-//        $this->groupService->deleteGroup($group);
-//
-//        $parentGroup = $this->groupService->getGroupByIdentifier(5);
-//
-//        $this->assertCount(0, $this->groupService->getAllChildIdsForGroup($parentGroup, false));
-//    }
-//
-//    public function testMoveGroup()
-//    {
-//        $rootGroup = $this->groupService->getRootGroup();
-//
-//        $group = $this->groupService->getGroupByIdentifier(5);
-//        $this->groupService->moveGroup($group, 2);
-//
-//        $leafGroup = $this->groupService->getGroupByIdentifier(6);
-//        $this->assertEquals([1, 2, 5, 6], $this->groupService->getAllParentIdsForGroup($leafGroup));
-//        $this->assertCount(3, $this->groupService->findDirectChildrenFromGroup($rootGroup));
-//    }
-//
-//    public function testFindGroupByCode()
-//    {
-//        $group = $this->groupService->findGroupByCode('COSNICS');
-//        $this->assertEquals(1, $group->getId());
-//    }
-//
-//    public function testAddGroupToClosureTable()
-//    {
-//        $group = new Group();
-//        $group->set_name('TestSubGroup500');
-//        $group->set_parent_id(6);
-//        $group->set_code(strtoupper($group->get_name()));
-//        $group->create();
-//
-//        $this->groupService->addGroupToClosureTable($group);
-//
-//        $this->assertCount(4, $this->groupService->getAllParentIdsForGroup($group));
-//    }
+    public function testGetAllChildIdsFromRootGroup()
+    {
+        $rootGroup = $this->groupService->getRootGroup();
+        $childIds = $this->groupService->getAllChildIdsForGroup($rootGroup);
+
+        $this->assertCount(6, $childIds);
+    }
+
+    public function testGetAllChildIdsFromSubgroup()
+    {
+        $subGroup = $this->groupService->getGroupByIdentifier(5);
+        $childIds = $this->groupService->getAllChildIdsForGroup($subGroup);
+
+        $this->assertCount(2, $childIds);
+        $this->assertEquals([5, 6], $childIds);
+    }
+
+    public function testGetAllChildIdsFromSubgroupExcludeSelf()
+    {
+        $subGroup = $this->groupService->getGroupByIdentifier(5);
+        $this->assertCount(1, $this->groupService->getAllChildIdsForGroup($subGroup, false));
+    }
+
+    public function testGetAllChildrenForGroup()
+    {
+        $rootGroup = $this->groupService->getRootGroup();
+        $children = $this->groupService->getAllChildrenForGroup($rootGroup);
+
+        $this->assertCount(6, $children);
+    }
+
+    public function testGetAllChildrenForGroupFromSubgroup()
+    {
+        $subGroup = $this->groupService->getGroupByIdentifier(5);
+        $this->assertCount(2, $this->groupService->getAllChildrenForGroup($subGroup));
+    }
+
+    public function testGetAllChildrenForGroupFromSubgroupExcludeSelf()
+    {
+        $subGroup = $this->groupService->getGroupByIdentifier(5);
+        $this->assertCount(1, $this->groupService->getAllChildrenForGroup($subGroup, false));
+    }
+
+    public function testFindDirectChildrenFromGroup()
+    {
+        $rootGroup = $this->groupService->getRootGroup();
+        $directChildren = $this->groupService->findDirectChildrenFromGroup($rootGroup);
+
+        $this->assertCount(4, $directChildren);
+    }
+
+    public function testGetAllParentsForGroup()
+    {
+        $subGroup = $this->groupService->getGroupByIdentifier(6);
+        $this->assertCount(3, $this->groupService->getAllParentsForGroup($subGroup));
+    }
+
+    public function testGetAllParentsForGroupExcludeSelf()
+    {
+        $subGroup = $this->groupService->getGroupByIdentifier(6);
+        $this->assertCount(2, $this->groupService->getAllParentsForGroup($subGroup, false));
+    }
+
+    public function testGetAllParentIdsForGroup()
+    {
+        $subGroup = $this->groupService->getGroupByIdentifier(6);
+        $parentIds = $this->groupService->getAllParentIdsForGroup($subGroup);
+        $this->assertCount(3, $parentIds);
+        $this->assertEquals([1, 5, 6], $parentIds);
+    }
+
+    public function testGetAllParentIdsForGroupExcludeSelf()
+    {
+        $subGroup = $this->groupService->getGroupByIdentifier(6);
+        $this->assertCount(2, $this->groupService->getAllParentIdsForGroup($subGroup, false));
+    }
+
+    public function testGetDirectParentForGroup()
+    {
+        $subGroup = $this->groupService->getGroupByIdentifier(6);
+        $this->assertEquals(5, $this->groupService->getDirectParentOfGroup($subGroup)->getId());
+    }
+
+    public function testCreateGroup()
+    {
+        $group = new Group();
+        $group->set_name('TestSubGroup500');
+        $group->set_parent_id(6);
+        $group->set_code(strtoupper($group->get_name()));
+
+        $this->groupService->createGroup($group);
+
+        $this->assertCount(4, $this->groupService->getAllParentIdsForGroup($group));
+    }
+
+    public function testUpdateGroup()
+    {
+        $group = $this->groupService->getGroupByIdentifier(6);
+        $group->set_name('ChangedGroupName');
+
+        $this->groupService->updateGroup($group);
+
+        $this->getTestDataClassRepository()->getDataClassRepositoryCache()->truncate(Group::class);
+
+        $group = $this->groupService->getGroupByIdentifier(6);
+        $this->assertEquals('ChangedGroupName', $group->get_name());
+    }
+
+    public function testDeleteGroup()
+    {
+        $group = $this->groupService->getGroupByIdentifier(6);
+        $this->groupService->deleteGroup($group);
+
+        $parentGroup = $this->groupService->getGroupByIdentifier(5);
+
+        $this->assertCount(0, $this->groupService->getAllChildIdsForGroup($parentGroup, false));
+    }
+
+    public function testMoveGroup()
+    {
+        $rootGroup = $this->groupService->getRootGroup();
+
+        $group = $this->groupService->getGroupByIdentifier(5);
+        $this->groupService->moveGroup($group, 2);
+
+        $leafGroup = $this->groupService->getGroupByIdentifier(6);
+        $this->assertEquals([1, 2, 5, 6], $this->groupService->getAllParentIdsForGroup($leafGroup));
+        $this->assertCount(3, $this->groupService->findDirectChildrenFromGroup($rootGroup));
+    }
+
+    public function testFindGroupByCode()
+    {
+        $group = $this->groupService->findGroupByCode('COSNICS');
+        $this->assertEquals(1, $group->getId());
+    }
+
+    public function testAddGroupToClosureTable()
+    {
+        $group = new Group();
+        $group->set_name('TestSubGroup500');
+        $group->set_parent_id(6);
+        $group->set_code(strtoupper($group->get_name()));
+        $group->create();
+
+        $this->groupService->addGroupToClosureTable($group);
+
+        $this->assertCount(4, $this->groupService->getAllParentIdsForGroup($group));
+    }
 
     public function testFindGroupUserRelation()
     {
