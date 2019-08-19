@@ -1,0 +1,153 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    color: #337ab7;
+}
+
+p {
+    margin-top: 1rem;
+}
+
+a:hover {
+    color: #23527c;
+}
+
+a:visited {
+    color: #8d75a3;
+}
+
+body {
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: sans-serif;
+    max-width: 28rem;
+    position: relative;
+}
+
+#icon {
+    margin: 0 auto;
+    text-align: center;
+    font-size: 5rem;
+}
+
+#controls {
+    display: block;
+    margin: 2rem;
+    text-align: center;
+
+}
+
+button {
+    font-size: 1.042em;
+    font-family: Open Sans, sans-serif;
+    padding: .708em 1.25em;
+    margin: 0 .5em;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+    background-color: #1c8e16;
+    color: white;
+
+    width: 120px;
+
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+#insert {
+    font-size: 1.042em;
+    font-family: Open Sans, sans-serif;
+    padding: .708em 1.25em;
+    margin: 0 .5em;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+    background-color: #1c8e16;
+    color: white;
+
+    width: 200px;
+
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+#download {
+    font-size: 1.042em;
+    font-family: Open Sans, sans-serif;
+    padding: .708em 1.25em;
+    margin: 0 .5em;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: normal;
+    white-space: nowrap;
+
+    color: #333;
+    background-color: #f7f7f7;
+
+    width: 200px;
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button:hover, button:focus {
+    outline: none;
+    background: #c72d1c;
+}
+
+button::-moz-focus-inner {
+    border: 0;
+}
+
+button:active {
+    background-color: #7d211a;
+}
+
+button:disabled {
+    pointer-events: none;
+    background: lightgray;
+}
+
+button:first-child {
+    margin-left: 0;
+}
+
+audio {
+    display: block;
+    width: 100%;
+    margin-top: 0.2rem;
+}
+
+li {
+    list-style: none;
+    margin-bottom: 1rem;
+}
+
+#formats {
+    margin-top: 0.5rem;
+    font-size: 80%;
+}
+
+.blink {
+    animation: blink 2s steps(5, start) infinite;
+    -webkit-animation: blink 1s steps(5, start) infinite;
+    color: red;
+}
+@keyframes blink {
+    to {
+        visibility: hidden;
+    }
+}
+@-webkit-keyframes blink {
+    to {
+        visibility: hidden;
+    }
+}
