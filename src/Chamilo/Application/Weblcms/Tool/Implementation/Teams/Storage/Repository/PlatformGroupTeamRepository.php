@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class PlatformGroupTeamRepository
 {
+    const ALIAS_GROUP_ID = 'GroupId';
     const ALIAS_GROUP_NAME = 'GroupName';
     const ALIAS_GROUP_CODE = 'GroupCode';
 
@@ -192,8 +193,13 @@ class PlatformGroupTeamRepository
         $properties->add(new PropertiesConditionVariable(PlatformGroupTeam::class));
 
         $properties->add(
+            new FixedPropertyConditionVariable(Group::class, Group::PROPERTY_ID, self::ALIAS_GROUP_ID)
+        );
+
+        $properties->add(
             new FixedPropertyConditionVariable(Group::class, Group::PROPERTY_NAME, self::ALIAS_GROUP_NAME)
         );
+
         $properties->add(
             new FixedPropertyConditionVariable(Group::class, Group::PROPERTY_CODE, self::ALIAS_GROUP_CODE)
         );

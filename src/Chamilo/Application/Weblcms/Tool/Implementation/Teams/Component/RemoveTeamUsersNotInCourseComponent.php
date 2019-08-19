@@ -24,7 +24,8 @@ class RemoveTeamUsersNotInCourseComponent extends Manager
     public function run()
     {
         //only teachers can create the team
-        if(!$this->get_course()->is_course_admin($this->getUser())) {
+        if (!$this->get_course()->is_course_admin($this->getUser()))
+        {
             throw new NotAllowedException();
         }
 
@@ -37,7 +38,7 @@ class RemoveTeamUsersNotInCourseComponent extends Manager
         $message = $this->getTranslator()->trans('TeamUsersSynced', [], Manager::class);
 
         $browserUrlParameters = $this->get_parameters();
-        $browserUrlParameters[self::PARAM_ACTION]= self::ACTION_BROWSE;
+        $browserUrlParameters[self::PARAM_ACTION] = self::ACTION_BROWSE;
 
         $this->redirect($message, false, $browserUrlParameters);
     }

@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 
 /**
@@ -19,6 +20,11 @@ class RemoveTeamUsersNotInGroupsComponent extends Manager
      */
     public function run()
     {
+        if (!$this->get_course()->is_course_admin($this->getUser()))
+        {
+            throw new NotAllowedException();
+        }
+
         $platformGroupTeam = $this->getPlatformGroupTeamFromRequest();
 
         try
@@ -37,7 +43,6 @@ class RemoveTeamUsersNotInGroupsComponent extends Manager
             $message = 'TeamUsersNotInGroupsNotRemoved';
             $success = false;
             $this->getExceptionLogger()->logException($ex);
-            var_dump($ex->getMessage());
         }
 
         $this->redirect(

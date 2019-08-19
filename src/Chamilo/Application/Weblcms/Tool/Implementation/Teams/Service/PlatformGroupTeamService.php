@@ -3,12 +3,14 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\TooManyUsersException;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeamRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\PlatformGroupTeamRepository;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Microsoft\Graph\Model\Team;
@@ -41,23 +43,31 @@ class PlatformGroupTeamService
     protected $teamService;
 
     /**
+     * @var CourseService
+     */
+    protected $courseService;
+
+    /**
      * PlatformGroupTeamService constructor.
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\PlatformGroupTeamRepository $platformGroupTeamRepository
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService $teamService
+     * @param CourseService $courseService
      */
     public function __construct(
         \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\PlatformGroupTeamRepository $platformGroupTeamRepository,
         \Chamilo\Core\Group\Service\GroupService $groupService, \Chamilo\Core\User\Service\UserService $userService,
-        \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService $teamService
+        \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService $teamService,
+        CourseService $courseService
     )
     {
         $this->platformGroupTeamRepository = $platformGroupTeamRepository;
         $this->groupService = $groupService;
         $this->userService = $userService;
         $this->teamService = $teamService;
+        $this->courseService = $courseService;
     }
 
     /**
@@ -176,9 +186,33 @@ class PlatformGroupTeamService
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws NotAllowedException
      */
     public function getVisitTeamUrl(User $user, PlatformGroupTeam $platformGroupTeam)
     {
+        $course = $this->courseService->getCourseById($platformGroupTeam->getCourseId());
+        $isTeacher = $this->courseService->isUserTeacherInCourse($user, $course);
+        if(!$isTeacher)
+        {
+            $allowed = false;
+
+            $groupIds = $user->get_groups(true);
+            $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
+            foreach($groups as $group)
+            {
+                if(in_array($group->getId(), $groupIds))
+                {
+                    $allowed = true;
+                    break;
+                }
+            }
+
+            if(!$allowed)
+            {
+                throw new NotAllowedException();
+            }
+        }
+
         $team = $this->getTeam($platformGroupTeam);
 
         if (!$team instanceof Team)
@@ -202,11 +236,20 @@ class PlatformGroupTeamService
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
+     * @param User $user
+     *
      * @return array
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    public function getPlatformGroupTeamsForCourse(Course $course)
+    public function getPlatformGroupTeamsForCourse(Course $course, User $user)
     {
+        $isTeacher = $this->courseService->isUserTeacherInCourse($user, $course);
+        $groupIds = [];
+        if(!$isTeacher)
+        {
+            $groupIds = $user->get_groups(true);
+        }
+
         $platformGroupTeamsData =
             $this->platformGroupTeamRepository->findPlatformGroupTeamsWithPlatformGroupsForCourse($course);
 
@@ -218,6 +261,14 @@ class PlatformGroupTeamService
 
             if (!array_key_exists($id, $data))
             {
+                if(!$isTeacher)
+                {
+                    if(!in_array($row[PlatformGroupTeamRepository::ALIAS_GROUP_ID], $groupIds))
+                    {
+                        continue;
+                    }
+                }
+
                 $newTeamName = $this->updateTeamNameById(
                     $id, $row[PlatformGroupTeam::PROPERTY_TEAM_ID], $row[PlatformGroupTeam::PROPERTY_NAME]
                 );

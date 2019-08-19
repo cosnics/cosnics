@@ -32,7 +32,7 @@ class BrowserComponent extends Manager
         $hasTeam = $courseTeamService->courseHasTeam($this->get_course());
         $courseTeamName = null;
 
-        if($hasTeam)
+        if ($hasTeam)
         {
             $courseTeam = $courseTeamService->getTeam($this->get_course());
             $courseTeamName = $courseTeam->getProperties()['displayName'];
@@ -63,7 +63,9 @@ class BrowserComponent extends Manager
                     [self::PARAM_PLATFORM_GROUP_TEAM_ID => '__PLATFORM_GROUP_TEAM_ID__']
                 ),
                 'PLATFORM_GROUP_TEAMS_JSON' => $this->getSerializer()->serialize(
-                    $this->getPlatformGroupTeamService()->getPlatformGroupTeamsForCourse($this->get_course()), 'json'
+                    $this->getPlatformGroupTeamService()->getPlatformGroupTeamsForCourse(
+                        $this->get_course(), $this->getUser()
+                    ), 'json'
                 )
             ],
             'Chamilo\Application\Weblcms\Tool\Implementation\Teams:Browser.html.twig'
