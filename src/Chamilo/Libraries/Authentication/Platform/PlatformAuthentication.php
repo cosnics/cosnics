@@ -148,12 +148,13 @@ class PlatformAuthentication extends Authentication
             return false;
         }
 
-        $oldPasswordHash = $this->hashingUtilities->hashString($oldPassword);
-
         // Verify that the entered old password matches the stored password
-        if ($oldPasswordHash != $user->get_password())
+        if(!$this->passwordSecurity->isPasswordValidForUser($user, $oldPassword))
         {
-            return false;
+            if(!$this->isPasswordValidWithOldHashingMethod($user, $oldPassword))
+            {
+                return false;
+            }
         }
 
         // Set the password
