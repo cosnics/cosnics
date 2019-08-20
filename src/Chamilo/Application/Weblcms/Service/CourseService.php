@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Service;
 
+use Chamilo\Application\Weblcms\Admin\CourseAdminValidator;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
@@ -289,6 +290,18 @@ class CourseService implements CourseServiceInterface
      */
     public function isUserTeacherInCourse(User $user, Course $course)
     {
+        if($user->is_platform_admin())
+        {
+            return true;
+        }
+
+        $courseValidator = CourseAdminValidator::getInstance();
+        // If the user is a sub administrator, grant all rights
+        if ($courseValidator->isUserAdminOfCourse($user, $course))
+        {
+            return true;
+        }
+
         return $this->isUserSubscribedToCourseWithStatus($user, $course, CourseEntityRelation::STATUS_TEACHER);
     }
 
