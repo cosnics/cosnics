@@ -84,6 +84,8 @@ class PlatformGroupTeamService
     {
         $userCount = 0;
 
+        $groups = [];
+
         foreach ($groupIds as $groupId)
         {
             $group = $this->groupService->getGroupByIdentifier($groupId);
@@ -116,8 +118,6 @@ class PlatformGroupTeamService
                 sprintf('The new team for the platform group (%s) could not be created', $teamName)
             );
         }
-
-        $groups = [];
 
         foreach ($groups as $group)
         {
