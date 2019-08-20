@@ -469,7 +469,7 @@ class CourseService implements CourseServiceInterface
                 $group = new Group($group);
             }
 
-            $userIds = array_merge($userIds, $group->get_users(true, true));
+            $userIds = array_merge($userIds, $this->groupSubscriptionService->findUserIdsInGroupAndSubgroups($group));
         }
 
         if (count($userIds) == 0)

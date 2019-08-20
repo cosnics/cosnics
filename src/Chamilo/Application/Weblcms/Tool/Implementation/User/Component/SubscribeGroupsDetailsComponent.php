@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\GroupUsers\GroupUsersTable;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -124,7 +125,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
     public function get_table_condition($table_class_name)
     {
         $group = $this->getCurrentGroup();
-        $subscribedUserIds = $group->get_users();
+        $subscribedUserIds = $this->getGroupSubscriptionService()->findUsersDirectlySubscribedToGroup($group);
 
         $conditions = array();
 
@@ -148,5 +149,13 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         {
             return new AndCondition($conditions);
         }
+    }
+
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
     }
 }

@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\TooManyUsers
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeamRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\PlatformGroupTeamRepository;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
@@ -39,6 +40,10 @@ class PlatformGroupTeamService
      * @var TeamService
      */
     protected $teamService;
+    /**
+     * @var GroupSubscriptionService
+     */
+    protected $groupSubscriptionService;
 
     /**
      * PlatformGroupTeamService constructor.
@@ -47,17 +52,19 @@ class PlatformGroupTeamService
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService $teamService
+     * @param GroupSubscriptionService $groupSubscriptionService
      */
     public function __construct(
         \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\PlatformGroupTeamRepository $platformGroupTeamRepository,
         \Chamilo\Core\Group\Service\GroupService $groupService, \Chamilo\Core\User\Service\UserService $userService,
-        \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService $teamService
+        \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService $teamService, GroupSubscriptionService $groupSubscriptionService
     )
     {
         $this->platformGroupTeamRepository = $platformGroupTeamRepository;
         $this->groupService = $groupService;
         $this->userService = $userService;
         $this->teamService = $teamService;
+        $this->groupSubscriptionService = $groupSubscriptionService;
     }
 
     /**
@@ -150,7 +157,7 @@ class PlatformGroupTeamService
 
         foreach ($groups as $group)
         {
-            $userIds = array_merge($userIds, $group->get_users(true, true));
+            $userIds = array_merge($userIds, $this->groupSubscriptionService->findUserIdsInGroupAndSubgroups($group));
         }
 
         $users = $this->userService->findUsersByIdentifiers($userIds);
@@ -319,7 +326,7 @@ class PlatformGroupTeamService
 
         foreach ($groups as $group)
         {
-            $userIds = array_merge($userIds, $group->get_users(true, true));
+            $userIds = array_merge($userIds, $this->groupSubscriptionService->findUserIdsInGroupAndSubgroups($group));
         }
 
         $users = $this->userService->findUsersByIdentifiers($userIds);

@@ -60,7 +60,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @var ButtonToolBarRenderer
      */
-    private $buttonToolbarRenderer;
+    protected $buttonToolbarRenderer;
     // region PeerAssessmentDisplaySupport;
     public function get_settings($publication_id)
     {

@@ -200,7 +200,7 @@ class ExporterComponent extends Manager
 
         $groupStatus = $this->determineGroupStatus($group);
 
-        $groupUsersIds = $group->get_users();
+        $groupUsersIds = $this->getGroupSubscriptionService()->findUsersDirectlySubscribedToGroup($group);
 
         if (empty($groupUsersIds))
         {
@@ -291,4 +291,5 @@ class ExporterComponent extends Manager
 
         return (string) $safeName;
     }
+
 }

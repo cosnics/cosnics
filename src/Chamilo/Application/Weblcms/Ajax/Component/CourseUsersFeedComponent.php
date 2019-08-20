@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Ajax\Component;
 
 use Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -158,8 +159,7 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
 
         while ($group = $groups->next_result())
         {
-            $group_user_ids = $group->get_users(true, true);
-
+            $group_user_ids = $this->getGroupSubscriptionService()->findUserIdsInGroupAndSubgroups($group);
             $group_users = array_merge($group_users, $group_user_ids);
         }
 
@@ -220,5 +220,13 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
         }
 
         return $offset;
+    }
+
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
     }
 }

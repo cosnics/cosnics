@@ -191,9 +191,8 @@ class Rights extends RightsUtil
                 
                 while ($group = $groups->next_result())
                 {
-                    
-                    $user_ids = $group->get_users(true, true);
-                    
+                    $user_ids = $this->getGroupSubscriptionService()->findUserIdsInGroupAndSubgroups($group);
+
                     foreach ($user_ids as $user_id)
                     {
                         if (! in_array($user_id, self::$target_users[$user->get_id()]))
@@ -276,7 +275,7 @@ class Rights extends RightsUtil
                             
                             if ($group instanceof Group)
                             {
-                                $group_user_ids = $group->get_users(true, true);
+                                $group_user_ids = $this->getGroupSubscriptionService()->findUserIdsInGroupAndSubgroups($group);
                                 
                                 foreach ($group_user_ids as $group_user_id)
                                 {

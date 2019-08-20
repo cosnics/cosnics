@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\Workspace\Service;
 
 use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
@@ -31,6 +32,10 @@ class WorkspaceUserService
      * @var \Chamilo\Core\User\Service\UserService
      */
     protected $userService;
+    /**
+     * @var GroupSubscriptionService
+     */
+    protected $groupSubscriptionService;
 
     /**
      * WorkspaceUserService constructor.
@@ -38,14 +43,17 @@ class WorkspaceUserService
      * @param \Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository $entityRelationRepository
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
      * @param \Chamilo\Core\User\Service\UserService $userService
+     * @param GroupSubscriptionService $groupSubscriptionService
      */
     public function __construct(
-        EntityRelationRepository $entityRelationRepository, GroupService $groupService, UserService $userService
+        EntityRelationRepository $entityRelationRepository, GroupService $groupService, UserService $userService,
+        GroupSubscriptionService $groupSubscriptionService
     )
     {
         $this->entityRelationRepository = $entityRelationRepository;
         $this->groupService = $groupService;
         $this->userService = $userService;
+        $this->groupSubscriptionService = $groupSubscriptionService;
     }
 
     /**
@@ -74,7 +82,8 @@ class WorkspaceUserService
             elseif($entityType == PlatformGroupEntity::ENTITY_TYPE)
             {
                 $group = $this->groupService->getGroupByIdentifier($entityRelation->get_entity_id());
-                $userIds = array_merge($userIds, $group->get_users(true, true));
+                $groupUserIds = $this->groupSubscriptionService->findUserIdsInGroupAndSubgroups($group);
+                $userIds = array_merge($userIds, $groupUserIds);
             }
         }
 

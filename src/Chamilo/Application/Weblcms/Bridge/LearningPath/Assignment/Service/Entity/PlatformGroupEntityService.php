@@ -6,6 +6,8 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Assignmen
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
@@ -51,6 +53,14 @@ class PlatformGroupEntityService implements EntityServiceInterface
      * @var array
      */
     protected $targetPlatformGroupIds = [];
+    /**
+     * @var GroupSubscriptionService
+     */
+    protected $groupSubscriptionService;
+    /**
+     * @var GroupService
+     */
+    protected $groupService;
 
     /**
      * UserEntityService constructor.
@@ -59,16 +69,21 @@ class PlatformGroupEntityService implements EntityServiceInterface
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService $entryPlagiarismResultService
+     * @param GroupSubscriptionService $groupSubscriptionService
+     * @param GroupService $groupService
      */
     public function __construct(
         AssignmentService $assignmentService, Translator $translator, UserService $userService,
-        EntryPlagiarismResultService $entryPlagiarismResultService
+        EntryPlagiarismResultService $entryPlagiarismResultService, GroupSubscriptionService $groupSubscriptionService,
+        GroupService $groupService
     )
     {
         $this->assignmentService = $assignmentService;
         $this->translator = $translator;
         $this->userService = $userService;
         $this->entryPlagiarismResultService = $entryPlagiarismResultService;
+        $this->groupSubscriptionService = $groupSubscriptionService;
+        $this->groupService = $groupService;
     }
 
     /**
@@ -309,10 +324,13 @@ class PlatformGroupEntityService implements EntityServiceInterface
     public function getUsersForEntity($entityId)
     {
         /** @var Group $entity */
-        $entity = DataManager::retrieve_by_id(Group::class_name(), $entityId);
-        $groupUserIds = $entity->get_users(true, true);
+        $entity = $this->groupService->getGroupByIdentifier($entityId);
+        if(!$entity instanceof Group)
+        {
+            return null;
+        }
 
-        return $this->userService->findUsersByIdentifiers($groupUserIds);
+        return $this->groupSubscriptionService->findUsersInGroupAndSubgroups($entity);
     }
 
     /**
