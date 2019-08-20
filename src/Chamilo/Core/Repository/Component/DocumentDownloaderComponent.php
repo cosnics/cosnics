@@ -89,7 +89,7 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
      * @return RedirectResponse
      */
     protected function redirectToDownloadHost($object_id, $security_code)
-    { return null;
+    {
         $fileDownloadHost =
             $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Repository', 'file_download_host']);
 
