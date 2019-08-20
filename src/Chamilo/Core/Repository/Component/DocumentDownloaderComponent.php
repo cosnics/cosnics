@@ -95,9 +95,9 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
 
         if (empty($fileDownloadHost))
         {
-            $this->getExceptionLogger()->logException(
-                new \Exception('Please configure the file_download_host setting in your administrator settings')
-            );
+//            $this->getExceptionLogger()->logException(
+//                new \Exception('Please configure the file_download_host setting in your administrator settings')
+//            );
 
             return null;
         }
