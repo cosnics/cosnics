@@ -248,7 +248,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                     $activeInOthers = false;
                 }
 
-                if ($counter == 4)
+                if ($counter == 4 && !$this->get_parent()->show_empty_courses())
                 {
                     $othersActive = $activeInOthers ? 'active' : '';
 
@@ -284,7 +284,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $html[] = '">' . Translation::get('NoCourseType') . '</a></li>';
         }
 
-        if ($counter > 3)
+        if ($counter > 3 && !$this->get_parent()->show_empty_courses())
         {
             $sortCoursesUrl =
                 $this->get_parent()->get_url(array(Application::PARAM_ACTION => Manager::ACTION_MANAGER_SORT));
