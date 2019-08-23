@@ -113,13 +113,15 @@ interface CourseServiceInterface
 
     /**
      * Checks if the user is subscribed as a teacher in the course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
+     * @param bool $includeCourseAdminValidation
+     *
      * @return bool
      */
-    public function isUserTeacherInCourse(User $user, Course $course);
+    public function isUserTeacherInCourse(User $user, Course $course, bool $includeCourseAdminValidation = true);
 
     /**
      * Checks if the user is subscribed as a student in the course
