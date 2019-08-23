@@ -227,6 +227,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
         $counter = 1;
         $activeInOthers = true;
+        $activeCourseTypeTitle = null;
 
         while ($course_type = $this->course_types->next_result())
         {
@@ -246,19 +247,12 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                 if ($counter < 4 && $selected_course_type_id == $course_type[CourseType::PROPERTY_ID])
                 {
                     $activeInOthers = false;
+                    $activeCourseTypeTitle = $course_type[CourseType::PROPERTY_TITLE];
                 }
 
                 if ($counter == 4 && !$this->get_parent()->show_empty_courses())
                 {
-                    $othersActive = $activeInOthers ? 'active' : '';
-
-                    $html[] = '<li role="presentation" class="dropdown ' . $othersActive . '">';
-                    $html[] =
-                        '<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">';
-                    $html[] = Translation::get('Others');
-                    $html[] = ' <span class="caret"></span>';
-                    $html[] = '</a>';
-                    $html[] = '<ul class="dropdown-menu">';
+                    $this->addDropdown($html, $activeInOthers);
                 }
 
                 $html[] = '<li role="presentation" class="' . $active . '"><a href="';
@@ -275,16 +269,28 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
         if ($this->get_parent()->show_empty_courses() || $this->count_courses_for_course_type(0) > 0)
         {
+            if ($counter == 4 && !$this->get_parent()->show_empty_courses())
+            {
+                $this->addDropdown($html, $activeInOthers);
+            }
+
             $course_tabs->add_tab($created_tabs[0]);
 
             $active = $selected_course_type_id == 0 ? 'active' : '';
 
+            if ($selected_course_type_id == 0)
+            {
+                $activeCourseTypeTitle = Translation::get('NoCourseType');
+            }
+
             $html[] = '<li role="presentation" class="' . $active . '"><a href="';
             $html[] = $this->get_course_type_url(0);
             $html[] = '">' . Translation::get('NoCourseType') . '</a></li>';
+
+            $counter ++;
         }
 
-        if ($counter > 3 && !$this->get_parent()->show_empty_courses())
+        if ($counter > 4 && !$this->get_parent()->show_empty_courses())
         {
             $sortCoursesUrl =
                 $this->get_parent()->get_url(array(Application::PARAM_ACTION => Manager::ACTION_MANAGER_SORT));
@@ -306,7 +312,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                 $created_tabs[$selected_course_type_id]->set_selected(true);
             }
 
-            $content = $this->display_course_user_categories_for_course_type();
+            $content = $this->display_course_user_categories_for_course_type($activeInOthers, $activeCourseTypeTitle);
             $course_tabs->set_content($content);
 
             $html[] = '<div class="course-list-tab-content">';
@@ -323,16 +329,43 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         }
     }
 
+    protected function addDropdown(&$html = array(), $activeInOthers = false)
+    {
+        $othersActive = $activeInOthers ? 'active' : '';
+
+        $html[] = '<li role="presentation" class="dropdown ' . $othersActive . '">';
+        $html[] =
+            '<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">';
+        $html[] = Translation::get('Others');
+        $html[] = ' <span class="caret"></span>';
+        $html[] = '</a>';
+        $html[] = '<ul class="dropdown-menu">';
+    }
+
     /**
      * Displays the course user categories for the selected course type
      *
+     * @param bool $activeInOthers
+     *
+     * @param string|null $activeCourseTypeTitle
+     *
      * @return string
      */
-    protected function display_course_user_categories_for_course_type()
+    protected function display_course_user_categories_for_course_type(
+        bool $activeInOthers = false, string $activeCourseTypeTitle = null
+    )
     {
         $html = array();
 
         $html[] = '<div class="list-group">';
+
+        if ($activeInOthers)
+        {
+            $html[] =
+                '<h3 style="border-left: 1px solid #dddddd; border-right: 1px solid #dddddd; padding: 15px 15px; margin: 0;">' .
+                $activeCourseTypeTitle . '</h3>';
+        }
+
         $html[] = $this->display_course_user_category();
 
         $course_type_user_categories = $this->retrieve_course_user_categories_for_course_type();
