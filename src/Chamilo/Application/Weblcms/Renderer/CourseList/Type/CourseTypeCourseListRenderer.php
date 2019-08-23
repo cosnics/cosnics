@@ -247,6 +247,10 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                 if ($counter < 4 && $selected_course_type_id == $course_type[CourseType::PROPERTY_ID])
                 {
                     $activeInOthers = false;
+                }
+
+                if($selected_course_type_id == $course_type[CourseType::PROPERTY_ID])
+                {
                     $activeCourseTypeTitle = $course_type[CourseType::PROPERTY_TITLE];
                 }
 
