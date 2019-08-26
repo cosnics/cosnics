@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Ajax\Component;
 
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\DataManager;
@@ -123,13 +124,13 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
     /**
      * Returns the element for a specific group
      * 
-     * @param \core\group\Group $group
+     * @param Group $group
      *
      * @return AdvancedElementFinderElement
      */
     public function get_group_element($group)
     {
-        $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
+        $description = strip_tags($this->getGroupService()->getFullyQualifiedNameForGroup($group) . ' [' . $group->get_code() . ']');
         
         return new AdvancedElementFinderElement(
             self::PARAM_GROUP . '_' . $group->get_id(), 
@@ -137,6 +138,14 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
             $group->get_name(), 
             $description, 
             AdvancedElementFinderElement::TYPE_SELECTABLE_AND_FILTER);
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->getService(GroupService::class);
     }
 
     /**

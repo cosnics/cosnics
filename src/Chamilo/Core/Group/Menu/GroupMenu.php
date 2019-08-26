@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Group\Menu;
 
 use Chamilo\Core\Group\Ajax\Manager;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -33,6 +34,10 @@ use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 class GroupMenu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
+    /**
+     * @var GroupService
+     */
+    protected $groupService;
 
     /**
      * The string passed to sprintf() to format category URLs
@@ -55,18 +60,26 @@ class GroupMenu extends HtmlMenu
     /**
      * Creates a new category navigation menu.
      *
-     * @param int $owner The ID of the owner of the categories to provide in this menu.
      * @param int $current_category The ID of the current category in the menu.
      * @param string $url_format The format to use for the URL of a category. Passed to sprintf(). Defaults to the
      *        string "?category=%s".
-     * @param array $extra_items An array of extra tree items, added to the root.
+     * @param bool $include_root
+     * @param bool $show_complete_tree
+     * @param bool $hide_current_category
+     * @param GroupService $groupService
+     *
+     * @throws ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function __construct(
         $current_category, $url_format = '?application=group&go=browser&group_id=%s', $include_root = true,
         $show_complete_tree = false,
-        $hide_current_category = false
+        $hide_current_category = false,
+        GroupService $groupService
     )
     {
+        $this->groupService = $groupService;
+
         $this->include_root = $include_root;
         $this->show_complete_tree = $show_complete_tree;
         $this->hide_current_category = $hide_current_category;
@@ -113,6 +126,7 @@ class GroupMenu extends HtmlMenu
         parent::__construct($menu);
         $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_url($this->current_category->get_id()));
+
     }
 
     public function get_menu()
@@ -202,14 +216,14 @@ class GroupMenu extends HtmlMenu
                     $show_complete_tree
                 )
                 {
-                    if ($group->has_children())
+                    if ($this->groupService->hasChildren($group))
                     {
                         $menu_item['sub'] = $this->get_menu_items($group->get_id());
                     }
                 }
                 else
                 {
-                    if ($group->has_children())
+                    if ($this->groupService->hasChildren($group))
                     {
                         $menu_item['children'] = 'expand';
                     }

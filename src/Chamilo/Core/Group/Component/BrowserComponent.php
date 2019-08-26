@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
@@ -37,6 +38,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package group.lib.group_manager.component
  */
+
 /**
  * Weblcms component which allows the user to manage his or her user subscriptions
  */
@@ -61,7 +63,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -95,14 +97,16 @@ class BrowserComponent extends Manager implements TableSupport
         // Subgroups table tab
         // if ($subgroup_count > 0)
         // {
-        $table = new GroupTable($this);
+        $table = new GroupTable($this, $this->getGroupService(), $this->getGroupSubscriptionService());
         $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
         $tabs->add_tab(
             new DynamicContentTab(
                 self::TAB_SUBGROUPS,
                 Translation::get('Subgroups'),
                 Theme::getInstance()->getImagePath(\Chamilo\Core\Group\Manager::context(), 'Logo/' . Theme::ICON_MINI),
-                $table->as_html()));
+                $table->as_html()
+            )
+        );
 
         $table = new GroupRelUserTable($this);
         $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
@@ -111,7 +115,9 @@ class BrowserComponent extends Manager implements TableSupport
                 self::TAB_USERS,
                 Translation::get('Users', null, \Chamilo\Core\User\Manager::context()),
                 Theme::getInstance()->getImagePath(\Chamilo\Core\User\Manager::context(), 'Logo/' . Theme::ICON_MINI),
-                $table->as_html()));
+                $table->as_html()
+            )
+        );
 
         // Group info tab
         $tabs->add_tab(
@@ -119,7 +125,9 @@ class BrowserComponent extends Manager implements TableSupport
                 self::TAB_DETAILS,
                 Translation::get('Details'),
                 Theme::getInstance()->getImagePath('Chamilo\Core\Help', 'Logo/' . Theme::ICON_MINI),
-                $this->get_group_info()));
+                $this->get_group_info()
+            )
+        );
 
         $html[] = $tabs->render();
 
@@ -131,7 +139,11 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function get_menu_html()
     {
-        $group_menu = new GroupMenu($this->get_group());
+        $group_menu = new GroupMenu(
+            $this->get_group(), '?application=group&go=browser&group_id=%s', true, false, false,
+            $this->getGroupService()
+        );
+
         // $group_menu = new TreeMenu('GroupTreeMenu', new GroupTreeMenuDataProvider($this->get_url(),
         // $this->get_group()));
         $html = array();
@@ -144,11 +156,11 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function get_group()
     {
-        if (! $this->group)
+        if (!$this->group)
         {
             $this->group = Request::get(self::PARAM_GROUP_ID);
 
-            if (! $this->group)
+            if (!$this->group)
             {
                 $this->group = $this->get_root_group()->get_id();
             }
@@ -159,12 +171,14 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function get_root_group()
     {
-        if (! $this->root_group)
+        if (!$this->root_group)
         {
             $group = $this->retrieve_groups(
                 new EqualityCondition(
                     new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable(0)))->next_result();
+                    new StaticConditionVariable(0)
+                )
+            )->next_result();
             $this->root_group = $group;
         }
 
@@ -175,7 +189,8 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($this->get_group()));
+            new StaticConditionVariable($this->get_group())
+        );
 
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
@@ -183,13 +198,16 @@ class BrowserComponent extends Manager implements TableSupport
             $or_conditions = array();
             $or_conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
             $or_conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
             $or_conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_CODE),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
             $or_condition = new OrCondition($or_conditions);
 
             $and_conditions = array();
@@ -209,13 +227,16 @@ class BrowserComponent extends Manager implements TableSupport
             $or_conditions = array();
             $or_conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
             $or_conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
             $or_conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_CODE),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
             $condition = new OrCondition($or_conditions);
         }
 
@@ -227,7 +248,8 @@ class BrowserComponent extends Manager implements TableSupport
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($this->get_group()));
+            new StaticConditionVariable($this->get_group())
+        );
 
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
@@ -235,23 +257,28 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $or_conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
             $or_conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
             $or_conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
             $condition = new OrCondition($or_conditions);
 
             $users = \Chamilo\Core\User\Storage\DataManager::retrieves(
                 \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                new DataClassRetrievesParameters($condition));
+                new DataClassRetrievesParameters($condition)
+            );
             while ($user = $users->next_result())
             {
                 $userconditions[] = new EqualityCondition(
                     new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
-                    new StaticConditionVariable($user->get_id()));
+                    new StaticConditionVariable($user->get_id())
+                );
             }
 
             if (count($userconditions))
@@ -262,7 +289,8 @@ class BrowserComponent extends Manager implements TableSupport
             {
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
-                    new StaticConditionVariable(0));
+                    new StaticConditionVariable(0)
+                );
             }
         }
 
@@ -273,7 +301,7 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url(array(self::PARAM_GROUP_ID => $this->get_group())));
             $commonActions = new ButtonGroup();
@@ -283,21 +311,27 @@ class BrowserComponent extends Manager implements TableSupport
                     Translation::get('Add', null, Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Add'),
                     $this->get_create_group_url($this->get_group()),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $commonActions->addButton(
                 new Button(
                     Translation::get('Root', null, Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Home'),
                     $this->get_group_viewing_url($this->get_root_group()),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $commonActions->addButton(
                 new Button(
                     Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url(array(self::PARAM_GROUP_ID => $this->get_group())),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
             $buttonToolbar->addButtonGroup($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
@@ -319,7 +353,9 @@ class BrowserComponent extends Manager implements TableSupport
                 Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
                 Theme::getInstance()->getCommonImagePath('Action/Edit'),
                 $this->get_group_editing_url($group),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                ToolbarItem::DISPLAY_ICON_AND_LABEL
+            )
+        );
 
         if ($this->group != $this->root_group)
         {
@@ -328,7 +364,9 @@ class BrowserComponent extends Manager implements TableSupport
                     Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Delete'),
                     $this->get_group_delete_url($group),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
 
         $toolbar->add_item(
@@ -336,11 +374,14 @@ class BrowserComponent extends Manager implements TableSupport
                 Translation::get('AddUsers'),
                 Theme::getInstance()->getCommonImagePath('Action/Subscribe'),
                 $this->get_group_suscribe_user_browser_url($group),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                ToolbarItem::DISPLAY_ICON_AND_LABEL
+            )
+        );
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($group->get_id()));
+            new StaticConditionVariable($group->get_id())
+        );
         $users = $this->retrieve_group_rel_users($condition);
         $visible = ($users->size() > 0);
 
@@ -351,7 +392,9 @@ class BrowserComponent extends Manager implements TableSupport
                     Translation::get('Truncate'),
                     Theme::getInstance()->getCommonImagePath('Action/RecycleBin'),
                     $this->get_group_emptying_url($group),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
         else
         {
@@ -360,7 +403,9 @@ class BrowserComponent extends Manager implements TableSupport
                     Translation::get('TruncateNA'),
                     Theme::getInstance()->getCommonImagePath('Action/RecycleBinNa'),
                     null,
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
 
         $toolbar->add_item(
@@ -368,7 +413,9 @@ class BrowserComponent extends Manager implements TableSupport
                 Translation::get('Metadata', null, Utilities::COMMON_LIBRARIES),
                 Theme::getInstance()->getCommonImagePath('Action/Metadata'),
                 $this->get_group_metadata_url($group),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                ToolbarItem::DISPLAY_ICON_AND_LABEL
+            )
+        );
 
         $html[] = '<b>' . Translation::get('Code') . '</b>: ' . $group->get_code() . '<br />';
 
@@ -376,7 +423,7 @@ class BrowserComponent extends Manager implements TableSupport
         if ($description)
         {
             $html[] = '<b>' . Translation::get('Description', null, Utilities::COMMON_LIBRARIES) . '</b>: ' .
-                 $description . '<br />';
+                $description . '<br />';
         }
 
         $html[] = '<br />';

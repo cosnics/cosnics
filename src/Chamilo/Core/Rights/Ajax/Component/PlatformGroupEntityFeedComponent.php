@@ -28,7 +28,7 @@ class PlatformGroupEntityFeedComponent extends PlatformGroupsFeedComponent
      */
     public function get_group_element($group)
     {
-        $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
+        $description = strip_tags($this->getGroupService()->getFullyQualifiedNameForGroup($group) . ' [' . $group->get_code() . ']');
         
         return new AdvancedElementFinderElement(
             PlatformGroupEntity::ENTITY_TYPE . '_' . $group->get_id(), 

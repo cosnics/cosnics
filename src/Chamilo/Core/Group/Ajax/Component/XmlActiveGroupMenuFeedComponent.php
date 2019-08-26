@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Ajax\Component;
 
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -63,9 +64,9 @@ class XmlActiveGroupMenuFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
     {
         foreach ($groups as $group)
         {
-            $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
+            $description = strip_tags($this->getGroupService()->getFullyQualifiedNameForGroup($group) . ' [' . $group->get_code() . ']');
             
-            $has_children = $group->has_children() ? 1 : 0;
+            $has_children = $this->getGroupService()->hasChildren($group) ? 1 : 0;
             echo '<leaf id="' . $group->get_id() . '" classes="category" has_children="' . $has_children . '" title="' .
                  htmlspecialchars($group->get_name()) . '" description="' . htmlspecialchars($description) . '"/>' . "\n";
         }
@@ -78,5 +79,13 @@ class XmlActiveGroupMenuFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->getService(GroupService::class);
     }
 }

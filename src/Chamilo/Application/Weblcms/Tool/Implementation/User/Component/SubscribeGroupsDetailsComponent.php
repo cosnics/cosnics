@@ -49,9 +49,9 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12">';
         $html[] = '<b>' . $this->getTranslation('Code') . ':</b> ' . $group->get_code();
-        $html[] = '<br /><b>' . $this->getTranslation('Description') . ':</b> ' . $group->get_fully_qualified_name();
-        $html[] = '<br /><b>' . $this->getTranslation('NumberOfUsers') . ':</b> ' . $group->count_users();
-        $html[] = '<br /><b>' . $this->getTranslation('NumberOfSubgroups') . ':</b> ' . $group->count_subgroups(true);
+        $html[] = '<br /><b>' . $this->getTranslation('Description') . ':</b> ' . $this->getGroupService()->getFullyQualifiedNameForGroup($group);
+        $html[] = '<br /><b>' . $this->getTranslation('NumberOfUsers') . ':</b> ' . $this->getGroupSubscriptionService()->countUsersDirectlySubscribedToGroup($group);
+        $html[] = '<br /><b>' . $this->getTranslation('NumberOfSubgroups') . ':</b> ' . $this->getGroupService()->countAllChildrenForGroup($group, false);
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="row">';
@@ -63,6 +63,14 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         $html[] = '</div>';
 
         return implode($html, "\n");
+    }
+
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
     }
 
     /**
@@ -149,13 +157,5 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         {
             return new AndCondition($conditions);
         }
-    }
-
-    /**
-     * @return GroupSubscriptionService
-     */
-    protected function getGroupSubscriptionService()
-    {
-        return $this->getService(GroupSubscriptionService::class);
     }
 }

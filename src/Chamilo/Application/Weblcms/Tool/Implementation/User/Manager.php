@@ -2,6 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -162,5 +164,21 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER)),
                 Translation::getInstance()->getTranslation('UnsubscribeBrowserComponent', array(), $this->context())));
+    }
+
+    /**
+     * @return GroupSubscriptionService
+     */
+    protected function getGroupSubscriptionService()
+    {
+        return $this->getService(GroupSubscriptionService::class);
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->getService(GroupService::class);
     }
 }

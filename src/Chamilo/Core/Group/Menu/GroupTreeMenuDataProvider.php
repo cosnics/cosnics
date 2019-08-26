@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Menu;
 
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider;
@@ -15,6 +16,17 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
 {
     const PARAM_ID = 'group_id';
 
+    /**
+     * @var GroupService
+     */
+    protected $groupService;
+
+    public function __construct($url, $selectedTreeMenuItem, GroupService $groupService)
+    {
+        $this->groupService = $groupService;
+        parent::__construct($url, $selectedTreeMenuItem);
+
+    }
     /**
      *
      * @see \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider::get_tree_menu_data()
@@ -38,7 +50,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
         // $menu_item['url'] = $this->get_url($group->get_id());
         $menu_item->set_url($this->get_url());
 
-        if ($group->has_children())
+        if ($this->groupService->hasChildren($group))
         {
             $this->get_menu_items($menu_item, $group->get_id());
         }
@@ -74,7 +86,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
             $menu_item->set_id($group->get_id());
             $menu_item->set_url($this->format_url($group->get_id()));
 
-            if ($group->has_children())
+            if ($this->groupService->hasChildren($group))
             {
                 $this->get_menu_items($menu_item, $group->get_id());
             }

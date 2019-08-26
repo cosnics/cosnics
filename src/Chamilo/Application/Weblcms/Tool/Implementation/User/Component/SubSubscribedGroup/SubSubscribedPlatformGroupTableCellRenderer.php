@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\SubSubs
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
+use Chamilo\Libraries\Format\Table\Table;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -38,11 +39,19 @@ class SubSubscribedPlatformGroupTableCellRenderer extends DataClassTableCellRend
                 SubSubscribedPlatformGroupTableColumnModel::USERS, 
                 null, 
                 \Chamilo\Core\User\Manager::context()) :
-                return $group->count_users();
+                return $this->getTable()->getGroupSubscriptionService()->countUsersDirectlySubscribedToGroup($group);
             case Translation::get(SubSubscribedPlatformGroupTableColumnModel::SUBGROUPS) :
-                return $group->count_subgroups(true, true);
+                return $this->getTable()->getGroupService()->countAllChildrenForGroup($group, false);
         }
         
         return parent::render_cell($column, $group);
+    }
+
+    /**
+     * @return SubSubscribedPlatformGroupTable|Table
+     */
+    protected function getTable()
+    {
+        return $this->get_table();
     }
 }

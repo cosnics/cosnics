@@ -92,7 +92,7 @@ class PlatformGroupTeamService
 
             $groups[] = $group;
 
-            $userCount += $group->count_users(true, true);
+            $userCount += $this->groupSubscriptionService->countUsersInGroupAndSubgroups($group);
         }
 
         if ($userCount >= TeamService::MAX_USERS)

@@ -7,6 +7,7 @@ use Chamilo\Core\Group\Storage\DataClass\GroupClosureTable;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -254,6 +255,17 @@ class GroupRepository extends ClosureTableRepository
     }
 
     /**
+     * @param Group $group
+     * @param bool $includeSelf
+     *
+     * @return int
+     */
+    public function countAllChildrenForGroup(Group $group, bool $includeSelf = true)
+    {
+        return $this->countAllChildrenByParentId(GroupClosureTable::class, $group->getId(), $includeSelf);
+    }
+
+    /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|Group[]
@@ -266,6 +278,21 @@ class GroupRepository extends ClosureTableRepository
         );
 
         return $this->dataClassRepository->retrieves(Group::class, new DataClassRetrievesParameters($condition));
+    }
+
+    /**
+     * @param Group $group
+     *
+     * @return int
+     */
+    public function countDirectChildrenForGroup(Group $group)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($group->getId())
+        );
+
+        return $this->dataClassRepository->count(Group::class, new DataClassCountParameters($condition));
     }
 
     /**
@@ -292,6 +319,17 @@ class GroupRepository extends ClosureTableRepository
     public function getAllParentIdsForGroup(Group $group, bool $includeSelf = true)
     {
         return $this->getAllParentIdsByChildId(GroupClosureTable::class, $group->getId(), $includeSelf);
+    }
+
+    /**
+     * @param Group $group
+     * @param bool $includeSelf
+     *
+     * @return int
+     */
+    public function countAllParentsForGroup(Group $group, bool $includeSelf = true)
+    {
+        return $this->countAllParentsByChildId(GroupClosureTable::class, $group->getId(), $includeSelf);
     }
 
     /**

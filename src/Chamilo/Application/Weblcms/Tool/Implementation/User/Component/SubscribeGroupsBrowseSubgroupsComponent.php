@@ -26,7 +26,7 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
      */
     protected function renderTabContent()
     {
-        $table = new UnsubscribedGroupTable($this);
+        $table = new UnsubscribedGroupTable($this, $this->getGroupService(), $this->getGroupSubscriptionService());
         $table->setSearchForm($this->tabButtonToolbarRenderer->getSearchForm());
 
         $html = array();

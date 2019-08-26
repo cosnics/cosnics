@@ -5,6 +5,8 @@ namespace Chamilo\Core\Group\Service;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use function array_reverse;
+use function implode;
 
 /**
  * Service to manage the groups of Chamilo
@@ -12,6 +14,12 @@ use Chamilo\Core\User\Storage\DataClass\User;
  * @package Chamilo\Core\Group\Service
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ *
+ * TODO: Methods to refactor:
+ *      - get_parents
+ *      - get_ancestors
+ *      - is_parent_of
+ *      - get_children
  */
 class GroupService
 {
@@ -57,6 +65,16 @@ class GroupService
     public function getRootGroup()
     {
         return $this->groupRepository->getRootGroup();
+    }
+
+    /**
+     * @param Group $group
+     *
+     * @return bool
+     */
+    public function isRootGroup(Group $group)
+    {
+        return $group->get_parent_id() == 0;
     }
 
     /**
@@ -143,6 +161,17 @@ class GroupService
     }
 
     /**
+     * @param Group $group
+     * @param bool $includeSelf
+     *
+     * @return int
+     */
+    public function countAllChildrenForGroup(Group $group, bool $includeSelf = true)
+    {
+        return $this->groupRepository->countAllChildrenForGroup($group, $includeSelf);
+    }
+
+    /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      *
      * @return Group[]
@@ -150,6 +179,26 @@ class GroupService
     public function findDirectChildrenFromGroup(Group $group)
     {
         return $this->groupRepository->getDirectChildrenOfGroup($group);
+    }
+
+    /**
+     * @param Group $group
+     *
+     * @return int
+     */
+    public function countDirectChildrenForGroup(Group $group)
+    {
+        return $this->groupRepository->countDirectChildrenForGroup($group);
+    }
+
+    /**
+     * @param Group $group
+     *
+     * @return bool
+     */
+    public function hasChildren(Group $group)
+    {
+        return $this->countDirectChildrenForGroup($group) > 0;
     }
 
     /**
@@ -179,6 +228,17 @@ class GroupService
     }
 
     /**
+     * @param Group $group
+     * @param bool $includeSelf
+     *
+     * @return int
+     */
+    public function countAllParentsForGroup(Group $group, bool $includeSelf = true)
+    {
+        return $this->groupRepository->countAllParentsForGroup($group, $includeSelf);
+    }
+
+    /**
      * Returns the direct parent group of a given group
      *
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
@@ -188,6 +248,25 @@ class GroupService
     public function getDirectParentOfGroup(Group $group)
     {
         return $this->groupRepository->getDirectParentOfGroup($group);
+    }
+
+    /**
+     * @param Group $group
+     * @param bool $includeSelf
+     *
+     * @return string
+     */
+    public function getFullyQualifiedNameForGroup(Group $group, bool $includeSelf = true)
+    {
+        $parents = $this->getAllParentsForGroup($group, $includeSelf);
+        $names = array();
+
+        foreach($parents as $parent)
+        {
+            $names[] = $parent->get_name();
+        }
+
+        return implode(' <span class="visible">></span> ', $names);
     }
 
     /**

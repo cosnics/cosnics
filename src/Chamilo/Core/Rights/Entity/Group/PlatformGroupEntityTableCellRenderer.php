@@ -28,11 +28,19 @@ class PlatformGroupEntityTableCellRenderer extends LocationEntityTableCellRender
                 $description = StringUtilities::getInstance()->truncate($entity_item->get_description(), 50);
                 return StringUtilities::getInstance()->truncate($description);
             case PlatformGroupEntityTableColumnModel::COLUMN_USERS :
-                return $entity_item->count_users();
+                return $this->getTable()->getGroupSubscriptionService()->countUsersDirectlySubscribedToGroup($entity_item);
             case PlatformGroupEntityTableColumnModel::COLUMN_SUBGROUPS :
-                return $entity_item->count_subgroups(true);
+                return $this->getTable()->getGroupService()->countAllChildrenForGroup($entity_item, false);
         }
         
         return parent::render_cell($column, $entity_item);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Table\Table|PlatformGroupEntityTable
+     */
+    protected function getTable()
+    {
+        return $this->get_table();
     }
 }

@@ -6,6 +6,8 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\UnsubscribedGroup\UnsubscribedGroupTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\PlatformgroupMenuRenderer;
+use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -158,9 +160,9 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12">';
         $html[] = '<b>' . $this->getTranslation('Code') . ':</b> ' . $group->get_code();
-        $html[] = '<br /><b>' . $this->getTranslation('Description') . ':</b> ' . $group->get_fully_qualified_name();
-        $html[] = '<br /><b>' . $this->getTranslation('NumberOfUsers') . ':</b> ' . $group->count_users();
-        $html[] = '<br /><b>' . $this->getTranslation('NumberOfSubgroups') . ':</b> ' . $group->count_subgroups(true);
+        $html[] = '<br /><b>' . $this->getTranslation('Description') . ':</b> ' . $this->getGroupService()->getFullyQualifiedNameForGroup($group);
+        $html[] = '<br /><b>' . $this->getTranslation('NumberOfUsers') . ':</b> ' . $this->getGroupSubscriptionService()->countUsersDirectlySubscribedToGroup($group);
+        $html[] = '<br /><b>' . $this->getTranslation('NumberOfSubgroups') . ':</b> ' . $this->getGroupService()->countAllChildrenForGroup($group, false);
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="row">';
@@ -194,7 +196,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
      */
     protected function renderGroupSubgroupTable()
     {
-        $table = new UnsubscribedGroupTable($this, $this->get_parameters(), $this->get_table_condition(''));
+        $table = new UnsubscribedGroupTable($this, $this->getGroupService(), $this->getGroupSubscriptionService());
 
         $html = array();
         $html[] = '<div class="panel panel-default">';

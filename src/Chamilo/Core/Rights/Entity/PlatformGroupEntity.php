@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Core\Rights\Entity;
 
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Rights\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
@@ -20,6 +22,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class PlatformGroupEntity implements NestedRightsEntity
 {
+    use DependencyInjectionContainerTrait;
+
     const ENTITY_NAME = 'group';
     const ENTITY_TYPE = 2;
 
@@ -34,6 +38,11 @@ class PlatformGroupEntity implements NestedRightsEntity
             self::$instance = new static();
         }
         return self::$instance;
+    }
+
+    public function __construct()
+    {
+        $this->initializeContainer();
     }
 
     /**
@@ -217,19 +226,28 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function get_element_finder_element($id)
     {
+        /** @var Group $group */
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $id);
         if (! $group)
         {
             return null;
         }
 
-        $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
+        $description = strip_tags($this->getGroupService()->getFullyQualifiedNameForGroup($group) . ' [' . $group->get_code() . ']');
 
         return new AdvancedElementFinderElement(
             static::ENTITY_TYPE . '_' . $id,
             'type type_group',
             $group->get_name(),
             $description);
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->getService(GroupService::class);
     }
 
     /**

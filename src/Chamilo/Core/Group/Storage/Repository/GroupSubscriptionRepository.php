@@ -8,6 +8,7 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -17,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -189,6 +191,21 @@ class GroupSubscriptionRepository
     }
 
     /**
+     * @param Group $group
+     *
+     * @return int
+     */
+    public function countUsersDirectlySubscribedToGroup(Group $group)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($group->getId())
+        );
+
+        return $this->dataClassRepository->count(GroupRelUser::class, new DataClassCountParameters($condition));
+    }
+
+    /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|User[]
@@ -256,6 +273,40 @@ class GroupSubscriptionRepository
 
         return $this->dataClassRepository->distinct(
             GroupRelUser::class, new DataClassDistinctParameters($condition, $distinctProperties, $joins)
+        );
+    }
+
+    /**
+     * @param Group $group
+     *
+     * @return int
+     */
+    public function countUsersInGroupAndSubgroups(Group $group)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(GroupClosureTable::class, GroupClosureTable::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($group->getId())
+        );
+
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                GroupClosureTable::class,
+                new EqualityCondition(
+                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+                    new PropertyConditionVariable(GroupClosureTable::class, GroupClosureTable::PROPERTY_CHILD_ID)
+                )
+            )
+        );
+
+        $properties = new FunctionConditionVariable(
+            FunctionConditionVariable::DISTINCT,
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID)
+        );
+
+        return $this->dataClassRepository->count(
+            GroupRelUser::class, new DataClassCountParameters($condition, $joins, $properties)
         );
     }
 

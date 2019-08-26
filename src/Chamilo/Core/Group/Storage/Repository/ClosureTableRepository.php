@@ -5,6 +5,7 @@ namespace Chamilo\Core\Group\Storage\Repository;
 use Chamilo\Core\Group\Storage\DataClass\ClosureTable;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
@@ -101,6 +102,19 @@ class ClosureTableRepository
      * @param int $parentId
      * @param bool $includeSelf
      *
+     * @return int
+     */
+    public function countAllChildrenByParentId(string $closureTableClass, int $parentId, bool $includeSelf = true)
+    {
+        $condition = $this->buildGetChildrenConditionByParentId($closureTableClass, $parentId, $includeSelf);
+        return $this->dataClassRepository->count($closureTableClass, new DataClassCountParameters($condition));
+    }
+
+    /**
+     * @param string $closureTableClass
+     * @param int $parentId
+     * @param bool $includeSelf
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
     protected function buildGetChildrenConditionByParentId(
@@ -179,6 +193,19 @@ class ClosureTableRepository
         $distinctParameters = new DataClassDistinctParameters($condition, $properties, null, $orderBy);
 
         return $this->dataClassRepository->distinct($closureTableClass, $distinctParameters);
+    }
+
+    /**
+     * @param string $closureTableClass
+     * @param int $childId
+     * @param bool $includeSelf
+     *
+     * @return int
+     */
+    protected function countAllParentsByChildId(string $closureTableClass, int $childId, bool $includeSelf = true)
+    {
+        $condition = $this->buildGetParentsConditionByParentId($closureTableClass, $childId, $includeSelf);
+        return $this->dataClassRepository->count($closureTableClass, new DataClassCountParameters($condition));
     }
 
     /**

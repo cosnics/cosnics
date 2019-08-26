@@ -40,9 +40,9 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
                 }
                 return StringUtilities::getInstance()->truncate($description);
             case Translation::get(GroupTableColumnModel::USERS, null, \Chamilo\Core\User\Manager::context()) :
-                return $group->count_users();
+                return $this->getTable()->getGroupSubscriptionService()->countUsersDirectlySubscribedToGroup($group);
             case Translation::get(GroupTableColumnModel::SUBGROUPS) :
-                return $group->count_subgroups(true, true);
+                return $this->getTable()->getGroupService()->countAllChildrenForGroup($group, false);
         }
         
         return parent::render_cell($column, $group);
@@ -116,5 +116,13 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
                 ToolbarItem::DISPLAY_ICON));
         
         return $toolbar->as_html();
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Table\Table|GroupTable
+     */
+    public function getTable()
+    {
+        return $this->get_table();
     }
 }

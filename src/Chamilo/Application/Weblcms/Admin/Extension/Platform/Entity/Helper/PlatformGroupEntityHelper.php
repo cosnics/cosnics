@@ -4,6 +4,9 @@ namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\Helper;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\PlatformGroupEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
+use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -55,14 +58,26 @@ class PlatformGroupEntityHelper
                      '</a>';
                 break;
             case self::PROPERTY_PATH :
+                /** @var Group $group */
                 $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
                     \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
                     $result[\Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_ID]);
-                return $group->get_fully_qualified_name();
+                return self::getGroupService()->getFullyQualifiedNameForGroup($group);
                 break;
             default :
                 return null;
         }
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected static function getGroupService()
+    {
+        $builder = new DependencyInjectionContainerBuilder();
+        $container = $builder->createContainer();
+
+        return $container->get(GroupService::class);
     }
 
     /**

@@ -3,6 +3,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Unsubsc
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
+use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Core\Group\Service\GroupSubscriptionService;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
@@ -18,6 +21,49 @@ use Chamilo\Libraries\Translation\Translation;
 class UnsubscribedGroupTable extends DataClassTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_OBJECTS;
+
+    /**
+     * @var GroupService
+     */
+    protected $groupService;
+
+    /**
+     * @var GroupSubscriptionService
+     */
+    protected $groupSubscriptionService;
+
+    /**
+     * @param Application $parentComponent
+     * @param GroupService $groupService
+     * @param GroupSubscriptionService $groupSubscriptionService
+     *
+     * @throws \Exception
+     */
+    public function __construct(
+        Application $parentComponent, GroupService $groupService, GroupSubscriptionService $groupSubscriptionService
+    )
+    {
+        parent::__construct($parentComponent);
+
+        $this->groupService = $groupService;
+        $this->groupSubscriptionService = $groupSubscriptionService;
+    }
+
+    /**
+     * @return GroupService
+     */
+    public function getGroupService(): GroupService
+    {
+        return $this->groupService;
+    }
+
+    /**
+     * @return GroupSubscriptionService
+     */
+    public function getGroupSubscriptionService(): GroupSubscriptionService
+    {
+        return $this->groupSubscriptionService;
+    }
 
     public function get_implemented_form_actions()
     {

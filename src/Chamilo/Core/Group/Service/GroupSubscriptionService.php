@@ -143,6 +143,16 @@ class GroupSubscriptionService
     }
 
     /**
+     * @param Group $group
+     *
+     * @return int
+     */
+    public function countUsersDirectlySubscribedToGroup(Group $group)
+    {
+        return $this->groupSubscriptionRepository->countUsersDirectlySubscribedToGroup($group);
+    }
+
+    /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|User[]
@@ -160,6 +170,16 @@ class GroupSubscriptionService
     public function findUserIdsInGroupAndSubgroups(Group $group)
     {
         return $this->groupSubscriptionRepository->findUserIdsInGroupAndSubgroups($group);
+    }
+
+    /**
+     * @param Group $group
+     *
+     * @return int
+     */
+    public function countUsersInGroupAndSubgroups(Group $group)
+    {
+        return $this->groupSubscriptionRepository->countUsersInGroupAndSubgroups($group);
     }
 
     /**
