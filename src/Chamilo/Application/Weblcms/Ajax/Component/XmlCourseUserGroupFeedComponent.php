@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -234,6 +235,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                             new OrderBy(
                                 new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME)))));
 
+                /** @var CourseGroup $group */
                 while ($group = $group_result_set->next_result())
                 {
 
@@ -364,7 +366,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
 
     function dump_platform_group($group)
     {
-        $children = $group->get_children(false);
+        $children = $this->getGroupService()->findDirectChildrenFromGroup($group);
 
         if ($children && count($children) > 0)
         {
@@ -435,5 +437,13 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
     protected function getGroupSubscriptionService()
     {
         return $this->getService(GroupSubscriptionService::class);
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->getService(GroupService::class);
     }
 }

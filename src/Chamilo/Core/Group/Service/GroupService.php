@@ -3,10 +3,9 @@
 namespace Chamilo\Core\Group\Service;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\DataClass\GroupClosureTable;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
-use function array_reverse;
-use function implode;
 
 /**
  * Service to manage the groups of Chamilo
@@ -14,12 +13,6 @@ use function implode;
  * @package Chamilo\Core\Group\Service
  *
  * @author Sven Vanpoucke - Hogeschool Gent
- *
- * TODO: Methods to refactor:
- *      - get_parents
- *      - get_ancestors
- *      - is_parent_of
- *      - get_children
  */
 class GroupService
 {
@@ -202,6 +195,18 @@ class GroupService
     }
 
     /**
+     * @param Group $parentGroup
+     * @param Group $childGroup
+     *
+     * @return bool
+     */
+    public function isChildOf(Group $childGroup, Group $parentGroup)
+    {
+        return $this->groupRepository->getGroupClosureTableForParentChild($parentGroup, $childGroup) instanceof
+            GroupClosureTable;
+    }
+
+    /**
      * Returns all the parent groups for a given group. Has the possibility to include the given group.
      *
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
@@ -239,6 +244,18 @@ class GroupService
     }
 
     /**
+     * @param Group $parentGroup
+     * @param Group $childGroup
+     *
+     * @return bool
+     */
+    public function isParentOf(Group $parentGroup, Group $childGroup)
+    {
+        return $this->groupRepository->getGroupClosureTableForParentChild($parentGroup, $childGroup) instanceof
+            GroupClosureTable;
+    }
+
+    /**
      * Returns the direct parent group of a given group
      *
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
@@ -261,7 +278,7 @@ class GroupService
         $parents = $this->getAllParentsForGroup($group, $includeSelf);
         $names = array();
 
-        foreach($parents as $parent)
+        foreach ($parents as $parent)
         {
             $names[] = $parent->get_name();
         }
@@ -279,7 +296,7 @@ class GroupService
     {
         // LEGACY CODE: make sure that the group is also moved using the move in the dataclass. We use this to
         // make sure that the nested sets are used as a backup until the refactoring is done.
-        if(!$group->move($newParentId))
+        if (!$group->move($newParentId))
         {
             throw new \RuntimeException(sprintf('Could not move the group with id %s', $newParentId));
         }

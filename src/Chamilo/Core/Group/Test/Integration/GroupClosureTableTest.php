@@ -258,6 +258,85 @@ class GroupClosureTableTest extends ChamiloFixturesBasedTestCase
         $this->assertCount(4, $this->groupService->getAllParentIdsForGroup($group));
     }
 
+    public function testIsRootGroup()
+    {
+        $group = $this->groupService->getGroupByIdentifier(1);
+        $this->assertTrue($this->groupService->isRootGroup($group));
+    }
+
+    public function testCountAllChildrenForGroup()
+    {
+        $group = $this->groupService->getGroupByIdentifier(1);
+        $this->assertEquals(6, $this->groupService->countAllChildrenForGroup($group));
+    }
+
+    public function testCountDirectChildrenForGroup()
+    {
+        $group = $this->groupService->getGroupByIdentifier(1);
+        $this->assertEquals(4, $this->groupService->countDirectChildrenForGroup($group));
+    }
+
+    public function testHasChildren()
+    {
+        $group = $this->groupService->getGroupByIdentifier(5);
+        $this->assertTrue($this->groupService->hasChildren($group));
+    }
+
+    public function testHasChildrenFalse()
+    {
+        $group = $this->groupService->getGroupByIdentifier(6);
+        $this->assertFalse($this->groupService->hasChildren($group));
+    }
+
+    public function testIsChildOf()
+    {
+        $parentGroup = $this->groupService->getGroupByIdentifier(5);
+        $childGroup = $this->groupService->getGroupByIdentifier(6);
+
+        $this->assertTrue($this->groupService->isChildOf($childGroup, $parentGroup));
+    }
+
+    public function testIsChildOfFalse()
+    {
+        $parentGroup = $this->groupService->getGroupByIdentifier(5);
+        $childGroup = $this->groupService->getGroupByIdentifier(6);
+
+        $this->assertFalse($this->groupService->isChildOf($parentGroup, $childGroup));
+    }
+
+    public function testIsParentOf()
+    {
+        $parentGroup = $this->groupService->getGroupByIdentifier(5);
+        $childGroup = $this->groupService->getGroupByIdentifier(6);
+
+        $this->assertTrue($this->groupService->isParentOf($parentGroup, $childGroup));
+    }
+
+    public function testIsParentOfFalse()
+    {
+        $parentGroup = $this->groupService->getGroupByIdentifier(5);
+        $childGroup = $this->groupService->getGroupByIdentifier(6);
+
+        $this->assertFalse($this->groupService->isParentOf($childGroup, $parentGroup));
+    }
+
+    public function testCountAllParentsForGroup()
+    {
+        $group = $this->groupService->getGroupByIdentifier(6);
+        $this->assertEquals(3, $this->groupService->countAllParentsForGroup($group));
+    }
+
+    public function testGetFullyQualifiedNameForGroup()
+    {
+        $group = $this->groupService->getGroupByIdentifier(6);
+        $this->assertEquals(
+            'Cosnics <span class="visible">></span> nulla <span class="visible">></span> repellat',
+            $this->groupService->getFullyQualifiedNameForGroup($group)
+        );
+    }
+
+    // GroupSubscriptions
+
     public function testFindGroupUserRelation()
     {
         $user = $this->userService->findUserByIdentifier(1);
@@ -389,6 +468,18 @@ class GroupClosureTableTest extends ChamiloFixturesBasedTestCase
         $group = $this->groupService->getGroupByIdentifier(5);
 
         $this->assertTrue($this->groupSubscriptionService->isUserSubscribedToGroupOrSubgroups($group, $user));
+    }
+
+    public function testCountUsersDirectlySubscribedToGroup()
+    {
+        $group = $this->groupService->getGroupByIdentifier(6);
+        $this->assertEquals(2, $this->groupSubscriptionService->countUsersDirectlySubscribedToGroup($group));
+    }
+
+    public function testCountUsersInGroupAndSubgroups()
+    {
+        $group = $this->groupService->getGroupByIdentifier(1);
+        $this->assertEquals(3, $this->groupSubscriptionService->countUsersInGroupAndSubgroups($group));
     }
 }
 

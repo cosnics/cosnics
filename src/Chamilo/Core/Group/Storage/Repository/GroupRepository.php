@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Group\Storage\Repository;
 
+use Chamilo\Core\Group\Storage\DataClass\ClosureTable;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupClosureTable;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
@@ -167,7 +168,7 @@ class GroupRepository extends ClosureTableRepository
     {
         // LEGACY CODE: make sure that the group is not already created using the create dataclass. We use
         // double code to make sure that the nested sets are used as backup until the refactoring is done.
-        if(!$group->is_identified())
+        if (!$group->is_identified())
         {
             $success = $this->dataClassRepository->create($group);
             if (!$success)
@@ -330,6 +331,19 @@ class GroupRepository extends ClosureTableRepository
     public function countAllParentsForGroup(Group $group, bool $includeSelf = true)
     {
         return $this->countAllParentsByChildId(GroupClosureTable::class, $group->getId(), $includeSelf);
+    }
+
+    /**
+     * @param Group $parentGroup
+     * @param Group $childGroup
+     *
+     * @return GroupClosureTable|ClosureTable
+     */
+    public function getGroupClosureTableForParentChild(Group $parentGroup, Group $childGroup)
+    {
+        return $this->getClosureTableForParentChild(
+            GroupClosureTable::class, $parentGroup->getId(), $childGroup->getId()
+        );
     }
 
     /**

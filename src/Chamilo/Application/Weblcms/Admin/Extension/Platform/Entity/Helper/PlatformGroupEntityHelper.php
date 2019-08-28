@@ -159,9 +159,9 @@ class PlatformGroupEntityHelper
 
         if ($group instanceof \Chamilo\Core\Group\Storage\DataClass\Group)
         {
-            $parents = $group->get_parents();
+            $parents = self::getGroupService()->getAllParentsForGroup($group);
 
-            while ($parent = $parents->next_result())
+            foreach($parents as $parent)
             {
                 $entities[PlatformGroupEntity::ENTITY_TYPE][] = $parent;
             }

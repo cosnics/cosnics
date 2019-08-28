@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Ajax\Component;
 
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -128,6 +129,7 @@ class XmlUserGroupFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
             )
         );
 
+        /** @var Group $group */
         while ($group = $group_result_set->next_result())
         {
             $group_parent_id = $group->get_parent();
@@ -144,9 +146,9 @@ class XmlUserGroupFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
 
             if ($group_parent_id != 0)
             {
-                $tree_parents = $group->get_parents(false);
+                $tree_parents = $this->getGroupService()->getAllParentsForGroup($group, false);
 
-                while ($tree_parent = $tree_parents->next_result())
+                foreach($tree_parents as $tree_parent)
                 {
                     $tree_parent_parent_id = $tree_parent->get_parent();
 
@@ -201,6 +203,14 @@ class XmlUserGroupFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
         $this->dump_tree($users, $groups_tree);
 
         echo '</tree>';
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->getService(GroupService::class);
     }
 
     public function dump_tree($users, $groups)

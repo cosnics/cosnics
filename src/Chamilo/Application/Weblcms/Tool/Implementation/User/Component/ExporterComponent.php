@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\UserExporter\CourseUserExportExtender;
 use Chamilo\Application\Weblcms\UserExporter\Renderer\ExcelUserExportRenderer;
 use Chamilo\Application\Weblcms\UserExporter\UserExporter;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupSubscriptionService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -252,8 +253,8 @@ class ExporterComponent extends Manager
     {
         $parentIds = array();
 
-        $parents = $group->get_ancestors(true);
-        while ($parent = $parents->next_result())
+        $parents = $this->getGroupService()->getAllParentsForGroup($group);
+        foreach($parents as $parent)
         {
             $parentIds[] = $parent->getId();
         }
@@ -274,6 +275,14 @@ class ExporterComponent extends Manager
         }
 
         return CourseEntityRelation::STATUS_STUDENT;
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->getService(GroupService::class);
     }
 
     /**

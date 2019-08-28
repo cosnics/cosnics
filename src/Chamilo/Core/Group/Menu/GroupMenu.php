@@ -51,6 +51,9 @@ class GroupMenu extends HtmlMenu
 
     private $include_root;
 
+    /**
+     * @var \Chamilo\Libraries\Storage\DataClass\DataClass|Group
+     */
     private $current_category;
 
     private $show_complete_tree;
@@ -183,6 +186,7 @@ class GroupMenu extends HtmlMenu
      */
     private function get_menu_items($parent_id = 0)
     {
+
         $current_category = $this->current_category;
 
         $show_complete_tree = $this->show_complete_tree;
@@ -212,7 +216,8 @@ class GroupMenu extends HtmlMenu
                 $menu_item['title'] = $group->get_name();
                 $menu_item['url'] = $this->get_url($group->get_id());
 
-                if ($group->is_parent_of($current_category) || $group->get_id() == $current_category->get_id() ||
+                $isParentOf = $this->groupService->isParentOf($group, $current_category);
+                if ($isParentOf || $group->get_id() == $current_category->get_id() ||
                     $show_complete_tree
                 )
                 {

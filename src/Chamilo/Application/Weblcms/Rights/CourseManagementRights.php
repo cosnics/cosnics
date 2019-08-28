@@ -8,10 +8,12 @@ use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation;
 use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocationLockedRight;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\RightsUtil;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -31,6 +33,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class CourseManagementRights extends WeblcmsRights
 {
+    use DependencyInjectionContainerTrait;
+
     /**
      * **************************************************************************************************************
      * Rights Definitions *
@@ -103,6 +107,19 @@ class CourseManagementRights extends WeblcmsRights
         return self::$instance;
     }
 
+    public function __construct()
+    {
+        $this->initializeContainer();
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->getService(GroupService::class);
+    }
+
     /**
      * **************************************************************************************************************
      * Inherited Functionality *
@@ -151,6 +168,7 @@ class CourseManagementRights extends WeblcmsRights
         
         if (! $this->rights[$entity_type][$group_id])
         {
+            /** @var Group $base_group */
             $base_group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $group_id);
             $location = CourseDataManager::retrieve_by_id(Course::class_name(), $course_id)->get_rights_location();
             
@@ -159,7 +177,7 @@ class CourseManagementRights extends WeblcmsRights
                 return false;
             }
             
-            $groups = $base_group->get_parents(true)->as_array();
+            $groups = $this->getGroupService()->getAllParentsForGroup($base_group);
             $group_ids = array();
             foreach ($groups as $group)
             {

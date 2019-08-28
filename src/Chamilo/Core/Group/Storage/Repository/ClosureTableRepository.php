@@ -7,6 +7,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -206,6 +207,32 @@ class ClosureTableRepository
     {
         $condition = $this->buildGetParentsConditionByParentId($closureTableClass, $childId, $includeSelf);
         return $this->dataClassRepository->count($closureTableClass, new DataClassCountParameters($condition));
+    }
+
+    /**
+     * @param string $closureTableClass
+     * @param int $parentId
+     * @param int $childId
+     *
+     * @return ClosureTable|DataClass
+     */
+    protected function getClosureTableForParentChild(string $closureTableClass, int $parentId, int $childId)
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($parentId)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($closureTableClass, ClosureTable::PROPERTY_CHILD_ID),
+            new StaticConditionVariable($childId)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->retrieve($closureTableClass, new DataClassRetrieveParameters($condition));
     }
 
     /**
