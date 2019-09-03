@@ -14,9 +14,16 @@ class CpoContentObjectImport extends ContentObjectImport
             $this->get_import_implementation()->get_content_object_import_parameters()->get_content_object_node();
         $dom_xpath = $this->get_import_implementation()->get_controller()->get_dom_xpath();
 
-        $content_object_type = $this->get_import_implementation()->get_controller()->determine_content_object_type(
-            $dom_xpath->query('general/type', $content_object_node)->item(0)->nodeValue
-        );
+        try
+        {
+            $content_object_type = $this->get_import_implementation()->get_controller()->determine_content_object_type(
+                $dom_xpath->query('general/type', $content_object_node)->item(0)->nodeValue
+            );
+        }
+        catch(\InvalidArgumentException $ex)
+        {
+            return null;
+        }
 
         $content_object = new $content_object_type();
 
