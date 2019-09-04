@@ -170,7 +170,7 @@ class PlatformGroupTeamService
          * Make sure that the teachers are not removed
          */
         $teachers = $this->courseService->getTeachersFromCourse($course);
-//        $this->teamService->removeTeamOwnersNotInArray($team, $teachers);
+        $this->teamService->removeTeamOwnersNotInArray($team, $teachers);
         $users = array_merge($users, $teachers);
 
         $this->teamService->removeTeamMembersNotInArray($team, $users);
@@ -233,7 +233,11 @@ class PlatformGroupTeamService
             );
         }
 
-        if (!$this->teamService->isOwner($user, $team))
+        if($isTeacher)
+        {
+            $this->teamService->addOwner($user, $team);
+        }
+        else
         {
             $this->teamService->addMember($user, $team);
         }
