@@ -147,11 +147,12 @@ class PlatformGroupTeamService
     }
 
     /**
+     * @param Course $course
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    public function removeTeamUsersNotInGroups(PlatformGroupTeam $platformGroupTeam)
+    public function removeTeamUsersNotInGroups(Course $course, PlatformGroupTeam $platformGroupTeam)
     {
         $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
         $team = $this->getTeam($platformGroupTeam);
@@ -164,6 +165,13 @@ class PlatformGroupTeamService
         }
 
         $users = $this->userService->findUsersByIdentifiers($userIds);
+
+        /**
+         * Make sure that the teachers are not removed
+         */
+        $teachers = $this->courseService->getTeachersFromCourse($course);
+//        $this->teamService->removeTeamOwnersNotInArray($team, $teachers);
+        $users = array_merge($users, $teachers);
 
         $this->teamService->removeTeamMembersNotInArray($team, $users);
     }
@@ -240,6 +248,7 @@ class PlatformGroupTeamService
      *
      * @return array
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Exception
      */
     public function getPlatformGroupTeamsForCourse(Course $course, User $user)
     {

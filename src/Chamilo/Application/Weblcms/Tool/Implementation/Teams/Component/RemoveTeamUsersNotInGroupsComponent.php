@@ -29,7 +29,7 @@ class RemoveTeamUsersNotInGroupsComponent extends Manager
 
         try
         {
-            $this->getPlatformGroupTeamService()->removeTeamUsersNotInGroups($platformGroupTeam);
+            $this->getPlatformGroupTeamService()->removeTeamUsersNotInGroups($this->get_course(), $platformGroupTeam);
 
             $message = 'TeamUsersNotInGroupsRemoved';
             $success = true;
