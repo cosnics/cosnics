@@ -238,7 +238,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             else
             {
                 // when hide sharing is active content object is automatically shared with course admins
-                $defaults[ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] = 1;
+                $defaults[ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] = 0;
             }
         }
         

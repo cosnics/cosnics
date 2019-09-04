@@ -32,8 +32,7 @@ class SubSubscribedPlatformGroupTableCellRenderer extends DataClassTableCellRend
                 return $title_short;
             
             case Group::PROPERTY_DESCRIPTION :
-                $description = strip_tags(parent::render_cell($column, $group));
-                return StringUtilities::getInstance()->truncate($description);
+                return $group->get_fully_qualified_name();
             case Translation::get(
                 SubSubscribedPlatformGroupTableColumnModel::USERS, 
                 null, 
