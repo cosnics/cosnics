@@ -42,7 +42,7 @@ class AssignmentPublicationService
      */
     public function deletePublication(ContentObjectPublication $contentObjectPublication)
     {
-        $this->assignmentService->deleteEntriesForContentObjectPublication($contentObjectPublication);
+//        $this->assignmentService->deleteEntriesForContentObjectPublication($contentObjectPublication);
         $this->assignmentPublicationRepository->deletePublicationForContentObjectPublication($contentObjectPublication);
 
         if (!$contentObjectPublication->delete())
