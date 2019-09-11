@@ -528,3 +528,6 @@ SelectCourse = "Selecteer cursus"
 ObjectNotActiveWarning = "Dit object is niet zichtbaar in jouw repository. Om die reden kan je het object niet wijzigen of verwijderen."
 Downloads = "Downloads"
 FileDownloadHost = "Hostname om bestanden te downloaden"
+CopierComponent = "Object(en) kopiëren"
+CopyContentObject = "Object(en) kopiëren"
+

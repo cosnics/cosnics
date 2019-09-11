@@ -15,5 +15,11 @@
 
         <service id="Chamilo\Core\Repository\Common\Includes\ContentObjectIncluder" autowire="true" />
         <service id="Chamilo\Core\Repository\Common\ContentObjectResourceParser" autowire="true" />
+
+        <service id="Chamilo\Core\Repository\Service\CategoryService" autowire="true" />
+        <service id="Chamilo\Core\Repository\Storage\Repository\CategoryRepository" autowire="true" />
+        <service id="Chamilo\Core\Repository\Form\Type\CopyFormType" autowire="true">
+            <tag name="form.type" />
+        </service>
     </services>
 </container>
