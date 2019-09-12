@@ -140,7 +140,7 @@ class Redirect
     public function getUrl()
     {
         $baseUrl = $this->getCurrentUrl(false, false) . $_SERVER['PHP_SELF'];
-        return $this->getWebLink($baseUrl);
+        return $this->addParametersToUrl($baseUrl);
     }
 
     /**
@@ -177,7 +177,7 @@ class Redirect
      * @param string[] $parameters
      * @return string
      */
-    protected function getWebLink($url, $parameters = array ())
+    public function addParametersToUrl($url)
     {
         $parameters = $this->getFilteredParameters();
 

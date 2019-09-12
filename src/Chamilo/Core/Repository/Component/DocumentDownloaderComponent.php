@@ -87,6 +87,7 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
      * @param $security_code
      *
      * @return RedirectResponse
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     protected function redirectToDownloadHost($object_id, $security_code)
     {
@@ -107,24 +108,8 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
         $isRedirected = $this->getRequest()->getFromUrl(self::PARAM_REDIRECTED_TO_DOWNLOAD_HOST);
         if (strpos($this->get_url(), $fileDownloadHost) === false && !$isRedirected)
         {
-            $redirectedUrl = $this->get_url(
-                [
-                    self::PARAM_CONTENT_OBJECT_ID => $object_id, self::PARAM_REDIRECTED_TO_DOWNLOAD_HOST => 1,
-                    ContentObject::PARAM_SECURITY_CODE => $security_code,
-                    'display' => $this->getRequest()->getFromUrl('display')
-                ]
-        );
-
-            $webPath = $this->getPathBuilder()->getBasePath(true);
-            $lastChar = substr($fileDownloadHost, - 1);
-            if ($lastChar != '/')
-            {
-                $fileDownloadHost .= '/';
-            }
-
-            $redirectedUrl = str_replace($webPath, $fileDownloadHost, $redirectedUrl);
-
-            return new RedirectResponse($redirectedUrl);
+            $documentDownloadUrl = self::get_document_downloader_url($object_id, $security_code);
+            return new RedirectResponse($documentDownloadUrl);
         }
 
         return null;
