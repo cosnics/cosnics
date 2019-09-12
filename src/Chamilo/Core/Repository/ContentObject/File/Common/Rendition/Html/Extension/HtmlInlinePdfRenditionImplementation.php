@@ -56,6 +56,8 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
      */
     protected function addDownloadHostToViewerPath(string $viewerPath)
     {
+        $this->initializeContainer();
+
         $fileDownloadHost =
             $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Repository', 'file_download_host']);
 
