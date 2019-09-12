@@ -669,7 +669,7 @@ abstract class Manager extends Application
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
         /** @var ConfigurationConsulter $configurationConsulter */
-        $configurationConsulter = $container->get('');
+        $configurationConsulter = $container->get('chamilo.configuration.service.configuration_consulter');
         $fileDownloadHost = $configurationConsulter->getSetting(['Chamilo\Core\Repository', 'file_download_host']);
 
         if (empty($fileDownloadHost))
