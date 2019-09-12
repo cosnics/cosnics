@@ -28,7 +28,7 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
         
         $viewerPath = Path::getInstance()->getResourcesPath(Utilities::COMMON_LIBRARIES, true) .
              'Javascript/Plugin/PDFJS/web/viewer.html';
-        
+        $viewerPath = $this->addDownloadHostToViewerPath($viewerPath);
         $url = $viewerPath . '?file=' . urlencode($url);
         
         $html = array();
@@ -47,5 +47,32 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
                 width="100%" height="600"  src="' . $url . '"></iframe></div>';
         
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param string $viewerPath
+     *
+     * @return string
+     */
+    protected function addDownloadHostToViewerPath(string $viewerPath)
+    {
+        $fileDownloadHost =
+            $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Repository', 'file_download_host']);
+
+        if (empty($fileDownloadHost))
+        {
+            return $viewerPath;
+        }
+
+        $webPath = $this->getPathBuilder()->getBasePath(true);
+        $lastChar = substr($fileDownloadHost, - 1);
+        if ($lastChar != '/')
+        {
+            $fileDownloadHost .= '/';
+        }
+
+        $viewerPath = str_replace($webPath, $fileDownloadHost, $viewerPath);
+
+        return $viewerPath;
     }
 }
