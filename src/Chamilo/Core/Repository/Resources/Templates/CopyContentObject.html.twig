@@ -1,0 +1,27 @@
+{{ HEADER|raw }}
+
+{% form_theme FORM 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% set appContext = 'Chamilo\\Core\\Repository' %}
+
+
+<div class="panel panel-default" style="margin: 35px 0;">
+    <div class="panel-heading">
+        {{ 'SelectedContentObjects'|trans({}, appContext) }}
+    </div>
+    <div class="panel-body">
+        {{ SELECTED_OBJECTS|raw }}
+    </div>
+</div>
+
+
+{{ form_start(FORM) }}
+{{ form_row(FORM.category) }}
+<div class="row">
+    <div class="col-md-10 col-md-push-2">
+        <button type="submit" class="btn btn-primary">{{ 'CopyContentObject'|trans({}, appContext) }}</button>
+    </div>
+</div>
+{{ form_end(FORM) }}
+
+{{ FOOTER|raw }}

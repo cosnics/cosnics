@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Common\Action;
 
 use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
@@ -31,6 +32,10 @@ class ContentObjectCopier
     const TYPE_WARNING = 2;
     const TYPE_CONFIRM = 3;
     const TYPE_NORMAL = 4;
+    /**
+     * @var bool
+     */
+    protected $changeTitles;
 
     private $messages;
 
@@ -85,9 +90,13 @@ class ContentObjectCopier
      * @param WorkspaceInterface $targetWorkspace
      * @param integer $targetUserIdentifier
      * @param integer $targetCategory
+     * @param bool $changeTitles
      */
-    public function __construct(User $currentUser, $contentObjectIdentifiers, WorkspaceInterface $sourceWorkspace,
-        $sourceUserIdentifier, WorkspaceInterface $targetWorkspace, $targetUserIdentifier, $targetCategory = 0)
+    public function __construct(
+        User $currentUser, $contentObjectIdentifiers, WorkspaceInterface $sourceWorkspace,
+        $sourceUserIdentifier, WorkspaceInterface $targetWorkspace, $targetUserIdentifier, $targetCategory = 0,
+        bool $changeTitles = true
+    )
     {
         $this->currentUser = $currentUser;
         $this->contentObjectIdentifiers = $contentObjectIdentifiers;
@@ -96,6 +105,7 @@ class ContentObjectCopier
         $this->targetWorkspace = $targetWorkspace;
         $this->targetUserIdentifier = $targetUserIdentifier;
         $this->targetCategory = $targetCategory;
+        $this->changeTitles = $changeTitles;
     }
 
     /**
@@ -104,14 +114,14 @@ class ContentObjectCopier
      */
     public function run()
     {
-        if (! $this->contentObjectIdentifiers)
+        if (!$this->contentObjectIdentifiers)
         {
             $this->add_message(Translation::get('NoObjectSelected'), self::TYPE_ERROR);
 
             return false;
         }
 
-        if (! is_array($this->contentObjectIdentifiers))
+        if (!is_array($this->contentObjectIdentifiers))
         {
             $this->contentObjectIdentifiers = array($this->contentObjectIdentifiers);
         }
@@ -120,7 +130,8 @@ class ContentObjectCopier
             $this->sourceWorkspace,
             $this->sourceUserIdentifier,
             ContentObjectExport::FORMAT_CPO,
-            $this->contentObjectIdentifiers);
+            $this->contentObjectIdentifiers
+        );
 
         $exporter = ContentObjectExportController::factory($exportParameters);
 
@@ -135,20 +146,22 @@ class ContentObjectCopier
 
         $targetUser = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
             User::class_name(),
-            $this->targetUserIdentifier);
+            $this->targetUserIdentifier
+        );
 
         $parameters = ImportParameters::factory(
             ContentObjectImport::FORMAT_CPO,
             $this->targetUserIdentifier,
             $this->targetWorkspace,
             $this->targetCategory,
-            $file);
+            $file
+        );
         $controller = ContentObjectImportController::factory($parameters);
         $contentObjectIdentifiers = $controller->run();
 
         $this->messages = $controller->get_messages();
 
-        if ($this->sourceUserIdentifier == $this->targetUserIdentifier)
+        if ($this->changeTitles && ($this->sourceUserIdentifier == $this->targetUserIdentifier))
         {
             $this->changeContentObjectNames($contentObjectIdentifiers);
         }
@@ -166,7 +179,7 @@ class ContentObjectCopier
      */
     public function add_message($message, $type)
     {
-        if (! isset($this->messages[$type]))
+        if (!isset($this->messages[$type]))
         {
             $this->messages[$type] = array();
         }
@@ -247,7 +260,8 @@ class ContentObjectCopier
 
         $condition = new InCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
-            $contentObjectIdentifiers);
+            $contentObjectIdentifiers
+        );
 
         $parameters = new DataClassRetrievesParameters($condition);
 
