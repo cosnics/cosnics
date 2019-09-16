@@ -33,8 +33,14 @@ class AdminUserVisit extends SimpleTracker
             return;
         }
 
+        $visitTrackerId = $parameters[self::PROPERTY_USER_VISIT_ID];
+        if(empty($visitTrackerId))
+        {
+            return;
+        }
+
         $this->setAdminUserId($adminUserId);
-        $this->setUserVisitId($parameters['user_visit_id']);
+        $this->setUserVisitId($visitTrackerId);
         $this->setVisitDate(time());
         $this->create();
     }
