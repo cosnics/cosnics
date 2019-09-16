@@ -32,7 +32,8 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
                 return 'Doctrine\DBAL\Driver\PDOMySql\Driver';
                 break;
             case self::DRIVER_MSSQL :
-                return 'Doctrine\DBAL\Driver\PDOSqlsrv\Driver';
+                return 'Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql\MsSqlDoctrineDriver';
+                //return 'Doctrine\DBAL\Driver\PDOSqlsrv\Driver';
                 break;
             case self::DRIVER_IBM_DB2 :
                 return 'Doctrine\DBAL\Driver\IBMDB2\Driver';
