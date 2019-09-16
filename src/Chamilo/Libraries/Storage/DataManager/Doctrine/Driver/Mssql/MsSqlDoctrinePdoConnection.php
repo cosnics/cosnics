@@ -29,4 +29,9 @@ class MsSqlDoctrinePdoConnection extends \Doctrine\DBAL\Driver\PDOConnection imp
 
         return $stmt;
     }
+
+    public function getServerVersion()
+    {
+        return null;
+    }
 }
