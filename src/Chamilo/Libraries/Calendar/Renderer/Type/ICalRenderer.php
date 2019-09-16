@@ -6,6 +6,7 @@ use Chamilo\Libraries\Calendar\Event\RecurrenceRules\VObjectRecurrenceRulesForma
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\TimeZone\TimeZoneCalendarWrapper;
+use kigkonsult\iCalcreator\timezoneHandler;
 use Sabre\VObject\Component\VCalendar;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -105,8 +106,8 @@ class ICalRenderer extends Renderer
      */
     private function addTimeZone()
     {
-        \iCalUtilityFunctions::createTimezone(
-            new TimeZoneCalendarWrapper($this->getCalendar()),
+        timezoneHandler::createTimezone(
+            $this->getCalendar(),
             date_default_timezone_get(),
             array()/*,
             self :: TIMEZONE_START,
