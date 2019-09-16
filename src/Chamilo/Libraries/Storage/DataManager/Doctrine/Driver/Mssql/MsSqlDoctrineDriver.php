@@ -64,10 +64,38 @@ class MsSqlDoctrineDriver extends AbstractSQLServerDriver
 
     /**
      *
+     * @see \Doctrine\DBAL\Driver::getDatabasePlatform()
+     */
+    public function getDatabasePlatform()
+    {
+        return new \Doctrine\DBAL\Platforms\SQLServer2008Platform();
+    }
+
+    /**
+     *
+     * @see \Doctrine\DBAL\Driver::getSchemaManager()
+     */
+    public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
+    {
+        return new \Doctrine\DBAL\Schema\SQLServerSchemaManager($conn);
+    }
+
+    /**
+     *
      * @see \Doctrine\DBAL\Driver::getName()
      */
     public function getName()
     {
         return 'pdo_mssql';
+    }
+
+    /**
+     *
+     * @see \Doctrine\DBAL\Driver::getDatabase()
+     */
+    public function getDatabase(\Doctrine\DBAL\Connection $conn)
+    {
+        $params = $conn->getParams();
+        return $params['dbname'];
     }
 }

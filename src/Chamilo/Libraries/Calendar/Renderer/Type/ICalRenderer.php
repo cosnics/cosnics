@@ -106,12 +106,12 @@ class ICalRenderer extends Renderer
      */
     private function addTimeZone()
     {
-//        timezoneHandler::createTimezone(
-//            $this->getCalendar(),
-//            date_default_timezone_get(),
-//            array()/*,
-//            self :: TIMEZONE_START,
-//            self :: TIMEZONE_END*/);
+        timezoneHandler::createTimezone(
+            new TimeZoneCalendarWrapper($this->getCalendar()),
+            date_default_timezone_get(),
+            array()/*,
+            self :: TIMEZONE_START,
+            self :: TIMEZONE_END*/);
     }
 
     /**

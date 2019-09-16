@@ -8,7 +8,7 @@ use Sabre\VObject\Component\VCalendar;
  * @package Chamilo\Libraries\Calendar\TimeZone
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class TimeZoneCalendarWrapper
+class TimeZoneCalendarWrapper extends \kigkonsult\iCalcreator\vcalendar
 {
 
     /**
@@ -44,8 +44,13 @@ class TimeZoneCalendarWrapper
         $this->vCalendar = $vCalendar;
     }
 
-    public function getProperty()
+    public function getProperty($property)
     {
+    }
+
+    public function newVtimezone()
+    {
+        return $this->newComponent('vtimezone');
     }
 
     /**

@@ -74,6 +74,7 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
     /**
      *
      * @param integer[] $dateArray
+     *
      * @return string
      */
     private function implodeDate($dateArray)
@@ -91,15 +92,27 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
         return implode('', $date);
     }
 
+    public function newDaylight()
+    {
+        return $this->newComponent('daylight');
+    }
+
+    public function newStandard()
+    {
+        return $this->newComponent('standard');
+    }
+
     /**
      *
      * @param string $componentName
+     *
      * @return \Chamilo\Libraries\Calendar\TimeZone\TimeZoneComponentWrapper
      */
     public function newComponent($componentName)
     {
         $component = $this->getVCalendar()->createComponent($componentName);
         $this->getComponent()->add($component);
+
         return new TimeZoneComponentWrapper($this->getVCalendar(), $component);
     }
 }
