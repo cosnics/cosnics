@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Type\PlatformGroupTeamType;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormHandler;
 use Symfony\Component\Form\FormInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CreatePlatformGroupTeamFormHandler extends FormHandler
+class EditPlatformGroupTeamFormHandler extends FormHandler
 {
     /**
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\PlatformGroupTeamService
@@ -30,6 +31,11 @@ class CreatePlatformGroupTeamFormHandler extends FormHandler
      * @var \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course
      */
     protected $course;
+
+    /**
+     * @var PlatformGroupTeam
+     */
+    protected $platformGroupTeam;
 
     /**
      * CreatePlatformGroupTeamFormHandler constructor.
@@ -59,6 +65,11 @@ class CreatePlatformGroupTeamFormHandler extends FormHandler
         $this->course = $course;
     }
 
+    public function setPlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
+    {
+        $this->platformGroupTeam = $platformGroupTeam;
+    }
+
     /**
      * @param FormInterface $form
      * @param Request $request
@@ -81,6 +92,11 @@ class CreatePlatformGroupTeamFormHandler extends FormHandler
         if (!$this->course instanceof Course)
         {
             throw new \RuntimeException('The form handler can not be executed without a valid course object');
+        }
+
+        if(!$this->platformGroupTeam instanceof PlatformGroupTeam)
+        {
+            throw new \RuntimeException('The form handler can not be executed without a valid platform group team object');
         }
 
         $data = $form->getData();

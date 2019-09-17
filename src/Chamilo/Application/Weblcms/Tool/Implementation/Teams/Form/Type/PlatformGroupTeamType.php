@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CreatePlatformGroupTeamType extends AbstractType
+class PlatformGroupTeamType extends AbstractType
 {
     const ELEMENT_NAME = 'name';
     const ELEMENT_PLATFORM_GROUPS = 'platform_groups';

@@ -56,6 +56,8 @@
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li><a :href="addUsersUrl(data.item)">{{ 'AddUsersNotInTeam'|trans({}, appContext) }}</a></li>
                         <li><a :href="removeUsersUrl(data.item)">{{ 'RemoveUsersNotInGroups'|trans({}, appContext) }}</a></li>
+{#                        <li class="divider"></li>#}
+{#                        <li><a :href="editTeamUrl(data.item)">{{ 'EditPlatformGroupTeam'|trans({}, appContext) }}</a></li>#}
                     </ul>
                 </div>
             {% endif %}
@@ -86,6 +88,7 @@
         var visitTeamUrlTemplate = '{{ VISIT_PLATFORM_GROUP_TEAM_URL|raw }}';
         var addUsersUrlTemplate = '{{ SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS_URL|raw }}';
         var removeUsersUrlTemplate = '{{ REMOVE_TEAM_USERS_NOT_IN_GROUPS_URL|raw }}';
+        var editTeamUrl = '{{ EDIT_PLATFORM_GROUP_TEAM_URL|raw }}';
 
         $(window).on('load', function () {
             new Vue({
@@ -96,7 +99,8 @@
                     fields: fields,
                     visitTeamUrlTemplate: visitTeamUrlTemplate,
                     addUsersUrlTemplate: addUsersUrlTemplate,
-                    removeUsersUrlTemplate: removeUsersUrlTemplate
+                    removeUsersUrlTemplate: removeUsersUrlTemplate,
+                    editTeamUrlTemplate: editTeamUrl
                 },
                 methods: {
                     visitTeamUrl: function(team) {
@@ -107,6 +111,9 @@
                     },
                     removeUsersUrl: function(team) {
                         return this.addTeamToUrl(this.removeUsersUrlTemplate, team);
+                    },
+                    editTeamUrl: function(team) {
+                        return this.addTeamToUrl(this.editTeamUrlTemplate, team);
                     },
                     addTeamToUrl: function(urlTemplate, team) {
                         return urlTemplate.replace('__PLATFORM_GROUP_TEAM_ID__', team.id);

@@ -2,12 +2,10 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Component;
 
-use Chamilo\Application\Weblcms\Service\CourseSubscriptionService;
-use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler\CreatePlatformGroupTeamFormHandler;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler\EditPlatformGroupTeamFormHandler;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Type\PlatformGroupTeamType;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager;
 use Chamilo\Core\Group\Ajax\Component\GetGroupChildrenJSONComponent;
-use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 
@@ -16,7 +14,7 @@ use Chamilo\Libraries\Architecture\Exceptions\UserException;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CreatePlatformGroupTeamComponent extends Manager
+class EditPlatformGroupTeamComponent extends Manager
 {
     /**
      * @return string
@@ -30,23 +28,26 @@ class CreatePlatformGroupTeamComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = $this->getForm()->create(PlatformGroupTeamType::class);
+        $platformGroupTeam = $this->getPlatformGroupTeamFromRequest();
 
+        $form = $this->getForm()->create(PlatformGroupTeamType::class);
         $handler = $this->getFormHandler();
+
         $handler->setUser($this->getUser());
         $handler->setCourse($this->get_course());
+        $handler->setPlatformGroupTeam($platformGroupTeam);
 
         try
         {
             if ($handler->handle($form, $this->getRequest()))
             {
-                $message = 'PlatformGroupTeamCreated';
+                $message = 'PlatformGroupTeamUpdated';
                 $success = true;
             }
             else
             {
                 return $this->getTwig()->render(
-                    Manager::context() . ':CreatePlatformGroupTeam.html.twig', [
+                    Manager::context() . ':EditPlatformGroupTeam.html.twig', [
                         'HEADER' => $this->render_header(),
                         'FOOTER' => $this->render_footer(),
                         'FORM' => $form->createView(),
@@ -55,7 +56,8 @@ class CreatePlatformGroupTeamComponent extends Manager
                         ),
                         'GET_GROUP_CHILDREN_URL' => GetGroupChildrenJSONComponent::getAjaxUrl(),
                         'TEAM_NAME_COURSE_METADATA' => $this->get_course()->get_title() . ' (' .
-                            $this->get_course()->get_visual_code() . ')'
+                            $this->get_course()->get_visual_code() . ')',
+                        'PLATFORM_GROUP_TEAM' => $platformGroupTeam
                     ]
                 );
             }
@@ -66,7 +68,7 @@ class CreatePlatformGroupTeamComponent extends Manager
         }
         catch (\Exception $ex)
         {
-            $message = 'PlatformGroupTeamNotCreated';
+            $message = 'PlatformGroupTeamNotUpdated';
             $success = false;
             $this->getExceptionLogger()->logException($ex);
         }
@@ -80,10 +82,10 @@ class CreatePlatformGroupTeamComponent extends Manager
     }
 
     /**
-     * @return CreatePlatformGroupTeamFormHandler
+     * @return EditPlatformGroupTeamFormHandler
      */
     protected function getFormHandler()
     {
-        return $this->getService(CreatePlatformGroupTeamFormHandler::class);
+        return $this->getService(EditPlatformGroupTeamFormHandler::class);
     }
 }

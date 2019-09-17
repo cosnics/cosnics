@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams;
 
+use Chamilo\Application\Weblcms\Service\CourseSubscriptionService;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\CourseTeamService;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\PlatformGroupTeamService;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 
 /**
@@ -20,6 +22,7 @@ class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     const ACTION_SUBSCRIBE_ALL_COURSE_USERS_TO_TEAM = 'SubscribeAllCourseUsersToTeam';
 
     const ACTION_CREATE_PLATFORM_GROUP_TEAM = 'CreatePlatformGroupTeam';
+    const ACTION_EDIT_PLATFORM_GROUP_TEAM = 'EditPlatformGroupTeam';
     const ACTION_REMOVE_TEAM_USERS_NOT_IN_GROUPS = 'RemoveTeamUsersNotInGroups';
     const ACTION_SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS = 'SubscribePlatformGroupTeamUsers';
     const ACTION_VISIT_PLATFORM_GROUP_TEAM = 'VisitPlatformGroupTeam';
@@ -65,5 +68,33 @@ class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         }
 
         return $platformGroupTeam;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDirectlySubscribedPlatformGroups()
+    {
+        $groups = $this->getCourseSubscriptionService()->findGroupsDirectlySubscribedToCourse($this->get_course())
+            ->getArrayCopy();
+
+        foreach ($groups as $index => $group)
+        {
+            $leftValue = $group[Group::PROPERTY_LEFT_VALUE];
+            $rightValue = $group[Group::PROPERTY_RIGHT_VALUE];
+
+            $hasChildren = $leftValue != ($rightValue - 1);
+            $groups[$index]['has_children'] = $hasChildren;
+        }
+
+        return $groups;
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Service\CourseSubscriptionService
+     */
+    protected function getCourseSubscriptionService()
+    {
+        return $this->getService(CourseSubscriptionService::class);
     }
 }
