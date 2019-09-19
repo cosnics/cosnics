@@ -153,7 +153,12 @@ class CourseGroupOffice365Connector
         $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup); //todo: check if name in group differs from course group. If so the user changed it, and we don't need to sync...
         $this->groupService->updateGroupName($reference->getOffice365GroupId(), $courseGroupName);
         $this->courseGroupOffice365ReferenceService->linkCourseGroupReference($reference);
-        $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+
+        if(!$this->groupService->isOwnerOfGroup($reference->getOffice365GroupId(), $user))
+        {
+            $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+        }
+
         $this->subscribeCourseGroupUsers($courseGroup, $reference->getOffice365GroupId());
 
         return $reference->getOffice365GroupId();
@@ -325,7 +330,11 @@ class CourseGroupOffice365Connector
         }
 
         $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
-        $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+
+        if(!$this->groupService->isOwnerOfGroup($reference->getOffice365GroupId(), $user))
+        {
+            $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+        }
 
         $baseUrl = $this->configurationConsulter->getSetting(
             ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'planner_base_uri']
@@ -394,7 +403,11 @@ class CourseGroupOffice365Connector
         }
 
         $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
-        $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+
+        if(!$this->groupService->isOwnerOfGroup($reference->getOffice365GroupId(), $user))
+        {
+            $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+        }
 
         $groupUrl = $this->configurationConsulter->getSetting(
             ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri']
