@@ -363,7 +363,11 @@ class CourseGroupOffice365Connector
         }
 
         $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
-        $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+
+        if(!$this->groupService->isOwnerOfGroup($reference->getOffice365GroupId(), $user))
+        {
+            $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+        }
 
         $group = $this->groupService->getGroup($reference->getOffice365GroupId());
 
