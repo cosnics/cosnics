@@ -54,7 +54,7 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
      */
     public function setProperty($name, $value)
     {
-        if ($name == 'dtstart')
+        if ($name == 'DTSTART')
         {
             $this->getComponent()->add($name, $this->implodeDate($value));
         }
