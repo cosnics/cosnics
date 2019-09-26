@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Feedback;
 
+use Chamilo\Core\Repository\Common\Includes\ContentObjectIncluder;
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeAdapter;
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsServiceBridgeAdapter;
@@ -8,6 +9,7 @@ use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsServiceBridgeInterface
 use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationService;
 use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationServiceInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -130,5 +132,21 @@ abstract class Manager extends Application
         $configuration = $this->getApplicationConfiguration()->get(self::CONFIGURATION_SHOW_FEEDBACK_HEADER);
 
         return isset($configuration) ? $configuration : true;
+    }
+
+    /**
+     * @return ContentObjectRepository
+     */
+    protected function getContentObjectRepository()
+    {
+        return $this->getService(ContentObjectRepository::class);
+    }
+
+    /**
+     * @return ContentObjectIncluder
+     */
+    protected function getContentObjectIncluder()
+    {
+        return $this->getService(ContentObjectIncluder::class);
     }
 }

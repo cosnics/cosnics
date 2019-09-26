@@ -24,7 +24,7 @@ class CreatorComponent extends Manager
             throw new NotAllowedException();
         }
         
-        $form = new FeedbackForm($this, $this->get_url());
+        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url());
         
         if ($form->validate())
         {

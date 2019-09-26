@@ -44,7 +44,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $form = new FeedbackForm($this, $this->get_url());
+        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url());
 
         if ($form->validate())
         {
@@ -422,13 +422,5 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         return $this->pagerRenderer;
-    }
-
-    /**
-     * @return ContentObjectIncluder
-     */
-    protected function getContentObjectIncluder()
-    {
-        return $this->getService(ContentObjectIncluder::class);
     }
 }
