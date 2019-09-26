@@ -1379,7 +1379,7 @@ class ContentObject extends CompositeDataClass
 
     public static function icon_path($context, $size = Theme :: ICON_SMALL, $is_current = true)
     {
-        return Theme::getInstance()->getImagePath($context, 'Logo/' . $size . ($is_current ? '' : 'Na'));
+        return Theme::getInstance()->getImagePath($context, 'Logo/' . $size /*. ($is_current ? '' : 'Na')*/);
     }
 
     /**
