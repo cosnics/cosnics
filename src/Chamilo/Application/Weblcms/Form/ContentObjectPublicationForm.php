@@ -232,13 +232,24 @@ class ContentObjectPublicationForm extends BasePublicationForm
                     Manager:: package()
                 );
 
-                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = $first_publication->is_identified() ?
+                $defaults[ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] = $first_publication->is_identified() ?
                     $first_publication->get_allow_collaboration() : $collaborateDefault;
             }
             else
             {
-                // when hide sharing is active content object is automatically shared with course admins
-                $defaults[ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] = 0;
+                if($force_collaborate)
+                {
+                    // when force collaborate is active content object is automatically shared with course admins
+                    $defaults[ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] = 1;
+                }
+                else
+                {
+                    // when a user doesn't have the rights to change it we don't share new publications
+                    // existing publications will keep their default value
+                    $defaults[ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] =
+                        $first_publication->is_identified() ?
+                            $first_publication->get_allow_collaboration() : 0;
+                }
             }
         }
         
