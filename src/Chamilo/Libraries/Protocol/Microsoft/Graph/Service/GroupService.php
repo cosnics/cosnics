@@ -165,7 +165,16 @@ class GroupService
                 throw new AzureUserNotExistsException($user);
             }
 
-            $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
+            /** BUG IN MICROSOFT: SUBSCRIBE MEMBER REMOVES AN OWNER BUT THE OWNER SHOULD BE BOTH MEMBER AND OWNER  */
+            if($this->isOwnerOfGroup($groupId, $user))
+            {
+                $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
+                $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
+            }
+            else
+            {
+                $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
+            }
         }
     }
 
@@ -270,6 +279,8 @@ class GroupService
                 throw new AzureUserNotExistsException($user);
             }
 
+            /** BUG IN MICROSOFT: THE OWNER SHOULD BE BOTH MEMBER AND OWNER  */
+            $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
             $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
         }
     }
