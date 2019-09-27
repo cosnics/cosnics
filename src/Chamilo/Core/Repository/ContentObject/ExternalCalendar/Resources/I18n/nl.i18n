@@ -16,3 +16,4 @@ MaximumFileSizeUser = "Je hebt nog <b>{USER}</b> ter beschikking in je eigen rep
 MaximumFileSizeUserNoUpgrade = "Je hebt nog <b>{USER}</b> ter beschikking in je eigen repository voor het uploaden van documenten. De maximale bestandsgrootte die door het platform toegestaan wordt, is op dit moment <b>{SERVER}</b>."
 MaximumFileSizeServer = "De maximale bestandsgrootte die door het platform toegestaan wordt, is op dit moment <b>{FILESIZE}</b>"
 ICalParseError = "Het systeem kon het opgegeven ICal bestand niet verwerken. Gelieve een geldig ICal bestand / url op te geven."
+SameHostNotAllowed = "Je kan geen URL van dezelfde host als deze leeromgeving opgeven. Gelieve een externe URL te gebruiken."
