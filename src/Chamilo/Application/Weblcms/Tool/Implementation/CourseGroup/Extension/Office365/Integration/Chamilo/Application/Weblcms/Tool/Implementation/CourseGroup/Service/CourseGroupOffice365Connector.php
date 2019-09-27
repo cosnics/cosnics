@@ -138,31 +138,30 @@ class CourseGroupOffice365Connector
         if (!$reference instanceof CourseGroupOffice365Reference)
         {
             return $this->createGroupFromCourseGroup($courseGroup, $user);
-
         }
 
         if ($reference->isLinked())
         {
             $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup);
-            $this->groupService->updateGroupName($reference->getOffice365GroupId(), $courseGroupName); //todo: check if name in group differs from course group. If so the user changed it, and we don't need to sync...
+            $this->groupService->updateGroupName(
+                $reference->getOffice365GroupId(), $courseGroupName
+            ); //todo: check if name in group differs from course group. If so the user changed it, and we don't need to sync...
 
             return $reference->getOffice365GroupId();
         }
 
         //if an office365 group was previously linked, we need to re-attach it and subscribe the course group users.
-        $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup); //todo: check if name in group differs from course group. If so the user changed it, and we don't need to sync...
+        $courseGroupName = $this->getOffice365GroupNameForCourseGroup(
+            $courseGroup
+        ); //todo: check if name in group differs from course group. If so the user changed it, and we don't need to sync...
         $this->groupService->updateGroupName($reference->getOffice365GroupId(), $courseGroupName);
         $this->courseGroupOffice365ReferenceService->linkCourseGroupReference($reference);
 
-        if(!$this->groupService->isOwnerOfGroup($reference->getOffice365GroupId(), $user))
-        {
-            $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
-        }
+        $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
 
         $this->subscribeCourseGroupUsers($courseGroup, $reference->getOffice365GroupId());
 
         return $reference->getOffice365GroupId();
-
     }
 
     /**
@@ -178,16 +177,23 @@ class CourseGroupOffice365Connector
     {
         $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
 
-        if(!$reference->isLinked()) { //there is no course group
+        if (!$reference->isLinked())
+        { //there is no course group
             $office365GroupId = $this->createOrUpdateGroupFromCourseGroup($courseGroup, $user);
-        } else {
+        }
+        else
+        {
             $office365GroupId = $reference->getOffice365GroupId();
         }
 
-        if(!$reference->hasTeam()) {
-            if($this->teamService->getTeam($office365GroupId)) { //team already exists, just link it
+        if (!$reference->hasTeam())
+        {
+            if ($this->teamService->getTeam($office365GroupId))
+            { //team already exists, just link it
                 $this->courseGroupOffice365ReferenceService->linkTeam($reference);
-            } else {
+            }
+            else
+            {
                 $this->teamService->addTeamToGroup($office365GroupId);
             }
         }
@@ -228,11 +234,13 @@ class CourseGroupOffice365Connector
     public function unlinkTeamFromOffice365Group(CourseGroup $courseGroup)
     {
         $office365Reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
-        if(!$office365Reference) {
+        if (!$office365Reference)
+        {
             return;
         }
 
-        if(!$office365Reference->hasTeam()) {
+        if (!$office365Reference->hasTeam())
+        {
             return;
         }
 
@@ -297,11 +305,13 @@ class CourseGroupOffice365Connector
     {
         $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
 
-        if(empty($reference)) {
+        if (empty($reference))
+        {
             return;
         }
 
-        if(!$reference->isLinked()) {
+        if (!$reference->isLinked())
+        {
             return;
         }
 
@@ -331,10 +341,7 @@ class CourseGroupOffice365Connector
 
         $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
 
-        if(!$this->groupService->isOwnerOfGroup($reference->getOffice365GroupId(), $user))
-        {
-            $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
-        }
+        $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
 
         $baseUrl = $this->configurationConsulter->getSetting(
             ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'planner_base_uri']
@@ -359,6 +366,7 @@ class CourseGroupOffice365Connector
     /**
      * @param CourseGroup $courseGroup
      * @param User $user
+     *
      * @return string
      * @throws AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
@@ -373,10 +381,7 @@ class CourseGroupOffice365Connector
 
         $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
 
-        if(!$this->groupService->isOwnerOfGroup($reference->getOffice365GroupId(), $user))
-        {
-            $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
-        }
+        $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
 
         $group = $this->groupService->getGroup($reference->getOffice365GroupId());
 
@@ -404,24 +409,22 @@ class CourseGroupOffice365Connector
 
         $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
 
-        if(!$this->groupService->isOwnerOfGroup($reference->getOffice365GroupId(), $user))
-        {
-            $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
-        }
+        $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
 
         $groupUrl = $this->configurationConsulter->getSetting(
             ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri']
         );
 
-        try {
+        try
+        {
             $group = $this->groupService->getGroup($reference->getOffice365GroupId());
-        } catch (GroupNotExistsException $exception) {
+        }
+        catch (GroupNotExistsException $exception)
+        {
             throw new \RuntimeException('Office365 group not found');
         }
 
-
         return str_replace('{GROUP_ID}', $group->getMailNickname(), $groupUrl);
-
     }
 
     /**
@@ -486,7 +489,8 @@ class CourseGroupOffice365Connector
         $course = $this->courseService->getCourseById($courseGroup->get_course_code());
         if ($course instanceof Course)
         {
-            $courseGroupName = $courseGroupName . ' - ' . $course->get_title() . ' (' . $course->get_visual_code() . ')';
+            $courseGroupName =
+                $courseGroupName . ' - ' . $course->get_title() . ' (' . $course->get_visual_code() . ')';
         }
 
         return $courseGroupName;

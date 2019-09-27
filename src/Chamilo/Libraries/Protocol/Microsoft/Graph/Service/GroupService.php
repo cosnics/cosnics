@@ -126,6 +126,9 @@ class GroupService
         }
 
         $group = $this->getGroupRepository()->createGroup($groupName);
+
+        /** IMPORTANT: SUBSCRIBE USER AS MEMBER AND AS OWNER TO MAKE CORRECT FUNCTIONALITY */
+        $this->getGroupRepository()->subscribeMemberInGroup($group->getId(), $azureUserIdentifier);
         $this->getGroupRepository()->subscribeOwnerInGroup($group->getId(), $azureUserIdentifier);
 
         return $group->getId();
@@ -492,6 +495,13 @@ class GroupService
             {
                 $excludedUsersForRemovalIdentifiers[] = $azureUserIdentifier;
             }
+        }
+
+        // NEVER REMOVE OWNERS AS MEMBER WHILE SYNCHING
+        $owners = $this->getGroupRepository()->listGroupOwners($groupId);
+        foreach($owners as $owner)
+        {
+            $excludedUsersForRemovalIdentifiers[] = $owner->getId();
         }
 
         $office365GroupMemberIdentifiers = $this->getGroupMembers($groupId);
