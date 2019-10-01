@@ -46,7 +46,7 @@ class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer i
         $parameters = array();
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_USER_DETAILS;
         $parameters[Manager::PARAM_TAB] = Request::get(Manager::PARAM_TAB);
-        $parameters[Manager::PARAM_OBJECTS] = $groupreluser->get_user_id();
+        $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $groupreluser->get_user_id();
         $details_url = $this->get_component()->get_url($parameters);
         
         $toolbar->add_item(
