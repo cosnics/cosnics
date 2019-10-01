@@ -40,7 +40,8 @@
 		"kriswallsmith/assetic": "^1.4",
 		"ext-json": "*",
 		"endroid/qr-code": "^3.5",
-      "ext-dom": "*"
+		"aws/aws-sdk-php": "*",
+		"ext-dom": "*"
     },
 	"require-dev": {
 		"behat/behat": "*",
