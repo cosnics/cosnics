@@ -36,6 +36,20 @@ class PlatformgroupMenuRenderer extends GenericTree
      */
     private $browser;
 
+    /**
+     * Keeps track of the current active parent node to determine the FQN on a performant way
+     *
+     * @var Group
+     */
+    protected $currentActiveParentGroup;
+
+    /**
+     * Caching
+     *
+     * @var string
+     */
+    protected $currentActiveParentGroupFQN;
+
     // **************************************************************************
     // CONSTRUCTOR
     // **************************************************************************
@@ -99,7 +113,13 @@ class PlatformgroupMenuRenderer extends GenericTree
      */
     public function get_node($node_id)
     {
-        return \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $node_id);
+        /** @var Group $group */
+        $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $node_id);
+
+        $this->currentActiveParentGroup = $group;
+        $this->currentActiveParentGroupFQN = $group->get_fully_qualified_name();
+
+        return $group;
     }
 
     /**
@@ -194,7 +214,17 @@ class PlatformgroupMenuRenderer extends GenericTree
 
     public function get_node_safe_title($node)
     {
-        return strip_tags($node->get_fully_qualified_name());
+        $fqn = $this->currentActiveParentGroupFQN;
+
+        /** We are actually working with a child of the current parent group */
+        if($node->getId() != $this->currentActiveParentGroup->getId())
+        {
+            $fqn .= ' > ' . $node->get_name();
+        }
+
+        $fqn .= ' (' . $node->get_code() . ')';
+
+        return strip_tags($fqn);
     }
 
     public function get_node_id($node)
