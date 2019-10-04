@@ -44,7 +44,7 @@ class XmlGroupMenuFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
         echo '</tree>';
     }
 
-    public function dump_tree($groups, Group $parentGroup = null)
+    public function dump_tree($groups, $parentGroup = null)
     {
         $html = array();
         
@@ -54,7 +54,11 @@ class XmlGroupMenuFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
         }
     }
 
-    public function dump_groups_tree($groups, Group $parentGroup = null)
+    /**
+     * @param $groups
+     * @param Group $parentGroup
+     */
+    public function dump_groups_tree($groups, $parentGroup = null)
     {
         if($parentGroup instanceof Group)
         {
