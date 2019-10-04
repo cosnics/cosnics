@@ -116,8 +116,11 @@ class PlatformgroupMenuRenderer extends GenericTree
         /** @var Group $group */
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $node_id);
 
-        $this->currentActiveParentGroup = $group;
-        $this->currentActiveParentGroupFQN = $group->get_fully_qualified_name();
+        if($group instanceof Group)
+        {
+            $this->currentActiveParentGroup = $group;
+            $this->currentActiveParentGroupFQN = $group->get_fully_qualified_name();
+        }
 
         return $group;
     }
