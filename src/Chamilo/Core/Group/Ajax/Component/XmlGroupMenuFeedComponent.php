@@ -44,13 +44,13 @@ class XmlGroupMenuFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
         echo '</tree>';
     }
 
-    public function dump_tree($groups)
+    public function dump_tree($groups, Group $parentGroup = null)
     {
         $html = array();
         
         if ($this->contains_results($groups))
         {
-            $this->dump_groups_tree($groups);
+            $this->dump_groups_tree($groups, $parentGroup);
         }
     }
 
