@@ -3,9 +3,11 @@ namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTable;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Table\HtmlTable;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -49,5 +51,10 @@ class MoverComponent extends Manager implements DelegateComponent
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE),
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => Request::get(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE)));
+    }
+
+    public function get_additional_parameters()
+    {
+        return ObjectPublicationTable::getFilterParameterNames();
     }
 }

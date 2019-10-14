@@ -162,7 +162,9 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
         return $this->get_component()->get_publication_actions(
             $publication, 
             $column_model->is_display_order_column(), 
-            $column_model->get_default_order_direction() == SORT_ASC)->as_html();
+            $column_model->get_default_order_direction() == SORT_ASC,
+            $this->get_table()->getTableFilterParameters()
+        )->as_html();
     }
 
     /**
