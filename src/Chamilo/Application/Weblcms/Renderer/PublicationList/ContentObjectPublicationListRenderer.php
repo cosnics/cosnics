@@ -886,9 +886,8 @@ abstract class ContentObjectPublicationListRenderer
         // When the $ascending parameter is omitted, this code works just as before.
         //
         // TODO: refactor this code out of this method as much as possible.
-        ++ $this->row_counter;
-        $first_row = $this->row_counter == 1;
-        $last_row = $this->row_counter == $this->get_publication_count();
+        $first_row = $publication[ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX] == 1;
+        $last_row = $publication[ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX] == $this->get_publication_count();
 
         $true_up = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_UP;
         $true_down = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_DOWN;
