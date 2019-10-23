@@ -10,26 +10,26 @@ class PropertyMapper
 {
     /**
      *
-     * @param string[][] $records
-     * @param string $propertyName
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
+     * @param string $methodName
      *
-     * @return string[][]
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]
      */
-    public function mapRecordsByProperty($records, $propertyName)
+    public function groupDataClassByMethod($dataClasses, $methodName)
     {
-        $mappedRecords = array();
+        $mappedDataClasses = array();
 
-        foreach ($records as $record)
+        foreach ($dataClasses as $dataClass)
         {
-            $propertyValue = $record[$propertyName];
+            $groupValue = $dataClass->$methodName();
 
-            if (isset($propertyValue))
+            if ($groupValue)
             {
-                $mappedRecords[$propertyValue] = $record;
+                $mappedDataClasses[$groupValue][] = $dataClass;
             }
         }
 
-        return $mappedRecords;
+        return $mappedDataClasses;
     }
 
     /**
@@ -37,19 +37,22 @@ class PropertyMapper
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
      * @param string $propertyName
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]
      */
-    public function mapDataClassByProperty($dataClasses, $propertyName)
+    public function groupDataClassByProperty($dataClasses, $propertyName)
     {
         $mappedDataClasses = array();
 
         foreach ($dataClasses as $dataClass)
         {
-            $propertyValue = $dataClass->getDefaultProperty($propertyName);
-
-            if (isset($propertyValue))
+            if (in_array($propertyName, $dataClass->get_default_property_names()))
             {
-                $mappedDataClasses[$propertyValue] = $dataClass;
+                if (!array_key_exists($dataClass->getDefaultProperty($propertyName), $mappedDataClasses))
+                {
+                    $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)] = array();
+                }
+
+                $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)][] = $dataClass;
             }
         }
 
@@ -86,27 +89,72 @@ class PropertyMapper
     /**
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
-     * @param string $propertyName
+     * @param string $methodName
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
-    public function groupDataClassByProperty($dataClasses, $propertyName)
+    public function mapDataClassByMethod($dataClasses, $methodName)
     {
         $mappedDataClasses = array();
 
         foreach ($dataClasses as $dataClass)
         {
-            if (in_array($propertyName, $dataClass->get_default_property_names()))
-            {
-                if (!array_key_exists($dataClass->getDefaultProperty($propertyName), $mappedDataClasses))
-                {
-                    $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)] = array();
-                }
+            $mapValue = $dataClass->$methodName();
 
-                $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)][] = $dataClass;
+            if ($mapValue)
+            {
+                $mappedDataClasses[$mapValue] = $dataClass;
             }
         }
 
         return $mappedDataClasses;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
+     * @param string $propertyName
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    public function mapDataClassByProperty($dataClasses, $propertyName)
+    {
+        $mappedDataClasses = array();
+
+        foreach ($dataClasses as $dataClass)
+        {
+            $propertyValue = $dataClass->getDefaultProperty($propertyName);
+
+            if (isset($propertyValue))
+            {
+                $mappedDataClasses[$propertyValue] = $dataClass;
+            }
+        }
+
+        return $mappedDataClasses;
+    }
+
+    /**
+     *
+     * @param string[][] $records
+     * @param string $propertyName
+     *
+     * @return string[][]
+     */
+    public function mapRecordsByProperty($records, $propertyName)
+    {
+        $mappedRecords = array();
+
+        foreach ($records as $record)
+        {
+            $propertyValue = $record[$propertyName];
+
+            if (isset($propertyValue))
+            {
+                $mappedRecords[$propertyValue] = $record;
+            }
+        }
+
+        return $mappedRecords;
     }
 }

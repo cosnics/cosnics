@@ -172,9 +172,17 @@ class DisplayOrderRepository
             );
         }
 
+        if (count($conditions))
+        {
+            $condition = new AndCondition($conditions);
+        }
+        else
+        {
+            $condition = null;
+        }
+
         return $this->getDataClassRepository()->count(
-            $this->determinePropertyDataClassName($dataClass),
-            new DataClassCountParameters(new AndCondition($conditions))
+            $this->determinePropertyDataClassName($dataClass), new DataClassCountParameters($condition)
         );
     }
 
