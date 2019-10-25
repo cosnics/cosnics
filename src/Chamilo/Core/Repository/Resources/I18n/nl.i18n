@@ -530,4 +530,4 @@ Downloads = "Downloads"
 FileDownloadHost = "Hostname om bestanden te downloaden"
 CopierComponent = "Object(en) kopiëren"
 CopyContentObject = "Object(en) kopiëren"
-
+ObjectsCopied = "De geselecteerde objecten werden successvol gekopieerd naar jouw repository."

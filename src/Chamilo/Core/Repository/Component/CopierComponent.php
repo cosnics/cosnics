@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Form\Type\CopyFormType;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -61,10 +62,15 @@ class CopierComponent extends Manager
             $this->copyContentObject($selectedObjects, $categoryId);
 
             $parameters = array(
-                self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS, 'parent_id' => $categoryId
+                self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
             );
 
-            $this->simple_redirect($parameters);
+            if($this->getWorkspace() instanceof PersonalWorkspace)
+            {
+                $parameters['parent_id'] = $categoryId;
+            }
+
+            $this->redirect($this->getTranslator()->trans('ObjectsCopied', [], Manager::context()), false, $parameters);
 
             return null;
         }
@@ -87,6 +93,8 @@ class CopierComponent extends Manager
         $target_user_id = $this->get_user_id();
         $messages = array();
 
+        $userPersonalWorkspace = new PersonalWorkspace($this->getUser());
+
         foreach ($selectedContentObjects as $content_object)
         {
             if (RightsService::getInstance()->canCopyContentObject(
@@ -102,7 +110,7 @@ class CopierComponent extends Manager
                     array($content_object->get_id()),
                     $this->getWorkspace(),
                     $source_user_id,
-                    $this->getWorkspace(),
+                    $userPersonalWorkspace,
                     $target_user_id,
                     $categoryId,
                     false
@@ -114,7 +122,7 @@ class CopierComponent extends Manager
             }
         }
 
-        Session::register(self::PARAM_MESSAGES, $messages);
+//        Session::register(self::PARAM_MESSAGES, $messages);
     }
 
     public function get_additional_parameters($additionalParameters = array())
