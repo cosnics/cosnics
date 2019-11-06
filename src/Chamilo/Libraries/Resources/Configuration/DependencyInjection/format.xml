@@ -20,6 +20,13 @@
         </service>
 
         <service
+                id="Chamilo\Libraries\Format\Utilities\ResourceManager">
+            <argument
+                    type="service"
+                    id="chamilo.libraries.file.path_builder"/>
+        </service>
+
+        <service
                 alias="chamilo.libraries.format.theme"
                 id="Chamilo\Libraries\Format\Theme"/>
 

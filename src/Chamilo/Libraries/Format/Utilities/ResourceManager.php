@@ -1,13 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Format\Utilities;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 
 /**
  * Manages resources, ensuring that they are only loaded when necessary.
  * Currently only relevant for JavaScript and CSS files.
  *
  * @author Tim De Pauw
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @package Chamilo\Libraries\Format\Utilities
  */
 class ResourceManager
@@ -25,29 +26,18 @@ class ResourceManager
      */
     private $resources;
 
-    private function __construct()
+    /**
+     * @var \Chamilo\Libraries\File\PathBuilder
+     */
+    private $pathBuilder;
+
+    /**
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
+     */
+    public function __construct(PathBuilder $pathBuilder)
     {
+        $this->pathBuilder = $pathBuilder;
         $this->resources = array();
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function get_resources()
-    {
-        return $this->resources;
-    }
-
-    /**
-     *
-     * @param string $path
-     * @return boolean
-     */
-    public function resource_loaded($path)
-    {
-        // return false;
-        return in_array($path, $this->resources);
     }
 
     /**
@@ -63,33 +53,87 @@ class ResourceManager
 
     /**
      *
-     * @param string $path
-     * @return string
+     * @return \Chamilo\Libraries\Format\Utilities\ResourceManager
      */
-    public function get_resource_html($path)
+    public static function getInstance()
     {
-        if ($this->resource_loaded($path))
+        if (!isset(self::$instance))
         {
-            return '';
+            self::$instance = new ResourceManager(PathBuilder::getInstance());
         }
-        else
-        {
-            $this->resources[] = $path;
-            return $this->_get_resource_html($path);
-        }
+
+        return self::$instance;
     }
 
     /**
      *
      * @param string $path
+     *
      * @return string
      */
-    private function _get_resource_html($path)
+    public function getResourceHtml($path)
     {
-        $pathUtil = Path::getInstance();
+        if ($this->hasResourceAlreadyBeenLoaded($path))
+        {
+            return '';
+        }
 
-        $webPath = $pathUtil->getBasePath(true);
-        $basePath = $pathUtil->getBasePath() . '../web/';
+        $this->resources[] = $path;
+
+        return $this->renderResourceHtml($path);
+    }
+
+    /**
+     * @param $path
+     *
+     * @return string
+     * @deprecated Use getResourcesHtml() now
+     */
+    public function get_resource_html($path)
+    {
+        return $this->getResourceHtml($path);
+    }
+
+    /**
+     *
+     * @return string[]
+     * @deprecated Use getResources() now
+     */
+    public function get_resources()
+    {
+        return $this->getResources();
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getResources()
+    {
+        return $this->resources;
+    }
+
+    /**
+     *
+     * @param string $path
+     *
+     * @return boolean
+     */
+    public function hasResourceAlreadyBeenLoaded($path)
+    {
+        return in_array($path, $this->resources);
+    }
+
+    /**
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    private function renderResourceHtml($path)
+    {
+        $webPath = $this->pathBuilder->getBasePath(true);
+        $basePath = $this->pathBuilder->getBasePath() . '../web/';
 
         $systemPath = str_replace($webPath, $basePath, $path);
         $modificationTime = filemtime($systemPath);
@@ -101,10 +145,10 @@ class ResourceManager
         {
             case 'css' :
                 return '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($path) . '?' .
-                     $modificationTime . '"/>';
+                    $modificationTime . '"/>';
             case 'js' :
                 return '<script type="text/javascript" src="' . htmlspecialchars($path) . '?' . $modificationTime .
-                     '"></script>';
+                    '"></script>';
             default :
                 die('Unknown resource type: ' . $path);
         }
@@ -112,14 +156,13 @@ class ResourceManager
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Utilities\ResourceManager
+     * @param string $path
+     *
+     * @return boolean
+     * @deprecated Use hasResourceAlreadyBeenLoaded() now
      */
-    public static function getInstance()
+    public function resource_loaded($path)
     {
-        if (! isset(self::$instance))
-        {
-            self::$instance = new ResourceManager();
-        }
-        return self::$instance;
+        return $this->hasResourceAlreadyBeenLoaded($path);
     }
 }

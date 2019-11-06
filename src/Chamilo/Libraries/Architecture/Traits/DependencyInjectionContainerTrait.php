@@ -6,6 +6,7 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterfa
 
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Chamilo\Libraries\Architecture\Bridge\BridgeManager;
 
@@ -49,7 +50,7 @@ trait DependencyInjectionContainerTrait
     public function getBridgeManager()
     {
         return $this->getService(BridgeManager::class);
-}
+    }
 
     /**
      *
@@ -172,6 +173,15 @@ trait DependencyInjectionContainerTrait
     public function getPathBuilder()
     {
         return $this->getService('chamilo.libraries.file.path_builder');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Utilities\ResourceManager
+     */
+    public function getResourceManager()
+    {
+        return $this->getService(ResourceManager::class);
     }
 
     /**
