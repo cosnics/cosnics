@@ -123,6 +123,16 @@
                 </div>
             </div>
 
+            <div class="form-row row">
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                    Kopieer naar deze categorie
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                    <select name="selected_copy_category" class="form-control" ng-model="main.selectedCopyCategory" ng-options="category.name for category in main.userCategories track by category.id">
+                    </select>
+                </div>
+            </div>
+
             <h4 class="form-category">Stap 4: Kopieer</h4>
 
             <div class="form-row row">

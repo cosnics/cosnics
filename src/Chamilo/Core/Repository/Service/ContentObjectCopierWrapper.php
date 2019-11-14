@@ -23,7 +23,7 @@ class ContentObjectCopierWrapper
         $contentObjectCopier = new ContentObjectCopier(
             $user, array($contentObject->getId()), new PersonalWorkspace($contentObject->get_owner()),
             $contentObject->get_owner_id(), new PersonalWorkspace($user), $user->getId(),
-            $categoryId
+            $categoryId, false
         );
 
         return $contentObjectCopier->run();
