@@ -16,12 +16,64 @@
 
 
 {{ form_start(FORM) }}
-{{ form_row(FORM.category) }}
+
+<div class="form-group">
+    {{ form_label(FORM.category) }}
+    <div class="col-sm-10" style="display: flex;">
+        <div style="flex-grow: 2;">
+            {{ form_widget(FORM.category) }}
+        </div>
+        <div style="margin-left: 15px;" id="add_category" >
+            <button type="button" class="btn btn-default"><span class="fa fa-plus"></span> {{ 'AddNewCategory'|trans({}, appContext) }}</button>
+        </div>
+    </div>
+</div>
+
+<div id="new_category">
+    <div class="form-group">
+        {{ form_label(FORM.new_category) }}
+        <div class="col-sm-10" style="display: flex;">
+            <div style="flex-grow: 2;">
+                {{ form_widget(FORM.new_category) }}
+            </div>
+            <div style="margin-left: 15px;" id="cancel_category" >
+                <button type="button" class="btn btn-default"><span class="fa fa-remove"></span> {{ 'Cancel'|trans({}, 'Chamilo\\Libraries') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-10 col-md-push-2">
         <button type="submit" class="btn btn-primary">{{ 'CopyContentObject'|trans({}, appContext) }}</button>
     </div>
 </div>
 {{ form_end(FORM) }}
+
+<script type="text/javascript">
+    $(function() {
+        function showNewCategory(e, ui) {
+            e.preventDefault();
+            $("div#new_category").show();
+            $("div#add_category").hide();
+        }
+
+        function cancelNewCategory(e, ui) {
+            e.preventDefault();
+            $("div#new_category").hide();
+            $("div#add_category").show();
+            $("input#copy_form_new_category").val('');
+        }
+
+        $(document)
+            .ready(
+                function() {
+                    $("div#new_category").hide();
+                    $("div#add_category").show();
+                    $("div#add_category").on('click', showNewCategory);
+                    $("div#cancel_category").on('click', cancelNewCategory);
+                });
+    })();
+</script>
 
 {{ FOOTER|raw }}

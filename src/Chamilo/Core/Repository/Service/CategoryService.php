@@ -114,4 +114,30 @@ class CategoryService
 
         return $sortedCategories;
     }
+
+    /**
+     * @param string $name
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
+     * @param int $parentId
+     *
+     * @return RepositoryCategory
+     */
+    public function createCategoryInWorkspace(
+        $name, \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace, $parentId = 0
+    )
+    {
+        $category = new RepositoryCategory();
+        $category->set_type($workspace->getWorkspaceType());
+        $category->set_type_id($workspace->getId());
+        $category->set_name($name);
+        $category->set_parent($parentId);
+        $category->set_display_order($this->categoryRepository->getNextDisplayOrderForCategory($category));
+
+        if(!$this->categoryRepository->createCategory($category))
+        {
+            throw new \RuntimeException('Could not create the category in the database');
+        }
+
+        return $category;
+    }
 }

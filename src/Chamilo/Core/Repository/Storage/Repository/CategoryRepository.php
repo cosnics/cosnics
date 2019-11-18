@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\Storage\Repository;
 
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -54,5 +55,48 @@ class CategoryRepository
         return $this->dataClassRepository->retrieves(
             RepositoryCategory::class, new DataClassRetrievesParameters($condition)
         );
+    }
+
+    /**
+     * @param RepositoryCategory $repositoryCategory
+     *
+     * @return int
+     */
+    public function getNextDisplayOrderForCategory(RepositoryCategory $repositoryCategory)
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
+            new StaticConditionVariable($repositoryCategory->get_parent())
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
+            new StaticConditionVariable($repositoryCategory->get_type_id())
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE),
+            new StaticConditionVariable($repositoryCategory->get_type())
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->retrieveNextValue(
+            RepositoryCategory::class_name(),
+            RepositoryCategory::PROPERTY_DISPLAY_ORDER,
+            $condition
+        );
+    }
+
+    /**
+     * @param RepositoryCategory $category
+     *
+     * @return bool
+     */
+    public function createCategory(RepositoryCategory $category)
+    {
+        return $this->dataClassRepository->create($category);
     }
 }
