@@ -30,6 +30,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
     const PARAM_SELECTED_LEARNING_PATH_NODES = 'learning_path_selected_nodes';
     const PARAM_COPY_INSTEAD_OF_REUSE = 'copy_instead_of_reuse';
     const PARAM_SELECTED_COPY_CATEGORY = 'selected_copy_category';
+    const PARAM_NEW_COPY_CATEGORY = 'new_copy_category';
 
     /**
      * Builds this component and returns it's response
@@ -54,6 +55,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
 
         $copyInsteadOfReuse = (bool) $this->getRequest()->getFromPost(self::PARAM_COPY_INSTEAD_OF_REUSE);
         $selectedCopyCategory = $this->getRequest()->getFromPost(self::PARAM_SELECTED_COPY_CATEGORY);
+        $newCopyCategoryName = $this->getRequest()->getFromPost(self::PARAM_NEW_COPY_CATEGORY);
 
         $translator = Translation::getInstance();
 
@@ -100,7 +102,8 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
                     $this->getUser(),
                     $selectedLearningPathNodes,
                     (bool) $copyInsteadOfReuse,
-                    $selectedCopyCategory
+                    $selectedCopyCategory,
+                    $newCopyCategoryName
                 );
 
                 $message = 'LearningPathNodesCopied';
@@ -195,6 +198,6 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
      */
     protected function getTreeNodeCopier()
     {
-        return $this->getService('chamilo.core.repository.content_object.learning_path.service.tree_node_copier');
+        return $this->getService(TreeNodeCopier::class);
     }
 }

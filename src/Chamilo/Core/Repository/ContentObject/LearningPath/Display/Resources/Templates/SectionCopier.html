@@ -127,9 +127,30 @@
                 <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
                     Kopieer naar deze categorie
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
-                    <select name="selected_copy_category" class="form-control" ng-model="main.selectedCopyCategory" ng-options="category.name for category in main.userCategories track by category.id">
-                    </select>
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw" style="display: flex;">
+                    <div style="flex-grow: 2;">
+                        <select name="selected_copy_category" class="form-control" ng-model="main.selectedCopyCategory" ng-options="category.name for category in main.userCategories track by category.id">
+                        </select>
+                    </div>
+                    <div style="margin-left: 15px;" id="add_category" >
+                        <button type="button" class="btn btn-default"><span class="fa fa-plus"></span> of hierin een nieuwe categorie:</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="new_category">
+                <div class="form-row row">
+                    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                        Nieuwe categorie naam
+                    </div>
+                    <div class="col-sm-10" style="display: flex;">
+                        <div style="flex-grow: 2;">
+                            <input id="new_copy_category" type="text" class="form-control" name="new_copy_category"/>
+                        </div>
+                        <div style="margin-left: 15px;" id="cancel_category" >
+                            <button type="button" class="btn btn-default"><span class="fa fa-remove"></span> Annuleer</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -154,5 +175,27 @@
         var learningPathSectionCopierApp = angular.module('learningPathSectionCopierApp');
 
         angular.bootstrap($(".learning-path-section-copier"), ['learningPathSectionCopierApp']);
+
+        function showNewCategory(e, ui) {
+            e.preventDefault();
+            $("div#new_category").show();
+            $("div#add_category").hide();
+        }
+
+        function cancelNewCategory(e, ui) {
+            e.preventDefault();
+            $("div#new_category").hide();
+            $("div#add_category").show();
+            $("input#new_copy_category").val('');
+        }
+
+        $(document)
+            .ready(
+                function() {
+                    $("div#new_category").hide();
+                    $("div#add_category").show();
+                    $("div#add_category").on('click', showNewCategory);
+                    $("div#cancel_category").on('click', cancelNewCategory);
+                });
     })();
 </script>

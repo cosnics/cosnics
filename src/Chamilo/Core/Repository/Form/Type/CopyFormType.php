@@ -63,7 +63,7 @@ class CopyFormType extends AbstractType
 
         $builder->add(self::ELEMENT_NEW_CATEGORY, TextType::class,
             [
-                'label' => $this->translator->trans('NewCategory', [], self::TRANSLATION_CONTEXT),
+                'label' => $this->translator->trans('NewCategory', [], self::TRANSLATION_CONTEXT), 'required' => false
             ]
         );
     }
