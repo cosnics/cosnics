@@ -99,4 +99,14 @@ class CategoryRepository
     {
         return $this->dataClassRepository->create($category);
     }
+
+    /**
+     * @param int $categoryId
+     *
+     * @return RepositoryCategory|DataClass
+     */
+    public function findCategoryById(int $categoryId)
+    {
+        return $this->dataClassRepository->retrieveById(RepositoryCategory::class, $categoryId);
+    }
 }
