@@ -35,7 +35,13 @@ class CategoryService
      */
     public function getCategoryById(int $categoryId)
     {
-        return $this->categoryRepository->findCategoryById($categoryId);
+        $category = $this->categoryRepository->findCategoryById($categoryId);
+        if($category === false)
+        {
+            return null;
+        }
+
+        return $category;
     }
 
     /**
@@ -86,16 +92,16 @@ class CategoryService
      * @return string
      */
     public function getCategoryPathForCategory(
-        User $user, RepositoryCategory $category, WorkspaceInterface $workspace, string $urlTemplate = null
+        User $user, WorkspaceInterface $workspace, RepositoryCategory $category = null, string $urlTemplate = null
     )
     {
         $categories = $this->getAllCategoriesForUser($user);
         $categoriesByID = $this->sortCategoriesById($categories);
 
-        $parentCategory = $categoriesByID[$category->get_parent()];
+        $parentCategory = $category instanceof RepositoryCategory ? $categoriesByID[$category->get_parent()] : null;
         if ($parentCategory instanceof RepositoryCategory)
         {
-            $prefix = $this->getCategoryPathForCategory($user, $parentCategory, $workspace, $urlTemplate);
+            $prefix = $this->getCategoryPathForCategory($user, $workspace, $parentCategory, $urlTemplate);
         }
         else
         {
@@ -110,19 +116,22 @@ class CategoryService
             }
         }
 
-        if (!empty($prefix))
+        if($category instanceof RepositoryCategory)
         {
-            $prefix .= ' > ';
-        }
+            if (!empty($prefix))
+            {
+                $prefix .= ' > ';
+            }
 
-        if (!empty($urlTemplate))
-        {
-            $name = '<a href="' . str_replace('__category_id__', $category->getId(), $urlTemplate) . '">' .
-                $category->get_name() . '</a>';
-        }
-        else
-        {
-            $name = $category->get_name();
+            if (!empty($urlTemplate))
+            {
+                $name = '<a href="' . str_replace('__category_id__', $category->getId(), $urlTemplate) . '">' .
+                    $category->get_name() . '</a>';
+            }
+            else
+            {
+                $name = $category->get_name();
+            }
         }
 
         return $prefix . $name;

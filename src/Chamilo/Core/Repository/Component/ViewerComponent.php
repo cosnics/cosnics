@@ -742,7 +742,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         $category = $this->getCategoryService()->getCategoryById($this->object->get_parent_id());
 
         $html[] = $this->getCategoryService()->getCategoryPathForCategory(
-            $this->getUser(), $category, $this->getWorkspace(),
+            $this->getUser(), $this->getWorkspace(), $category,
             $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS,
