@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="tracking_weblcms_assignment_entry">
+<object name="assignment_entry">
     <properties>
         <property
             name="id"

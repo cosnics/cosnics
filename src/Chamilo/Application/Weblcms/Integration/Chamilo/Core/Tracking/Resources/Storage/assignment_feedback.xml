@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="tracking_weblcms_assignment_feedback">
+<object name="assignment_feedback">
     <properties>
         <property
             name="id"
@@ -30,6 +30,11 @@
         <property
             name="comment"
             type="text" />
+        <property
+            name="feedback_content_object_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
     </properties>
     <index name="id">
         <indexproperty name="id" />
