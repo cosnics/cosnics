@@ -1,6 +1,7 @@
 /web/*
 /files/*
 /vendor/*
+/node_modules/*
 /bin/*
 /src/*
 /.idea/
