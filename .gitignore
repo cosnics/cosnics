@@ -6,6 +6,9 @@
 /src/*
 /.idea/
 
+package-lock.json
+vue-cli-service
+
 !/src/Chamilo
 !/web/index.php
 /composer.lock
