@@ -274,9 +274,17 @@ abstract class ComplexContentObjectPath
                 
                 if ($content_object instanceof HelperContentObjectSupport)
                 {
-                    $content_object = DataManager::retrieve_by_id(
-                        ContentObject::class_name(), 
-                        $content_object->get_reference());
+                    try
+                    {
+                        $content_object = DataManager::retrieve_by_id(
+                            ContentObject::class_name(),
+                            $content_object->get_reference()
+                        );
+                    }
+                    catch(\Exception $ex)
+                    {
+                        continue;
+                    }
                 }
                 
                 if ($content_object instanceof ComplexContentObjectSupport)

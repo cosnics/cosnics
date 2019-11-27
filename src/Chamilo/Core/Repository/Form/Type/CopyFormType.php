@@ -3,10 +3,10 @@
 namespace Chamilo\Core\Repository\Form\Type;
 
 use Chamilo\Core\Repository\Service\CategoryService;
-use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,6 +21,7 @@ class CopyFormType extends AbstractType
     const TRANSLATION_CONTEXT = 'Chamilo\Core\Repository';
 
     const ELEMENT_CATEGORY = 'category';
+    const ELEMENT_NEW_CATEGORY = 'new_category';
     const OPTION_USER = 'user';
 
     /**
@@ -57,6 +58,12 @@ class CopyFormType extends AbstractType
             [
                 'label' => $this->translator->trans('Category', [], self::TRANSLATION_CONTEXT),
                 'choices' => $categories
+            ]
+        );
+
+        $builder->add(self::ELEMENT_NEW_CATEGORY, TextType::class,
+            [
+                'label' => $this->translator->trans('NewCategory', [], self::TRANSLATION_CONTEXT), 'required' => false
             ]
         );
     }

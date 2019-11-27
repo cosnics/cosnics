@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
@@ -28,6 +29,8 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
     const PARAM_SELECTED_WORKSPACE = 'selected_workspace';
     const PARAM_SELECTED_LEARNING_PATH_NODES = 'learning_path_selected_nodes';
     const PARAM_COPY_INSTEAD_OF_REUSE = 'copy_instead_of_reuse';
+    const PARAM_SELECTED_COPY_CATEGORY = 'selected_copy_category';
+    const PARAM_NEW_COPY_CATEGORY = 'new_copy_category';
 
     /**
      * Builds this component and returns it's response
@@ -38,7 +41,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
      */
     function build()
     {
-        if (! $this->canEditCurrentTreeNode())
+        if (!$this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
         }
@@ -47,39 +50,46 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
         $selectedWorkspace = $this->getRequest()->getFromPost(self::PARAM_SELECTED_WORKSPACE);
 
         $selectedLearningPathNodes = json_decode(
-            $this->getRequest()->getFromPost(self::PARAM_SELECTED_LEARNING_PATH_NODES));
+            $this->getRequest()->getFromPost(self::PARAM_SELECTED_LEARNING_PATH_NODES)
+        );
 
         $copyInsteadOfReuse = (bool) $this->getRequest()->getFromPost(self::PARAM_COPY_INSTEAD_OF_REUSE);
+        $selectedCopyCategory = $this->getRequest()->getFromPost(self::PARAM_SELECTED_COPY_CATEGORY);
+        $newCopyCategoryName = $this->getRequest()->getFromPost(self::PARAM_NEW_COPY_CATEGORY);
 
         $translator = Translation::getInstance();
 
-        if (! empty($selectedContentObject) && ! empty($selectedLearningPathNodes))
+        if (!empty($selectedContentObject) && !empty($selectedLearningPathNodes))
         {
             try
             {
                 $contentObject = $this->getContentObjectRepository()->findById($selectedContentObject);
-                if (! $contentObject instanceof LearningPath)
+                if (!$contentObject instanceof LearningPath)
                 {
                     throw new ObjectNotExistException(
                         $translator->getTranslation('LearningPath'),
-                        $selectedContentObject);
+                        $selectedContentObject
+                    );
                 }
 
                 $workspaceService = new WorkspaceService(new WorkspaceRepository());
                 $workspace = $workspaceService->determineWorkspaceForUserByIdentifier(
                     $this->getUser(),
-                    (int) $selectedWorkspace);
+                    (int) $selectedWorkspace
+                );
 
-                if (! $workspace instanceof WorkspaceInterface)
+                if (!$workspace instanceof WorkspaceInterface)
                 {
                     throw new ObjectNotExistException(
                         $translator->getTranslation('Workspace', null, 'Chamilo\Core\Repository'),
-                        $selectedContentObject);
+                        $selectedContentObject
+                    );
                 }
 
                 $canUse = $this->getRightsService()->canUseContentObject($this->getUser(), $contentObject, $workspace);
-                $canCopy = $this->getRightsService()->canCopyContentObject($this->getUser(), $contentObject, $workspace);
-                if (! $canUse && ! $canCopy)
+                $canCopy =
+                    $this->getRightsService()->canCopyContentObject($this->getUser(), $contentObject, $workspace);
+                if (!$canUse && !$canCopy)
                 {
                     throw new NotAllowedException();
                 }
@@ -91,7 +101,10 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
                     $contentObject,
                     $this->getUser(),
                     $selectedLearningPathNodes,
-                    (bool) $copyInsteadOfReuse);
+                    (bool) $copyInsteadOfReuse,
+                    $selectedCopyCategory,
+                    $newCopyCategoryName
+                );
 
                 $message = 'LearningPathNodesCopied';
                 $success = true;
@@ -105,8 +118,9 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
 
             $this->redirect(
                 Translation::getInstance()->getTranslation($message),
-                ! $success,
-                array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT));
+                !$success,
+                array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT)
+            );
         }
 
         return $this->renderCopyForm();
@@ -121,7 +135,8 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
     {
         $breadcrumbTrail = BreadcrumbTrail::getInstance();
         $breadcrumbTrail->add(
-            new Breadcrumb($this->get_url(), Translation::getInstance()->getTranslation('SectionCopierComponent')));
+            new Breadcrumb($this->get_url(), Translation::getInstance()->getTranslation('SectionCopierComponent'))
+        );
 
         $html = array();
 
@@ -132,16 +147,19 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
             'Repository/service/RepositoryService.js',
             'LearningPathSectionCopier/app.js',
             'LearningPathSectionCopier/service/LearningPathService.js',
-            'LearningPathSectionCopier/controller/MainController.js');
+            'LearningPathSectionCopier/controller/MainController.js'
+        );
 
         foreach ($javascriptFiles as $javascriptFile)
         {
             $html[] = ResourceManager::getInstance()->get_resource_html(
-                $this->getPathBuilder()->getResourcesPath(Manager::context(), true) . 'Javascript/' . $javascriptFile);
+                $this->getPathBuilder()->getResourcesPath(Manager::context(), true) . 'Javascript/' . $javascriptFile
+            );
         }
 
         $sectionCopierHtml = file_get_contents(
-            $this->getPathBuilder()->getResourcesPath(Manager::context()) . 'Templates/SectionCopier.html');
+            $this->getPathBuilder()->getResourcesPath(Manager::context()) . 'Templates/SectionCopier.html'
+        );
 
         $parameters = array('FORM_URL' => $this->get_url());
 
@@ -180,6 +198,6 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
      */
     protected function getTreeNodeCopier()
     {
-        return $this->getService('chamilo.core.repository.content_object.learning_path.service.tree_node_copier');
+        return $this->getService(TreeNodeCopier::class);
     }
 }

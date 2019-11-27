@@ -2421,7 +2421,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
                             if ($course_group)
                             {
-                                $user_ids = array_merge($user_ids, $course_group->get_members(true, true, false));
+                                $courseGroupMemberIds = $course_group->get_members(true, true, false);
+                                if(is_array($courseGroupMemberIds))
+                                {
+                                    $user_ids = array_merge($user_ids, $courseGroupMemberIds);
+                                }
                             }
                         }
                         break;

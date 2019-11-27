@@ -5,7 +5,9 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Service\CategoryService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\ContentObject\Version\VersionTable;
@@ -178,6 +180,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $this->getTranslator()->trans('ObjectNotActiveWarning', [], Manager::context()) . '</div>';
             }
 
+            $html[] = $this->renderCategoryPath();
             $html[] = $display->render();
             $html[] = $this->tabs->render();
             $html[] = $this->render_footer();
@@ -725,6 +728,41 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER),
             new StaticConditionVariable($this->object->get_object_number())
         );
+    }
+
+    /**
+     * @return string
+     */
+    protected function renderCategoryPath()
+    {
+        $html = [];
+        $html[] =
+            '<div style="border: 1px solid #dddddd; background-color: #f5f5f5; padding: 17px 10px; margin-bottom: 15px;">';
+
+        $category = $this->getCategoryService()->getCategoryById($this->object->get_parent_id());
+
+        $html[] = $this->getCategoryService()->getCategoryPathForCategory(
+            $this->getUser(), $this->getWorkspace(), $category,
+            $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS,
+                    FilterData::FILTER_CATEGORY => '__category_id__'
+                ],
+                [self::PARAM_CONTENT_OBJECT_ID]
+            )
+        );
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->getService(CategoryService::class);
     }
 
     /**

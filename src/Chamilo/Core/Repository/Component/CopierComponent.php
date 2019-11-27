@@ -5,8 +5,10 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Core\Repository\Common\Action\ContentObjectCopier;
 use Chamilo\Core\Repository\Form\Type\CopyFormType;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Service\CategoryService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -20,6 +22,10 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class CopierComponent extends Manager
 {
+    /**
+     * @var int
+     */
+    protected $selectedCategoryId;
 
     /**
      * Runs this component and displays its output.
@@ -56,15 +62,21 @@ class CopierComponent extends Manager
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $categoryId = $form->getData()[CopyFormType::ELEMENT_CATEGORY];
+            $this->selectedCategoryId = $categoryId = $form->getData()[CopyFormType::ELEMENT_CATEGORY];
+            $newCategoryName = $form->getData()[CopyFormType::ELEMENT_NEW_CATEGORY];
 
-            $this->copyContentObject($selectedObjects, $categoryId);
+            $this->copyContentObject($selectedObjects, $categoryId, $newCategoryName);
 
             $parameters = array(
-                self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS, 'parent_id' => $categoryId
+                self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
             );
 
-            $this->simple_redirect($parameters);
+            if ($this->getWorkspace() instanceof PersonalWorkspace)
+            {
+                $parameters['parent_id'] = $this->selectedCategoryId;
+            }
+
+            $this->redirect($this->getTranslator()->trans('ObjectsCopied', [], Manager::context()), false, $parameters);
 
             return null;
         }
@@ -81,11 +93,23 @@ class CopierComponent extends Manager
     /**
      * @param ContentObject[] $selectedContentObjects
      * @param int $categoryId
+     * @param string|null $newCategoryName
      */
-    protected function copyContentObject($selectedContentObjects, int $categoryId = 0)
+    protected function copyContentObject($selectedContentObjects, int $categoryId = 0, string $newCategoryName = null)
     {
         $target_user_id = $this->get_user_id();
         $messages = array();
+
+        $userPersonalWorkspace = new PersonalWorkspace($this->getUser());
+
+        if (!empty($newCategoryName))
+        {
+            $category = $this->getCategoryService()->createCategoryInWorkspace(
+                $newCategoryName, $userPersonalWorkspace, $categoryId
+            );
+
+            $this->selectedCategoryId = $categoryId = $category->getId();
+        }
 
         foreach ($selectedContentObjects as $content_object)
         {
@@ -102,7 +126,7 @@ class CopierComponent extends Manager
                     array($content_object->get_id()),
                     $this->getWorkspace(),
                     $source_user_id,
-                    $this->getWorkspace(),
+                    $userPersonalWorkspace,
                     $target_user_id,
                     $categoryId,
                     false
@@ -113,8 +137,7 @@ class CopierComponent extends Manager
                 $messages += $copier->get_messages_for_url();
             }
         }
-
-        Session::register(self::PARAM_MESSAGES, $messages);
+//        Session::register(self::PARAM_MESSAGES, $messages);
     }
 
     public function get_additional_parameters($additionalParameters = array())
@@ -152,5 +175,13 @@ class CopierComponent extends Manager
         $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->getService(CategoryService::class);
     }
 }

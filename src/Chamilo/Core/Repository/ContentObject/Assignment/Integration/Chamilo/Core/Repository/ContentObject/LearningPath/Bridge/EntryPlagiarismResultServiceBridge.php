@@ -155,6 +155,6 @@ class EntryPlagiarismResultServiceBridge implements
      */
     public function isPlagiarismEnabled()
     {
-        return true;
+        return $this->assignmentEntryPlagiarismResultServiceBridge->isPlagiarismEnabled();
     }
 }

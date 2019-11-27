@@ -1,64 +1,22 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Bridge\Assignment;
 
-use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface;
-use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\AssignmentConfiguration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\Parameters\FilterParameters;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
- * Interface EntryPlagiarismResultServiceBridge
+ * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge
  *
- * @package Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Interfaces
+ * @author Sven Vanpoucke - Hogeschool Gent
  */
 class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultServiceBridgeInterface
 {
-    /**
-     * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService
-     */
-    protected $assignmentEntryPlagiarismResultService;
-
-    /**
-     * @var \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
-     */
-    protected $contentObjectPublication;
-
-    /**
-     * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager
-     */
-    protected $entityServiceManager;
-
-    /**
-     * EntryPlagiarismResultServiceBridge constructor.
-     *
-     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService $assignmentEntryPlagiarismResultService
-     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Entity\EntityServiceManager $entityServiceManager
-     */
-    public function __construct(
-        \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService $assignmentEntryPlagiarismResultService,
-        EntityServiceManager $entityServiceManager
-    )
-    {
-        $this->assignmentEntryPlagiarismResultService = $assignmentEntryPlagiarismResultService;
-        $this->entityServiceManager = $entityServiceManager;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     */
-    public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
-    {
-        $this->contentObjectPublication = $contentObjectPublication;
-    }
-
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      *
@@ -66,10 +24,7 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
      */
     public function checkForPlagiarismAfterSubmission(TreeNode $treeNode)
     {
-        /** @var AssignmentConfiguration $configuration */
-        $configuration = $treeNode->getConfiguration(new AssignmentConfiguration());
-
-        return $configuration->getCheckForPlagiarism();
+        // TODO: Implement checkForPlagiarismAfterSubmission() method.
     }
 
     /**
@@ -79,7 +34,7 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
      */
     public function findEntryPlagiarismResultByEntry(Entry $entry)
     {
-        return $this->assignmentEntryPlagiarismResultService->findEntryPlagiarismResultByEntry($entry);
+        // TODO: Implement findEntryPlagiarismResultByEntry() method.
     }
 
     /**
@@ -89,7 +44,7 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
      */
     public function findEntryPlagiarismResultByExternalId(string $externalId)
     {
-        return $this->assignmentEntryPlagiarismResultService->findEntryPlagiarismResultByExternalId($externalId);
+        // TODO: Implement findEntryPlagiarismResultByExternalId() method.
     }
 
     /**
@@ -100,9 +55,7 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
      */
     public function createEntryPlagiarismResultForEntry(Entry $entry, string $externalId)
     {
-        return $this->assignmentEntryPlagiarismResultService->createEntryPlagiarismResultForEntry(
-            $entry, $externalId
-        );
+        // TODO: Implement createEntryPlagiarismResultForEntry() method.
     }
 
     /**
@@ -112,7 +65,7 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
      */
     public function updateEntryPlagiarismResult(EntryPlagiarismResult $entryPlagiarismResult)
     {
-        return $this->assignmentEntryPlagiarismResultService->updateEntryPlagiarismResult($entryPlagiarismResult);
+        // TODO: Implement updateEntryPlagiarismResult() method.
     }
 
     /**
@@ -122,13 +75,11 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
      *
      * @return int
      */
-    public function countEntriesWithPlagiarismResult(TreeNode $treeNode, int $entityType, FilterParameters $filterParameters)
+    public function countEntriesWithPlagiarismResult(
+        TreeNode $treeNode, int $entityType, FilterParameters $filterParameters
+    )
     {
-        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
-
-        return $entityService->countEntriesWithPlagiarismResult(
-            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $filterParameters
-        );
+        // TODO: Implement countEntriesWithPlagiarismResult() method.
     }
 
     /**
@@ -143,11 +94,7 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
         EntryPlagiarismResultTableParameters $entryPlagiarismResultTableParameters
     )
     {
-        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
-
-        return $entityService->getEntryPlagiarismResultTable(
-            $application, $entryPlagiarismResultTableParameters
-        );
+        // TODO: Implement getEntryPlagiarismResultTable() method.
     }
 
     /**
@@ -161,18 +108,11 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
         TreeNode $treeNode, int $entityType, FilterParameters $filterParameters
     )
     {
-        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
-
-        return $entityService->findEntriesWithPlagiarismResult(
-            $this->contentObjectPublication, $treeNode->getTreeNodeData(), $filterParameters
-        );
+        // TODO: Implement findEntriesWithPlagiarismResult() method.
     }
 
-    /**
-     * @return bool
-     */
     public function isPlagiarismEnabled()
     {
-        return true;
+        return false;
     }
 }

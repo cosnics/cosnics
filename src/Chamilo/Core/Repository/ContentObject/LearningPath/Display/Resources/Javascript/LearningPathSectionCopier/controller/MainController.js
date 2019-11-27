@@ -19,6 +19,9 @@
             this.selectedCategory = null;
             this.searchQuery = null;
 
+            this.userCategories = [];
+            this.selectedCopyCategory = null;
+
             this.pager = {
                 itemsPerPage: 5,
                 totalItems: this.learningPaths.length,
@@ -196,6 +199,11 @@
             });
 
             var tree = treeSelector.fancytree('getTree');
+
+            RepositoryService.fetchCategories(0, function(categories) {
+                mainController.userCategories = categories;
+                mainController.selectedCopyCategory = categories[0];
+            });
         }]
     );
 })();
