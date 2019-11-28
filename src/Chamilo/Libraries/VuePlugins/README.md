@@ -13,7 +13,7 @@ there is only one npm dependency tree throught cosnics.
 ## Run (serve, build, ...)
 
 * ../../../../node_modules/.bin/vue-cli-service serve
-* ../../../../node_modules/.bin/vue-cli-service build
+* ../../../../node_modules/.bin/vue-cli-service build --target lib --name cosnics-vue-plugins src/Plugins/plugins.ts
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
