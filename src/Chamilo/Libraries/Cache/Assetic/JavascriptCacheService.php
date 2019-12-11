@@ -65,6 +65,7 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Help.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Visit.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'InitHighlight.js');
+//        $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Common.js');
 
 
         return $assets;
