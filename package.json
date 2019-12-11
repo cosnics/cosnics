@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build-legacy": "./src/Chamilo/Libraries/Resources/Private/Javascript/JavascriptBuild.js"
   },
   "dependencies": {
     "axios": "^0.19.0",
@@ -24,6 +22,10 @@
     "@vue/cli-plugin-unit-jest": "^4.0.5",
     "@vue/cli-service": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-uglify": "^3.0.2",
+    "gulp-clean-css": "^4.2.0",
     "prettier": "^1.18.2",
     "ts-jest": "^23.0.0",
     "typescript": "~3.5.3",
