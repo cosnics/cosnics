@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --name cosnics-vue-plugins src/Plugins/plugins.ts",
-    "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "serve": "node ./../../../../node_modules/@vue/cli-service/bin/vue-cli-service.js serve",
+    "build": "node ./../../../../node_modules/@vue/cli-service/bin/vue-cli-service.js build --target lib --name cosnics-vue-plugins src/Plugins/plugins.ts",
+    "test:unit": "node ./../../../../node_modules/@vue/cli-service/bin/vue-cli-service.js test:unit",
+    "lint": "node ./../../../../node_modules/@vue/cli-service/bin/vue-cli-service.js lint"
   },
   "dependencies": {
     "axios": "^0.19.0",
