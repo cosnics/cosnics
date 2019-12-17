@@ -1,8 +1,6 @@
 {% set commonContext = 'Chamilo\\Libraries' %}
 
-{{ getJavascript('Plugin/VueJS/vue.js', commonContext) }}
-{{ getJavascript('Plugin/VueJS/polyfill.min.js', commonContext) }}
-{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', commonContext) }}
+{{ getJavascript('VueCommon.js', 'Chamilo\\Libraries') }}
 
 <div>
     <style>

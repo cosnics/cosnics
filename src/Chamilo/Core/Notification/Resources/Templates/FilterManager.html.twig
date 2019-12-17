@@ -2,24 +2,21 @@
 
 {% set appContext = 'Chamilo\\Core\\Notification' %}
 
-{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('VueCommon.js', 'Chamilo\\Libraries') }}
 
 <div id="filterManager">
     <b-table striped bordered :items="filters" :fields="fields"
              show-empty empty-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
              empty-filtered-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
     >
-        <template slot="message" slot-scope="data">
+        <template v-slot:cell(message)="data">
             <span v-html="data.item.message"></span>
         </template>
-        <template slot="HEAD_checkbox" slot-scope="data">
+        <template v-slot:cell(HEAD_checkbox)="data">
             <!-- We use click.stop here to prevent 'sort-changed' or 'head-clicked' events -->
             <input @click.stop type="checkbox" v-model="isAllSelected" @change="selectAll">
         </template>
-        <template slot="checkbox" slot-scope="data">
+        <template v-slot:cell(checkbox)="data">
             <input @click.stop type="checkbox" :value="data.item.id" v-model="data.item.selected" @change="selectSingleItem(data.item)">
         </template>
     </b-table>
@@ -34,17 +31,19 @@
 </style>
 
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
 
-        var fields = {
-            checkbox: {
+        var fields = [
+            {
+                key: 'checkbox',
                 label: '',
                 class: 'column-checkbox'
             },
-            message: {
+            {
+                key: 'message',
                 label: '{{ 'FilterMessage'|trans({}, appContext) }}'
             }
-        };
+        ];
 
         new Vue({
             el: '#filterManager',
@@ -76,21 +75,22 @@
                 selectedItems: []
             },
             methods: {
-                selectAll: function() {
+                selectAll: function () {
                     var vueInstance = this;
 
-                    this.filters.forEach(function(filter) {
+                    this.filters.forEach(function (filter) {
                         filter.selected = vueInstance.isAllSelected;
                     });
                 },
-                selectSingleItem: function(filter) {
-                    if(!filter.selected) {
+                selectSingleItem: function (filter) {
+                    if (!filter.selected) {
                         this.isAllSelected = false;
-                    } else {
+                    }
+                    else {
                         var isAllSelected = true;
 
-                        this.filters.forEach(function(filter) {
-                            if(!filter.selected) {
+                        this.filters.forEach(function (filter) {
+                            if (!filter.selected) {
                                 isAllSelected = false;
                             }
                         });

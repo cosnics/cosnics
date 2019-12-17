@@ -56,6 +56,7 @@ const root = path.resolve(__dirname, '../../../../../../');
 const config = require(path.resolve(root, configPath));
 
 const bowerVendorPath = path.resolve(root, 'vendor/bower_components');
+const nodeModulesPath = path.resolve(root, 'node_modules');
 const packagePath = path.resolve(root, 'src', config.package);
 const webPackagePath = path.resolve(root, 'web', config.package);
 
@@ -69,6 +70,7 @@ const webPackagePath = path.resolve(root, 'web', config.package);
 const getFullPath = function (relativePath) {
     relativePath = relativePath.replace('{{ VendorPath }}', bowerVendorPath);
     relativePath = relativePath.replace('{{ PackagePath }}', packagePath);
+    relativePath = relativePath.replace('{{ NodeModulesPath }}', nodeModulesPath);
 
     return path.resolve(relativePath);
 };

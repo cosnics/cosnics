@@ -33,6 +33,9 @@
             <argument
                 type="service"
                 id="chamilo.libraries.file.path_builder" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.architecture.classname_utilities" />
         </service>
 
         <service
