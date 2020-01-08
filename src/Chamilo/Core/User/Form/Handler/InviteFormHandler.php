@@ -67,7 +67,8 @@ class InviteFormHandler extends FormHandler
         $data = $form->getData();
 
         $this->userInviteService->inviteUser(
-            $this->user, $data[InviteFormType::ELEMENT_EMAIL], $data[InviteFormType::ELEMENT_PERSONAL_MESSAGE]
+            $this->user, $data[InviteFormType::ELEMENT_EMAIL], $data[InviteFormType::ELEMENT_ACCOUNT_VALID_UNTIL],
+            $data[InviteFormType::ELEMENT_PERSONAL_MESSAGE]
         );
 
         return true;
