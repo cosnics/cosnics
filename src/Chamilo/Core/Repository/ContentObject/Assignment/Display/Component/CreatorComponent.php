@@ -5,7 +5,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
+use Chamilo\Core\Repository\Viewer\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -91,11 +92,21 @@ class CreatorComponent extends Manager
         }
         else
         {
+            $page = new Page();
+            $page->set_title('Test Kopie');
+            $page->set_description('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel erat consectetur, convallis lorem ut, tincidunt urna. Phasellus dignissim turpis ac placerat efficitur. Quisque at sapien fringilla, maximus odio eget, malesuada justo. Nam sodales quis purus quis convallis. Morbi efficitur volutpat enim, ut venenatis arcu feugiat sit amet. Duis sollicitudin lacus vitae auctor volutpat. Donec at rhoncus neque. Suspendisse quis lorem a nulla elementum imperdiet finibus ac neque. Duis at nisi nec eros pharetra maximus. Cras sit amet nisl turpis. Cras odio purus, semper eu est vitae, varius iaculis ante. Maecenas justo velit, ornare quis pellentesque in, consequat sed lectus. Pellentesque eu vestibulum nulla, sed cursus ligula. Nullam nec tellus interdum, lacinia velit vitae, laoreet enim. Sed cursus lobortis aliquam. Cras faucibus sodales felis sed ultrices.');
+            $page->set_owner_id($this->getUser()->getId());
+            $page->set_parent_id(39);
+
+            $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
+//            $configuration->setUserTemplates([$page]);
+            $configuration->setAllowedContentObjectTypes($this->get_allowed_content_object_types());
+            $configuration->setMaximumSelect(ApplicationConfiguration::MAXIMUM_SELECT_SINGLE);
+
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+                $configuration
             );
-            $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
 
             return $component->run();
         }

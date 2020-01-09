@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -95,13 +96,24 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
      */
     protected function get_creation_form($template_id)
     {
+        /** @var TemplateRegistration $template_registration */
         $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id($template_id);
         $template = $template_registration->get_template();
-        
+
         $object = $template->get_content_object();
         $object->set_template_registration_id($template_id);
         $object->set_owner_id($this->get_user_id());
-        
+
+        $contentObjectType = $object->get_type();
+
+        if($this->hasUserTemplatesForType($contentObjectType))
+        {
+            $userTemplates = $this->getUserTemplatesForType($contentObjectType);
+            $userTemplate = $userTemplates[0];
+
+            $object->copyPropertiesFromOtherObject($userTemplate);
+        }
+
         $content_object_type_image = 'Logo/template/' . $template_registration->get_name() . '/16';
         
         BreadcrumbTrail::getInstance()->add(
