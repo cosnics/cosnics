@@ -146,6 +146,14 @@ class ContentObjectRelationService
         return $contentObjectRelation;
     }
 
+    public function addContentObjectsToWorkspace(Workspace $workspace, array $contentObjectIds, int $categoryId = null)
+    {
+        foreach($contentObjectIds as $contentObjectId)
+        {
+            $this->createContentObjectRelation($workspace->getId(), $contentObjectId, $categoryId);
+        }
+    }
+
     /**
      *
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation $contentObjectRelation
