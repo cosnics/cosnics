@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass;
 
+use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
@@ -28,6 +29,9 @@ class Assignment extends ContentObject implements AttachmentSupport
     const VISIBILITY_FEEDBACK_AFTER_END_TIME = 0;
     const VISIBILITY_FEEDBACK_AFTER_SUBMISSION = 1;
 
+    const PROPERTY_PAGE_TEMPLATE = 'page_template';
+    const PROPERTY_LAST_ENTRY_AS_TEMPLATE = 'last_entry_as_template';
+
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
@@ -43,8 +47,79 @@ class Assignment extends ContentObject implements AttachmentSupport
             self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT,
             self::PROPERTY_VISIBILTY_FEEDBACK,
             self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS,
-            self::PROPERTY_ALLOWED_TYPES
+            self::PROPERTY_ALLOWED_TYPES,
+            self::PROPERTY_PAGE_TEMPLATE,
+            self::PROPERTY_LAST_ENTRY_AS_TEMPLATE
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageTemplate()
+    {
+        return $this->get_additional_property(self::PROPERTY_PAGE_TEMPLATE);
+    }
+
+    /**
+     * @param string $pageTemplate
+     *
+     * @return $this
+     */
+    public function setPageTemplate(string $pageTemplate)
+    {
+        $this->set_additional_property(self::PROPERTY_PAGE_TEMPLATE, $pageTemplate);
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPageTemplate()
+    {
+        return !empty($this->getPageTemplate());
+    }
+
+    /**
+     * @return Page|null
+     * @throws \Exception
+     */
+    public function getInMemoryPageObjectFromTemplate(): ?Page
+    {
+        if(!$this->hasPageTemplate())
+        {
+            return null;
+        }
+
+        $currentDateTime = new \DateTime();
+        $currentTime = $currentDateTime->format('d/m/y - H:i');
+
+        $page = new Page();
+        $page->set_title($this->get_title() . ' (' . $currentTime . ')');
+        $page->set_description($this->getPageTemplate());
+
+        return $page;
+    }
+
+    /**
+     * @return bool
+     */
+    public function useLastEntryAsTemplate()
+    {
+        return (bool) $this->get_additional_property(self::PROPERTY_LAST_ENTRY_AS_TEMPLATE);
+    }
+
+    /**
+     * @param bool $useLastEntryAsTemplate
+     *
+     * @return $this
+     */
+    public function setUseLastEntryAsTemplate(bool $useLastEntryAsTemplate)
+    {
+        $this->set_additional_property(self::PROPERTY_LAST_ENTRY_AS_TEMPLATE, $useLastEntryAsTemplate);
+
+        return $this;
     }
 
     public function get_start_time()

@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\N
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Extensions\ExtensionManager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -393,5 +394,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function getExtensionManager()
     {
         return $this->getService(ExtensionManager::class);
+    }
+
+    /**
+     * @return ContentObjectRepository
+     */
+    protected function getContentObjectRepository()
+    {
+        return $this->getService(ContentObjectRepository::class);
     }
 }

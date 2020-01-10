@@ -14,5 +14,6 @@
         </service>
 
         <service id="Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Extensions\ExtensionManager" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\TemplateService" autowire="true" />
     </services>
 </container>

@@ -2,10 +2,12 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\TemplateService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -30,7 +32,7 @@ class CreatorComponent extends Manager
      */
     public function run()
     {
-        if(empty($this->get_allowed_content_object_types()))
+        if (empty($this->get_allowed_content_object_types()))
         {
             throw new UserException($this->getTranslator()->trans('NoSubmissionPossible', [], Manager::context()));
         }
@@ -45,7 +47,7 @@ class CreatorComponent extends Manager
         if (\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
-            if(is_array($objects))
+            if (is_array($objects))
             {
                 $objects = $objects[0];
             }
@@ -66,9 +68,11 @@ class CreatorComponent extends Manager
                 {
                     $this->getExtensionManager()->entryCreated($this->getAssignment(), $entry, $this->getUser());
                 }
-                catch(\Exception $ex)
+                catch (\Exception $ex)
                 {
-                    $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
+                    $this->getExceptionLogger()->logException(
+                        $ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR
+                    );
                 }
 
                 $this->redirect(
@@ -92,14 +96,11 @@ class CreatorComponent extends Manager
         }
         else
         {
-            $page = new Page();
-            $page->set_title('Test Kopie');
-            $page->set_description('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel erat consectetur, convallis lorem ut, tincidunt urna. Phasellus dignissim turpis ac placerat efficitur. Quisque at sapien fringilla, maximus odio eget, malesuada justo. Nam sodales quis purus quis convallis. Morbi efficitur volutpat enim, ut venenatis arcu feugiat sit amet. Duis sollicitudin lacus vitae auctor volutpat. Donec at rhoncus neque. Suspendisse quis lorem a nulla elementum imperdiet finibus ac neque. Duis at nisi nec eros pharetra maximus. Cras sit amet nisl turpis. Cras odio purus, semper eu est vitae, varius iaculis ante. Maecenas justo velit, ornare quis pellentesque in, consequat sed lectus. Pellentesque eu vestibulum nulla, sed cursus ligula. Nullam nec tellus interdum, lacinia velit vitae, laoreet enim. Sed cursus lobortis aliquam. Cras faucibus sodales felis sed ultrices.');
-            $page->set_owner_id($this->getUser()->getId());
-            $page->set_parent_id(39);
 
             $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
-//            $configuration->setUserTemplates([$page]);
+
+            $this->addTemplatesToConfiguration($configuration);
+
             $configuration->setAllowedContentObjectTypes($this->get_allowed_content_object_types());
             $configuration->setMaximumSelect(ApplicationConfiguration::MAXIMUM_SELECT_SINGLE);
 
@@ -130,6 +131,7 @@ class CreatorComponent extends Manager
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws UserException
      */
     public function render_header()
     {
@@ -186,11 +188,34 @@ class CreatorComponent extends Manager
     public function get_allowed_content_object_types()
     {
         $types = $this->get_root_content_object()->get_allowed_types();
-        if(empty($types))
+        if (empty($types))
         {
             return [];
         }
 
         return explode(',', $types);
+    }
+
+    /**
+     * @param ApplicationConfiguration $configuration
+     *
+     * @throws \Exception
+     */
+    protected function addTemplatesToConfiguration(ApplicationConfiguration $configuration)
+    {
+        $configuration->setUserTemplates(
+            $this->getTemplateService()->getTemplatesForAssignment(
+                $this->getAssignment(), $this->getAssignmentServiceBridge(), $this->getEntityType(),
+                $this->getEntityIdentifier()
+            )
+        );
+    }
+
+    /**
+     * @return TemplateService
+     */
+    protected function getTemplateService()
+    {
+        return $this->getService(TemplateService::class);
     }
 }
