@@ -116,6 +116,7 @@ class AssignmentRepository extends
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL));
 
         return $properties;
     }

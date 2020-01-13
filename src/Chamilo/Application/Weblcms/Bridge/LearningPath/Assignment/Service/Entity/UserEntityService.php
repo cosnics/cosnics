@@ -220,7 +220,7 @@ class UserEntityService implements EntityServiceInterface
     )
     {
         $entityTableParameters->setEntityClass(User::class);
-        $entityTableParameters->setEntityProperties([User::PROPERTY_FIRSTNAME, User::PROPERTY_LASTNAME]);
+        $entityTableParameters->setEntityProperties([User::PROPERTY_FIRSTNAME, User::PROPERTY_LASTNAME, User::PROPERTY_EMAIL]);
         $entityTableParameters->setEntityHasMultipleMembers(false);
 
         return new EntityTable($application, $entityTableParameters);
@@ -238,7 +238,7 @@ class UserEntityService implements EntityServiceInterface
     )
     {
         $entryPlagiarismResultTableParameters->setEntityClass(User::class);
-        $entryPlagiarismResultTableParameters->setEntityProperties([User::PROPERTY_FIRSTNAME, User::PROPERTY_LASTNAME]);
+        $entryPlagiarismResultTableParameters->setEntityProperties([User::PROPERTY_FIRSTNAME, User::PROPERTY_LASTNAME, User::PROPERTY_EMAIL]);
 
         return new EntryPlagiarismResultTable($application, $entryPlagiarismResultTableParameters);
     }
