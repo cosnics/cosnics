@@ -151,9 +151,10 @@ class UserExporter
             $user_export_data[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
 
             $safeLastName = StringUtilities::getInstance()->createString($user->get_lastname())->toAscii();
+            $safeFirstName = StringUtilities::getInstance()->createString($user->get_firstname())->toAscii();
 
             $user_export_data[self::PROPERTY_SORT_NAME] =
-                strtoupper(str_replace(' ', '', $safeLastName . ',' . $user->get_firstname()));
+                strtoupper(str_replace(' ', '', $safeLastName . ',' . $safeFirstName));
 
             $user_export_data[User::PROPERTY_EMAIL] = $user->get_email();
 
