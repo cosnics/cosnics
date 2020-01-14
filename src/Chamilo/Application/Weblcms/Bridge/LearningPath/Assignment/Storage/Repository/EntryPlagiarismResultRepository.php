@@ -65,7 +65,7 @@ class EntryPlagiarismResultRepository extends
 
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE));
 
         return $this->findEntriesWithPlagiarismResult(
             Entry::ENTITY_TYPE_USER,
@@ -93,7 +93,7 @@ class EntryPlagiarismResultRepository extends
 
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE));
 
 
         return $this->countEntriesWithPlagiarismResult(
