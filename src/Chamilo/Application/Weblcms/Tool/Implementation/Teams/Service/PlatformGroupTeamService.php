@@ -187,6 +187,39 @@ class PlatformGroupTeamService
     }
 
     /**
+     * @param PlatformGroupTeam $platformGroupTeam
+     *
+     * @return Group[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findGroupsForPlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
+    {
+        return $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
+    }
+
+    /**
+     * @param PlatformGroupTeam $platformGroupTeam
+     *
+     * @return array
+     */
+    public function findGroupsAsArrayForPlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
+    {
+        $groupArray = [];
+
+        $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
+
+        foreach($groups as $group)
+        {
+            $groupsArray[] = [
+                'id' => $group->getId(),
+                'name' => $group->get_name(),
+                'code' => $group->get_code()
+            ];
+        }
+
+        return $groupsArray;
+    }
+
+    /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
      *
@@ -282,14 +315,15 @@ class PlatformGroupTeamService
                     }
                 }
 
-                $newTeamName = $this->updateTeamNameById(
-                    $id, $row[PlatformGroupTeam::PROPERTY_TEAM_ID], $row[PlatformGroupTeam::PROPERTY_NAME]
-                );
-
-                if (!$newTeamName)
-                {
-                    continue;
-                }
+                $newTeamName = $row[PlatformGroupTeam::PROPERTY_NAME];
+//                $newTeamName = $this->updateTeamNameById(
+//                    $id, $row[PlatformGroupTeam::PROPERTY_TEAM_ID], $row[PlatformGroupTeam::PROPERTY_NAME]
+//                );
+//
+//                if (!$newTeamName)
+//                {
+//                    continue;
+//                }
 
                 $row[PlatformGroupTeam::PROPERTY_NAME] = $newTeamName;
 

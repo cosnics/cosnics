@@ -712,196 +712,196 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
         $this->courseGroupOffice365Connector->syncCourseGroupSubscriptions($courseGroup);
     }
 
-    public function testGetPlannerUrlForVisit()
-    {
-        $courseGroup = new CourseGroup();
-        $user = new User();
+//    public function testGetPlannerUrlForVisit()
+//    {
+//        $courseGroup = new CourseGroup();
+//        $user = new User();
+//
+//        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+//            ->method('courseGroupHasLinkedReference')
+//            ->with($courseGroup)
+//            ->will($this->returnValue(true));
+//
+//        $reference = new CourseGroupOffice365Reference();
+//        $reference->setOffice365GroupId(5);
+//        $reference->setOffice365PlanId(10);
+//
+//        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+//            ->method('getCourseGroupReference')
+//            ->with($courseGroup)
+//            ->will($this->returnValue($reference));
+//
+//        $this->groupServiceMock->expects($this->once())
+//            ->method('addMemberToGroup')
+//            ->with(5, $user);
+//
+//        $baseUrl = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#/';
+//
+//        $this->configurationConsulterMock->expects($this->once())
+//            ->method('getSetting')
+//            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'planner_base_uri'])
+//            ->will($this->returnValue($baseUrl));
+//
+//        $url = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#//#/plantaskboard?groupId=5&planId=10';
+//
+//        $this->assertEquals($url, $this->courseGroupOffice365Connector->getPlannerUrlForVisit($courseGroup, $user));
+//    }
+//
+//    /**
+//     * @expectedException \RuntimeException
+//     */
+//    public function testGetPlannerUrlForVisitWithoutValidReference()
+//    {
+//        $courseGroup = new CourseGroup();
+//        $user = new User();
+//
+//        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+//            ->method('courseGroupHasLinkedReference')
+//            ->with($courseGroup)
+//            ->will($this->returnValue(false));
+//
+//        $this->courseGroupOffice365Connector->getPlannerUrlForVisit($courseGroup, $user);
+//    }
+//
+//    public function testGetPlannerUrlForVisitNoPlanId()
+//    {
+//        $courseGroup = new CourseGroup();
+//        $user = new User();
+//
+//        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+//            ->method('courseGroupHasLinkedReference')
+//            ->with($courseGroup)
+//            ->will($this->returnValue(true));
+//
+//        $reference = new CourseGroupOffice365Reference();
+//        $reference->setOffice365GroupId(5);
+//
+//        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+//            ->method('getCourseGroupReference')
+//            ->with($courseGroup)
+//            ->will($this->returnValue($reference));
+//
+//        $this->groupServiceMock->expects($this->once())
+//            ->method('addMemberToGroup')
+//            ->with(5, $user);
+//
+//        $baseUrl = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#/';
+//
+//        $this->configurationConsulterMock->expects($this->once())
+//            ->method('getSetting')
+//            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'planner_base_uri'])
+//            ->will($this->returnValue($baseUrl));
+//
+//        $this->groupServiceMock->expects($this->once())
+//            ->method('getOrCreatePlanIdForGroup')
+//            ->with(5)
+//            ->will($this->returnValue(10));
+//
+//        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+//            ->method('storePlannerReferenceForCourseGroup')
+//            ->with($courseGroup, 5, 10);
+//
+//        $url = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#//#/plantaskboard?groupId=5&planId=10';
+//
+//        $this->assertEquals($url, $this->courseGroupOffice365Connector->getPlannerUrlForVisit($courseGroup, $user));
+//    }
 
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('courseGroupHasLinkedReference')
-            ->with($courseGroup)
-            ->will($this->returnValue(true));
-
-        $reference = new CourseGroupOffice365Reference();
-        $reference->setOffice365GroupId(5);
-        $reference->setOffice365PlanId(10);
-
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('getCourseGroupReference')
-            ->with($courseGroup)
-            ->will($this->returnValue($reference));
-
-        $this->groupServiceMock->expects($this->once())
-            ->method('addMemberToGroup')
-            ->with(5, $user);
-
-        $baseUrl = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#/';
-
-        $this->configurationConsulterMock->expects($this->once())
-            ->method('getSetting')
-            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'planner_base_uri'])
-            ->will($this->returnValue($baseUrl));
-
-        $url = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#//#/plantaskboard?groupId=5&planId=10';
-
-        $this->assertEquals($url, $this->courseGroupOffice365Connector->getPlannerUrlForVisit($courseGroup, $user));
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testGetPlannerUrlForVisitWithoutValidReference()
-    {
-        $courseGroup = new CourseGroup();
-        $user = new User();
-
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('courseGroupHasLinkedReference')
-            ->with($courseGroup)
-            ->will($this->returnValue(false));
-
-        $this->courseGroupOffice365Connector->getPlannerUrlForVisit($courseGroup, $user);
-    }
-
-    public function testGetPlannerUrlForVisitNoPlanId()
-    {
-        $courseGroup = new CourseGroup();
-        $user = new User();
-
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('courseGroupHasLinkedReference')
-            ->with($courseGroup)
-            ->will($this->returnValue(true));
-
-        $reference = new CourseGroupOffice365Reference();
-        $reference->setOffice365GroupId(5);
-
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('getCourseGroupReference')
-            ->with($courseGroup)
-            ->will($this->returnValue($reference));
-
-        $this->groupServiceMock->expects($this->once())
-            ->method('addMemberToGroup')
-            ->with(5, $user);
-
-        $baseUrl = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#/';
-
-        $this->configurationConsulterMock->expects($this->once())
-            ->method('getSetting')
-            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'planner_base_uri'])
-            ->will($this->returnValue($baseUrl));
-
-        $this->groupServiceMock->expects($this->once())
-            ->method('getOrCreatePlanIdForGroup')
-            ->with(5)
-            ->will($this->returnValue(10));
-
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('storePlannerReferenceForCourseGroup')
-            ->with($courseGroup, 5, 10);
-
-        $url = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#//#/plantaskboard?groupId=5&planId=10';
-
-        $this->assertEquals($url, $this->courseGroupOffice365Connector->getPlannerUrlForVisit($courseGroup, $user));
-    }
-
-    public function testGetGroupUrlForVisit()
-    {
-        $courseGroup = new CourseGroup();
-        $user = new User();
-
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('courseGroupHasLinkedReference')
-            ->with($courseGroup)
-            ->will($this->returnValue(true));
-
-        $reference = new CourseGroupOffice365Reference();
-        $reference->setOffice365GroupId(5);
-
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('getCourseGroupReference')
-            ->with($courseGroup)
-            ->will($this->returnValue($reference));
-
-        $this->groupServiceMock->expects($this->once())
-            ->method('addMemberToGroup')
-            ->with(5, $user);
-
-        $baseUrl = 'https://outlook.office.com/owa/?realm=example.com&exsvurl=1&ll-cc=1043&modurl=0&path=/group/{GROUP_ID}@example.onmicrosoft.com/mail';
-
-        $this->configurationConsulterMock->expects($this->once())
-            ->method('getSetting')
-            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri'])
-            ->will($this->returnValue($baseUrl));
-
-        $group = new \Microsoft\Graph\Model\Group(['mailNickname' => 'MyFirstGroup']);
-
-        $this->groupServiceMock->expects($this->once())
-            ->method('getGroup')
-            ->with(5)
-            ->will($this->returnValue($group));
-
-        $url = 'https://outlook.office.com/owa/?realm=example.com&exsvurl=1&ll-cc=1043&modurl=0&path=/group/MyFirstGroup@example.onmicrosoft.com/mail';
-
-        $this->assertEquals($url, $this->courseGroupOffice365Connector->getGroupUrlForVisit($courseGroup, $user));
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testGetGroupUrlForVisitValidReference()
-    {
-        $courseGroup = new CourseGroup();
-        $user = new User();
-
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('courseGroupHasLinkedReference')
-            ->with($courseGroup)
-            ->will($this->returnValue(false));
-
-        $this->courseGroupOffice365Connector->getGroupUrlForVisit($courseGroup, $user);
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testGetGroupUrlForVisitWithoutValidGroup()
-    {
-        $courseGroup = new CourseGroup();
-        $user = new User();
-
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('courseGroupHasLinkedReference')
-            ->with($courseGroup)
-            ->will($this->returnValue(true));
-
-        $reference = new CourseGroupOffice365Reference();
-        $reference->setOffice365GroupId(5);
-
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('getCourseGroupReference')
-            ->with($courseGroup)
-            ->will($this->returnValue($reference));
-
-        $this->groupServiceMock->expects($this->once())
-            ->method('addMemberToGroup')
-            ->with(5, $user);
-
-        $baseUrl = 'https://outlook.office.com/owa/?realm=example.com&exsvurl=1&ll-cc=1043&modurl=0&path=/group/{GROUP_ID}@example.onmicrosoft.com/mail';
-
-        $this->configurationConsulterMock->expects($this->once())
-            ->method('getSetting')
-            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri'])
-            ->will($this->returnValue($baseUrl));
-
-        $this->groupServiceMock->expects($this->once())
-            ->method('getGroup')
-            ->with(5)
-            ->willThrowException(new GroupNotExistsException('5'));
-
-        $this->courseGroupOffice365Connector->getGroupUrlForVisit($courseGroup, $user);
-    }
+//    public function testGetGroupUrlForVisit()
+//    {
+//        $courseGroup = new CourseGroup();
+//        $user = new User();
+//
+//        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+//            ->method('courseGroupHasLinkedReference')
+//            ->with($courseGroup)
+//            ->will($this->returnValue(true));
+//
+//        $reference = new CourseGroupOffice365Reference();
+//        $reference->setOffice365GroupId(5);
+//
+//        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+//            ->method('getCourseGroupReference')
+//            ->with($courseGroup)
+//            ->will($this->returnValue($reference));
+//
+//        $this->groupServiceMock->expects($this->once())
+//            ->method('addMemberToGroup')
+//            ->with(5, $user);
+//
+//        $baseUrl = 'https://outlook.office.com/owa/?realm=example.com&exsvurl=1&ll-cc=1043&modurl=0&path=/group/{GROUP_ID}@example.onmicrosoft.com/mail';
+//
+//        $this->configurationConsulterMock->expects($this->once())
+//            ->method('getSetting')
+//            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri'])
+//            ->will($this->returnValue($baseUrl));
+//
+//        $group = new \Microsoft\Graph\Model\Group(['mailNickname' => 'MyFirstGroup']);
+//
+//        $this->groupServiceMock->expects($this->once())
+//            ->method('getGroup')
+//            ->with(5)
+//            ->will($this->returnValue($group));
+//
+//        $url = 'https://outlook.office.com/owa/?realm=example.com&exsvurl=1&ll-cc=1043&modurl=0&path=/group/MyFirstGroup@example.onmicrosoft.com/mail';
+//
+//        $this->assertEquals($url, $this->courseGroupOffice365Connector->getGroupUrlForVisit($courseGroup, $user));
+//    }
+//
+//    /**
+//     * @expectedException \RuntimeException
+//     */
+//    public function testGetGroupUrlForVisitValidReference()
+//    {
+//        $courseGroup = new CourseGroup();
+//        $user = new User();
+//
+//        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+//            ->method('courseGroupHasLinkedReference')
+//            ->with($courseGroup)
+//            ->will($this->returnValue(false));
+//
+//        $this->courseGroupOffice365Connector->getGroupUrlForVisit($courseGroup, $user);
+//    }
+//
+//    /**
+//     * @expectedException \RuntimeException
+//     */
+//    public function testGetGroupUrlForVisitWithoutValidGroup()
+//    {
+//        $courseGroup = new CourseGroup();
+//        $user = new User();
+//
+//        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+//            ->method('courseGroupHasLinkedReference')
+//            ->with($courseGroup)
+//            ->will($this->returnValue(true));
+//
+//        $reference = new CourseGroupOffice365Reference();
+//        $reference->setOffice365GroupId(5);
+//
+//        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+//            ->method('getCourseGroupReference')
+//            ->with($courseGroup)
+//            ->will($this->returnValue($reference));
+//
+//        $this->groupServiceMock->expects($this->once())
+//            ->method('addMemberToGroup')
+//            ->with(5, $user);
+//
+//        $baseUrl = 'https://outlook.office.com/owa/?realm=example.com&exsvurl=1&ll-cc=1043&modurl=0&path=/group/{GROUP_ID}@example.onmicrosoft.com/mail';
+//
+//        $this->configurationConsulterMock->expects($this->once())
+//            ->method('getSetting')
+//            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri'])
+//            ->will($this->returnValue($baseUrl));
+//
+//        $this->groupServiceMock->expects($this->once())
+//            ->method('getGroup')
+//            ->with(5)
+//            ->willThrowException(new GroupNotExistsException('5'));
+//
+//        $this->courseGroupOffice365Connector->getGroupUrlForVisit($courseGroup, $user);
+//    }
 
     /**
      * @param string $courseName

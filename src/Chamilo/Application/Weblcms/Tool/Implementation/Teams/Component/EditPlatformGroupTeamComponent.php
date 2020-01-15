@@ -47,7 +47,7 @@ class EditPlatformGroupTeamComponent extends Manager
             else
             {
                 return $this->getTwig()->render(
-                    Manager::context() . ':EditPlatformGroupTeam.html.twig', [
+                    Manager::context() . ':PlatformGroupTeamForm.html.twig', [
                         'HEADER' => $this->render_header(),
                         'FOOTER' => $this->render_footer(),
                         'FORM' => $form->createView(),
@@ -57,7 +57,14 @@ class EditPlatformGroupTeamComponent extends Manager
                         'GET_GROUP_CHILDREN_URL' => GetGroupChildrenJSONComponent::getAjaxUrl(),
                         'TEAM_NAME_COURSE_METADATA' => $this->get_course()->get_title() . ' (' .
                             $this->get_course()->get_visual_code() . ')',
-                        'PLATFORM_GROUP_TEAM' => $platformGroupTeam
+                        'PLATFORM_GROUP_TEAM' => $platformGroupTeam,
+                        'DEFAULT_SELECTED_GROUPS' => $this->getSerializer()->serialize(
+                            $this->getPlatformGroupTeamService()->findGroupsAsArrayForPlatformGroupTeam(
+                                $platformGroupTeam
+                            ),
+                            'json'
+                        ),
+                        'EDIT_MODE' => true
                     ]
                 );
             }
