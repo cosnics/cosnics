@@ -82,28 +82,9 @@ class PlatformGroupTeamService
      */
     public function createTeamForSelectedGroups(User $owner, Course $course, string $teamName, $groupIds = [])
     {
-        $userCount = 0;
+        $groups = $this->groupService->findGroupsByIds($groupIds);
 
-        $groups = [];
-
-        foreach ($groupIds as $groupId)
-        {
-            $group = $this->groupService->getGroupByIdentifier($groupId);
-
-            if (!$group instanceof Group)
-            {
-                continue;
-            }
-
-            $groups[] = $group;
-
-            $userCount += $group->count_users(true, true);
-        }
-
-        if ($userCount >= TeamService::MAX_USERS)
-        {
-            throw new TooManyUsersException();
-        }
+        $this->validateUserCount();
 
         $team = $this->teamService->createTeamByName($owner, $teamName);
 
@@ -119,6 +100,49 @@ class PlatformGroupTeamService
             );
         }
 
+        $this->addGroupsToPlatformGroupTeam($platformGroupTeam, $groups);
+    }
+
+    /**
+     * @param PlatformGroupTeam $platformGroupTeam
+     * @param string $teamName
+     * @param array $groupIds
+     *
+     * @throws TooManyUsersException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     */
+    public function updatePlatformGroupTeam(PlatformGroupTeam $platformGroupTeam, string $teamName, $groupIds = [])
+    {
+        $groups = $this->groupService->findGroupsByIds($groupIds);
+
+        $this->validateUserCount();
+
+        $team = $this->teamService->getTeam($platformGroupTeam->getTeamId());
+        if(!$team instanceof Team)
+        {
+            return;
+        }
+
+        $this->teamService->updateTeamName($team, $teamName);
+        $this->platformGroupTeamRepository->deleteRelationsForPlatformGroupTeam($platformGroupTeam);
+        $this->addGroupsToPlatformGroupTeam($platformGroupTeam, $groups);
+
+        $platformGroupTeam->setName($teamName);
+
+        if (!$this->platformGroupTeamRepository->updatePlatformGroupTeam($platformGroupTeam))
+        {
+            throw new \RuntimeException(
+                sprintf('The platform group team (%s) could not be updated', $teamName)
+            );
+        }
+    }
+
+    /**
+     * @param PlatformGroupTeam $platformGroupTeam
+     * @param Group[] $groups (can't typehint as array because iterators don't match the array type)
+     */
+    public function addGroupsToPlatformGroupTeam(PlatformGroupTeam $platformGroupTeam, $groups = [])
+    {
         foreach ($groups as $group)
         {
             $platformGroupTeamRelation = new PlatformGroupTeamRelation();
@@ -131,6 +155,31 @@ class PlatformGroupTeamService
                     'The relation between the team %s and the group %s could not be created'
                 );
             }
+        }
+    }
+
+    /**
+     * @param Group[] $groups
+     *
+     * @throws TooManyUsersException
+     */
+    protected function validateUserCount($groups = [])
+    {
+        $userCount = 0;
+
+        foreach ($groups as $group)
+        {
+            if (!$group instanceof Group)
+            {
+                continue;
+            }
+
+            $userCount += $group->count_users(true, true);
+        }
+
+        if ($userCount >= TeamService::MAX_USERS)
+        {
+            throw new TooManyUsersException();
         }
     }
 
@@ -203,7 +252,7 @@ class PlatformGroupTeamService
      */
     public function findGroupsAsArrayForPlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
     {
-        $groupArray = [];
+        $groupsArray = [];
 
         $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
 
@@ -316,7 +365,7 @@ class PlatformGroupTeamService
                 }
 
                 $newTeamName = $row[PlatformGroupTeam::PROPERTY_NAME];
-//                $newTeamName = $this->updateTeamNameById(
+//                $newTeamName = $this->updateLocalTeamNameById(
 //                    $id, $row[PlatformGroupTeam::PROPERTY_TEAM_ID], $row[PlatformGroupTeam::PROPERTY_NAME]
 //                );
 //
@@ -343,36 +392,29 @@ class PlatformGroupTeamService
      * Helper method for the record iterator above. Cleans up deleted teams and updates team names when changed
      *
      * @param int $platformGroupId
-     * @param string $teamId
-     * @param string $currentName
      *
-     * @return null|string
+     * @return string
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    protected function updateTeamNameById(int $platformGroupId, string $teamId, string $currentName)
+    public function updateLocalTeamNameById(int $platformGroupId)
     {
-        $team = $this->teamService->getTeam($teamId);
+        $platformGroupTeam = $this->findPlatformGroupTeamById($platformGroupId);
+
+        $team = $this->teamService->getTeam($platformGroupTeam->getTeamId());
         if (!$team instanceof Team)
         {
-            $platformGroupTeam = $this->findPlatformGroupTeamById($platformGroupId);
-            $this->deleteRemovedTeam($platformGroupTeam);
-
-            return null;
+            return $platformGroupTeam->getName();
         }
 
         $teamName = $team->getProperties()['displayName'];
 
-        if ($teamName != $currentName)
+        $platformGroupTeam->setName($teamName);
+        if (!$this->platformGroupTeamRepository->updatePlatformGroupTeam($platformGroupTeam))
         {
-            $platformGroupTeam = $this->findPlatformGroupTeamById($platformGroupId);
-            $platformGroupTeam->setName($teamName);
-            if (!$this->platformGroupTeamRepository->updatePlatformGroupTeam($platformGroupTeam))
-            {
-                throw new \RuntimeException(
-                    'Could not update the platform group team with id ' . $platformGroupTeam->getId()
-                );
-            }
+            throw new \RuntimeException(
+                'Could not update the platform group team with id ' . $platformGroupTeam->getId()
+            );
         }
 
         return $teamName;

@@ -31,3 +31,5 @@ PlatformGroupTeamNotCreated = "A new team for platform groups could not be creat
 TooManyUsersException = "Er zijn meer dan 5000 gebruikers voor het team waardoor het team niet aangemaakt kan worden."
 EditPlatformGroupTeam = "Edit team for platform groups"
 EditPlatformGroupTeamComponent = "Edit team for platform groups"
+PlatformGroupTeamUpdated = "The team has changed. Please synchronize the users from the new platform groups with the team."
+PlatformGroupTeamNotUpdated = "The team could not be changed"

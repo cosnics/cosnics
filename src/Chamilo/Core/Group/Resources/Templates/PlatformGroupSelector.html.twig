@@ -119,6 +119,8 @@
                     vueInstance.defaultSelectedGroups.forEach(function(group) {
                         vueInstance.selectedGroups.push(group);
                     });
+
+                    vueInstance.$emit('selection-changed', vueInstance.selectedGroups);
                 }
 
                 var convertData = function (groups) {

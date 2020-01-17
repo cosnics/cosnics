@@ -104,6 +104,15 @@ class TeamService
     }
 
     /**
+     * @param Team $team
+     * @param string $newName
+     */
+    public function updateTeamName(Team $team, string $newName)
+    {
+        $this->groupService->updateGroupName($team->getId(), $newName);
+    }
+
+    /**
      * @param User $user
      * @param Team $team
      * @return bool
