@@ -1,6 +1,9 @@
 <?php
+
 namespace Chamilo\Core\Repository\Viewer;
 
+use Chamilo\Core\Repository\Interfaces\TemplateSupportInterface;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -57,15 +60,10 @@ abstract class Manager extends Application
     const SETTING_TABS_DISABLED = 'tabs_disabled';
     const SETTING_BREADCRUMBS_DISABLED = 'breadcrumbs_disabled';
 
-    /**
-     *
-     * @var multitype:string
-     */
-    private $types;
 
     /**
      *
-     * @var multitype:string
+     * @var string[]
      */
     private $actions;
 
@@ -94,14 +92,17 @@ abstract class Manager extends Application
     const SELECT_SINGLE = 1;
 
     /**
+     * Manager constructor.
      *
-     * @param \libraries\architecture\application\Application $parent
+     * @param ApplicationConfigurationInterface|ApplicationConfiguration $applicationConfiguration
+     *
+     * @throws InvalidUserException
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
+
         $this->maximum_select = self::SELECT_MULTIPLE;
-        $this->default_content_objects = array();
         $this->parameters = array();
         $this->excluded_objects = array();
 
@@ -110,7 +111,7 @@ abstract class Manager extends Application
             (Request::get(self::PARAM_ACTION) ? Request::get(self::PARAM_ACTION) : self::ACTION_CREATOR)
         );
 
-        if(!$this->getUserService()->isUserCurrentLoggedInUser($this->getUser()))
+        if (!$this->getUserService()->isUserCurrentLoggedInUser($this->getUser()))
         {
             throw new InvalidUserException();
         }
@@ -136,7 +137,7 @@ abstract class Manager extends Application
         $html[] = parent::render_header();
 
         $currentTab = $this->getRequest()->get(self::PARAM_TAB);
-        if(empty($currentTab))
+        if (empty($currentTab))
         {
             $currentTab = self::TAB_CREATOR;
         }
@@ -201,22 +202,36 @@ abstract class Manager extends Application
      */
     public function get_maximum_select()
     {
-        return $this->maximum_select;
+        $configuration = $this->getApplicationConfiguration();
+
+        if(!$configuration instanceof ApplicationConfiguration)
+        {
+            return $this->maximum_select;
+        }
+
+        return $configuration->getMaximumSelect();
     }
 
     /**
      * Returns the types of content object that the viewer can use.
      *
-     * @return multitype:string
+     * @return string[]
      */
     public function get_types()
     {
-        return $this->get_application()->get_allowed_content_object_types();
+        $configuration = $this->getApplicationConfiguration();
+
+        if(!$configuration instanceof ApplicationConfiguration)
+        {
+            return $this->get_application()->get_allowed_content_object_types();
+        }
+
+        return $configuration->getAllowedContentObjectTypes();
     }
 
     /**
      *
-     * @return multitype:string
+     * @return string[]
      */
     public function get_actions()
     {
@@ -225,7 +240,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @param multitype :string $actions
+     * @param string[] $actions
      */
     public function set_actions($actions)
     {
@@ -234,16 +249,23 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return multitype:int
+     * @return int[]
      */
     public function get_excluded_objects()
     {
-        return $this->excluded_objects;
+        $configuration = $this->getApplicationConfiguration();
+
+        if(!$configuration instanceof ApplicationConfiguration)
+        {
+            return $this->excluded_objects;
+        }
+
+        return $configuration->getExcludedContentObjectIds();
     }
 
     /**
      *
-     * @param multitype :int $excluded_objects
+     * @param int[] $excluded_objects
      */
     public function set_excluded_objects($excluded_objects)
     {
@@ -261,7 +283,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return Ambigous <multitype:int, int>
+     * @return int|int[]
      */
     public static function get_selected_objects()
     {
@@ -295,8 +317,19 @@ abstract class Manager extends Application
      */
     public function areTabsDisabled()
     {
-        return $this->getApplicationConfiguration()->get(self::SETTING_TABS_DISABLED) === true ||
-        !$this->isAuthorized(\Chamilo\Core\Repository\Manager::context());
+        if(!$this->isAuthorized(\Chamilo\Core\Repository\Manager::context()))
+        {
+            return true;
+        }
+
+        $configuration = $this->getApplicationConfiguration();
+
+        if(!$configuration instanceof ApplicationConfiguration)
+        {
+            return $this->getApplicationConfiguration()->get(self::SETTING_TABS_DISABLED) === true;
+        }
+
+        return $configuration->areTabsDisabled();
     }
 
     /**
@@ -305,7 +338,14 @@ abstract class Manager extends Application
      */
     public function areBreadcrumbsDisabled()
     {
-        return $this->getApplicationConfiguration()->get(self::SETTING_BREADCRUMBS_DISABLED) === true;
+        $configuration = $this->getApplicationConfiguration();
+
+        if(!$configuration instanceof ApplicationConfiguration)
+        {
+            return $this->getApplicationConfiguration()->get(self::SETTING_BREADCRUMBS_DISABLED) === true;
+        }
+
+        return $configuration->areBreadcrumbsDisabled();
     }
 
     /**
@@ -345,7 +385,7 @@ abstract class Manager extends Application
             )
         );
 
-        if($this->get_maximum_select() > 1)
+        if ($this->get_maximum_select() > 1)
         {
             $tabs[self::TAB_IMPORTER] = $this->get_url(
                 array(self::PARAM_TAB => self::TAB_IMPORTER, self::PARAM_ACTION => self::ACTION_IMPORTER)
@@ -364,4 +404,57 @@ abstract class Manager extends Application
 
         return $tabs;
     }
+
+    /**
+     * @return ContentObject[]
+     */
+    protected function getUserTemplates()
+    {
+        $configuration = $this->getApplicationConfiguration();
+
+        if(!$configuration instanceof ApplicationConfiguration)
+        {
+            return [];
+        }
+
+        return $configuration->getUserTemplates();
+    }
+
+    /**
+     * @param string $contentObjectType
+     *
+     * @return bool
+     */
+    protected function hasUserTemplatesForType(string $contentObjectType)
+    {
+        return count($this->getUserTemplatesForType($contentObjectType)) > 0;
+    }
+
+    /**
+     * @param string $contentObjectType
+     *
+     * @return ContentObject[]
+     */
+    protected function getUserTemplatesForType(string $contentObjectType)
+    {
+        $templatesForType = [];
+
+        foreach ($this->getUserTemplates() as $template)
+        {
+            if (!$template instanceof TemplateSupportInterface)
+            {
+                throw new \RuntimeException(
+                    'The given content object type can not be used as a template because it is not supported'
+                );
+            }
+
+            if ($template->get_type() == $contentObjectType)
+            {
+                $templatesForType[] = $template;
+            }
+        }
+
+        return $templatesForType;
+    }
+
 }

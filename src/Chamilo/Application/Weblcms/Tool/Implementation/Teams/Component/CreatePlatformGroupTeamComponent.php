@@ -46,7 +46,7 @@ class CreatePlatformGroupTeamComponent extends Manager
             else
             {
                 return $this->getTwig()->render(
-                    Manager::context() . ':CreatePlatformGroupTeam.html.twig', [
+                    Manager::context() . ':PlatformGroupTeamForm.html.twig', [
                         'HEADER' => $this->render_header(),
                         'FOOTER' => $this->render_footer(),
                         'FORM' => $form->createView(),

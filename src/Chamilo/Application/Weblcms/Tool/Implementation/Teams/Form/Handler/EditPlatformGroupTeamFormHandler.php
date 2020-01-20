@@ -104,8 +104,8 @@ class EditPlatformGroupTeamFormHandler extends FormHandler
         $teamName = $data[PlatformGroupTeamType::ELEMENT_NAME];
         $platformGroupIds = json_decode($data[PlatformGroupTeamType::ELEMENT_PLATFORM_GROUPS]);
 
-        $this->platformGroupTeamService->createTeamForSelectedGroups(
-            $this->user, $this->course, $teamName, $platformGroupIds
+        $this->platformGroupTeamService->updatePlatformGroupTeam(
+            $this->platformGroupTeam, $teamName, $platformGroupIds
         );
 
         return true;

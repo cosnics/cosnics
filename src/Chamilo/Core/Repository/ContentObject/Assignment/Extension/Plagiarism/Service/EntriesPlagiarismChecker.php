@@ -83,9 +83,13 @@ class EntriesPlagiarismChecker
 
             if ($this->plagiarismChecker->canCheckForPlagiarism($entry))
             {
-                $this->plagiarismChecker->checkEntryForPlagiarism(
-                    $entry, $submitter, $entryPlagiarismResultServiceBridge
-                );
+                try {
+                    $this->plagiarismChecker->checkEntryForPlagiarism(
+                        $entry, $submitter, $entryPlagiarismResultServiceBridge
+                    );
+                } catch (\Exception $exception) {
+                    //todo: long term fix
+                }
             }
         }
     }

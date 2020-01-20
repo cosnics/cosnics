@@ -1,9 +1,13 @@
 <?php
+
 namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportService;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -22,7 +26,7 @@ class ImporterComponent extends Manager
      */
     public function run()
     {
-        if (! RightsService::getInstance()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
+        if (!RightsService::getInstance()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
         {
             throw new NotAllowedException();
         }
@@ -44,7 +48,12 @@ class ImporterComponent extends Manager
                         'ImportType',
                         array(
                             'TYPE' => Translation::get(
-                                'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize())))));
+                                'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize()
+                            )
+                        )
+                    )
+                )
+            );
 
             $html = array();
 
@@ -61,5 +70,13 @@ class ImporterComponent extends Manager
     public function get_additional_parameters($additionalParameters = array())
     {
         return parent::get_additional_parameters([self::PARAM_IMPORT_TYPE]);
+    }
+
+    /**
+     * @return ContentObjectRelationService
+     */
+    protected function getContentObjectRelationService()
+    {
+        return $this->getService(ContentObjectRelationService::class);
     }
 }

@@ -71,6 +71,16 @@ class GroupService
     }
 
     /**
+     * @param array $groupIds
+     *
+     * @return Group[]
+     */
+    public function findGroupsByIds($groupIds = [])
+    {
+        return $this->groupRepository->findGroupsByIds($groupIds);
+    }
+
+    /**
      * @param string $groupCode
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */

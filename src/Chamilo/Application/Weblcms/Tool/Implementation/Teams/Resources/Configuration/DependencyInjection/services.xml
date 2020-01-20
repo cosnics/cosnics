@@ -10,5 +10,6 @@
         </service>
 
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler\CreatePlatformGroupTeamFormHandler" autowire="true" />
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler\EditPlatformGroupTeamFormHandler" autowire="true" />
     </services>
 </container>

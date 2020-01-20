@@ -1,7 +1,11 @@
 {% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Teams' %}
 
-{{ getJavascript('VueCommon.js', 'Chamilo\\Libraries') }}
-{#{{ getCss('Plugin/VueJS/BootstrapVue/bootstrap-vue.min.css', 'Chamilo\\Configuration') }}#}
+{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
+
+{{ getCss('Plugin/VueJS/BootstrapVue/bootstrap-vue.min.css', 'Chamilo\\Configuration') }}
 
 <style>
     .platform-group-table {
@@ -29,17 +33,17 @@
              show-empty empty-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
              empty-filtered-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
     >
-        <template v-slot:cell(name)="data">
+        <template slot="name" slot-scope="data">
             <a :href="visitTeamUrl(data.item)">{{ '{{ data.item.name }}' }}</a>
         </template>
-        <template v-slot:cell(platform_groups)="data">
+        <template slot="platform_groups" slot-scope="data">
             <select class="form-control input-sm" name="platform_groups">
                 <option v-for="platformGroup in data.item.groups">
                     {{ '{{ platformGroup.name }}' }} ({{ '{{ platformGroup.code }}' }})
                 </option>
             </select>
         </template>
-        <template v-slot:cell(actions)="data">
+        <template slot="actions" slot-scope="data">
 
             <a :href="visitTeamUrl(data.item)" type="button" class="btn btn-default btn-sm">{{ 'VisitTeam'|trans({}, appContext) }}</a>
 
@@ -52,8 +56,8 @@
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li><a :href="addUsersUrl(data.item)">{{ 'AddUsersNotInTeam'|trans({}, appContext) }}</a></li>
                         <li><a :href="removeUsersUrl(data.item)">{{ 'RemoveUsersNotInGroups'|trans({}, appContext) }}</a></li>
-                        {#                        <li class="divider"></li>#}
-                        {#                        <li><a :href="editTeamUrl(data.item)">{{ 'EditPlatformGroupTeam'|trans({}, appContext) }}</a></li>#}
+                        <li class="divider"></li>
+                        <li><a :href="editTeamUrl(data.item)">{{ 'EditPlatformGroupTeam'|trans({}, appContext) }}</a></li>
                     </ul>
                 </div>
             {% endif %}
@@ -65,29 +69,27 @@
 <script type="text/javascript">
     (function () {
 
-        var fields = [
-            {
-                key: 'name',
+        var fields = {
+            'name': {
                 'label': '{{ 'PlatformGroupTeamName'|trans({}, appContext) }}',
                 'sortable': true
             },
-            {
-                key: 'platform_groups',
+            'platform_groups': {
                 'label': '{{ 'PlatformGroups'|trans({}, appContext) }}',
                 'sortable': false
             },
-            {
-                key: 'actions',
+            'actions': {
                 'label': '',
                 'class': 'actions-column'
             }
-        ];
+        };
 
         var platformGroups = {{ PLATFORM_GROUP_TEAMS_JSON|raw }};
         var visitTeamUrlTemplate = '{{ VISIT_PLATFORM_GROUP_TEAM_URL|raw }}';
         var addUsersUrlTemplate = '{{ SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS_URL|raw }}';
         var removeUsersUrlTemplate = '{{ REMOVE_TEAM_USERS_NOT_IN_GROUPS_URL|raw }}';
         var editTeamUrl = '{{ EDIT_PLATFORM_GROUP_TEAM_URL|raw }}';
+        var updateLocalTeamNamesUrl = '{{ UPDATE_LOCAL_TEAM_NAMES_AJAX_URL|raw }}';
 
         $(window).on('load', function () {
             new Vue({
@@ -99,27 +101,54 @@
                     visitTeamUrlTemplate: visitTeamUrlTemplate,
                     addUsersUrlTemplate: addUsersUrlTemplate,
                     removeUsersUrlTemplate: removeUsersUrlTemplate,
-                    editTeamUrlTemplate: editTeamUrl
+                    editTeamUrlTemplate: editTeamUrl,
+                    updateLocalTeamNamesUrl: updateLocalTeamNamesUrl
                 },
                 methods: {
-                    visitTeamUrl: function (team) {
+                    visitTeamUrl: function(team) {
                         return this.addTeamToUrl(this.visitTeamUrlTemplate, team);
                     },
-                    addUsersUrl: function (team) {
+                    addUsersUrl: function(team) {
                         return this.addTeamToUrl(this.addUsersUrlTemplate, team);
                     },
-                    removeUsersUrl: function (team) {
+                    removeUsersUrl: function(team) {
                         return this.addTeamToUrl(this.removeUsersUrlTemplate, team);
                     },
-                    editTeamUrl: function (team) {
+                    editTeamUrl: function(team) {
                         return this.addTeamToUrl(this.editTeamUrlTemplate, team);
                     },
-                    addTeamToUrl: function (urlTemplate, team) {
+                    addTeamToUrl: function(urlTemplate, team) {
                         return urlTemplate.replace('__PLATFORM_GROUP_TEAM_ID__', team.id);
                     }
+                },
+                mounted: function() {
+                    var vueInstance = this;
+
+                    var ids = [];
+                    this.platformGroups.forEach(function(platformGroupTeam) {
+                        ids.push(platformGroupTeam.id);
+                    });
+
+                    var formData = new FormData();
+                    formData.append('PlatformGroupTeamIds', JSON.stringify(ids));
+
+                    vueInstance.$http.post(vueInstance.updateLocalTeamNamesUrl, formData).then(function (response) {
+                        if(response.body)
+                        {
+                            vueInstance.platformGroups.forEach(function(platformGroupTeam) {
+                                if(response.body[platformGroupTeam.id])
+                                {
+                                    platformGroupTeam.name = response.body[platformGroupTeam.id];
+                                }
+                            });
+
+                            vueInstance.$forceUpdate();
+
+                        }
+                    });
+
                 }
             });
         });
-    })
-    ();
+    })();
 </script>

@@ -167,11 +167,13 @@ class UserService
      * @param string $authSource
      * @param bool $active
      *
+     * @param \DateTime|null $expirationDate
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function createUser(
         $firstName, $lastName, $username, $officialCode, $emailAddress, $password = null, $authSource = 'Platform',
-        $active = true
+        $active = true, \DateTime $expirationDate = null
     )
     {
         $requiredParameters = [
@@ -212,6 +214,11 @@ class UserService
         }
 
         $user->set_active($active);
+
+        if($expirationDate instanceof \DateTime)
+        {
+            $user->set_expiration_date($expirationDate->getTimestamp());
+        }
 
         $this->passwordSecurity->setPasswordForUser($user, $password);
 

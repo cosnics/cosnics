@@ -7,6 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
+use GuzzleHttp\Exception\ClientException;
 use Microsoft\Graph\Model\Group;
 
 /**
@@ -166,7 +167,7 @@ class GroupService
             }
 
             /** BUG IN MICROSOFT: SUBSCRIBE MEMBER REMOVES AN OWNER BUT THE OWNER SHOULD BE BOTH MEMBER AND OWNER  */
-            if($this->isOwnerOfGroup($groupId, $user))
+            if ($this->isOwnerOfGroup($groupId, $user))
             {
                 $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
                 $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
@@ -489,7 +490,7 @@ class GroupService
 
         $currentAzureUserIdentifiers = [];
 
-        foreach($users as $user)
+        foreach ($users as $user)
         {
             $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
             if (!empty($azureUserIdentifier))
@@ -510,7 +511,7 @@ class GroupService
 
         // NEVER REMOVE OWNERS AS MEMBER WHILE SYNCHING
         $owners = $this->getGroupRepository()->listGroupOwners($groupId);
-        foreach($owners as $owner)
+        foreach ($owners as $owner)
         {
             $excludedUsersForRemovalIdentifiers[] = $owner->getId();
         }
@@ -524,7 +525,7 @@ class GroupService
         }
 
         $usersToRemove = array_diff($office365GroupMemberIdentifiers, $currentAzureUserIdentifiers);
-        if(!empty($excludedUsersForRemovalIdentifiers))
+        if (!empty($excludedUsersForRemovalIdentifiers))
         {
             $usersToRemove = array_diff($usersToRemove, $excludedUsersForRemovalIdentifiers);
         }
@@ -538,9 +539,10 @@ class GroupService
     /**
      * @param string $groupId
      * @param User[] $members
+     *
      * @return string[]
      */
-    public function getGroupMemberAzureIdsNotInArray(string $groupId, array $members):array
+    public function getGroupMemberAzureIdsNotInArray(string $groupId, array $members): array
     {
         return array_diff($this->getGroupMembers($groupId), $this->userService->getAzureUserIdentifiers($members));
     }
@@ -548,9 +550,10 @@ class GroupService
     /**
      * @param string $groupId
      * @param User[] $owners
+     *
      * @return string[]
      */
-    public function getGroupOwnerAzureIdsNotInArray(string $groupId, array $owners):array
+    public function getGroupOwnerAzureIdsNotInArray(string $groupId, array $owners): array
     {
         return array_diff($this->getGroupOwners($groupId), $this->userService->getAzureUserIdentifiers($owners));
     }
@@ -561,7 +564,8 @@ class GroupService
      */
     public function removeGroupMembersNotInArray(string $groupId, array $members)
     {
-        foreach ($this->getGroupMemberAzureIdsNotInArray($groupId, $members) as $memberAzureId) {
+        foreach ($this->getGroupMemberAzureIdsNotInArray($groupId, $members) as $memberAzureId)
+        {
             $this->removeMemberFromGroupByAzureId($groupId, $memberAzureId);
         }
     }
@@ -572,20 +576,34 @@ class GroupService
      */
     public function removeGroupOwnersNotInArray(string $groupId, array $owners)
     {
-        foreach ($this->getGroupOwnerAzureIdsNotInArray($groupId, $owners) as $memberAzureId) {
+        foreach ($this->getGroupOwnerAzureIdsNotInArray($groupId, $owners) as $memberAzureId)
+        {
             $this->removeOwnerByAzureId($groupId, $memberAzureId);
         }
     }
 
     /**
      * @param string $groupId
+     *
      * @return Group
      * @throws GroupNotExistsException
      */
     public function getGroup(string $groupId): Group
     {
-        $group = $this->groupRepository->getGroup($groupId);
-        if(!$group instanceof Group) {
+        try
+        {
+            $group = $this->groupRepository->getGroup($groupId);
+        }
+        catch(ClientException $clientException)
+        {
+            if($clientException->getCode() == '404')
+            {
+                throw new GroupNotExistsException($groupId);
+            }
+        }
+
+        if (!$group instanceof Group)
+        {
             throw new GroupNotExistsException($groupId);
         }
 

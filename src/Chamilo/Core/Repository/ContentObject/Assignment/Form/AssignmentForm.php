@@ -84,6 +84,9 @@ class AssignmentForm extends ContentObjectForm
                     $active->_elements[0]->setValue(serialize($defaults[Assignment::PROPERTY_SELECT_ATTACHMENT]));
                 }
             }
+
+            $defaults[Assignment::PROPERTY_PAGE_TEMPLATE] = $object->getPageTemplate();
+            $defaults[Assignment::PROPERTY_LAST_ENTRY_AS_TEMPLATE] = $object->useLastEntryAsTemplate();
         }
         else
         {
@@ -180,6 +183,24 @@ class AssignmentForm extends ContentObjectForm
             'advanced_element_finder', Assignment::PROPERTY_ALLOWED_TYPES, Translation::get('AllowedContentTypes'),
             $types
         );
+
+        $this->addElement('html', '<div class="page_template" style="display:none;">');
+
+        $this->addElement('category', Translation::get('PageTemplate'));
+
+        $this->add_html_editor(Assignment::PROPERTY_PAGE_TEMPLATE, Translation::get('PageTemplate'), false);
+        $this->addElement(
+            'checkbox', Assignment::PROPERTY_LAST_ENTRY_AS_TEMPLATE, Translation::get('UseLastEntryAsTemplate')
+        );
+
+        $this->addElement(
+            'html',
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath(Assignment::package(), true) . 'PageTemplate.js'
+            )
+        );
+
+        $this->addElement('html', '</div>');
 
         $this->addElement('category');
 
@@ -304,6 +325,9 @@ class AssignmentForm extends ContentObjectForm
             $object->set_visibility_feedback(null);
         }
 
+        $object->setPageTemplate($values[Assignment::PROPERTY_PAGE_TEMPLATE]);
+        $object->setUseLastEntryAsTemplate(boolval($values[Assignment::PROPERTY_LAST_ENTRY_AS_TEMPLATE]));
+
         $this->set_content_object($object);
 
         return parent::create_content_object();
@@ -345,6 +369,9 @@ class AssignmentForm extends ContentObjectForm
         {
             $object->set_visibility_feedback(null);
         }
+
+        $object->setPageTemplate($values[Assignment::PROPERTY_PAGE_TEMPLATE]);
+        $object->setUseLastEntryAsTemplate(boolval($values[Assignment::PROPERTY_LAST_ENTRY_AS_TEMPLATE]));
 
         $this->set_content_object($object);
 

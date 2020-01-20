@@ -437,7 +437,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $contentObjectRelationService->createContentObjectRelation(
                 $this->get_parameters()->getWorkspace()->getId(), 
-                $contentObject->getId(), 
+                $contentObject->get_object_number(),
                 $parent);
         }
     }

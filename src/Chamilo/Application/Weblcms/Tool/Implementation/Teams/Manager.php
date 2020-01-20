@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams;
 
 use Chamilo\Application\Weblcms\Service\CourseSubscriptionService;
@@ -26,6 +27,8 @@ class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     const ACTION_REMOVE_TEAM_USERS_NOT_IN_GROUPS = 'RemoveTeamUsersNotInGroups';
     const ACTION_SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS = 'SubscribePlatformGroupTeamUsers';
     const ACTION_VISIT_PLATFORM_GROUP_TEAM = 'VisitPlatformGroupTeam';
+
+    const ACTION_AJAX = 'Ajax';
 
     const PARAM_PLATFORM_GROUP_TEAM_ID = 'PlatformGroupTeamId';
 
@@ -55,7 +58,7 @@ class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         $platformGroupTeamId = $this->getRequest()->getFromUrl(self::PARAM_PLATFORM_GROUP_TEAM_ID);
         $platformGroupTeam = null;
 
-        if(!empty($platformGroupTeamId))
+        if (!empty($platformGroupTeamId))
         {
             $platformGroupTeam = $this->getPlatformGroupTeamService()->findPlatformGroupTeamById($platformGroupTeamId);
         }
@@ -96,5 +99,20 @@ class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     protected function getCourseSubscriptionService()
     {
         return $this->getService(CourseSubscriptionService::class);
+    }
+
+    /**
+     * @param string $ajaxAction
+     *
+     * @param array $parameters
+     *
+     * @return string
+     */
+    public function getAjaxUrl(string $ajaxAction, $parameters = [])
+    {
+        $parameters[self::PARAM_ACTION] = self::ACTION_AJAX;
+        $parameters[\Chamilo\Application\Weblcms\Tool\Implementation\Teams\Ajax\Manager::PARAM_ACTION] = $ajaxAction;
+
+        return $this->get_url($parameters);
     }
 }
