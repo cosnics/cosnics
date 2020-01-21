@@ -5,6 +5,8 @@
  * they will be placed in the resources folder and automatically be moved to the web folder once the process:resources script is being run in production, thus eliminating
  * the need to "build" the resources while in production.
  *
+ * EX: npm  build-legacy .\src\Chamilo\Libraries\Resources\Configuration\assets.json
+ *
  * Since this script works by configuration this gives us a lot more power over which resources we combine together.
  *
  * Color Reference
@@ -44,7 +46,13 @@ const cleanCSS = require('gulp-clean-css');
 const fs = require('fs');
 
 const arguments = process.argv;
-const configPath = arguments[2];
+let configPath = arguments[2];
+
+if(!configPath)
+{
+    configPath = path.resolve('assets.json');
+    console.log(configPath);
+}
 
 if(!configPath || !fs.existsSync(configPath))
 {
@@ -53,7 +61,7 @@ if(!configPath || !fs.existsSync(configPath))
 }
 
 const root = path.resolve(__dirname, '../../../../../../');
-const config = require(path.resolve(root, configPath));
+const config = require(path.resolve(configPath));
 
 const bowerVendorPath = path.resolve(root, 'vendor/bower_components');
 const nodeModulesPath = path.resolve(root, 'node_modules');

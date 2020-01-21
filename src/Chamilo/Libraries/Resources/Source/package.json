@@ -1,0 +1,22 @@
+{
+  "name": "@cosnics/chamilo-libraries",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "build-legacy"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-uglify": "^3.0.2",
+    "gulp-clean-css": "^4.2.0",
+    "prettier": "^1.18.2",
+    "ts-jest": "^23.0.0",
+    "typescript": "~3.5.3"
+  },
+  "bin": {
+    "build-legacy": "Javascript/JavascriptBuild.js"
+  }
+}
