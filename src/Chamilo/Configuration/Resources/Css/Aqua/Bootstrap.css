@@ -924,7 +924,8 @@ div.panel del {
 	border-bottom: 1px solid #dddddd;
 }
 
-table th.sorting {
+table th.sorting,
+.table.b-table>thead>tr>[aria-sort] {
 	color: #337ab7;
 	cursor: pointer;
 }
