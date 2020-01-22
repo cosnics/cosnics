@@ -194,6 +194,7 @@
     .category-td {
         height: 100%;
         padding: 0;
+        width: 100px;
     }
 
     .category-red {
@@ -218,9 +219,10 @@
 
     .category {
         display: flex;
-        justify-content: stretch;
+        align-items: stretch;
         padding: 0;
         height: 100%;
+        position: absolute;
     }
 
     .score-title, .score {
