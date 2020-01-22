@@ -39,4 +39,16 @@
 
 <style scoped>
 
+    .btn-secondary {
+        color: #fff;
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+        color: #fff;
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+
 </style>

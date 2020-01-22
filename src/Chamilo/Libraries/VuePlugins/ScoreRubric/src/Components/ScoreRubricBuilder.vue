@@ -24,7 +24,7 @@
                                     </MoveDeleteBar>
                                 </div>
 
-                                <b-button variant="primary" class="ml-2 mt-1">Koppel leerdoelstelling</b-button>
+                                <b-button variant="primary" class="w-100 ml-2 mt-1">Koppel leerdoelstelling</b-button>
                             </div>
                         </slot>
                     </collapse>
@@ -71,14 +71,14 @@
             </tr>
             <tr>
                 <td :colspan="store.rubric.levels.length + 1">
-                    <b-button variant="primary" class="w-100">Voeg vrij criterium of leerdoelstelling toe</b-button>
+                    <b-button variant="primary" class="w-100" v-on:click="category.addCriterium(getDefaultCriterium())">Voeg vrij criterium of leerdoelstelling toe</b-button>
                 </td>
             </tr>
             </tbody>
             <tbody  v-if="!cluster.collapsed">
             <tr>
                 <td :colspan="2 + store.rubric.levels.length">
-                    <b-button  variant="primary" class="w-100">Voeg Categorie toe</b-button>
+                    <b-button  variant="primary" class="w-100" v-on:click="cluster.addCategory(getDefaultCategory())">Voeg Categorie toe</b-button>
                 </td>
             </tr>
             </tbody>
@@ -94,15 +94,15 @@
         <div class="row mb-4">
             <div class="col-12">
 
-                <b-button variant="primary" size="lg" class="pull-left w-100">Voeg nieuwe cluster toe</b-button>
+                <b-button variant="primary" size="lg" class="w-100" v-on:click="store.rubric.addCluster(getDefaultCluster())">Voeg nieuwe cluster toe</b-button>
             </div>
         </div>
         <div class="row">
             <div class="col-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Rubric Rapport</h5></div>
-                    <div class="card-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5 class="panel-title">Rubric Rapport</h5></div>
+                    <div class="panel-body">
                         <p class="pull-left">Maximum score: </p>
                     </div>
                 </div>
@@ -112,12 +112,15 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from "vue-property-decorator";
+    import {Component, Vue} from "vue-property-decorator";
     import LevelsTable from "./LevelsTable.vue";
     import ScoreRubricStore from "../ScoreRubricStore";
     import Configuration from "./Configuration.vue";
     import Collapse from "./Collapse.vue";
     import MoveDeleteBar from "./MoveDeleteBar.vue";
+    import Cluster from "../Domain/Cluster";
+    import Category from "../Domain/Category";
+    import Criterium from "../Domain/Criterium";
 
     @Component({
         name: 'score-rubric-builder',
@@ -134,6 +137,25 @@
     })
     export default class ScoreRubricBuilder extends Vue {
         public store: ScoreRubricStore = this.$root.$data.store;
+
+        getDefaultCluster() {
+            let cluster = new Cluster("");
+            cluster.addCategory(this.getDefaultCategory());
+
+            return cluster;
+        }
+
+        getDefaultCategory() {
+            let category = new Category("Categorie 1");
+            category.color = "blue";
+            category.addCriterium(this.getDefaultCriterium());
+
+            return category;
+        }
+
+        getDefaultCriterium() {
+            return new Criterium("");
+        }
     }
     //todo replace border with padding
 </script>
@@ -171,6 +193,7 @@
 
     .category-td {
         height: 100%;
+        padding: 0;
     }
 
     .category-red {
@@ -181,7 +204,11 @@
     .category-green {
         background: green;
         width: 10px;
+    }
 
+    .category-blue {
+        background: blue;
+        width: 10px;
     }
 
     .category-title {
@@ -224,5 +251,99 @@
 
     .feedback-text {
         height: 200px;
+    }
+
+    .w-100 {
+        width: 100%;
+    }
+
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+
+    .mb-2 {
+        margin-bottom: 0.5rem;
+    }
+
+    .ml-1 {
+        margin-left: 0.25rem;
+    }
+
+    .ml-2 {
+        margin-left: 0.5rem;
+    }
+
+    .mr-2 {
+        margin-right: 0.5rem;
+    }
+
+    .mt-2 {
+        margin-top: 0.5rem;
+    }
+
+    .mt-1 {
+        margin-top: 0.25rem;
+    }
+
+    .rubric-table tr.cluster-header td {
+        padding: 0.5rem;
+    }
+
+    .d-flex {
+        display: flex;
+    }
+
+    .input-group-prepend,
+    .input-group-append {
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1;
+        color: #555;
+        text-align: center;
+        background-color: #eee;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .input-group-prepend, .input-group-btn,
+    .input-group-append, .input-group-btn {
+        width: 1%;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+    .input-group .form-control, .input-group-prepend, .input-group-btn,
+    .input-group .form-control, .input-group-append, .input-group-btn{
+        display: table-cell;
+    }
+
+    .input-group-prepend:first-child {
+        border-right: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .input-group-append:last-child {
+        border-left: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .btn-secondary {
+        color: #fff;
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+        color: #fff;
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+
+    .btn-secondary:focus {
+        color: #fff;
+        background-color: #5a6268;
+        border-color: #545b62;
     }
 </style>

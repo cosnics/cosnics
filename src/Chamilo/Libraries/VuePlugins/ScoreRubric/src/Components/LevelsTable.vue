@@ -47,9 +47,9 @@
                 </td>
             </tr>
             <tr scope="row">
-                <td :colspan="rubric.levels.length" class="button-row">
+                <td :colspan="rubric.levels.length + 1" class="button-row">
                     <button class="btn btn-sm btn-primary ml-1 pull-left"
-                            v-on:click="rubric.addLevel()"><i
+                            v-on:click="rubric.addLevel(getDefaultLevel())"><i
                             class="fa fa-plus" aria-hidden="true"></i> Voeg niveau toe
                     </button>
                 </td>
@@ -90,6 +90,10 @@
             }
             this.rubric.removeLevel(level);
         }
+
+        getDefaultLevel() {
+            return new Level('');
+        }
     }
 </script>
 <style scoped>
@@ -125,6 +129,42 @@
 
     .score-input-group {
         width: 150px;
+    }
+
+    .input-group-prepend,
+    .input-group-append {
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1;
+        color: #555;
+        text-align: center;
+        background-color: #eee;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .input-group-prepend, .input-group-btn,
+    .input-group-append, .input-group-btn {
+        width: 1%;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+    .input-group .form-control, .input-group-prepend, .input-group-btn,
+    .input-group .form-control, .input-group-append, .input-group-btn{
+        display: table-cell;
+    }
+
+    .input-group-prepend:first-child {
+        border-right: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .input-group-append:last-child {
+        border-left: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
     }
 
 </style>

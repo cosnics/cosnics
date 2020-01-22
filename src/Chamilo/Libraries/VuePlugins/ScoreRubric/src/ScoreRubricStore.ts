@@ -45,8 +45,10 @@ export default class ScoreRubricStore {
         category2.addCriterium(criteria23);
 
         const cluster2 = new Cluster('Een tweede cluster');
-        const category3 = new Category();
+        const category3 = new Category('Categorie 3');
         category3.color = 'blue';
+
+        category3.addCriterium(new Criterium(''));
 
         cluster2.addCategory(category3);
 

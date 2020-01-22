@@ -1,11 +1,11 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            <h5 class="card-title">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title">
                 Configuratie Rubric
             </h5>
         </div>
-        <div class="card-body options">
+        <div class="panel-body options">
             <b-form-checkbox v-model="store.rubric.useScores"
                              name="score"
                              :value="true"
@@ -31,12 +31,6 @@
 </script>
 
 <style scoped>
-    .card-header {
-        padding: 0.5rem 1.25rem;
-    }
-    .card-title {
-        margin-bottom: 0;
-    }
 .options{
     display: flex;
     flex-direction: column;
