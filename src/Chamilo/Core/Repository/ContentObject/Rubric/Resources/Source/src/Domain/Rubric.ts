@@ -20,18 +20,12 @@ export function isContainer(object: any): object is ContainerInterface {
     return 'children' in object && isElement(object);
 }
 
-export interface RubricChoiceJsonObject {
-    "criteriumId": string,
-    "levelId": string,
-    "choice": ChoiceJsonObject
-}
-
 export interface RubricJsonObject {
     useScores: boolean,
     title: string,
     levels: LevelJsonObject[],
     clusters: ClusterJsonObject[],
-    choices: RubricChoiceJsonObject[]
+    choices: ChoiceJsonObject[]
 }
 
 export default class Rubric extends Container {
@@ -101,16 +95,12 @@ export default class Rubric extends Container {
         }
     }
 
-    protected getChoicesJSON(): RubricChoiceJsonObject[]{
-        let choicesArray:RubricChoiceJsonObject[] = [];
+    protected getChoicesJSON(): ChoiceJsonObject[]{
+        let choicesArray:ChoiceJsonObject[] = [];
         this.choices.forEach((levelMap, criteriumId) => {
             levelMap.forEach((choice, levelId) => {
                 choicesArray.push(
-                    {
-                        "criteriumId": criteriumId,
-                        "levelId": levelId,
-                        "choice": choice.toJSON()
-                    }
+                    choice.toJSON(criteriumId, levelId)
                 )
             })
         } );
@@ -130,7 +120,7 @@ export default class Rubric extends Container {
 
         rubricObject.choices.forEach(rubricChoiceJsonObject => {
             newRubric.addChoice(
-                Choice.fromJSON(rubricChoiceJsonObject.choice),
+                Choice.fromJSON(rubricChoiceJsonObject),
                 rubricChoiceJsonObject.criteriumId,
                 rubricChoiceJsonObject.levelId,
                 )

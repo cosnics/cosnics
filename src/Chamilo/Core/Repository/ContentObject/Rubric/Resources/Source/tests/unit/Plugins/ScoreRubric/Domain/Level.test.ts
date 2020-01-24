@@ -1,5 +1,4 @@
-import Criterium from "@/../../../../../ScoreRubric/src/Domain/Criterium";
-import Level, {Signal} from "@/../../../../../ScoreRubric/src/Domain/Level";
+import Level, {Signal} from "../../../../../src/Domain/Level";
 
 test('json', () => {
     let level = new Level('My Level', "description", 5, Signal.GREEN, true);

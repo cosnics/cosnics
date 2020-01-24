@@ -1,10 +1,10 @@
-import {ClusterJsonObject} from "./Cluster";
-
 export interface ChoiceJsonObject {
     selected: boolean,
     feedback: string,
     hasFixedScore: boolean,
-    fixedScore: number
+    fixedScore: number,
+    criteriumId: string,
+    levelId: string
 }
 
 export default class Choice {
@@ -18,12 +18,14 @@ export default class Choice {
         this.feedback = feedback;
     }
 
-    toJSON(): ChoiceJsonObject {
+    toJSON(criteriumId: string, levelId: string): ChoiceJsonObject {
         return {
             selected: this.selected,
             feedback: this.feedback,
             hasFixedScore: this.hasFixedScore,
-            fixedScore: this.fixedScore
+            fixedScore: this.fixedScore,
+            criteriumId: criteriumId,
+            levelId: levelId
         }
     }
 

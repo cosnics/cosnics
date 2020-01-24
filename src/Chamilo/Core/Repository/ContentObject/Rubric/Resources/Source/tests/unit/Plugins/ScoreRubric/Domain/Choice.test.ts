@@ -1,4 +1,4 @@
-import Choice from "@/../../../../../ScoreRubric/src/Domain/Choice";
+import Choice from "../../../../../src/Domain/Choice";
 
 test('json', ()=>{
   let choice = new Choice() ;
@@ -7,5 +7,5 @@ test('json', ()=>{
   choice.hasFixedScore = true;
   choice.fixedScore = 10;
 
-  expect(Choice.fromJSON(choice.toJSON())).toEqual(choice);
+  expect(Choice.fromJSON(choice.toJSON("dummy", "dummy"))).toEqual(choice);
 });

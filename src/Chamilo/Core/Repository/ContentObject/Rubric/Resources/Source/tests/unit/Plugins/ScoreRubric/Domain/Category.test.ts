@@ -1,5 +1,5 @@
-import Category from "@/../../../../../ScoreRubric/src/Domain/Category";
-import Criterium from "@/../../../../../ScoreRubric/src/Domain/Criterium";
+import Category from "../../../../../src/Domain/Category";
+import Criterium from "../../../../../src/Domain/Criterium";
 
 test('json', () => {
     let category = new Category('my category');

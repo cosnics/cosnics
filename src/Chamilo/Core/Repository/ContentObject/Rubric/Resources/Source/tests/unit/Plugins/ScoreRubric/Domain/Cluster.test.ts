@@ -1,6 +1,6 @@
-import Cluster from "@/../../../../../ScoreRubric/src/Domain/Cluster";
-import Category from "@/../../../../../ScoreRubric/src/Domain/Category";
-import Criterium from "@/../../../../../ScoreRubric/src/Domain/Criterium";
+import Cluster from "../../../../../src/Domain/Cluster";
+import Category from "../../../../../src/Domain/Category";
+import Criterium from "../../../../../src/Domain/Criterium";
 
 test('json', () => {
     let cluster = new Cluster("my_cluster");
