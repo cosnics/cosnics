@@ -13,12 +13,8 @@
         Vue.use(BootstrapVue);
         Vue.use(this['cosnics-rubric'].default);
 
-        console.log(this['cosnics-rubric'].default);
         var app = new Vue({
             el: '#builder',
-            components: [
-                ScoreRubricBuilder
-            ],
             data: {
                 "store": {
                     rubric: Vue.prototype.$getRubricFromJSON(
