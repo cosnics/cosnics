@@ -1,5 +1,5 @@
 <template>
-    <div class="btn-group btn-group-sm btn-group-actions" role="group" aria-label="Actie">
+    <div class="btn-group btn-group-xs btn-group-actions" role="group" aria-label="Actie">
         <button v-if="index > 0" class="btn btn-secondary"
                 v-on:click="$emit('move-up')"
                 v-b-popover.hover.top="'Verplaats naar boven'"><i

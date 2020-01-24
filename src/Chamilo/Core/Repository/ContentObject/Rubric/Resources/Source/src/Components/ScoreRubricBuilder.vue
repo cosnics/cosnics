@@ -1,113 +1,111 @@
 <template>
     <b-container fluid>
-        <h1>Configureer </h1>
-        <Configuration class="configuration"></Configuration>
-        <h1>Bepaal niveau's</h1>
+        <Configuration class="configuration"/>
         <LevelsTable/>
-
-        <br/>
-        <h1>Rubric</h1>
-        <table class="table table-bordered rubric-table" v-for="(cluster, clusterIndex) in store.rubric.clusters">
-            <tr class="cluster-header">
-                <td colspan="2" class="cluster-title">
+        <div class="">
+            <table class="rubric-table table table-condensed table-striped" v-for="(cluster) in store.rubric.clusters">
+                <caption>
                     <collapse :collapsed="cluster.collapsed" v-on:toggle-collapse="cluster.toggleCollapsed()">
                         <slot>
-                            <div class="d-flex cluster-title-slot  w-100">
-                                <div class="d-flex w-100 cluster-title-slot-item">
-                                <textarea class="form-control text-area-level-description font-weight-bold ml-2 text-area-cluster-title"
-                                          v-model="cluster.title"
-                                          placeholder="Vul aan"></textarea>
-                                    <MoveDeleteBar :index="clusterIndex" :max-index="store.rubric.clusters.length - 1"
-                                                   v-on:move-up="store.rubric.moveClusterUp(cluster)"
-                                                   v-on:move-down="store.rubric.moveClusterDown(cluster)"
-                                                   v-on:remove="store.rubric.removeCluster(cluster)">
-                                    </MoveDeleteBar>
-                                </div>
-
-                                <b-button variant="primary" class="w-100 ml-2 mt-1">Koppel leerdoelstelling</b-button>
-                            </div>
+                            <b-input
+                                    v-model="cluster.title"
+                                    placeholder="Vul hier de titel van je cluster in"></b-input>
                         </slot>
                     </collapse>
+                </caption>
+                <thead v-if="!cluster.collapsed">
+                <tr class="">
+                    <th scope="col">
+                        Categorie
+                    </th>
+                    <th scope="col">
+                        Criterium
+                    </th>
+                    <th th scope="col" v-for="level in store.rubric.levels">
+                        <i v-if="level.description" class="fa fa-info-circle mr-2" aria-hidden="true"
+                           v-b-popover.hover.top="level.description"></i>{{ level.title }}
+                    </th>
+                </tr>
+                </thead>
+                <tbody v-if="!cluster.collapsed" v-for="category in cluster.categories">
+                <tr v-for="(criterium, index) in category.criteria" class="category-tr">
+                    <td v-if="index === 0" :rowspan="category.criteria.length + 1" class="category-td"
+                        :class="'category-' + category.color">
+                        <div class="spacer"></div>
+                        <div class="category-row">
+                            {{category.title}}
+                        </div>
+                        <div class="spacer"></div>
+                    </td>
+                    <td class="criteria">
+                        <div class="">
+                            <textarea class="form-control text-area-level-description mb-2 feedback-text"
+                                      v-model="criterium.title"
+                                      placeholder="Vul hier het criterium in"></textarea>
+                            <b-input-group v-if="store.rubric.useScores" prepend="Gewicht: " append="%"
+                                           class="weight-input-group weight">
+                                <input type="number" name="Score" class="form-control "
+                                       placeholder="Gewicht %" min="0" max="100" maxlength="3"
+                                       v-model="criterium.weight">
+                            </b-input-group>
 
-                </td>
-                <td v-for="level in store.rubric.levels" class="score-title">
-                    <i v-if="level.description" class="fa fa-info-circle mr-2" aria-hidden="true"
-                       v-b-popover.hover.top="level.description"></i>{{ level.title | capitalize }}
-                </td>
-            </tr>
-
-            <tbody v-if="!cluster.collapsed" v-for="category in cluster.categories">
-            <tr v-for="(criterium, index) in category.criteria" class="category-tr">
-                <td v-if="index === 0" :rowspan="category.criteria.length + 1" class="category-td p-0">
-                    <div class="category">
-                        <div :class="'category-' + category.color"></div>
-                        <div class="category-title">{{ category.title }}</div>
-                    </div>
-                </td>
-                <td class="criteria">
-                    <div class="criterium-title-container">
-                        {{ criterium.title }}
-                        <b-input-group v-if="store.rubric.useScores" prepend="Gewicht: " append="%" class="weight-input-group weight">
-                            <input type="number" name="Score" class="form-control "
-                                   placeholder="Gewicht %" min="0" max="100" maxlength="3"
-                                   v-model="criterium.weight">
-                        </b-input-group>
-                        <b-button variant="primary" class="ml-2 mt-1">Koppel leerdoelstelling</b-button>
-
-                    </div>
-                </td>
-                <td v-for="level in store.rubric.levels" class="score">
+                        </div>
+                    </td>
+                    <td v-for="level in store.rubric.levels" class="score">
                     <textarea class="form-control text-area-level-description mb-2 feedback-text"
                               v-model="store.rubric.getChoice(criterium, level).feedback"
                               placeholder="Vul aan"></textarea>
-                    <div v-if="store.rubric.useScores">
-                        {{store.rubric.getChoiceScore(criterium, level)}} punten
-                        <b-button size="sm">Vaste score</b-button>
-                    </div>
-                    <b-checkbox>Melding in rapport</b-checkbox>
-                </td>
-
-
-            </tr>
-            <tr>
-                <td :colspan="store.rubric.levels.length + 1">
-                    <b-button variant="primary" class="w-100" v-on:click="category.addCriterium(getDefaultCriterium())">Voeg vrij criterium of leerdoelstelling toe</b-button>
-                </td>
-            </tr>
-            </tbody>
-            <tbody  v-if="!cluster.collapsed">
-            <tr>
-                <td :colspan="2 + store.rubric.levels.length">
-                    <b-button  variant="primary" class="w-100" v-on:click="cluster.addCategory(getDefaultCategory())">Voeg Categorie toe</b-button>
-                </td>
-            </tr>
-            </tbody>
-            <tbody>
-            <tr>
-                <td :colspan="store.rubric.levels.length + 2" class="cluster-score">
-                    <h5 class="">Cluster rapport</h5>
-                    <p>Maxmimum score: </p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="row mb-4">
+                        <div v-if="store.rubric.useScores">
+                            {{store.rubric.getChoiceScore(criterium, level)}} punten
+                            <!--b-button size="sm">Vaste score</b-button!-->
+                        </div>
+                        <!--b-checkbox>Melding in rapport</b-checkbox!-->
+                    </td>
+                </tr>
+                <tr>
+                    <td :colspan="store.rubric.levels.length + 1">
+                        <button class="btn btn-sm btn-primary ml-1 pull-left"
+                                v-on:click="category.addCriterium(getDefaultCriterium())">
+                            <i class="fa fa-plus" aria-hidden="true"
+                               v-b-popover.hover.top="'Voeg criterium toe'"></i> Voeg criterium toe
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody v-if="!cluster.collapsed">
+                <tr>
+                    <td >
+                        <button class="btn btn-sm btn-primary pull-left" v-on:click="cluster.addCategory(getDefaultCategory())">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Voeg Categorie toe
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody>
+                <tr>
+                    <td :colspan="store.rubric.levels.length + 2" class="cluster-score">
+                        <p>Maximum score cluster: 10 punten</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row mb-4 add-cluster-row">
             <div class="col-12">
+                <button class="btn btn-sm btn-primary ml-1 pull-left"
+                        v-on:click="store.rubric.addCluster(getDefaultCluster())">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Voeg nieuwe cluster toe
+                </button>
+            </div>
+        </div>
 
-                <b-button variant="primary" size="lg" class="w-100" v-on:click="store.rubric.addCluster(getDefaultCluster())">Voeg nieuwe cluster toe</b-button>
+        <div class="row mb-4 max-rubric-score-row">
+            <div class="col-12">
+                <p class="pull-left">Maximum score rubric: 20 punten </p>
             </div>
         </div>
-        <div class="row">
-            <div class="col-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h5 class="panel-title">Rubric Rapport</h5></div>
-                    <div class="panel-body">
-                        <p class="pull-left">Maximum score: </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+
     </b-container>
 </template>
 
@@ -163,7 +161,12 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
     .rubric-table {
-        margin-bottom: 30px;
+        margin-bottom: 0px;
+    }
+
+    .spacer {
+        height: 45%;
+        width: 100%;
     }
 
     .cluster-header {
@@ -198,19 +201,24 @@
         position: relative;
     }
 
+    .category-row {
+        text-align: center;
+        height: 100%;
+        width: 100%;
+        color: white;
+        font-size: 20px;
+    }
+
     .category-red {
         background: red;
-        width: 10px;
     }
 
     .category-green {
         background: green;
-        width: 10px;
     }
 
     .category-blue {
         background: blue;
-        width: 10px;
     }
 
     .category-title {
@@ -220,7 +228,6 @@
 
     .category {
         display: flex;
-        align-items: stretch;
         padding: 0;
         height: 100%;
         position: absolute;
@@ -246,6 +253,7 @@
 
     .cluster-score {
         text-align: left;
+        background-color: white;
     }
 
     .weight {
@@ -253,7 +261,7 @@
     }
 
     .feedback-text {
-        height: 200px;
+        height: 100px;
     }
 
     .w-100 {
@@ -315,8 +323,9 @@
         white-space: nowrap;
         vertical-align: middle;
     }
+
     .input-group .form-control, .input-group-prepend, .input-group-btn,
-    .input-group .form-control, .input-group-append, .input-group-btn{
+    .input-group .form-control, .input-group-append, .input-group-btn {
         display: table-cell;
     }
 
@@ -353,5 +362,16 @@
     .text-area-cluster-title {
         width: auto;
         flex-grow: 1;
+    }
+
+    .add-cluster-row {
+        margin-left: 1px;
+        margin-bottom:8px;
+    }
+
+    .max-rubric-score-row {
+        padding-top:2px;
+        margin-left: 4px;
+        border-top: 1px solid #ddd;
     }
 </style>

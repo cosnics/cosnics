@@ -22,29 +22,31 @@ export default class ScoreRubricStore {
         this.rubric.addLevel(level4);
 
         const cluster1 = new Cluster("Cluster 1");
-        const category1 = new Category("Categorie 1");
+        cluster1.collapsed = true;
+        const category1 = new Category("Professioneel Communiceren");
         cluster1.addCategory(category1);
         category1.color = "red";
 
         const criterium1 = new Criterium("Volledigheid antwoorden");
         const criterium2 = new Criterium("Onderbouwde mening");
-        const criterium3 = new Criterium("Project stakeholders defined");
+        //const criterium3 = new Criterium("Project stakeholders defined");
 
         category1.addCriterium(criterium1);
         category1.addCriterium(criterium2);
-        category1.addCriterium(criterium3);
+        //category1.addCriterium(criterium3);
         const category2 = new Category("Categorie 2");
         category2.color = "green";
         cluster1.addCategory(category2);
 
         const criteria21 = new Criterium("Volledigheid antwoorden");
-        const criteria22 = new Criterium("Onderbouwde mening");
+        //const criteria22 = new Criterium("Onderbouwde mening");
         const criteria23 = new Criterium("Project stakeholders defined");
         category2.addCriterium(criteria21);
-        category2.addCriterium(criteria22);
+        //category2.addCriterium(criteria22);
         category2.addCriterium(criteria23);
 
         const cluster2 = new Cluster('Een tweede cluster');
+        cluster2.collapsed = true;
         const category3 = new Category('Categorie 3');
         category3.color = 'blue';
 

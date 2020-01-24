@@ -1,19 +1,14 @@
 <template>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h5 class="panel-title">
-                Configuratie Rubric
-            </h5>
-        </div>
-        <div class="panel-body options">
-            <b-form-checkbox v-model="store.rubric.useScores"
-                             name="score"
-                             :value="true"
-                             :unchecked-value="false">
-                Gebruik score
-            </b-form-checkbox>
-        </div>
-    </div>
+    <b-form inline >
+        <b-form-checkbox class="pull-left score-checkbox" v-model="store.rubric.useScores"
+                         id="score-input"
+                         name="score-input"
+                         :value="true"
+                         :unchecked-value="false">
+              Gebruikt score
+        </b-form-checkbox>
+    </b-form>
+
 </template>
 
 <script lang="ts">
@@ -23,18 +18,21 @@
     @Component({
         components: {}
     })
-    export default class Configuration extends Vue{
-        get store():ScoreRubricStore {
+    export default class Configuration extends Vue {
+        get store(): ScoreRubricStore {
             return this.$root.$data.store;
         }
     }
 </script>
 
 <style scoped>
-.options{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    text-align: left;
-}
+    .options {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        text-align: left;
+    }
+    .score-checkbox {
+        margin-right: 2px;
+    }
 </style>

@@ -1,11 +1,10 @@
 <template>
     <div class="collapse-header">
-        <div>
-            <button v-on:click="$emit('toggle-collapse')" class="btn btn-sm btn-secondary">
-                <i class="fa fa-2x"
-                   :class="caretClass" aria-hidden="true"></i>
-            </button>
-        </div>
+        <button v-on:click="$emit('toggle-collapse')" class="btn btn-sm btn-secondary btn-collapse">
+            <i class="fa fa-1x level-caret"
+               :class="caretClass" aria-hidden="true"></i>
+            {{collapsed? "klap open": "klap toe"}}
+        </button>
         <slot></slot>
     </div>
 </template>
@@ -38,24 +37,14 @@
 <style scoped>
     .collapse-header {
         display: flex;
-        flex-direction: row;
+        margin-right: 5px;
+
+    }
+    .btn-collapse {
+        margin-right: 5px;
     }
 
-    .btn-secondary {
-        color: #fff;
-        background-color: #6c757d;
-        border-color: #6c757d;
-    }
-
-    .btn-secondary:hover {
-        color: #fff;
-        background-color: #5a6268;
-        border-color: #545b62;
-    }
-
-    .btn-secondary:focus {
-        color: #fff;
-        background-color: #5a6268;
-        border-color: #545b62;
+    .level-caret {
+        margin-right: 5px;
     }
 </style>

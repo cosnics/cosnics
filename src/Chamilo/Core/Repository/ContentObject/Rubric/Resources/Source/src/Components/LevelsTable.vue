@@ -1,22 +1,18 @@
 <template>
-    <div>
-        <table class="table table-bordered">
-            <thead>
+    <div class="table-responsive w-100">
+        <table class="table table-striped table-condensed">
+            <caption>
+                <collapse :collapsed="collapsed" v-on:toggle-collapse="toggleConfigurationCollapsed">
+                    <slot>
+                        Pas niveau's aan
+                    </slot>
+                </collapse>
+            </caption>
+            <thead v-show="!collapsed" >
             <tr class="levels-header">
-                <th scope="col">
-                    <collapse :collapsed="collapsed" v-on:toggle-collapse="toggleConfigurationCollapsed">
-                        <slot>
-                            <div class="spacer"></div>
-                            <div class="level-title">
-                                Niveau
-                            </div>
-                            <div class="spacer"></div>
-                        </slot>
-                    </collapse>
-                </th>
+                <th scope="col" class="levels-title">Niveau</th>
                 <th scope="col" class="levels-title">Beschrijving</th>
-                <th v-if="store.useScore" scope="col" class="levels-title">Score</th>
-                <th scope="col" class="levels-title">Standaard</th>
+                <th scope="col" class="levels-title">Standaard keuze</th>
                 <th scope="col" class="levels-title"></th>
             </tr>
             </thead>
@@ -24,17 +20,17 @@
             <tr scope="row" v-for="(level, levelIndex) in rubric.levels">
                 <td><input class="form-control text-area-level-title font-weight-bold"
                            v-model="level.title"
-                           placeholder="Vul hier een titel in"></input></td>
-                <td><textarea class="form-control text-area-level-description"
-                              v-model="level.description"
-                              placeholder="Vul hier een beschrijving in"></textarea></td>
-                <td v-if="store.rubric.useScores">
-                    <b-input-group append="Punten" class="score-input-group">
+                           placeholder="Vul hier een niveau in"></input>
+                    <b-input-group v-if="store.rubric.useScores" append="Punten" class="score-input-group">
                         <input type="number" name="Weight" class="form-control"
                                maxlength="3"
                                v-model="level.score">
                     </b-input-group>
                 </td>
+
+                <td><textarea class="form-control text-area-level-description"
+                              v-model="level.description"
+                              placeholder="Vul hier een beschrijving in"></textarea></td>
                 <td>
                     <b-form-radio v-model="level.isDefault" name="isDefault" value=""></b-form-radio>
                 </td>
@@ -97,16 +93,6 @@
     }
 </script>
 <style scoped>
-    .spacer {
-        width: 100%;
-    }
-
-    .levels-header {
-        background-color: #45546a;
-        color: white;
-        font-weight: bold;
-    }
-
     .level-title {
         align-self: center;
     }
@@ -129,6 +115,7 @@
 
     .score-input-group {
         width: 150px;
+        margin-top: 3px;
     }
 
     .input-group-prepend,
@@ -150,8 +137,9 @@
         white-space: nowrap;
         vertical-align: middle;
     }
+
     .input-group .form-control, .input-group-prepend, .input-group-btn,
-    .input-group .form-control, .input-group-append, .input-group-btn{
+    .input-group .form-control, .input-group-append, .input-group-btn {
         display: table-cell;
     }
 
