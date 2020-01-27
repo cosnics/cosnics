@@ -1,17 +1,16 @@
-import {Element} from "./Rubric";
 import Category, {CategoryJsonObject} from "./Category";
 import Criterium, {CriteriumJsonObject} from "./Criterium";
-import Container from "./Container";
-import {logMethod} from "../Logger";
+import TreeNode from "./TreeNode";
 
 export interface ClusterJsonObject {
+    id: string,
     title: string;
     categories: CategoryJsonObject[];
     criteria: CriteriumJsonObject[];
 
 }
 
-export default class Cluster extends Container {
+export default class Cluster extends TreeNode {
     public collapsed: boolean = false;
 
     public getScore(): number {
@@ -52,6 +51,7 @@ export default class Cluster extends Container {
 
     toJSON(): ClusterJsonObject {
         return {
+            id: this.id,
             title: this.title,
             categories: this.children.filter(child => (child instanceof Category)).map((category) => (category as Category).toJSON()),//todo typeguards?
             criteria: this.children.filter(child => (child instanceof Criterium)).map((criterium) => (criterium as Criterium).toJSON())
@@ -67,7 +67,8 @@ export default class Cluster extends Container {
         }
 
         let newCluster = new Cluster(
-            clusterObject.title
+            clusterObject.title,
+            clusterObject.id
         );
 
         clusterObject.categories

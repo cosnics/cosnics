@@ -1,6 +1,6 @@
 import Rubric from "./Rubric";
 import Criterium, {CriteriumId} from "./Criterium";
-import Container from "./Container";
+import Container from "./TreeNode";
 
 export default class CriteriumSequence {
     /*protected criteriumCounter = 0;
@@ -14,7 +14,7 @@ export default class CriteriumSequence {
         this.buildSequenceRecursive(rubric);
     }
 
-    protected buildSequenceRecursive(container: Container) {
+    protected buildSequenceRecursive(container: TreeNode) {
         if ( container instanceof Criterium) {
             this.criteriumSequence.push(container);
             this.criteriumSequenceNumberMap.set(container.id, this.criteriumCounter);

@@ -1,4 +1,4 @@
-import Criterium from "../../../../../src/Domain/Criterium";
+import Criterium from "../../../src/Domain/Criterium";
 
 test('json', () => {
     let criterium = new Criterium("my criterium");

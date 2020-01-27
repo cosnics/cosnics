@@ -2,25 +2,10 @@ import Cluster, {ClusterJsonObject} from "./Cluster";
 import Level, {LevelId, LevelJsonObject} from "./Level";
 import Choice, {ChoiceJsonObject} from "./Choice";
 import Criterium, {CriteriumId} from "./Criterium";
-import Container, {ContainerInterface} from "./Container";
-
-export interface Element {
-    parent: Container | null;
-    title: string;
-
-    getScore(): number;
-}
-
-export function isElement(object: any): object is Element {
-    return 'parent' in object && 'title' in object;
-}
-
-
-export function isContainer(object: any): object is ContainerInterface {
-    return 'children' in object && isElement(object);
-}
+import TreeNode from "./TreeNode";
 
 export interface RubricJsonObject {
+    id: string,
     useScores: boolean,
     title: string,
     levels: LevelJsonObject[],
@@ -28,7 +13,7 @@ export interface RubricJsonObject {
     choices: ChoiceJsonObject[]
 }
 
-export default class Rubric extends Container {
+export default class Rubric extends TreeNode {
     public useScores: boolean = true;
     public levels: Level[] = [];
     public choices: Map<CriteriumId, Map<LevelId, Choice>> = new Map<CriteriumId, Map<LevelId, Choice>>();
@@ -45,18 +30,18 @@ export default class Rubric extends Container {
         this.removeChild(cluster);
     }
 
-    protected addChild(element: Element): void {
-        super.addChild(element);
-        this.notifyAddChild(element);
+    protected addChild(treeNode: TreeNode): void {
+        super.addChild(treeNode);
+        this.notifyAddChild(treeNode);
     }
 
-    protected notifyAddChild(element: Element): void {
-        if(element instanceof Criterium) {
-            this.onCriteriumAdded(element);
+    protected notifyAddChild(treeNode: TreeNode): void {
+        if(treeNode instanceof Criterium) {
+            this.onCriteriumAdded(treeNode);
         }
 
-        else if(element instanceof Container) {
-            let addedCriteria = this.getAllCriteria(element);
+        else {
+            let addedCriteria = this.getAllCriteria(treeNode);
             addedCriteria.forEach(criterium => {
                 this.levels.forEach(level =>
                 {
@@ -80,13 +65,14 @@ export default class Rubric extends Container {
         });
     }
 
-    protected notifyRemoveChild(container: Container, element: Element): void {
-        let criteriaToBeRemoved = this.getAllCriteria(container);
+    protected notifyRemoveChild(parent: TreeNode, treeNode: TreeNode): void {
+        let criteriaToBeRemoved = this.getAllCriteria(parent);
         criteriaToBeRemoved.forEach(criterium => this.removeChoicesByCriterium(criterium));
     }
 
     toJSON(): RubricJsonObject {
         return {
+            id: this.id,
             useScores: this.useScores,
             title: this.title,
             levels: this.levels,
@@ -115,7 +101,8 @@ export default class Rubric extends Container {
             rubricObject = rubric;
         }
 
-        let newRubric = new Rubric(rubricObject.title);
+        let newRubric = new Rubric(rubricObject.title, rubricObject.id);
+
         newRubric.levels.push(...rubricObject.levels.map(level => Level.fromJSON(level)));
 
         rubricObject.choices.forEach(rubricChoiceJsonObject => {
@@ -218,23 +205,23 @@ export default class Rubric extends Container {
 
     public getScore() {
         return this._children
-            .reduce((accumulator, currentContainer) => accumulator + currentContainer.getScore(), 0);
+            .reduce((accumulator, currentTreeNode) => accumulator + currentTreeNode.getScore(), 0);
     }
 
-    public getAllCriteria(container: Container = this) {
+    public getAllCriteria(treeNode: TreeNode = this) {
         const criteria: Criterium[] = [];
-        this.getCriteriaRecursive(container, criteria);
+        this.getCriteriaRecursive(treeNode, criteria);
 
         return criteria;
     }
 
-    protected getCriteriaRecursive(container: Container, criteria: Criterium[]) {
-        container.children.filter(child => (child instanceof Criterium)).forEach(
+    protected getCriteriaRecursive(treeNode: TreeNode, criteria: Criterium[]) {
+        treeNode.children.filter(child => (child instanceof Criterium)).forEach(
             criterium => criteria.push(criterium as Criterium)
         );
 
-        container.children.filter(child => isContainer(child)).forEach(
-            childContainer => this.getCriteriaRecursive(childContainer as Container, criteria)
+        treeNode.children.filter(child => child.hasChildren()).forEach(
+            child => this.getCriteriaRecursive(child, criteria)
         )
     }
 

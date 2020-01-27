@@ -1,7 +1,4 @@
-import {Element} from "./Rubric";
-import {LevelJsonObject} from "./Level";
-import Choice from "./Choice";
-import Container from "./Container";
+import TreeNode from "./TreeNode";
 
 export type CriteriumId = string;
 
@@ -11,21 +8,8 @@ export interface CriteriumJsonObject {
     weight: number
 }
 
-export default class Criterium implements Element{
-    public id: CriteriumId;
-    public title: string;
+export default class Criterium extends TreeNode {
     public weight: number = 100;
-    public selectedLevelIndex: number = 0;
-    public parent:Container|null = null;
-    public readonly children:Element[] = [];
-    public choices: Choice[] = [];
-
-    constructor(title: string, id?:string) {
-        if(!id)
-            this.id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15); //GUID
-        else this.id = id;
-        this.title = title;
-    }
 
     public weightToString(): string {
         return String(this.weight * 100);
@@ -34,8 +18,13 @@ export default class Criterium implements Element{
     public getScore(): number {
         return 0;
     }
+
     public toString(): string {
         return `Criterium (id: ${this.id}, title: ${this.title})`;
+    }
+
+    canHaveChildren(): boolean {
+        return false;
     }
 
     toJSON(): CriteriumJsonObject {

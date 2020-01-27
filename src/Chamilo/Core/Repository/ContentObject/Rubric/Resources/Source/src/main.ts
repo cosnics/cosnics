@@ -5,8 +5,9 @@ import ScoreRubric from './plugin';
 import BootstrapVue from 'bootstrap-vue'
 
 Vue.use(BootstrapVue);
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'jquery.fancytree/dist/skin-lion/ui.fancytree.css';  // CSS or LESS
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 import ScoreRubricStore from "./ScoreRubricStore";
 
 Vue.config.productionTip = false;

@@ -1,9 +1,9 @@
-import Rubric from "../../../../../src/Domain/Rubric";
-import Cluster from "../../../../../src/Domain/Cluster";
-import Level from "../../../../../src/Domain/Level";
-import Category from "../../../../../src/Domain/Category";
-import Criterium from "../../../../../src/Domain/Criterium";
-import Choice from "../../../../../src/Domain/Choice";
+import Rubric from "../../../src/Domain/Rubric";
+import Cluster from "../../../src/Domain/Cluster";
+import Level from "../../../src/Domain/Level";
+import Category from "../../../src/Domain/Category";
+import Criterium from "../../../src/Domain/Criterium";
+import Choice from "../../../src/Domain/Choice";
 
 let rubric: Rubric, cluster: Cluster, level1: Level, level2: Level, category: Category, clusterCriterium: Criterium,
     categoryCriterium: Criterium;

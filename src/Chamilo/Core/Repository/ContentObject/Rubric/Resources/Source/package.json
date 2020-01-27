@@ -12,6 +12,8 @@
     "bootstrap": "^3.4.1",
     "bootstrap-vue": "2.2.2",
     "core-js": "3.6.4",
+    "jquery": "^2.2.4",
+    "jquery.fancytree": "^2.34.0",
     "reflect-metadata": "0.1.13",
     "vue": "2.6.11",
     "vue-class-component": "7.2.2",
@@ -19,7 +21,9 @@
     "winston": "3.2.1"
   },
   "devDependencies": {
+    "@types/jquery.fancytree": "^2.7.34",
     "@types/jest": "^24.0.11",
+    "@types/jquery": "^3.3.31",
     "@vue/cli-plugin-babel": "4.1.2",
     "@vue/cli-plugin-typescript": "4.1.2",
     "@vue/cli-plugin-unit-jest": "4.1.2",

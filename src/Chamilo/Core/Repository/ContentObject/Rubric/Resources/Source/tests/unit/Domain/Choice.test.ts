@@ -1,4 +1,4 @@
-import Choice from "../../../../../src/Domain/Choice";
+import Choice from "../../../src/Domain/Choice";
 
 test('json', ()=>{
   let choice = new Choice() ;

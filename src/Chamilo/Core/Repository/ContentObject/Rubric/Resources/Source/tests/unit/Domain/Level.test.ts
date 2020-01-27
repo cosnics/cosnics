@@ -1,4 +1,4 @@
-import Level, {Signal} from "../../../../../src/Domain/Level";
+import Level, {Signal} from "../../../src/Domain/Level";
 
 test('json', () => {
     let level = new Level('My Level', "description", 5, Signal.GREEN, true);

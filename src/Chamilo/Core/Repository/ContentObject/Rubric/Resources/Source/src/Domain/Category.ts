@@ -1,13 +1,13 @@
 import Criterium, {CriteriumJsonObject} from "./Criterium";
-import {Element} from "./Rubric";
-import Container from "./Container";
+import TreeNode from "./TreeNode";
 
 export interface CategoryJsonObject {
+    id: string;
     title: string,
     color: string,
     criteria: CriteriumJsonObject[]
 }
-export default class Category extends Container {
+export default class Category extends TreeNode {
     public color: string = 'blue';
 
     public getScore(): number {
@@ -28,6 +28,7 @@ export default class Category extends Container {
 
     toJSON():CategoryJsonObject {
         return {
+            id: this.id,
             title: this.title,
             color: this.color,
             criteria: this._children as Criterium[]
@@ -43,10 +44,12 @@ export default class Category extends Container {
         }
 
         let newCategory = new Category(
-            categoryObject.title
+            categoryObject.title,
+            categoryObject.id
         );
 
         newCategory.color = categoryObject.color;
+        newCategory.id = categoryObject.id;
         categoryObject.criteria
             .map(criteriumJsonObject => Criterium.fromJSON(criteriumJsonObject))
             .forEach(criterium => newCategory.addChild(criterium));
