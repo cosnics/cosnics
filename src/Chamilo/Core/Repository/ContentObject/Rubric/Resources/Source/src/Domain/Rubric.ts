@@ -18,6 +18,11 @@ export default class Rubric extends TreeNode {
     public levels: Level[] = [];
     public choices: Map<CriteriumId, Map<LevelId, Choice>> = new Map<CriteriumId, Map<LevelId, Choice>>();
 
+    constructor(title: string = '', id?:string) {
+        super(title, id);
+        this.isRoot = true;
+    }
+
     get clusters():Cluster[] {
         return this.children as Cluster[]; //invariant garded at addChild
     }
@@ -30,26 +35,15 @@ export default class Rubric extends TreeNode {
         this.removeChild(cluster);
     }
 
-    protected addChild(treeNode: TreeNode): void {
-        super.addChild(treeNode);
-        this.notifyAddChild(treeNode);
-    }
-
     protected notifyAddChild(treeNode: TreeNode): void {
         if(treeNode instanceof Criterium) {
             this.onCriteriumAdded(treeNode);
         }
 
-        else {
+        else { //if for example a cluster is added, we add any choices from criteria in that cluster. This could happen when bootstrapping from json data model
             let addedCriteria = this.getAllCriteria(treeNode);
             addedCriteria.forEach(criterium => {
-                this.levels.forEach(level =>
-                {
-                    let choice = this.findChoice(criterium, level);
-                    if(!choice)
-                        choice = new Choice(false, "");
-                    this.addChoice(choice, criterium.id, level.id);
-                })
+                this.onCriteriumAdded(criterium)
             });
         }
         //no more bubbling

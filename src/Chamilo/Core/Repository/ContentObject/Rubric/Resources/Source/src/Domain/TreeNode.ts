@@ -11,6 +11,7 @@ export interface TreeNodeInterface {
     readonly children: ReadonlyArray<TreeNode>;
     parent: TreeNode | null;
     title: string;
+    isRoot: boolean;
     getScore(): number;
     hasChildren(): boolean;
 }
@@ -20,6 +21,7 @@ export default abstract class TreeNode implements TreeNodeInterface {
     public title: string = '';
     public id: string;
     protected _children:TreeNode[] = [];
+    public isRoot:boolean = false;
 
     constructor(title: string = '', id?:string) {
         this.parent = null;
@@ -52,6 +54,9 @@ export default abstract class TreeNode implements TreeNodeInterface {
         this._children.push(treeNode);
         if(this.parent)
             this.parent.notifyAddChild(treeNode);
+
+        if(this.isRoot)
+            this.notifyAddChild(treeNode);
     }
 
     protected notifyAddChild(treeNode: TreeNode): void {
