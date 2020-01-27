@@ -1,36 +1,54 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass;
+namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ *
+ * @ORM\Entity
+ *
+ * @ORM\Table(
+ *      name="repository_rubric_level"
+ * )
  */
 class Choice
 {
     /**
      * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, length=10)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
     /**
      * @var bool
+     *
+     * @ORM\Column(name="selected", type="boolean")
      */
     protected $selected;
 
     /**
      * @var string
+     *
+     *  @ORM\Column(name="feedback", type="text")
      */
     protected $feedback;
 
     /**
      * @var bool
+     *
+     * @ORM\Column(name="has_fixed_score", type="boolean")
      */
     protected $hasFixedScore;
 
     /**
      * @var int
+     *
+     * @ORM\Column(name="fixed_score", type="integer")
      */
     protected $fixedScore;
 
@@ -40,7 +58,7 @@ class Choice
     protected $level;
 
     /**
-     * @var Criterium
+     * @var CriteriumNode
      */
     protected $criterium;
 
@@ -165,19 +183,19 @@ class Choice
     }
 
     /**
-     * @return Criterium
+     * @return CriteriumNode
      */
-    public function getCriterium(): ?Criterium
+    public function getCriterium(): ?CriteriumNode
     {
         return $this->criterium;
     }
 
     /**
-     * @param Criterium $criterium
+     * @param CriteriumNode $criterium
      *
      * @return Choice
      */
-    public function setCriterium(Criterium $criterium): Choice
+    public function setCriterium(CriteriumNode $criterium): Choice
     {
         $this->criterium = $criterium;
 
