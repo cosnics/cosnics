@@ -1,36 +1,54 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass;
+namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ *
+ * @ORM\Entity
+ *
+ * @ORM\Table(
+ *      name="repository_rubric_level"
+ * )
  */
 class Level
 {
     /**
-     * @var string
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, length=10)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255)
      */
     protected $title;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="description", type="text")
      */
     protected $description;
 
     /**
      * @var int
+     *
+     * @ORM\Column(name="score", type="integer")
      */
     protected $score;
 
     /**
      * @var bool
+     *
+     * @ORM\Column(name="is_default", type="boolean")
      */
     protected $isDefault;
 
