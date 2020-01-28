@@ -4,7 +4,10 @@
 @import url('BootstrapCheckbox/awesome-bootstrap-checkbox.css');
 
 /* Font Awesome */
-@import url('FontAwesome/css/font-awesome.min.css');
+/*@import url('FontAwesome/css/font-awesome.css');*/
+
+@import url('FontAwesome5/css/all.css');
+@import url('FontAwesome5/css/v4-shims.css');
 
 @import url('ConnectIdents/ConnectIdents.css');
 

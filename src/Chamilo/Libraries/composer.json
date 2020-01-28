@@ -15,7 +15,7 @@
         "kigkonsult/icalcreator": "2.24",
         "simplepie/simplepie": "1.*",
         "ezyang/htmlpurifier": "4.9.2",
-        "sentry/sentry": "*",
+        "sentry/sentry": "^1.10",
         "google/recaptcha": "~1.1"
     },
     "require-dev": {

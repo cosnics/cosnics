@@ -4,7 +4,10 @@
 @import url('../Aqua/BootstrapCheckbox/awesome-bootstrap-checkbox.css');
 
 /* Font Awesome */
-@import url('../Aqua/FontAwesome/css/font-awesome.min.css');
+/*@import url('../Aqua/FontAwesome/css/font-awesome.css');*/
+
+@import url('../Aqua/FontAwesome5/css/all.css');
+@import url('../Aqua/FontAwesome5/css/v4-shims.css');
 
 @import url('../Aqua/ConnectIdents/ConnectIdents.css');
 
