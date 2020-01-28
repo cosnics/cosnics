@@ -2,6 +2,9 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
  *
@@ -19,6 +22,19 @@ class CriteriumNode extends TreeNode
     protected $weight = 100;
 
     /**
+     * @var Choice[] | ArrayCollection
+     */
+    protected $choices;
+
+    /**
+     * CriteriumNode constructor.
+     */
+    public function __construct()
+    {
+        $this->choices = new ArrayCollection();
+    }
+
+    /**
      * @return int
      */
     public function getWeight(): ?int
@@ -34,6 +50,52 @@ class CriteriumNode extends TreeNode
     public function setWeight(int $weight): CriteriumNode
     {
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * @return Choice[]|ArrayCollection
+     */
+    public function getChoices()
+    {
+        return $this->choices;
+    }
+
+    /**
+     * @param Choice[]|ArrayCollection $choices
+     *
+     * @return CriteriumNode
+     */
+    public function setChoices($choices)
+    {
+        $this->choices = $choices;
+
+        return $this;
+    }
+
+    /**
+     * @param Choice $choice
+     *
+     * @return CriteriumNode
+     */
+    public function addChoice(Choice $choice): self
+    {
+        $choice->setCriterium($this);
+        $this->choices->add($choice);
+
+        return $this;
+    }
+
+    /**
+     * @param Choice $choice
+     *
+     * @return CriteriumNode
+     */
+    public function removeChoice(Choice $choice): self
+    {
+        $choice->setCriterium(null);
+        $this->choices->removeElement($choice);
 
         return $this;
     }

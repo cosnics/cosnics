@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
@@ -14,95 +15,34 @@ use Doctrine\Common\Collections\ArrayCollection;
 class RubricNode extends TreeNode
 {
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="use_scores", type="boolean")
-     */
-    protected $useScores;
-
-    /**
-     * @var Level[]
-     *
-     * @OneToMany(targetEntity="Level", mappedBy="rubric")
-     */
-    protected $levels;
-
-    /**
      * @var ClusterNode[]
      *
-     * @OneToMany(targetEntity="ClusterNode", mappedBy="parentNode")
+     * @ORM\OneToMany(targetEntity="ClusterNode", mappedBy="parentNode")
      */
     protected $clusters;
 
     /**
      * @var CategoryNode[]
      *
-     * @OneToMany(targetEntity="ClusterNode", mappedBy="parentNode")
+     * @ORM\OneToMany(targetEntity="ClusterNode", mappedBy="parentNode")
      */
     protected $categories;
 
     /**
      * @var CriteriumNode[]
      *
-     * @OneToMany(targetEntity="ClusterNode", mappedBy="parentNode")
+     * @ORM\OneToMany(targetEntity="ClusterNode", mappedBy="parentNode")
      */
     protected $criteria;
-
-    /**
-     * @var Choice[]
-     *
-     * @OneToMany(targetEntity="Choice", mappedBy="rubric")
-     */
-    protected $choices;
 
     /**
      * RubricData constructor.
      */
     public function __construct()
     {
-        $this->levels = new ArrayCollection();
         $this->clusters = new ArrayCollection();
-        $this->choices = new ArrayCollection();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isUseScores(): ?bool
-    {
-        return $this->useScores;
-    }
-
-    /**
-     * @param bool $useScores
-     *
-     * @return RubricNode
-     */
-    public function setUseScores(bool $useScores): RubricNode
-    {
-        $this->useScores = $useScores;
-
-        return $this;
-    }
-
-    /**
-     * @return Level[]
-     */
-    public function getLevels(): ?array
-    {
-        return $this->levels;
-    }
-
-    /**
-     * @param Level[] $levels
-     *
-     * @return RubricNode
-     */
-    public function setLevels(array $levels): RubricNode
-    {
-        $this->levels = $levels;
-
-        return $this;
+        $this->categories = new ArrayCollection();
+        $this->criteria = new ArrayCollection();
     }
 
     /**
@@ -126,45 +66,41 @@ class RubricNode extends TreeNode
     }
 
     /**
-     * @return Choice[]
+     * @return CategoryNode[]
      */
-    public function getChoices(): ?array
+    public function getCategories(): ?array
     {
-        return $this->choices;
+        return $this->categories;
     }
 
     /**
-     * @param Choice[] $choices
+     * @param CategoryNode[] $categories
      *
      * @return RubricNode
      */
-    public function setChoices(array $choices): RubricNode
+    public function setCategories(array $categories): RubricNode
     {
-        $this->choices = $choices;
+        $this->categories = $categories;
 
         return $this;
     }
 
     /**
-     * @param Level $level
-     *
-     * @return RubricNode
+     * @return CriteriumNode[]
      */
-    public function addLevel(Level $level): RubricNode
+    public function getCriteria(): ?array
     {
-        $this->levels->add($level);
-
-        return $this;
+        return $this->criteria;
     }
 
     /**
-     * @param Level $level
+     * @param CriteriumNode[] $criteria
      *
      * @return RubricNode
      */
-    public function removeLevel(Level $level): RubricNode
+    public function setCriteria(array $criteria): RubricNode
     {
-        $this->levels->removeElement($level);
+        $this->criteria = $criteria;
 
         return $this;
     }
@@ -177,6 +113,7 @@ class RubricNode extends TreeNode
     public function addCluster(ClusterNode $cluster): RubricNode
     {
         $this->clusters->add($cluster);
+        $this->children->add($cluster);
 
         return $this;
     }
@@ -189,30 +126,59 @@ class RubricNode extends TreeNode
     public function removeCluster(ClusterNode $cluster): RubricNode
     {
         $this->clusters->removeElement($cluster);
+        $this->children->removeElement($cluster);
 
         return $this;
     }
 
     /**
-     * @param Choice $choice
+     * @param CategoryNode $category
      *
      * @return RubricNode
      */
-    public function addChoice(Choice $choice): RubricNode
+    public function addCategory(CategoryNode $category): RubricNode
     {
-        $this->choices->add($choice);
+        $this->categories->add($category);
+        $this->children->add($category);
 
         return $this;
     }
 
     /**
-     * @param Choice $choice
+     * @param CategoryNode $category
      *
      * @return RubricNode
      */
-    public function removeChoice(Choice $choice): RubricNode
+    public function removeCategory(CategoryNode $category): RubricNode
     {
-        $this->choices->removeElement($choice);
+        $this->categories->removeElement($category);
+        $this->children->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * @param CriteriumNode $criterium
+     *
+     * @return RubricNode
+     */
+    public function addCriterium(CriteriumNode $criterium): RubricNode
+    {
+        $this->criteria->add($criterium);
+        $this->children->add($criterium);
+
+        return $this;
+    }
+
+    /**
+     * @param CriteriumNode $criterium
+     *
+     * @return RubricNode
+     */
+    public function removeCriterium(CriteriumNode $criterium): RubricNode
+    {
+        $this->criteria->removeElement($criterium);
+        $this->children->removeElement($criterium);
 
         return $this;
     }

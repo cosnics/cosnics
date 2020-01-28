@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
  *
@@ -10,7 +12,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
  * @ORM\Entity
  *
  * @ORM\Table(
- *      name="repository_rubric_level"
+ *      name="repository_rubric_choice"
  * )
  */
 class Choice
@@ -54,13 +56,27 @@ class Choice
 
     /**
      * @var Level
+     *
+     * @ORM\ManyToOne(targetEntity="Level")
+     * @ORM\JoinColumn(name="level_id", referencedColumnName="id")
      */
     protected $level;
 
     /**
      * @var CriteriumNode
+     *
+     * @ORM\OneToOne(targetEntity="CriteriumNode")
+     * @ORM\JoinColumn(name="criterium_id", referencedColumnName="id")
      */
     protected $criterium;
+
+    /**
+     * @var RubricData
+     *
+     * @ORM\ManyToOne(targetEntity="RubricData")
+     * @ORM\JoinColumn(name="rubric_data_id", referencedColumnName="id")
+     */
+    protected $rubric;
 
     /**
      * @return int
@@ -198,6 +214,26 @@ class Choice
     public function setCriterium(CriteriumNode $criterium): Choice
     {
         $this->criterium = $criterium;
+
+        return $this;
+    }
+
+    /**
+     * @return RubricData
+     */
+    public function getRubric(): ?RubricData
+    {
+        return $this->rubric;
+    }
+
+    /**
+     * @param RubricData $rubric
+     *
+     * @return Choice
+     */
+    public function setRubric(RubricData $rubric): Choice
+    {
+        $this->rubric = $rubric;
 
         return $this;
     }

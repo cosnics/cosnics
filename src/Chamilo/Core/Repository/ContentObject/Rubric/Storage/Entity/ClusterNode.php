@@ -2,6 +2,9 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
  *
@@ -12,18 +15,27 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 class ClusterNode extends TreeNode
 {
     /**
-     * @var CategoryNode[]
+     * @var CategoryNode[] | ArrayCollection
      *
-     * @OneToMany(targetEntity="CategoryNode", mappedBy="parentNode")
+     * @ORM\OneToMany(targetEntity="CategoryNode", mappedBy="parentNode")
      */
     protected $categories;
 
     /**
-     * @var CriteriumNode[]
+     * @var CriteriumNode[] | ArrayCollection
      *
-     * @OneToMany(targetEntity="CriteriumNode", mappedBy="parentNode")
+     * @ORM\OneToMany(targetEntity="CriteriumNode", mappedBy="parentNode")
      */
     protected $criteria;
+
+    /**
+     * ClusterNode constructor.
+     */
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+        $this->criteria = new ArrayCollection();
+    }
 
     /**
      * @return CategoryNode[]
@@ -61,6 +73,58 @@ class ClusterNode extends TreeNode
     public function setCriteria(array $criteria): ClusterNode
     {
         $this->criteria = $criteria;
+
+        return $this;
+    }
+
+    /**
+     * @param CategoryNode $category
+     *
+     * @return self
+     */
+    public function addCategory(CategoryNode $category): self
+    {
+        $this->categories->add($category);
+        $this->children->add($category);
+
+        return $this;
+    }
+
+    /**
+     * @param CategoryNode $category
+     *
+     * @return self
+     */
+    public function removeCategory(CategoryNode $category): self
+    {
+        $this->categories->removeElement($category);
+        $this->children->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * @param CriteriumNode $criterium
+     *
+     * @return self
+     */
+    public function addCriterium(CriteriumNode $criterium): self
+    {
+        $this->criteria->add($criterium);
+        $this->children->add($criterium);
+
+        return $this;
+    }
+
+    /**
+     * @param CriteriumNode $criterium
+     *
+     * @return self
+     */
+    public function removeCriterium(CriteriumNode $criterium): self
+    {
+        $this->criteria->removeElement($criterium);
+        $this->children->removeElement($criterium);
 
         return $this;
     }

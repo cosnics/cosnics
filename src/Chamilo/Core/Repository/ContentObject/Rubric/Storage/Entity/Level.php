@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
  *
@@ -51,6 +53,14 @@ class Level
      * @ORM\Column(name="is_default", type="boolean")
      */
     protected $isDefault;
+
+    /**
+     * @var RubricData
+     *
+     * @ORM\ManyToOne(targetEntity="RubricData")
+     * @ORM\JoinColumn(name="rubric_data_id", referencedColumnName="id")
+     */
+    protected $rubric;
 
     /**
      * @return string
@@ -152,5 +162,24 @@ class Level
         return $this;
     }
 
+    /**
+     * @return RubricData
+     */
+    public function getRubric(): ?RubricData
+    {
+        return $this->rubric;
+    }
+
+    /**
+     * @param RubricData $rubric
+     *
+     * @return Level
+     */
+    public function setRubric(RubricData $rubric): Level
+    {
+        $this->rubric = $rubric;
+
+        return $this;
+    }
 
 }

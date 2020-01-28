@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
@@ -23,7 +24,7 @@ class CategoryNode extends TreeNode
     /**
      * @var CriteriumNode[] | ArrayCollection
      *
-     * @OneToMany(targetEntity="CriteriumNode", mappedBy="parentNode")
+     * @ORM\OneToMany(targetEntity="CriteriumNode", mappedBy="parentNode")
      */
     protected $criteria;
 
@@ -83,6 +84,7 @@ class CategoryNode extends TreeNode
     public function addCriterium(CriteriumNode $criterium): CategoryNode
     {
         $this->criteria->add($criterium);
+        $this->children->add($criterium);
 
         return $this;
     }
@@ -95,6 +97,7 @@ class CategoryNode extends TreeNode
     public function removeCriterium(CriteriumNode $criterium): CategoryNode
     {
         $this->criteria->removeElement($criterium);
+        $this->children->removeElement($criterium);
 
         return $this;
     }
