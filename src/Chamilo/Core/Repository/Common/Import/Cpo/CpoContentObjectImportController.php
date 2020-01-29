@@ -730,6 +730,10 @@ class CpoContentObjectImportController extends ContentObjectImportController
         );
     }
 
+    /**
+     * @param $contentObjectNode
+     * @param ContentObject $contentObject
+     */
     public function process_workspace_category($contentObjectNode, $contentObject)
     {
         if ($this->get_parameters()->getWorkspace() instanceof Workspace)
@@ -748,7 +752,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $contentObjectRelationService->createContentObjectRelation(
                 $this->get_parameters()->getWorkspace()->getId(),
-                $contentObject->getId(),
+                $contentObject->get_object_number(),
                 $parentId
             );
         }

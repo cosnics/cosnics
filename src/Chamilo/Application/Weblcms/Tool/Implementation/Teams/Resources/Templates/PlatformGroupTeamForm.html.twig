@@ -30,6 +30,7 @@
                     :platform-groups="platformGroups"
                     :get-group-children-url="getGroupChildrenUrl"
                     v-on:selection-changed="selectionChanged"
+                    :default-selected-groups="defaultSelectedGroups"
             ></platform-group-selector>
         </div>
     </div>
@@ -40,7 +41,13 @@
 
     <div class="form-group">
         <div class="col-sm-10 col-sm-push-2">
-            <button type="submit" class="btn btn-primary" :disabled="!canCreate()">{{ 'CreatePlatformGroupTeam'|trans({}, appContext) }}</button>
+            <button type="submit" class="btn btn-primary" :disabled="!canCreate()">
+                {%- if EDIT_MODE -%}
+                    {{ 'EditPlatformGroupTeam'|trans({}, appContext) }}
+                {%- else -%}
+                    {{ 'CreatePlatformGroupTeam'|trans({}, appContext) }}
+                {%- endif -%}
+            </button>
         </div>
     </div>
 
@@ -52,8 +59,18 @@
         $(document).ready(function () {
 
             var platformGroups = {{ PLATFORM_GROUPS_JSON|raw }};
+            var defaultSelectedGroups = null;
             var getGroupChildrenUrl = '{{ GET_GROUP_CHILDREN_URL|raw }}';
             var courseMetadata = '{{ TEAM_NAME_COURSE_METADATA }}';
+
+            var teamName = '';
+            var editMode = false;
+
+            {% if EDIT_MODE and PLATFORM_GROUP_TEAM %}
+                teamName = '{{ PLATFORM_GROUP_TEAM.name }}';
+                editMode = true;
+                defaultSelectedGroups = {{ DEFAULT_SELECTED_GROUPS|raw }};
+            {% endif %}
 
             new Vue({
                 el: '.platform-group-team-creator',
@@ -61,7 +78,8 @@
                     platformGroups: platformGroups,
                     getGroupChildrenUrl: getGroupChildrenUrl,
                     selectedGroups: [],
-                    teamName: ''
+                    teamName: teamName,
+                    defaultSelectedGroups: defaultSelectedGroups
                 },
                 methods: {
                     canCreate: function () {
@@ -76,6 +94,10 @@
                         this.proposeTeamName();
                     },
                     proposeTeamName: function() {
+                        if(editMode) {
+                            return;
+                        }
+
                         var vueInstance = this;
 
                         if (vueInstance.selectedGroups.length === 1) {

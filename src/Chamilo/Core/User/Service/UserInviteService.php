@@ -99,18 +99,20 @@ class UserInviteService
      * @param string $userEmail
      *
      * @param string $personalMessage
+     * @param \DateTime $expirationDate
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
-     * @throws \Chamilo\Core\User\Domain\UserInvite\Exceptions\UserAlreadyExistsException
+     * @throws UserAlreadyExistsException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
-     * @throws \Exception
      */
-    public function inviteUser(User $invitedByUser, string $userEmail, string $personalMessage = null)
+    public function inviteUser(
+        User $invitedByUser, string $userEmail, \DateTime $expirationDate, string $personalMessage = null
+    )
     {
         $this->validateUserEmail($userEmail);
-        $user = $this->createUserByEmail($userEmail);
+        $user = $this->createUserByEmail($userEmail, $expirationDate);
         $userInvite = $this->createUserInvite($invitedByUser, $user);
 //        $user = $this->userService->findUserByIdentifier(2);
 //        $userInvite = $this->userInviteRepository->getUserInviteBySecurityKey(
@@ -269,13 +271,20 @@ class UserInviteService
 
     /**
      * @param string $userEmail
+     * @param \DateTime|null $expirationDate
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
-    protected function createUserByEmail(string $userEmail): \Chamilo\Core\User\Storage\DataClass\User
+    protected function createUserByEmail(string $userEmail, \DateTime $expirationDate):
+    \Chamilo\Core\User\Storage\DataClass\User
     {
         $officialCode = $this->userService->generateUniqueUsername();
-        $user = $this->userService->createUser('Invited User', 'Invited User', $userEmail, $officialCode, $userEmail);
+
+        $user = $this->userService->createUser(
+            'Invited User', 'Invited User', $userEmail, $officialCode, $userEmail, null, 'Platform', true,
+            $expirationDate
+        );
+
         if (!$user instanceof User)
         {
             throw new \RuntimeException('The invited user could not be created for email ' . $userEmail);
@@ -325,7 +334,7 @@ class UserInviteService
         }
 
         $externalUsersGroup = $this->groupService->getGroupByIdentifier($externalUsersGroupId);
-        if(!$externalUsersGroup instanceof Group)
+        if (!$externalUsersGroup instanceof Group)
         {
             return;
         }

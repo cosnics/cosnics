@@ -326,7 +326,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $contentObjectRelationService->createContentObjectRelation(
                 $this->get_parameters()->getWorkspace()->getId(),
-                $contentObject->getId(),
+                $contentObject->get_object_number(),
                 $this->get_parameters()->get_category()
             );
         }

@@ -3,11 +3,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\CourseTeamService;
-use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\PlatformGroupTeamService;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
-use Microsoft\Graph\Model\Team;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
@@ -70,6 +67,9 @@ class BrowserComponent extends Manager
                     $this->getPlatformGroupTeamService()->getPlatformGroupTeamsForCourse(
                         $this->get_course(), $this->getUser()
                     ), 'json'
+                ),
+                'UPDATE_LOCAL_TEAM_NAMES_AJAX_URL' => $this->getAjaxUrl(
+                    \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Ajax\Manager::ACTION_UPDATE_LOCAL_TEAM_NAME
                 )
             ],
             'Chamilo\Application\Weblcms\Tool\Implementation\Teams:Browser.html.twig'

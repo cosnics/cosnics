@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Form\Type;
 
 use Chamilo\Libraries\Format\Validator\Constraint\Length;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,6 +19,7 @@ class InviteFormType extends AbstractType
 {
     const ELEMENT_EMAIL = 'email';
     const ELEMENT_PERSONAL_MESSAGE = 'personal_message';
+    const ELEMENT_ACCOUNT_VALID_UNTIL = 'account_valid_until';
 
     const TRANSLATION_CONTEXT = 'Chamilo\Core\User';
 
@@ -61,6 +63,21 @@ class InviteFormType extends AbstractType
                     'rows' => 5
                 ],
                 'required' => false
+            ]
+        );
+
+        $currentDate = new \DateTime();
+
+        $builder->add(
+            self::ELEMENT_ACCOUNT_VALID_UNTIL, DateType::class,
+            [
+                'required' => true,
+                'choice_translation_domain' => true,
+                'input' => 'datetime',
+                'widget' => 'single_text',
+                'attr' => [
+                    'min' => $currentDate->format('Y-m-d')
+                ]
             ]
         );
     }

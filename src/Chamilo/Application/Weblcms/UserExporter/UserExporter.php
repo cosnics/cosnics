@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\UserExporter;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Class to export users
@@ -149,8 +150,11 @@ class UserExporter
             $user_export_data[User::PROPERTY_LASTNAME] = $user->get_lastname();
             $user_export_data[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
 
+            $safeLastName = StringUtilities::getInstance()->createString($user->get_lastname())->toAscii();
+            $safeFirstName = StringUtilities::getInstance()->createString($user->get_firstname())->toAscii();
+
             $user_export_data[self::PROPERTY_SORT_NAME] =
-                strtoupper(str_replace(' ', '', $user->get_lastname() . ',' . $user->get_firstname()));
+                strtoupper(str_replace(' ', '', $safeLastName . ',' . $safeFirstName));
 
             $user_export_data[User::PROPERTY_EMAIL] = $user->get_email();
 

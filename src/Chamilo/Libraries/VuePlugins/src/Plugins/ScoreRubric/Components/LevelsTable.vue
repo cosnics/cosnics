@@ -1,0 +1,130 @@
+<template>
+    <div>
+        <table class="table table-bordered">
+            <thead>
+            <tr class="levels-header">
+                <th scope="col">
+                    <collapse :collapsed="collapsed" v-on:toggle-collapse="toggleConfigurationCollapsed">
+                        <slot>
+                            <div class="spacer"></div>
+                            <div class="level-title">
+                                Niveau
+                            </div>
+                            <div class="spacer"></div>
+                        </slot>
+                    </collapse>
+                </th>
+                <th scope="col" class="levels-title">Beschrijving</th>
+                <th v-if="store.useScore" scope="col" class="levels-title">Score</th>
+                <th scope="col" class="levels-title">Standaard</th>
+                <th scope="col" class="levels-title"></th>
+            </tr>
+            </thead>
+            <tbody v-show="!collapsed" class="table-striped">
+            <tr scope="row" v-for="(level, levelIndex) in rubric.levels">
+                <td><input class="form-control text-area-level-title font-weight-bold"
+                           v-model="level.title"
+                           placeholder="Vul hier een titel in"></input></td>
+                <td><textarea class="form-control text-area-level-description"
+                              v-model="level.description"
+                              placeholder="Vul hier een beschrijving in"></textarea></td>
+                <td v-if="store.rubric.useScores">
+                    <b-input-group append="Punten" class="score-input-group">
+                        <input type="number" name="Weight" class="form-control"
+                               maxlength="3"
+                               v-model="level.score">
+                    </b-input-group>
+                </td>
+                <td>
+                    <b-form-radio v-model="level.isDefault" name="isDefault" value=""></b-form-radio>
+                </td>
+                <td>
+                    <MoveDeleteBar :index="levelIndex" :max-index="rubric.levels.length - 1"
+                                   v-on:move-up="rubric.moveLevelUp(level)"
+                                   v-on:move-down="rubric.moveLevelDown(level)"
+                                   v-on:remove="removeLevel(level)">
+                    </MoveDeleteBar>
+                </td>
+            </tr>
+            <tr scope="row">
+                <td :colspan="rubric.levels.length" class="button-row">
+                    <button class="btn btn-sm btn-primary ml-1 pull-left"
+                            v-on:click="rubric.addLevel()"><i
+                            class="fa fa-plus" aria-hidden="true"></i> Voeg niveau toe
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+<script lang="ts">
+    import {Component, Prop, Vue} from "vue-property-decorator";
+    import Level from "@/Plugins/ScoreRubric/Domain/Level";
+    import Rubric from "@/Plugins/ScoreRubric/Domain/Rubric";
+    import Collapse from "@/Plugins/ScoreRubric/Components/Collapse.vue";
+    import ScoreRubricStore from "@/Plugins/ScoreRubric/ScoreRubricStore";
+    import MoveDeleteBar from "@/Plugins/ScoreRubric/Components/MoveDeleteBar.vue";
+
+    @Component({
+        components: {MoveDeleteBar, Collapse}
+    })
+    export default class LevelsTable extends Vue {
+        protected collapsed: boolean = true;
+
+        get store(): ScoreRubricStore {
+            return this.$root.$data.store;
+        }
+
+        get rubric() {
+            return this.store.rubric;
+        }
+
+        toggleConfigurationCollapsed() {
+            this.collapsed = !this.collapsed;
+        }
+
+        removeLevel(level: Level) {
+            if (confirm("Niveau verwijderen?") === false) {
+                return;
+            }
+            this.rubric.removeLevel(level);
+        }
+    }
+</script>
+<style scoped>
+    .spacer {
+        width: 100%;
+    }
+
+    .levels-header {
+        background-color: #45546a;
+        color: white;
+        font-weight: bold;
+    }
+
+    .level-title {
+        align-self: center;
+    }
+
+    .button-row {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+
+    .text-area-level-description {
+        font-size: 12px;
+        width: 100%;
+    }
+
+    h3 {
+        margin: 40px 0;
+        padding-bottom: 10px;
+        font-size: 24px
+    }
+
+    .score-input-group {
+        width: 150px;
+    }
+
+</style>

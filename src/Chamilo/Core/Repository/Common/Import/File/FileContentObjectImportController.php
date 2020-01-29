@@ -195,8 +195,8 @@ class FileContentObjectImportController extends ContentObjectImportController
         {
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $contentObjectRelationService->createContentObjectRelation(
-                $this->get_parameters()->getWorkspace()->getId(), 
-                $contentObject->getId(), 
+                $this->get_parameters()->getWorkspace()->getId(),
+                $contentObject->get_object_number(),
                 $this->get_parameters()->get_category());
         }
     }

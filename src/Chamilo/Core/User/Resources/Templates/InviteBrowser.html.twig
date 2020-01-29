@@ -34,10 +34,6 @@
         background-color: white;
     }
 
-    .invite-browser-container .invite-user .input-group .form-control:last-child {
-        border-left: 1px solid white;
-    }
-
     .form-control:focus {
         border-color: #66afe9 !important;
     }
@@ -49,6 +45,17 @@
 
     .invite-browser-container .invite-table {
         margin-top: 50px;
+    }
+
+    #end-date-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        margin-left: 3px;
+        margin-top: 10px;
+    }
+
+    input.form-control[type="date"] {
+        line-height: normal;
     }
 </style>
 
@@ -77,6 +84,7 @@
                 {{ form_errors(FORM.email) }}
             </div>
         </div>
+
         <div class="form-group">
             <div class="col-sm-12">
                 <div class="input-group">
@@ -86,9 +94,21 @@
                 {{ form_errors(FORM.personal_message) }}
             </div>
         </div>
+
+        <div class="form-group">
+            <div class="col-sm-12">
+                <div id="end-date-label" title="{{ 'AccountValidUntilDescription'|trans({}, appContext) }}">
+                    {{ 'AccountValidUntil'|trans({}, appContext) }}
+                </div>
+                {{ form_widget(FORM.account_valid_until) }}
+                {{ form_errors(FORM.account_valid_until) }}
+            </div>
+        </div>
+
         <div class="buttons text-center">
             <button type="submit" class="btn btn-success">{{ 'Invite'|trans({}, appContext) }}</button>
         </div>
+
         {{ form_end(FORM) }}
 
     </div>

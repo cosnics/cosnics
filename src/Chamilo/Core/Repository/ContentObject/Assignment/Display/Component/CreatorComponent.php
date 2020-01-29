@@ -2,10 +2,13 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\TemplateService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Viewer\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -29,7 +32,7 @@ class CreatorComponent extends Manager
      */
     public function run()
     {
-        if(empty($this->get_allowed_content_object_types()))
+        if (empty($this->get_allowed_content_object_types()))
         {
             throw new UserException($this->getTranslator()->trans('NoSubmissionPossible', [], Manager::context()));
         }
@@ -44,7 +47,7 @@ class CreatorComponent extends Manager
         if (\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
-            if(is_array($objects))
+            if (is_array($objects))
             {
                 $objects = $objects[0];
             }
@@ -65,9 +68,11 @@ class CreatorComponent extends Manager
                 {
                     $this->getExtensionManager()->entryCreated($this->getAssignment(), $entry, $this->getUser());
                 }
-                catch(\Exception $ex)
+                catch (\Exception $ex)
                 {
-                    $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
+                    $this->getExceptionLogger()->logException(
+                        $ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR
+                    );
                 }
 
                 $this->redirect(
@@ -91,11 +96,18 @@ class CreatorComponent extends Manager
         }
         else
         {
+
+            $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
+
+            $this->addTemplatesToConfiguration($configuration);
+
+            $configuration->setAllowedContentObjectTypes($this->get_allowed_content_object_types());
+            $configuration->setMaximumSelect(ApplicationConfiguration::MAXIMUM_SELECT_SINGLE);
+
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+                $configuration
             );
-            $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
 
             return $component->run();
         }
@@ -119,6 +131,7 @@ class CreatorComponent extends Manager
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws UserException
      */
     public function render_header()
     {
@@ -175,11 +188,34 @@ class CreatorComponent extends Manager
     public function get_allowed_content_object_types()
     {
         $types = $this->get_root_content_object()->get_allowed_types();
-        if(empty($types))
+        if (empty($types))
         {
             return [];
         }
 
         return explode(',', $types);
+    }
+
+    /**
+     * @param ApplicationConfiguration $configuration
+     *
+     * @throws \Exception
+     */
+    protected function addTemplatesToConfiguration(ApplicationConfiguration $configuration)
+    {
+        $configuration->setUserTemplates(
+            $this->getTemplateService()->getTemplatesForAssignment(
+                $this->getAssignment(), $this->getAssignmentServiceBridge(), $this->getEntityType(),
+                $this->getEntityIdentifier()
+            )
+        );
+    }
+
+    /**
+     * @return TemplateService
+     */
+    protected function getTemplateService()
+    {
+        return $this->getService(TemplateService::class);
     }
 }

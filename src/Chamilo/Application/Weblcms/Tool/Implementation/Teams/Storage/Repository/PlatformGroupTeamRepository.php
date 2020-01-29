@@ -99,12 +99,7 @@ class PlatformGroupTeamRepository
      */
     public function deleteRelationsForPlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                PlatformGroupTeamRelation::class, PlatformGroupTeamRelation::PROPERTY_PLATFORM_GROUP_TEAM_ID
-            ),
-            new StaticConditionVariable($platformGroupTeam->getId())
-        );
+        $condition = $this->getConditionForPlatformGroupTeam($platformGroupTeam);
 
         return $this->dataClassRepository->deletes(PlatformGroupTeamRelation::class, $condition);
     }
@@ -216,12 +211,7 @@ class PlatformGroupTeamRepository
      */
     public function findGroupsForPlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                PlatformGroupTeamRelation::class, PlatformGroupTeamRelation::PROPERTY_PLATFORM_GROUP_TEAM_ID
-            ),
-            new StaticConditionVariable($platformGroupTeam->getId())
-        );
+        $condition = $this->getConditionForPlatformGroupTeam($platformGroupTeam);
 
         $joins = new Joins();
 
@@ -240,6 +230,21 @@ class PlatformGroupTeamRepository
         $parameters = new DataClassRetrievesParameters($condition, null, null, [], $joins);
 
         return $this->dataClassRepository->retrieves(Group::class, $parameters);
+    }
+
+    /**
+     * @param PlatformGroupTeam $platformGroupTeam
+     *
+     * @return EqualityCondition
+     */
+    protected function getConditionForPlatformGroupTeam(PlatformGroupTeam $platformGroupTeam): EqualityCondition
+    {
+        return new EqualityCondition(
+            new PropertyConditionVariable(
+                PlatformGroupTeamRelation::class, PlatformGroupTeamRelation::PROPERTY_PLATFORM_GROUP_TEAM_ID
+            ),
+            new StaticConditionVariable($platformGroupTeam->getId())
+        );
     }
 
 }

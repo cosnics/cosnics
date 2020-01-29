@@ -29,12 +29,17 @@ class InviteComponent extends Manager
      */
     function run()
     {
-        if(!$this->areInvitesAllowed())
+        if (!$this->areInvitesAllowed())
         {
             throw new NotAllowedException();
         }
 
-        $form = $this->getForm()->create(InviteFormType::class);
+        $defaultValid = new \DateTime();
+        $defaultValid->modify('+ 1 year');
+
+        $form = $this->getForm()->create(
+            InviteFormType::class, [InviteFormType::ELEMENT_ACCOUNT_VALID_UNTIL => $defaultValid]
+        );
         $success = $invalidEmail = false;
         $formData = [];
 
@@ -59,7 +64,6 @@ class InviteComponent extends Manager
         }
 
         $existingInvites = $this->getInviteService()->getInvitesFromUser($this->getUser());
-
 
         return $this->getTwig()->render(
             Manager::context() . ':InviteBrowser.html.twig',
@@ -106,8 +110,12 @@ class InviteComponent extends Manager
         return new NoPackageBreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
+    /**
+     * @return bool
+     */
     protected function areInvitesAllowed()
     {
-        return $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'allow_invites']) == 1;
+        return $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'allow_invites']) == 1 &&
+            $this->getUser()->is_teacher();
     }
 }

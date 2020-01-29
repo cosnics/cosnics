@@ -12,6 +12,7 @@ use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Spipu\Html2Pdf\Tag\Sub;
+use function filesize;
 
 /**
  * @package Chamilo\Application\Plagiarism\Service\Turnitin
@@ -20,6 +21,9 @@ use Spipu\Html2Pdf\Tag\Sub;
  */
 class SubmissionService
 {
+    // 100 MB
+    const MAX_ALLOWED_FILE_SIZE = 100 * 1024 * 1024;
+
     /**
      * @var \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository
      */
@@ -92,6 +96,12 @@ class SubmissionService
         $fileParts = explode('.', $filename);
         $extension = array_pop($fileParts);
         if (!in_array($extension, $this->getAllowedFileExtensions()))
+        {
+            return false;
+        }
+
+        $fileSize = filesize($filePath);
+        if($fileSize > self::MAX_ALLOWED_FILE_SIZE)
         {
             return false;
         }

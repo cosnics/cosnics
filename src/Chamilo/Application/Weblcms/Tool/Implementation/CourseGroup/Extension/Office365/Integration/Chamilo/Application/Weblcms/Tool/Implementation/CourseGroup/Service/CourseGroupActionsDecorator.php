@@ -65,36 +65,29 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
         ButtonToolBar $courseGroupActionsToolbar, CourseGroup $courseGroup, User $user, $isCourseTeacher = false
     )
     {
-        if (!$this->courseGroupOffice365ReferenceService->courseGroupHasLinkedReference($courseGroup))
+        if (!$this->courseGroupOffice365ReferenceService->courseGroupHasTeam($courseGroup))
         {
             return;
         }
 
-        $visitGroupUrl = $this->urlGenerator->generateURL(
+        $visitTeamUrl = $this->urlGenerator->generateURL(
             [
                 \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
                     \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_LAUNCH_INTEGRATION,
                 IntegrationLauncherComponent::PARAM_BASE_CONTEXT =>
                     'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365',
-                Manager::PARAM_ACTION => Manager::ACTION_VISIT_GROUP
+                Manager::PARAM_ACTION => Manager::ACTION_VISIT_TEAM
             ]
         );
 
-        $visitGroupLabel = $this->translator->trans('VisitGroup', [], Manager::context());
+        $visitTeamLabel = $this->translator->trans('VisitTeam', [], Manager::context());
 
-        $visitPlannerUrl = $this->urlGenerator->generateURL(
-            [
-                \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
-                    \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_LAUNCH_INTEGRATION,
-                IntegrationLauncherComponent::PARAM_BASE_CONTEXT =>
-                    'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365',
-                Manager::PARAM_ACTION => Manager::ACTION_VISIT_PLANNER
-            ]
+        $visitTeamButton = new SplitDropdownButton(
+            $visitTeamLabel, null, $visitTeamUrl,
+            Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
         );
 
-        $visitPlannerLabel = $this->translator->trans('VisitPlanner', [], Manager::context());
-
-        $synchronizePlannerUrl = $this->urlGenerator->generateURL(
+        $synchronizeUrl = $this->urlGenerator->generateURL(
             [
                 \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
                     \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_LAUNCH_INTEGRATION,
@@ -104,45 +97,13 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
             ]
         );
 
-        $synchronizePlannerLabel = $this->translator->trans('SynchronizeUsersToPlanner', [], Manager::context());
-
-        $visitGroupButton = new SplitDropdownButton(
-            $visitGroupLabel, null, $visitGroupUrl,
-            Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
-        );
-
-        $visitGroupButton->addSubButton(
-            new SubButton(
-                $visitPlannerLabel, null, $visitPlannerUrl, Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
-            )
-        );
-
-        $groupReference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
-
-        if($groupReference->hasTeam()){
-            $visitTeamUrl = $this->urlGenerator->generateURL(
-                [
-                    \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
-                        \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_LAUNCH_INTEGRATION,
-                    IntegrationLauncherComponent::PARAM_BASE_CONTEXT =>
-                        'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365',
-                    Manager::PARAM_ACTION => Manager::ACTION_VISIT_TEAM
-                ]
-            );
-            $visitTeamLabel = $this->translator->trans('VisitTeam', [], Manager::context());
-            $visitGroupButton->addSubButton(
-                new SubButton(
-                $visitTeamLabel, null, $visitTeamUrl, Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
-               )
-            );
-        }
-
+        $synchronizeLabel = $this->translator->trans('SynchronizeUsers', [], Manager::context());
 
         if ($isCourseTeacher)
         {
-            $visitGroupButton->addSubButton(new SubButton($synchronizePlannerLabel, null, $synchronizePlannerUrl));
+            $visitTeamButton->addSubButton(new SubButton($synchronizeLabel, null, $synchronizeUrl));
         }
 
-        $courseGroupActionsToolbar->addItem($visitGroupButton);
+        $courseGroupActionsToolbar->addItem($visitTeamButton);
     }
 }

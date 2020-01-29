@@ -152,4 +152,19 @@ class GroupRepository extends CommonDataClassRepository
     {
         return $this->dataClassRepository->retrieveById(Group::class, $groupId);
     }
+
+    /**
+     * @param array $groupIds
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | Group[]
+     */
+    public function findGroupsByIds(array $groupIds)
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
+            $groupIds
+        );
+
+        return $this->dataClassRepository->retrieves(Group::class, new DataClassRetrievesParameters($condition));
+    }
 }

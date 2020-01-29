@@ -75,8 +75,8 @@
         </table>
 
         <div class="selected-platform-groups">
-            <span class="selected-platform-group" v-for="selectedTreeNode in selectedTreeNodes">
-                {{ '{{ selectedTreeNode.data.selectedLabel }}' }} <span @click="deselectNode(selectedTreeNode)" class="fa fa-times deselect-node"></span>
+            <span class="selected-platform-group" v-for="group in selectedGroups">
+                {{ '{{ group.name }} ({{  group.code }})' }} <span @click="deselectGroup(group)" class="fa fa-times deselect-node"></span>
             </span>
         </div>
     </div>
@@ -88,27 +88,51 @@
             template: '#platform-group-selector-template',
             data: function() {
                 return {
-                    selectedTreeNodes: [],
                     selectedGroups: []
                 }
             },
             methods: {
-                deselectNode: function (selectedTreeNode) {
-                    selectedTreeNode.setSelected(false);
+                deselectGroup: function (selectedGroup) {
+                    var vueInstance = this;
+                    var node = $('#platform-group-tree').fancytree('getTree').getNodeByKey(selectedGroup.id);
+
+                    if(node) {
+                        node.setSelected(false);
+                    } else {
+                        var index = vueInstance.selectedGroups.indexOf(selectedGroup);
+                        if(index !== false) {
+                            vueInstance.selectedGroups.splice(index, 1);
+                        }
+                    }
                 }
             },
             props: {
                 platformGroups: Array,
+                defaultSelectedGroups: Array,
                 getGroupChildrenUrl: String
 
             },
             mounted: function () {
                 var vueInstance = this;
 
+                if(vueInstance.defaultSelectedGroups) {
+                    vueInstance.defaultSelectedGroups.forEach(function(group) {
+                        vueInstance.selectedGroups.push(group);
+                    });
+
+                    vueInstance.$emit('selection-changed', vueInstance.selectedGroups);
+                }
+
                 var convertData = function (groups) {
                     var treeData = [];
 
                     groups.forEach(function (group) {
+                        var selectedGroupIndex = vueInstance.selectedGroups.findIndex(function(selectedGroup) {
+                            return selectedGroup.id === group.id;
+                        });
+
+                        var isSelected = selectedGroupIndex > -1;
+
                         treeData.push({
                             title: group.name,
                             key: group.id,
@@ -116,7 +140,8 @@
                             lazy: group.has_children,
                             code: group.code,
                             selectedLabel: group.name + ' (' + group.code + ') ',
-                            originalGroup: group
+                            originalGroup: group,
+                            selected: isSelected
                         });
                     });
                     return treeData;
@@ -157,8 +182,6 @@
                     },
                     select: function (event, data) {
                         var group = data.node.data.originalGroup;
-
-                        vueInstance.selectedTreeNodes = data.tree.getSelectedNodes();
 
                         if(data.node.selected) {
                             vueInstance.selectedGroups.push(group);

@@ -16,6 +16,8 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
 {
+    const DEFAULT_ORDER_COLUMN_INDEX = 8;
+
     /**
      * **************************************************************************************************************
      * Inherited Functionality *
