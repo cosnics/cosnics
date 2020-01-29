@@ -2,10 +2,13 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.3/phpunit.xsd"
         backupGlobals="true"
-        bootstrap="../../../../../../Chamilo/Libraries/Architecture/Test/bootstrap.php">
+        bootstrap="../../../../../Libraries/Architecture/Test/bootstrap.php">
     <testsuites>
         <testsuite name="Source">
             <directory>Source</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory>Integration</directory>
         </testsuite>
     </testsuites>
     <filter>

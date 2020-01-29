@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\TreeNodeRepository")
  *
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string")
@@ -66,9 +66,23 @@ abstract class TreeNode
     /**
      * @var TreeNode[] | ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="TreeNode", mappedBy="parentNode")
+     * @ORM\OneToMany(targetEntity="TreeNode", mappedBy="parentNode", cascade={"persist", "refresh"})
      */
     protected $children;
+
+    /**
+     * TreeNode constructor.
+     *
+     * @param string $title
+     * @param TreeNode $parentNode
+     */
+    public function __construct(string $title, TreeNode $parentNode = null)
+    {
+        $this->title = $title;
+        $this->parentNode = $parentNode;
+
+        $this->children = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -123,7 +137,7 @@ abstract class TreeNode
      *
      * @return TreeNode
      */
-    public function setParentNode(TreeNode $parentNode): TreeNode
+    public function setParentNode(TreeNode $parentNode = null): TreeNode
     {
         $this->parentNode = $parentNode;
 
@@ -191,26 +205,53 @@ abstract class TreeNode
     }
 
     /**
-     * @param TreeNode $child
+     * @param TreeNode $childToAdd
      *
      * @return $this
      */
-    public function addChild(TreeNode $child): self
+    public function addChild(TreeNode $childToAdd): self
     {
-        $this->children->add($child);
+//        if($childToAdd->getSort() > 0)
+//        {
+//            foreach ($this->children as $child)
+//            {
+//                if ($child->getSort() >= $childToAdd->getSort())
+//                {
+//                    $child->setSort($child->getSort() + 1);
+//                }
+//            }
+//        }
+//        else
+//        {
+//            $childToAdd->setSort(count($this->children) + 1);
+//            $childToAdd->setSort(20);
+//        }
+
+        $this->children->add($childToAdd);
+        $childToAdd->setParentNode($this);
 
         return $this;
     }
 
     /**
-     * @param TreeNode $child
+     * @param TreeNode $childToRemove
      *
      * @return $this
      */
-    public function removeChild(TreeNode $child): self
+    public function removeChild(TreeNode $childToRemove): self
     {
-        $this->children->removeElement($child);
+//        foreach($this->children as $child)
+//        {
+//            if($child->getSort() > $childToRemove->getSort())
+//            {
+//                $child->setSort($child->getSort() - 1);
+//            }
+//        }
+
+        $this->children->removeElement($childToRemove);
+        $childToRemove->setParentNode(null);
 
         return $this;
     }
+
 }

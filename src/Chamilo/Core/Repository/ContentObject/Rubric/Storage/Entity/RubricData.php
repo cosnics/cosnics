@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricDataRepository")
  *
  * @ORM\Table(
  *      name="repository_rubric_data"
@@ -167,6 +167,7 @@ class RubricData
     public function setRootNode(TreeNode $rootNode): RubricData
     {
         $this->rootNode = $rootNode;
+        $this->addTreeNode($rootNode);
 
         return $this;
     }

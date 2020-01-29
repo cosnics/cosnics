@@ -28,9 +28,14 @@ class CriteriumNode extends TreeNode
 
     /**
      * CriteriumNode constructor.
+     *
+     * @param string $title
+     * @param TreeNode|null $parentNode
      */
-    public function __construct()
+    public function __construct(string $title, TreeNode $parentNode = null)
     {
+        parent::__construct($title, $parentNode);
+
         $this->choices = new ArrayCollection();
     }
 
