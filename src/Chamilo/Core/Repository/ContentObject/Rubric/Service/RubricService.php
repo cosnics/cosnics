@@ -90,7 +90,6 @@ class RubricService
         );
 
         // Update the changed tree nodes from the parent node so the domain model stays correct
-        $parentNode->setChildren(new ArrayCollection($this->treeNodeRepository->getChildrenForNode($parentNode, true)));
     }
 
     /**
@@ -113,7 +112,6 @@ class RubricService
         );
 
         // Update the changed tree nodes from the parent node so the domain model stays correct
-        $parentNode->setChildren(new ArrayCollection($this->treeNodeRepository->getChildrenForNode($parentNode, true)));
     }
 
     /**
@@ -151,13 +149,6 @@ class RubricService
 
                 $this->treeNodeRepository->saveTreeNode($treeNode);
 
-                $currentParentNode->setChildren(
-                    new ArrayCollection($this->treeNodeRepository->getChildrenForNode($currentParentNode, true))
-                );
-
-                $newParentNode->setChildren(
-                    new ArrayCollection($this->treeNodeRepository->getChildrenForNode($newParentNode, true))
-                );
             }
         );
     }

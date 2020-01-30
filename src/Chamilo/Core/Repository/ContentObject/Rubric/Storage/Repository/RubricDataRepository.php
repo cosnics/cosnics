@@ -32,4 +32,31 @@ class RubricDataRepository extends CommonEntityRepository
         $this->flush();
     }
 
+    /**
+     * @param int $rubricDataId
+     *
+     * @return RubricData
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findEntireRubricById(int $rubricDataId)
+    {
+        $qb = $this->createQueryBuilder('rd')
+            ->addSelect('tn')
+            ->addSelect('rn')
+            ->addSelect('lv')
+            ->addSelect('ch')
+            ->join('rd.treeNodes', 'tn')
+            ->join('rd.rootNode', 'rn')
+            ->leftJoin('rd.levels', 'lv')
+            ->leftJoin('rd.choices', 'ch')
+            ->where('rd.id = :id')
+            ->setParameter('id', $rubricDataId);
+
+        print_r($qb->getQuery()->getSQL());
+
+        return $qb->getQuery()->getResult()[0];
+    }
+
 }

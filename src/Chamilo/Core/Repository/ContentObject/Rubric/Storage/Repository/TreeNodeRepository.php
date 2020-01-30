@@ -100,30 +100,4 @@ class TreeNodeRepository extends CommonEntityRepository
 
         $query->execute();
     }
-
-    /**
-     * @param TreeNode $parentNode
-     * @param bool $force
-     *
-     * @return TreeNode[]
-     */
-    public function getChildrenForNode(TreeNode $parentNode, $force = false)
-    {
-        if($force)
-        {
-            foreach ($parentNode->getChildren() as $child)
-            {
-                $this->getEntityManager()->detach($child);
-            }
-        }
-
-        $queryBuilder = $this->createQueryBuilder('tn')
-            ->where('tn.rubricData = :rubricData')
-            ->andWhere('tn.parentNode = :parentNode')
-             ->setParameter("parentNode", $parentNode)
-             ->setParameter("rubricData", $parentNode->getRubricData());
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
 }

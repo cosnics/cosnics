@@ -58,6 +58,8 @@ class RubricData
 
     /**
      * @var TreeNode[] | ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="TreeNode", mappedBy="rubricData")
      */
     protected $treeNodes;
 
