@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import ScoreRubricTreeBuilder from "./Components/ScoreRubricTreeBuilder.vue";
+import ScoreRubricTreeBuilder from "./Components/TreeBuilder/ScoreRubricTreeBuilder.vue";
 
 @Component({
   components: {

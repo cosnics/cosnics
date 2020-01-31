@@ -1,3 +1,5 @@
+import {logMethod} from "../Logger";
+
 export interface TreeNodeInterface {
     readonly children: ReadonlyArray<TreeNode>;
     parent: TreeNode | null;
@@ -49,9 +51,14 @@ export default abstract class TreeNode implements TreeNodeInterface {
         return this.title;
     }
 
-    protected addChild(treeNode: TreeNode): void {
+    @logMethod
+    addChild(treeNode: TreeNode, index?:number): void {
         treeNode.parent = this;
-        this._children.push(treeNode);
+        if(!index)
+            this._children.push(treeNode);
+        else
+            this._children.splice(index, 0, treeNode);
+
         if(this.parent)
             this.parent.notifyAddChild(treeNode);
 
@@ -69,7 +76,8 @@ export default abstract class TreeNode implements TreeNodeInterface {
             this.parent.notifyRemoveChild(treeNodeContainer, treeNode);
     }
 
-    protected removeChild(treeNode: TreeNode): void {
+    @logMethod
+    removeChild(treeNode: TreeNode): void {
         if(treeNode.parent !== this) {
             throw new Error("treeNode: " + treeNode.title + " not part of treeNode: " + this.title);
         }

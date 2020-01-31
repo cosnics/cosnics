@@ -3,10 +3,11 @@ import Cluster from "./Domain/Cluster";
 import Category from "./Domain/Category";
 import Criterium from "./Domain/Criterium";
 import Rubric from "./Domain/Rubric";
+import Vue from "vue";
 
 export default class ScoreRubricStore {
 
-    public rubric:Rubric;
+    public rubric!:Rubric;
     public useScore: boolean = true;
 
     constructor() {
@@ -15,11 +16,11 @@ export default class ScoreRubricStore {
         const level3 = new Level("Voldoet bijna aan de verwachtingen", "", 4);
         const level4 = new Level("Voldoet niet aan de verwachtingen", "", 0);
 
-        this.rubric = new Rubric();
-        this.rubric.addLevel(level1);
-        this.rubric.addLevel(level2);
-        this.rubric.addLevel(level3);
-        this.rubric.addLevel(level4);
+        let newRubric = new Rubric("Een rubric");
+        newRubric.addLevel(level1);
+        newRubric.addLevel(level2);
+        newRubric.addLevel(level3);
+        newRubric.addLevel(level4);
 
         const cluster1 = new Cluster("Cluster 1");
         cluster1.collapsed = true;
@@ -54,14 +55,15 @@ export default class ScoreRubricStore {
 
         cluster2.addCategory(category3);
 
-        this.rubric.addCluster(cluster1);
-        this.rubric.addCluster(cluster2);
+        newRubric.addCluster(cluster1);
+        newRubric.addCluster(cluster2);
 
-        this.rubric.getChoice(criterium1, level1)!.feedback = "Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.";
-        this.rubric.getChoice(criterium1, level2)!.feedback = "Student geeft soms volledige en betrouwbare informatie. Niet alle informatie is opgenomen in de antwoorden.";
-        this.rubric.getChoice(criterium1, level3)!.feedback = "Student geeft zo goed als altijd onvolledige en twijfelachtige informatie die vragen oproept.";
-        this.rubric.getChoice(criterium1, level4)!.feedback = "Student geeft zijn mening onderbouwd en overtuigend.";
-        this.rubric.getChoice(criterium2, level1)!.feedback = "Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.";
-        this.rubric.getChoice(criterium2, level2)!.feedback = "Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.";
+        newRubric.getChoice(criterium1, level1)!.feedback = "Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.";
+        newRubric.getChoice(criterium1, level2)!.feedback = "Student geeft soms volledige en betrouwbare informatie. Niet alle informatie is opgenomen in de antwoorden.";
+        newRubric.getChoice(criterium1, level3)!.feedback = "Student geeft zo goed als altijd onvolledige en twijfelachtige informatie die vragen oproept.";
+        newRubric.getChoice(criterium1, level4)!.feedback = "Student geeft zijn mening onderbouwd en overtuigend.";
+        newRubric.getChoice(criterium2, level1)!.feedback = "Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.";
+        newRubric.getChoice(criterium2, level2)!.feedback = "Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.";
+        Vue.set(this, 'rubric', newRubric);
     }
 }
