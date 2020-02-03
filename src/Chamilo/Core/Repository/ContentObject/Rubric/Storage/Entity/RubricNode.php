@@ -35,20 +35,21 @@ class RubricNode extends TreeNode
 //     */
 //    protected $criteria;
 
-    /**
-     * RubricData constructor.
-     *
-     * @param string $title
-     * @param TreeNode|null $parentNode
-     */
-    public function __construct(string $title, TreeNode $parentNode = null)
-    {
-        parent::__construct($title, $parentNode);
-
-//        $this->clusters = new ArrayCollection();
-//        $this->categories = new ArrayCollection();
-//        $this->criteria = new ArrayCollection();
-    }
+//    /**
+//     * RubricData constructor.
+//     *
+//     * @param string $title
+//     * @param RubricData $rubricData
+//     * @param TreeNode|null $parentNode
+//     */
+//    public function __construct(string $title, RubricData $rubricData, TreeNode $parentNode = null)
+//    {
+//        parent::__construct($title, $rubricData, $parentNode);
+//
+////        $this->clusters = new ArrayCollection();
+////        $this->categories = new ArrayCollection();
+////        $this->criteria = new ArrayCollection();
+//    }
 
 //    /**
 //     * @return ClusterNode[]

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Service;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricDataRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\PersistentCollection;
 
 /**
@@ -37,11 +38,19 @@ class RubricTreeBuilder
     {
         $rubricData = $this->rubricDataRepository->findEntireRubricById($rubricDataId);
 
-        /** @var PersistentCollection $treeNodes */
         $treeNodes = $rubricData->getTreeNodes();
-        var_dump($rubricData->getRootNode()->getChildren()->isInitialized());
+        foreach($treeNodes as $treeNode)
+        {
+            $treeNode->setChildren(new ArrayCollection());
+        }
 
-
+        foreach($treeNodes as $treeNode)
+        {
+            if($treeNode->hasParentNode())
+            {
+                $treeNode->getParentNode()->getChildren()->add($treeNode);
+            }
+        }
 
         return $rubricData;
     }

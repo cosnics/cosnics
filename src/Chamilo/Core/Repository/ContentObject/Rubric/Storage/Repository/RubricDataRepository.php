@@ -36,9 +36,6 @@ class RubricDataRepository extends CommonEntityRepository
      * @param int $rubricDataId
      *
      * @return RubricData
-     *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findEntireRubricById(int $rubricDataId)
     {
@@ -53,8 +50,6 @@ class RubricDataRepository extends CommonEntityRepository
             ->leftJoin('rd.choices', 'ch')
             ->where('rd.id = :id')
             ->setParameter('id', $rubricDataId);
-
-        print_r($qb->getQuery()->getSQL());
 
         return $qb->getQuery()->getResult()[0];
     }

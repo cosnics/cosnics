@@ -28,19 +28,19 @@ class ClusterNode extends TreeNode
 //     */
 //    protected $criteria;
 
-    /**
-     * ClusterNode constructor.
-     *
-     * @param string $title
-     * @param TreeNode|null $parentNode
-     */
-    public function __construct(string $title, TreeNode $parentNode = null)
-    {
-        parent::__construct($title, $parentNode);
-
-//        $this->categories = new ArrayCollection();
-//        $this->criteria = new ArrayCollection();
-    }
+//    /**
+//     * ClusterNode constructor.
+//     *
+//     * @param string $title
+//     * @param TreeNode|null $parentNode
+//     */
+//    public function __construct(string $title, TreeNode $parentNode = null)
+//    {
+//        parent::__construct($title, $parentNode);
+//
+////        $this->categories = new ArrayCollection();
+////        $this->criteria = new ArrayCollection();
+//    }
 
 //    /**
 //     * @return CategoryNode[]

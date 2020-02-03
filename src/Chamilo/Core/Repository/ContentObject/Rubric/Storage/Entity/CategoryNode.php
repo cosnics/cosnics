@@ -28,17 +28,17 @@ class CategoryNode extends TreeNode
 //     */
 //    protected $criteria;
 
-    /**
-     * Category constructor.
-     *
-     * @param string $title
-     * @param TreeNode|null $parentNode
-     */
-    public function __construct(string $title, TreeNode $parentNode = null)
-    {
-        parent::__construct($title, $parentNode);
-//        $this->criteria = new ArrayCollection();
-    }
+//    /**
+//     * Category constructor.
+//     *
+//     * @param string $title
+//     * @param TreeNode|null $parentNode
+//     */
+//    public function __construct(string $title, TreeNode $parentNode = null)
+//    {
+//        parent::__construct($title, $rubricData, $parentNode);
+////        $this->criteria = new ArrayCollection();
+//    }
 
     /**
      * @return string

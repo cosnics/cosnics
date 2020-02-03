@@ -65,12 +65,20 @@ class RubricData
 
     /**
      * RubricData constructor.
+     *
+     * @param string $rubricTitle
+     * @param bool $useScores
      */
-    public function __construct()
+    public function __construct(string $rubricTitle, bool $useScores = true)
     {
         $this->choices = new ArrayCollection();
         $this->levels = new ArrayCollection();
         $this->treeNodes = new ArrayCollection();
+
+        $rootNode = new RubricNode($rubricTitle, $this);
+        $this->setRootNode($rootNode);
+
+        $this->useScores = $useScores;
     }
 
     /**
@@ -96,7 +104,7 @@ class RubricData
     /**
      * @return bool
      */
-    public function isUseScores(): ?bool
+    public function useScores(): ?bool
     {
         return $this->useScores;
     }
@@ -168,6 +176,8 @@ class RubricData
      */
     public function setRootNode(TreeNode $rootNode): RubricData
     {
+        $rootNode->setSort(1);
+
         $this->rootNode = $rootNode;
         $this->addTreeNode($rootNode);
 

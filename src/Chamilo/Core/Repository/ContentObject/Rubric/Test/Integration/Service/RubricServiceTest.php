@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricDataRe
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\TreeNodeRepository;
 use Chamilo\Libraries\Architecture\Test\TestCases\DoctrineORMFixturesBasedTestCase;
+use Doctrine\DBAL\Logging\EchoSQLLogger;
 
 /**
  * Class RubricServiceTest
@@ -153,16 +154,18 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
         $this->rubricService->addTreeNode($rubricData, $clusterNode, $rootNode);
         $this->rubricService->addTreeNode($rubricData, $clusterNode2, $rootNode);
 
-        $clusterNode2 = $rootNode->getChildren()[1];
-
         $this->rubricService->addTreeNode($rubricData, $categoryNode, $clusterNode2);
-
-        $categoryNode = $clusterNode2->getChildren()[0];
 
         $this->rubricService->addTreeNode($rubricData, $criteriumNode, $categoryNode);
         $this->getTestEntityManager()->clear();
 
+        $this->getTestEntityManager()->getConnection()->getConfiguration()->setSQLLogger(new EchoSQLLogger());
+
         $rubricData = $this->rubricTreeBuilder->buildRubricTreeByRubricDataId(1);
+
         $this->assertInstanceOf(RubricData::class, $rubricData);
+        $this->assertEquals(2, count($rubricData->getRootNode()->getChildren()));
+        $this->assertEquals(1, count($rubricData->getRootNode()->getChildren()[1]->getChildren()));
+        $this->assertEquals(1, count($rubricData->getRootNode()->getChildren()[1]->getChildren()[0]->getChildren()));
     }
 }

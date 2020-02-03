@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
+use function count;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity
@@ -74,12 +76,14 @@ abstract class TreeNode
      * TreeNode constructor.
      *
      * @param string $title
+     * @param RubricData $rubricData
      * @param TreeNode $parentNode
      */
-    public function __construct(string $title, TreeNode $parentNode = null)
+    public function __construct(string $title, RubricData $rubricData, TreeNode $parentNode = null)
     {
         $this->title = $title;
-        $this->parentNode = $parentNode;
+        $this->rubricData = $rubricData;
+        $this->setParentNode($parentNode);
 
         $this->children = new ArrayCollection();
     }
@@ -125,26 +129,6 @@ abstract class TreeNode
     }
 
     /**
-     * @return TreeNode
-     */
-    public function getParentNode(): ?TreeNode
-    {
-        return $this->parentNode;
-    }
-
-    /**
-     * @param TreeNode $parentNode
-     *
-     * @return TreeNode
-     */
-    public function setParentNode(TreeNode $parentNode = null): TreeNode
-    {
-        $this->parentNode = $parentNode;
-
-        return $this;
-    }
-
-    /**
      * @return RubricData
      */
     public function getRubricData(): ?RubricData
@@ -165,6 +149,54 @@ abstract class TreeNode
     }
 
     /**
+     * @return TreeNode
+     */
+    public function getParentNode(): ?TreeNode
+    {
+        return $this->parentNode;
+    }
+
+    /**
+     * @param TreeNode|null $newParentNode
+     *
+     * @return TreeNode
+     */
+    public function setParentNode(TreeNode $newParentNode = null): TreeNode
+    {
+        if($this === $this->getRubricData()->getRootNode())
+        {
+            throw new \InvalidArgumentException('You can not change the parent node of the root node');
+        }
+
+        if($this->parentNode === $newParentNode)
+        {
+            return $this;
+        }
+
+        if($this->hasParentNode())
+        {
+            $this->parentNode->removeChild($this);
+        }
+
+        if($newParentNode instanceof TreeNode)
+        {
+            $newParentNode->addChild($this);
+        }
+
+        $this->parentNode = $newParentNode;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasParentNode(): bool
+    {
+        return $this->parentNode instanceof TreeNode;
+    }
+
+    /**
      * @return int
      */
     public function getSort(): ?int
@@ -179,9 +211,34 @@ abstract class TreeNode
      */
     public function setSort(int $sort): self
     {
-        $this->sort = $sort;
+        if(!$this->parentNode instanceof TreeNode)
+        {
+            $this->sort = 1;
+            return $this;
+        }
+
+        if (!$this->getParentNode()->isChildSortValid($sort))
+        {
+            throw new \InvalidArgumentException(
+                'The given child sort must be between 1 and the number of available siblings'
+            );
+        }
+
+
+        $this->getParentNode()->removeChild($this);
+        $this->getParentNode()->insertChild($this, $sort);
 
         return $this;
+    }
+
+    /**
+     * @param int $sort
+     *
+     * @return bool
+     */
+    public function isChildSortValid(int $sort)
+    {
+        return $sort >= 1 && $sort <= $this->getChildren()->count();
     }
 
     /**
@@ -211,21 +268,41 @@ abstract class TreeNode
      */
     public function addChild(TreeNode $childToAdd): self
     {
-//        if($childToAdd->getSort() > 0)
-//        {
-//            foreach ($this->children as $child)
-//            {
-//                if ($child->getSort() >= $childToAdd->getSort())
-//                {
-//                    $child->setSort($child->getSort() + 1);
-//                }
-//            }
-//        }
-//        else
-//        {
-//            $childToAdd->setSort(count($this->children) + 1);
-//            $childToAdd->setSort(20);
-//        }
+        if($this->hasChild($childToAdd))
+        {
+            return $this;
+        }
+
+        $childToAdd->setSort($this->children->count() + 1);
+
+        $this->children->add($childToAdd);
+        $childToAdd->setParentNode($this);
+
+        return $this;
+    }
+
+    /**
+     * @param TreeNode $childToAdd
+     * @param int $sortValue
+     *
+     * @return TreeNode
+     */
+    public function insertChild(TreeNode $childToAdd, int $sortValue): self
+    {
+        if($this->hasChild($childToAdd))
+        {
+            return $this;
+        }
+// validate child sort (first with test)
+        $childToAdd->setSort($sortValue);
+
+        foreach ($this->children as $child)
+        {
+            if ($child->getSort() >= $sortValue)
+            {
+                $child->setSort($child->getSort() + 1);
+            }
+        }
 
         $this->children->add($childToAdd);
         $childToAdd->setParentNode($this);
@@ -240,13 +317,23 @@ abstract class TreeNode
      */
     public function removeChild(TreeNode $childToRemove): self
     {
-//        foreach($this->children as $child)
-//        {
-//            if($child->getSort() > $childToRemove->getSort())
-//            {
-//                $child->setSort($child->getSort() - 1);
-//            }
-//        }
+        if(!$this->hasChild($childToRemove))
+        {
+            return $this;
+        }
+
+        foreach ($this->children as $child)
+        {
+            if($child == $childToRemove)
+            {
+                continue;
+            }
+
+            if ($child->getSort() > $childToRemove->getSort())
+            {
+                $child->setSort($child->getSort() - 1);
+            }
+        }
 
         $this->children->removeElement($childToRemove);
         $childToRemove->setParentNode(null);
@@ -254,4 +341,13 @@ abstract class TreeNode
         return $this;
     }
 
+    /**
+     * @param TreeNode $possibleChildNode
+     *
+     * @return bool
+     */
+    public function hasChild(TreeNode $possibleChildNode)
+    {
+        return $this->children->contains($possibleChildNode);
+    }
 }
