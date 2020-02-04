@@ -23,7 +23,7 @@ class LinkApplicationItemRenderer extends ItemRenderer
     {
         $html = array();
 
-        $html[] = '<li>';
+        $html[] = '<li class="nav-item">';
         $html[] = '<a href="' . $item->getUrl() . '" target="' . $item->getTargetString() . '">';
 
         $html[] = '<div class="chamilo-menu-item-label">' . $this->renderTitle($item) . '</div>';

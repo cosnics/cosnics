@@ -76,21 +76,21 @@ body.cke_editable {
 	z-index: 10000;
 }
 
-.dropdown-menu>li>a>img+span, .dropdown-menu>li>a>span.inline-glyph+span,
+.dropdown-menu>a.dropdown-item>img+span, .dropdown-menu>a.dropdown-item>span.inline-glyph+span,
 	.btn>img+span, .btn>span.inline-glyph+span {
 	margin-left: 10px;
 }
 
-.dropdown-menu>li>a.selected>img, .dropdown-menu>li>a.selected>span.glyphicon
+.dropdown-menu>a.dropdown-item.selected>img, .dropdown-menu>a.dropdown-item.selected>span.glyphicon
 	{
 	display: none;
 }
 
-.dropdown-menu>li>a.selected, .dropdown-menu>li>a.not-selected {
+.dropdown-menu>a.dropdown-item.selected, .dropdown-menu>a.dropdown-item.not-selected {
 	padding-left: 46px;
 }
 
-.dropdown-menu>li>a.selected, .dropdown-menu>li>a:hover.selected {
+.dropdown-menu>a.dropdown-item.selected, .dropdown-menu>a.dropdown-item:hover.selected {
 	background-image: url("../../Images/Aqua/Background/Checkmark.png");
 	background-position: 20px center;
 	background-repeat: no-repeat;

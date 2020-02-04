@@ -67,7 +67,16 @@ class JumpForm
      */
     public function render()
     {
-        return $this->getButtonToolBarRenderer()->render();
+        $html = array();
+
+        $html[] = '<div class="card">';
+        $html[] = '<h6 class="card-header">' . Translation::get('JumpTo') . '</h6>';
+        $html[] = '<div class="card-body">';
+        $html[] = $this->getButtonToolBarRenderer()->render();
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -79,8 +88,6 @@ class JumpForm
         $buttonToolbar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
 
-        $buttonToolbar->addItem(
-            new Button(Translation::get('JumpTo'), null, null, Button::DISPLAY_LABEL, false, 'btn-link'));
         $buttonToolbar->addItem($buttonGroup);
 
         $dateButton = new DropdownButton(date('j', $this->getCurrentTime()));
@@ -90,7 +97,8 @@ class JumpForm
             $dayUrl = str_replace(
                 Calendar::TIME_PLACEHOLDER,
                 mktime(null, null, null, date('n', $this->getCurrentTime()), $day, date('Y', $this->getCurrentTime())),
-                $this->getNavigationUrl());
+                $this->getNavigationUrl()
+            );
 
             $classes = date('j', $this->getCurrentTime()) == $day ? 'selected' : 'not-selected';
             $dateButton->addSubButton(new SubButton($day, null, $dayUrl, SubButton::DISPLAY_LABEL, false, $classes));
@@ -102,13 +110,15 @@ class JumpForm
         foreach ($this->getMonths() as $month => $monthLabel)
         {
             $monthUrl = str_replace(
-                Calendar::TIME_PLACEHOLDER,
-                mktime(null, null, null, $month, date('j', $this->getCurrentTime()), date('Y', $this->getCurrentTime())),
-                $this->getNavigationUrl());
+                Calendar::TIME_PLACEHOLDER, mktime(
+                null, null, null, $month, date('j', $this->getCurrentTime()), date('Y', $this->getCurrentTime())
+            ), $this->getNavigationUrl()
+            );
 
             $classes = date('n', $this->getCurrentTime()) == $month ? 'selected' : 'not-selected';
             $monthButton->addSubButton(
-                new SubButton($monthLabel, null, $monthUrl, SubButton::DISPLAY_LABEL, false, $classes));
+                new SubButton($monthLabel, null, $monthUrl, SubButton::DISPLAY_LABEL, false, $classes)
+            );
         }
 
         $yearButton = new DropdownButton(date('Y', $this->getCurrentTime()));
@@ -118,7 +128,8 @@ class JumpForm
             $yearUrl = str_replace(
                 Calendar::TIME_PLACEHOLDER,
                 mktime(null, null, null, date('n', $this->getCurrentTime()), date('j', $this->getCurrentTime()), $year),
-                $this->getNavigationUrl());
+                $this->getNavigationUrl()
+            );
 
             $classes = date('Y', $this->getCurrentTime()) == $year ? 'selected' : 'not-selected';
             $yearButton->addSubButton(new SubButton($year, null, $yearUrl, SubButton::DISPLAY_LABEL, false, $classes));
@@ -128,8 +139,7 @@ class JumpForm
         $buttonGroup->addButton($monthButton);
         $buttonGroup->addButton($yearButton);
 
-        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        return $buttonToolbarRenderer;
+        return new ButtonToolBarRenderer($buttonToolbar);
     }
 
     /**
@@ -167,7 +177,8 @@ class JumpForm
             Translation::get("SeptemberLong", null, Utilities::COMMON_LIBRARIES),
             Translation::get("OctoberLong", null, Utilities::COMMON_LIBRARIES),
             Translation::get("NovemberLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("DecemberLong", null, Utilities::COMMON_LIBRARIES));
+            Translation::get("DecemberLong", null, Utilities::COMMON_LIBRARIES)
+        );
         $months = array();
 
         foreach ($monthNames as $key => $month)

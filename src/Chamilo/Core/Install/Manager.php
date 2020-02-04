@@ -114,7 +114,7 @@ abstract class Manager extends Application implements NoContextComponent
         $html[] = $page->getHeader()->toHtml();
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="col-12">';
 
         $html[] = $this->renderWizardHeader();
 

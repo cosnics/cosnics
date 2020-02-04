@@ -20,9 +20,9 @@ class SubButtonRenderer extends AbstractButtonRenderer
     {
         $html = array();
 
-        $html[] = '<li>';
+//        $html[] = '<div class="dropdown-item">';
         $html[] = parent::render();
-        $html[] = '</li>';
+//        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -35,6 +35,7 @@ class SubButtonRenderer extends AbstractButtonRenderer
     {
         $classes = array();
 
+        $classes[] = 'dropdown-item';
         $classes[] = $this->getButton()->getClasses();
 
         if (! $this->getButton()->getAction())

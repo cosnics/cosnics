@@ -79,9 +79,9 @@ class LanguageCategoryItemRenderer extends ItemRenderer
 
         $html = array();
 
-        $html[] = '<li class="dropdown">';
+        $html[] = '<li class="nav-item dropdown">';
         $html[] =
-            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+            '<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
         $imagePath = $this->getThemeUtilities()->getImagePath('Chamilo\Core\Menu', 'Language');
         $title = $this->getItemCacheService()->getItemTitleForCurrentLanguage($item);

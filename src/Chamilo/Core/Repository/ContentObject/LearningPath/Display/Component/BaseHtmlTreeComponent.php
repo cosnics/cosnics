@@ -99,7 +99,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
         // Menu
 
-        $classes = array('col-xs-12', 'col-sm-4', 'col-lg-4', 'learning-path-tree-menu-container');
+        $classes = array('col-12', 'col-sm-4', 'col-lg-4', 'learning-path-tree-menu-container');
 
         if ($isMenuHidden == 'true')
         {
@@ -232,7 +232,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
         // Content
 
-        $classes = array('col-xs-12', 'col-sm-8', 'col-lg-8', 'learning-path-content');
+        $classes = array('col-12', 'col-sm-8', 'col-lg-8', 'learning-path-content');
 
         if ($isMenuHidden == 'true')
         {

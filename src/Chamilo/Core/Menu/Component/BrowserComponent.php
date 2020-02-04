@@ -58,11 +58,11 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $html[] = $this->getButtonToolbarRenderer()->render();
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12 col-lg-2">';
+        $html[] = '<div class="col-12 col-lg-2">';
         $html[] = $this->getMenu()->renderAsTree();
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-12 col-lg-10">';
+        $html[] = '<div class="col-12 col-lg-10">';
         $html[] = $table->render();
         $html[] = '</div>';
         $html[] = '</div>';

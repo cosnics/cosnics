@@ -39,7 +39,7 @@ class LanguageItemRenderer extends ItemRenderer
 
         $html = array();
 
-        $html[] = '<li>';
+        $html[] = '<li class="dropdown-item">';
         $html[] = '<a href="' . $redirect->getUrl() . '">';
         $html[] = '<div class="chamilo-menu-item-label">';
         $html[] = $this->renderTitle($item);

@@ -54,7 +54,6 @@ class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
     protected function getClasses()
     {
         $classes = $this->getButtonGroup()->getClasses();
-        $classes[] = 'action-bar';
         $classes[] = 'btn-group';
 
         return implode(' ', $classes);

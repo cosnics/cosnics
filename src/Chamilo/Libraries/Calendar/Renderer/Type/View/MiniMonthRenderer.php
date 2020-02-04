@@ -36,8 +36,10 @@ class MiniMonthRenderer extends ViewRenderer
      * @param string $linkTarget
      * @param integer $markPeriod
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $viewActions = array(), $linkTarget = '', $markPeriod = null)
+    public function __construct(
+        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = array(),
+        $linkTarget = '', $markPeriod = null
+    )
     {
         $this->markPeriod = $markPeriod;
 
@@ -79,10 +81,10 @@ class MiniMonthRenderer extends ViewRenderer
     {
         $html = array();
 
-        $html[] = '<div class="panel panel-default">';
+        $html[] = '<div class="card mb-2">';
         $html[] = $this->renderNavigation();
 
-        $html[] = '<div class="table-calendar-mini-container">';
+        $html[] = '<div class="card-body table-calendar-mini-container">';
         $html[] = $this->renderCalendar();
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
@@ -116,8 +118,8 @@ class MiniMonthRenderer extends ViewRenderer
                 $endDate = $event->getEndDate();
 
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
-                     $tableDate < $endDate && $endDate <= $nextTableDate ||
-                     $startDate <= $tableDate && $nextTableDate <= $endDate)
+                    $tableDate < $endDate && $endDate <= $nextTableDate ||
+                    $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
                     $this->getLegend()->addSource($event->getSource());
 
@@ -142,7 +144,8 @@ class MiniMonthRenderer extends ViewRenderer
         $html[] = '<div class="clearfix"></div>';
 
         $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js'
+        );
 
         return implode(PHP_EOL, $html);
     }
@@ -156,13 +159,11 @@ class MiniMonthRenderer extends ViewRenderer
     {
         $html = array();
 
-        $html[] = '<div class="panel-heading table-calendar-mini-navigation">';
+        $html[] = '<h6 class="card-header table-calendar-mini-navigation">';
         $html[] = $this->renderPreviousMonthNavigation();
         $html[] = $this->renderNextMonthNavigation();
-        $html[] = '<h4 class="panel-title">';
         $html[] = $this->renderTitle();
-        $html[] = '</h4>';
-        $html[] = '</div>';
+        $html[] = '</h6>';
 
         return implode(PHP_EOL, $html);
     }
@@ -174,7 +175,7 @@ class MiniMonthRenderer extends ViewRenderer
     public function renderTitle()
     {
         return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities::COMMON_LIBRARIES) . ' ' .
-             date('Y', $this->getDisplayTime());
+            date('Y', $this->getDisplayTime());
     }
 
     /**
@@ -187,7 +188,7 @@ class MiniMonthRenderer extends ViewRenderer
         $previousTime = strtotime('-1 Month', $this->getDisplayTime());
         $previousUrl = str_replace(Calendar::TIME_PLACEHOLDER, $previousTime, $urlFormat);
 
-        return '<a href="' . $previousUrl . '"><span class="glyphicon glyphicon-chevron-left pull-left"></span></a>';
+        return '<a href="' . $previousUrl . '"><span class="fa fa-chevron-left float-left"></span></a>';
     }
 
     /**
@@ -200,6 +201,6 @@ class MiniMonthRenderer extends ViewRenderer
         $nextTime = strtotime('+1 Month', $this->getDisplayTime());
         $nextUrl = str_replace(Calendar::TIME_PLACEHOLDER, $nextTime, $urlFormat);
 
-        return '<a href="' . $nextUrl . '"><span class="glyphicon glyphicon-chevron-right pull-right"></span></a>';
+        return '<a href="' . $nextUrl . '"><span class="fa fa-chevron-right float-right"></span></a>';
     }
 }

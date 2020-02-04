@@ -109,7 +109,7 @@ class MiniMonthCalendar extends MonthCalendar
         // Is current table date today?
         if (date('Ymd', $tableDate) == date('Ymd'))
         {
-            $cellContent = '<span class="badge">' . $cellContent . '</span>';
+            $cellContent = '<span class="badge text-white">' . $cellContent . '</span>';
         }
 
         return $cellContent;

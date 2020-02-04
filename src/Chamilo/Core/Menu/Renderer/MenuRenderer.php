@@ -271,6 +271,7 @@ class MenuRenderer
     {
         $html = array();
 
+        $html[] = '</div>';
         $html[] = '</ul>';
         $html[] = '</nav>';
 
@@ -287,7 +288,7 @@ class MenuRenderer
     {
         $html = array();
 
-        $class = 'navbar navbar-chamilo navbar-default';
+        $class = 'navbar navbar-chamilo navbar-expand-lg navbar-dark bg-dark';
 
         if ($numberOfItems == 0)
         {
@@ -295,21 +296,20 @@ class MenuRenderer
         }
 
         $html[] = '<nav class="' . $class . '">';
-        $html[] = '<div class="' . $containerMode . '">';
-        $html[] = '<div class="navbar-header">';
+//        $html[] = '<div class="' . $containerMode . '">';
+//        $html[] = '<div class="navbar-header">';
 
-        $html[] =
-            '<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-navbar-collapse" aria-expanded="false">';
-        $html[] = '<span class="sr-only">Toggle navigation</span>';
-        $html[] = '<span class="icon-bar"></span>';
-        $html[] = '<span class="icon-bar"></span>';
-        $html[] = '<span class="icon-bar"></span>';
-        $html[] = '</button>';
         $html[] = $this->renderBrand();
 
-        $html[] = '</div>';
-        $html[] = '<div class="collapse navbar-collapse" id="menu-navbar-collapse">';
-        $html[] = '<ul class="nav navbar-nav navbar-right">';
+        $html[] = '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">';
+        $html[] = '<span class="navbar-toggler-icon"></span>';
+        $html[] = '</button>';
+
+
+
+//        $html[] = '</div>';
+        $html[] = '<div class="collapse navbar-collapse" id="navbarSupportedContent">';
+        $html[] = '<ul class="navbar-nav mr-auto">';
 
         return implode(PHP_EOL, $html);
     }

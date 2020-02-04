@@ -181,10 +181,8 @@ class Legend
         {
             $visibleSources = 0;
 
-            $result[] = '<div class="panel panel-default table-calendar-legend">';
-            $result[] = '<div class="panel-heading">';
-            $result[] = '<h4 class="panel-title">' . Translation::get('Legend') . '</h4>';
-            $result[] = '</div>';
+            $result[] = '<div class="card panel-default table-calendar-legend">';
+            $result[] = '<h6 class="card-header">' . Translation::get('Legend') . '</h6>';
             $result[] = '<ul class="list-group">';
 
             $sources = $this->getSources();

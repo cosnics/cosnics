@@ -75,7 +75,7 @@ class BaseHeader implements HeaderInterface
      * @param string $languageCode
      * @param string $textDirection
      */
-    public function __construct($viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid', $languageCode = 'en', $textDirection = 'ltr')
+    public function __construct($viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid', $languageCode = 'en', $textDirection = 'ltr')
     {
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;

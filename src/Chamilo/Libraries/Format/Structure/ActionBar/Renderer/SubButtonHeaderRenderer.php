@@ -19,9 +19,9 @@ class SubButtonHeaderRenderer extends AbstractButtonToolbarItemRenderer
     {
         $html = array();
 
-        $html[] = '<li ' . $this->renderClasses() . '>';
+        $html[] = '<h6 ' . $this->renderClasses() . '>';
         $html[] = $this->getButton()->getLabel();
-        $html[] = '</li>';
+        $html[] = '</h6>';
 
         return implode(PHP_EOL, $html);
     }

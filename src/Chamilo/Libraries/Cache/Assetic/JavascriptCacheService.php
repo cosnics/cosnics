@@ -30,11 +30,13 @@ class JavascriptCacheService extends AsseticCacheService
 
         $javascriptPath = $this->getPathBuilder()->getJavascriptPath('Chamilo\Libraries');
         $pluginPath = $javascriptPath . 'Plugin/';
+        $resourcesPath = $this->getPathBuilder()->getResourcesPath('Chamilo\Configuration');
 
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.min.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.browser.min.js');
-        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Bootstrap/bootstrap.min.js');
-        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Bootstrap/bootstrap-toggle.min.js');
+//        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Bootstrap/bootstrap.min.js');
+//        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Bootstrap/bootstrap-toggle.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $resourcesPath . 'Css/Aqua/Bootstrap4/js/bootstrap.bundle.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'BootstrapConflictFixes.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.ui.min.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.tabula.js');

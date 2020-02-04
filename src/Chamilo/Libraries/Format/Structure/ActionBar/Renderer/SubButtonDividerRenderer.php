@@ -17,7 +17,7 @@ class SubButtonDividerRenderer extends AbstractButtonToolbarItemRenderer
      */
     public function render()
     {
-        return '<li role="separator" ' . $this->renderClasses() . '></li>';
+        return '<div ' . $this->renderClasses() . '></div>';
     }
 
     /**
@@ -37,7 +37,7 @@ class SubButtonDividerRenderer extends AbstractButtonToolbarItemRenderer
     {
         $classes = array();
 
-        $classes[] = 'divider';
+        $classes[] = 'dropdown-divider';
         $classes[] = $this->getButton()->getClasses();
 
         return $classes;

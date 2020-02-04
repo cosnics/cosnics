@@ -163,7 +163,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 if ($this->feedbackServiceBridge->countFeedback() > $feedbackCount)
                 {
                     $html[] = '<div class="row">';
-                    $html[] = '<div class="col-xs-12 feedback-pagination">';
+                    $html[] = '<div class="col-12 feedback-pagination">';
                     $html[] = $this->getPagerRenderer()->renderPaginationWithPageLimit(
                         $this->get_parameters(),
                         self::PARAM_PAGE_NUMBER

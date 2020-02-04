@@ -33,7 +33,7 @@ trait DropdownButtonRendererTrait
     {
         $html = array();
 
-        $html[] = '<div class="btn-group">';
+        $html[] = '<div class="dropdown">';
         $html[] = parent::render();
         $html[] = $this->renderDropdown();
         $html[] = '</div>';
@@ -49,17 +49,18 @@ trait DropdownButtonRendererTrait
     {
         $html = array();
 
-        $html[] = '<ul class="' . implode(' ', $this->determineDropdownClasses()) . '">';
+        $html[] = '<div class="' . implode(' ', $this->determineDropdownClasses()) . '">';
 
         foreach ($this->getButton()->getSubButtons() as $subButton)
         {
-            $rendererClassName = __NAMESPACE__ . '\\' .
-                 ClassnameUtilities::getInstance()->getClassnameFromObject($subButton) . 'Renderer';
+            $rendererClassName =
+                __NAMESPACE__ . '\\' . ClassnameUtilities::getInstance()->getClassnameFromObject($subButton) .
+                'Renderer';
             $renderer = new $rendererClassName($subButton);
             $html[] = $renderer->render($subButton);
         }
 
-        $html[] = '</ul>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -76,7 +77,7 @@ trait DropdownButtonRendererTrait
 
         $dropdownClasses = $this->getButton()->getDropdownClasses();
 
-        if (! empty($dropdownClasses))
+        if (!empty($dropdownClasses))
         {
             $classes[] = $dropdownClasses;
         }

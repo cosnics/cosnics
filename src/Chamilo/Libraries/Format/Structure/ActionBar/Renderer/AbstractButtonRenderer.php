@@ -90,7 +90,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
         $classes = array();
 
         $classes[] = 'btn';
-        $classes[] = 'btn-default';
+        $classes[] = 'btn-light';
         $classes[] = $this->getButton()->getClasses();
 
         return $classes;

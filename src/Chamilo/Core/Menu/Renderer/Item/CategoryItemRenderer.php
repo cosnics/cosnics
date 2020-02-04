@@ -60,6 +60,7 @@ class CategoryItemRenderer extends ItemRenderer
      */
     protected function getClasses($isSelected = false, $existingClasses = [])
     {
+        $existingClasses[] = 'nav-item';
         $existingClasses[] = 'dropdown';
 
         return parent::getClasses($isSelected, $existingClasses);
@@ -82,7 +83,7 @@ class CategoryItemRenderer extends ItemRenderer
 
         $html[] = '<li class="' . implode(' ', $this->getClasses($selected)) . '">';
         $html[] =
-            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+            '<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
         if ($item->showIcon())
         {

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -47,6 +48,7 @@ class BreadcrumbTrailRenderer
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
+     *
      * @return string
      */
     public function render(BreadcrumbTrail $breadcrumbTrail)
@@ -70,6 +72,7 @@ class BreadcrumbTrailRenderer
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
+     *
      * @return string
      */
     public function renderBreadcrumbs(BreadcrumbTrail $breadcrumbTrail)
@@ -86,17 +89,20 @@ class BreadcrumbTrailRenderer
             {
                 $breadCrumbHtml = array();
 
-                $breadCrumbHtml[] = '<li>';
+                $breadCrumbHtml[] = '<li class="breadcrumb-item">';
                 $breadCrumbHtml[] = '<a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self">';
 
                 if ($breadcrumb->getImage())
                 {
-                    $breadCrumbHtml[] = '<img src="' . $breadcrumb->getImage() . '" title="' .
-                         htmlentities($breadcrumb->get_name()) . '">';
+                    $breadCrumbHtml[] =
+                        '<img src="' . $breadcrumb->getImage() . '" title="' . htmlentities($breadcrumb->get_name()) .
+                        '">';
                 }
                 elseif ($breadcrumb->getGlyph())
                 {
-                    $breadCrumbHtml[] = '<span class="glyphicon glyphicon-' . $breadcrumb->getGlyph() . '"></span>';
+                    $fontAwesomeGlyph = new FontAwesomeGlyph($breadcrumb->getGlyph());
+
+                    $breadCrumbHtml[] = $fontAwesomeGlyph->render();
                 }
                 else
                 {
@@ -118,6 +124,7 @@ class BreadcrumbTrailRenderer
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
+     *
      * @return string
      */
     public function renderHelp(BreadcrumbTrail $breadcrumbTrail)
@@ -146,6 +153,7 @@ class BreadcrumbTrailRenderer
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
+     *
      * @return string
      */
     public function renderExtra(BreadcrumbTrail $breadcrumbTrail)

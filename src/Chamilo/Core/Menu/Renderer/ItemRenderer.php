@@ -92,6 +92,8 @@ abstract class ItemRenderer
      */
     protected function getClasses($isSelected = false, $existingClasses = [])
     {
+        $existingClasses[] = 'nav-item';
+
         if ($isSelected)
         {
             $existingClasses[] = 'active';

@@ -49,7 +49,7 @@ class SplitDropdownButtonRenderer extends AbstractButtonRenderer
         $classes = array();
 
         $classes[] = 'btn';
-        $classes[] = 'btn-default';
+        $classes[] = 'btn-light';
         $classes[] = 'dropdown-toggle';
         $classes[] = $this->getButton()->getClasses();
 
