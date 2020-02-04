@@ -7,8 +7,8 @@
         <testsuite name="Source">
             <directory>Source</directory>
         </testsuite>
-        <testsuite name="Domain">
-            <directory>Domain</directory>
+        <testsuite name="Unit">
+            <directory>Unit</directory>
         </testsuite>
         <testsuite name="Integration">
             <directory>Integration</directory>

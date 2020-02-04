@@ -4,8 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
-use function count;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity
@@ -69,6 +67,7 @@ abstract class TreeNode
      * @var TreeNode[] | ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="TreeNode", mappedBy="parentNode", cascade={"persist", "refresh"})
+     * @ORM\OrderBy({"sort" = "asc"})
      */
     protected $children;
 
@@ -83,6 +82,8 @@ abstract class TreeNode
     {
         $this->title = $title;
         $this->rubricData = $rubricData;
+
+        $rubricData->addTreeNode($this);
         $this->setParentNode($parentNode);
 
         $this->children = new ArrayCollection();
@@ -163,22 +164,22 @@ abstract class TreeNode
      */
     public function setParentNode(TreeNode $newParentNode = null): TreeNode
     {
-        if($this === $this->getRubricData()->getRootNode())
+        if ($this === $this->getRubricData()->getRootNode())
         {
             throw new \InvalidArgumentException('You can not change the parent node of the root node');
         }
 
-        if($this->parentNode === $newParentNode)
+        if ($this->parentNode === $newParentNode)
         {
             return $this;
         }
 
-        if($this->hasParentNode())
+        if ($this->hasParentNode())
         {
             $this->parentNode->removeChild($this);
         }
 
-        if($newParentNode instanceof TreeNode)
+        if ($newParentNode instanceof TreeNode)
         {
             $newParentNode->addChild($this);
         }
@@ -205,28 +206,35 @@ abstract class TreeNode
     }
 
     /**
+     * This method should only be called by other methods e.g. the parent treenode that changes the sort of his
+     * children.
+     *
+     * WARNING: due to domain limitations this method will not change the sort of the sibling treenodes. Calling
+     * this method directly to "move" this node to a different location will result in a broken domain model.
+     * To prevent storing a false domain model in the database the entire structure of the rubric will be validated
+     * upon storing it into the database. Making sure that any changes in the sort that are invalid
+     * (same sort value multiple times, sort value out of range, gaps between sort values)
+     * will not be stored into the database.
+     *
      * @param int $sort
      *
      * @return TreeNode
      */
     public function setSort(int $sort): self
     {
-        if(!$this->parentNode instanceof TreeNode)
-        {
-            $this->sort = 1;
-            return $this;
-        }
+        $parentNode = $this->getParentNode();
 
-        if (!$this->getParentNode()->isChildSortValid($sort))
+        if ($parentNode instanceof TreeNode && !$parentNode->isChildSortValid($sort))
         {
             throw new \InvalidArgumentException(
-                'The given child sort must be between 1 and the number of available siblings'
+                sprintf(
+                    'The given child sort must be between 1 and %s, %s given',
+                    $parentNode->getChildren()->count(), $sort
+                )
             );
         }
 
-
-        $this->getParentNode()->removeChild($this);
-        $this->getParentNode()->insertChild($this, $sort);
+        $this->sort = $sort;
 
         return $this;
     }
@@ -268,15 +276,14 @@ abstract class TreeNode
      */
     public function addChild(TreeNode $childToAdd): self
     {
-        if($this->hasChild($childToAdd))
+        if ($this->hasChild($childToAdd))
         {
             return $this;
         }
 
-        $childToAdd->setSort($this->children->count() + 1);
-
         $this->children->add($childToAdd);
         $childToAdd->setParentNode($this);
+        $childToAdd->setSort($this->children->count());
 
         return $this;
     }
@@ -289,23 +296,28 @@ abstract class TreeNode
      */
     public function insertChild(TreeNode $childToAdd, int $sortValue): self
     {
-        if($this->hasChild($childToAdd))
+        if ($this->hasChild($childToAdd))
         {
             return $this;
         }
-// validate child sort (first with test)
+
+        $this->children->add($childToAdd);
+
+        $childToAdd->setParentNode($this);
         $childToAdd->setSort($sortValue);
 
         foreach ($this->children as $child)
         {
+            if($child === $childToAdd)
+            {
+                continue;
+            }
+
             if ($child->getSort() >= $sortValue)
             {
                 $child->setSort($child->getSort() + 1);
             }
         }
-
-        $this->children->add($childToAdd);
-        $childToAdd->setParentNode($this);
 
         return $this;
     }
@@ -317,14 +329,14 @@ abstract class TreeNode
      */
     public function removeChild(TreeNode $childToRemove): self
     {
-        if(!$this->hasChild($childToRemove))
+        if (!$this->hasChild($childToRemove))
         {
             return $this;
         }
 
         foreach ($this->children as $child)
         {
-            if($child == $childToRemove)
+            if ($child == $childToRemove)
             {
                 continue;
             }
@@ -339,6 +351,16 @@ abstract class TreeNode
         $childToRemove->setParentNode(null);
 
         return $this;
+    }
+
+    /**
+     * @param TreeNode $childNode
+     * @param int $newPosition
+     */
+    public function moveChild(TreeNode $childNode, int $newPosition)
+    {
+        $this->removeChild($childNode);
+        $this->insertChild($childNode, $newPosition);
     }
 
     /**

@@ -38,6 +38,11 @@ class RubricTreeBuilder
     {
         $rubricData = $this->rubricDataRepository->findEntireRubricById($rubricDataId);
 
+        if(!$rubricData instanceof RubricData)
+        {
+            return null;
+        }
+
         $treeNodes = $rubricData->getTreeNodes();
         foreach($treeNodes as $treeNode)
         {

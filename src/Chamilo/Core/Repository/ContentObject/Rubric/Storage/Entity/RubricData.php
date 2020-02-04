@@ -176,10 +176,10 @@ class RubricData
      */
     public function setRootNode(TreeNode $rootNode): RubricData
     {
-        $rootNode->setSort(1);
-
         $this->rootNode = $rootNode;
         $this->addTreeNode($rootNode);
+
+        $rootNode->setSort(1);
 
         return $this;
     }
