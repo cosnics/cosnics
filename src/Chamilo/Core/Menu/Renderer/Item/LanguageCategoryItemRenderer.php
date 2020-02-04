@@ -81,7 +81,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
 
         $html[] = '<li class="nav-item dropdown">';
         $html[] =
-            '<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+            '<a href="#" class="nav-link text-center" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
         $imagePath = $this->getThemeUtilities()->getImagePath('Chamilo\Core\Menu', 'Language');
         $title = $this->getItemCacheService()->getItemTitleForCurrentLanguage($item);
@@ -90,10 +90,9 @@ class LanguageCategoryItemRenderer extends ItemRenderer
             '<img class="chamilo-menu-item-icon' . ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') .
             '" src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
 
-        $html[] = '<div class="chamilo-menu-item-label-with-image">';
+        $html[] = '<br/>';
+
         $html[] = $this->renderTitle($item);
-        $html[] = '<span class="caret"></span>';
-        $html[] = '</div>';
         $html[] = '</a>';
 
         $html[] = $this->renderLanguageItems($item, $user);

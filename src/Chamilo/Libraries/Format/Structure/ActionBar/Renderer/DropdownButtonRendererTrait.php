@@ -33,7 +33,7 @@ trait DropdownButtonRendererTrait
     {
         $html = array();
 
-        $html[] = '<div class="dropdown">';
+        $html[] = '<div class="btn-group">';
         $html[] = parent::render();
         $html[] = $this->renderDropdown();
         $html[] = '</div>';

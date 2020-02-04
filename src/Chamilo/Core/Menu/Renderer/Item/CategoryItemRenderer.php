@@ -83,7 +83,7 @@ class CategoryItemRenderer extends ItemRenderer
 
         $html[] = '<li class="' . implode(' ', $this->getClasses($selected)) . '">';
         $html[] =
-            '<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+            '<a href="#" class="nav-link text-center" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
         if ($item->showIcon())
         {
@@ -101,15 +101,18 @@ class CategoryItemRenderer extends ItemRenderer
                     ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' . $imagePath .
                     '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
             }
+
+            if ($item->showTitle())
+            {
+                $html[] = '<br/>';
+            }
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
+            $html[] = $title;
         }
 
-        $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
 
         if ($this->getItemCacheService()->doesItemHaveChildren($item))

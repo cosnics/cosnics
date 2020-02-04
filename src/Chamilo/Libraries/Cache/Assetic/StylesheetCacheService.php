@@ -28,8 +28,9 @@ class StylesheetCacheService extends AsseticCacheService
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      */
-    public function __construct(PathBuilder $pathBuilder, ConfigurablePathBuilder $configurablePathBuilder,
-        Theme $themeUtilities)
+    public function __construct(
+        PathBuilder $pathBuilder, ConfigurablePathBuilder $configurablePathBuilder, Theme $themeUtilities
+    )
     {
         parent::__construct($pathBuilder, $configurablePathBuilder);
         $this->themeUtilities = $themeUtilities;
@@ -94,6 +95,6 @@ class StylesheetCacheService extends AsseticCacheService
      */
     protected function getAssetFilters()
     {
-        return array(new CssImportFilter(), new CssMinFilter());
+        return array(new CssImportFilter());
     }
 }

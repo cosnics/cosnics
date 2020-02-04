@@ -21,11 +21,8 @@ abstract class FullRenderer extends ViewRenderer
     public function renderMiniMonth()
     {
         $renderer = new MiniMonthRenderer(
-            $this->getDataProvider(),
-            $this->getLegend(),
-            $this->getDisplayTime(),
-            null,
-            null);
+            $this->getDataProvider(), $this->getLegend(), $this->getDisplayTime(), null, null
+        );
 
         return $renderer->render();
     }
@@ -36,7 +33,7 @@ abstract class FullRenderer extends ViewRenderer
      */
     protected function getJumpForm()
     {
-        if (! isset($this->form))
+        if (!isset($this->form))
         {
             $this->form = new JumpForm($this->determineNavigationUrl(), $this->getDisplayTime());
         }
@@ -86,9 +83,7 @@ abstract class FullRenderer extends ViewRenderer
         $html[] = '</div>';
 
         $html[] = '<div class="col-12 col-lg-8">';
-        $html[] = '<div class="pull-right">';
         $html[] = $this->renderViewActions();
-        $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -104,7 +99,8 @@ abstract class FullRenderer extends ViewRenderer
         $html[] = '<div class="clearfix"></div>';
 
         $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js'
+        );
 
         return implode(PHP_EOL, $html);
     }

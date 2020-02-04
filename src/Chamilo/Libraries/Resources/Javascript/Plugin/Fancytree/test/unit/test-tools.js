@@ -17,7 +17,6 @@ TOOLS.TOTAL_ELAP = 0;
  * QUnit setup
  */
 TOOLS.initQUnit = function() {
-
 	// See https://github.com/axemclion/grunt-saucelabs
 	QUnit.done(function (testResults) {
 	  var details, i, len,
@@ -35,12 +34,10 @@ TOOLS.initQUnit = function() {
 	  }
 	  testResults.tests = tests;
 
-	  // Expand first section when all tests are run
-	  $("ol#qunit-tests > li:first > ol").show("slow");
-
-	  /*jshint camelcase:false*/ // jscs: disable
 	  window.global_test_results = testResults; // used by saucelabs
-	  /*jshint camelcase:true*/ // jscs: enable
+	  //console.info("Set window.global_test_results =", window.global_test_results);
+	  // Expand first section when all tests are run
+	  $("ol#qunit-tests > li").first().find("> ol").show("slow");
 	});
 
 	// See https://github.com/axemclion/grunt-saucelabs
@@ -52,6 +49,30 @@ TOOLS.initQUnit = function() {
 		}
 	  });
 	});
+
+	// // Log something if test fails
+	// QUnit.testDone( function( details ) {
+	// 	if( !details.failed || !details.total || !window.console ) {
+	// 		return;
+	// 	}
+	// 	var result = {
+	// 		"Module name": details.module,
+	// 		"Test name": details.name,
+	// 		"Assertions": {
+	// 			"Total": details.total,
+	// 			"Passed": details.passed,
+	// 			"Failed": details.failed
+	// 		},
+	// 		"Skipped": details.skipped,
+	// 		"Todo": details.todo,
+	// 		"Runtime": details.runtime
+	// 		};
+	// 	window.console.error( JSON.stringify( result, null, 2 ) );
+	// });
+
+	// Timeout async tests after 30 seconds
+	QUnit.config.testTimeout = 30000;
+
 	// Silence, please
 	$.ui.fancytree.debugLevel = 1;
 };
@@ -94,6 +115,13 @@ TOOLS.appendEvent = function(assert, msg) {
 };
 
 
+TOOLS.clearEvents = function(assert) {
+	if( !assert || !assert.deepEqual ) { $.error("assert must be passed"); }
+	if( !assert.EVENT_SEQUENCE ) { $.error("TOOLS.setup() was not called"); }
+	assert.EVENT_SEQUENCE = [];
+};
+
+
 /** Helper to reset environment for asynchronous Fancytree tests. */
 TOOLS.setup = function(assert) {
 	if( !assert ) { $.error("Need assert arg"); }
@@ -126,9 +154,17 @@ TOOLS.getNode = function(key){
 };
 
 
+/** Get first node with matching title. */
+TOOLS.getNodeByTitle = function(title){
+	var tree = $.ui.fancytree.getTree("#tree");
+
+	return tree.findFirst(function(n){ return n.title === title; });
+};
+
+
 /** Get current Fancytree. */
 TOOLS.getTree = function(){
-	return $(FIXTURE_SELECTOR).fancytree("getTree");
+	return $.ui.fancytree.getTree(FIXTURE_SELECTOR);
 };
 
 
@@ -369,9 +405,9 @@ function profileWrapper(fn, flag, opts){
 				if( opts.printTime ){
 					console.time(name);
 				}
-				start = new Date().getTime();
+				start = Date.now();
 				fn.apply(this, arguments);
-				elap = new Date().getTime() - start;
+				elap = Date.now() - start;
 
 				if(opts.printTime){
 					console.timeEnd(name);

@@ -67,16 +67,7 @@ class JumpForm
      */
     public function render()
     {
-        $html = array();
-
-        $html[] = '<div class="card">';
-        $html[] = '<h6 class="card-header">' . Translation::get('JumpTo') . '</h6>';
-        $html[] = '<div class="card-body">';
-        $html[] = $this->getButtonToolBarRenderer()->render();
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $this->getButtonToolBarRenderer()->render();
     }
 
     /**
@@ -89,6 +80,8 @@ class JumpForm
         $buttonGroup = new ButtonGroup();
 
         $buttonToolbar->addItem($buttonGroup);
+
+        $buttonGroup->addButton(new Button(Translation::get('JumpTo'), null, null, null, false, 'btn-outline-dark'));
 
         $dateButton = new DropdownButton(date('j', $this->getCurrentTime()));
 

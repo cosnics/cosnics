@@ -4,7 +4,7 @@
  * Expose the available options of a jQueryUI widget and let the user modify
  * them (useful to create live demos).
  *
- * Copyright (c) 2008-2017, Martin Wendt (http://wwWendt.de)
+ * Copyright (c) 2008-2018, Martin Wendt (http://wwWendt.de)
  *
  * Released under the MIT license
  * https://github.com/mar10/fancytree/wiki/LicenseInfo
@@ -56,7 +56,7 @@
 			$(this.options.optionTarget)
 				.addClass("ui-configurator-options")
 				.empty()
-				.delegate("input,select", "change", $.proxy(this._onOptionChange, this));
+				.on("change", "input,select", $.proxy(this._onOptionChange, this));
 			$(this.options.sourceTarget)
 				.addClass("ui-configurator-source")
 				.empty();

@@ -5,7 +5,7 @@
 	<title>Fancytree - Example</title>
 
 	<script src="../lib/jquery.js"></script>
-	<script src="../lib/jquery-ui.custom.js"></script>
+	<script src="../src/jquery-ui-dependencies/jquery.fancytree.ui-deps.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
 	<script src="../src/jquery.fancytree.js"></script>
@@ -54,13 +54,13 @@
 			addSampleButton({
 				label: "Products",
 				code: function(){
-					$("#tree").fancytree("getTree").reload({url: "ajax-tree-products.json"});
+					$.ui.fancytree.getTree("#tree").reload({url: "ajax-tree-products.json"});
 				}
 			});
 			addSampleButton({
 				label: "Files",
 				code: function(){
-					$("#tree").fancytree("getTree").reload({url: "ajax-tree-fs.json"});
+					$.ui.fancytree.getTree("#tree").reload({url: "ajax-tree-fs.json"});
 				}
 			});
 		});

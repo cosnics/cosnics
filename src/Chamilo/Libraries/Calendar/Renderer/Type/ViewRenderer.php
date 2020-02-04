@@ -78,8 +78,10 @@ abstract class ViewRenderer extends Renderer
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
      * @param string $linkTarget
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $viewActions = array(), $linkTarget = '')
+    public function __construct(
+        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = array(),
+        $linkTarget = ''
+    )
     {
         parent::__construct($dataProvider);
 
@@ -157,6 +159,7 @@ abstract class ViewRenderer extends Renderer
      *
      * @param string $source
      * @param integer $userIdentifier
+     *
      * @return boolean
      */
     public function isSourceVisible($source, $userIdentifier = null)
@@ -174,6 +177,7 @@ abstract class ViewRenderer extends Renderer
      *
      * @param integer $startTime
      * @param integer $endTime
+     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getEvents($startTime, $endTime)
@@ -181,22 +185,21 @@ abstract class ViewRenderer extends Renderer
         $events = $this->getDataProvider()->getAllEventsInPeriod($startTime, $endTime);
 
         usort(
-            $events,
-            function ($eventLeft, $eventRight)
+            $events, function ($eventLeft, $eventRight) {
+            if ($eventLeft->getStartDate() < $eventRight->getStartDate())
             {
-                if ($eventLeft->getStartDate() < $eventRight->getStartDate())
-                {
-                    return - 1;
-                }
-                elseif ($eventLeft->getStartDate() > $eventRight->getStartDate())
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
-            });
+                return - 1;
+            }
+            elseif ($eventLeft->getStartDate() > $eventRight->getStartDate())
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        );
 
         return $events;
     }
@@ -205,11 +208,12 @@ abstract class ViewRenderer extends Renderer
      * Get the actions available in the renderer for the given event
      *
      * @param \Chamilo\Libraries\Calendar\Event\Event $event
+     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
     public function getActions(Event $event)
     {
-        if (! $this->getDataProvider() instanceof ActionSupport)
+        if (!$this->getDataProvider() instanceof ActionSupport)
         {
             return array();
         }
@@ -222,6 +226,7 @@ abstract class ViewRenderer extends Renderer
      * @param string[] $types
      * @param string $typeUrl
      * @param string $todayUrl
+     *
      * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
     public static function getToolbarItems($types, $typeUrl, $todayUrl)
@@ -233,13 +238,14 @@ abstract class ViewRenderer extends Renderer
             $items[] = new ToolbarItem(
                 Translation::get($type . 'View', null, Utilities::COMMON_LIBRARIES),
                 Theme::getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Type/' . $type),
-                str_replace(self::MARKER_TYPE, $type, $typeUrl));
+                str_replace(self::MARKER_TYPE, $type, $typeUrl)
+            );
         }
 
         $items[] = new ToolbarItem(
             Translation::get('Today', null, Utilities::COMMON_LIBRARIES),
-            Theme::getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Today'),
-            $todayUrl);
+            Theme::getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Today'), $todayUrl
+        );
 
         return $items;
     }
@@ -249,6 +255,7 @@ abstract class ViewRenderer extends Renderer
      * @param string[] $types
      * @param string $typeUrl
      * @param string $todayUrl
+     *
      * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTab[]
      */
     public static function getTabs($types, $typeUrl, $todayUrl)
@@ -258,25 +265,18 @@ abstract class ViewRenderer extends Renderer
         foreach ($types as $type)
         {
             $tabs[] = new DynamicVisualTab(
-                $type,
-                Translation::get($type . 'View', null, Utilities::COMMON_LIBRARIES),
+                $type, Translation::get($type . 'View', null, Utilities::COMMON_LIBRARIES),
                 Theme::getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Tab/Type/' . $type),
-                str_replace(self::MARKER_TYPE, $type, $typeUrl),
-                false,
-                false,
-                DynamicVisualTab::POSITION_LEFT,
-                DynamicVisualTab::DISPLAY_BOTH_SELECTED);
+                str_replace(self::MARKER_TYPE, $type, $typeUrl), false, false, DynamicVisualTab::POSITION_LEFT,
+                DynamicVisualTab::DISPLAY_BOTH_SELECTED
+            );
         }
 
         $tabs[] = new DynamicVisualTab(
-            'today',
-            Translation::get('Today', null, Utilities::COMMON_LIBRARIES),
-            Theme::getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Tab/Today'),
-            $todayUrl,
-            false,
-            false,
-            DynamicVisualTab::POSITION_LEFT,
-            DynamicVisualTab::DISPLAY_BOTH_SELECTED);
+            'today', Translation::get('Today', null, Utilities::COMMON_LIBRARIES),
+            Theme::getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Tab/Today'), $todayUrl,
+            false, false, DynamicVisualTab::POSITION_LEFT, DynamicVisualTab::DISPLAY_BOTH_SELECTED
+        );
 
         return $tabs;
     }
@@ -288,10 +288,8 @@ abstract class ViewRenderer extends Renderer
     public function renderTypeButton()
     {
         $rendererTypes = array(
-            ViewRenderer::TYPE_MONTH,
-            ViewRenderer::TYPE_WEEK,
-            ViewRenderer::TYPE_DAY,
-            ViewRenderer::TYPE_LIST);
+            ViewRenderer::TYPE_MONTH, ViewRenderer::TYPE_WEEK, ViewRenderer::TYPE_DAY, ViewRenderer::TYPE_LIST
+        );
 
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
         $currentRendererType = $displayParameters[self::PARAM_TYPE];
@@ -306,12 +304,10 @@ abstract class ViewRenderer extends Renderer
 
             $button->addSubButton(
                 new SubButton(
-                    Translation::get($rendererType . 'View'),
-                    null,
-                    $typeUrl->getUrl(),
-                    SubButton::DISPLAY_LABEL,
-                    false,
-                    $currentRendererType == $rendererType ? 'selected' : 'not-selected'));
+                    Translation::get($rendererType . 'View'), null, $typeUrl->getUrl(), SubButton::DISPLAY_LABEL, false,
+                    $currentRendererType == $rendererType ? 'selected' : 'not-selected'
+                )
+            );
         }
 
         return $button;
@@ -327,6 +323,7 @@ abstract class ViewRenderer extends Renderer
         $parameters[self::PARAM_TIME] = Calendar::TIME_PLACEHOLDER;
 
         $redirect = new Redirect($parameters);
+
         return $redirect->getUrl();
     }
 
@@ -337,6 +334,7 @@ abstract class ViewRenderer extends Renderer
     public function renderViewActions()
     {
         $buttonToolBar = new ButtonToolBar();
+        $buttonToolBar->setClasses(array('float-right'));
         $buttonGroup = new ButtonGroup();
 
         foreach ($this->getViewActions() as $viewAction)

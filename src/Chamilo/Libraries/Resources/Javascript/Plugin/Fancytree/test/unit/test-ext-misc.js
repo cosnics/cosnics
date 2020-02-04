@@ -17,7 +17,7 @@ TEST_DATA = [
 		{key: "2", title: "item1 with key and tooltip", tooltip: "Look, a tool tip!" },
 		{key: "3", title: "<span>item2 with <b>html</b> inside a span tag</span>" },
 		{key: "4", title: "this nodes uses 'nolink', so no &lt;a> tag is generated", nolink: true},
-		{key: "5", title: "using href", href: "http://www.wwWendt.de/" },
+		{key: "5", title: "using href", href: "https://wwWendt.de/" },
 		{key: "6", title: "node with some extra classes (will be added to the generated markup)", extraClasses: "my-extra-class" },
 		{key: "10", title: "Folder 1", folder: true, children: [
 			{key: "10_1", title: "Sub-item 1.1", children: [
@@ -78,7 +78,7 @@ QUnit.test("sync load", function(assert) {
 		extensions: ["clones"],
 		source: TEST_DATA,
 		lazyLoad: function(event, data){
-			// fake an async, deleayed Ajax request that generates 5 lazy nodes
+			// fake an async, delayed Ajax request that generates 5 lazy nodes
 			data.result = tools.fakeAjaxLoad(data.node, 5, 10);
 		}
 	});
@@ -86,7 +86,7 @@ QUnit.test("sync load", function(assert) {
 		tree = tools.getTree();
 
 	assert.ok($.isPlainObject(tree.keyMap), "has keyMap");
-	assert.deepEqual(tree.refMap,  {"rk_1": ["20_1_1", "20_2_1"], "rk_2": ["id_11b7cb44"]}, "has refMap");
+	assert.deepEqual(tree.refMap,  {"rk_1": ["20_1_1", "20_2_1"], "rk_2": ["id_11b7cb44a03ea041"]}, "has refMap");
 
 	assert.equal(tools.getNode("10_1_1").refKey, undefined, "no default refKey");
 
@@ -109,7 +109,7 @@ QUnit.test("sync load", function(assert) {
 	nodeList = tree.getNodesByRef("rk_2");
 	assert.equal(nodeList.length, 1, "also single refKeys are stored in refMap");
 	node = tools.getNodeKeyArray(nodeList[0]);
-	assert.equal(node.key, "id_11b7cb44", "generate predictable unique default keys");
+	assert.equal(node.key, "id_11b7cb44a03ea041", "generate predictable unique default keys");
 
 	nodeList = tools.getNode("20_1_1").getCloneList();
 	assert.deepEqual(tools.getNodeKeyArray(nodeList), ["20_2_1"], "node.getCloneList() 1 detected");

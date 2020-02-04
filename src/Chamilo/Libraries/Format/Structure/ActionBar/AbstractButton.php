@@ -39,7 +39,7 @@ abstract class AbstractButton extends AbstractButtonToolBarItem
      * @param integer $display
      * @param string $classes
      */
-    public function __construct($label = null, $imagePath = null, $display = self :: DISPLAY_ICON_AND_LABEL, $classes = null)
+    public function __construct($label = null, $imagePath = null, $display = self::DISPLAY_ICON_AND_LABEL, $classes = null)
     {
         parent::__construct($classes);
 

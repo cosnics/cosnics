@@ -48,6 +48,7 @@ class ApplicationItemRenderer extends ItemRenderer
      * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
      *
      * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function renderTitle(Item $item)
     {
@@ -63,7 +64,7 @@ class ApplicationItemRenderer extends ItemRenderer
      * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function render(Item $item, User $user)
     {
@@ -82,7 +83,7 @@ class ApplicationItemRenderer extends ItemRenderer
 
         $title = $this->renderTitle($item);
 
-        $html[] = '<a href="' . $url . '">';
+        $html[] = '<a class="nav-link text-center" href="' . $url . '">';
 
         if ($item->showIcon())
         {
@@ -101,15 +102,18 @@ class ApplicationItemRenderer extends ItemRenderer
                     ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' . $imagePath .
                     '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
             }
+
+            if ($item->showTitle())
+            {
+                $html[] = '<br/>';
+            }
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
+            $html[] = $title;
         }
 
-        $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
         $html[] = '</li>';
 

@@ -5,7 +5,7 @@
 	<title>Fancytree - Webservice Example</title>
 
 	<script src="../lib/jquery.js"></script>
-	<script src="../lib/jquery-ui.custom.js"></script>
+	<script src="../src/jquery-ui-dependencies/jquery.fancytree.ui-deps.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
 	<script src="../src/jquery.fancytree.js"></script>
@@ -21,7 +21,7 @@
 		$(function(){
 			$("#taxonTree").fancytree({
 				source: {
-					url: "http://www.itis.gov/ITISWebService/jsonservice/getKingdomNames",
+					url: "//www.itis.gov/ITISWebService/jsonservice/getKingdomNames",
 					data: {
 						jsonp: "itis_data"
 					},
@@ -31,7 +31,7 @@
 				},
 				lazyLoad: function(event, data) {
 					data.result = {
-						url: "http://www.itis.gov/ITISWebService/jsonservice/getHierarchyDownFromTSN",
+						url: "//www.itis.gov/ITISWebService/jsonservice/getHierarchyDownFromTSN",
 						data: {
 							jsonp: "itis_data",
 							tsn: data.node.key
@@ -70,7 +70,7 @@ $(function(){
 	addSampleButton({
 		label: "Goto 'Homo Sapiens'",
 		code: function(){
-			var tree = $("#taxonTree").fancytree("getTree"),
+			var tree = $.ui.fancytree.getTree("#taxonTree"),
 				path = "/202423/914154/914156/158852/331030/914179/914181/179913/179916/179925/180089/943773/943778/943782/180090/943805/180091/180092";
 
 			tree.loadKeyPath(path, function(node, status){
@@ -100,7 +100,7 @@ $(function(){
 		</a>
 		and convert the provided JSON data to Fancytree format.
 		<br>
-		See the <a href="http://wwwendt.de/tech/fancytree/demo/taxonomy-browser/">Taxonomy Browser</a>
+		See the <a href="https://wwWendt.de/tech/fancytree/demo/taxonomy-browser/">Taxonomy Browser</a>
 		for a more sophisticated example.
 	</div>
 	<div>

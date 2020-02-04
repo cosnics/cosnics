@@ -78,6 +78,6 @@ class JavascriptCacheService extends AsseticCacheService
      */
     protected function getAssetFilters()
     {
-        return array(new \Assetic\Filter\JSMinFilter());
+        return array();
     }
 }

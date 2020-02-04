@@ -62,9 +62,9 @@ class MenuRenderer
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      */
     public function __construct(
-        ItemCacheService $itemCacheService, RightsCacheService $rightsCacheService, ItemRendererFactory $itemRendererFactory,
-        ChamiloRequest $chamiloRequest, ConfigurationConsulter $configurationConsulter, PathBuilder $pathBuilder,
-        Theme $themeUtilities
+        ItemCacheService $itemCacheService, RightsCacheService $rightsCacheService,
+        ItemRendererFactory $itemRendererFactory, ChamiloRequest $chamiloRequest,
+        ConfigurationConsulter $configurationConsulter, PathBuilder $pathBuilder, Theme $themeUtilities
     )
     {
         $this->itemCacheService = $itemCacheService;
@@ -288,7 +288,7 @@ class MenuRenderer
     {
         $html = array();
 
-        $class = 'navbar navbar-chamilo navbar-expand-lg navbar-dark bg-dark';
+        $class = 'navbar navbar-expand-lg navbar-dark bg-dark';
 
         if ($numberOfItems == 0)
         {
@@ -296,20 +296,19 @@ class MenuRenderer
         }
 
         $html[] = '<nav class="' . $class . '">';
-//        $html[] = '<div class="' . $containerMode . '">';
-//        $html[] = '<div class="navbar-header">';
+        //        $html[] = '<div class="' . $containerMode . '">';
+        //        $html[] = '<div class="navbar-header">';
 
         $html[] = $this->renderBrand();
 
-        $html[] = '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">';
+        $html[] =
+            '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">';
         $html[] = '<span class="navbar-toggler-icon"></span>';
         $html[] = '</button>';
 
-
-
-//        $html[] = '</div>';
+        //        $html[] = '</div>';
         $html[] = '<div class="collapse navbar-collapse" id="navbarSupportedContent">';
-        $html[] = '<ul class="navbar-nav mr-auto">';
+        $html[] = '<ul class="navbar-nav ml-auto">';
 
         return implode(PHP_EOL, $html);
     }

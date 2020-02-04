@@ -7,7 +7,7 @@
 	<title>Fancytree - Example</title>
 
 	<script src="../lib/jquery.js"></script>
-	<script src="../lib/jquery-ui.custom.js"></script>
+	<script src="../src/jquery-ui-dependencies/jquery.fancytree.ui-deps.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
 	<script src="../src/jquery.fancytree.js"></script>
@@ -17,10 +17,10 @@
 	$(function(){
 		$("#btnExpand").click(function(){
 			var $tree = parent.$("#tree");
-			var rootNode = parent.$("#tree").fancytree("getRootNode");
+			var rootNode = parent.$.ui.fancytree.getTree("#tree").getRootNode();
 			$.ui.fancytree.debug("rootNode: %o", rootNode);
 			$.ui.fancytree.debug("rootNode: %o", rootNode.visit);
-			parent.$("#tree").fancytree("getRootNode").visit(function(node){
+			parent.$.ui.fancytree.getTree("#tree").getRootNode().visit(function(node){
 				node.toggleExpanded();
 				});
 		});
