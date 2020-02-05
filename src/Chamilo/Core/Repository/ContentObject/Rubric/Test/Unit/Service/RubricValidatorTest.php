@@ -125,7 +125,16 @@ class RubricValidatorTest extends ChamiloTestCase
         $this->rubricValidator->validateRubric($this->rubricData);
     }
 
+    /**
+     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidTreeStructureException
+     */
+    public function testValidatorWithWrongDepth()
+    {
+        $clusterNode2 = $this->rootNode->getChildren()[1];
+        $clusterNode2->setDepth(2);
 
+        $this->rubricValidator->validateRubric($this->rubricData);
+    }
 
 
 
