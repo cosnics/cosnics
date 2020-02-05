@@ -52,7 +52,7 @@ class RubricValidator
         foreach ($children as $child)
         {
             $this->validateTreeNode($child, $expectedDepth + 1, $expectedSort);
-
+            $expectedSort++;
         }
     }
 }
