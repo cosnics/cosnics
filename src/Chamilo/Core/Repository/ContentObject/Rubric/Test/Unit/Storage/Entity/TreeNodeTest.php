@@ -100,6 +100,14 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals($this->rootNode, $treeNode->getParentNode());
     }
 
+    public function testAddChildSetsCorrectDepth()
+    {
+        $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
+        $this->rootNode->addChild($treeNode);
+
+        $this->assertEquals(1, $treeNode->getDepth());
+    }
+
     public function testRemoveChild()
     {
         $clusterNode2 = $this->rootNode->getChildren()[1];
@@ -178,6 +186,13 @@ class TreeNodeTest extends ChamiloTestCase
         $this->rootNode->insertChild($treeNode, 4);
     }
 
+    public function testInsertChildSetsCorrectDepth()
+    {
+        $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
+        $this->rootNode->insertChild($treeNode, 2);
+        $this->assertEquals(1, $treeNode->getDepth());
+    }
+
     public function testSetParentNode()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -219,6 +234,14 @@ class TreeNodeTest extends ChamiloTestCase
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
 
         $this->rootNode->setParentNode($treeNode);
+    }
+
+    public function testSetParentNodeSetsCorrectDepth()
+    {
+        $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
+        $treeNode->setParentNode($this->rootNode);
+
+        $this->assertEquals(1, $treeNode->getDepth());
     }
 
     public function testChangeParentNode()
@@ -281,6 +304,17 @@ class TreeNodeTest extends ChamiloTestCase
         $treeNode->setParentNode($clusterNode1);
 
         $this->assertEquals(2, $clusterNode2->getSort());
+    }
+
+    public function testChangeParentNodeSetsCorrectDepth()
+    {
+        $clusterNode1 = $this->rootNode->getChildren()[0];
+
+        $treeNode = new CriteriumNode('Test Criterium 2', $this->rubricData);
+        $treeNode->setParentNode($this->rootNode);
+        $treeNode->setParentNode($clusterNode1);
+
+        $this->assertEquals(2, $treeNode->getDepth());
     }
 
     public function testMoveChild()

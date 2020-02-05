@@ -28,11 +28,18 @@ class RubricValidator
 
     /**
      * @param TreeNode $treeNode
+     * @param int $expectedDepth
+     * @param int $expectedSort
      *
      * @throws InvalidTreeStructureException
      */
-    protected function validateTreeNode(TreeNode $treeNode)
+    protected function validateTreeNode(TreeNode $treeNode, int $expectedDepth = 0, int $expectedSort = 1)
     {
+        if($treeNode->getDepth() != $expectedDepth || $treeNode->getSort() != $expectedSort)
+        {
+            throw new InvalidTreeStructureException($treeNode, $expectedSort, $expectedDepth);
+        }
+
         $children = $treeNode->getChildren()->getIterator();
 
         $children->uasort(
@@ -44,14 +51,8 @@ class RubricValidator
         $expectedSort = 1;
         foreach ($children as $child)
         {
-            $this->validateTreeNode($child);
+            $this->validateTreeNode($child, $expectedDepth + 1, $expectedSort);
 
-            if ($child->getSort() != $expectedSort)
-            {
-                throw new InvalidTreeStructureException($child, $expectedSort);
-            }
-
-            $expectedSort++;
         }
     }
 }

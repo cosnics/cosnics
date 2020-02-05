@@ -31,17 +31,17 @@ class RubricTreeBuilder
 
     /**
      * @param int $rubricDataId
+     * @param int $expectedVersion
      *
      * @return RubricData
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function buildRubricTreeByRubricDataId(int $rubricDataId)
+    public function buildRubricTreeByRubricDataId(int $rubricDataId, int $expectedVersion)
     {
-        $rubricData = $this->rubricDataRepository->findEntireRubricById($rubricDataId);
-
-        if(!$rubricData instanceof RubricData)
-        {
-            return null;
-        }
+        $rubricData = $this->rubricDataRepository->findEntireRubricById($rubricDataId, $expectedVersion);
 
         $treeNodes = $rubricData->getTreeNodes();
         foreach($treeNodes as $treeNode)

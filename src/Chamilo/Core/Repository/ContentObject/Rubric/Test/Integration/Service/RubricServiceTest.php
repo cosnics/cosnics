@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Test\Integration\Service;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricTreeBuilder;
+use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricValidator;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CategoryNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
@@ -25,10 +26,6 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
      * @var RubricService
      */
     protected $rubricService;
-    /**
-     * @var RubricTreeBuilder
-     */
-    protected $rubricTreeBuilder;
 
     /**
      * @inheritDoc
@@ -37,7 +34,8 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
     {
         return [
             'Chamilo\Core\Repository\ContentObject\Rubric' => [
-                'RubricData', 'TreeNode', 'RubricNode', 'ClusterNode', 'CategoryNode', 'CriteriumNode', 'Level', 'Choice'
+                'RubricData', 'TreeNode', 'RubricNode', 'ClusterNode', 'CategoryNode', 'CriteriumNode', 'Level',
+                'Choice'
             ]
         ];
     }
@@ -60,11 +58,10 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
         /** @var RubricDataRepository $rubricDataRepository */
         $rubricDataRepository = $this->getTestEntityManager()->getRepository(RubricData::class);
 
-        /** @var TreeNodeRepository $treeNodeRepository */
-        $treeNodeRepository = $this->getTestEntityManager()->getRepository(TreeNode::class);
+        $rubricValidator = new RubricValidator();
+        $rubricTreeBuilder = new RubricTreeBuilder($rubricDataRepository);
 
-        $this->rubricService = new RubricService($rubricDataRepository, $treeNodeRepository);
-        $this->rubricTreeBuilder = new RubricTreeBuilder($rubricDataRepository);
+        $this->rubricService = new RubricService($rubricDataRepository, $rubricValidator, $rubricTreeBuilder);
     }
 
     protected function tearDown()
@@ -73,99 +70,80 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
         unset($this->rubricService);
     }
 
-//    /**
-//     * @throws \Doctrine\ORM\ORMException
-//     */
-//    public function testCreateRubric()
-//    {
-//        $rubricData = $this->rubricService->createRubric('TestRubric');
-//        $this->assertInstanceOf(RubricData::class, $rubricData);
-//    }
-//
-//    /**
-//     * @throws \Exception
-//     */
-//    public function testAddTreeNode()
-//    {
-//        $rubricData = $this->rubricService->createRubric('TestRubric');
-//        $clusterNode = new ClusterNode('Cluster1');
-//        $clusterNode2 = new ClusterNode('Cluster2');
-//
-//        $this->rubricService->addTreeNode($rubricData, $clusterNode, $rubricData->getRootNode());
-//        $this->rubricService->addTreeNode($rubricData, $clusterNode2, $rubricData->getRootNode());
-//
-//        $this->assertEquals(2, $rubricData->getRootNode()->getChildren()[1]->getSort());
-//    }
-//
-//    /**
-//     * @throws \Exception
-//     */
-//    public function testRemoveTreeNode()
-//    {
-//        $rubricData = $this->rubricService->createRubric('TestRubric');
-//        $clusterNode = new ClusterNode('Cluster1');
-//        $clusterNode2 = new ClusterNode('Cluster2');
-//        $clusterNode3 = new ClusterNode('Cluster3');
-//
-//        $this->rubricService->addTreeNode($rubricData, $clusterNode, $rubricData->getRootNode());
-//        $this->rubricService->addTreeNode($rubricData, $clusterNode2, $rubricData->getRootNode());
-//        $this->rubricService->addTreeNode($rubricData, $clusterNode3, $rubricData->getRootNode());
-//
-//        $this->rubricService->removeTreeNode($clusterNode2);
-//
-//        $this->assertEquals(2, $clusterNode3->getSort());
-//    }
-//
-//    /**
-//     * @throws \Exception
-//     */
-//    public function testMoveTreeNode()
-//    {
-//        $rubricData = $this->rubricService->createRubric('TestRubric');
-//        $clusterNode = new ClusterNode('Cluster1');
-//        $clusterNode2 = new ClusterNode('Cluster2');
-//        $clusterNode3 = new ClusterNode('Cluster3');
-//
-//        $rootNode = $rubricData->getRootNode();
-//
-//        $this->rubricService->addTreeNode($rubricData, $clusterNode, $rootNode);
-//        $this->rubricService->addTreeNode($rubricData, $clusterNode2, $rootNode);
-//        $this->rubricService->addTreeNode($rubricData, $clusterNode3, $rootNode);
-//
-//        $this->rubricService->moveTreeNode($clusterNode2, $clusterNode3);
-//
-//        $this->assertEquals(2, $clusterNode3->getSort());
-//    }
-
     /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidTreeStructureException
+     * @throws \Doctrine\Common\Persistence\Mapping\MappingException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function testTreeBuilder()
+    public function testGetTree()
     {
-        $rubricData = $this->rubricService->createRubric('TestRubric');
-
-        $rootNode = $rubricData->getRootNode();
-
-        $clusterNode = new ClusterNode('Cluster1');
-        $clusterNode2 = new ClusterNode('Cluster2');
-        $categoryNode = new CategoryNode('Category1');
-        $criteriumNode = new CriteriumNode('Criterium1');
-
-        $this->rubricService->addTreeNode($rubricData, $clusterNode, $rootNode);
-        $this->rubricService->addTreeNode($rubricData, $clusterNode2, $rootNode);
-
-        $this->rubricService->addTreeNode($rubricData, $categoryNode, $clusterNode2);
-
-        $this->rubricService->addTreeNode($rubricData, $criteriumNode, $categoryNode);
+        $this->createTestData();
         $this->getTestEntityManager()->clear();
 
-        $this->getTestEntityManager()->getConnection()->getConfiguration()->setSQLLogger(new EchoSQLLogger());
-
-        $rubricData = $this->rubricTreeBuilder->buildRubricTreeByRubricDataId(1);
+        $rubricData = $this->rubricService->getRubric(1, 1);
 
         $this->assertInstanceOf(RubricData::class, $rubricData);
+
         $this->assertEquals(2, count($rubricData->getRootNode()->getChildren()));
         $this->assertEquals(1, count($rubricData->getRootNode()->getChildren()[1]->getChildren()));
         $this->assertEquals(1, count($rubricData->getRootNode()->getChildren()[1]->getChildren()[0]->getChildren()));
+    }
+
+    /**
+     * @expectedException \Doctrine\ORM\OptimisticLockException
+     */
+    public function testGetTreeWillLockOptimistically()
+    {
+        $this->createTestData();
+
+        $this->rubricService->getRubric(1, 2);
+    }
+
+    /**
+     * @expectedException \Doctrine\ORM\OptimisticLockException
+     */
+    public function testSaveRubricWillLockOptimistically()
+    {
+        $rubricData = $this->createTestData();
+
+        $this->getTestEntityManager()
+            ->createQuery(
+                sprintf(
+                    'UPDATE %s rd SET rd.version = rd.version + 1 WHERE rd.id=:id',
+                    RubricData::class
+                )
+            )
+            ->setParameter('id', $rubricData->getId())
+            ->execute();
+
+        $rubricData->getRootNode()->setTitle('New Title');
+        $this->rubricService->saveRubric($rubricData);
+    }
+
+    /**
+     * @return RubricData
+     *
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidTreeStructureException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    protected function createTestData()
+    {
+        $rubricData = new RubricData('TestRubric');
+
+        $rootNode = $rubricData->getRootNode();
+
+        $clusterNode = new ClusterNode('Cluster1', $rubricData);
+        $clusterNode2 = new ClusterNode('Cluster2', $rubricData);
+        $categoryNode = new CategoryNode('Category1', $rubricData);
+        $criteriumNode = new CriteriumNode('Criterium1', $rubricData);
+
+        $rootNode->addChild($clusterNode);
+        $rootNode->addChild($clusterNode2);
+        $clusterNode2->addChild($categoryNode);
+        $categoryNode->addChild($criteriumNode);
+
+        $this->rubricService->saveRubric($rubricData);
+
+        return $rubricData;
     }
 }

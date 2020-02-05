@@ -59,6 +59,13 @@ abstract class TreeNode
     /**
      * @var int
      *
+     * @ORM\Column(name="depth", type="integer")
+     */
+    protected $depth = 0;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="sort", type="integer")
      */
     protected $sort;
@@ -240,6 +247,31 @@ abstract class TreeNode
     }
 
     /**
+     * @return int
+     */
+    public function getDepth(): ?int
+    {
+        return $this->depth;
+    }
+
+    /**
+     * WARNING: NEVER EVER EVER change the depth of this class manually. This method should only be used
+     * by referenced methods and is used to set the correct sorting order to retrieve the tree nodes from the database.
+     * Changing the depth will in no way move this item to another parent. The validator will make sure that the depths
+     * of the nodes are respected.
+     *
+     * @param int $depth
+     *
+     * @return TreeNode
+     */
+    public function setDepth(int $depth): TreeNode
+    {
+        $this->depth = $depth;
+
+        return $this;
+    }
+
+    /**
      * @param int $sort
      *
      * @return bool
@@ -284,6 +316,7 @@ abstract class TreeNode
         $this->children->add($childToAdd);
         $childToAdd->setParentNode($this);
         $childToAdd->setSort($this->children->count());
+        $childToAdd->setDepth($this->getDepth() + 1);
 
         return $this;
     }
@@ -305,6 +338,7 @@ abstract class TreeNode
 
         $childToAdd->setParentNode($this);
         $childToAdd->setSort($sortValue);
+        $childToAdd->setDepth($this->getDepth() + 1);
 
         foreach ($this->children as $child)
         {

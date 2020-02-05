@@ -50,36 +50,19 @@ class RubricService
      * Retrieves a rubric from the database
      *
      * @param int $rubricDataId
+     * @param int $expectedVersion
      *
      * @return RubricData
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function getRubric(int $rubricDataId)
+    public function getRubric(int $rubricDataId, int $expectedVersion)
     {
-        $rubric = $this->rubricTreeBuilder->buildRubricTreeByRubricDataId($rubricDataId);
-
-        if(!$rubric instanceof RubricData)
-        {
-            throw new \RuntimeException('Rubric with id %s not found');
-        }
+        $rubric = $this->rubricTreeBuilder->buildRubricTreeByRubricDataId($rubricDataId, $expectedVersion);
 
         return $rubric;
-    }
-
-    /**
-     * @param string $rubricName
-     * @param bool $useScores
-     *
-     * @return RubricData
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidTreeStructureException
-     */
-    public function createRubric(string $rubricName, bool $useScores = true)
-    {
-        $rubricData = new RubricData($rubricName, $useScores);
-
-        $this->saveRubric($rubricData);
-
-        return $rubricData;
     }
 
     /**
@@ -90,6 +73,7 @@ class RubricService
      */
     public function saveRubric(RubricData $rubricData)
     {
+        $rubricData->setLastUpdated(new \DateTime());
         $this->rubricValidator->validateRubric($rubricData);
         $this->rubricDataRepository->saveRubricData($rubricData);
     }

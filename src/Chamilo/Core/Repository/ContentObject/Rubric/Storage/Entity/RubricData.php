@@ -35,6 +35,22 @@ class RubricData
     protected $useScores;
 
     /**
+     * @var int
+     *
+     * @ORM\Version
+     * @ORM\Column(name="version", type="integer")
+     *
+     */
+    protected $version;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_updated", type="datetime")
+     */
+    protected $lastUpdated;
+
+    /**
      * @var Choice[] | ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Choice", mappedBy="rubric")
@@ -275,6 +291,45 @@ class RubricData
         $this->treeNodes->removeElement($treeNode);
 
         return $this;
-    } 
+    }
 
+    /**
+     * @return int
+     */
+    public function getVersion(): ?int
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param int $version
+     *
+     * @return RubricData
+     */
+    public function setVersion(int $version): RubricData
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastUpdated(): ?\DateTime
+    {
+        return $this->lastUpdated;
+    }
+
+    /**
+     * @param \DateTime $lastUpdated
+     *
+     * @return RubricData
+     */
+    public function setLastUpdated(\DateTime $lastUpdated): RubricData
+    {
+        $this->lastUpdated = $lastUpdated;
+
+        return $this;
+    }
 }

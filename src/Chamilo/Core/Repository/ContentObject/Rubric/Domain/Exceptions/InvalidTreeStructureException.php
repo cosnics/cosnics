@@ -11,12 +11,21 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
  */
 class InvalidTreeStructureException extends \Exception
 {
-    public function __construct(TreeNode $treeNode, int $expectedSortValue)
+    /**
+     * InvalidTreeStructureException constructor.
+     *
+     * @param TreeNode $treeNode
+     * @param int $expectedSortValue
+     * @param int $expectedDepthValue
+     */
+    public function __construct(TreeNode $treeNode, int $expectedSortValue, int $expectedDepthValue)
     {
         parent::__construct(
             sprintf(
-                'The given sort for tree node %s is invalid: %s given, expected %s', $treeNode->getId(),
-                $treeNode->getSort(), $expectedSortValue
+                'The given sort or depth for tree node %s is invalid. ' .
+                '[Expected] Sort: %d, Depth: %s. [Given] Sort: %s, Depth: %s.',
+                $treeNode->getId(), $expectedSortValue, $expectedDepthValue,
+                $treeNode->getSort(), $treeNode->getDepth()
             )
         );
     }

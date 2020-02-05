@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\CommonEntityRepository;
+use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\PessimisticLockException;
 
 /**
  * Class RubricRepository
@@ -34,10 +36,15 @@ class RubricDataRepository extends CommonEntityRepository
 
     /**
      * @param int $rubricDataId
+     * @param int $expectedVersion
      *
      * @return RubricData
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function findEntireRubricById(int $rubricDataId)
+    public function findEntireRubricById(int $rubricDataId, int $expectedVersion)
     {
         $qb = $this->createQueryBuilder('rd')
             ->addSelect('tn')
@@ -49,9 +56,19 @@ class RubricDataRepository extends CommonEntityRepository
             ->leftJoin('rd.levels', 'lv')
             ->leftJoin('rd.choices', 'ch')
             ->where('rd.id = :id')
+            ->orderBy('tn.depth')
+            ->addOrderBy('tn.sort')
             ->setParameter('id', $rubricDataId);
 
-        return $qb->getQuery()->getResult()[0];
+        $rubricData = $qb->getQuery()->getSingleResult();
+
+        try
+        {
+            $this->getEntityManager()->lock($rubricData, LockMode::OPTIMISTIC, $expectedVersion);
+        }
+        catch(PessimisticLockException $ex) {} // The doc throws a pessimistic lock exception which is impossible, just catching it here so it doesn't go to the other docblocks
+
+        return $rubricData;
     }
 
 }
