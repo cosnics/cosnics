@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class InvalidTreeStructureException extends \Exception
+class InvalidTreeStructureException extends RubricStructureException
 {
     /**
      * InvalidTreeStructureException constructor.

@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,25 +19,6 @@ class CategoryNode extends TreeNode
      * @ORM\Column(name="color", type="string", length=255, nullable=true)
      */
     protected $color;
-
-//    /**
-//     * @var CriteriumNode[] | ArrayCollection
-//     *
-//     * @ORM\OneToMany(targetEntity="CriteriumNode", mappedBy="parentNode")
-//     */
-//    protected $criteria;
-
-//    /**
-//     * Category constructor.
-//     *
-//     * @param string $title
-//     * @param TreeNode|null $parentNode
-//     */
-//    public function __construct(string $title, TreeNode $parentNode = null)
-//    {
-//        parent::__construct($title, $rubricData, $parentNode);
-////        $this->criteria = new ArrayCollection();
-//    }
 
     /**
      * @return string
@@ -60,49 +40,11 @@ class CategoryNode extends TreeNode
         return $this;
     }
 
-//    /**
-//     * @return CriteriumNode[]
-//     */
-//    public function getCriteria(): ?array
-//    {
-//        return $this->criteria;
-//    }
-//
-//    /**
-//     * @param CriteriumNode[] $criteria
-//     *
-//     * @return CategoryNode
-//     */
-//    public function setCriteria(array $criteria): CategoryNode
-//    {
-//        $this->criteria = $criteria;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * @param CriteriumNode $criterium
-//     *
-//     * @return CategoryNode
-//     */
-//    public function addCriterium(CriteriumNode $criterium): CategoryNode
-//    {
-//        $this->criteria->add($criterium);
-//        $this->children->add($criterium);
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * @param CriteriumNode $criterium
-//     *
-//     * @return CategoryNode
-//     */
-//    public function removeCriterium(CriteriumNode $criterium): CategoryNode
-//    {
-//        $this->criteria->removeElement($criterium);
-//        $this->children->removeElement($criterium);
-//
-//        return $this;
-//    }
+    /**
+     * @return array
+     */
+    public function getAllowedChildTypes()
+    {
+        return [CriteriumNode::class];
+    }
 }

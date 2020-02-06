@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Tests the TreeNode
@@ -28,6 +29,7 @@ class TreeNodeTest extends ChamiloTestCase
 
     /**
      * Setup before each test
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
     public function setUp()
     {
@@ -66,6 +68,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertCount(1, $this->rootNode->getChildren()[1]->getChildren()[0]->getChildren());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testAddChild()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -75,6 +80,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals($treeNode, $this->rootNode->getChildren()[2]);
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testAddChildTwice()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -84,6 +92,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertCount(3, $this->rootNode->getChildren());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testAddChildSetsCorrectSort()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -92,6 +103,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals(3, $treeNode->getSort());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testAddChildSetsCorrectParentNode()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -100,6 +114,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals($this->rootNode, $treeNode->getParentNode());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testAddChildSetsCorrectDepth()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -142,6 +159,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertNull($clusterNode1->getParentNode());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testInsertChild()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -151,6 +171,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals($treeNode, $this->rootNode->getChildren()[2]);
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testInsertChildTwice()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -160,6 +183,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertCount(3, $this->rootNode->getChildren());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testInsertChildSetsCorrectSort()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -170,6 +196,7 @@ class TreeNodeTest extends ChamiloTestCase
 
     /**
      * @expectedException \InvalidArgumentException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
     public function testInsertChildWithInvalidLowerSort()
     {
@@ -179,6 +206,7 @@ class TreeNodeTest extends ChamiloTestCase
 
     /**
      * @expectedException \InvalidArgumentException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
     public function testInsertChildWithInvalidUpperSort()
     {
@@ -186,6 +214,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->rootNode->insertChild($treeNode, 4);
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testInsertChildSetsCorrectDepth()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -193,6 +224,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals(1, $treeNode->getDepth());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testSetParentNode()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -201,6 +235,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals($this->rootNode, $treeNode->getParentNode());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testSetParentNodeAddsToChildren()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -209,6 +246,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals($treeNode, $this->rootNode->getChildren()->get(2));
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testSetParentNodeTwice()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -218,6 +258,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertCount(3, $this->rootNode->getChildren());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testSetParentNodeSetsCorrectSort()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -227,15 +270,8 @@ class TreeNodeTest extends ChamiloTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
-    public function testSetParentNodeWithRootNode()
-    {
-        $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
-
-        $this->rootNode->setParentNode($treeNode);
-    }
-
     public function testSetParentNodeSetsCorrectDepth()
     {
         $treeNode = new ClusterNode('Test Cluster 3', $this->rubricData);
@@ -244,6 +280,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals(1, $treeNode->getDepth());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testChangeParentNode()
     {
         $clusterNode1 = $this->rootNode->getChildren()[0];
@@ -255,6 +294,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals($clusterNode1, $treeNode->getParentNode());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testChangeParentNodeAddedToCorrectParent()
     {
         $clusterNode1 = $this->rootNode->getChildren()[0];
@@ -266,6 +308,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertContains($treeNode, $clusterNode1->getChildren());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testChangeParentNodeNotInOldParent()
     {
         $clusterNode1 = $this->rootNode->getChildren()[0];
@@ -277,6 +322,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertNotContains($treeNode, $this->rootNode->getChildren());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testChangeParentNodeSetsCorrectSort()
     {
         $clusterNode1 = $this->rootNode->getChildren()[0];
@@ -291,6 +339,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals(1, $treeNode->getSort());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testChangeParentNodeCleansUpSortsInOldParent()
     {
         $clusterNode1 = $this->rootNode->getChildren()[0];
@@ -306,6 +357,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals(2, $clusterNode2->getSort());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testChangeParentNodeSetsCorrectDepth()
     {
         $clusterNode1 = $this->rootNode->getChildren()[0];
@@ -336,10 +390,66 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals(1, $clusterNode2->getSort());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testMoveChildWithChildNotAvailable()
+    {
+        $clusterNode4 = new ClusterNode('Cluster node 4', $this->rubricData);
+        $this->rootNode->moveChild($clusterNode4, 2);
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testTreeNodeIsAddedToRubricDataDuringConstruct()
     {
         $treeNode = new CriteriumNode('Test Criterium 2', $this->rubricData);
         $this->assertContains($treeNode, $this->rubricData->getTreeNodes());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSetDepthWithWrongDepth()
+    {
+        $clusterNode2 = $this->rootNode->getChildren()[1];
+        $clusterNode2->setDepth(2);
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
+    public function testSetChildren()
+    {
+        $children = new ArrayCollection([new ClusterNode('Cluster node 4', $this->rubricData)]);
+        $this->rootNode->setChildren($children);
+
+        $this->assertEquals($children, $this->rootNode->getChildren());
+    }
+
+    public function testSetGetTitle()
+    {
+        $title = 'test';
+        $this->rootNode->setTitle($title);
+
+        $this->assertEquals($title, $this->rootNode->getTitle());
+    }
+
+    public function testChangeRubricDataRemovesChoiceFromOldRubricData()
+    {
+        $newRubricData = new RubricData('Rubric 2');
+        $this->rootNode->setRubricData($newRubricData);
+
+        $this->assertNotContains($this->rootNode, $this->rubricData->getTreeNodes());
+    }
+
+    public function testHasParentNode()
+    {
+        $this->assertTrue($this->rootNode->getChildren()[0]->hasParentNode());
+        $this->assertFalse($this->rootNode->hasParentNode());
     }
 }
 

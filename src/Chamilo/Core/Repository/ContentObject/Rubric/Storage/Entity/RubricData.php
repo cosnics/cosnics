@@ -53,14 +53,14 @@ class RubricData
     /**
      * @var Choice[] | ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Choice", mappedBy="rubric")
+     * @ORM\OneToMany(targetEntity="Choice", mappedBy="rubricData")
      */
     protected $choices;
 
     /**
      * @var Level[] | ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Level", mappedBy="rubric")
+     * @ORM\OneToMany(targetEntity="Level", mappedBy="rubricData")
      */
     protected $levels;
 
@@ -84,6 +84,9 @@ class RubricData
      *
      * @param string $rubricTitle
      * @param bool $useScores
+     *
+     * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function __construct(string $rubricTitle, bool $useScores = true)
     {
@@ -146,35 +149,11 @@ class RubricData
     }
 
     /**
-     * @param Choice[]|ArrayCollection $choices
-     *
-     * @return RubricData
-     */
-    public function setChoices($choices)
-    {
-        $this->choices = $choices;
-
-        return $this;
-    }
-
-    /**
      * @return Level[]|ArrayCollection
      */
     public function getLevels()
     {
         return $this->levels;
-    }
-
-    /**
-     * @param Level[]|ArrayCollection $levels
-     *
-     * @return RubricData
-     */
-    public function setLevels($levels)
-    {
-        $this->levels = $levels;
-
-        return $this;
     }
 
     /**
@@ -209,25 +188,19 @@ class RubricData
     }
 
     /**
-     * @param TreeNode[]|ArrayCollection $treeNodes
-     *
-     * @return RubricData
-     */
-    public function setTreeNodes($treeNodes)
-    {
-        $this->treeNodes = $treeNodes;
-
-        return $this;
-    }
-    
-    /**
      * @param Level $level
      *
      * @return self
      */
     public function addLevel(Level $level): self
     {
+        if($this->levels->contains($level))
+        {
+            return $this;
+        }
+
         $this->levels->add($level);
+        $level->setRubricData($this);
 
         return $this;
     }
@@ -239,7 +212,13 @@ class RubricData
      */
     public function removeLevel(Level $level): self
     {
+        if(!$this->levels->contains($level))
+        {
+            return $this;
+        }
+
         $this->levels->removeElement($level);
+        $level->setRubricData(null);
 
         return $this;
     }
@@ -251,7 +230,13 @@ class RubricData
      */
     public function addChoice(Choice $choice): self
     {
+        if($this->choices->contains($choice))
+        {
+            return $this;
+        }
+
         $this->choices->add($choice);
+        $choice->setRubricData($this);
 
         return $this;
     }
@@ -263,7 +248,13 @@ class RubricData
      */
     public function removeChoice(Choice $choice): self
     {
+        if(!$this->choices->contains($choice))
+        {
+            return $this;
+        }
+
         $this->choices->removeElement($choice);
+        $choice->setRubricData(null);
 
         return $this;
     }
@@ -275,6 +266,11 @@ class RubricData
      */
     public function addTreeNode(TreeNode $treeNode): self
     {
+        if($this->treeNodes->contains($treeNode))
+        {
+            return $this;
+        }
+
         $this->treeNodes->add($treeNode);
         $treeNode->setRubricData($this);
 
@@ -288,7 +284,13 @@ class RubricData
      */
     public function removeTreeNode(TreeNode $treeNode): self
     {
+        if(!$this->treeNodes->contains($treeNode))
+        {
+            return $this;
+        }
+
         $this->treeNodes->removeElement($treeNode);
+        $treeNode->setRubricData(null);
 
         return $this;
     }
@@ -332,4 +334,5 @@ class RubricData
 
         return $this;
     }
+
 }

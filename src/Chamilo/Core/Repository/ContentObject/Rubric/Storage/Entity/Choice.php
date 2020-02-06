@@ -76,7 +76,17 @@ class Choice
      * @ORM\ManyToOne(targetEntity="RubricData")
      * @ORM\JoinColumn(name="rubric_data_id", referencedColumnName="id")
      */
-    protected $rubric;
+    protected $rubricData;
+
+    /**
+     * Choice constructor.
+     *
+     * @param RubricData $rubricData
+     */
+    public function __construct(RubricData $rubricData)
+    {
+        $this->setRubricData($rubricData);
+    }
 
     /**
      * @return int
@@ -141,7 +151,7 @@ class Choice
     /**
      * @return bool
      */
-    public function isHasFixedScore(): ?bool
+    public function hasFixedScore(): ?bool
     {
         return $this->hasFixedScore;
     }
@@ -211,9 +221,25 @@ class Choice
      *
      * @return Choice
      */
-    public function setCriterium(CriteriumNode $criterium): Choice
+    public function setCriterium(CriteriumNode $criterium = null): Choice
     {
+        if($this->criterium === $criterium)
+        {
+            return $this;
+        }
+
+        $oldCriterium = $this->criterium;
         $this->criterium = $criterium;
+
+        if($oldCriterium instanceof CriteriumNode)
+        {
+            $oldCriterium->removeChoice($this);
+        }
+
+        if($criterium instanceof CriteriumNode)
+        {
+            $criterium->addChoice($this);
+        }
 
         return $this;
     }
@@ -221,19 +247,35 @@ class Choice
     /**
      * @return RubricData
      */
-    public function getRubric(): ?RubricData
+    public function getRubricData(): ?RubricData
     {
-        return $this->rubric;
+        return $this->rubricData;
     }
 
     /**
-     * @param RubricData $rubric
+     * @param RubricData $rubricData
      *
      * @return Choice
      */
-    public function setRubric(RubricData $rubric): Choice
+    public function setRubricData(RubricData $rubricData = null): Choice
     {
-        $this->rubric = $rubric;
+        if($this->rubricData === $rubricData)
+        {
+            return $this;
+        }
+
+        $oldRubricData = $this->rubricData;
+        $this->rubricData = $rubricData;
+
+        if($oldRubricData instanceof RubricData)
+        {
+            $oldRubricData->removeChoice($this);
+        }
+
+        if($rubricData instanceof RubricData)
+        {
+            $rubricData->addChoice($this);
+        }
 
         return $this;
     }

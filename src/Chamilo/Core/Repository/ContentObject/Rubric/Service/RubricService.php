@@ -60,16 +60,14 @@ class RubricService
      */
     public function getRubric(int $rubricDataId, int $expectedVersion)
     {
-        $rubric = $this->rubricTreeBuilder->buildRubricTreeByRubricDataId($rubricDataId, $expectedVersion);
-
-        return $rubric;
+        return $this->rubricTreeBuilder->buildRubricTreeByRubricDataId($rubricDataId, $expectedVersion);
     }
 
     /**
      * @param RubricData $rubricData
      *
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Doctrine\ORM\ORMException
-     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidTreeStructureException
      */
     public function saveRubric(RubricData $rubricData)
     {

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -84,13 +85,14 @@ abstract class TreeNode
      * @param string $title
      * @param RubricData $rubricData
      * @param TreeNode $parentNode
+     *
+     * @throws InvalidChildTypeException
      */
     public function __construct(string $title, RubricData $rubricData, TreeNode $parentNode = null)
     {
         $this->title = $title;
-        $this->rubricData = $rubricData;
 
-        $rubricData->addTreeNode($this);
+        $this->setRubricData($rubricData);
         $this->setParentNode($parentNode);
 
         $this->children = new ArrayCollection();
@@ -149,9 +151,25 @@ abstract class TreeNode
      *
      * @return TreeNode
      */
-    public function setRubricData(RubricData $rubricData): self
+    public function setRubricData(RubricData $rubricData = null): self
     {
+        if ($this->rubricData === $rubricData )
+        {
+            return $this;
+        }
+
+        $oldRubricData = $this->rubricData;
         $this->rubricData = $rubricData;
+
+        if($oldRubricData instanceof RubricData)
+        {
+            $oldRubricData->removeTreeNode($this);
+        }
+
+        if($rubricData instanceof RubricData)
+        {
+            $rubricData->addTreeNode($this);
+        }
 
         return $this;
     }
@@ -168,6 +186,7 @@ abstract class TreeNode
      * @param TreeNode|null $newParentNode
      *
      * @return TreeNode
+     * @throws InvalidChildTypeException
      */
     public function setParentNode(TreeNode $newParentNode = null): TreeNode
     {
@@ -181,17 +200,18 @@ abstract class TreeNode
             return $this;
         }
 
-        if ($this->hasParentNode())
+        $oldParentNode = $this->parentNode;
+        $this->parentNode = $newParentNode;
+
+        if ($oldParentNode instanceof TreeNode)
         {
-            $this->parentNode->removeChild($this);
+            $oldParentNode->removeChild($this);
         }
 
         if ($newParentNode instanceof TreeNode)
         {
             $newParentNode->addChild($this);
         }
-
-        $this->parentNode = $newParentNode;
 
         return $this;
     }
@@ -266,6 +286,18 @@ abstract class TreeNode
      */
     public function setDepth(int $depth): TreeNode
     {
+        $parentNode = $this->getParentNode();
+
+        if ($parentNode instanceof TreeNode && ($depth - $parentNode->getDepth() != 1))
+        {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The given child depth was expected to be %s but was given %s',
+                    $parentNode->getDepth() + 1, $depth
+                )
+            );
+        }
+
         $this->depth = $depth;
 
         return $this;
@@ -293,10 +325,21 @@ abstract class TreeNode
      * @param TreeNode[]|ArrayCollection $children
      *
      * @return TreeNode
+     * @throws InvalidChildTypeException
      */
-    public function setChildren($children): self
+    public function setChildren(ArrayCollection $children): self
     {
         $this->children = $children;
+
+        foreach($this->children as $child)
+        {
+            if (!$this->isChildTypeValid($child))
+            {
+                throw new InvalidChildTypeException($this, $child);
+            }
+
+            $child->setParentNode($this);
+        }
 
         return $this;
     }
@@ -305,12 +348,18 @@ abstract class TreeNode
      * @param TreeNode $childToAdd
      *
      * @return $this
+     * @throws InvalidChildTypeException
      */
     public function addChild(TreeNode $childToAdd): self
     {
         if ($this->hasChild($childToAdd))
         {
             return $this;
+        }
+
+        if (!$this->isChildTypeValid($childToAdd))
+        {
+            throw new InvalidChildTypeException($this, $childToAdd);
         }
 
         $this->children->add($childToAdd);
@@ -322,10 +371,21 @@ abstract class TreeNode
     }
 
     /**
+     * @param TreeNode $child
+     *
+     * @return bool
+     */
+    public function isChildTypeValid(TreeNode $child)
+    {
+        return in_array(get_class($child), $this->getAllowedChildTypes());
+    }
+
+    /**
      * @param TreeNode $childToAdd
      * @param int $sortValue
      *
      * @return TreeNode
+     * @throws InvalidChildTypeException
      */
     public function insertChild(TreeNode $childToAdd, int $sortValue): self
     {
@@ -334,15 +394,12 @@ abstract class TreeNode
             return $this;
         }
 
-        $this->children->add($childToAdd);
-
-        $childToAdd->setParentNode($this);
+        $this->addChild($childToAdd);
         $childToAdd->setSort($sortValue);
-        $childToAdd->setDepth($this->getDepth() + 1);
 
         foreach ($this->children as $child)
         {
-            if($child === $childToAdd)
+            if ($child === $childToAdd)
             {
                 continue;
             }
@@ -360,6 +417,9 @@ abstract class TreeNode
      * @param TreeNode $childToRemove
      *
      * @return $this
+     *
+     * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function removeChild(TreeNode $childToRemove): self
     {
@@ -382,6 +442,7 @@ abstract class TreeNode
         }
 
         $this->children->removeElement($childToRemove);
+
         $childToRemove->setParentNode(null);
 
         return $this;
@@ -390,9 +451,21 @@ abstract class TreeNode
     /**
      * @param TreeNode $childNode
      * @param int $newPosition
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function moveChild(TreeNode $childNode, int $newPosition)
     {
+        if (!$this->hasChild($childNode))
+        {
+            throw new \InvalidArgumentException(
+                sprintf('The given tree node %s is not a child of tree node %s', $childNode->getId(), $this->getId())
+            );
+        }
+
         $this->removeChild($childNode);
         $this->insertChild($childNode, $newPosition);
     }
@@ -406,4 +479,6 @@ abstract class TreeNode
     {
         return $this->children->contains($possibleChildNode);
     }
+
+    abstract function getAllowedChildTypes();
 }

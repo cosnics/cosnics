@@ -2,18 +2,15 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Test\Integration\Service;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricTreeBuilder;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricValidator;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CategoryNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
-use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricDataRepository;
-use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
-use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\TreeNodeRepository;
 use Chamilo\Libraries\Architecture\Test\TestCases\DoctrineORMFixturesBasedTestCase;
-use Doctrine\DBAL\Logging\EchoSQLLogger;
 
 /**
  * Class RubricServiceTest
@@ -71,9 +68,13 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
     }
 
     /**
-     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidTreeStructureException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Doctrine\Common\Persistence\Mapping\MappingException
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function testGetTree()
     {
@@ -91,6 +92,12 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
 
     /**
      * @expectedException \Doctrine\ORM\OptimisticLockException
+     *
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function testGetTreeWillLockOptimistically()
     {
@@ -101,6 +108,9 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
 
     /**
      * @expectedException \Doctrine\ORM\OptimisticLockException
+     *
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     * @throws \Doctrine\ORM\ORMException
      */
     public function testSaveRubricWillLockOptimistically()
     {
@@ -123,7 +133,7 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
     /**
      * @return RubricData
      *
-     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidTreeStructureException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Doctrine\ORM\ORMException
      */
     protected function createTestData()

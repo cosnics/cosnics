@@ -4,9 +4,12 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Test\Unit\Service;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricValidator;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CategoryNode;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Choice;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
@@ -34,6 +37,7 @@ class RubricValidatorTest extends ChamiloTestCase
 
     /**
      * Setup before each test
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
     public function setUp()
     {
@@ -64,6 +68,17 @@ class RubricValidatorTest extends ChamiloTestCase
         $criteriumNode = new CriteriumNode('Test Criterium 1', $this->rubricData);
         $criteriumNode->setId(6);
         $categoryNode->addChild($criteriumNode);
+
+        $level = new Level($this->rubricData);
+        $level->setId(75);
+
+        $choice = new Choice($this->rubricData);
+        $choice->setId(49);
+
+        $this->rubricData->addLevel($level);
+        $this->rubricData->addChoice($choice);
+
+        $criteriumNode->addChoice($choice);
     }
 
     /**
@@ -76,13 +91,18 @@ class RubricValidatorTest extends ChamiloTestCase
         unset($this->rubricData);
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     * @noinspection PhpVoidFunctionResultUsedInspection
+     */
     public function testValidator()
     {
-        $this->assertNull($this->rubricValidator->validateRubric($this->rubricData));
+        $this->assertEmpty($this->rubricValidator->validateRubric($this->rubricData));
     }
 
     /**
      * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidTreeStructureException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      */
     public function testValidatorWithDoubleSortValues()
     {
@@ -94,6 +114,7 @@ class RubricValidatorTest extends ChamiloTestCase
 
     /**
      * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidTreeStructureException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      */
     public function testValidatorWithGapSortValues()
     {
@@ -126,7 +147,8 @@ class RubricValidatorTest extends ChamiloTestCase
     }
 
     /**
-     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidTreeStructureException
+     * @expectedException \InvalidArgumentException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      */
     public function testValidatorWithWrongDepth()
     {
@@ -136,7 +158,170 @@ class RubricValidatorTest extends ChamiloTestCase
         $this->rubricValidator->validateRubric($this->rubricData);
     }
 
+    /**
+     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidRubricDataException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     */
+    public function testTreeNodeWithWrongRubricData()
+    {
+        $this->rootNode->getChildren()[1]->setRubricData(new RubricData('test'));
+        $this->rubricValidator->validateRubric($this->rubricData);
+    }
 
+    /**
+     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidRubricDataException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     */
+    public function testChoiceWithWrongRubricData()
+    {
+        $this->rubricData->getChoices()[0]->setRubricData(new RubricData('test'));
+        $this->rubricValidator->validateRubric($this->rubricData);
+    }
 
+    /**
+     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidParentNodeException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     */
+    public function testInvalidAddNodeInChildren()
+    {
+        $cluster = new ClusterNode('test cluster', $this->rubricData);
+        $cluster->setSort(4);
+        $cluster->setDepth(1);
+
+        $this->rootNode->getChildren()->add($cluster);
+        $this->rubricValidator->validateRubric($this->rubricData);
+    }
+
+    /**
+     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidRootNodeException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     */
+    public function testInvalidRootNodeAdd()
+    {
+        $cluster = new ClusterNode('test cluster', $this->rubricData);
+        $cluster->setSort(2);
+        $cluster->setDepth(0);
+
+        $this->rubricData->getTreeNodes()->add($cluster);
+        $this->rubricValidator->validateRubric($this->rubricData);
+    }
+
+    /**
+     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidRubricDataException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     */
+    public function testInvalidRubricDataInRootNode()
+    {
+        $this->rootNode->setRubricData(new RubricData('test'));
+        $this->rubricValidator->validateRubric($this->rubricData);
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidRubricDataException
+     */
+    public function testInvalidAddChoice()
+    {
+        $rubricData = new RubricData('test 2');
+        $rubricData->setId(3);
+
+        $choice = new Choice($rubricData);
+        $choice->setId(48);
+
+        $this->rubricData->getChoices()->add($choice);
+        $this->rubricValidator->validateRubric($this->rubricData);
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     *
+     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidCriteriumException
+     */
+    public function testChoiceWithInvalidCriterium()
+    {
+        $choice = new Choice($this->rubricData);
+        $choice->setId(48);
+
+        /** @var CriteriumNode $criteriumNode */
+        $criteriumNode = $this->rubricData->getRootNode()->getChildren()[1]->getChildren()[0]->getChildren()[0];
+
+        $criteriumNode->getChoices()->add($choice);
+        $this->rubricValidator->validateRubric($this->rubricData);
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidRubricDataException
+     */
+    public function testInvalidAddLevel()
+    {
+        $rubricData = new RubricData('test 2');
+        $rubricData->setId(3);
+
+        $level = new Level($rubricData);
+        $level->setId(76);
+
+        $this->rubricData->getLevels()->add($level);
+        $this->rubricValidator->validateRubric($this->rubricData);
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     *
+     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidRubricDataException
+     */
+    public function testInvalidRubricDataInTreeNode()
+    {
+        $rubricData2 = new RubricData('Test Rubric');
+        $rubricData2->setId(4);
+        $clusterNode = new ClusterNode('test cluster 5', $rubricData2);
+        $clusterNode->setId(84);
+
+//        $rubricData2->getRootNode()->addChild($clusterNode);
+
+        $this->rubricData->getTreeNodes()->add($clusterNode);
+        $this->rubricValidator->validateRubric($this->rubricData);
+
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     *
+     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidRubricDataException
+     */
+    public function testInvalidRubricDataInTreeNodeChildren()
+    {
+        $rubricData2 = new RubricData('Test Rubric');
+        $rubricData2->setId(4);
+
+        $clusterNode = new ClusterNode('test cluster 5', $rubricData2);
+        $clusterNode->setId(84);
+
+        $clusterNode->setSort(4);
+        $clusterNode->setDepth(1);
+
+        $this->rootNode->getChildren()->add($clusterNode);
+        $this->rubricValidator->validateRubric($this->rubricData);
+
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     * @expectedException \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     */
+    public function testInvalidChildType()
+    {
+        $rubricNode2 = new RubricNode('test', $this->rubricData);
+        $rubricNode2->setId(7);
+        $rubricNode2->setDepth(1);
+        $rubricNode2->setSort(4);
+
+        $this->rootNode->getChildren()->add($rubricNode2);
+        $this->rubricValidator->validateRubric($this->rubricData);
+    }
 }
 
