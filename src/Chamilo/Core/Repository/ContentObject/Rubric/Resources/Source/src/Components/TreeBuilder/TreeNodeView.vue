@@ -89,19 +89,46 @@
         }
 
         get children() {
-            return this.treeNode.children;
+            let children = this.treeNode.children;
+            if(children.length > 0) {
+                return children;
+            }
+
+            return [
+                {
+                    'fakeNode': true,
+                    'parent': this.treeNode,
+                }
+            ]
         }
 
         set children(value: any){
+
+            let fakeElementIndex = value.findIndex((child: any) => child.fakeNode);
+            if(fakeElementIndex > -1)
+            {
+                value.splice(fakeElementIndex, 1);
+            }
+
             this.treeNode.children = value;
             this.treeNode.children.forEach(child => child.parent = this.treeNode);
         }
 
+        placeHolder(parentNode: TreeNode) {
+            return {
+                'parent': parentNode,
+            }
+        }
+
         checkMove(evt: any) {
-            if(!evt.relatedContext.element)
-                return true;
+            if(!evt.relatedContext.element) {
+                console.log(evt);
+                return false;
+            }
+
             let draggedTreeNode:TreeNode = evt.draggedContext.element;
             let parentTreeNode:TreeNode = evt.relatedContext.element.parent;
+
             if (parentTreeNode instanceof Rubric) {
                 return true;
             } else if (parentTreeNode instanceof Cluster) {
@@ -117,22 +144,22 @@
                 return {
                     name: "rubric-child",
                     put: (toGroup: any, fromGroup: any, element: any, meh: any, bleh: any) => {
-                        let draggedTreeNode = element._underlying_vm_;
-                        if (this.treeNode instanceof Criterium)
-                            return false;
-                        if (this.treeNode instanceof Category) {
-                            if (!(draggedTreeNode instanceof Criterium))
-                                return false;
-                            else return true;
-                        }
-                        if (this.treeNode instanceof Cluster) {
-                            if (!(draggedTreeNode instanceof Category || draggedTreeNode instanceof Criterium))
-                                return false;
-                            else
-                                return true;
-                        }
-
-                        return true;
+                        // let draggedTreeNode = element._underlying_vm_;
+                        // if (this.treeNode instanceof Criterium)
+                        //     return false;
+                        // if (this.treeNode instanceof Category) {
+                        //     if (!(draggedTreeNode instanceof Criterium))
+                        //         return false;
+                        //     else return true;
+                        // }
+                        // if (this.treeNode instanceof Cluster) {
+                        //     if (!(draggedTreeNode instanceof Category || draggedTreeNode instanceof Criterium))
+                        //         return false;
+                        //     else
+                        //         return true;
+                        // }
+                        //
+                        // return true;
                     }
 
                 }
@@ -140,27 +167,27 @@
                 return {
                     name: "category-child",
                     put: (toGroup: any, fromGroup: any, element: any, meh: any, bleh: any) => {
-                        return false;
+                        // return false;
                     }
                 }
             } else if (this.treeNode.parent instanceof Cluster) {
                 return {
                     name: "cluster-child",
                     put: (toGroup: any, fromGroup: any, element: any, meh: any, bleh: any) => {
-                        let draggedTreeNode = element._underlying_vm_;
-                        if (this.treeNode instanceof Criterium)
-                            return false;
-                        else if (draggedTreeNode instanceof Category || draggedTreeNode instanceof Cluster)
-                            return false;
-
-                        return true;
+                        // let draggedTreeNode = element._underlying_vm_;
+                        // if (this.treeNode instanceof Criterium)
+                        //     return false;
+                        // else if (draggedTreeNode instanceof Category || draggedTreeNode instanceof Cluster)
+                        //     return false;
+                        //
+                        // return true;
                     }
                 }
             } else {
                 return {
                     name: "root-child",
                     put: (toGroup: any, fromGroup: any, element: any, meh: any, bleh: any) => {
-                        return true
+                        // return true
                     }
                 }
             }
