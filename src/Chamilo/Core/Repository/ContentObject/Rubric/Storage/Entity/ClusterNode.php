@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
  *
@@ -12,57 +14,10 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 class ClusterNode extends TreeNode
 {
     /**
-     * @var CategoryNode[]
-     *
-     * @OneToMany(targetEntity="CategoryNode", mappedBy="parentNode")
+     * @return array
      */
-    protected $categories;
-
-    /**
-     * @var CriteriumNode[]
-     *
-     * @OneToMany(targetEntity="CriteriumNode", mappedBy="parentNode")
-     */
-    protected $criteria;
-
-    /**
-     * @return CategoryNode[]
-     */
-    public function getCategories(): ?array
+    public function getAllowedChildTypes()
     {
-        return $this->categories;
+        return [CategoryNode::class, CriteriumNode::class];
     }
-
-    /**
-     * @param CategoryNode[] $categories
-     *
-     * @return ClusterNode
-     */
-    public function setCategories(array $categories): ClusterNode
-    {
-        $this->categories = $categories;
-
-        return $this;
-    }
-
-    /**
-     * @return CriteriumNode[]
-     */
-    public function getCriteria(): ?array
-    {
-        return $this->criteria;
-    }
-
-    /**
-     * @param CriteriumNode[] $criteria
-     *
-     * @return ClusterNode
-     */
-    public function setCriteria(array $criteria): ClusterNode
-    {
-        $this->criteria = $criteria;
-
-        return $this;
-    }
-
 }

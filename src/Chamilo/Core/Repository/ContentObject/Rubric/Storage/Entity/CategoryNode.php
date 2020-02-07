@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
@@ -19,21 +19,6 @@ class CategoryNode extends TreeNode
      * @ORM\Column(name="color", type="string", length=255, nullable=true)
      */
     protected $color;
-
-    /**
-     * @var CriteriumNode[] | ArrayCollection
-     *
-     * @OneToMany(targetEntity="CriteriumNode", mappedBy="parentNode")
-     */
-    protected $criteria;
-
-    /**
-     * Category constructor.
-     */
-    public function __construct()
-    {
-        $this->criteria = new ArrayCollection();
-    }
 
     /**
      * @return string
@@ -56,46 +41,10 @@ class CategoryNode extends TreeNode
     }
 
     /**
-     * @return CriteriumNode[]
+     * @return array
      */
-    public function getCriteria(): ?array
+    public function getAllowedChildTypes()
     {
-        return $this->criteria;
-    }
-
-    /**
-     * @param CriteriumNode[] $criteria
-     *
-     * @return CategoryNode
-     */
-    public function setCriteria(array $criteria): CategoryNode
-    {
-        $this->criteria = $criteria;
-
-        return $this;
-    }
-
-    /**
-     * @param CriteriumNode $criterium
-     *
-     * @return CategoryNode
-     */
-    public function addCriterium(CriteriumNode $criterium): CategoryNode
-    {
-        $this->criteria->add($criterium);
-
-        return $this;
-    }
-
-    /**
-     * @param CriteriumNode $criterium
-     *
-     * @return CategoryNode
-     */
-    public function removeCriterium(CriteriumNode $criterium): CategoryNode
-    {
-        $this->criteria->removeElement($criterium);
-
-        return $this;
+        return [CriteriumNode::class];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
  *
@@ -10,7 +12,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
  * @ORM\Entity
  *
  * @ORM\Table(
- *      name="repository_rubric_level"
+ *      name="repository_rubric_choice"
  * )
  */
 class Choice
@@ -54,13 +56,37 @@ class Choice
 
     /**
      * @var Level
+     *
+     * @ORM\ManyToOne(targetEntity="Level")
+     * @ORM\JoinColumn(name="level_id", referencedColumnName="id")
      */
     protected $level;
 
     /**
      * @var CriteriumNode
+     *
+     * @ORM\OneToOne(targetEntity="CriteriumNode")
+     * @ORM\JoinColumn(name="criterium_id", referencedColumnName="id")
      */
     protected $criterium;
+
+    /**
+     * @var RubricData
+     *
+     * @ORM\ManyToOne(targetEntity="RubricData")
+     * @ORM\JoinColumn(name="rubric_data_id", referencedColumnName="id")
+     */
+    protected $rubricData;
+
+    /**
+     * Choice constructor.
+     *
+     * @param RubricData $rubricData
+     */
+    public function __construct(RubricData $rubricData)
+    {
+        $this->setRubricData($rubricData);
+    }
 
     /**
      * @return int
@@ -125,7 +151,7 @@ class Choice
     /**
      * @return bool
      */
-    public function isHasFixedScore(): ?bool
+    public function hasFixedScore(): ?bool
     {
         return $this->hasFixedScore;
     }
@@ -195,9 +221,61 @@ class Choice
      *
      * @return Choice
      */
-    public function setCriterium(CriteriumNode $criterium): Choice
+    public function setCriterium(CriteriumNode $criterium = null): Choice
     {
+        if($this->criterium === $criterium)
+        {
+            return $this;
+        }
+
+        $oldCriterium = $this->criterium;
         $this->criterium = $criterium;
+
+        if($oldCriterium instanceof CriteriumNode)
+        {
+            $oldCriterium->removeChoice($this);
+        }
+
+        if($criterium instanceof CriteriumNode)
+        {
+            $criterium->addChoice($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return RubricData
+     */
+    public function getRubricData(): ?RubricData
+    {
+        return $this->rubricData;
+    }
+
+    /**
+     * @param RubricData $rubricData
+     *
+     * @return Choice
+     */
+    public function setRubricData(RubricData $rubricData = null): Choice
+    {
+        if($this->rubricData === $rubricData)
+        {
+            return $this;
+        }
+
+        $oldRubricData = $this->rubricData;
+        $this->rubricData = $rubricData;
+
+        if($oldRubricData instanceof RubricData)
+        {
+            $oldRubricData->removeChoice($this);
+        }
+
+        if($rubricData instanceof RubricData)
+        {
+            $rubricData->addChoice($this);
+        }
 
         return $this;
     }
