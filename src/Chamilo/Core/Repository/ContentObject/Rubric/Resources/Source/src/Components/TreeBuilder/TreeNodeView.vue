@@ -17,20 +17,24 @@
         </div>
         <ul class="list-group tree-list-group" v-if="!collapsed && treeNode.canHaveChildren()">
             <draggable handle=".handle" v-model="children" group="tree" :move="checkMove"
-                       :animation="250" :invertSwap="true" ghost-class="ghost">
+                       :animation="250" ghost-class="ghost" :filter="'.action-list-group-item'" :invertSwap="true">
                 <tree-node-view
                         v-for="child in treeNode.children"
                         :treeNode="child"
                         :level="level + 1"
                         v-bind:key="child.id"
                 />
+                <li v-if="treeNode.canHaveChildren() && !treeNode.hasChildren()"
+                    class="list-group-item tree-list-group-item action-list-group-item">
+                    Geen items
+                </li>
             </draggable>
-            <draggable v-if="treeNode.canHaveChildren() && !treeNode.hasChildren()" group="action" :filter="'.action-list-group-item'">
+            <!--draggable v-if="treeNode.canHaveChildren() && !treeNode.hasChildren()" group="action" :filter="'.action-list-group-item'">
 
                 <li v-if="treeNode.constructor.name !== 'Criterium'"
                     class="list-group-item tree-list-group-item action-list-group-item">
                     Geen items
-                    <!--div class="btn-group btn-group-sm" role="group" aria-label="...">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="...">
                         <button type="button" class="btn btn-default"
                                 v-on:click="store.selectedTreeNode = treeNode">
                             <i class="fa fa-plus"></i>
@@ -48,9 +52,9 @@
                             <i class="fa fa-plus"></i>
                             Voeg Cluster Toe
                         </button>
-                    </div!-->
+                    </div>
                 </li>
-            </draggable>
+            </draggable!-->
         </ul>
     </li>
 </template>
