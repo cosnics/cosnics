@@ -3,16 +3,19 @@
         <levels-table></levels-table>
         <div class="row">
             <div class="col-md-4">
-                <div id="tree" class="rubric-tree"></div>
+                <div class="rubric-tree">
+                    <ul class="list-group">
+                        <tree-node-view :tree-node="store.rubric"></tree-node-view>
+                    </ul>
+                </div>
             </div>
             <div class="col-md-8">
-                <criterium-node-builder v-if="selectedNodeIsCriterium" :criterium="selectedTreeNode"></criterium-node-builder>
-                <category-node-builder v-if="selectedNodeIsCategory" :category="selectedTreeNode"></category-node-builder>
-                <cluster-node-builder v-if="selectedNodeIsCluster" :cluster="selectedTreeNode"></cluster-node-builder>
-                <rubric-node-builder v-if="selectedNodeIsRubric" :rubric="selectedTreeNode"></rubric-node-builder>
+                <criterium-node-builder v-if="selectedNodeIsCriterium" :criterium="store.selectedTreeNode"></criterium-node-builder>
+                <category-node-builder v-if="selectedNodeIsCategory" :category="store.selectedTreeNode"></category-node-builder>
+                <cluster-node-builder v-if="selectedNodeIsCluster" :cluster="store.selectedTreeNode"></cluster-node-builder>
+                <rubric-node-builder v-if="selectedNodeIsRubric" :rubric="store.selectedTreeNode"></rubric-node-builder>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -32,13 +35,15 @@
     import CategoryNodeBuilder from "./CategoryNodeBuilder.vue";
     import ClusterNodeBuilder from "./ClusterNodeBuilder.vue";
     import RubricNodeBuilder from "./RubricNodeBuilder.vue";
+    import TreeNodeView from "./TreeNodeView.vue";
 
     @Component({
         name: 'score-rubric-tree-builder',
-        components: {RubricNodeBuilder, ClusterNodeBuilder, CategoryNodeBuilder, LevelsTable, CriteriumNodeBuilder},
+        components: {
+            TreeNodeView,
+            RubricNodeBuilder, ClusterNodeBuilder, CategoryNodeBuilder, LevelsTable, CriteriumNodeBuilder},
     })
     export default class ScoreRubricTreeBuilder extends Vue {
-        protected selectedTreeNode:TreeNode = this.store.rubric;
 
         getDefaultCluster() {
             let cluster = new Cluster("");
@@ -48,16 +53,16 @@
         }
 
         get selectedNodeIsCriterium(){
-            return this.selectedTreeNode instanceof Criterium;
+            return this.store.selectedTreeNode instanceof Criterium;
         }
         get selectedNodeIsCategory(){
-            return this.selectedTreeNode instanceof Category;
+            return this.store.selectedTreeNode instanceof Category;
         }
         get selectedNodeIsCluster(){
-            return this.selectedTreeNode instanceof Cluster;
+            return this.store.selectedTreeNode instanceof Cluster;
         }
         get selectedNodeIsRubric(){
-            return this.selectedTreeNode instanceof Rubric;
+            return this.store.selectedTreeNode instanceof Rubric;
         }
 
         get store(){
@@ -65,7 +70,6 @@
         }
 
         get rubric(){
-            console.log("hiedr");
             return this.store.rubric;
         }
 
@@ -105,7 +109,7 @@
 
 
         mounted() {
-            let tree = createTree('#tree', {
+            /*let tree = createTree('#tree', {
                 extensions: ['dnd', 'edit'],
                 source: this.treeData,
                 checkbox: false,
@@ -183,6 +187,7 @@
                 },
             });
             tree.expandAll();
+            */
         }
     }
     //todo replace border with padding

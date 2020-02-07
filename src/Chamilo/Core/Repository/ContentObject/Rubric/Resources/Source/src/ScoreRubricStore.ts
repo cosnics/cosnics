@@ -4,11 +4,13 @@ import Category from "./Domain/Category";
 import Criterium from "./Domain/Criterium";
 import Rubric from "./Domain/Rubric";
 import Vue from "vue";
+import TreeNode from "./Domain/TreeNode";
 
 export default class ScoreRubricStore {
 
     public rubric!:Rubric;
     public useScore: boolean = true;
+    public selectedTreeNode!:TreeNode;
 
     constructor() {
         const level1 = new Level("Overstijgt de verwachtingen", "", 10);
@@ -51,7 +53,7 @@ export default class ScoreRubricStore {
         const category3 = new Category('Categorie 3');
         category3.color = 'blue';
 
-        category3.addCriterium(new Criterium(''));
+        category3.addCriterium(new Criterium('Nog een laatste criterium'));
 
         cluster2.addCategory(category3);
 
@@ -65,5 +67,7 @@ export default class ScoreRubricStore {
         newRubric.getChoice(criterium2, level1)!.feedback = "Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.";
         newRubric.getChoice(criterium2, level2)!.feedback = "Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.";
         Vue.set(this, 'rubric', newRubric);
+        Vue.set(this, 'selectedTreeNode', newRubric);
+
     }
 }

@@ -20,13 +20,14 @@
     "vue-class-component": "7.2.2",
     "vue-property-decorator": "8.3.0",
     "vue-swatches": "^1.0.4",
+    "vuedraggable": "^2.23.2",
     "winston": "3.2.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
     "@types/jquery": "^3.3.31",
-    "@types/jqueryui": "^1.12.10",
     "@types/jquery.fancytree": "^2.7.34",
+    "@types/jqueryui": "^1.12.10",
     "@vue/cli-plugin-babel": "4.1.2",
     "@vue/cli-plugin-typescript": "4.1.2",
     "@vue/cli-plugin-unit-jest": "4.1.2",

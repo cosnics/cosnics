@@ -8,6 +8,8 @@ export const logMethod:MethodDecorator = ((target, propertyKey, descriptor:Typed
     let originalMethod = descriptor.value;
     descriptor.value = function (...args: any[]) {
         console.log("Called " + propertyKey.toString() + " on " + this + " with params: " + args.map(arg => arg.toString()). join(', '));
-        return originalMethod.apply(this, args);
+        let returned = originalMethod.apply(this, args);
+        console.log(returned);
+        return returned;
     }
 });

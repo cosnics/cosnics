@@ -43,15 +43,18 @@ export default abstract class TreeNode implements TreeNodeInterface {
         return this.children.length > 0;
     }
 
-    get children():ReadonlyArray<TreeNode> {
-        return this._children.slice();
+    get children():Array<TreeNode> {
+        return this._children;
+    }
+
+    set children(children:TreeNode[]) {
+        this._children = children;
     }
 
     toString() {
         return this.title;
     }
 
-    @logMethod
     addChild(treeNode: TreeNode, index?:number): void {
         treeNode.parent = this;
         if(!index)
