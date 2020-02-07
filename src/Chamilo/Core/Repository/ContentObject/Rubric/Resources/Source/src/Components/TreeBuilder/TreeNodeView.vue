@@ -25,11 +25,12 @@
                         v-bind:key="child.id"
                 />
             </draggable>
-            <draggable group="action" :filter="'.action-list-group-item'">
+            <draggable v-if="treeNode.canHaveChildren() && !treeNode.hasChildren()" group="action" :filter="'.action-list-group-item'">
 
                 <li v-if="treeNode.constructor.name !== 'Criterium'"
                     class="list-group-item tree-list-group-item action-list-group-item">
-                    <div class="btn-group btn-group-sm" role="group" aria-label="...">
+                    Dropzone
+                    <!--div class="btn-group btn-group-sm" role="group" aria-label="...">
                         <button type="button" class="btn btn-default"
                                 v-on:click="store.selectedTreeNode = treeNode">
                             <i class="fa fa-plus"></i>
@@ -47,7 +48,7 @@
                             <i class="fa fa-plus"></i>
                             Voeg Cluster Toe
                         </button>
-                    </div>
+                    </div!-->
                 </li>
             </draggable>
         </ul>
@@ -94,7 +95,7 @@
 
         checkMove(evt: any) {
             if(!evt.relatedContext.element)
-                return false;
+                return true;
             let draggedTreeNode:TreeNode = evt.draggedContext.element;
             let parentTreeNode:TreeNode = evt.relatedContext.element.parent;
             if (parentTreeNode instanceof Rubric) {
@@ -165,24 +166,25 @@
 
 <style scoped>
     .list-group-item {
-        border: none !important;
+        border: none;
     }
 
     .tree-list-group {
-        margin-bottom: 5px !important;
-        border: none !important;
+        margin-bottom: 5px;
+        border: none;
     }
 
     .tree-list-group-item {
         padding-top: 0px;
         padding-bottom: 0px;
         padding-right: 0px;
-        border: none !important;
+        border: none;
     }
 
     .action-list-group-item {
         margin-left: 40px;
         padding-left: 0px;
+        border: slategray dotted 1px;
     }
 
     .tree-list-group-item-content {
