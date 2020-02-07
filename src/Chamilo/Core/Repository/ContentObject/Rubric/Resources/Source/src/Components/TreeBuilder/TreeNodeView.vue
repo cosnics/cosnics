@@ -9,15 +9,15 @@
             </div>
             <div>
                 <button type="button" class="list-group-item" v-on:click="store.selectedTreeNode = treeNode">
-                    <i class="fa fa-align-justify handle"></i>
+                    <i class="fa fa-bars handle-icon handle"></i>
                     <i v-if="treeNode.canHaveChildren()" class="fa fa-folder-o folder-icon"></i>
                     {{treeNode.title}}
                 </button>
             </div>
         </div>
-        <ul class="list-group tree-list-group" v-if="!collapsed">
+        <ul class="list-group tree-list-group" v-if="!collapsed && treeNode.canHaveChildren()">
             <draggable handle=".handle" v-model="children" group="tree" :move="checkMove"
-                       :animation="250" :invertSwap="true">
+                       :animation="250" :invertSwap="true" ghost-class="ghost">
                 <tree-node-view
                         v-for="child in treeNode.children"
                         :treeNode="child"
@@ -29,7 +29,7 @@
 
                 <li v-if="treeNode.constructor.name !== 'Criterium'"
                     class="list-group-item tree-list-group-item action-list-group-item">
-                    Dropzone
+                    Geen items
                     <!--div class="btn-group btn-group-sm" role="group" aria-label="...">
                         <button type="button" class="btn btn-default"
                                 v-on:click="store.selectedTreeNode = treeNode">
@@ -194,8 +194,12 @@
     }
 
     .handle {
-        cursor: move;
+        cursor: grab;
     }
+    .handle:active {
+        cursor: grabbing;
+    }
+
 
     .caret-toggle {
         padding-top: 10px;
@@ -208,5 +212,13 @@
 
     .folder-icon {
         margin-left: 3px;
+    }
+
+    .handle-icon {
+        margin-right: 5px;
+    }
+    .ghost {
+        opacity: 0.5;
+        background: #c8ebfb;
     }
 </style>
