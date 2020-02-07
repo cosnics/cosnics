@@ -64,6 +64,7 @@
     import Rubric from "../../Domain/Rubric";
     import Category from "../../Domain/Category";
     import Cluster from "../../Domain/Cluster";
+    import Criterium from "../../Domain/Criterium";
 
     @Component({
         components: {draggable}
@@ -95,12 +96,22 @@
             if (this.treeNode.parent instanceof Rubric) {
                 return {
                     name: "rubric-child",
-                    put: (to: any, from: any, element: any) => {
-                        console.log(from.options.group.name);
-                        console.log(to.options.group.name);
-                        console.log(this.treeNode.title);
-                        console.log(element.id);
-                        console.log(this.$refs);
+                    put: (toGroup: any, fromGroup: any, element: any, meh:any, bleh:any) => {
+                        let draggedTreeNode = element._underlying_vm_;
+                        if(this.treeNode instanceof Criterium)
+                            return false;
+                        if(this.treeNode instanceof Category) {
+                            if(!(draggedTreeNode instanceof Criterium))
+                                return false;
+                            else return true;
+                        }
+                        if(this.treeNode instanceof Cluster){
+                            if(!(draggedTreeNode instanceof Category || draggedTreeNode instanceof Criterium))
+                                return false;
+                            else
+                                return true;
+                        }
+
                         return true;
                     }
 
@@ -108,29 +119,28 @@
             } else if (this.treeNode.parent instanceof Category) {
                 return {
                     name: "category-child",
-                    put: (to: any, meh: any, bleh: any, freh: any) => {
-                        console.log(to.options.group.name);
-                        console.log(this.treeNode.title);
-
+                    put: (toGroup: any, fromGroup: any, element: any, meh:any, bleh:any) => {
                         return false;
                     }
                 }
             } else if (this.treeNode.parent instanceof Cluster) {
                 return {
                     name: "cluster-child",
-                    put: (to: any, meh: any, bleh: any, freh: any) => {
-                        console.log(to.options.group.name);
-                        console.log(this.treeNode.title);
+                    put: (toGroup: any, fromGroup: any, element: any, meh:any, bleh:any) => {
+                        let draggedTreeNode = element._underlying_vm_;
+                        if(this.treeNode instanceof Criterium)
+                            return false;
+                        else if(draggedTreeNode instanceof Category || draggedTreeNode instanceof Cluster)
+                            return false;
+
                         return true;
                     }
                 }
             } else {
                 return {
                     name: "root-child",
-                    put: (to: any, meh: any, bleh: any, freh: any) => {
-                        console.log(to.options.group.name);
-                        console.log(this.treeNode.title);
-                        return true;
+                    put: (toGroup: any, fromGroup: any, element: any, meh:any, bleh:any) => {
+                        return true
                     }
                 }
             }
