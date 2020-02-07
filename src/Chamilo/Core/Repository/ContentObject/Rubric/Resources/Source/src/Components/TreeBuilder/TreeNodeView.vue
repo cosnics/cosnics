@@ -16,8 +16,8 @@
             </div>
         </div>
         <ul class="list-group tree-list-group" v-if="!collapsed">
-            <draggable handle=".handle" v-model="treeNode.children" group="tree" :move="checkMove" :group="getGroup()"
-                       :animation="250" :invertSwap="true" :component-data="getComponentData()">
+            <draggable handle=".handle" v-model="children" group="tree" :move="checkMove"
+                       :animation="250" :invertSwap="true">
                 <tree-node-view
                         v-for="child in treeNode.children"
                         :treeNode="child"
@@ -83,30 +83,45 @@
             return this.$root.$data.store;
         }
 
-        checkMove(evt: any) {
-            return true;
+        get children() {
+            return this.treeNode.children;
         }
 
-        getComponentData() {
-            console.log("hier");
-            return this.treeNode;
+        set children(value: any){
+            this.treeNode.children = value;
+            this.treeNode.children.forEach(child => child.parent = this.treeNode);
+        }
+
+        checkMove(evt: any) {
+            if(!evt.relatedContext.element)
+                return false;
+            let draggedTreeNode:TreeNode = evt.draggedContext.element;
+            let parentTreeNode:TreeNode = evt.relatedContext.element.parent;
+            if (parentTreeNode instanceof Rubric) {
+                return true;
+            } else if (parentTreeNode instanceof Cluster) {
+                return draggedTreeNode instanceof Criterium || draggedTreeNode instanceof Category;
+            } else if (parentTreeNode instanceof Category) {
+                return draggedTreeNode instanceof Criterium;
+            }
+            return false;
         }
 
         getGroup(to: any) {
             if (this.treeNode.parent instanceof Rubric) {
                 return {
                     name: "rubric-child",
-                    put: (toGroup: any, fromGroup: any, element: any, meh:any, bleh:any) => {
+                    put: (toGroup: any, fromGroup: any, element: any, meh: any, bleh: any) => {
                         let draggedTreeNode = element._underlying_vm_;
-                        if(this.treeNode instanceof Criterium)
+                        if (this.treeNode instanceof Criterium)
                             return false;
-                        if(this.treeNode instanceof Category) {
-                            if(!(draggedTreeNode instanceof Criterium))
+                        if (this.treeNode instanceof Category) {
+                            if (!(draggedTreeNode instanceof Criterium))
                                 return false;
                             else return true;
                         }
-                        if(this.treeNode instanceof Cluster){
-                            if(!(draggedTreeNode instanceof Category || draggedTreeNode instanceof Criterium))
+                        if (this.treeNode instanceof Cluster) {
+                            if (!(draggedTreeNode instanceof Category || draggedTreeNode instanceof Criterium))
                                 return false;
                             else
                                 return true;
@@ -119,18 +134,18 @@
             } else if (this.treeNode.parent instanceof Category) {
                 return {
                     name: "category-child",
-                    put: (toGroup: any, fromGroup: any, element: any, meh:any, bleh:any) => {
+                    put: (toGroup: any, fromGroup: any, element: any, meh: any, bleh: any) => {
                         return false;
                     }
                 }
             } else if (this.treeNode.parent instanceof Cluster) {
                 return {
                     name: "cluster-child",
-                    put: (toGroup: any, fromGroup: any, element: any, meh:any, bleh:any) => {
+                    put: (toGroup: any, fromGroup: any, element: any, meh: any, bleh: any) => {
                         let draggedTreeNode = element._underlying_vm_;
-                        if(this.treeNode instanceof Criterium)
+                        if (this.treeNode instanceof Criterium)
                             return false;
-                        else if(draggedTreeNode instanceof Category || draggedTreeNode instanceof Cluster)
+                        else if (draggedTreeNode instanceof Category || draggedTreeNode instanceof Cluster)
                             return false;
 
                         return true;
@@ -139,7 +154,7 @@
             } else {
                 return {
                     name: "root-child",
-                    put: (toGroup: any, fromGroup: any, element: any, meh:any, bleh:any) => {
+                    put: (toGroup: any, fromGroup: any, element: any, meh: any, bleh: any) => {
                         return true
                     }
                 }
