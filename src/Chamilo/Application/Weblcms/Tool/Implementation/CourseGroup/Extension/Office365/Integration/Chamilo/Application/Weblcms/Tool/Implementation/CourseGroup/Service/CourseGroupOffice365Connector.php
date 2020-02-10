@@ -187,7 +187,7 @@ class CourseGroupOffice365Connector
     {
         $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
 
-        if (!$reference->isLinked())
+        if (!$reference instanceof CourseGroupOffice365Reference || !$reference->isLinked())
         {
             $office365GroupId = $this->createOrUpdateGroupFromCourseGroup($courseGroup, $user);
         }
