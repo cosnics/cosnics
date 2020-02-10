@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -80,6 +81,11 @@ class RubricData
     protected $treeNodes;
 
     /**
+     * @var int
+     */
+    protected $contentObjectId;
+
+    /**
      * RubricData constructor.
      *
      * @param string $rubricTitle
@@ -87,6 +93,7 @@ class RubricData
      *
      * @noinspection PhpDocMissingThrowsInspection
      * @noinspection PhpUnhandledExceptionInspection
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
     public function __construct(string $rubricTitle, bool $useScores = true)
     {
@@ -333,6 +340,55 @@ class RubricData
         $this->lastUpdated = $lastUpdated;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getContentObjectId(): ?int
+    {
+        return $this->contentObjectId;
+    }
+
+    /**
+     * @param int $contentObjectId
+     *
+     * @return RubricData
+     */
+    public function setContentObjectId(int $contentObjectId): RubricData
+    {
+        $this->contentObjectId = $contentObjectId;
+
+        return $this;
+    }
+
+    /**
+     * @param int $treeNodeIdentifier
+     * TODO: testing!
+     * @return TreeNode
+     */
+    public function getTreeNodeById(int $treeNodeIdentifier)
+    {
+        return $this->treeNodes->filter(function(TreeNode $treeNode) use ($treeNodeIdentifier) {
+            return $treeNode->getId() == $treeNodeIdentifier;
+        })->get(0);
+    }
+
+    /**
+     * @param int|null $parentNodeId
+     *
+     * @return TreeNode|null
+     * @throws ObjectNotExistException
+     */
+    public function getParentNodeById(int $parentNodeId = null)
+    {
+        $parentTreeNode = empty($parentNodeId) ? $this->getRootNode() : $this->getTreeNodeById($parentNodeId);
+        if (!$parentTreeNode instanceof TreeNode)
+        {
+            throw new ObjectNotExistException('Parent tree node', $parentNodeId);
+        }
+
+        return $parentTreeNode;
     }
 
 }

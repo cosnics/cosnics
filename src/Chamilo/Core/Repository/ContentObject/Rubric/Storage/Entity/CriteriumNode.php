@@ -2,8 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\TreeNodeJSONModel;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use OutOfRangeException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
@@ -57,6 +59,11 @@ class CriteriumNode extends TreeNode
      */
     public function setWeight(int $weight): CriteriumNode
     {
+        if($weight < 0 || $weight > 100)
+        {
+            throw new OutOfRangeException('Weight must be between 0 and 100');
+        }
+
         $this->weight = $weight;
 
         return $this;
@@ -129,6 +136,33 @@ class CriteriumNode extends TreeNode
     public function getAllowedChildTypes()
     {
         return [];
+    }
+
+    /**
+     * @param TreeNodeJSONModel $treeNodeJSONModel
+     * @param RubricData $rubricData
+     *
+     * @return RubricNode
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
+    public static function fromJSONModel(TreeNodeJSONModel $treeNodeJSONModel, RubricData $rubricData): TreeNode
+    {
+        $node = new self($treeNodeJSONModel->getTitle(), $rubricData);
+        $node->setWeight($treeNodeJSONModel->getWeight());
+
+        return $node;
+    }
+
+    /**
+     * @return TreeNodeJSONModel
+     * @throws \Exception
+     */
+    public function toJSONModel(): TreeNodeJSONModel
+    {
+        return new TreeNodeJSONModel(
+            $this->getId(), $this->getTitle(), TreeNodeJSONModel::TYPE_RUBRIC, $this->getParentNodeId(),
+            null, $this->getWeight()
+        );
     }
 
 }
