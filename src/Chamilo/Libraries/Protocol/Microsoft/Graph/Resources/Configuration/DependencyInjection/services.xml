@@ -1,147 +1,132 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container
-    xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults autowire="true" autoconfigure="true" public="true"/>
         <service
-            id="chamilo.libraries.protocol.microsoft.graph.storage.repository.access_token_repository"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepository">
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepository">
             <argument
-                type="service"
-                id="chamilo.libraries.platform.configuration.local_setting" />
+                    type="service"
+                    id="Chamilo\Libraries\Platform\Configuration\LocalSetting"/>
             <argument
-                type="service"
-                id="chamilo.libraries.platform.session.session_utilities" />
+                    type="service"
+                    id="Chamilo\Libraries\Platform\Session\SessionUtilities"/>
         </service>
 
         <service
-            id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository_factory"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepositoryFactory">
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepositoryFactory">
             <argument
-                type="service"
-                id="chamilo.configuration.service.configuration_consulter" />
+                    type="service"
+                    id="Chamilo\Configuration\Service\ConfigurationConsulter"/>
             <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.access_token_repository" />
+                    type="service"
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepository"/>
             <argument
-                type="service"
-                id="symfony.component.http_foundation.request" />
+                    type="service"
+                    id="Chamilo\Libraries\Platform\ChamiloRequest"/>
         </service>
 
         <service
-            id="chamilo.libraries.protocol.microsoft.graph.storage.repository.group_repository_factory"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepositoryFactory">
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepositoryFactory">
             <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository" />
+                    type="service"
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository"/>
             <argument
-                type="service"
-                id="chamilo.configuration.service.configuration_consulter" />
+                    type="service"
+                    id="Chamilo\Configuration\Service\ConfigurationConsulter"/>
         </service>
 
         <service
-            id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository">
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository">
             <factory
-                service="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository_factory"
-                method="buildGraphRepository" />
+                    service="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepositoryFactory"
+                    method="buildGraphRepository"/>
         </service>
 
         <service
-            id="chamilo.libraries.protocol.microsoft.graph.storage.repository.user_repository"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository">
-            <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository" />
-        </service>
-
-        <service
-                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.team_repository"
-                class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\TeamRepository">
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository">
             <argument
                     type="service"
-                    id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository" />
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository"/>
         </service>
 
         <service
-            id="chamilo.libraries.protocol.microsoft.graph.storage.repository.group_repository"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository">
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\TeamRepository">
+            <argument
+                    type="service"
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository"/>
+        </service>
+
+        <service
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository">
             <factory
-                service="chamilo.libraries.protocol.microsoft.graph.storage.repository.group_repository_factory"
-                method="buildGroupRepository" />
+                    service="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepositoryFactory"
+                    method="buildGroupRepository"/>
         </service>
 
         <service
-            id="chamilo.libraries.protocol.microsoft.graph.storage.repository.calendar_repository"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository">
-            <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository" />
-        </service>
-
-
-        <service
-            id="chamilo.libraries.protocol.microsoft.graph.service.graph_service"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GraphService">
-            <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.service.user_service" />
-            <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.service.group_service" />
-            <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.service.calendar_service" />
-        </service>
-
-
-        <service
-            id="chamilo.libraries.protocol.microsoft.graph.service.user_service"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService">
-            <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.user_repository" />
-            <argument
-                type="service"
-                id="chamilo.libraries.platform.configuration.local_setting" />
-        </service>
-
-
-        <service
-            id="chamilo.libraries.protocol.microsoft.graph.service.group_service"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService">
-            <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.service.user_service" />
-            <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.group_repository" />
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository">
             <argument
                     type="service"
-                    id="chamilo.configuration.service.configuration_consulter" />
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository"/>
         </service>
 
         <service
-                id="chamilo.libraries.protocol.microsoft.graph.service.team_service"
-                class="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService">
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GraphService">
             <argument
                     type="service"
-                    id="chamilo.libraries.protocol.microsoft.graph.service.group_service" />
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService"/>
             <argument
                     type="service"
-                    id="chamilo.libraries.protocol.microsoft.graph.storage.repository.team_repository" />
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService"/>
+            <argument
+                    type="service"
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService"/>
         </service>
 
         <service
-            id="chamilo.libraries.protocol.microsoft.graph.service.calendar_service"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService">
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService">
             <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.service.user_service" />
+                    type="service"
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository"/>
             <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.calendar_repository" />
+                    type="service"
+                    id="Chamilo\Libraries\Platform\Configuration\LocalSetting"/>
+        </service>
+
+        <service
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService">
+            <argument
+                    type="service"
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService"/>
+            <argument
+                    type="service"
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository"/>
+            <argument
+                    type="service"
+                    id="Chamilo\Configuration\Service\ConfigurationConsulter"/>
+        </service>
+
+        <service
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService">
+            <argument
+                    type="service"
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService"/>
+            <argument
+                    type="service"
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\TeamRepository"/>
+        </service>
+
+        <service
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService">
+            <argument
+                    type="service"
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService"/>
+            <argument
+                    type="service"
+                    id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository"/>
         </service>
 
     </services>

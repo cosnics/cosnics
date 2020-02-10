@@ -28,7 +28,7 @@ class MappingDriverFactoryTest extends DependencyInjectionBasedTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->mappingDriverFactory = $this->getService('doctrine.orm.mapping_driver_factory');
+        $this->mappingDriverFactory = $this->getService('Doctrine\ORM\MappingDriverFactory');
     }
 
     /**
@@ -79,8 +79,7 @@ class MappingDriverFactoryTest extends DependencyInjectionBasedTestCase
             'default' => array('Chamilo/Libraries/Test/Integration/Storage/DataManager/Doctrine/ORM/config'),
             'custom' => array(
                 'common_libraries_test' => array(
-                    'type' => 'annotation',
-                    'namespace' => 'common\libraries\test',
+                    'type' => 'annotation', 'namespace' => 'common\libraries\test',
                     'paths' => array('Chamilo/Libraries/Test/Integration/Storage/DataManager/Doctrine/ORM/')
                 )
             )
@@ -158,8 +157,7 @@ class MappingDriverFactoryTest extends DependencyInjectionBasedTestCase
             'default' => array('Chamilo/Libraries/Test/Integration/Storage/DataManager/Doctrine/ORM/config'),
             'custom' => array(
                 'common_libraries_test' => array(
-                    'type' => $driverType,
-                    'namespace' => 'common\libraries\test',
+                    'type' => $driverType, 'namespace' => 'common\libraries\test',
                     'paths' => array('Chamilo/Libraries/Test/Integration/Storage/DataManager/Doctrine/ORM/')
                 )
             )

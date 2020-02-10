@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container
-    xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults autowire="true" autoconfigure="true" public="true"/>
         <service
-            id="chamilo.libraries.cache.cache_management.cache_manager"
-            class="Chamilo\Libraries\Cache\CacheManagement\CacheManager">
+                id="Chamilo\Libraries\Cache\CacheManagement\CacheManager">
             <factory
-                service="chamilo.libraries.cache.cache_management.cache_manager_builder"
-                method="buildCacheManager" />
+                    service="Chamilo\Libraries\Cache\CacheManagement\CacheManagerBuilder"
+                    method="buildCacheManager"/>
         </service>
 
         <service
-            id="chamilo.libraries.cache.cache_management.cache_manager_builder"
-            class="Chamilo\Libraries\Cache\CacheManagement\CacheManagerBuilder">
+                id="Chamilo\Libraries\Cache\CacheManagement\CacheManagerBuilder">
         </service>
 
-        <service id="chamilo.libraries.cache.cache_management.chamilo_cache_services_constructor"
-                 class="Chamilo\Libraries\Cache\CacheManagement\ChamiloCacheServicesConstructor">
+        <service
+                id="Chamilo\Libraries\Cache\CacheManagement\ChamiloCacheServicesConstructor">
             <argument
                     type="service"
-                    id="service_container" />
-            <tag name="chamilo.libraries.cache.cache_management.cache_services_constructor" />
+                    id="service_container"/>
+            <tag name="chamilo.libraries.cache.cache_management.cache_services_constructor"/>
         </service>
 
     </services>

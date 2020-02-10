@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -24,6 +25,7 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
      * Constructor
      *
      * @param \Chamilo\Libraries\Format\Table\Table $table
+     *
      * @throws \Exception
      */
     public function __construct($table)
@@ -39,7 +41,7 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
      */
     public function getHashingUtilities()
     {
-        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+        return $this->getService(HashingUtilities::class);
     }
 
     public function render_cell($column, $user)
@@ -49,6 +51,7 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
             case User::PROPERTY_PICTURE_URI :
                 return $this->render_picture($user);
         }
+
         return parent::render_cell($column, $user);
     }
 
@@ -56,6 +59,7 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
      * Gets the action links to display
      *
      * @param $user The user for which the action links should be returned
+     *
      * @return string A HTML representation of the action links
      */
     public function get_actions($user)
@@ -67,17 +71,17 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
             $um = new Manager();
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Approve'),
-                    Theme::getInstance()->getCommonImagePath('Action/Activate'),
-                    $um->get_approve_user_url($user),
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('Approve'), Theme::getInstance()->getCommonImagePath('Action/Activate'),
+                    $um->get_approve_user_url($user), ToolbarItem::DISPLAY_ICON
+                )
+            );
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Deny'),
-                    Theme::getInstance()->getCommonImagePath('Action/Deinstall'),
-                    $um->get_deny_user_url($user),
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('Deny'), Theme::getInstance()->getCommonImagePath('Action/Deinstall'),
+                    $um->get_deny_user_url($user), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
         return $toolbar->as_html();
@@ -90,8 +94,9 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
             $picture = $user->get_full_picture_path();
             $thumbnail_path = $this->get_thumbnail_path($picture);
             $thumbnail_url = Path::getInstance()->getTemporaryPath(null, true) . basename($thumbnail_path);
+
             return '<span style="display:none;">1</span><img src="' . $thumbnail_url . '" alt="' .
-                 htmlentities($user->get_fullname()) . '" border="0"/>';
+                htmlentities($user->get_fullname()) . '" border="0"/>';
         }
         else
         {
@@ -101,15 +106,17 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
 
     private function get_thumbnail_path($image_path)
     {
-        $thumbnail_path = Path::getInstance()->getTemporaryPath(null, true) .
-             $this->getHashingUtilities()->hashString($image_path) . basename($image_path);
+        $thumbnail_path =
+            Path::getInstance()->getTemporaryPath(null, true) . $this->getHashingUtilities()->hashString($image_path) .
+            basename($image_path);
 
-        if (! is_file($thumbnail_path))
+        if (!is_file($thumbnail_path))
         {
             $thumbnail_creator = ImageManipulation::factory($image_path);
             $thumbnail_creator->create_thumbnail(20);
             $thumbnail_creator->write_to_file($thumbnail_path);
         }
+
         return $thumbnail_path;
     }
 }

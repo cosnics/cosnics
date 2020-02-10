@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\DependencyInjection\CompilerPass;
 
+use Chamilo\Core\Repository\Service\WorkspaceExtensionManager;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -23,15 +24,13 @@ class WorkspaceExtensionCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if ($container->hasDefinition('chamilo.core.repository.service.workspace_extension_manager'))
+        if ($container->hasDefinition(WorkspaceExtensionManager::class))
         {
             $taggedServices = $container->findTaggedServiceIds(
                 'chamilo.core.repository.workspace.extension'
             );
 
-            $definition =  $container->getDefinition(
-                'chamilo.core.repository.service.workspace_extension_manager'
-            );
+            $definition = $container->getDefinition(WorkspaceExtensionManager::class);
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {

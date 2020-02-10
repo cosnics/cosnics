@@ -27,7 +27,7 @@ class DoctrineEntityManagerFactoryTest extends DependencyInjectionBasedTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->entityManagerFactory = $this->getService('doctrine.orm.entity_manager_factory');
+        $this->entityManagerFactory = $this->getService('Doctrine\ORM\EntityManagerFactory');
     }
 
     /**

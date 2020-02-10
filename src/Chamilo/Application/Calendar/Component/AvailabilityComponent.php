@@ -23,7 +23,7 @@ class AvailabilityComponent extends Manager
      */
     protected function getAvailabilityService()
     {
-        return $this->getService('chamilo.application.calendar.service.availability_service');
+        return $this->getService(AvailabilityService::class);
     }
 
     public function run()

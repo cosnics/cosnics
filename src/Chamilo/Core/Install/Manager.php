@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Install;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -82,13 +83,11 @@ abstract class Manager extends Application implements NoContextComponent
      */
     public function getPage()
     {
-        if (! isset($this->page))
+        if (!isset($this->page))
         {
             $header = new Header(
-                Page::VIEW_MODE_FULL,
-                'container-fluid',
-                Translation::getInstance()->getLanguageIsocode(),
-                'ltr');
+                Page::VIEW_MODE_FULL, 'container-fluid', Translation::getInstance()->getLanguageIsocode(), 'ltr'
+            );
             $footer = new Footer(Page::VIEW_MODE_FULL);
 
             $this->page = new Page(Page::VIEW_MODE_FULL, 'container-fluid', $header, $footer);
@@ -168,9 +167,10 @@ abstract class Manager extends Application implements NoContextComponent
 
                 $language_node = $dom_xpath->query('/packages/package')->item(0);
 
-                $language_list[$dom_xpath->query('extra/isocode', $language_node)->item(0)->nodeValue] = $dom_xpath->query(
-                    'name',
-                    $language_node)->item(0)->nodeValue;
+                $language_list[$dom_xpath->query('extra/isocode', $language_node)->item(0)->nodeValue] =
+                    $dom_xpath->query(
+                        'name', $language_node
+                    )->item(0)->nodeValue;
             }
         }
 
@@ -200,7 +200,7 @@ abstract class Manager extends Application implements NoContextComponent
      */
     protected function getWizardHeader()
     {
-        if (! isset($this->wizardHeader))
+        if (!isset($this->wizardHeader))
         {
             $currentAction = $this->get_action();
             $wizardActions = $this->getWizardHeaderActions();
@@ -208,12 +208,11 @@ abstract class Manager extends Application implements NoContextComponent
             $this->wizardHeader = new WizardHeader();
             $this->wizardHeader->setStepTitles(
                 array(
-                    Translation::get('IntroductionComponentTitle'),
-                    Translation::get('RequirementsComponentTitle'),
-                    Translation::get('LicenseComponentTitle'),
-                    Translation::get('SettingsComponentTitle'),
-                    Translation::get('OverviewComponentTitle'),
-                    Translation::get('InstallerComponentTitle')));
+                    Translation::get('IntroductionComponentTitle'), Translation::get('RequirementsComponentTitle'),
+                    Translation::get('LicenseComponentTitle'), Translation::get('SettingsComponentTitle'),
+                    Translation::get('OverviewComponentTitle'), Translation::get('InstallerComponentTitle')
+                )
+            );
 
             $this->wizardHeader->setSelectedStepIndex(array_search($currentAction, $wizardActions));
         }
@@ -228,12 +227,9 @@ abstract class Manager extends Application implements NoContextComponent
     protected function getWizardHeaderActions()
     {
         return array(
-            self::ACTION_INTRODUCTION,
-            self::ACTION_REQUIREMENTS,
-            self::ACTION_LICENSE,
-            self::ACTION_SETTINGS,
-            self::ACTION_OVERVIEW,
-            self::ACTION_INSTALL_PLATFORM);
+            self::ACTION_INTRODUCTION, self::ACTION_REQUIREMENTS, self::ACTION_LICENSE, self::ACTION_SETTINGS,
+            self::ACTION_OVERVIEW, self::ACTION_INSTALL_PLATFORM
+        );
     }
 
     /**
@@ -241,24 +237,25 @@ abstract class Manager extends Application implements NoContextComponent
      */
     protected function checkInstallationAllowed()
     {
-        $fileConfigurationLocator = $this->getService('chamilo.configuration.service.file_configuration_locator');
+        $fileConfigurationLocator = $this->getService(FileConfigurationLocator::class);
 
-        if (! $fileConfigurationLocator->isAvailable())
+        if (!$fileConfigurationLocator->isAvailable())
         {
             return true;
         }
         else
         {
             $installationBlocked = (bool) Configuration::getInstance()->get_setting(
-                array('Chamilo\Core\Admin', 'installation_blocked'));
+                array('Chamilo\Core\Admin', 'installation_blocked')
+            );
 
             if ($installationBlocked)
             {
                 throw new \Exception(
                     Translation::getInstance()->getTranslation(
-                        'InstallationBlockedByAdministrator',
-                        null,
-                        self::context()));
+                        'InstallationBlockedByAdministrator', null, self::context()
+                    )
+                );
             }
         }
     }

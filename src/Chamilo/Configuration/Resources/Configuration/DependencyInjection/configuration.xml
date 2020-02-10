@@ -1,78 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container xmlns="http://symfony.com/schema/dic/services"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-	<services>
-		<service id="chamilo.configuration.service.configuration_consulter"
-			class="Chamilo\Configuration\Service\ConfigurationConsulter">
-			<argument type="service"
-				id="chamilo.configuration.service.configuration_cache_loader" />
-		</service>
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true" autoconfigure="true" public="true"/>
+        <service
+                id="Chamilo\Configuration\Service\ConfigurationConsulter">
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\ConfigurationCacheLoader"/>
+        </service>
 
-        <service id="Chamilo\Configuration\Service\ConfigurationConsulter" alias="chamilo.configuration.service.configuration_consulter" />
-		<service id="Chamilo\Configuration\Service\ConfigurationConsulter"
-			alias="chamilo.configuration.service.configuration_consulter" />
+        <service id="Chamilo\Configuration\Service\ConfigurationCacheLoader"
+                 class="Chamilo\Configuration\Service\DataCacheLoader">
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\ConfigurationLoader"/>
+        </service>
 
-		<service id="chamilo.configuration.service.configuration_cache_loader"
-			class="Chamilo\Configuration\Service\DataCacheLoader">
-			<argument type="service"
-				id="chamilo.configuration.service.configuration_loader" />
-		</service>
+        <service id="Chamilo\Configuration\Service\ConfigurationLoader"
+                 class="Chamilo\Configuration\Service\CacheableAggregatedDataLoader">
+            <factory service="Chamilo\Configuration\Factory\ConfigurationLoaderFactory"
+                     method="getConfigurationLoader"/>
+        </service>
 
-		<service id="chamilo.configuration.service.configuration_loader"
-			class="Chamilo\Configuration\Service\CacheableAggregatedDataLoader">
-			<factory service="chamilo.configuration.factory.configuration_loader_factory"
-				method="getConfigurationLoader" />
-		</service>
+        <service id="Chamilo\Configuration\Factory\ConfigurationLoaderFactory">
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\FileConfigurationLoader"/>
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\StorageConfigurationLoader"/>
+        </service>
 
-		<service id="chamilo.configuration.factory.configuration_loader_factory"
-			class="Chamilo\Configuration\Factory\ConfigurationLoaderFactory">
-			<argument type="service"
-				id="chamilo.configuration.service.file_configuration_loader" />
-			<argument type="service"
-				id="chamilo.configuration.service.storage_configuration_loader" />
-		</service>
+        <service
+                id="Chamilo\Configuration\Service\FileConfigurationLoader">
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\FileConfigurationLocator"/>
+        </service>
 
-		<service id="chamilo.configuration.service.file_configuration_loader"
-			class="Chamilo\Configuration\Service\FileConfigurationLoader">
-			<argument type="service"
-				id="chamilo.configuration.service.file_configuration_locator" />
-		</service>
+        <service id="Chamilo\Configuration\Service\FileConfigurationLocator">
+            <argument type="service" id="Chamilo\Libraries\File\PathBuilder"/>
+        </service>
 
-		<service id="chamilo.configuration.service.file_configuration_locator"
-			class="Chamilo\Configuration\Service\FileConfigurationLocator">
-			<argument type="service" id="chamilo.libraries.file.path_builder" />
-		</service>
+        <service
+                id="Chamilo\Configuration\Service\StorageConfigurationLoader">
+            <argument type="service"
+                      id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository"/>
+        </service>
 
-		<service id="chamilo.configuration.service.storage_configuration_loader"
-			class="Chamilo\Configuration\Service\StorageConfigurationLoader">
-			<argument type="service"
-				id="chamilo.configuration.storage.repository.configuration_repository" />
-		</service>
+        <service
+                id="Chamilo\Configuration\Service\ConfigurationService">
+            <argument type="service"
+                      id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository"/>
+        </service>
 
-		<service id="chamilo.configuration.service.configuration_service"
-			class="Chamilo\Configuration\Service\ConfigurationService">
-			<argument type="service"
-				id="chamilo.configuration.storage.repository.configuration_repository" />
-		</service>
+        <service
+                id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository">
+            <argument type="service"
+                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
+        </service>
 
-		<service
-			id="chamilo.configuration.storage.repository.configuration_repository"
-			class="Chamilo\Configuration\Storage\Repository\ConfigurationRepository">
-			<argument type="service"
-				id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
-		</service>
+        <service id="Chamilo\Configuration\Service\FileConfigurationConsulter"
+                 class="Chamilo\Configuration\Service\ConfigurationConsulter">
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\FileConfigurationLoader"/>
+        </service>
 
-		<service id="chamilo.configuration.service.file_configuration_consulter"
-			class="Chamilo\Configuration\Service\ConfigurationConsulter">
-			<argument type="service"
-				id="chamilo.configuration.service.file_configuration_loader" />
-		</service>
-
-		<service id="chamilo.configuration.package.service.package_factory"
-			class="Chamilo\Configuration\Package\Service\PackageFactory">
-			<argument type="service" id="chamilo.libraries.file.path_builder" />
-			<argument type="service" id="chamilo.libraries.platform.translation" />
-		</service>
-	</services>
+        <service
+                id="Chamilo\Configuration\Package\Service\PackageFactory">
+            <argument type="service" id="Chamilo\Libraries\File\PathBuilder"/>
+            <argument type="service" id="Chamilo\Libraries\Platform\Translation"/>
+        </service>
+    </services>
 </container>

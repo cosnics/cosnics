@@ -1,6 +1,10 @@
 <?php
 namespace Chamilo\Configuration;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Configuration\Service\LanguageConsulter;
+use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\DBAL\DriverManager;
@@ -42,7 +46,7 @@ class Configuration
      */
     public function getConfigurationConsulter()
     {
-        return $this->getService('chamilo.configuration.service.configuration_consulter');
+        return $this->getService(ConfigurationConsulter::class);
     }
 
     /**
@@ -51,7 +55,7 @@ class Configuration
      */
     public function getRegistrationConsulter()
     {
-        return $this->getService('chamilo.configuration.service.registration_consulter');
+        return $this->getService(RegistrationConsulter::class);
     }
 
     /**
@@ -60,7 +64,7 @@ class Configuration
      */
     public function getLanguageConsulter()
     {
-        return $this->getService('chamilo.configuration.service.language_consulter');
+        return $this->getService(LanguageConsulter::class);
     }
 
     /**
@@ -69,7 +73,7 @@ class Configuration
      */
     public function getFileConfigurationLocator()
     {
-        return $this->getService('chamilo.configuration.service.file_configuration_locator');
+        return $this->getService(FileConfigurationLocator::class);
     }
 
     /**

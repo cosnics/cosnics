@@ -4,42 +4,36 @@
         xmlns="http://symfony.com/schema/dic/services"
         xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults autowire="true" autoconfigure="true" public="true"/>
         <service
-                id="chamilo.libraries.file.path"
-                class="Chamilo\Libraries\File\Path">
+                id="Chamilo\Libraries\File\Path">
             <argument
                     type="service"
-                    id="chamilo.libraries.architecture.classname_utilities"/>
+                    id="Chamilo\Libraries\Architecture\ClassnameUtilities"/>
         </service>
 
         <service
-                id="chamilo.libraries.file.path_builder"
-                class="Chamilo\Libraries\File\PathBuilder">
+                id="Chamilo\Libraries\File\PathBuilder">
             <argument
                     type="service"
-                    id="chamilo.libraries.architecture.classname_utilities"/>
+                    id="Chamilo\Libraries\Architecture\ClassnameUtilities"/>
         </service>
 
         <service
-                alias="chamilo.libraries.file.path_builder"
-                id="Chamilo\Libraries\File\PathBuilder"/>
-
-        <service
-                id="chamilo.libraries.file.configurable_path_builder"
-                class="Chamilo\Libraries\File\ConfigurablePathBuilder">
+                id="Chamilo\Libraries\File\ConfigurablePathBuilder">
             <argument>%chamilo.configuration.storage%</argument>
         </service>
 
-        <service id="chamilo.libraries.file.compression.file_compression"
-                 class="Chamilo\Libraries\File\Compression\Filecompression">
+        <service
+                id="Chamilo\Libraries\File\Compression\Filecompression">
             <factory class="Chamilo\Libraries\File\Compression\Filecompression" method="factory"/>
         </service>
 
-        <service id="chamilo.libraries.file.compression.archive_creator.archive_creator"
-                 class="Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator">
-            <argument type="service" id="symfony.component.filesystem.filesystem"/>
-            <argument type="service" id="chamilo.libraries.file.compression.file_compression"/>
-            <argument type="service" id="chamilo.libraries.file.configurable_path_builder"/>
+        <service
+                id="Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator">
+            <argument type="service" id="Symfony\Component\Filesystem\Filesystem"/>
+            <argument type="service" id="Chamilo\Libraries\File\Compression\Filecompression"/>
+            <argument type="service" id="Chamilo\Libraries\File\ConfigurablePathBuilder"/>
         </service>
     </services>
 </container>

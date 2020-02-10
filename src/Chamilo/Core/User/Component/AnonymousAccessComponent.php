@@ -6,6 +6,7 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Form\AnonymousUserForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
+use Chamilo\Core\User\Roles\Service\UserRoleService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
@@ -159,8 +160,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
 
         if (empty($parameters) || ($parameters[self::PARAM_CONTEXT] == self::context() &&
                 $parameters[self::PARAM_ACTION] == self::ACTION_ACCESS_ANONYMOUSLY) ||
-            $parameters[self::PARAM_CONTEXT] == 'Chamilo\Core\Home'
-        )
+            $parameters[self::PARAM_CONTEXT] == 'Chamilo\Core\Home')
         {
             $parameters = array(
                 self::PARAM_CONTEXT => Configuration::getInstance()->get_setting(
@@ -215,7 +215,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
      */
     protected function getUserRoleService()
     {
-        return $this->getService('chamilo.core.user.roles.service.user_role_service');
+        return $this->getService(UserRoleService::class);
     }
 
     /**
@@ -223,6 +223,6 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
      */
     public function getConfigurationConsulter()
     {
-        return $this->getService('chamilo.configuration.service.configuration_consulter');
+        return $this->getService(ConfigurationConsulter::class);
     }
 }

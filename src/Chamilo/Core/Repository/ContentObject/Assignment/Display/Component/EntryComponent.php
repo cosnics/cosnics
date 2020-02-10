@@ -15,6 +15,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreServic
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -92,8 +93,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $this->processSubmittedData($scoreForm);
 
         return $this->getTwig()->render(
-            Manager::context() . ':EntryViewer.html.twig',
-            $this->getTemplateProperties($scoreForm)
+            Manager::context() . ':EntryViewer.html.twig', $this->getTemplateProperties($scoreForm)
         );
     }
 
@@ -153,21 +153,16 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $assignment = $this->get_root_content_object();
 
         $baseParameters = [
-            'HAS_ENTRY' => false,
-            'IS_USER_PART_OF_ENTITY' => $this->getDataProvider()->isUserPartOfEntity(
+            'HAS_ENTRY' => false, 'IS_USER_PART_OF_ENTITY' => $this->getDataProvider()->isUserPartOfEntity(
                 $this->getUser(), $this->getEntityType(), $this->getEntityIdentifier()
-            ),
-            'CHANGE_ENTITY_URL' => $this->get_url([self::PARAM_ENTITY_ID => '__ENTITY_ID__']),
-            'HEADER' => $this->render_header(),
-            'FOOTER' => $this->render_footer(),
+            ), 'CHANGE_ENTITY_URL' => $this->get_url([self::PARAM_ENTITY_ID => '__ENTITY_ID__']),
+            'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
             'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
             'NAVIGATOR_BUTTON_TOOLBAR' => $this->getNavigatorButtonToolbarRenderer()->render(),
             'ASSIGNMENT_TITLE' => $this->get_root_content_object()->get_title(),
-            'ASSIGNMENT_RENDITION' => $this->renderAssignment(),
-            'ATTACHMENT_VIEWER_URL' => $this->get_url(
+            'ASSIGNMENT_RENDITION' => $this->renderAssignment(), 'ATTACHMENT_VIEWER_URL' => $this->get_url(
                 [
-                    self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
-                    self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__'
+                    self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT, self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__'
                 ]
             )
         ];
@@ -188,8 +183,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $this->buildBridgeServices();
 
         $feedbackManager = $this->getApplicationFactory()->getApplication(
-            "Chamilo\Core\Repository\Feedback", $configuration,
-            \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE
+            "Chamilo\Core\Repository\Feedback", $configuration, \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE
         );
 
         $feedbackManagerHtml = $feedbackManager->run();
@@ -197,46 +191,37 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $contentObjects = $assignment->getAutomaticFeedbackObjects();
 
         $extendParameters = [
-            'HAS_ENTRY' => true,
-            'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject() ?
+            'HAS_ENTRY' => true, 'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject() ?
                 $this->getEntry()->getContentObject()->get_title() :
                 Translation::getInstance()->getTranslation('SubmissionRemoved', null, Manager::context()),
             'CONTENT_OBJECT_RENDITION' => $this->getEntry()->getContentObject() ? $this->renderContentObject() : null,
-            'FEEDBACK_MANAGER' => $feedbackManagerHtml,
-            'FEEDBACK_COUNT' => $this->count_feedbacks(),
+            'FEEDBACK_MANAGER' => $feedbackManagerHtml, 'FEEDBACK_COUNT' => $this->count_feedbacks(),
             'SUBMITTED_DATE' => $submittedDate,
             'SUBMITTED_BY' => $this->getUserService()->getUserFullNameByIdentifier($this->getEntry()->getUserId()),
-            'SCORE_FORM' => $scoreForm->createView(),
-            'SCORE' => $this->getScore(),
+            'SCORE_FORM' => $scoreForm->createView(), 'SCORE' => $this->getScore(),
             'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
             'ENTRY_TABLE' => $this->renderEntryTable(),
             'ENTRY_COUNT' => $this->getDataProvider()->countEntriesForEntityTypeAndId(
                 $this->getEntityType(), $this->getEntityIdentifier()
-            ),
-            'SHOW_AUTOMATIC_FEEDBACK' => $assignment->isAutomaticFeedbackVisible(),
+            ), 'SHOW_AUTOMATIC_FEEDBACK' => $assignment->isAutomaticFeedbackVisible(),
             'AUTOMATIC_FEEDBACK_TEXT' => $assignment->get_automatic_feedback_text(),
-            'AUTOMATIC_FEEDBACK_CONTENT_OBJECTS' => $contentObjects,
-            'UPLOAD_ENTRY_ATTACHMENT_URL' => $this->get_url(
+            'AUTOMATIC_FEEDBACK_CONTENT_OBJECTS' => $contentObjects, 'UPLOAD_ENTRY_ATTACHMENT_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
                     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::ACTION_UPLOAD_ENTRY_ATTACHMENT,
                     self::PARAM_ENTRY_ID => $this->getEntry()->getId()
                 ]
-            ),
-            'DELETE_ENTRY_ATTACHMENT_URL' => $this->get_url(
+            ), 'DELETE_ENTRY_ATTACHMENT_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
                     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::ACTION_DELETE_ENTRY_ATTACHMENT
                 ]
-            ),
-            'ATTACHMENT_VIEWER_URL' => $this->get_url(
+            ), 'ATTACHMENT_VIEWER_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
-                    self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__',
-                    self::PARAM_ENTRY_ID => $this->getEntry()->getId()
+                    self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__', self::PARAM_ENTRY_ID => $this->getEntry()->getId()
                 ]
-            ),
-            'ATTACHED_CONTENT_OBJECTS' => $this->getAttachedContentObjects(),
+            ), 'ATTACHED_CONTENT_OBJECTS' => $this->getAttachedContentObjects(),
             'SHOW_COMPACT_FEEDBACK' => $this->getConfigurationConsulter()->getSetting(
                 ['Chamilo\Core\Repository\ContentObject\Assignment', 'show_compact_feedback']
             )
@@ -326,10 +311,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $contentObject = $this->getEntry()->getContentObject();
 
         $display = ContentObjectRenditionImplementation::factory(
-            $contentObject,
-            ContentObjectRendition::FORMAT_HTML,
-            ContentObjectRendition::VIEW_DESCRIPTION,
-            $this
+            $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this
         );
 
         return $display->render();
@@ -344,10 +326,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $contentObject = $this->get_root_content_object();
 
         $display = ContentObjectRenditionImplementation::factory(
-            $contentObject,
-            ContentObjectRendition::FORMAT_HTML,
-            ContentObjectRendition::VIEW_DESCRIPTION,
-            $this
+            $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this
         );
 
         return $display->render();
@@ -382,9 +361,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected function renderEntryTable()
     {
         $table = $this->getDataProvider()->getEntryTableForEntityTypeAndId(
-            $this,
-            $this->getEntityType(),
-            $this->getEntityIdentifier()
+            $this, $this->getEntityType(), $this->getEntityIdentifier()
         );
 
         if (!empty($table))
@@ -480,26 +457,19 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $buttonGroup = new ButtonGroup();
 
-            if (
-                $this->getRightsService()->canUserCreateEntry(
+            if ($this->getRightsService()->canUserCreateEntry(
                     $this->getUser(), $this->getAssignment(), $this->getEntityType(), $this->getEntityIdentifier()
-                ) && $this->getAssignment()->canSubmit()
-            )
+                ) && $this->getAssignment()->canSubmit())
             {
                 $buttonGroup->addButton(
                     new Button(
-                        Translation::get('AddNewEntry'),
-                        new FontAwesomeGlyph('plus'),
-                        $this->get_url(
-                            [
-                                self::PARAM_ACTION => self::ACTION_CREATE,
-                                self::PARAM_ENTITY_TYPE => $this->getEntityType(),
-                                self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
-                            ]
-                        ),
-                        Button::DISPLAY_ICON_AND_LABEL,
-                        false,
-                        'btn-success'
+                        Translation::get('AddNewEntry'), new FontAwesomeGlyph('plus'), $this->get_url(
+                        [
+                            self::PARAM_ACTION => self::ACTION_CREATE,
+                            self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                            self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
+                        ]
+                    ), Button::DISPLAY_ICON_AND_LABEL, false, 'btn-success'
                     )
                 );
             }
@@ -538,31 +508,25 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             if ($this->getEntry() instanceof Entry)
             {
                 $splitDropdownButton = new SplitDropdownButton(
-                    Translation::get('DownloadAll'),
-                    new FontAwesomeGlyph('download'),
-                    $this->get_url(
-                        [
-                            self::PARAM_ACTION => self::ACTION_DOWNLOAD,
-                            self::PARAM_ENTITY_TYPE => $this->getEntityType(),
-                            self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
-                        ],
-                        [self::PARAM_ENTRY_ID]
-                    )
+                    Translation::get('DownloadAll'), new FontAwesomeGlyph('download'), $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_DOWNLOAD, self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                        self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
+                    ], [self::PARAM_ENTRY_ID]
+                )
                 );
 
                 $splitDropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('DownloadCurrent'),
-                        new FontAwesomeGlyph('download'),
-                        $this->get_url(
-                            [
-                                self::PARAM_ACTION => self::ACTION_DOWNLOAD,
-                                self::PARAM_ENTITY_TYPE => $this->getEntityType(),
-                                self::PARAM_ENTITY_ID => $this->getEntityIdentifier(),
-                                self::PARAM_ENTRY_ID => $this->getEntry()->getId()
-                            ]
+                        Translation::get('DownloadCurrent'), new FontAwesomeGlyph('download'), $this->get_url(
+                        [
+                            self::PARAM_ACTION => self::ACTION_DOWNLOAD,
+                            self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                            self::PARAM_ENTITY_ID => $this->getEntityIdentifier(),
+                            self::PARAM_ENTRY_ID => $this->getEntry()->getId()
+                        ]
 
-                        )
+                    )
                     )
                 );
 
@@ -578,20 +542,16 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                         array(
                             new Button(
                                 Translation::get(
-                                    'BrowseEntities',
-                                    [
+                                    'BrowseEntities', [
                                         'NAME' => strtolower(
                                             $this->getDataProvider()->getPluralEntityNameByType($this->getEntityType())
                                         )
                                     ]
-                                ),
-                                new FontAwesomeGlyph('user'),
-                                $this->get_url(
-                                    [
-                                        self::PARAM_ACTION => self::ACTION_VIEW
-                                    ],
-                                    [self::PARAM_ENTRY_ID]
-                                )
+                                ), new FontAwesomeGlyph('user'), $this->get_url(
+                                [
+                                    self::PARAM_ACTION => self::ACTION_VIEW
+                                ], [self::PARAM_ENTRY_ID]
+                            )
                             )
                         )
                     )
@@ -639,28 +599,21 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $entityNavigatorActions->addButton(
                 new Button(
                     $translator->getTranslation('PreviousEntity', ['ENTITY_NAME' => strtolower($entityName)]),
-                    new FontAwesomeGlyph('backward'),
-                    $this->getPreviousEntityUrl(),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    new FontAwesomeGlyph('backward'), $this->getPreviousEntityUrl(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $entityNavigatorActions->addButton(
                 new Button(
-                    '<span class="badge" style="color: white; background-color: #5bc0de; height: 19px; top: 0;">'
-                    . $currentEntityPosition . ' / ' . $entitiesCount . '</span>',
-                    null,
-                    '#',
-                    ToolbarItem::DISPLAY_LABEL
+                    '<span class="badge" style="color: white; background-color: #5bc0de; height: 19px; top: 0;">' .
+                    $currentEntityPosition . ' / ' . $entitiesCount . '</span>', null, '#', ToolbarItem::DISPLAY_LABEL
                 )
             );
 
             $entityNavigatorActions->addButton(
                 new Button(
                     $translator->getTranslation('NextEntity', ['ENTITY_NAME' => strtolower($entityName)]),
-                    new FontAwesomeGlyph('forward'),
-                    $this->getNextEntityUrl(),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    new FontAwesomeGlyph('forward'), $this->getNextEntityUrl(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
@@ -669,8 +622,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $selectEntityButton = new DropdownButton(
                 $this->getDataProvider()->renderEntityNameByEntityTypeAndEntityId(
                     $this->getEntityType(), $this->getEntityIdentifier()
-                ),
-                new FontAwesomeGlyph('user')
+                ), new FontAwesomeGlyph('user')
             );
 
             $selectEntityButton->setDropdownClasses('dropdown-entities');
@@ -716,29 +668,22 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $entriesNavigatorActions->addButton(
                 new Button(
-                    $translator->getTranslation('EarlierEntry'),
-                    new FontAwesomeGlyph('backward'),
-                    $this->getPreviousEntryUrl(),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $translator->getTranslation('EarlierEntry'), new FontAwesomeGlyph('backward'),
+                    $this->getPreviousEntryUrl(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $entriesNavigatorActions->addButton(
                 new Button(
-                    '<span class="badge" style="color: white; background-color: #28a745; height: 19px; top: 0;">'
-                    . $currentEntryPosition . ' / ' . $entriesCount . '</span>',
-                    null,
-                    '#',
-                    ToolbarItem::DISPLAY_LABEL
+                    '<span class="badge" style="color: white; background-color: #28a745; height: 19px; top: 0;">' .
+                    $currentEntryPosition . ' / ' . $entriesCount . '</span>', null, '#', ToolbarItem::DISPLAY_LABEL
                 )
             );
 
             $entriesNavigatorActions->addButton(
                 new Button(
-                    $translator->getTranslation('LaterEntry'),
-                    new FontAwesomeGlyph('forward'),
-                    $this->getNextEntryUrl(),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $translator->getTranslation('LaterEntry'), new FontAwesomeGlyph('forward'),
+                    $this->getNextEntryUrl(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
@@ -878,16 +823,12 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
             $owner = $this->getUserService()->getUserFullNameByIdentifier($contentObject->get_owner_id());
 
-            $contentObjectAttachments[] =
-                [
-                    'attachment_id' => $entryAttachment->getId(),
-                    'content_object' => [
-                        'id' => $contentObject->getId(),
-                        'title' => $contentObject->get_title(),
-                        'user' => $owner,
-                        'date' => DatetimeUtilities::format_locale_date(null, $contentObject->get_creation_date())
-                    ]
-                ];
+            $contentObjectAttachments[] = [
+                'attachment_id' => $entryAttachment->getId(), 'content_object' => [
+                    'id' => $contentObject->getId(), 'title' => $contentObject->get_title(), 'user' => $owner,
+                    'date' => DatetimeUtilities::format_locale_date(null, $contentObject->get_creation_date())
+                ]
+            ];
         }
 
         return $contentObjectAttachments;
@@ -898,6 +839,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function getUserService()
     {
-        return $this->getService('chamilo.core.user.service.user_service');
+        return $this->getService(UserService::class);
     }
 }

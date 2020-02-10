@@ -2,15 +2,18 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 
 /**
  * This class represents the manager for the ephorus tool
- * 
+ *
  * @author Pieterjan Broekaert - Hogeschool Gent
  * @author Tom Goethals - Hogeschool Gent
  * @author Vanpoucke Sven - Hogeschool Gent
@@ -47,7 +50,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function validateAccess()
     {
-        if(!$this->canUseEphorus())
+        if (!$this->canUseEphorus())
         {
             throw new NotAllowedException();
         }
@@ -72,7 +75,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             throw new NoObjectSelectedException($requestTranslation);
         }
 
-        if(!is_array($ids))
+        if (!is_array($ids))
         {
             $ids = array($ids);
         }
@@ -100,7 +103,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function getRequestManager()
     {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.service.request_manager');
+        return $this->getService(RequestManager::class);
     }
 
     /**
@@ -108,7 +111,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function getReportRenderer()
     {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.renderer.report_renderer');
+        return $this->getService(ReportRenderer::class);
     }
 
     /**
@@ -116,6 +119,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function getContentObjectRepository()
     {
-        return $this->getService('chamilo.core.repository.workspace.repository.content_object_repository');
+        return $this->getService(ContentObjectRepository::class);
     }
 }

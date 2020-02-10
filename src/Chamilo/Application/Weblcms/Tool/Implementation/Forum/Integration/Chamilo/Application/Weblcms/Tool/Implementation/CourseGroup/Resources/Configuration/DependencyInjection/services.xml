@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container
-    xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="chamilo.application.weblcms.tool.implementation.forum.integration.chamilo.application.weblcms.tool.implementation.course_group.form.course_group_form_decorator"
-                 class="Chamilo\Application\Weblcms\Tool\Implementation\Forum\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupFormDecorator">
-            <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.service.course_group_publication_category_service" />
-            <tag name="chamilo.application.weblcms.tool.implementation.course_group.decorator.form" />
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Forum\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupFormDecorator">
+            <argument type="service"
+                      id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService"/>
+            <tag name="chamilo.application.weblcms.tool.implementation.course_group.decorator.form"/>
         </service>
 
-        <service id="chamilo.application.weblcms.tool.implementation.forum.integration.chamilo.application.weblcms.tool.implementation.course_group.service.course_group_service_decorator"
-                 class="Chamilo\Application\Weblcms\Tool\Implementation\Forum\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupServiceDecorator">
-            <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.service.course_group_publication_category_service" />
-            <tag name="chamilo.application.weblcms.tool.implementation.course_group.decorator.service" />
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Forum\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupServiceDecorator">
+            <argument type="service"
+                      id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService"/>
+            <tag name="chamilo.application.weblcms.tool.implementation.course_group.decorator.service"/>
         </service>
 
-        <service id="chamilo.application.weblcms.tool.implementation.forum.integration.chamilo.application.weblcms.tool.implementation.course_group.service.course_group_actions_decorator"
-                 class="Chamilo\Application\Weblcms\Tool\Implementation\Forum\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupActionsDecorator">
-            <argument type="service" id="chamilo.libraries.architecture.application.routing.url_generator" />
-            <argument type="service" id="symfony.component.translation.translator" />
-            <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.service.course_group_publication_category_service" />
-            <tag name="chamilo.application.weblcms.tool.implementation.course_group.decorator.actions" />
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Forum\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupActionsDecorator">
+            <argument type="service"
+                      id="Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator"/>
+            <argument type="service"
+                      id="Symfony\Component\Translation\Translator"/>
+            <argument type="service"
+                      id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService"/>
+            <tag name="chamilo.application.weblcms.tool.implementation.course_group.decorator.actions"/>
         </service>
     </services>
 </container>

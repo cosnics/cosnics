@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\DependencyInjection;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -29,9 +30,7 @@ class CourseGroupDecoratorsCompilerPass implements CompilerPassInterface
     {
         if ($container->hasDefinition('chamilo.application.weblcms.tool.implementation.course_group.decorator.manager'))
         {
-            $definition = $container->getDefinition(
-                'chamilo.application.weblcms.tool.implementation.course_group.decorator.manager'
-            );
+            $definition = $container->getDefinition(CourseGroupDecoratorsManager::class);
 
             $this->addFormDecorators($container, $definition);
             $this->addServiceDecorators($container, $definition);

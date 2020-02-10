@@ -5,6 +5,7 @@ use Chamilo\Application\Calendar\Architecture\ExternalCalendar;
 use Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
@@ -56,7 +57,7 @@ class CalendarEventDataProvider extends ExternalCalendar
      */
     protected function getAvailabilityService()
     {
-        return $this->getService('chamilo.application.calendar.service.availability_service');
+        return $this->getService(AvailabilityService::class);
     }
 
     /**

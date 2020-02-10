@@ -3,8 +3,10 @@ namespace Chamilo\Libraries\Ajax\Component;
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Filter\CssImportFilter;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\CssFileAsset;
 use Chamilo\Libraries\Platform\Session\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,9 +33,9 @@ class CkeditorCssComponent extends \Chamilo\Libraries\Ajax\Manager implements No
         $contentObjectTypes = \Chamilo\Core\Repository\Storage\DataManager::get_registered_types();
 
         /** @var PathBuilder $pathUtilities */
-        $pathUtilities = $this->getService('chamilo.libraries.file.path_builder');
-        $classNameUtilities = $this->getService('chamilo.libraries.architecture.classname_utilities');
-        $themeUtilities = $this->getService('chamilo.libraries.format.theme');
+        $pathUtilities = $this->getService(PathBuilder::class);
+        $classNameUtilities = $this->getService(ClassnameUtilities::class);
+        $themeUtilities = $this->getService(Theme::Class);
 
         foreach ($contentObjectTypes as $contentObjectType)
         {

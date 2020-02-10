@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Package;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
@@ -34,7 +35,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      */
     public function getHashingUtilities()
     {
-        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+        return $this->getService(HashingUtilities::class);
     }
 
     /**

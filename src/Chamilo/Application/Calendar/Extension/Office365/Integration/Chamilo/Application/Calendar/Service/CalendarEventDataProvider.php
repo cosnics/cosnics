@@ -3,9 +3,13 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\A
 
 use Chamilo\Application\Calendar\Architecture\ExternalCalendar;
 use Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService;
 
 /**
  *
@@ -87,7 +91,7 @@ class CalendarEventDataProvider extends ExternalCalendar
      */
     protected function getAvailabilityService()
     {
-        return $this->getService('chamilo.application.calendar.service.availability_service');
+        return $this->getService(AvailabilityService::class);
     }
 
     /**
@@ -251,7 +255,7 @@ class CalendarEventDataProvider extends ExternalCalendar
      */
     protected function getCalendarService()
     {
-        return $this->getService('chamilo.libraries.protocol.microsoft.graph.service.calendar_service');
+        return $this->getService(CalendarService::class);
     }
 
     /**
@@ -260,7 +264,7 @@ class CalendarEventDataProvider extends ExternalCalendar
      */
     protected function getConfigurationConsulter()
     {
-        return $this->getService('chamilo.configuration.service.configuration_consulter');
+        return $this->getService(ConfigurationConsulter::class);
     }
 
     /**
@@ -269,6 +273,6 @@ class CalendarEventDataProvider extends ExternalCalendar
      */
     protected function getConfigurablePathBuilder()
     {
-        return $this->getService('chamilo.libraries.file.configurable_path_builder');
+        return $this->getService(ConfigurablePathBuilder::class);
     }
 }

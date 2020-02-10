@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container
-    xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults autowire="true" public="true" />
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
 
-        <prototype namespace="Chamilo\Core\Queue\" resource="../../../{Service, Storage/Repository}/*" exclude="../../../Service/Producer"/>
+        <prototype namespace="Chamilo\Core\Queue\"
+                   resource="../../../{Service, Storage/Repository}/*"
+                   exclude="../../../Service/Producer"/>
 
-        <service id="Chamilo\Core\Queue\Service\Producer\ProducerFactory" autowire="true" />
+        <service id="Chamilo\Core\Queue\Service\Producer\ProducerFactory"/>
 
         <service id="Chamilo\Core\Queue\Storage\Repository\JobEntityRepository">
-            <factory service="doctrine.orm.entity_manager" method="getRepository" />
+            <factory service="Doctrine\ORM\EntityManager"
+                     method="getRepository"/>
             <argument>Chamilo\Core\Queue\Storage\Entity\Job</argument>
         </service>
 
-        <service id="Chamilo\Core\Queue\Service\Producer\ProducerInterface" class="Chamilo\Core\Queue\Service\Producer\ProducerInterface">
-            <factory service="Chamilo\Core\Queue\Service\Producer\ProducerFactory" method="createProducer" />
+        <service id="Chamilo\Core\Queue\Service\Producer\ProducerInterface">
+            <factory service="Chamilo\Core\Queue\Service\Producer\ProducerFactory"
+                     method="createProducer"/>
         </service>
 
-        <service id="Interop\Queue\PsrContext" class="Interop\Queue\PsrContext">
-            <factory service="Chamilo\Core\Queue\Service\PsrContextFactory" method="createContext" />
+        <service id="Interop\Queue\PsrContext">
+            <factory service="Chamilo\Core\Queue\Service\PsrContextFactory"
+                     method="createContext"/>
         </service>
 
-        <prototype namespace="Chamilo\Core\Queue\Console\Command\" resource="../../../Console/Command/*">
+        <prototype namespace="Chamilo\Core\Queue\Console\Command\"
+                   resource="../../../Console/Command/*">
             <tag name="chamilo.libraries.console.command"/>
         </prototype>
 

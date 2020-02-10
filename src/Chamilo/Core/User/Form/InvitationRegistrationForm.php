@@ -8,6 +8,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
@@ -50,7 +51,7 @@ class InvitationRegistrationForm extends FormValidator
      */
     public function getHashingUtilities()
     {
-        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+        return $this->getService(HashingUtilities::class);
     }
 
     /**
@@ -59,41 +60,36 @@ class InvitationRegistrationForm extends FormValidator
     public function build_basic_form()
     {
         $this->add_information_message(
-            'introduction',
-            null,
-            Translation::get('InvitedUserRegistrationIntroduction'),
-            true);
+            'introduction', null, Translation::get('InvitedUserRegistrationIntroduction'), true
+        );
 
         $this->addElement('category', Translation::get('Profile'));
 
         $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_USERNAME,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            'required'
+        );
         $this->addRule(User::PROPERTY_USERNAME, Translation::get('UsernameNotAvailable'), 'username_available');
 
         // $this->add_warning_message('password_requirements', null, Translation :: get('GeneralPasswordRequirements'));
 
         $this->addElement(
-            'password',
-            self::PASSWORD,
-            Translation::get('Password'),
-            array('size' => 40, 'autocomplete' => 'off', 'id' => 'password'));
+            'password', self::PASSWORD, Translation::get('Password'),
+            array('size' => 40, 'autocomplete' => 'off', 'id' => 'password')
+        );
         $this->addElement(
-            'password',
-            self::PASSWORD_CONFIRMATION,
-            Translation::get('PasswordConfirmation'),
-            array('size' => 40, 'autocomplete' => 'off'));
+            'password', self::PASSWORD_CONFIRMATION, Translation::get('PasswordConfirmation'),
+            array('size' => 40, 'autocomplete' => 'off')
+        );
         $this->addRule(array(self::PASSWORD, self::PASSWORD_CONFIRMATION), Translation::get('PassTwo'), 'compare');
         $this->addRule(
-            self::PASSWORD,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            self::PASSWORD, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
         $this->addRule(
-            self::PASSWORD_CONFIRMATION,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            self::PASSWORD_CONFIRMATION, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            'required'
+        );
 
         $this->addElement('category');
 
@@ -101,15 +97,15 @@ class InvitationRegistrationForm extends FormValidator
 
         $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_FIRSTNAME,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            'required'
+        );
 
         $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_LASTNAME,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            'required'
+        );
 
         // Email
         $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array("size" => "50"));
@@ -124,23 +120,21 @@ class InvitationRegistrationForm extends FormValidator
         {
             $this->addElement('category', Translation::get('Information'));
             $this->addElement(
-                'textarea',
-                'conditions',
-                Translation::get('TermsAndConditions'),
-                array('cols' => 80, 'rows' => 20, 'disabled' => 'disabled', 'style' => 'background-color: white;'));
+                'textarea', 'conditions', Translation::get('TermsAndConditions'),
+                array('cols' => 80, 'rows' => 20, 'disabled' => 'disabled', 'style' => 'background-color: white;')
+            );
             $this->addElement('checkbox', 'conditions_accept', '', Translation::get('IAccept'));
             $this->addRule(
-                'conditions_accept',
-                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-                'required');
+                'conditions_accept', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                'required'
+            );
             $this->addElement('category');
         }
 
         $buttons[] = $this->createElement('style_submit_button', 'submit', Translation::get('CreateAccount'));
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -173,9 +167,9 @@ class InvitationRegistrationForm extends FormValidator
 
             \Chamilo\Libraries\Platform\Session\Session::register('_uid', intval($user->get_id()));
             Event::trigger(
-                'Register',
-                Manager::context(),
-                array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id()));
+                'Register', Manager::context(),
+                array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id())
+            );
             Event::trigger('Login', Manager::context(), array('server' => $_SERVER, 'user' => $user));
 
             return true;
@@ -191,7 +185,7 @@ class InvitationRegistrationForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array())
     {
         $invitation = $this->invitation;
         $defaults[User::PROPERTY_EMAIL] = $invitation->get_email();
@@ -212,13 +206,17 @@ class InvitationRegistrationForm extends FormValidator
         $options['site_name'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
         $options['site_url'] = Path::getInstance()->getBasePath(true);
         $options['admin_firstname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_firstname'));
+            array('Chamilo\Core\Admin', 'administrator_firstname')
+        );
         $options['admin_surname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_surname'));
+            array('Chamilo\Core\Admin', 'administrator_surname')
+        );
         $options['admin_telephone'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_telephone'));
+            array('Chamilo\Core\Admin', 'administrator_telephone')
+        );
         $options['admin_email'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_email'));
+            array('Chamilo\Core\Admin', 'administrator_email')
+        );
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 

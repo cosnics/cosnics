@@ -2,14 +2,14 @@
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="chamilo.core.repository.content_object.assignment.display.form.score_form_type"
-                 class="Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreFormType">
-            <argument type="service" id="symfony.component.translation.translator"/>
+        <defaults autowire="true" autoconfigure="true" public="true"/>
+        <service
+                id="Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreFormType">
+            <argument type="service" id="Symfony\Component\Translation\Translator"/>
             <tag name="form.type"/>
         </service>
-        <service id="chamilo.core.repository.content_object.assignment.display.form.code_page_corrector_form_type"
-                 class="Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\CodePageCorrectorFormType">
-            <argument type="service" id="symfony.component.translation.translator"/>
+        <service id="Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\CodePageCorrectorFormType">
+            <argument type="service" id="Symfony\Component\Translation\Translator"/>
             <tag name="form.type"/>
         </service>
     </services>

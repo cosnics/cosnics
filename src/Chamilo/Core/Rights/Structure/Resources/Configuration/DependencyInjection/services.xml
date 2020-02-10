@@ -1,65 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container
-    xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults autowire="true" autoconfigure="true" public="true"/>
         <service
-            id="chamilo.core.rights.structure.service.structure_location_configuration.loader"
-            class="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Loader">
+                id="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Loader">
             <argument
-                type="service"
-                id="chamilo.libraries.file.path" />
+                    type="service"
+                    id="Chamilo\Libraries\File\Path"/>
         </service>
 
         <service
-            id="chamilo.core.rights.structure.service.structure_location_service"
-            class="Chamilo\Core\Rights\Structure\Service\StructureLocationService">
+                id="Chamilo\Core\Rights\Structure\Service\StructureLocationService">
             <argument
-                type="service"
-                id="chamilo.core.rights.structure.storage.repository.structure_location_repository" />
+                    type="service"
+                    id="Chamilo\Core\Rights\Structure\Storage\Repository\StructureLocationRepository"/>
         </service>
 
         <service
-            id="chamilo.core.rights.structure.service.structure_location_role_service"
-            class="Chamilo\Core\Rights\Structure\Service\StructureLocationRoleService">
+                id="Chamilo\Core\Rights\Structure\Service\StructureLocationRoleService">
             <argument
-                type="service"
-                id="chamilo.core.user.roles.service.role_service" />
+                    type="service"
+                    id="Chamilo\Core\User\Roles\Service\RoleService"/>
             <argument
-                type="service"
-                id="chamilo.core.rights.structure.service.structure_location_service" />
+                    type="service"
+                    id="Chamilo\Core\Rights\Structure\Service\StructureLocationService"/>
             <argument
-                type="service"
-                id="chamilo.core.rights.structure.storage.repository.structure_location_role_repository" />
+                    type="service"
+                    id="Chamilo\Core\Rights\Structure\Storage\Repository\StructureLocationRoleRepository"/>
         </service>
 
         <service
-            id="chamilo.core.rights.structure.service.structure_location_configuration.synchronizer"
-            class="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Synchronizer">
+                id="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Synchronizer">
             <argument
-                type="service"
-                id="chamilo.core.rights.structure.service.structure_location_configuration.loader" />
+                    type="service"
+                    id="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Loader"/>
             <argument
-                type="service"
-                id="chamilo.configuration.service.registration_consulter" />
+                    type="service"
+                    id="Chamilo\Configuration\Service\RegistrationConsulter"/>
             <argument
-                type="service"
-                id="chamilo.core.rights.structure.service.structure_location_service" />
+                    type="service"
+                    id="Chamilo\Core\Rights\Structure\Service\StructureLocationService"/>
             <argument
-                type="service"
-                id="chamilo.core.rights.structure.service.structure_location_role_service" />
+                    type="service"
+                    id="Chamilo\Core\Rights\Structure\Service\StructureLocationRoleService"/>
         </service>
 
         <service
-            id="chamilo.core.rights.structure.service.authorization_checker"
-            class="Chamilo\Core\Rights\Structure\Service\AuthorizationChecker">
+                id="Chamilo\Core\Rights\Structure\Service\AuthorizationChecker">
             <argument
-                type="service"
-                id="chamilo.core.user.roles.service.user_role_service" />
+                    type="service"
+                    id="Chamilo\Core\User\Roles\Service\UserRoleService"/>
             <argument
-                type="service"
-                id="chamilo.core.rights.structure.service.structure_location_role_service" />
+                    type="service"
+                    id="Chamilo\Core\Rights\Structure\Service\StructureLocationRoleService"/>
         </service>
     </services>
 </container>

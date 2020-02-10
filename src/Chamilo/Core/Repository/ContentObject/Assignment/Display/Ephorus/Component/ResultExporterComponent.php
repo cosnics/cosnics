@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Component;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\ReportExporter;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -31,11 +32,11 @@ class ResultExporterComponent extends Manager
         $this->getReportExporter()->exportRequestReport($request);
     }
 
-        /**
-         * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\ReportExporter
-         */
-        protected function getReportExporter()
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\ReportExporter
+     */
+    protected function getReportExporter()
     {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.service.report_exporter');
+        return $this->getService(ReportExporter::class);
     }
 }

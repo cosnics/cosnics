@@ -55,8 +55,6 @@ class ActivityTableDataProvider
      */
     protected function getActivityService()
     {
-        return $this->get_component()->getService(
-            'chamilo.core.repository.content_object.learning_path.service.activity_service'
-        );
+        return $this->get_component()->getService(ActivityService::class);
     }
 }

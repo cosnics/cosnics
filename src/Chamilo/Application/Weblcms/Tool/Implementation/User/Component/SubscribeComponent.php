@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -32,14 +33,14 @@ class SubscribeComponent extends Manager
      */
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
 
         $course_id = $this->get_course_id();
         $userIds = $this->getRequest()->get(self::PARAM_OBJECTS);
-        if (isset($userIds) && ! is_array($userIds))
+        if (isset($userIds) && !is_array($userIds))
         {
             $userIds = array($userIds);
         }
@@ -62,18 +63,16 @@ class SubscribeComponent extends Manager
                     $status = Request::get(self::PARAM_STATUS) ? Request::get(self::PARAM_STATUS) : 5;
 
                     if (\Chamilo\Application\Weblcms\Course\Storage\DataManager::is_user_direct_subscribed_to_course(
-                        $userId,
-                        $course_id) || (! $this->get_user()->is_platform_admin() && ! $course_management_rights->is_allowed(
-                        CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT,
-                        $course_id,
-                        CourseManagementRights::TYPE_COURSE,
-                        $userId)))
+                            $userId, $course_id
+                        ) || (!$this->get_user()->is_platform_admin() && !$course_management_rights->is_allowed(
+                                CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, $course_id,
+                                CourseManagementRights::TYPE_COURSE, $userId
+                            )))
                     {
                         $requestRight = $course_management_rights->is_allowed(
-                            CourseManagementRights::TEACHER_REQUEST_SUBSCRIBE_RIGHT,
-                            $course_id,
-                            CourseManagementRights::TYPE_COURSE,
-                            $userId);
+                            CourseManagementRights::TEACHER_REQUEST_SUBSCRIBE_RIGHT, $course_id,
+                            CourseManagementRights::TYPE_COURSE, $userId
+                        );
 
                         $failures ++;
 
@@ -89,10 +88,9 @@ class SubscribeComponent extends Manager
                         continue;
                     }
 
-                    if (! \Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
-                        $course_id,
-                        $status,
-                        $userId))
+                    if (!\Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
+                        $course_id, $status, $userId
+                    ))
                     {
                         $failures ++;
                         $usersStatus[self::STATUS_FAILED_UNKNOWN][] = $user;
@@ -114,10 +112,10 @@ class SubscribeComponent extends Manager
                     }
 
                     $this->redirect(
-                        Translation::get($message),
-                        false,
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER));
+                        Translation::get($message), false, array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER
+                        )
+                    );
                 }
                 else
                 {
@@ -127,7 +125,8 @@ class SubscribeComponent extends Manager
             else
             {
                 throw new NoObjectSelectedException(
-                    Translation::getInstance()->getTranslation('Users', null, Manager::context()));
+                    Translation::getInstance()->getTranslation('Users', null, Manager::context())
+                );
             }
         }
         else
@@ -135,9 +134,9 @@ class SubscribeComponent extends Manager
 
             throw new NoObjectSelectedException(
                 Translation::getInstance()->getTranslation(
-                    'Course',
-                    null,
-                    \Chamilo\Application\Weblcms\Manager::context()));
+                    'Course', null, \Chamilo\Application\Weblcms\Manager::context()
+                )
+            );
         }
     }
 
@@ -157,14 +156,14 @@ class SubscribeComponent extends Manager
         $html[] = $this->render_header();
 
         $html[] = $this->renderUserList(
-            'panel-info',
-            $translator->getTranslation('SubscribedUsers', null, Manager::context()),
-            $usersStatus[self::STATUS_SUCCESS]);
+            'panel-info', $translator->getTranslation('SubscribedUsers', null, Manager::context()),
+            $usersStatus[self::STATUS_SUCCESS]
+        );
 
         $html[] = $this->renderUserList(
-            'panel-danger',
-            $translator->getTranslation('FailedUsersNotAllowed', null, Manager::context()),
-            $usersStatus[self::STATUS_FAILED_NOT_ALLOWED]);
+            'panel-danger', $translator->getTranslation('FailedUsersNotAllowed', null, Manager::context()),
+            $usersStatus[self::STATUS_FAILED_NOT_ALLOWED]
+        );
 
         $html[] = $this->renderRequestUserList($translator, $usersStatus[self::STATUS_FAILED_REQUEST]);
 
@@ -191,18 +190,19 @@ class SubscribeComponent extends Manager
         }
 
         $requestUrl = $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_REQUEST_SUBSCRIBE_USERS, self::PARAM_OBJECTS => $requestUserIds));
+            array(self::PARAM_ACTION => self::ACTION_REQUEST_SUBSCRIBE_USERS, self::PARAM_OBJECTS => $requestUserIds)
+        );
 
         $additionalItems = array(
             '<a href="' . $requestUrl . '">' . '<button type="button" class="btn btn-default pull-right">' .
-                 $translator->getTranslation('RequestUsers', null, Manager::context()) .
-                 '</button><div class="clearfix"></div></a>');
+            $translator->getTranslation('RequestUsers', null, Manager::context()) .
+            '</button><div class="clearfix"></div></a>'
+        );
 
         return $this->renderUserList(
-            'panel-warning',
-            $translator->getTranslation('FailedUsersCanOnlyBeRequested', null, Manager::context()),
-            $requestUsers,
-            $additionalItems);
+            'panel-warning', $translator->getTranslation('FailedUsersCanOnlyBeRequested', null, Manager::context()),
+            $requestUsers, $additionalItems
+        );
     }
 
     /**
@@ -216,12 +216,13 @@ class SubscribeComponent extends Manager
     {
         /**
          *
-         * @var \Chamilo\Core\User\UserService $userService
+         * @var \Chamilo\Core\User\Service\UserService $userService
          */
-        $userService = $this->getService('chamilo.core.user.service.user_service');
+        $userService = $this->getService(UserService::class);
 
         return $userService->findUsers(
-            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds));
+            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds)
+        );
     }
 
     /**

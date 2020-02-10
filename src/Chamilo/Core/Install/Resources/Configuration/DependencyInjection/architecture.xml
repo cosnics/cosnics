@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container
-    xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults autowire="true" autoconfigure="true" public="true"/>
         <service
-            id="chamilo.core.install.architecture.bootstrap.kernel"
-            class="Chamilo\Core\Install\Architecture\Bootstrap\Kernel">
+                id="Chamilo\Core\Install\Architecture\Bootstrap\Kernel">
             <argument
-                type="service"
-                id="symfony.component.http_foundation.request" />
+                    type="service"
+                    id="Chamilo\Libraries\Platform\ChamiloRequest"/>
             <argument
-                type="service"
-                id="chamilo.libraries.architecture.factory.application_factory" />
+                    type="service"
+                    id="Chamilo\Libraries\Architecture\Factory\ApplicationFactory"/>
             <argument
-                type="service"
-                id="chamilo.libraries.architecture.error_handler.exception_logger" />
+                    type="service"
+                    id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger"/>
             <argument>%chamilo.configuration.version%</argument>
         </service>
     </services>

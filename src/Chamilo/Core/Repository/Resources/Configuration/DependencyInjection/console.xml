@@ -4,20 +4,20 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults autowire="true" autoconfigure="true" public="true"/>
         <service
-                id="chamilo.core.repository.console.command.content_object_template_synchronizer_command"
-                class="Chamilo\Core\Repository\Console\Command\ContentObjectTemplateSynchronizerCommand">
-            <argument type="service" id="chamilo.core.repository.service.content_object_template.synchronizer" />
-            <argument type="service" id="symfony.component.translation.translator" />
-            <tag name="chamilo.libraries.console.command" />
+                id="Chamilo\Core\Repository\Console\Command\ContentObjectTemplateSynchronizerCommand">
+            <argument type="service"
+                      id="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer"/>
+            <argument type="service" id="Symfony\Component\Translation\Translator"/>
+            <tag name="chamilo.libraries.console.command"/>
         </service>
 
         <service
-                id="chamilo.core.repository.console.command.resource_fixer_command"
-                class="Chamilo\Core\Repository\Console\Command\ResourceFixerCommand">
-            <argument type="service" id="chamilo.core.repository.service.resource_fixer.resource_fixer_director" />
-            <argument type="service" id="symfony.component.translation.translator" />
-            <tag name="chamilo.libraries.console.command" />
+                id="Chamilo\Core\Repository\Console\Command\ResourceFixerCommand">
+            <argument type="service" id="Chamilo\Core\Repository\Service\ResourceFixer\ResourceFixerDirector"/>
+            <argument type="service" id="Symfony\Component\Translation\Translator"/>
+            <tag name="chamilo.libraries.console.command"/>
         </service>
     </services>
 </container>

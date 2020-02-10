@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryDownloader;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator;
 
 /**
  *
@@ -23,15 +24,15 @@ class DownloaderComponent extends Manager
     public function run()
     {
         $entryCompressor = new EntryDownloader(
-            $this->getDataProvider(), $this->getRightsService(), $this->getArchiveCreator(),
-            $this->getUser(), $this->getAssignment()
+            $this->getDataProvider(), $this->getRightsService(), $this->getArchiveCreator(), $this->getUser(),
+            $this->getAssignment()
         );
 
         try
         {
             $entryCompressor->downloadByRequest($this->getRequest());
         }
-        catch(\Exception $exception)
+        catch (\Exception $exception)
         {
             throw new UserException($this->getTranslator()->trans('EntriesNotDownloadable', [], Manager::context()));
         }
@@ -42,6 +43,6 @@ class DownloaderComponent extends Manager
      */
     protected function getArchiveCreator()
     {
-        return $this->getService('chamilo.libraries.file.compression.archive_creator.archive_creator');
+        return $this->getService(ArchiveCreator::class);
     }
 }

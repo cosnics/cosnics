@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -9,6 +10,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  *
  * @package application.lib.weblcms.tool.course_group
  */
+
 /**
  * This tool allows a course_group to publish course_groups in his or her course.
  */
@@ -42,8 +44,8 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
 
         return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            CourseGroup::class_name(),
-            $course_group_id);
+            CourseGroup::class_name(), $course_group_id
+        );
     }
 
     public function get_additional_parameters()
@@ -56,6 +58,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     protected function getCourseGroupDecoratorsManager()
     {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.course_group.decorator.manager');
+        return $this->getService(CourseGroupDecoratorsManager::class);
     }
 }

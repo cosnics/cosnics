@@ -7,6 +7,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
@@ -56,7 +57,7 @@ class RegisterForm extends FormValidator
      */
     public function getHashingUtilities()
     {
-        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+        return $this->getService(HashingUtilities::class);
     }
 
     /**
@@ -68,52 +69,54 @@ class RegisterForm extends FormValidator
         // Lastname
         $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_LASTNAME,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            'required'
+        );
         // Firstname
         $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_FIRSTNAME,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            'required'
+        );
         // Email
         $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array("size" => "50"));
 
         if (Configuration::getInstance()->get_setting(array(Manager::context(), 'require_email')))
         {
             $this->addRule(
-                User::PROPERTY_EMAIL,
-                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-                'required');
+                User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                'required'
+            );
         }
 
         $this->addRule(User::PROPERTY_EMAIL, Translation::get('WrongEmail'), 'email');
         // Username
         $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_USERNAME,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            'required'
+        );
         // pw
         $group = array();
-        $group[] = & $this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
-        $group[] = & $this->createElement('radio', 'pass', null, null, 0);
-        $group[] = & $this->createElement('password', User::PROPERTY_PASSWORD, null, null);
+        $group[] = &$this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
+        $group[] = &$this->createElement('radio', 'pass', null, null, 0);
+        $group[] = &$this->createElement('password', User::PROPERTY_PASSWORD, null, null);
         $this->addGroup($group, 'pw', Translation::get('Password'), '');
 
         $this->addElement('category');
         $this->addElement('category', Translation::get('Additional'));
 
         // Official Code
-        $this->addElement('text', User::PROPERTY_OFFICIAL_CODE, Translation::get('OfficialCode'), array("size" => "50"));
+        $this->addElement(
+            'text', User::PROPERTY_OFFICIAL_CODE, Translation::get('OfficialCode'), array("size" => "50")
+        );
 
         if (Configuration::getInstance()->get_setting(array(Manager::context(), 'require_official_code')))
         {
             $this->addRule(
                 User::PROPERTY_OFFICIAL_CODE,
-                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-                'required');
+                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            );
         }
 
         // Picture URI
@@ -123,10 +126,8 @@ class RegisterForm extends FormValidator
         }
         $allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif', 'JPG', 'JPEG', 'PNG', 'GIF');
         $this->addRule(
-            User::PROPERTY_PICTURE_URI,
-            Translation::get('OnlyImagesAllowed'),
-            'filetype',
-            $allowed_picture_types);
+            User::PROPERTY_PICTURE_URI, Translation::get('OnlyImagesAllowed'), 'filetype', $allowed_picture_types
+        );
         // Phone Number
         $this->addElement('text', User::PROPERTY_PHONE, Translation::get('PhoneNumber'), array("size" => "50"));
 
@@ -140,18 +141,12 @@ class RegisterForm extends FormValidator
         }
         // Send email
         $group = array();
-        $group[] = & $this->createElement(
-            'radio',
-            'send_mail',
-            null,
-            Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES),
-            1);
-        $group[] = & $this->createElement(
-            'radio',
-            'send_mail',
-            null,
-            Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES),
-            0);
+        $group[] = &$this->createElement(
+            'radio', 'send_mail', null, Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
+        );
+        $group[] = &$this->createElement(
+            'radio', 'send_mail', null, Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES), 0
+        );
         $this->addGroup($group, 'mail', Translation::get('SendMailToNewUser'), '&nbsp;');
         // Submit button
         // $this->addElement('submit', 'user_settings', 'OK');
@@ -162,29 +157,23 @@ class RegisterForm extends FormValidator
         {
             $this->addElement('category', Translation::get('Information'));
             $this->addElement(
-                'textarea',
-                'conditions',
-                Translation::get('TermsAndConditions'),
-                array('cols' => 80, 'rows' => 20, 'disabled' => 'disabled', 'style' => 'background-color: white;'));
+                'textarea', 'conditions', Translation::get('TermsAndConditions'),
+                array('cols' => 80, 'rows' => 20, 'disabled' => 'disabled', 'style' => 'background-color: white;')
+            );
             $this->addElement('checkbox', 'conditions_accept', '', Translation::get('IAccept'));
             $this->addRule(
-                'conditions_accept',
-                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-                'required');
+                'conditions_accept', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                'required'
+            );
             $this->addElement('category');
         }
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation::get('Register'),
-            null,
-            null,
-            'user');
+            'style_submit_button', 'submit', Translation::get('Register'), null, null, 'user'
+        );
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -212,8 +201,8 @@ class RegisterForm extends FormValidator
         }
 
         if (\Chamilo\Core\User\Storage\DataManager::is_username_available(
-            $values[User::PROPERTY_USERNAME],
-            $values[User::PROPERTY_ID]))
+            $values[User::PROPERTY_USERNAME], $values[User::PROPERTY_ID]
+        ))
         {
             $user->set_id($values[User::PROPERTY_ID]);
             $user->set_lastname($values[User::PROPERTY_LASTNAME]);
@@ -225,7 +214,7 @@ class RegisterForm extends FormValidator
             $user->set_official_code($values[User::PROPERTY_OFFICIAL_CODE]);
             $user->set_phone($values[User::PROPERTY_PHONE]);
 
-            if (! Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_teacher_registration')))
+            if (!Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_teacher_registration')))
             {
                 $values[User::PROPERTY_STATUS] = STUDENT;
             }
@@ -256,6 +245,7 @@ class RegisterForm extends FormValidator
             {
                 $user->set_approved(0);
                 $user->set_active(0);
+
                 return $user->create();
             }
 
@@ -263,9 +253,10 @@ class RegisterForm extends FormValidator
             {
                 \Chamilo\Libraries\Platform\Session\Session::register('_uid', intval($user->get_id()));
                 Event::trigger(
-                    'Register',
-                    Manager::context(),
-                    array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id()));
+                    'Register', Manager::context(),
+                    array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id())
+                );
+
                 return true;
             }
             else
@@ -284,7 +275,7 @@ class RegisterForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array())
     {
         $user = $this->user;
         if ($this->form_type == self::TYPE_EDIT)
@@ -327,13 +318,17 @@ class RegisterForm extends FormValidator
         $options['site_name'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
         $options['site_url'] = Path::getInstance()->getBasePath(true);
         $options['admin_firstname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_firstname'));
+            array('Chamilo\Core\Admin', 'administrator_firstname')
+        );
         $options['admin_surname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_surname'));
+            array('Chamilo\Core\Admin', 'administrator_surname')
+        );
         $options['admin_telephone'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_telephone'));
+            array('Chamilo\Core\Admin', 'administrator_telephone')
+        );
         $options['admin_email'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_email'));
+            array('Chamilo\Core\Admin', 'administrator_email')
+        );
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
@@ -344,14 +339,9 @@ class RegisterForm extends FormValidator
         }
 
         $mail = new Mail(
-            $subject,
-            $body,
-            $user->get_email(),
-            true,
-            array(),
-            array(),
-            $options['admin_firstname'] . ' ' . $options['admin_surname'],
-            $options['admin_email']);
+            $subject, $body, $user->get_email(), true, array(), array(),
+            $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
+        );
 
         $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();

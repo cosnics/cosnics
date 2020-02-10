@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Platform;
 
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 
@@ -48,7 +49,7 @@ class Security
             $isAdmin = self::isPlatformAdminOrTeacher();
         }
 
-        if (! $isAdmin)
+        if (!$isAdmin)
         { // don't question the actions of platform admins, they know what they are doing
 
             if (is_array($variable))
@@ -65,30 +66,28 @@ class Security
             // Remove javascript: and vbscript: protocols
             $variable = preg_replace(
                 '#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu',
-                '$1=$2nojavascript...',
-                $variable);
+                '$1=$2nojavascript...', $variable
+            );
             $variable = preg_replace(
                 '#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu',
-                '$1=$2novbscript...',
-                $variable);
+                '$1=$2novbscript...', $variable
+            );
             $variable = preg_replace(
-                '#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u',
-                '$1=$2nomozbinding...',
-                $variable);
+                '#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u', '$1=$2nomozbinding...',
+                $variable
+            );
 
             // Only works in IE: <span style="width: expression(alert('Ping!'));"></span>
             $variable = preg_replace(
-                '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?expression[\x00-\x20]*\([^>]*+>#i',
-                '$1>',
-                $variable);
+                '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?expression[\x00-\x20]*\([^>]*+>#i', '$1>', $variable
+            );
             $variable = preg_replace(
-                '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?behaviour[\x00-\x20]*\([^>]*+>#i',
-                '$1>',
-                $variable);
+                '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?behaviour[\x00-\x20]*\([^>]*+>#i', '$1>', $variable
+            );
             $variable = preg_replace(
                 '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*+>#iu',
-                '$1>',
-                $variable);
+                '$1>', $variable
+            );
 
             // Remove namespaced elements (we do not need them)
             $variable = preg_replace('#</*\w+:\w[^>]*+>#i', '', $variable);
@@ -99,13 +98,13 @@ class Security
                 $old_data = $variable;
                 $variable = preg_replace(
                     '#</*(?:applet|b(?:ase|gsound|link)|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|s(?:cript)|xml)[^>]*+>#i',
-                    '',
-                    $variable);
+                    '', $variable
+                );
             }
             while ($old_data !== $variable);
-
             // we are done...
         }
+
         return $variable;
     }
 
@@ -138,12 +137,13 @@ class Security
         {
             $key2 = self::removeXSS($key, $isAdmin);
             $value2 = (is_array($value)) ? self::removeXSSRecursive($value, $isAdmin) : self::remove_XSS(
-                $value,
-                $isAdmin);
+                $value, $isAdmin
+            );
 
             unset($array[$key]);
             $array[$key2] = $value2;
         }
+
         return $array;
     }
 
@@ -196,6 +196,7 @@ class Security
         {
             return true;
         }
+
         return false;
     }
 
@@ -206,7 +207,8 @@ class Security
     public function getHashingUtilities()
     {
         $this->initializeContainer();
-        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+
+        return $this->getService(HashingUtilities::class);
     }
 
     /**
@@ -240,6 +242,7 @@ class Security
     {
         $token = $this->getHashingUtilities()->hashString(uniqid(rand(), true));
         Session::register('sec_token', $token);
+
         return $token;
     }
 
@@ -279,6 +282,7 @@ class Security
                 {
                     return true;
                 }
+
                 return false;
             case 'post' :
                 $post_token = Request::post('sec_token');
@@ -286,12 +290,14 @@ class Security
                 {
                     return true;
                 }
+
                 return false;
             default :
                 if (isset($session_token) && isset($array) && $session_token === $array)
                 {
                     return true;
                 }
+
                 return false;
         }
     }
@@ -305,11 +311,11 @@ class Security
     {
         $user_id = Session::getUserId();
 
-        if (! empty($user_id))
+        if (!empty($user_id))
         {
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                $user_id);
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(), $user_id
+            );
 
             return $user->is_platform_admin() || $user->is_teacher();
         }

@@ -14,7 +14,8 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager
+class LeaveItemComponent extends
+    \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager
 {
     const PARAM_TRACKER_ID = 'tracker_id';
 
@@ -35,7 +36,7 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
 
             $trackingService->setAttemptTotalTimeByTreeNodeAttemptId($treeNodeAttemptId);
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             JsonAjaxResult::bad_request();
         }
@@ -63,7 +64,7 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
     protected function getTrackingServiceBuilder()
     {
         return new TrackingServiceBuilder(
-            $this->getService('chamilo.libraries.storage.data_manager.doctrine.data_class_repository')
+            $this->getService('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository')
         );
     }
 }

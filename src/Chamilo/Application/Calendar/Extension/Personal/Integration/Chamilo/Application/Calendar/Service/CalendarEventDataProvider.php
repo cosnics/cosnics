@@ -5,6 +5,7 @@ use Chamilo\Application\Calendar\Architecture\MixedCalendar;
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Interfaces\PersonalCalendarEventDataProviderRepositoryInterface;
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarEventDataProviderRepository;
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
@@ -36,7 +37,7 @@ class CalendarEventDataProvider extends MixedCalendar
      */
     protected function getAvailabilityService()
     {
-        return $this->getService('chamilo.application.calendar.service.availability_service');
+        return $this->getService(AvailabilityService::class);
     }
 
     /**
@@ -45,15 +46,15 @@ class CalendarEventDataProvider extends MixedCalendar
      */
     public function getEvents(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
-        $requestedSourceType, $fromDate, $toDate)
+        $requestedSourceType, $fromDate, $toDate
+    )
     {
         $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 5);
         $availabilityService = $this->getAvailabilityService();
 
         if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
-            $calendarRendererProvider->getDataUser(),
-            $package,
-            'personal'))
+            $calendarRendererProvider->getDataUser(), $package, 'personal'
+        ))
         {
             $userEvents = $this->getUserEvents($calendarRendererProvider, $fromDate, $toDate);
         }
@@ -63,9 +64,8 @@ class CalendarEventDataProvider extends MixedCalendar
         }
 
         if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
-            $calendarRendererProvider->getDataUser(),
-            $package,
-            'shared'))
+            $calendarRendererProvider->getDataUser(), $package, 'shared'
+        ))
         {
             $sharedEvents = $this->getSharedEvents($calendarRendererProvider, $fromDate, $toDate);
         }
@@ -87,17 +87,17 @@ class CalendarEventDataProvider extends MixedCalendar
      */
     public function getUserEvents(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, $fromDate,
-        $toDate)
+        $toDate
+    )
     {
         $repository = new CalendarEventDataProviderRepository();
         $dataClassRetrievesParameters = $repository->getPublicationsRecordRetrievesParameters(
-            $calendarRendererProvider->getDataUser());
+            $calendarRendererProvider->getDataUser()
+        );
 
         return $this->getEventsByParameters(
-            $calendarRendererProvider,
-            $dataClassRetrievesParameters,
-            $fromDate,
-            $toDate);
+            $calendarRendererProvider, $dataClassRetrievesParameters, $fromDate, $toDate
+        );
     }
 
     /**
@@ -110,11 +110,13 @@ class CalendarEventDataProvider extends MixedCalendar
      */
     public function getSharedEvents(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, $fromDate,
-        $toDate)
+        $toDate
+    )
     {
         $repository = new CalendarEventDataProviderRepository();
         $recordRetrievesParameters = $repository->getSharedPublicationsRecordRetrievesParameters(
-            $calendarRendererProvider->getDataUser());
+            $calendarRendererProvider->getDataUser()
+        );
 
         return $this->getEventsByParameters($calendarRendererProvider, $recordRetrievesParameters, $fromDate, $toDate);
     }
@@ -130,12 +132,14 @@ class CalendarEventDataProvider extends MixedCalendar
      */
     protected function getEventsByParameters(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
-        RecordRetrievesParameters $recordRetrievesParameters, $fromDate, $toDate)
+        RecordRetrievesParameters $recordRetrievesParameters, $fromDate, $toDate
+    )
     {
         $publications = array();
 
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
-            \Chamilo\Application\Calendar\Extension\Personal\Manager::package());
+            \Chamilo\Application\Calendar\Extension\Personal\Manager::package()
+        );
 
         $publicationRepository = new PublicationRepository();
 
@@ -153,8 +157,8 @@ class CalendarEventDataProvider extends MixedCalendar
                     if ($source instanceof PersonalCalendarEventDataProviderRepositoryInterface)
                     {
                         $publications = array_merge(
-                            $publications,
-                            $source->getPublications($recordRetrievesParameters, $fromDate, $toDate));
+                            $publications, $source->getPublications($recordRetrievesParameters, $fromDate, $toDate)
+                        );
                     }
                 }
             }
@@ -174,7 +178,8 @@ class CalendarEventDataProvider extends MixedCalendar
      */
     private function renderEvents(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, $publications,
-        $fromDate, $toDate)
+        $fromDate, $toDate
+    )
     {
         $events = array();
 
@@ -189,11 +194,11 @@ class CalendarEventDataProvider extends MixedCalendar
 
     /**
      *
-     * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getCalendars()
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
      *
      * @return array|\Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getCalendars()
+     *
      */
     public function getCalendars(User $user = null)
     {

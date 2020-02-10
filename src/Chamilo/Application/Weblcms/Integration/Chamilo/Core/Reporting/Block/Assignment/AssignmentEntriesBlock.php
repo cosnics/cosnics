@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -138,6 +139,6 @@ class AssignmentEntriesBlock extends AssignmentReportingManager
      */
     public function getUserService()
     {
-        return $this->getService('chamilo.core.user.service.user_service');
+        return $this->getService(UserService::class);
     }
 }

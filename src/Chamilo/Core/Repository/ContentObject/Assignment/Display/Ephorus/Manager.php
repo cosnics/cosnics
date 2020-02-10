@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\EphorusComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -45,7 +47,8 @@ abstract class Manager extends Application
     }
 
     /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider | \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider |
+     *     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface
      */
     public function getDataProvider()
     {
@@ -73,7 +76,7 @@ abstract class Manager extends Application
      */
     public function getRequestManager()
     {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.service.request_manager');
+        return $this->getService(RequestManager::class);
     }
 
     /**
@@ -81,6 +84,6 @@ abstract class Manager extends Application
      */
     public function getReportRenderer()
     {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.ephorus.renderer.report_renderer');
+        return $this->getService(ReportRenderer::class);
     }
 }

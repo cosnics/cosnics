@@ -9,15 +9,16 @@ use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Returns the courses formatted for the element finder
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class GetCoursesForElementFinderComponent extends \Chamilo\Application\Weblcms\Course\Ajax\Component\GetCoursesForElementFinderComponent
+class GetCoursesForElementFinderComponent
+    extends \Chamilo\Application\Weblcms\Course\Ajax\Component\GetCoursesForElementFinderComponent
 {
 
     /**
      * Returns the number of total elements (without the offset)
-     * 
+     *
      * @return int
      */
     public function getTotalNumberOfElements()
@@ -27,16 +28,15 @@ class GetCoursesForElementFinderComponent extends \Chamilo\Application\Weblcms\C
 
     /**
      * Retrieves the courses for the current request
-     * 
+     *
      * @return ResultSet
      */
     protected function getCourses()
     {
         return $this->getOpenCourseService()->getClosedCourses(
-            $this->getCondition(), 
-            $this->ajaxResultGenerator->getOffset(), 
-            100, 
-            array(new OrderBy(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE))));
+            $this->getCondition(), $this->ajaxResultGenerator->getOffset(), 100,
+            array(new OrderBy(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE)))
+        );
     }
 
     /**
@@ -45,6 +45,6 @@ class GetCoursesForElementFinderComponent extends \Chamilo\Application\Weblcms\C
      */
     public function getOpenCourseService()
     {
-        return $this->getService('chamilo.application.weblcms.course.open_course.service.open_course_service');
+        return $this->getService(OpenCourseService::class);
     }
 }

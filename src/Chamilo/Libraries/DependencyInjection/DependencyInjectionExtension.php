@@ -98,14 +98,14 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
 
             if (array_key_exists('mappings', $ormConfig))
             {
-                $mappingDriverDef = $container->getDefinition('doctrine.orm.mapping_driver');
+                $mappingDriverDef = $container->getDefinition('Doctrine\ORM\MappingDriver');
                 $mappingDriverDef->setArguments(array($ormConfig['mappings']));
             }
 
             if (array_key_exists('resolve_target_entities', $ormConfig))
             {
                 $resolveTargetEntityListenerDef = $container->getDefinition(
-                    'doctrine.orm.listeners.resolve_target_entity');
+                    'Doctrine\ORM\Tools\ResolveTargetEntityListener');
 
                 foreach ($ormConfig['resolve_target_entities'] as $name => $implementation)
                 {

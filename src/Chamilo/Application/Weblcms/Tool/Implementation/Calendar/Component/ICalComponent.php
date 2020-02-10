@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component;
 
 use Chamilo\Application\Weblcms\Component\CourseViewerComponent;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -68,7 +69,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
             if ($user instanceof User)
             {
                 $this->renderCalendar($user);
-                if(!$alreadyAuthenticated)
+                if (!$alreadyAuthenticated)
                 {
                     $authentication->logout($user);
                 }
@@ -145,12 +146,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         if (!isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                $this->getPublicationService(),
-                $this->get_course(),
-                $this->get_tool_id(),
-                $user,
-                $user,
-                array()
+                $this->getPublicationService(), $this->get_course(), $this->get_tool_id(), $user, $user, array()
             );
         }
 
@@ -169,7 +165,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
      */
     protected function getPublicationService()
     {
-        return $this->getService('chamilo.application.weblcms.service.publication');
+        return $this->getService(PublicationService::class);
     }
 
     /**
@@ -179,9 +175,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     public function get_publications()
     {
         return $this->getPublicationService()->getPublicationsForUser(
-            $this->getUser(),
-            $this->get_course(),
-            $this->get_tool_id()
+            $this->getUser(), $this->get_course(), $this->get_tool_id()
         );
     }
 

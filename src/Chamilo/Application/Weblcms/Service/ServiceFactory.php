@@ -65,7 +65,7 @@ class ServiceFactory
      */
     public function getCourseService()
     {
-        return $this->getService('chamilo.application.weblcms.service.course');
+        return $this->getService(CourseService::class);
     }
 
     /**
@@ -75,7 +75,7 @@ class ServiceFactory
      */
     public function getRightsService()
     {
-        return $this->getService('chamilo.application.weblcms.service.rights');
+        return $this->getService(RightsService::class);
     }
 
     /**
@@ -85,7 +85,7 @@ class ServiceFactory
      */
     public function getPublicationService()
     {
-        return $this->getService('chamilo.application.weblcms.service.publication');
+        return $this->getService(PublicationService::class);
     }
 
     /**
@@ -95,7 +95,7 @@ class ServiceFactory
      */
     public function getCourseSettingsService()
     {
-        return $this->getService('chamilo.application.weblcms.service.course_settings');
+        return $this->getService(CourseSettingsService::class);
     }
 
     /**

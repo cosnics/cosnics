@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Action;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\Translation\Translation;
@@ -43,10 +44,10 @@ abstract class Manager extends Application implements NoContextComponent
 
     public static function factory($type, $tool_component)
     {
-        $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
-             'Component';
+        $class =
+            __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . 'Component';
 
-        if (! class_exists($class))
+        if (!class_exists($class))
         {
             throw new Exception(Translation::get('ToolComponentTypeDoesNotExist', array('type' => $type)));
         }
@@ -182,6 +183,6 @@ abstract class Manager extends Application implements NoContextComponent
      */
     public function getCategoryBreadcrumbsGenerator()
     {
-        return $this->getService('chamilo.application.weblcms.tool.service.category_breadcrumbs_generator');
+        return $this->getService(CategoryBreadcrumbsGenerator::class);
     }
 }

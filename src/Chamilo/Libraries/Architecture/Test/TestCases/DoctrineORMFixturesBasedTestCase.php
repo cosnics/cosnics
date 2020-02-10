@@ -42,12 +42,12 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
         $entitiesToCreate = [];
 
         $packages = $this->getStorageUnitsToCreate();
-        foreach($packages as $packageContext => $entitiesToCreateForPackage)
+        foreach ($packages as $packageContext => $entitiesToCreateForPackage)
         {
-            $configurationPath = Path::getInstance()->namespaceToFullPath($packageContext) .
-                'Resources/Configuration/Config.yml';
+            $configurationPath =
+                Path::getInstance()->namespaceToFullPath($packageContext) . 'Resources/Configuration/Config.yml';
 
-            if(file_exists($configurationPath))
+            if (file_exists($configurationPath))
             {
                 $packageConfigurations[] = $configurationPath;
                 $entitiesToCreate = array_merge($entitiesToCreate, $entitiesToCreateForPackage);
@@ -62,7 +62,7 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
         foreach ($allClassNames as $fullyQualifiedClassName)
         {
             $className = $classNameUtilities->getClassnameFromNamespace($fullyQualifiedClassName);
-            if(in_array($className, $entitiesToCreate))
+            if (in_array($className, $entitiesToCreate))
             {
                 $this->classMetadata[] = $entityManager->getClassMetadata($fullyQualifiedClassName);
                 $this->entityClassNames[] = $fullyQualifiedClassName;
@@ -91,9 +91,9 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
         $chamiloFixtureLoader = new ChamiloFixtureLoader();
 
         $objects = $chamiloFixtureLoader->loadFixturesFromPackages($this->getFixtureFiles());
-        foreach($objects as $object)
+        foreach ($objects as $object)
         {
-            if(!in_array(get_class($object), $this->entityClassNames))
+            if (!in_array(get_class($object), $this->entityClassNames))
             {
                 continue;
             }
@@ -105,7 +105,7 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
         {
             $entityManager->flush();
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             var_dump($ex->getMessage());
         }
@@ -116,7 +116,7 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
      */
     protected function getPackagesMappingDriverFactory()
     {
-        return $this->getService('doctrine.orm.packages_mapping_driver_factory');
+        return $this->getService('Doctrine\ORM\PackagesMappingDriverFactory');
     }
 
     /**
@@ -126,7 +126,7 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
      */
     public function getTestSchemaTool()
     {
-        return $this->getService('doctrine.orm.test.schema_tool');
+        return $this->getService('Doctrine\ORM\Test\Tools\SchemaTool');
     }
 
     /**
@@ -134,6 +134,6 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
      */
     public function getClassNameUtilities()
     {
-        return $this->getService('chamilo.libraries.architecture.classname_utilities');
+        return $this->getService(ClassnameUtilities::class);
     }
 }

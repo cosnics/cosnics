@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Test\Integration\Format\Validator;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Test\Integration\Format\Validator
@@ -30,7 +31,7 @@ class ValidatorTest extends DependencyInjectionBasedTestCase
      */
     protected function getValidator()
     {
-        return $this->getService('symfony.component.validator.validator');
+        return $this->getService('Symfony\Component\Validator\Validator');
     }
 
     /**
@@ -38,6 +39,6 @@ class ValidatorTest extends DependencyInjectionBasedTestCase
      */
     protected function getTranslator()
     {
-        return $this->getService('symfony.component.translation.translator');
+        return $this->getService(Translator::class);
     }
 }

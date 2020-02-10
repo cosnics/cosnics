@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\Admin\Form\ConfigurationForm;
 use Chamilo\Core\User\Manager;
@@ -47,22 +48,19 @@ class UserSettingsComponent extends ProfileComponent
         $this->checkAuthorization(Manager::context(), 'ManageAccount');
         $this->context = Request::get(self::PARAM_CONTEXT);
 
-        if (! $this->context)
+        if (!$this->context)
         {
             $this->context = \Chamilo\Core\Admin\Manager::package();
         }
 
-        if (! $this->getRegistrationConsulter()->isContextRegisteredAndActive($this->context))
+        if (!$this->getRegistrationConsulter()->isContextRegisteredAndActive($this->context))
         {
             throw new NotAllowedException();
         }
 
         $this->form = new ConfigurationForm(
-            $this->context,
-            'config',
-            'post',
-            $this->get_url(array(self::PARAM_CONTEXT => $this->context)),
-            true);
+            $this->context, 'config', 'post', $this->get_url(array(self::PARAM_CONTEXT => $this->context)), true
+        );
 
         if ($this->form->validate())
         {
@@ -70,7 +68,8 @@ class UserSettingsComponent extends ProfileComponent
             $this->redirect(
                 Translation::get($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'),
                 ($success ? false : true),
-                array(Application::PARAM_ACTION => self::ACTION_USER_SETTINGS, self::PARAM_CONTEXT => $this->context));
+                array(Application::PARAM_ACTION => self::ACTION_USER_SETTINGS, self::PARAM_CONTEXT => $this->context)
+            );
         }
         else
         {
@@ -85,13 +84,15 @@ class UserSettingsComponent extends ProfileComponent
     public function getContent()
     {
         $tabs = new DynamicVisualTabsRenderer(
-            ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true),
-            $this->form->toHtml());
+            ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true), $this->form->toHtml()
+        );
 
         $setting_contexts = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_contexts(
             new EqualityCondition(
                 new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_USER_SETTING),
-                new StaticConditionVariable(1)));
+                new StaticConditionVariable(1)
+            )
+        );
 
         foreach ($setting_contexts as $setting_context)
         {
@@ -100,23 +101,24 @@ class UserSettingsComponent extends ProfileComponent
                 $package_url = $this->get_url(
                     array(
                         Application::PARAM_ACTION => self::ACTION_USER_SETTINGS,
-                        \Chamilo\Core\Admin\Manager::PARAM_CONTEXT => $setting_context));
+                        \Chamilo\Core\Admin\Manager::PARAM_CONTEXT => $setting_context
+                    )
+                );
                 $is_current_tab = ($this->context === $setting_context);
                 $tab = new DynamicVisualTab(
-                    $setting_context,
-                    Translation::get('TypeName', null, $setting_context),
-                    Theme::getInstance()->getImagePath($setting_context, 'Logo/22'),
-                    $package_url,
-                    $is_current_tab);
+                    $setting_context, Translation::get('TypeName', null, $setting_context),
+                    Theme::getInstance()->getImagePath($setting_context, 'Logo/22'), $package_url, $is_current_tab
+                );
                 $tabs->add_tab($tab);
             }
         }
 
         $html = array();
 
-        if (! $this->context)
+        if (!$this->context)
         {
-            $html[] = '<div class="normal-message">' . Translation::get('SelectApplicationToConfigure') . '</div><br />';
+            $html[] =
+                '<div class="normal-message">' . Translation::get('SelectApplicationToConfigure') . '</div><br />';
         }
 
         $html[] = $tabs->render();
@@ -130,6 +132,6 @@ class UserSettingsComponent extends ProfileComponent
      */
     public function getRegistrationConsulter()
     {
-        return $this->getService('chamilo.configuration.service.registration_consulter');
+        return $this->getService(RegistrationConsulter::class);
     }
 }

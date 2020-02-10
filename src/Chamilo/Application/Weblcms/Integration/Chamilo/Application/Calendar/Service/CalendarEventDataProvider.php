@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\Service;
 
 use Chamilo\Application\Calendar\Architecture\InternalCalendar;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
@@ -32,7 +33,7 @@ abstract class CalendarEventDataProvider extends InternalCalendar
      */
     protected function getAvailabilityService()
     {
-        return $this->getService('chamilo.application.calendar.service.availability_service');
+        return $this->getService(AvailabilityService::class);
     }
 
     /**

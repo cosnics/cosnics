@@ -4,12 +4,12 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults autowire="true" autoconfigure="true" public="true"/>
         <service
-                id="chamilo.core.repository.content_object.learning_path.storage.repository.tree_node_data_repository"
-                class="Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository">
+                id="Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository">
             <argument
                     type="service"
-                    id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+                    id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
         </service>
 
     </services>

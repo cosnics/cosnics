@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
 
 /**
  *
@@ -21,6 +22,6 @@ abstract class Manager extends Application
      */
     protected function getGraphService()
     {
-        return $this->getService('chamilo.libraries.protocol.microsoft.graph.service.user_service');
+        return $this->getService(UserService::class);
     }
 }

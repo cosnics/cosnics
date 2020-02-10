@@ -49,7 +49,7 @@ class DoctrineORMMappingsConfiguration implements ConfigurationInterface
         $rootNode->children()->arrayNode('default')->requiresAtLeastOneElement()->prototype('scalar')->cannotBeEmpty()
             ->end()->end()->arrayNode(
             'custom'
-        )->prototype('array')->cannotBeEmpty()->children()->enumNode('type')->values(
+        )->prototype('array')->children()->enumNode('type')->values(
             array('annotation', 'xml', 'yaml', 'php', 'staticphp')
         )->isRequired()->cannotBeEmpty()->end()->scalarNode(
             'namespace'

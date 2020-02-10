@@ -29,8 +29,8 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * This tool allows a user to publish learning paths in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable,
-    IntroductionTextSupportInterface
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
+    implements Categorizable, IntroductionTextSupportInterface
 {
     const ACTION_EXPORT_RAW_RESULTS = 'AssessmentRawResultsExporter';
 
@@ -77,30 +77,26 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Reporting'),
-                        Theme::getInstance()->getCommonImagePath('Action/Statistics'),
+                        Translation::get('Reporting'), Theme::getInstance()->getCommonImagePath('Action/Statistics'),
                         $this->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
                             )
-                        ),
-                        ToolbarItem::DISPLAY_ICON
+                        ), ToolbarItem::DISPLAY_ICON
                     )
                 );
 
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('ExportRawResults'),
-                        Theme::getInstance()->getCommonImagePath('Action/Export'),
+                        Translation::get('ExportRawResults'), Theme::getInstance()->getCommonImagePath('Action/Export'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS,
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
                             )
-                        ),
-                        ToolbarItem::DISPLAY_ICON
+                        ), ToolbarItem::DISPLAY_ICON
                     )
                 );
             }
@@ -112,9 +108,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('StatisticsNA'),
-                        Theme::getInstance()->getCommonImagePath('Action/StatisticsNa'),
-                        null,
-                        ToolbarItem::DISPLAY_ICON
+                        Theme::getInstance()->getCommonImagePath('Action/StatisticsNa'), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
             }
@@ -128,8 +122,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      * @param DropdownButton $dropdownButton
      */
     public function addContentObjectPublicationButtons(
-        $publication, ButtonGroup $buttonGroup,
-        DropdownButton $dropdownButton
+        $publication, ButtonGroup $buttonGroup, DropdownButton $dropdownButton
     )
     {
         $allowed = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
@@ -140,30 +133,26 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             {
                 $dropdownButton->prependSubButton(
                     new SubButton(
-                        Translation::get('Statistics'),
-                        Theme::getInstance()->getCommonImagePath('Action/Statistics'),
+                        Translation::get('Statistics'), Theme::getInstance()->getCommonImagePath('Action/Statistics'),
                         $this->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
                             )
-                        ),
-                        SubButton::DISPLAY_LABEL
+                        ), SubButton::DISPLAY_LABEL
                     )
                 );
 
                 $dropdownButton->prependSubButton(
                     new SubButton(
-                        Translation::get('ExportRawResults'),
-                        Theme::getInstance()->getCommonImagePath('Action/Export'),
+                        Translation::get('ExportRawResults'), Theme::getInstance()->getCommonImagePath('Action/Export'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS,
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
                             )
-                        ),
-                        SubButton::DISPLAY_LABEL
+                        ), SubButton::DISPLAY_LABEL
                     )
                 );
             }
@@ -200,7 +189,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     protected function getTreeNodeDataService()
     {
-        return $this->getService('chamilo.core.repository.content_object.learning_path.service.tree_node_data_service');
+        return $this->getService(TreeNodeDataService::class);
     }
 
     /**
@@ -210,7 +199,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     protected function getLearningPathService()
     {
-        return $this->getService('chamilo.core.repository.content_object.learning_path.service.learning_path_service');
+        return $this->getService(LearningPathService::class);
     }
 
     /**
@@ -257,11 +246,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     /**
      *
-     * @return object | DataClassRepository
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
     protected function getDataClassRepository()
     {
-        return $this->getService('chamilo.libraries.storage.data_manager.doctrine.data_class_repository');
+        return $this->getService('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository');
     }
 
     /**
@@ -272,8 +261,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public function getCurrentTreeNodeDataId()
     {
         return (int) $this->getRequest()->get(
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID,
-            0
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID, 0
         );
     }
 

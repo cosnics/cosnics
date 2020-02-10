@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\LanguageConsulter;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -15,9 +17,10 @@ class QuickLanguageComponent extends Manager
     private function isAllowedToChangeLanguage()
     {
         return $this->getConfigurationService()->getSetting(
-            array(self::package(), 'allow_user_change_platform_language')) == 1 &&
-            $this->getConfigurationService()->getSetting(
-                array(self::package(), 'allow_user_quick_change_platform_language')) == 1;
+                array(self::package(), 'allow_user_change_platform_language')
+            ) == 1 && $this->getConfigurationService()->getSetting(
+                array(self::package(), 'allow_user_quick_change_platform_language')
+            ) == 1;
     }
 
     private function getLanguages()
@@ -40,13 +43,13 @@ class QuickLanguageComponent extends Manager
         {
             $choice = Request::get(self::PARAM_CHOICE);
             $languages = array_keys($this->getLanguages());
-            
+
             if ($choice && in_array($choice, $languages))
             {
                 LocalSetting::getInstance()->create('platform_language', $choice);
             }
         }
-        
+
         $response = new RedirectResponse(Request::get(self::PARAM_REFER));
         $response->send();
     }
@@ -54,14 +57,16 @@ class QuickLanguageComponent extends Manager
     /**
      * @return \Chamilo\Configuration\Service\ConfigurationConsulter|object
      */
-    private function getConfigurationService() {
-        return $this->getService('chamilo.configuration.service.configuration_consulter');
+    private function getConfigurationService()
+    {
+        return $this->getService(ConfigurationConsulter::class);
     }
 
     /**
      * @return \Chamilo\Configuration\Service\LanguageConsulter|object
      */
-    private function getLanguageService() {
-        return $this->getService('chamilo.configuration.service.language_consulter');
+    private function getLanguageService()
+    {
+        return $this->getService(LanguageConsulter::class);
     }
 }

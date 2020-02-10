@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\Menu\RepositoryCategoryTreeMenu;
 use Chamilo\Core\Repository\Menu\RepositoryMenu;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Service\WorkspaceExtensionManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
@@ -848,6 +849,6 @@ abstract class Manager extends Application
      */
     public function getWorkspaceExtensionManager()
     {
-        return $this->getService('chamilo.core.repository.service.workspace_extension_manager');
+        return $this->getService(WorkspaceExtensionManager::class);
     }
 }

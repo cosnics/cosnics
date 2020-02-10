@@ -25,7 +25,7 @@ abstract class Manager extends AjaxManager
      */
     protected function getContentObjectRepository()
     {
-        return $this->getService('chamilo.core.repository.workspace.repository.content_object_repository');
+        return $this->getService(ContentObjectRepository::class);
     }
 
     /**

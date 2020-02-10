@@ -31,8 +31,8 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Bert De Clercq (Hogeschool Gent)
  * @author Anthony Hurst (Hogeschool Gent)
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable,
-    IntroductionTextSupportInterface
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
+    implements Categorizable, IntroductionTextSupportInterface
 {
     const ACTION_DISPLAY = 'Display';
 
@@ -72,38 +72,32 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $toolbar->insert_item(
             new ToolbarItem(
-                Translation::get('BrowseSubmitters'),
-                Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                Translation::get('BrowseSubmitters'), Theme::getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
                     )
-                ),
-                ToolbarItem::DISPLAY_ICON
+                ), ToolbarItem::DISPLAY_ICON
             ), 0
         );
 
         $toolbar->insert_item(
             new ToolbarItem(
-                Translation::get('SubmissionSubmit'),
-                Theme::getInstance()->getCommonImagePath('Action/Add'),
+                Translation::get('SubmissionSubmit'), Theme::getInstance()->getCommonImagePath('Action/Add'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
                     )
-                ),
-                ToolbarItem::DISPLAY_ICON
-            ),
-            1
+                ), ToolbarItem::DISPLAY_ICON
+            ), 1
         );
 
         $toolbar->insert_item(
             new ToolbarItem(
-                Translation::get('Reporting'),
-                Theme::getInstance()->getCommonImagePath('Action/Reporting'),
+                Translation::get('Reporting'), Theme::getInstance()->getCommonImagePath('Action/Reporting'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Reporting',
@@ -111,30 +105,24 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => AssignmentEntitiesTemplate::class
                     )
-                ),
-                ToolbarItem::DISPLAY_ICON, false, null, '_blank'
-            ),
-            2
+                ), ToolbarItem::DISPLAY_ICON, false, null, '_blank'
+            ), 2
         );
 
-        if($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication) && $this->isEphorusEnabled())
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication) && $this->isEphorusEnabled())
         {
             $toolbar->insert_item(
                 new ToolbarItem(
-                    Translation::get('EphorusOverview'),
-                    Theme::getInstance()->getImagePath(
-                        \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::context(), 'Logo/16'
-                    ),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EPHORUS
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON, false, null, '_blank'
-                ),
-                3
+                    Translation::get('EphorusOverview'), Theme::getInstance()->getImagePath(
+                    \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::context(), 'Logo/16'
+                ), $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EPHORUS
+                    )
+                ), ToolbarItem::DISPLAY_ICON, false, null, '_blank'
+                ), 3
             );
         }
 
@@ -142,59 +130,45 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     public function addContentObjectPublicationButtons(
-        $publication, ButtonGroup $buttonGroup,
-        DropdownButton $dropdownButton
+        $publication, ButtonGroup $buttonGroup, DropdownButton $dropdownButton
     )
     {
         $buttonGroup->prependButton(
             new Button(
-                Translation::get('BrowseSubmitters'),
-                new FontAwesomeGlyph('folder-open'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                    )
-                ),
-                Button::DISPLAY_ICON,
-                false,
-                'btn-link'
+                Translation::get('BrowseSubmitters'), new FontAwesomeGlyph('folder-open'), $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                )
+            ), Button::DISPLAY_ICON, false, 'btn-link'
             )
         );
 
         $buttonGroup->prependButton(
             new Button(
-                Translation::get('SubmissionSubmit'),
-                new FontAwesomeGlyph('plus'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
-                    )
-                ),
-                Button::DISPLAY_ICON,
-                false,
-                'btn-link'
+                Translation::get('SubmissionSubmit'), new FontAwesomeGlyph('plus'), $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
+                )
+            ), Button::DISPLAY_ICON, false, 'btn-link'
             )
         );
 
-        if($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication) && $this->isEphorusEnabled())
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication) && $this->isEphorusEnabled())
         {
             $buttonGroup->prependButton(
                 new Button(
-                    Translation::get('EphorusOverview'),
-                    Theme::getInstance()->getImagePath(
-                        \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::context(), 'Logo/16'
-                    ),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EPHORUS
-                        )
-                    ),
-                    Button::DISPLAY_ICON, false, null, '_blank'
+                    Translation::get('EphorusOverview'), Theme::getInstance()->getImagePath(
+                    \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::context(), 'Logo/16'
+                ), $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EPHORUS
+                    )
+                ), Button::DISPLAY_ICON, false, null, '_blank'
                 )
             );
         }
@@ -207,15 +181,13 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $ephorusToolRegistration = DataManager::retrieve_course_tool_by_name('Ephorus');
 
-        if(!$ephorusToolRegistration)
+        if (!$ephorusToolRegistration)
         {
             return false;
         }
 
         $toolActive = CourseSettingsController::getInstance()->get_course_setting(
-            $this->get_course(),
-            CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
-            $ephorusToolRegistration->get_id()
+            $this->get_course(), CourseSetting::COURSE_SETTING_TOOL_ACTIVE, $ephorusToolRegistration->get_id()
         );
 
         return $toolActive;
@@ -226,7 +198,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function getAssignmentService()
     {
-        return $this->getService('chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service');
+        return $this->getService(AssignmentService::class);
     }
 
     /**
@@ -234,7 +206,9 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function getAssignmentDataProvider()
     {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.assignment.service.assignment_data_provider');
+        return $this->getService(
+            'chamilo.application.weblcms.tool.implementation.assignment.service.assignment_data_provider'
+        );
     }
 
     /**
@@ -242,7 +216,9 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function getPublicationRepository()
     {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository');
+        return $this->getService(
+            'chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository'
+        );
     }
 
     /**

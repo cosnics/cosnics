@@ -54,7 +54,7 @@ abstract class DependencyInjectionBasedTestCase extends ChamiloTestCase
      */
     protected function getTestStorageUnitRepository()
     {
-        return $this->getService('chamilo.libraries.storage.data_manager.doctrine.test.storage_unit_repository');
+        return $this->getService('Chamilo\Libraries\Storage\DataManager\Doctrine\Test\StorageUnitRepository');
     }
 
     /**
@@ -62,7 +62,7 @@ abstract class DependencyInjectionBasedTestCase extends ChamiloTestCase
      */
     protected function getTestDataClassRepository()
     {
-        return $this->getService('chamilo.libraries.storage.data_manager.doctrine.test.data_class_repository');
+        return $this->getService('Chamilo\Libraries\Storage\DataManager\Doctrine\Test\DataClassRepository');
     }
 
     /**
@@ -72,6 +72,6 @@ abstract class DependencyInjectionBasedTestCase extends ChamiloTestCase
      */
     public function getTestEntityManager()
     {
-        return $this->getService('doctrine.orm.test.entity_manager');
+        return $this->getService('Doctrine\ORM\Test\EntityManager');
     }
 }
