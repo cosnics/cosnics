@@ -3,7 +3,7 @@ namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Psr\SimpleCache\CacheInterface;
+use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 
 /**
  * @package Chamilo\Core\Menu\Service
@@ -24,16 +24,16 @@ class RightsCacheService
     private $itemService;
 
     /**
-     * @var \Psr\SimpleCache\CacheInterface
+     * @var \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
      */
     private $cacheProvider;
 
     /**
      * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param \Psr\SimpleCache\CacheInterface $cacheProvider
+     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $cacheProvider
      */
-    public function __construct(RightsService $rightsService, ItemService $itemService, CacheInterface $cacheProvider)
+    public function __construct(RightsService $rightsService, ItemService $itemService, FilesystemCache $cacheProvider)
     {
         $this->rightsService = $rightsService;
         $this->itemService = $itemService;
@@ -45,7 +45,7 @@ class RightsCacheService
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Exception
      */
     public function canUserViewItem(User $user, Item $item)
     {
@@ -56,12 +56,12 @@ class RightsCacheService
 
         $cacheProvider = $this->getCacheProvider();
 
-        if (!$cacheProvider->has($user->getId()))
+        if (!$cacheProvider->contains($user->getId()))
         {
-            $cacheProvider->set($user->getId(), $this->getUserRightsForAllItems($user));
+            $cacheProvider->save($user->getId(), $this->getUserRightsForAllItems($user));
         }
 
-        $userRights = $cacheProvider->get($user->getId());
+        $userRights = $cacheProvider->fetch($user->getId());
 
         return $userRights[$item->getId()];
     }
@@ -71,21 +71,21 @@ class RightsCacheService
      */
     public function clear()
     {
-        return $this->getCacheProvider()->clear();
+        return $this->getCacheProvider()->deleteAll();
     }
 
     /**
-     * @return \Psr\SimpleCache\CacheInterface
+     * @return \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
      */
-    public function getCacheProvider(): CacheInterface
+    public function getCacheProvider(): FilesystemCache
     {
         return $this->cacheProvider;
     }
 
     /**
-     * @param \Psr\SimpleCache\CacheInterface $cacheProvider
+     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $cacheProvider
      */
-    public function setCacheProvider(CacheInterface $cacheProvider): void
+    public function setCacheProvider(FilesystemCache $cacheProvider): void
     {
         $this->cacheProvider = $cacheProvider;
     }
@@ -126,6 +126,7 @@ class RightsCacheService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return boolean[]
+     * @throws \Exception
      */
     protected function getUserRightsForAllItems(User $user)
     {

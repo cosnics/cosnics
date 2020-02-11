@@ -3,9 +3,9 @@ namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
-use Psr\SimpleCache\CacheInterface;
+use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 
 /**
  * @package Chamilo\Core\Menu\Service
@@ -23,7 +23,7 @@ class ItemCacheService
     private $itemService;
 
     /**
-     * @var \Psr\SimpleCache\CacheInterface
+     * @var \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
      */
     private $cacheProvider;
 
@@ -34,10 +34,12 @@ class ItemCacheService
 
     /**
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param \Psr\SimpleCache\CacheInterface $cacheProvider
+     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $cacheProvider
      * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
      */
-    public function __construct(ItemService $itemService, CacheInterface $cacheProvider, PropertyMapper $propertyMapper)
+    public function __construct(
+        ItemService $itemService, FilesystemCache $cacheProvider, PropertyMapper $propertyMapper
+    )
     {
         $this->itemService = $itemService;
         $this->cacheProvider = $cacheProvider;
@@ -61,17 +63,17 @@ class ItemCacheService
     }
 
     /**
-     * @return \Psr\SimpleCache\CacheInterface
+     * @return \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
      */
-    public function getCacheProvider(): CacheInterface
+    public function getCacheProvider(): FilesystemCache
     {
         return $this->cacheProvider;
     }
 
     /**
-     * @param \Psr\SimpleCache\CacheInterface $cacheProvider
+     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $cacheProvider
      */
-    public function setCacheProvider(CacheInterface $cacheProvider): void
+    public function setCacheProvider(FilesystemCache $cacheProvider): void
     {
         $this->cacheProvider = $cacheProvider;
     }
@@ -104,25 +106,23 @@ class ItemCacheService
 
     /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[][]
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function getItemsGroupedByParentIdentifier()
     {
         $cacheProvider = $this->getCacheProvider();
 
-        if (!$cacheProvider->has(self::KEY_ITEMS))
+        if (!$cacheProvider->contains(self::KEY_ITEMS))
         {
-            $cacheProvider->set(self::KEY_ITEMS, $this->findItemsGroupedByParentIdentifier());
+            $cacheProvider->save(self::KEY_ITEMS, $this->findItemsGroupedByParentIdentifier());
         }
 
-        return $cacheProvider->get(self::KEY_ITEMS);
+        return $cacheProvider->fetch(self::KEY_ITEMS);
     }
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function doesItemHaveChildren(Item $item)
     {
@@ -138,7 +138,6 @@ class ItemCacheService
      * @param $parentIdentifier
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function findItemsByParentIdentifier(int $parentIdentifier)
     {
@@ -165,7 +164,7 @@ class ItemCacheService
             foreach ($itemTitlesGroupedByIdentifier as $itemTitle)
 
             {
-                if(!array_key_exists($itemIdentifier, $groupedItemTitles))
+                if (!array_key_exists($itemIdentifier, $groupedItemTitles))
                 {
                     $groupedItemTitles[$itemIdentifier] = array();
                 }
@@ -179,25 +178,23 @@ class ItemCacheService
 
     /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][][]
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function getItemTitlesGroupedByItemIdentifierAndIsocode()
     {
         $cacheProvider = $this->getCacheProvider();
 
-        if (!$cacheProvider->has(self::KEY_ITEM_TITLES))
+        if (!$cacheProvider->contains(self::KEY_ITEM_TITLES))
         {
-            $cacheProvider->set(self::KEY_ITEM_TITLES, $this->findItemTitlesGroupedByItemIdentifierAndIsocode());
+            $cacheProvider->save(self::KEY_ITEM_TITLES, $this->findItemTitlesGroupedByItemIdentifierAndIsocode());
         }
 
-        return $cacheProvider->get(self::KEY_ITEM_TITLES);
+        return $cacheProvider->fetch(self::KEY_ITEM_TITLES);
     }
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle|\Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][]
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function getItemTitles(Item $item)
     {
@@ -212,7 +209,6 @@ class ItemCacheService
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return string
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getItemTitleForCurrentLanguage(Item $item)
     {
@@ -224,12 +220,9 @@ class ItemCacheService
      */
     public function clear()
     {
-        return $this->getCacheProvider()->clear();
+        return $this->getCacheProvider()->deleteAll();
     }
 
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function warmUp()
     {
         $this->getItemTitlesGroupedByItemIdentifierAndIsocode();

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Menu\Factory;
 
+use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Symfony\Component\Cache\Simple\FilesystemCache;
 
 /**
  * @package Chamilo\Core\Menu\Factory
@@ -41,22 +41,22 @@ class MenuCacheProviderFactory
     }
 
     /**
-     * @return \Symfony\Component\Cache\Simple\FilesystemCache
+     * @return \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
      */
     public function getItemCacheProvider()
     {
         return new FilesystemCache(
-            'item', 0, $this->getConfigurablePathBuilder()->getCachePath('Chamilo\Core\Menu')
+            $this->getConfigurablePathBuilder()->getCachePath('Chamilo\Core\Menu\Item')
         );
     }
 
     /**
-     * @return \Symfony\Component\Cache\Simple\FilesystemCache
+     * @return \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
      */
     public function getRightsCacheProvider()
     {
         return new FilesystemCache(
-            'rights', 0, $this->getConfigurablePathBuilder()->getCachePath('Chamilo\Core\Menu')
+            $this->getConfigurablePathBuilder()->getCachePath('Chamilo\Core\Menu\Rights')
         );
     }
 }

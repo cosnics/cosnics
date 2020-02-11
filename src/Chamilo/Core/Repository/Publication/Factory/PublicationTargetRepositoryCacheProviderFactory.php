@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Publication\Factory;
 
-use Symfony\Component\Cache\Simple\ArrayCache;
+use Doctrine\Common\Cache\ArrayCache;
 
 /**
  * @package Chamilo\Core\Repository\Publication\Factory
@@ -12,7 +12,7 @@ class PublicationTargetRepositoryCacheProviderFactory
 {
 
     /**
-     * @return \Symfony\Component\Cache\Simple\ArrayCache
+     * @return \Doctrine\Common\Cache\ArrayCache
      */
     public function getPublicationTargetRepositoryCacheProvider()
     {

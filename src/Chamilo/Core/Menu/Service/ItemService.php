@@ -4,10 +4,10 @@ namespace Chamilo\Core\Menu\Service;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
+use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -56,7 +56,7 @@ class ItemService
     private $displayOrderHandler;
 
     /**
-     * @var \Psr\SimpleCache\CacheInterface
+     * @var \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
      */
     private $itemCacheProvider;
 
@@ -67,12 +67,12 @@ class ItemService
      * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Libraries\Storage\Service\DisplayOrderHandler $displayOrderHandler
-     * @param \Psr\SimpleCache\CacheInterface $itemCacheProvider
+     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $itemCacheProvider
      */
     public function __construct(
         ItemRepository $itemRepository, RightsService $rightsService, StringUtilities $stringUtilities,
         PropertyMapper $propertyMapper, Translator $translator, DisplayOrderHandler $displayOrderHandler,
-        CacheInterface $itemCacheProvider
+        FilesystemCache $itemCacheProvider
     )
     {
         $this->itemRepository = $itemRepository;
@@ -100,7 +100,6 @@ class ItemService
      *
      * @return boolean
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Exception
      */
     public function createItem(Item $item)
@@ -131,8 +130,6 @@ class ItemService
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Exception
      */
     public function createItemForTypeFromValues(string $itemType, array $values)
     {
@@ -170,7 +167,6 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
      *
      * @return boolean
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Exception
      */
     public function createItemTitle(ItemTitle $itemTitle)
@@ -192,7 +188,6 @@ class ItemService
      *
      * @return boolean
      * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function createItemTitleForItemFromParameters(Item $item, string $isocode, string $title)
     {
@@ -210,7 +205,6 @@ class ItemService
      *
      * @return boolean
      * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function createItemTitlesForItemFromValues(Item $item, array $values)
     {
@@ -234,7 +228,6 @@ class ItemService
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Exception
      */
     public function createItemWithTitlesForTypeFromValues(string $itemType, array $values)
@@ -258,6 +251,7 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
+     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Exception
      */
@@ -297,8 +291,8 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
+     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Exception
      */
     public function deleteItemChildren(Item $item)
     {
@@ -319,7 +313,6 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
      *
      * @return boolean
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function deleteItemTitle(ItemTitle $itemTitle)
     {
@@ -337,7 +330,6 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function deleteItemTitlesForItem(Item $item)
     {
@@ -510,17 +502,17 @@ class ItemService
     }
 
     /**
-     * @return \Psr\SimpleCache\CacheInterface
+     * @return \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
      */
-    public function getItemCacheProvider(): CacheInterface
+    public function getItemCacheProvider(): FilesystemCache
     {
         return $this->itemCacheProvider;
     }
 
     /**
-     * @param \Psr\SimpleCache\CacheInterface $itemCacheProvider
+     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $itemCacheProvider
      */
-    public function setItemCacheProvider(CacheInterface $itemCacheProvider): void
+    public function setItemCacheProvider(FilesystemCache $itemCacheProvider): void
     {
         $this->itemCacheProvider = $itemCacheProvider;
     }
@@ -658,7 +650,6 @@ class ItemService
      *
      * @return boolean
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function moveItemInDirection(Item $item, int $moveDirection)
     {
@@ -674,7 +665,6 @@ class ItemService
      *
      * @return boolean
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function saveItemFromValues(Item $item, array $values)
     {
@@ -715,7 +705,6 @@ class ItemService
      *
      * @return boolean
      * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function saveItemTitlesForItemFromValues(Item $item, array $values)
     {
@@ -764,8 +753,8 @@ class ItemService
      * @param string[] $values
      *
      * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function saveItemWithTitlesFromValues(Item $item, array $values)
     {
@@ -787,8 +776,6 @@ class ItemService
      *
      * @return bool
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Exception
      */
     public function updateItem(Item $item)
     {
@@ -816,7 +803,6 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
      *
      * @return boolean
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function updateItemTitle(ItemTitle $itemTitle)
     {
