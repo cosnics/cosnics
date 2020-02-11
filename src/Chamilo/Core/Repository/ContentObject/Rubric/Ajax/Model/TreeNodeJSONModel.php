@@ -171,16 +171,6 @@ class TreeNodeJSONModel
         ];
 
         $class = $types[$this->getType()];
-        return $class::fromJSON($this, $rubricData);
-    }
-
-    /**
-     * @param Serializer $serializer
-     *
-     * @return mixed|string
-     */
-    public function toJSON(Serializer $serializer)
-    {
-        return $serializer->serialize($this, 'json');
+        return $class::fromJSONModel($this, $rubricData);
     }
 }

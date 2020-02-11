@@ -74,4 +74,17 @@ class CategoryNode extends TreeNode
             $this->getId(), $this->getTitle(), TreeNodeJSONModel::TYPE_RUBRIC, $this->getParentNodeId(), $this->getColor()
         );
     }
+
+    /**
+     * @param TreeNodeJSONModel $treeNodeJSONModel
+     *
+     * @return TreeNode
+     */
+    public function updateFromJSONModel(TreeNodeJSONModel $treeNodeJSONModel): TreeNode
+    {
+        parent::updateFromJSONModel($treeNodeJSONModel);
+        $this->setColor($treeNodeJSONModel->getColor());
+
+        return $this;
+    }
 }

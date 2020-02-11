@@ -165,4 +165,17 @@ class CriteriumNode extends TreeNode
         );
     }
 
+    /**
+     * @param TreeNodeJSONModel $treeNodeJSONModel
+     *
+     * @return TreeNode
+     */
+    public function updateFromJSONModel(TreeNodeJSONModel $treeNodeJSONModel): TreeNode
+    {
+        parent::updateFromJSONModel($treeNodeJSONModel);
+        $this->setWeight($treeNodeJSONModel->getWeight());
+
+        return $this;
+    }
+
 }

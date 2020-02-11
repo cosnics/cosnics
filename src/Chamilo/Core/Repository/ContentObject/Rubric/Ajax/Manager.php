@@ -2,13 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax;
 
-use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
-use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
-use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricAjaxService;
 use Chamilo\Libraries\Architecture\AjaxManager;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Response\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Ajax
@@ -28,6 +25,33 @@ abstract class Manager extends AjaxManager
     const PARAM_RUBRIC_DATA_ID = 'RubricId';
     const PARAM_VERSION = 'Version';
     const PARAM_TREE_NODE_DATA = 'TreeNodeData';
+    const PARAM_NEW_PARENT_ID = 'NewParentId';
+    const PARAM_NEW_SORT = 'NewSort';
+    const PARAM_LEVEL_DATA = 'LevelData';
+    const PARAM_CHOICE_DATA = 'ChoiceData';
+
+    /**
+     * @return string|Response
+     */
+    function run()
+    {
+        try
+        {
+            $result = $this->runAjaxComponent();
+
+            return new JsonResponse($this->getSerializer()->serialize($result, 'json'), 200, [], true);
+        }
+        catch (\Exception $ex)
+        {
+            $this->getExceptionLogger()->logException($ex);
+            return new AjaxExceptionResponse($ex);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    abstract function runAjaxComponent();
 
     public function getRequiredPostParameters()
     {
@@ -35,48 +59,50 @@ abstract class Manager extends AjaxManager
     }
 
     /**
-     * @return RubricService
+     * @return RubricAjaxService
      */
-    protected function getRubricService()
+    protected function getRubricAjaxService()
     {
-        return $this->getService(RubricService::class);
+        return $this->getService(RubricAjaxService::class);
     }
 
     /**
-     * @param RubricData $rubricData
-     *
-     * @throws NotAllowedException
+     * @return int
      */
-    protected function validateRubricDataRights(RubricData $rubricData)
+    protected function getRubricDataId()
     {
-        $rubricId = $rubricData->getContentObjectId();
-        $contentObject = $this->getContentObjectRepository()->findById($rubricId);
-        if (!$contentObject instanceof Rubric)
-        {
-            throw new \RuntimeException(
-                sprintf('Rubric content object for rubric data %s not found', $rubricData->getId())
-            );
-        }
-
-        if(!$this->getRightsService()->canEditContentObject($this->getUser(), $contentObject))
-        {
-            throw new NotAllowedException();
-        }
+        return $this->getRequest()->getFromPost(self::PARAM_RUBRIC_DATA_ID);
     }
 
     /**
-     * @return ContentObjectRepository
+     * @return int
      */
-    protected function getContentObjectRepository()
+    protected function getVersion()
     {
-        return $this->getService(ContentObjectRepository::class);
+        return $this->getRequest()->getFromPost(self::PARAM_VERSION);
     }
 
     /**
-     * @return RightsService
+     * @return string
      */
-    protected function getRightsService()
+    protected function getTreeNodeData()
     {
-        return $this->getService(RightsService::class);
+        return $this->getRequest()->getFromPost(self::PARAM_TREE_NODE_DATA);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getLevelData()
+    {
+        return $this->getRequest()->getFromPost(self::PARAM_LEVEL_DATA);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getChoiceData()
+    {
+        return $this->getRequest()->getFromPost(self::PARAM_CHOICE_DATA);
     }
 }

@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use function sprintf;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity
@@ -365,13 +366,22 @@ class RubricData
     /**
      * @param int $treeNodeIdentifier
      * TODO: testing!
+     *
      * @return TreeNode
+     * @throws ObjectNotExistException
      */
     public function getTreeNodeById(int $treeNodeIdentifier)
     {
-        return $this->treeNodes->filter(function(TreeNode $treeNode) use ($treeNodeIdentifier) {
+        $treeNode = $this->treeNodes->filter(function(TreeNode $treeNode) use ($treeNodeIdentifier) {
             return $treeNode->getId() == $treeNodeIdentifier;
         })->get(0);
+
+        if (!$treeNode instanceof TreeNode)
+        {
+            throw new ObjectNotExistException('tree node', $treeNodeIdentifier);
+        }
+
+        return $treeNode;
     }
 
     /**
@@ -382,13 +392,7 @@ class RubricData
      */
     public function getParentNodeById(int $parentNodeId = null)
     {
-        $parentTreeNode = empty($parentNodeId) ? $this->getRootNode() : $this->getTreeNodeById($parentNodeId);
-        if (!$parentTreeNode instanceof TreeNode)
-        {
-            throw new ObjectNotExistException('Parent tree node', $parentNodeId);
-        }
-
-        return $parentTreeNode;
+        return empty($parentNodeId) ? $this->getRootNode() : $this->getTreeNodeById($parentNodeId);
     }
 
 }

@@ -7,7 +7,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UpdateTreeNodeComponent extends Manager
+class UpdateLevelComponent extends Manager
 {
     /**
      * @return array
@@ -18,8 +18,8 @@ class UpdateTreeNodeComponent extends Manager
      */
     function runAjaxComponent()
     {
-        return $this->getRubricAjaxService()->updateTreeNode(
-            $this->getRubricDataId(), $this->getVersion(), $this->getTreeNodeData()
+        return $this->getRubricAjaxService()->updateLevel(
+            $this->getRubricDataId(), $this->getVersion(), $this->getLevelData()
         );
     }
 
@@ -29,7 +29,7 @@ class UpdateTreeNodeComponent extends Manager
     public function getRequiredPostParameters()
     {
         $parameters = parent::getRequiredPostParameters();
-        $parameters[] = self::PARAM_TREE_NODE_DATA;
+        $parameters[] = self::PARAM_LEVEL_DATA;
 
         return $parameters;
     }

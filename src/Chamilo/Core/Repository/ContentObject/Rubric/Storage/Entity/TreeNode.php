@@ -507,4 +507,15 @@ abstract class TreeNode
      * @return TreeNodeJSONModel
      */
     abstract public function toJSONModel(): TreeNodeJSONModel;
+
+    /**
+     * @param TreeNodeJSONModel $treeNodeJSONModel
+     *
+     * @return TreeNode
+     */
+    public function updateFromJSONModel(TreeNodeJSONModel $treeNodeJSONModel): TreeNode
+    {
+        $this->setTitle($treeNodeJSONModel->getTitle());
+        return $this;
+    }
 }
