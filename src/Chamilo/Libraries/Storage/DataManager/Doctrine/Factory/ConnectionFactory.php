@@ -4,6 +4,8 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Factory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 use Chamilo\Libraries\Storage\Exception\ConnectionException;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Configuration;
+use Exception;
 
 /**
  *
@@ -49,30 +51,30 @@ class ConnectionFactory
 
     /**
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
      * @return \Doctrine\DBAL\Connection
+     *
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function getConnection()
     {
         $dataSourceName = $this->getDataSourceName();
 
         $connectionParameters = array(
-            'dbname' => $dataSourceName->get_database(),
-            'user' => $dataSourceName->get_username(),
-            'password' => $dataSourceName->get_password(),
-            'host' => $dataSourceName->get_host(),
-            'driverClass' => $dataSourceName->get_driver(true),
-            'charset' => 'UTF8');
-
-        $connection = DriverManager::getConnection($connectionParameters, new \Doctrine\DBAL\Configuration());
+            'dbname' => $dataSourceName->getDatabase(), 'user' => $dataSourceName->getUsername(),
+            'password' => $dataSourceName->getPassword(), 'host' => $dataSourceName->getHost(),
+            'driverClass' => $dataSourceName->getDriver(true), 'charset' => 'UTF8'
+        );
 
         try
         {
-            return $connection;
+            return DriverManager::getConnection($connectionParameters, new Configuration());
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
-            throw new ConnectionException('Could not connect to the database. Please contact your system administrator.');
+            throw new ConnectionException(
+                'Could not connect to the database. Please contact your system administrator.'
+            );
         }
     }
 }

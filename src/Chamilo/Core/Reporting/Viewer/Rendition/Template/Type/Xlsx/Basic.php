@@ -49,7 +49,7 @@ class Basic extends Xlsx
 
     /**
      *
-     * @var \PHPExcel
+     * @var \PhpOffice\PhpSpreadsheet\Spreadsheet
      */
     private $php_excel;
 
@@ -176,7 +176,7 @@ class Basic extends Xlsx
 
     /**
      *
-     * @return multitype:string
+     * @return string[]
      */
     public function get_letters()
     {

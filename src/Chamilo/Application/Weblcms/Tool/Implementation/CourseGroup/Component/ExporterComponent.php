@@ -269,7 +269,7 @@ class ExporterComponent extends Manager
     /**
      * Retrieves the course groups when exporting all the course groups
      *
-     * @param $worksheet <type>
+     * @param $worksheet
      */
     protected function get_course_groups_tab($worksheet)
     {
@@ -378,7 +378,7 @@ class ExporterComponent extends Manager
     /**
      * Gets the course group subscriptions for the given course group
      *
-     * @param $worksheet <type>
+     * @param $worksheet
      */
     private function get_course_group_subscription($worksheet)
     {
