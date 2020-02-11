@@ -1,113 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container
-        xmlns="http://symfony.com/schema/dic/services"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults autowire="true" autoconfigure="true" public="true"/>
-        <service
-                id="Chamilo\Libraries\Architecture\Bootstrap\Bootstrap">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Platform\ChamiloRequest"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Configuration\Service\FileConfigurationLocator"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Platform\Session\SessionUtilities"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler"/>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+        <service id="Chamilo\Libraries\Architecture\Bootstrap\Bootstrap">
+            <argument type="service"
+                      id="Chamilo\Libraries\Platform\ChamiloRequest"/>
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\FileConfigurationLocator"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Platform\Session\SessionUtilities"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler"/>
             <argument>%chamilo.configuration.debug.show_errors%</argument>
         </service>
 
         <service id="Chamilo\Libraries\Architecture\Bridge\BridgeManager"/>
 
-        <service
-                id="Chamilo\Libraries\Architecture\Bootstrap\Kernel">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Platform\ChamiloRequest"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Configuration\Service\ConfigurationConsulter"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Architecture\Factory\ApplicationFactory"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Platform\Session\SessionUtilities"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Authentication\AuthenticationValidator"/>
+        <service id="Chamilo\Libraries\Architecture\Bootstrap\Kernel">
+            <argument type="service"
+                      id="Chamilo\Libraries\Platform\ChamiloRequest"/>
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\ConfigurationConsulter"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Architecture\Factory\ApplicationFactory"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Platform\Session\SessionUtilities"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Authentication\AuthenticationValidator"/>
             <argument>%chamilo.configuration.version%</argument>
-            <argument
-                    type="service"
-                    id="Chamilo\Core\User\User"/>
+            <argument type="service"
+                      id="Chamilo\Core\User\User"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Architecture\Factory\ApplicationFactory">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Platform\ChamiloRequest"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Utilities\StringUtilities"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Platform\Translation"/>
+        <service id="Chamilo\Libraries\Architecture\Factory\ApplicationFactory">
+            <argument type="service"
+                      id="Chamilo\Libraries\Platform\ChamiloRequest"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Utilities\StringUtilities"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Platform\Translation"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Architecture\ClassnameUtilities">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Utilities\StringUtilities"/>
+        <service id="Chamilo\Libraries\Architecture\ClassnameUtilities">
+            <argument type="service"
+                      id="Chamilo\Libraries\Utilities\StringUtilities"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Platform\Translator"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Format\Theme"/>
+        <service id="Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler">
+            <argument type="service"
+                      id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Platform\Translator"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Format\Theme"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger"
-                class="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface">
-            <factory
-                    service="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory"
-                    method="createExceptionLogger"/>
+        <service id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger"
+                 class="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface">
+            <factory service="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory"
+                     method="createExceptionLogger"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory">
-            <argument
-                    type="service"
-                    id="Chamilo\Configuration\Service\FileConfigurationConsulter"/>
+        <service id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory">
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\FileConfigurationConsulter"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Architecture\Test\PHPUnitGenerator\PHPUnitGenerator">
-            <argument type="service" id="Twig\Environment"/>
-            <argument type="service" id="Chamilo\Libraries\File\PathBuilder"/>
-            <argument type="service" id="Chamilo\Configuration\Service\RegistrationConsulter"/>
+        <service id="Chamilo\Libraries\Architecture\Test\PHPUnitGenerator\PHPUnitGenerator">
+            <argument type="service"
+                      id="Twig\Environment"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\File\PathBuilder"/>
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\RegistrationConsulter"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator">
-            <argument type="service" id="Chamilo\Libraries\Platform\ChamiloRequest"/>
+        <service id="Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator">
+            <argument type="service"
+                      id="Chamilo\Libraries\Platform\ChamiloRequest"/>
         </service>
 
     </services>

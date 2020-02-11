@@ -1,85 +1,62 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://symfony.com/schema/dic/services"
-        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults autowire="true" autoconfigure="true" public="true"/>
-        <service
-                id="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\File\PathBuilder"/>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+        <service id="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader">
+            <argument type="service"
+                      id="Chamilo\Libraries\File\PathBuilder"/>
         </service>
 
-        <service
-                id="Chamilo\Core\Repository\Service\ConfigurationCacheService">
+        <service id="Chamilo\Core\Repository\Service\ConfigurationCacheService"></service>
+
+        <service id="Chamilo\Core\Repository\Storage\Repository\ContentObjectTemplateRepository"></service>
+
+        <service id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"></service>
+
+        <service id="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer">
+            <argument type="service"
+                      id="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader"/>
+            <argument type="service"
+                      id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
+            <argument type="service"
+                      id="Chamilo\Core\Repository\Service\ConfigurationCacheService"/>
         </service>
 
-        <service
-                id="Chamilo\Core\Repository\Storage\Repository\ContentObjectTemplateRepository">
+        <service id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"></service>
+
+        <service id="Chamilo\Core\Repository\Storage\Repository\ResourceFixerRepository">
+            <argument type="service"
+                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
         </service>
 
-        <service
-                id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository">
+        <service id="Chamilo\Core\Repository\Service\ResourceFixer\ResourceFixerDirectorFactory">
+            <argument type="service"
+                      id="Chamilo\Core\Repository\Storage\Repository\ResourceFixerRepository"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\File\ConfigurablePathBuilder"/>
         </service>
 
-        <service
-                id="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer">
-            <argument
-                    type="service"
-                    id="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Core\Repository\Service\ConfigurationCacheService"/>
-        </service>
-
-        <service
-                id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository">
-        </service>
-
-        <service
-                id="Chamilo\Core\Repository\Storage\Repository\ResourceFixerRepository">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
-        </service>
-
-        <service
-                id="Chamilo\Core\Repository\Service\ResourceFixer\ResourceFixerDirectorFactory">
-            <argument
-                    type="service"
-                    id="Chamilo\Core\Repository\Storage\Repository\ResourceFixerRepository"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\File\ConfigurablePathBuilder"/>
-        </service>
-
-        <service
-                id="Chamilo\Core\Repository\Service\ResourceFixer\ResourceFixerDirector">
-            <factory
-                    service="Chamilo\Core\Repository\Service\ResourceFixer\ResourceFixerDirectorFactory"
-                    method="buildResourceFixerDirector"/>
+        <service id="Chamilo\Core\Repository\Service\ResourceFixer\ResourceFixerDirector">
+            <factory service="Chamilo\Core\Repository\Service\ResourceFixer\ResourceFixerDirectorFactory"
+                     method="buildResourceFixerDirector"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Publication\Service\PublicationAggregator"/>
 
-        <service
-                id="Chamilo\Core\Repository\Publication\Factory\PublicationTargetRepositoryCacheProviderFactory"/>
+        <service id="Chamilo\Core\Repository\Publication\Factory\PublicationTargetRepositoryCacheProviderFactory"/>
 
         <service id="Chamilo\Core\Repository\Publication\Storage\PublicationTargetRepositoryCache">
-            <factory
-                    service="Chamilo\Core\Repository\Publication\Factory\PublicationTargetRepositoryCacheProviderFactory"
-                    method="getPublicationTargetRepositoryCacheProvider"/>
+            <factory service="Chamilo\Core\Repository\Publication\Factory\PublicationTargetRepositoryCacheProviderFactory"
+                     method="getPublicationTargetRepositoryCacheProvider"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Publication\Storage\Repository\PublicationTargetRepository">
-            <argument
-                    type="service"
-                    id="Chamilo\Core\Repository\Publication\Storage\PublicationTargetRepositoryCache"/>
+            <argument type="service"
+                      id="Chamilo\Core\Repository\Publication\Storage\PublicationTargetRepositoryCache"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Publication\Service\PublicationTargetService"/>

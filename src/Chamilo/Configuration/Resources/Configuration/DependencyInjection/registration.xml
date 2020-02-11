@@ -1,43 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container
-        xmlns="http://symfony.com/schema/dic/services"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults autowire="true" autoconfigure="true" public="true"/>
-        <service
-                id="Chamilo\Configuration\Service\RegistrationConsulter">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Utilities\StringUtilities"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Configuration\Service\RegistrationCacheLoader"/>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+        <service id="Chamilo\Configuration\Service\RegistrationConsulter">
+            <argument type="service"
+                      id="Chamilo\Libraries\Utilities\StringUtilities"/>
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\RegistrationCacheLoader"/>
         </service>
 
-        <service
-                id="Chamilo\Configuration\Service\RegistrationCacheLoader"
-                class="Chamilo\Configuration\Service\DataCacheLoader">
-            <argument
-                    type="service"
-                    id="Chamilo\Configuration\Service\RegistrationLoader"/>
+        <service id="Chamilo\Configuration\Service\RegistrationCacheLoader"
+                 class="Chamilo\Configuration\Service\DataCacheLoader">
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\RegistrationLoader"/>
         </service>
 
-        <service
-                id="Chamilo\Configuration\Service\RegistrationLoader">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Utilities\StringUtilities"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Configuration\Storage\Repository\RegistrationRepository"/>
+        <service id="Chamilo\Configuration\Service\RegistrationLoader">
+            <argument type="service"
+                      id="Chamilo\Libraries\Utilities\StringUtilities"/>
+            <argument type="service"
+                      id="Chamilo\Configuration\Storage\Repository\RegistrationRepository"/>
         </service>
 
-        <service
-                id="Chamilo\Configuration\Storage\Repository\RegistrationRepository">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
+        <service id="Chamilo\Configuration\Storage\Repository\RegistrationRepository">
+            <argument type="service"
+                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
         </service>
     </services>
 </container>

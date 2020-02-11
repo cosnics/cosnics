@@ -1,57 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container
-        xmlns="http://symfony.com/schema/dic/services"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults autowire="true" autoconfigure="true" public="true"/>
-        <service
-                id="Chamilo\Libraries\Platform\Session\SessionUtilities">
-            <argument
-                    type="service"
-                    id="Chamilo\Configuration\Service\FileConfigurationLocator"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Core\User\Service\SessionHandler"/>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+        <service id="Chamilo\Libraries\Platform\Session\SessionUtilities">
+            <argument type="service"
+                      id="Chamilo\Configuration\Service\FileConfigurationLocator"/>
+            <argument type="service"
+                      id="Chamilo\Core\User\Service\SessionHandler"/>
             <argument>%chamilo.configuration.general.security_key%</argument>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Platform\Translation"
-                class="Chamilo\Libraries\Translation\Translation">
+        <service id="Chamilo\Libraries\Platform\Translation"
+                 class="Chamilo\Libraries\Translation\Translation">
             <deprecated>The "%service_id%" service is deprecated</deprecated>
-            <factory
-                    class="Chamilo\Libraries\Translation\Translation"
-                    method="getInstance"/>
+            <factory class="Chamilo\Libraries\Translation\Translation"
+                     method="getInstance"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Translation\Translation">
-            <factory
-                    class="Chamilo\Libraries\Translation\Translation"
-                    method="getInstance"/>
+        <service id="Chamilo\Libraries\Translation\Translation">
+            <factory class="Chamilo\Libraries\Translation\Translation"
+                     method="getInstance"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Platform\Translator"
-                class="Chamilo\Libraries\Translation\Translation">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Architecture\ClassnameUtilities"/>
-            <argument
-                    type="service"
-                    id="Symfony\Component\Translation\Translator"/>
+        <service id="Chamilo\Libraries\Platform\Translator"
+                 class="Chamilo\Libraries\Translation\Translation">
+            <argument type="service"
+                      id="Chamilo\Libraries\Architecture\ClassnameUtilities"/>
+            <argument type="service"
+                      id="Symfony\Component\Translation\Translator"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Platform\TranslationCacheService">
-        </service>
+        <service id="Chamilo\Libraries\Platform\TranslationCacheService"></service>
 
-        <service
-                id="Chamilo\Libraries\Platform\Configuration\LocalSetting">
-            <factory
-                    class="Chamilo\Libraries\Platform\Configuration\LocalSetting"
-                    method="getInstance"/>
+        <service id="Chamilo\Libraries\Platform\Configuration\LocalSetting">
+            <factory class="Chamilo\Libraries\Platform\Configuration\LocalSetting"
+                     method="getInstance"/>
         </service>
     </services>
 </container>

@@ -3,9 +3,10 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults autowire="true" autoconfigure="true" public="true"/>
-        <service
-                id="Chamilo\Configuration\Service\ConfigurationConsulter">
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+        <service id="Chamilo\Configuration\Service\ConfigurationConsulter">
             <argument type="service"
                       id="Chamilo\Configuration\Service\ConfigurationCacheLoader"/>
         </service>
@@ -29,30 +30,27 @@
                       id="Chamilo\Configuration\Service\StorageConfigurationLoader"/>
         </service>
 
-        <service
-                id="Chamilo\Configuration\Service\FileConfigurationLoader">
+        <service id="Chamilo\Configuration\Service\FileConfigurationLoader">
             <argument type="service"
                       id="Chamilo\Configuration\Service\FileConfigurationLocator"/>
         </service>
 
         <service id="Chamilo\Configuration\Service\FileConfigurationLocator">
-            <argument type="service" id="Chamilo\Libraries\File\PathBuilder"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\File\PathBuilder"/>
         </service>
 
-        <service
-                id="Chamilo\Configuration\Service\StorageConfigurationLoader">
+        <service id="Chamilo\Configuration\Service\StorageConfigurationLoader">
             <argument type="service"
                       id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository"/>
         </service>
 
-        <service
-                id="Chamilo\Configuration\Service\ConfigurationService">
+        <service id="Chamilo\Configuration\Service\ConfigurationService">
             <argument type="service"
                       id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository"/>
         </service>
 
-        <service
-                id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository">
+        <service id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository">
             <argument type="service"
                       id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
         </service>
@@ -63,10 +61,11 @@
                       id="Chamilo\Configuration\Service\FileConfigurationLoader"/>
         </service>
 
-        <service
-                id="Chamilo\Configuration\Package\Service\PackageFactory">
-            <argument type="service" id="Chamilo\Libraries\File\PathBuilder"/>
-            <argument type="service" id="Chamilo\Libraries\Platform\Translation"/>
+        <service id="Chamilo\Configuration\Package\Service\PackageFactory">
+            <argument type="service"
+                      id="Chamilo\Libraries\File\PathBuilder"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Platform\Translation"/>
         </service>
     </services>
 </container>

@@ -1,63 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container
-        xmlns="http://symfony.com/schema/dic/services"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults autowire="true" autoconfigure="true" public="true"/>
-        <service
-                id="Chamilo\Libraries\Format\Theme">
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+        <service id="Chamilo\Libraries\Format\Theme">
             <argument>%chamilo.configuration.general.theme%</argument>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Utilities\StringUtilities"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Architecture\ClassnameUtilities"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\File\PathBuilder"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Utilities\StringUtilities"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Architecture\ClassnameUtilities"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\File\PathBuilder"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Format\Utilities\ResourceManager">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\File\PathBuilder"/>
+        <service id="Chamilo\Libraries\Format\Utilities\ResourceManager">
+            <argument type="service"
+                      id="Chamilo\Libraries\File\PathBuilder"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Format\BreadcrumbTrailRenderer">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Utilities\StringUtilities"/>
+        <service id="Chamilo\Libraries\Format\BreadcrumbTrailRenderer">
+            <argument type="service"
+                      id="Chamilo\Libraries\Utilities\StringUtilities"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Format\Utilities\ResourceProcessor">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\File\PathBuilder"/>
+        <service id="Chamilo\Libraries\Format\Utilities\ResourceProcessor">
+            <argument type="service"
+                      id="Chamilo\Libraries\File\PathBuilder"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Format\Utilities\PackageDescriber">
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\File\PathBuilder"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Configuration\Package\Service\PackageFactory"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Utilities\StringUtilities"/>
-            <argument
-                    type="service"
-                    id="Chamilo\Libraries\Architecture\ClassnameUtilities"/>
+        <service id="Chamilo\Libraries\Format\Utilities\PackageDescriber">
+            <argument type="service"
+                      id="Chamilo\Libraries\File\PathBuilder"/>
+            <argument type="service"
+                      id="Chamilo\Configuration\Package\Service\PackageFactory"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Utilities\StringUtilities"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Architecture\ClassnameUtilities"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer">
-        </service>
+        <service id="Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer"></service>
     </services>
 </container>

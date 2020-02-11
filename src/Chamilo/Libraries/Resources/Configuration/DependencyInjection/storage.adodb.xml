@@ -3,29 +3,29 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults autowire="true" autoconfigure="true" public="true"/>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
         <!-- Connection -->
-        <service
-                id="Chamilo\Libraries\Storage\DataManager\AdoDb\DataSourceName">
+        <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\DataSourceName">
             <argument>%chamilo.configuration.database%</argument>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConnectionFactory">
+        <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConnectionFactory">
             <argument type="service"
                       id="Chamilo\Libraries\Storage\DataManager\AdoDb\DataSourceName"/>
         </service>
 
-        <service id="ADOConnection" class="ADOConnection">
-            <factory
-                    service="Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConnectionFactory"
-                    method="getConnection"/>
+        <service id="ADOConnection"
+                 class="ADOConnection">
+            <factory service="Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConnectionFactory"
+                     method="getConnection"/>
         </service>
 
         <!-- Database Layer -->
-        <service
-                id="Chamilo\Libraries\Storage\DataManager\AdoDb\Database\DataClassDatabase">
-            <argument type="service" id="ADOConnection"/>
+        <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\Database\DataClassDatabase">
+            <argument type="service"
+                      id="ADOConnection"/>
             <argument type="service"
                       id="Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator"/>
             <argument type="service"
@@ -38,9 +38,9 @@
                       id="Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Storage\DataManager\AdoDb\Database\StorageUnitDatabase">
-            <argument type="service" id="ADOConnection"/>
+        <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\Database\StorageUnitDatabase">
+            <argument type="service"
+                      id="ADOConnection"/>
             <argument type="service"
                       id="Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator"/>
             <argument type="service"
@@ -49,9 +49,8 @@
 
         <!-- Repositories -->
 
-        <service
-                id="Chamilo\Libraries\Storage\DataManager\Adodb\DataClassRepository"
-                class="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository">
+        <service id="Chamilo\Libraries\Storage\DataManager\Adodb\DataClassRepository"
+                 class="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository">
             <argument type="service"
                       id="Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache"/>
             <argument type="service"
@@ -61,27 +60,22 @@
             <argument>%chamilo.configuration.debug.enable_query_cache%</argument>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Storage\DataManager\Adodb\StorageUnitRepository"
-                class="Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository">
+        <service id="Chamilo\Libraries\Storage\DataManager\Adodb\StorageUnitRepository"
+                 class="Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository">
             <argument type="service"
                       id="Chamilo\Libraries\Storage\DataManager\AdoDb\Database\StorageUnitDatabase"/>
         </service>
 
         <!-- Utilities -->
 
-        <service
-                id="Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConditionPartTranslatorFactory">
+        <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConditionPartTranslatorFactory">
             <argument type="service"
                       id="Chamilo\Libraries\Architecture\ClassnameUtilities"/>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor">
-        </service>
+        <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor"></service>
 
-        <service
-                id="Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService">
+        <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService">
             <argument type="service"
                       id="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory"/>
             <argument type="service"
@@ -89,8 +83,7 @@
             <argument>%chamilo.configuration.debug.enable_query_cache%</argument>
         </service>
 
-        <service
-                id="Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ParametersProcessor">
+        <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ParametersProcessor">
             <argument type="service"
                       id="Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService"/>
             <argument type="service"

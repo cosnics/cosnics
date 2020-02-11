@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container
-        xmlns="http://symfony.com/schema/dic/services"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults autowire="true" autoconfigure="true" public="true"/>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
 
-        <prototype namespace="Chamilo\Core\Notification\" resource="../../../{Service}/*"/>
+        <prototype namespace="Chamilo\Core\Notification\"
+                   resource="../../../{Service}/*"/>
 
         <service id="Chamilo\Core\Notification\Storage\Repository\NotificationRepository">
-            <factory service="Doctrine\ORM\EntityManager" method="getRepository"/>
+            <factory service="Doctrine\ORM\EntityManager"
+                     method="getRepository"/>
             <argument>Chamilo\Core\Notification\Storage\Entity\Notification</argument>
         </service>
 
         <service id="Chamilo\Core\Notification\Storage\Repository\NotificationContextRepository">
-            <factory service="Doctrine\ORM\EntityManager" method="getRepository"/>
+            <factory service="Doctrine\ORM\EntityManager"
+                     method="getRepository"/>
             <argument>Chamilo\Core\Notification\Storage\Entity\NotificationContext</argument>
         </service>
 
         <service id="Chamilo\Core\Notification\Storage\Repository\FilterRepository">
-            <factory service="Doctrine\ORM\EntityManager" method="getRepository"/>
+            <factory service="Doctrine\ORM\EntityManager"
+                     method="getRepository"/>
             <argument>Chamilo\Core\Notification\Storage\Entity\Filter</argument>
         </service>
 
