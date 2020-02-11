@@ -30,6 +30,7 @@ use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerI
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -178,7 +179,7 @@ abstract class Manager extends Application
         }
 
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        $applicationFactory = $container->get('chamilo.libraries.architecture.factory.application_factory');
+        $applicationFactory = $container->get(ApplicationFactory::class);
 
         return $applicationFactory->getApplication(
             $namespace, new ApplicationConfiguration($application->getRequest(), $application->get_user(), $application)

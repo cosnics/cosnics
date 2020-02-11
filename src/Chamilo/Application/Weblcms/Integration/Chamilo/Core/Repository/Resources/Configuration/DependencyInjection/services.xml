@@ -32,5 +32,7 @@
             <argument type="string">Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment
             </argument>
         </service>
+
+        <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer"/>
     </services>
 </container>

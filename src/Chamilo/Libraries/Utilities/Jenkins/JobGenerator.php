@@ -2,11 +2,13 @@
 namespace Chamilo\Libraries\Utilities\Jenkins;
 
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
+
 class JobGenerator
 {
 
@@ -82,7 +84,7 @@ class JobGenerator
     {
         $job_folder = $this->get_job_path() . $this->get_job_name($package_list->get_type()) . DIRECTORY_SEPARATOR;
 
-        if (! is_dir($job_folder))
+        if (!is_dir($job_folder))
         {
             $package_config_path = $this->get_folder($package_list->get_type()) . 'config.xml';
             $job_config_path = $job_folder . 'config.xml';
@@ -102,6 +104,7 @@ class JobGenerator
     /**
      *
      * @param string $context
+     *
      * @return string
      */
     public function get_folder($context)
@@ -112,6 +115,7 @@ class JobGenerator
     /**
      *
      * @param string $context
+     *
      * @return string
      */
     public function get_job_name($context)
@@ -128,7 +132,7 @@ class JobGenerator
 }
 
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-$container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
+$container->get(Bootstrap::class)->setup();
 
 $package_list = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list();
 $job_path = 'E:/jenkins/';

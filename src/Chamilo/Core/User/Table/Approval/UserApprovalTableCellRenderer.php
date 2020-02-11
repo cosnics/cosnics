@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Table\Approval;
 
-use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
@@ -58,7 +57,7 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
     /**
      * Gets the action links to display
      *
-     * @param $user The user for which the action links should be returned
+     * @param User $user The user for which the action links should be returned
      *
      * @return string A HTML representation of the action links
      */
@@ -68,7 +67,7 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
 
         if ($this->get_user()->is_platform_admin())
         {
-            $um = new Manager();
+            $um = $this->get_table()->get_component();
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Approve'), Theme::getInstance()->getCommonImagePath('Action/Activate'),

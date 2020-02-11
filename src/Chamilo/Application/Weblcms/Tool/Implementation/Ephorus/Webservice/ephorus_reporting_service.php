@@ -2,12 +2,13 @@
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Result;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 require_once realpath(__DIR__ . '/../../../../../../../../') . '/vendor/autoload.php';
 
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-$container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
+$container->get(Bootstrap::class)->setup();
 
 // Create a new soap server
 $wsdl = new wsdl(__DIR__ . '/ephorus_reporting_service.wsdl');
@@ -25,7 +26,7 @@ function report()
     $dom_xpath->registerNamespace('report', 'http://reporting.ephorus.org/');
 
     $guid = $dom_xpath->query('//report:document_guid')->item(0)->nodeValue;
-    if (! $guid)
+    if (!$guid)
     {
         return new soap_fault('SERVER', '', 'document_guid can not be empty');
     }
@@ -37,8 +38,11 @@ function report()
         $request->set_duplicate_original_guid($dom_xpath->query('//report:document_original_guid')->item(0)->nodeValue);
         $request->set_duplicate_student_name($dom_xpath->query('//report:duplicate_student_name')->item(0)->nodeValue);
         $request->set_duplicate_student_number(
-            $dom_xpath->query('//report:duplicate_student_number')->item(0)->nodeValue);
-        $request->set_duplicate_original_guid($dom_xpath->query('//report:duplicate_original_guid')->item(0)->nodeValue);
+            $dom_xpath->query('//report:duplicate_student_number')->item(0)->nodeValue
+        );
+        $request->set_duplicate_original_guid(
+            $dom_xpath->query('//report:duplicate_original_guid')->item(0)->nodeValue
+        );
         $request->set_status($dom_xpath->query('//report:status')->item(0)->nodeValue);
         $request->set_status_description($dom_xpath->query('//report:status_description')->item(0)->nodeValue);
 
@@ -51,7 +55,7 @@ function report()
 
         $request->set_summary($summary_xml);
 
-        if (! $request->update())
+        if (!$request->update())
         {
             return new soap_fault('SERVER', '', 'report could not be stored');
         }
@@ -66,9 +70,11 @@ function report()
             $result->set_type($dom_xpath->query('.//report:type', $result_element)->item(0)->nodeValue);
             $result->set_percentage($dom_xpath->query('.//report:percent', $result_element)->item(0)->nodeValue);
             $result->set_original_guid(
-                $dom_xpath->query('.//report:original_guid', $result_element)->item(0)->nodeValue);
+                $dom_xpath->query('.//report:original_guid', $result_element)->item(0)->nodeValue
+            );
             $result->set_student_number(
-                $dom_xpath->query('.//report:student_number', $result_element)->item(0)->nodeValue);
+                $dom_xpath->query('.//report:student_number', $result_element)->item(0)->nodeValue
+            );
             $result->set_student_name($dom_xpath->query('.//report:student_name', $result_element)->item(0)->nodeValue);
 
             $diff_element = $dom_xpath->query('.//report:diff', $result_element)->item(0);
@@ -76,7 +82,7 @@ function report()
 
             $result->set_diff($diff_xml);
 
-            if (! $result->create())
+            if (!$result->create())
             {
                 $request->truncate_results();
 

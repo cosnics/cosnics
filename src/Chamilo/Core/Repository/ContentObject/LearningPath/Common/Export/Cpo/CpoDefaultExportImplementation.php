@@ -3,8 +3,10 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Common\Export\Cpo;
 
 use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Common\Export\CpoExportImplementation;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 class CpoDefaultExportImplementation extends CpoExportImplementation
@@ -34,8 +36,9 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
      * @param \DOMElement $contentObjectNode
      * @param \DOMDocument $document
      */
-    protected function exportTreeNodesData(LearningPath $learningPath, \DOMElement $contentObjectNode,
-        \DOMDocument $document)
+    protected function exportTreeNodesData(
+        LearningPath $learningPath, \DOMElement $contentObjectNode, \DOMDocument $document
+    )
 
     {
         $childrenNode = $document->createElement('children');
@@ -51,9 +54,9 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
             try
             {
                 $contentObject = $contentObjectRepository->findById($treeNodeData->getContentObjectId());
-                if ($contentObject instanceof ContentObject && ! $contentObject instanceof LearningPath)
+                if ($contentObject instanceof ContentObject && !$contentObject instanceof LearningPath)
                 {
-                    if (! $this->get_context()->in_id_cache($contentObject->getId()))
+                    if (!$this->get_context()->in_id_cache($contentObject->getId()))
                     {
                         $this->get_context()->process($contentObject);
                     }
@@ -80,24 +83,23 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
 
     /**
      *
-     * @return object | TreeNodeDataService
+     * @return TreeNodeDataService
      */
     protected function getTreeNodeDataService()
     {
         $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
-        return $serviceContainer->get(
-            'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service');
+        return $serviceContainer->get(TreeNodeDataService::class);
     }
 
     /**
      *
-     * @return object | ContentObjectRepository
+     * @return ContentObjectRepository
      */
     protected function getContentObjectRepository()
     {
         $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
-        return $serviceContainer->get('chamilo.core.repository.workspace.repository.content_object_repository');
+        return $serviceContainer->get(ContentObjectRepository::class);
     }
 }

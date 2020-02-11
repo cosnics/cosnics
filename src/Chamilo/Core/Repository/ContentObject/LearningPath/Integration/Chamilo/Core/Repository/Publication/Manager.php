@@ -178,9 +178,6 @@ class Manager implements PublicationInterface
     {
         $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
-        return $dependencyInjectionContainer->get(
-            'chamilo.core.repository.content_object.learning_path.integration.' .
-            'chamilo.core.repository.publication.service.publication_service'
-        );
+        return $dependencyInjectionContainer->get(PublicationService::class);
     }
 }

@@ -28,23 +28,23 @@ abstract class DoctrineInstaller extends \Chamilo\Configuration\Package\Action\I
         $cacheDir = Path::getInstance()->getCachePath('Hogent\Libraries\DependencyInjection');
         $cacheFile = $cacheDir . 'InstallDependencyInjection.php';
 
-        if(!is_dir($cacheDir))
+        if (!is_dir($cacheDir))
         {
             Filesystem::create_dir($cacheDir);
         }
 
         $containerBuilder = new DependencyInjectionContainerBuilder(
-            null, new DirectoryContainerExtensionFinder(Path::getInstance()->getBasePath()),
-            $cacheFile, 'ChamiloInstallContainer'
+            null, new DirectoryContainerExtensionFinder(Path::getInstance()->getBasePath()), $cacheFile,
+            'ChamiloInstallContainer'
         );
 
         $container = $containerBuilder->createContainer();
 
         /** @var PackagesMappingDriverFactory $packagesMappingDriverFactory */
-        $packagesMappingDriverFactory = $container->get('doctrine.orm.packages_mapping_driver_factory');
+        $packagesMappingDriverFactory = $container->get('Doctrine\ORM\PackagesMappingDriverFactory');
 
         /** @var EntityManager $entityManager */
-        $entityManager = $container->get('doctrine.orm.entity_manager');
+        $entityManager = $container->get(EntityManager::class);
 
         $schema_tool = new \Doctrine\ORM\Tools\SchemaTool($entityManager);
 
@@ -56,16 +56,16 @@ abstract class DoctrineInstaller extends \Chamilo\Configuration\Package\Action\I
             $package = $classNameUtilities->getNamespaceParent($this->context());
 
             $packages = array(
-                $this->context() =>
-                    Path::getInstance()->namespaceToFullPath($package) . 'Resources/Configuration/Config.yml'
+                $this->context() => Path::getInstance()->namespaceToFullPath($package) .
+                    'Resources/Configuration/Config.yml'
             );
 
             $mappingDriver = $packagesMappingDriverFactory->createMappingDriverForPackages($packages);
 
             $entityClasses = $mappingDriver->getAllClassNames();
-            foreach($entityClasses as $entityClass)
+            foreach ($entityClasses as $entityClass)
             {
-                if(in_array($entityClass, $this->getExcludedEntityClasses()))
+                if (in_array($entityClass, $this->getExcludedEntityClasses()))
                 {
                     continue;
                 }
@@ -74,9 +74,8 @@ abstract class DoctrineInstaller extends \Chamilo\Configuration\Package\Action\I
             }
 
             $schema_tool->updateSchema($classesMetadata, true);
-
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             echo '<pre>';
             print_r($ex->getMessage());

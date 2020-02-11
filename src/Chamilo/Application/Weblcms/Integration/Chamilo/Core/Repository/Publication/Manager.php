@@ -6,6 +6,8 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationService;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Service\ContentObjectPublicationMailer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -23,6 +25,7 @@ use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
@@ -118,12 +121,11 @@ class Manager implements PublicationInterface
         $container = $containerBuilder->createContainer();
 
         /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService */
-        $assignmentService =
-            $container->get('chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service');
+        $assignmentService = $container->get(AssignmentService::class);
 
         /** @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService $learningPathAssignmentService */
         $learningPathAssignmentService = $container->get(
-            'chamilo.application.weblcms.integration.chamilo.core.tracking.service.learning_path_assignment_service'
+            LearningPathAssignmentService::class
         );
 
         $contentObject = new ContentObject();
@@ -249,9 +251,9 @@ class Manager implements PublicationInterface
 
         return [
             $container->get(
-                'chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.publication_aggregator.assignment_publication_service'
+                'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\AssignmentPublicationService'
             ), $container->get(
-                'chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.publication_aggregator.learning_path_assignment_publication_service'
+                'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\LearningPathAssignmentPublicationService'
             ),
         ];
     }
@@ -502,8 +504,7 @@ class Manager implements PublicationInterface
 
             $contentObjectPublicationMailer = new ContentObjectPublicationMailer(
                 $mailerFactory->getActiveMailer(), Translation::getInstance(), new CourseRepository(),
-                new PublicationRepository(), new ContentObjectRepository(),
-                $container->get('chamilo.core.user.service.user_service')
+                new PublicationRepository(), new ContentObjectRepository(), $container->get(UserService::class)
             );
 
             $contentObjectPublicationMailer->mailPublication($publication);

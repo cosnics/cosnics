@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Reporting\Viewer\Ajax\Component;
 
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -28,21 +29,23 @@ class GraphComponent extends \Chamilo\Core\Reporting\Viewer\Ajax\Manager
 
         $response = new StreamedResponse();
         $response->headers->add(array('Content-Type' => $mime, 'Content-Length' => $size));
-        $response->setCallback(function () use ($file)
-        {
-            readfile($file);
-        });
+        $response->setCallback(
+            function () use ($file) {
+                readfile($file);
+            }
+        );
 
         $response->send();
     }
 
     /**
      *
-     * @return object | ConfigurablePathBuilder
+     * @return ConfigurablePathBuilder
      */
     protected function getConfigurablePathBuilder()
     {
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        return $container->get('chamilo.libraries.file.configurable_path_builder');
+
+        return $container->get(ConfigurablePathBuilder::class);
     }
 }

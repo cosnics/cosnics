@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 /**
  * Extension on the dependency injection container.
  * Loads local services and parameters for this package.
- * 
+ *
  * @see http://symfony.com/doc/current/components/dependency_injection/compilation.html
  *
  * @package Chamilo\Libraries\DependencyInjection
@@ -23,19 +23,21 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
 
     /**
      * Loads a specific configuration.
-     * 
+     *
      * @param string[] $configuration
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
+     *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
      */
     public function load(array $configuration, ContainerBuilder $container)
     {
         $xmlFileLoader = new XmlFileLoader(
-            $container, 
-            new FileLocator(
+            $container, new FileLocator(
                 Path::getInstance()->getConfigurationPath('Chamilo\Application\Weblcms\Course\OpenCourse') .
-                     'DependencyInjection'));
-        
+                'DependencyInjection'
+            )
+        );
+
         $xmlFileLoader->load('repository.xml');
         $xmlFileLoader->load('services.xml');
     }
@@ -43,7 +45,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     /**
      * Returns the recommended alias to use in XML.
      * This alias is also the mandatory prefix to use when using YAML.
-     * 
+     *
      * @return string
      */
     public function getAlias()

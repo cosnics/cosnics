@@ -47,7 +47,10 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormFactory;
+use Twig\Environment;
 
 /**
  * Creates the cache services for Chamilo
@@ -174,17 +177,17 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
             'chamilo_calculator', new CalculatorCacheService()
         );
 
-// TODO: fix this for the new cache services for items
-//            $cacheManager->addCacheService('chamilo_menu_items', $this->container->get(ItemCacheService::class));
+        // TODO: fix this for the new cache services for items
+        //            $cacheManager->addCacheService('chamilo_menu_items', $this->container->get(ItemCacheService::class));
 
         $cacheManager->addCacheService(
             'chamilo_twig', new TwigCacheService(
-                $this->container->get('twig.environment'), $this->container->get('symfony.component.forms.form')
+                $this->container->get(Environment::class), $this->container->get(FormFactory::class)
             )
         );
 
         $cacheManager->addCacheService(
-            'doctrine_proxies', new DoctrineProxyCacheService($this->container->get('doctrine.orm.entity_manager'))
+            'doctrine_proxies', new DoctrineProxyCacheService($this->container->get(EntityManager::class))
         );
     }
 
@@ -215,10 +218,10 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         $cacheManager->addCacheService('chamilo_external_calendar', new ExternalCalendarCacheService());
 
         // TODO: fix the new cache services for rights
-//        $cacheManager->addCacheService(
-//            'chamilo_menu_rights', $this->container->get(RightsCacheService::class)
-//
-//        );
+        //        $cacheManager->addCacheService(
+        //            'chamilo_menu_rights', $this->container->get(RightsCacheService::class)
+        //
+        //        );
 
         $cacheManager->addCacheService('chamilo_user_groups', new UserGroupMembershipCacheService());
         $cacheManager->addCacheService('chamilo_local_settings', new LocalSettingCacheService());

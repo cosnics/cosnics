@@ -115,7 +115,7 @@ class Translation
         {
             $classnameUtilities = ClassnameUtilities::getInstance();
             $translator = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-                'symfony.component.translation.translator');
+                'Symfony\Component\Translation\Translator');
 
             self::$instance = new self($classnameUtilities, $translator);
         }

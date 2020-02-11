@@ -1,14 +1,16 @@
 <?php
 
+use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use GuzzleHttp\Exception\ServerException;
 
 require_once realpath(__DIR__ . '/../../../../../../../') . '/vendor/autoload.php';
 
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-$container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
+$container->get(Bootstrap::class)->setup();
 
-$url = 'http://localhost/connect/src/Chamilo/Application/Weblcms/Tool/Implementation/Ephorus/Webservice/ephorus_reporting_service.php';
+$url =
+    'http://localhost/connect/src/Chamilo/Application/Weblcms/Tool/Implementation/Ephorus/Webservice/ephorus_reporting_service.php';
 
 $client = new \GuzzleHttp\Client(['base_url' => $url]);
 

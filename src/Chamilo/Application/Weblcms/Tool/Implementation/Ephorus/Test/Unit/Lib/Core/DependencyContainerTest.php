@@ -1,17 +1,17 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Test\Unit\Lib\Core;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\DependencyContainer;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Core\DependencyContainer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Result;
 
 /**
  * This test case test the dependency container class
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Tom Goethals - Hogeschool Gent
  */
-class DependencyContainerTest extends Test
+class DependencyContainerTest extends \Test
 {
 
     /**
@@ -19,7 +19,7 @@ class DependencyContainerTest extends Test
      * Test functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Tests if an object dependency is properly validated.
      */
@@ -41,7 +41,7 @@ class DependencyContainerTest extends Test
     /**
      * Tests that the check valid dependency function throws an invalid argument exception when there is an invalid
      * dependency.
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function test_check_valid_dependency_with_invalid_dependency()
     {
@@ -51,7 +51,7 @@ class DependencyContainerTest extends Test
     /**
      * Tests that the check valid dependency function throws an invalid argument exception when there is an empty
      * dependency.
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function test_check_valid_dependency_with_empty_dependency()
     {
@@ -66,7 +66,7 @@ class DependencyContainerTest extends Test
         $dependency_container = new DependencyContainer();
         $dependency_container->add('dependency_container_test', $this);
         $value = $dependency_container->get_dependencies();
-        
+
         $this->assertEquals($this, $value['dependency_container_test']);
     }
 
@@ -76,18 +76,18 @@ class DependencyContainerTest extends Test
     public function test_add_dependency_with_class_name()
     {
         $classname = get_class($this);
-        
+
         $dependency_container = new DependencyContainer();
         $dependency_container->add('dependency_container_test', $classname);
         $value = $dependency_container->get_dependencies();
-        
+
         $this->assertEquals($classname, $value['dependency_container_test']);
     }
 
     /**
      * Tests that the add dependency function throws an invalid argument exception when there is an empty dependency
      * name.
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function test_add_dependency_with_empty_name()
     {
@@ -97,7 +97,8 @@ class DependencyContainerTest extends Test
 
     /**
      * Tests that the add dependency function throws an invalid argument exception when there is a dependency added with
-     * an already existing dependency name @expectedException InvalidArgumentException
+     * an already existing dependency name
+     * @expectedException \InvalidArgumentException
      */
     public function test_add_dependency_with_same_name()
     {
@@ -114,9 +115,9 @@ class DependencyContainerTest extends Test
         $dependency_container = new DependencyContainer();
         $dependency_container->add('dependency_container_test', $this);
         $dependency_container->delete('dependency_container_test');
-        
+
         $value = $dependency_container->get_dependencies();
-        
+
         $this->assertEmpty($value['dependency_container_test']);
     }
 
@@ -129,16 +130,16 @@ class DependencyContainerTest extends Test
         $dependency_container->add('dependency_container_test', $this);
         $dependency_container->add('dependency_container_test2', $this);
         $dependency_container->delete('dependency_container_test');
-        
+
         $value = $dependency_container->get_dependencies();
-        
+
         $this->assertEquals($this, $value['dependency_container_test2']);
     }
 
     /**
      * Tests that the delete dependency function throws an invalid argument exception when there is an empty dependency
      * name.
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function test_delete_dependency_with_empty_name()
     {
@@ -149,7 +150,7 @@ class DependencyContainerTest extends Test
     /**
      * Tests that the delete dependency function throws an invalid argument exception when there is an inexisting
      * dependency name.
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function test_delete_dependency_with_inexisting_name()
     {
@@ -167,16 +168,16 @@ class DependencyContainerTest extends Test
         $result = new Result();
         $dependency_container->add('dependency_container_test', $result);
         $dependency_container->replace('dependency_container_test', $request);
-        
+
         $value = $dependency_container->get_dependencies();
-        
+
         $this->assertEquals($request, $value['dependency_container_test']);
     }
 
     /**
      * Tests that the replace dependency function throws an invalid argument exception when there is an empty dependency
      * name.
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function test_replace_dependency_with_empty_name()
     {
@@ -187,7 +188,7 @@ class DependencyContainerTest extends Test
     /**
      * Tests that the replace dependency function throws an invalid argument exception when there is an inexisting
      * dependency name.
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function test_replace_dependency_with_inexisting_name()
     {
@@ -203,7 +204,7 @@ class DependencyContainerTest extends Test
         $result = new Result();
         $dependency_container = new DependencyContainer();
         $dependency_container->add('dependency_container_test', $result);
-        
+
         $get_result = $dependency_container->get('dependency_container_test');
         $this->assertEquals($result, $get_result);
     }
@@ -211,7 +212,7 @@ class DependencyContainerTest extends Test
     /**
      * Tests that the get dependency function throws an invalid argument exception when there is an empty dependency
      * name.
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function test_get_dependency_with_empty_name()
     {
@@ -222,7 +223,7 @@ class DependencyContainerTest extends Test
     /**
      * Tests that the get dependency function throws an invalid argument exception when there is an inexisting
      * dependency name.
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function test_get_dependency_with_inexisting_name()
     {
@@ -235,16 +236,16 @@ class DependencyContainerTest extends Test
      * Helper functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Invokes the check_valid_dependency method on a dependency container with a value.
-     * 
+     *
      * @param mixed $value
      */
     protected function invoke_check_valid_dependency($value)
     {
         $container = new DependencyContainer();
-        
+
         $method = $this->get_method(get_class($container), 'check_valid_dependency');
         $method->invoke($container, $value);
     }

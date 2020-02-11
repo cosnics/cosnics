@@ -2,13 +2,15 @@
 namespace Chamilo\Libraries\Utilities\Jenkins;
 
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
+
 class BuildGenerator
 {
 
@@ -123,14 +125,14 @@ class BuildGenerator
         }
 
         $this->write_configuration(
-            $package_list->get_type(),
-            $sub_jobs,
-            $this->get_source_repository($package_list->get_type()));
+            $package_list->get_type(), $sub_jobs, $this->get_source_repository($package_list->get_type())
+        );
     }
 
     /**
      *
      * @param string $context
+     *
      * @return int
      */
     public function get_level($context)
@@ -141,6 +143,7 @@ class BuildGenerator
     /**
      *
      * @param string $context
+     *
      * @return string
      */
     public function get_path($context)
@@ -151,6 +154,7 @@ class BuildGenerator
     /**
      *
      * @param string $context
+     *
      * @return string
      */
     public function get_folder($context)
@@ -161,6 +165,7 @@ class BuildGenerator
     /**
      *
      * @param string $context
+     *
      * @return string
      */
     public function get_job_name($context)
@@ -179,6 +184,7 @@ class BuildGenerator
         if (file_exists($source_repository_path))
         {
             $source_repository_configuration = parse_ini_file($source_repository_path);
+
             return $source_repository_configuration['default'];
         }
         else
@@ -240,8 +246,8 @@ class BuildGenerator
      */
     public function write_configuration($context, $sub_jobs, $source_respository)
     {
-        $chart_url = $this->get_web_url() . ClassnameUtilities::getInstance()->namespaceToPath($context) .
-             '/build/chart/';
+        $chart_url =
+            $this->get_web_url() . ClassnameUtilities::getInstance()->namespaceToPath($context) . '/build/chart/';
         $workspace_url = $this->get_system_url() . ClassnameUtilities::getInstance()->namespaceToPath($context) . '/';
 
         $php_class_path = Path::getInstance()->namespaceToFullPath($context) . 'php/';
@@ -869,7 +875,7 @@ class BuildGenerator
 }
 
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-$container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
+$container->get(Bootstrap::class)->setup();
 
 $package_list = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list();
 

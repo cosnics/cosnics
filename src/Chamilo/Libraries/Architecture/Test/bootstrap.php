@@ -7,12 +7,13 @@
  */
 $original_include_path = get_include_path();
 
+use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 $autoloader = require realpath(__DIR__ . '/../../../../../') . '/vendor/autoload.php';
 \Doctrine\Common\Annotations\AnnotationRegistry::registerLoader([$autoloader, 'loadClass']);
 
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-$container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
+$container->get(Bootstrap::class)->setup();
 
 ini_set('include_path', get_include_path() . PATH_SEPARATOR . $original_include_path);

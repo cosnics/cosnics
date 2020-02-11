@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container
-        xmlns="http://symfony.com/schema/dic/services"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-    <services><defaults autowire="true" autoconfigure="true" public="true"/>
-        <defaults  public="true" />
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+        <defaults public="true"/>
 
-        <prototype namespace="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\" resource="../../../{Service, Storage/Repository}/*" />
+        <prototype namespace="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\"
+                   resource="../../../{Service, Storage/Repository}/*"/>
 
-        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\AssignmentServiceBridge" />
-        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EphorusServiceBridge" />
-        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\FeedbackServiceBridge" />
-        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServiceBridge" />
-
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\AssignmentServiceBridge"/>
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EphorusServiceBridge"/>
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\FeedbackServiceBridge"/>
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServiceBridge"/>
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Repository\AssignmentRepository"/>
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Repository\EphorusRepository"/>
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Repository\FeedbackRepository"/>
     </services>
 </container>

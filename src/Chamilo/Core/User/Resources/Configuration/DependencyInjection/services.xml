@@ -3,8 +3,11 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults autowire="true" autoconfigure="true" public="true"/>
-        <service id="Chamilo\Core\User\User" class="Chamilo\Core\User\Storage\DataClass\User">
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+        <service id="Chamilo\Core\User\User"
+                 class="Chamilo\Core\User\Storage\DataClass\User">
             <factory service="Chamilo\Core\User\Factory\UserFactory"
                      method="getUser"/>
         </service>
@@ -12,11 +15,14 @@
         <service id="Chamilo\Core\User\Factory\UserFactory">
             <argument type="service"
                       id="Chamilo\Libraries\Platform\Session\SessionUtilities"/>
-            <argument type="service" id="Chamilo\Core\User\Service\UserService"/>
+            <argument type="service"
+                      id="Chamilo\Core\User\Service\UserService"/>
             <argument type="service"
                       id="Chamilo\Configuration\Service\ConfigurationConsulter"/>
-            <argument type="service" id="Chamilo\Libraries\Format\Theme"/>
-            <argument type="service" id="Chamilo\Libraries\Platform\Translation"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Format\Theme"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Platform\Translation"/>
             <argument type="service"
                       id="Chamilo\Libraries\Platform\Configuration\LocalSetting"/>
         </service>
@@ -24,19 +30,19 @@
         <service id="Chamilo\Core\User\Service\UserService">
             <argument type="service"
                       id="Chamilo\Core\User\Storage\Repository\UserRepository"/>
-            <argument type="service" id="Chamilo\Libraries\Hashing\HashingUtilities"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Hashing\HashingUtilities"/>
             <argument type="service"
                       id="Chamilo\Configuration\Service\ConfigurationService"/>
         </service>
 
-        <service
-                id="Chamilo\Core\User\Service\PasswordGenerator">
-        </service>
+        <service id="Chamilo\Core\User\Service\PasswordGenerator"></service>
 
         <service id="Chamilo\Core\User\Storage\Repository\UserRepository">
             <argument type="service"
                       id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
-            <argument type="service" id="Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator"/>
+            <argument type="service"
+                      id="Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator"/>
         </service>
 
         <service id="Chamilo\Core\User\Service\SessionHandler">

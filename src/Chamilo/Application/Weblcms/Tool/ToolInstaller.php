@@ -11,6 +11,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingDefaultValue;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
+use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -63,29 +64,29 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
         ini_set('memory_limit', - 1);
         set_time_limit(0);
 
-        if (! $this->register_tool())
+        if (!$this->register_tool())
         {
             return false;
         }
 
-        if (! CourseSettingsController::getInstance()->install_course_settings(
-            $this,
-            $this->tool_registration->get_id()))
+        if (!CourseSettingsController::getInstance()->install_course_settings(
+            $this, $this->tool_registration->get_id()
+        ))
         {
             return false;
         }
 
-        if (! $this->install_static_settings())
+        if (!$this->install_static_settings())
         {
             return false;
         }
 
-        if (! $this->install_tool_for_existing_course_types())
+        if (!$this->install_tool_for_existing_course_types())
         {
             return false;
         }
 
-        if (! $this->install_tool_for_existing_courses())
+        if (!$this->install_tool_for_existing_courses())
         {
             return false;
         }
@@ -118,16 +119,17 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
         if ($tool_object->create())
         {
             $this->add_message(
-                \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
-                Translation::get('RegisteredTool'));
+                \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL, Translation::get('RegisteredTool')
+            );
             $this->tool_registration = $tool_object;
+
             return true;
         }
         else
         {
             return $this->failed(
-                \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
-                Translation::get('CouldNotRegisterTool'));
+                \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL, Translation::get('CouldNotRegisterTool')
+            );
         }
     }
 
@@ -143,7 +145,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
         $section_type = CourseSection::TYPE_TOOL;
 
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        $packageFactory = $container->get('chamilo.configuration.package.service.package_factory');
+        $packageFactory = $container->get(PackageFactory::class);
 
         $packageInformation = $packageFactory->getPackage(static::package());
 
@@ -171,30 +173,32 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
             $course_setting->set_name($static_tool_setting);
             $course_setting->set_global_setting(0);
 
-            if (! $course_setting->create())
+            if (!$course_setting->create())
             {
                 return $this->failed(
                     \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
-                    Translation::get('CouldNotInstallStaticSettings'));
+                    Translation::get('CouldNotInstallStaticSettings')
+                );
             }
 
             $course_setting_default_value = new CourseSettingDefaultValue();
             $course_setting_default_value->set_course_setting_id($course_setting->get_id());
             $course_setting_default_value->set_value(1);
 
-            if (! $course_setting_default_value->create())
+            if (!$course_setting_default_value->create())
             {
                 return $this->failed(
                     \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
-                    Translation::get('CouldNotInstallStaticSettings'));
+                    Translation::get('CouldNotInstallStaticSettings')
+                );
             }
 
             $this->static_tool_settings[$static_tool_setting] = $course_setting;
         }
 
         $this->add_message(
-            \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
-            Translation::get('InstalledStaticSettings'));
+            \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL, Translation::get('InstalledStaticSettings')
+        );
 
         return true;
     }
@@ -209,20 +213,22 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
         $course_types = CourseTypeDataManager::retrieves(CourseType::class_name(), new DataClassRetrievesParameters());
         while ($course_type = $course_types->next_result())
         {
-            if (! $this->install_static_tool_setting_relations_for_object(
-                $course_type,
-                '\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSetting',
-                'set_course_type_id'))
+            if (!$this->install_static_tool_setting_relations_for_object(
+                $course_type, '\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSetting',
+                'set_course_type_id'
+            ))
             {
                 return $this->failed(
                     \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
-                    Translation::get('CouldNotInstallStaticSettingsForExistingCourseTypes'));
+                    Translation::get('CouldNotInstallStaticSettingsForExistingCourseTypes')
+                );
             }
         }
 
         $this->add_message(
             \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
-            Translation::get('InstalledStaticSettingsForExistingCourseTypes'));
+            Translation::get('InstalledStaticSettingsForExistingCourseTypes')
+        );
 
         return true;
     }
@@ -240,37 +246,40 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
         $courses = CourseDataManager::retrieves(Course::class_name(), new DataClassRetrievesParameters());
         while ($course = $courses->next_result())
         {
-            if (! $this->install_static_tool_setting_relations_for_object(
-                $course,
-                '\Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting',
-                'set_course_id'))
+            if (!$this->install_static_tool_setting_relations_for_object(
+                $course, '\Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting', 'set_course_id'
+            ))
             {
                 return $this->failed(
                     \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
-                    Translation::get('CouldNotInstallStaticSettingsForExistingCourses'));
+                    Translation::get('CouldNotInstallStaticSettingsForExistingCourses')
+                );
             }
 
-            $course_subtree_root_location_id = $course_management_rights->get_courses_subtree_root_id($course->get_id());
+            $course_subtree_root_location_id =
+                $course_management_rights->get_courses_subtree_root_id($course->get_id());
 
             $this->add_message(
                 \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
-                Translation::get('InstalledStaticSettingsForExistingCourses'));
+                Translation::get('InstalledStaticSettingsForExistingCourses')
+            );
 
-            if (! $course_management_rights->create_location_in_courses_subtree(
-                CourseManagementRights::TYPE_COURSE_MODULE,
-                $this->tool_registration->get_id(),
-                $course_subtree_root_location_id,
-                $course->get_id()))
+            if (!$course_management_rights->create_location_in_courses_subtree(
+                CourseManagementRights::TYPE_COURSE_MODULE, $this->tool_registration->get_id(),
+                $course_subtree_root_location_id, $course->get_id()
+            ))
             {
                 return $this->failed(
                     \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
-                    Translation::get('CouldNotInstallRightsLocationForExistingCourseTypes'));
+                    Translation::get('CouldNotInstallRightsLocationForExistingCourseTypes')
+                );
             }
         }
 
         $this->add_message(
             \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
-            Translation::get('InstalledRightsLocationForExistingCourses'));
+            Translation::get('InstalledRightsLocationForExistingCourses')
+        );
 
         return true;
     }
@@ -284,8 +293,9 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
      *
      * @return bool
      */
-    protected function install_static_tool_setting_relations_for_object($object, $course_setting_relation_class_name,
-        $set_object_function = null)
+    protected function install_static_tool_setting_relations_for_object(
+        $object, $course_setting_relation_class_name, $set_object_function = null
+    )
     {
         foreach ($this->static_tool_settings as $static_tool_setting)
         {
@@ -296,7 +306,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
 
             $course_setting_relation->set_value(0);
 
-            if (! $course_setting_relation->create())
+            if (!$course_setting_relation->create())
             {
                 return false;
             }

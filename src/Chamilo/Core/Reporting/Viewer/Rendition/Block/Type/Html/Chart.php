@@ -4,6 +4,7 @@ namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Translation\Translation;
@@ -64,7 +65,8 @@ abstract class Chart extends Html
             {
                 $chart_description['Values'][$row_id] = 'Serie' . $row_id;
                 $chart_description['Description']['Serie' . $row_id] = trim(
-                    trim(trim(html_entity_decode(strip_tags($row_name), ENT_COMPAT, 'utf-8')), "\xC2\xA0"));
+                    trim(trim(html_entity_decode(strip_tags($row_name), ENT_COMPAT, 'utf-8')), "\xC2\xA0")
+                );
             }
 
             $chart[1] = $chart_description;
@@ -73,8 +75,8 @@ abstract class Chart extends Html
             {
                 $category_array = array();
                 $category_array['Name'] = trim(
-                    trim(html_entity_decode(strip_tags($category_name), ENT_COMPAT, 'utf-8')),
-                    "\xC2\xA0");
+                    trim(html_entity_decode(strip_tags($category_name), ENT_COMPAT, 'utf-8')), "\xC2\xA0"
+                );
                 foreach ($reporting_data->get_rows() as $row_id => $row_name)
                 {
                     $category_array['Serie' . $row_id] = $reporting_data->get_data_category_row($category_id, $row_id);
@@ -83,6 +85,7 @@ abstract class Chart extends Html
             }
 
             $chart[0] = $chart_data;
+
             return $chart;
         }
     }
@@ -96,14 +99,13 @@ abstract class Chart extends Html
                 if ($key2 == "Name")
                 {
                     $value[$key2] = StringUtilities::getInstance()->truncate(
-                        trim(html_entity_decode(strip_tags($value2), ENT_COMPAT, 'utf-8')),
-                        30,
-                        false,
-                        '...');
+                        trim(html_entity_decode(strip_tags($value2), ENT_COMPAT, 'utf-8')), 30, false, '...'
+                    );
                 }
             }
             $data[$key] = $value;
         }
+
         return $data;
     }
 
@@ -117,7 +119,9 @@ abstract class Chart extends Html
             array(
                 Application::PARAM_CONTEXT => \Chamilo\Core\Reporting\Viewer\Ajax\Manager::context(),
                 Application::PARAM_ACTION => \Chamilo\Core\Reporting\Viewer\Ajax\Manager::ACTION_GRAPH,
-                \Chamilo\Core\Reporting\Viewer\Ajax\Manager::PARAM_GRAPHMD5 => $md5));
+                \Chamilo\Core\Reporting\Viewer\Ajax\Manager::PARAM_GRAPHMD5 => $md5
+            )
+        );
 
         return $graphUrl->getUrl();
     }
@@ -129,16 +133,18 @@ abstract class Chart extends Html
     public function getFilePath($md5)
     {
         $rootPath = $this->getConfigurablePathBuilder()->getTemporaryPath();
+
         return $rootPath . $md5 . '.png';
     }
 
     /**
      *
-     * @return object | ConfigurablePathBuilder
+     * @return ConfigurablePathBuilder
      */
     protected function getConfigurablePathBuilder()
     {
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        return $container->get('chamilo.libraries.file.configurable_path_builder');
+
+        return $container->get(ConfigurablePathBuilder::class);
     }
 }

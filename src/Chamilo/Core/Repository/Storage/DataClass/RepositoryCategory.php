@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -42,6 +43,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
      * Creates this category
      *
      * @param $create_in_batch boolean - Creates objects in batch without fixing the right / left values (faster)
+     *
      * @return boolean
      */
     public function create($create_in_batch = false)
@@ -50,25 +52,28 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
 
         // TRANSACTION
         $success = DataManager::transactional(
-            function ($c) use ($create_in_batch, $category)
-            {
-                if (! $category->check_before_save())
+            function ($c) use ($create_in_batch, $category) {
+                if (!$category->check_before_save())
                 {
                     return false;
                 }
 
-                if (! DataManager::create($category))
+                if (!DataManager::create($category))
                 {
                     $this->add_error(
                         Translation::get(
                             'CouldNotCreateObjectInDatabase',
-                            array('OBJECT' => Translation::get('Category'), Utilities::COMMON_LIBRARIES)));
+                            array('OBJECT' => Translation::get('Category'), Utilities::COMMON_LIBRARIES)
+                        )
+                    );
 
                     return false;
                 }
 
                 return true;
-            });
+            }
+        );
+
         return $success;
     }
 
@@ -84,17 +89,17 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
             $this->add_error(Translation::get('TitleIsRequired'));
         }
 
-        if (! $this->get_type_id())
+        if (!$this->get_type_id())
         {
             $this->add_error(Translation::get('TypeIdIsRequired'));
         }
 
-        if (! $this->get_type())
+        if (!$this->get_type())
         {
             $this->add_error(Translation::get('TypeIsRequired'));
         }
 
-        if (! $this->get_parent())
+        if (!$this->get_parent())
         {
             $this->set_parent(0);
         }
@@ -102,7 +107,8 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID),
-                new StaticConditionVariable($this->get_parent()));
+                new StaticConditionVariable($this->get_parent())
+            );
             $count = DataManager::count(RepositoryCategory::class_name(), new DataClassCountParameters($condition));
             if ($count == 0)
             {
@@ -110,13 +116,13 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
             }
         }
 
-        if (! $this->get_display_order())
+        if (!$this->get_display_order())
         {
             $this->set_display_order(
                 DataManager::select_next_category_display_order(
-                    $this->get_parent(),
-                    $this->get_type_id(),
-                    $this->get_type()));
+                    $this->get_parent(), $this->get_type_id(), $this->get_type()
+                )
+            );
         }
 
         $conditions = array();
@@ -126,21 +132,27 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
             $conditions[] = new NotCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID),
-                    new StaticConditionVariable($this->get_id())));
+                    new StaticConditionVariable($this->get_id())
+                )
+            );
         }
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_NAME),
-            new StaticConditionVariable($this->get_name()));
+            new StaticConditionVariable($this->get_name())
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
-            new StaticConditionVariable($this->get_parent()));
+            new StaticConditionVariable($this->get_parent())
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
-            new StaticConditionVariable($this->get_type_id()));
+            new StaticConditionVariable($this->get_type_id())
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE),
-            new StaticConditionVariable($this->get_type()));
+            new StaticConditionVariable($this->get_type())
+        );
 
         $condition = new AndCondition($conditions);
         $count = DataManager::count(RepositoryCategory::class_name(), new DataClassCountParameters($condition));
@@ -149,7 +161,8 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
         {
             $this->add_error('CategoryWithSameNameExists');
         }
-        return ! $this->has_errors();
+
+        return !$this->has_errors();
     }
 
     /**
@@ -165,23 +178,26 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
 
         // TRANSACTION
         $success = DataManager::transactional(
-            function ($c) use ($move, $category)
-            {
-                if (! $category->check_before_save())
+            function ($c) use ($move, $category) {
+                if (!$category->check_before_save())
                 {
                     return false;
                 }
 
-                if (! DataManager::update($category))
+                if (!DataManager::update($category))
                 {
                     $category->add_error(
                         Translation::get(
                             'CouldNotUpdateObjectInDatabase',
-                            array('OBJECT' => Translation::get('Category'), Utilities::COMMON_LIBRARIES)));
+                            array('OBJECT' => Translation::get('Category'), Utilities::COMMON_LIBRARIES)
+                        )
+                    );
                 }
 
                 return true;
-            });
+            }
+        );
+
         return $success;
     }
 
@@ -196,35 +212,39 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
 
         // TRANSACTION
         $success = DataManager::transactional(
-            function ($c) use ($category)
-            {
+            function ($c) use ($category) {
                 if ($category->get_type() == Workspace::WORKSPACE_TYPE)
                 {
-                    if (! DataManager::delete_workspace_category_recursive($category))
+                    if (!DataManager::delete_workspace_category_recursive($category))
                     {
                         $category->add_error(Translation::get('CouldNotDeleteCategoryInDatabase'));
+
                         return false;
                     }
                 }
                 else
                 {
                     $deleted_content_objects = DataManager::retrieve_recycled_content_objects_from_category(
-                        $category->get_id());
+                        $category->get_id()
+                    );
 
                     while ($deleted_content_object = $deleted_content_objects->next_result())
                     {
                         $deleted_content_object->move(0);
                     }
 
-                    if (! DataManager::delete_category_recursive($this->getPublicationAggregator(), $category))
+                    if (!DataManager::delete_category_recursive($this->getPublicationAggregator(), $category))
                     {
                         $category->add_error(Translation::get('CouldNotDeleteCategoryInDatabase'));
+
                         return false;
                     }
                 }
 
                 return true;
-            });
+            }
+        );
+
         return $success;
     }
 
@@ -236,7 +256,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
         $containerBuilder = DependencyInjectionContainerBuilder::getInstance();
         $container = $containerBuilder->createContainer();
 
-        return $container->get('chamilo.core.repository.publication.service.publication_aggregator');
+        return $container->get(PublicationAggregator::class);
     }
 
     /**
@@ -247,12 +267,9 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
     public static function get_default_property_names($extended_property_names = array())
     {
         return array(
-            self::PROPERTY_TYPE_ID,
-            self::PROPERTY_TYPE,
-            self::PROPERTY_ID,
-            self::PROPERTY_NAME,
-            self::PROPERTY_PARENT,
-            self::PROPERTY_DISPLAY_ORDER);
+            self::PROPERTY_TYPE_ID, self::PROPERTY_TYPE, self::PROPERTY_ID, self::PROPERTY_NAME, self::PROPERTY_PARENT,
+            self::PROPERTY_DISPLAY_ORDER
+        );
     }
 
     /**
@@ -308,7 +325,8 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT),
-            new StaticConditionVariable($this->get_id()));
+            new StaticConditionVariable($this->get_id())
+        );
 
         return DataManager::count(RepositoryCategory::class_name(), new DataClassCountParameters($condition)) > 0;
     }
@@ -317,13 +335,16 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT),
-            new StaticConditionVariable($this->get_id()));
+            new StaticConditionVariable($this->get_id())
+        );
 
-        if (! $recursive)
+        if (!$recursive)
         {
             $parameters = new DataClassDistinctParameters(
                 $condition,
-                new DataClassProperties(array(new PropertyConditionVariable(self::class, self::PROPERTY_ID))));
+                new DataClassProperties(array(new PropertyConditionVariable(self::class, self::PROPERTY_ID)))
+            );
+
             return (DataManager::distinct(self::class_name(), $parameters));
         }
         else

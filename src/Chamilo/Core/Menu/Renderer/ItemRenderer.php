@@ -195,6 +195,7 @@ abstract class ItemRenderer
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function renderTitle(Item $item)
     {
