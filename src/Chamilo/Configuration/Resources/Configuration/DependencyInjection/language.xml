@@ -6,6 +6,7 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <service id="Chamilo\Configuration\Service\LanguageConsulter">
             <argument type="service"
                       id="Chamilo\Configuration\Service\LanguageCacheLoader"/>
@@ -17,14 +18,7 @@
                       id="Chamilo\Configuration\Service\LanguageLoader"/>
         </service>
 
-        <service id="Chamilo\Configuration\Service\LanguageLoader">
-            <argument type="service"
-                      id="Chamilo\Configuration\Storage\Repository\LanguageRepository"/>
-        </service>
-
-        <service id="Chamilo\Configuration\Storage\Repository\LanguageRepository">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
-        </service>
+        <service id="Chamilo\Configuration\Service\LanguageLoader"/>
+        <service id="Chamilo\Configuration\Storage\Repository\LanguageRepository"/>
     </services>
 </container>

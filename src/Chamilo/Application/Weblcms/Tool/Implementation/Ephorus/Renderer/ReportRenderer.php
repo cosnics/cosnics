@@ -35,7 +35,7 @@ class ReportRenderer
     protected $userService;
 
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twigRenderer;
 
@@ -44,10 +44,10 @@ class ReportRenderer
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager $requestManager
      * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Twig_Environment $twigRenderer
+     * @param \Twig\Environment $twigRenderer
      */
     public function __construct(
-        RequestManager $requestManager, UserService $userService, \Twig_Environment $twigRenderer
+        RequestManager $requestManager, UserService $userService, \Twig\Environment $twigRenderer
     )
     {
         $this->requestManager = $requestManager;
@@ -59,10 +59,9 @@ class ReportRenderer
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $request
      *
      * @return string
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function renderRequestReport(Request $request)
     {
@@ -102,15 +101,11 @@ class ReportRenderer
         }
 
         return [
-            'CHAMILO_RESULTS' => $this->getChamiloResultsParameters($chamiloResults),
-            'LOCAL_RESULTS' => $localResults,
-            'INTERNET_RESULTS' => $internetResults,
-            'RESULTS' => $resultParameters,
-            'REQUEST' => $request,
+            'CHAMILO_RESULTS' => $this->getChamiloResultsParameters($chamiloResults), 'LOCAL_RESULTS' => $localResults,
+            'INTERNET_RESULTS' => $internetResults, 'RESULTS' => $resultParameters, 'REQUEST' => $request,
             'REQUEST_USER_NAME' => $this->userService->getUserFullNameByIdentifier(
                 $request->get_request_user_id()
-            ),
-            'AUTHOR' => $this->userService->getUserFullNameByIdentifier(
+            ), 'AUTHOR' => $this->userService->getUserFullNameByIdentifier(
                 $request->get_author_id()
             )
         ];
@@ -129,8 +124,7 @@ class ReportRenderer
         foreach ($chamiloResults as $result)
         {
             $resultListParameters[] = [
-                'RESULT_OBJECT' => $result,
-                'ORIGINAL_OBJECT' => $hits[$result->get_original_guid()]
+                'RESULT_OBJECT' => $result, 'ORIGINAL_OBJECT' => $hits[$result->get_original_guid()]
             ];
         }
 
@@ -180,8 +174,7 @@ class ReportRenderer
         $xslt->importStylesheet($stylesheet);
 
         $resultParameters = [
-            'RESULT_OBJECT' => $result,
-            'DIFF' => $xslt->transformToXml($diff)
+            'RESULT_OBJECT' => $result, 'DIFF' => $xslt->transformToXml($diff)
         ];
 
         return $resultParameters;

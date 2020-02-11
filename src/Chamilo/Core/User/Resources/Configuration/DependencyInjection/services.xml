@@ -6,63 +6,27 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <service id="Chamilo\Core\User\User"
                  class="Chamilo\Core\User\Storage\DataClass\User">
             <factory service="Chamilo\Core\User\Factory\UserFactory"
                      method="getUser"/>
         </service>
 
-        <service id="Chamilo\Core\User\Factory\UserFactory">
-            <argument type="service"
-                      id="Chamilo\Libraries\Platform\Session\SessionUtilities"/>
-            <argument type="service"
-                      id="Chamilo\Core\User\Service\UserService"/>
-            <argument type="service"
-                      id="Chamilo\Configuration\Service\ConfigurationConsulter"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Format\Theme"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Platform\Translation"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Platform\Configuration\LocalSetting"/>
-        </service>
-
-        <service id="Chamilo\Core\User\Service\UserService">
-            <argument type="service"
-                      id="Chamilo\Core\User\Storage\Repository\UserRepository"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Hashing\HashingUtilities"/>
-            <argument type="service"
-                      id="Chamilo\Configuration\Service\ConfigurationService"/>
-        </service>
-
-        <service id="Chamilo\Core\User\Service\PasswordGenerator"></service>
-
-        <service id="Chamilo\Core\User\Storage\Repository\UserRepository">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator"/>
-        </service>
+        <service id="Chamilo\Core\User\Factory\UserFactory"/>
+        <service id="Chamilo\Core\User\Service\UserService"/>
+        <service id="Chamilo\Core\User\Service\PasswordGenerator"/>
+        <service id="Chamilo\Core\User\Storage\Repository\UserRepository"/>
 
         <service id="Chamilo\Core\User\Service\SessionHandler">
             <factory service="Chamilo\Core\User\Factory\SessionHandlerFactory"
                      method="getSessionHandler"/>
         </service>
 
-        <service id="Chamilo\Core\User\Storage\Repository\SessionRepository">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
-        </service>
+        <service id="Chamilo\Core\User\Storage\Repository\SessionRepository"/>
 
         <service id="Chamilo\Core\User\Factory\SessionHandlerFactory">
-            <argument type="service"
-                      id="Chamilo\Configuration\Service\FileConfigurationLocator"/>
-            <argument>%chamilo.configuration.session.session_handler%</argument>
-            <argument type="service"
-                      id="Chamilo\Core\User\Storage\Repository\SessionRepository"/>
+            <argument key="$configuredSessionHandler">%chamilo.configuration.session.session_handler%</argument>
         </service>
 
     </services>

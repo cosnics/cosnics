@@ -6,13 +6,9 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
-        <service id="Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Service\ActivityService">
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Repository\ActivityRepository"/>
-        </service>
-        <service id="Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Repository\ActivityRepository">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
-        </service>
+
+        <service id="Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Service\ActivityService"/>
+        <service id="Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Repository\ActivityRepository"/>
+        
     </services>
 </container>

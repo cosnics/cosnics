@@ -1,11 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Test\PHPUnitGenerator;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\RegistrationConsulter;
-use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
 
 /**
@@ -18,7 +14,7 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
 
     /**
      *
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
 
@@ -44,12 +40,13 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
     /**
      * Constructor
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param PathBuilder $pathBuilder
      * @param RegistrationConsulter $registrationConsulter
      */
-    public function __construct(\Twig_Environment $twig, PathBuilder $pathBuilder,
-        RegistrationConsulter $registrationConsulter)
+    public function __construct(
+        \Twig\Environment $twig, PathBuilder $pathBuilder, RegistrationConsulter $registrationConsulter
+    )
     {
         $this->twig = $twig;
         $this->pathBuilder = $pathBuilder;
@@ -61,6 +58,10 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
      * Generates the global phpunit configuration file for Chamilo
      *
      * @param boolean $includeSource
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function generate($includeSource = true)
     {
@@ -73,7 +74,7 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
             $testPath = $packagePath . 'Test';
             $packagePHPUnitConfiguration = $testPath . DIRECTORY_SEPARATOR . 'phpunit.xml';
 
-            if (! file_exists($packagePHPUnitConfiguration))
+            if (!file_exists($packagePHPUnitConfiguration))
             {
                 continue;
             }
@@ -92,7 +93,7 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
             foreach ($domNodeList as $domElement)
             {
                 $testFolder = trim($domElement->textContent);
-                if (! $includeSource && $testFolder == 'Source')
+                if (!$includeSource && $testFolder == 'Source')
                 {
                     continue;
                 }
@@ -106,11 +107,11 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
         }
 
         $phpunitConfiguration = $this->twig->render(
-            'Chamilo\Libraries:PHPUnitGenerator/phpunit.xml.twig',
-            array(
-                'testDirectories' => $testDirectories,
-                'sourceDirectories' => $sourceDirectories,
-                'excludedDirectories' => $excludedDirectories));
+            'Chamilo\Libraries:PHPUnitGenerator/phpunit.xml.twig', array(
+                'testDirectories' => $testDirectories, 'sourceDirectories' => $sourceDirectories,
+                'excludedDirectories' => $excludedDirectories
+            )
+        );
 
         file_put_contents($this->phpUnitFile, $phpunitConfiguration);
     }

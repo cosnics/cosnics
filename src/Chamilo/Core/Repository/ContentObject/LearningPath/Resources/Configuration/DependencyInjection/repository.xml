@@ -6,10 +6,8 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
-        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
-        </service>
+
+        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository"/>
 
     </services>
 </container>

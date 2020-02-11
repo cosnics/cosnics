@@ -8,7 +8,6 @@
                   public="true"/>
 
         <service id="Chamilo\Application\Calendar\Service\AvailabilityService"/>
-
         <service id="Chamilo\Application\Calendar\Repository\AvailabilityRepository"/>
 
     </services>

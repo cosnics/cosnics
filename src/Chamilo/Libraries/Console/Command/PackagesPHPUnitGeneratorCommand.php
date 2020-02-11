@@ -17,16 +17,16 @@ class PackagesPHPUnitGeneratorCommand extends Command
 
     /**
      *
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
 
     /**
      * PackagesPHPUnitGeneratorCommand constructor.
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      */
-    public function __construct(\Twig_Environment $twig)
+    public function __construct(\Twig\Environment $twig)
     {
         parent::__construct();
 
@@ -39,7 +39,8 @@ class PackagesPHPUnitGeneratorCommand extends Command
     protected function configure()
     {
         $this->setName('chamilo:phpunit:generate-packages-config')->setDescription(
-            'Generates PHPUnit for every package in the system');
+            'Generates PHPUnit for every package in the system'
+        );
     }
 
     /**
@@ -47,14 +48,17 @@ class PackagesPHPUnitGeneratorCommand extends Command
      *
      * @param \Symfony\Component\Console\Input\InputInterface $input An InputInterface instance
      * @param \Symfony\Component\Console\Output\OutputInterface $output An OutputInterface instance
-     * @return null
      *
-     * @see Command::execute()
+     * @return null
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $packages = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list()->get_list(
-            true);
+            true
+        );
 
         foreach ($packages as $packageContext => $package)
         {
@@ -84,7 +88,7 @@ class PackagesPHPUnitGeneratorCommand extends Command
                 $unitPathExists = true;
             }
 
-            if (file_exists($phpUnitFile) || (! $sourcePathExists && ! $integrationPathExists && ! $unitPathExists))
+            if (file_exists($phpUnitFile) || (!$sourcePathExists && !$integrationPathExists && !$unitPathExists))
             {
                 continue;
             }
@@ -92,16 +96,15 @@ class PackagesPHPUnitGeneratorCommand extends Command
             $output->writeln($phpUnitFile);
 
             $packageParts = explode('\\', $packageContext);
-            $bootstrapPath = str_repeat('../', (count($packageParts) + 1)) .
-                 'Chamilo/Libraries/Architecture/Test/bootstrap.php';
+            $bootstrapPath =
+                str_repeat('../', (count($packageParts) + 1)) . 'Chamilo/Libraries/Architecture/Test/bootstrap.php';
 
             $phpunitContent = $this->twig->render(
-                'Chamilo\Libraries:PHPUnitGenerator/package_phpunit.xml.twig',
-                [
-                    'SourcePathExists' => $sourcePathExists,
-                    'IntegrationPathExists' => $integrationPathExists,
-                    'UnitPathExists' => $unitPathExists,
-                    'BootstrapPath' => $bootstrapPath]);
+                'Chamilo\Libraries:PHPUnitGenerator/package_phpunit.xml.twig', [
+                    'SourcePathExists' => $sourcePathExists, 'IntegrationPathExists' => $integrationPathExists,
+                    'UnitPathExists' => $unitPathExists, 'BootstrapPath' => $bootstrapPath
+                ]
+            );
 
             file_put_contents($phpUnitFile, $phpunitContent);
         }

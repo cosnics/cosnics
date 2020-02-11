@@ -6,6 +6,7 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <!-- SYMFONY -->
         <service id="Chamilo\Libraries\Platform\ChamiloRequest">
             <factory class="Chamilo\Libraries\Platform\ChamiloRequest"
@@ -46,13 +47,10 @@
         </service>
 
         <service id="Chamilo\Libraries\Format\Validator\ValidatorFactory">
-            <argument type="service"
+            <argument key="$translator"
+                      type="service"
                       id="Symfony\Component\Translation\Translator"/>
-            <argument type="service"
-                      id="Symfony\Component\Validator\ValidatorBuilder"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\File\ConfigurablePathBuilder"/>
-            <argument>%chamilo.configuration.debug.show_errors%</argument>
+            <argument key="$devMode">%chamilo.configuration.debug.show_errors%</argument>
         </service>
 
         <service id="Symfony\Component\Validator\ValidatorBuilder"/>
@@ -75,7 +73,6 @@
 
         <service id="Symfony\Component\Config\Definition\Processor"/>
         <service id="Symfony\Component\Yaml\Parser"/>
-
         <service id="Symfony\Component\Filesystem\Filesystem"/>
 
     </services>

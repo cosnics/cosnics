@@ -6,6 +6,7 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <service id="Chamilo\Core\Rights\Structure\Console\Command\SynchronizeStructureLocationsCommand">
             <argument type="service"
                       id="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Synchronizer"/>

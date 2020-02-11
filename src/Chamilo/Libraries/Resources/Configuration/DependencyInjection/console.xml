@@ -39,30 +39,14 @@
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\ClearCacheCommand">
-            <argument type="service"
-                      id="Symfony\Component\Translation\Translator"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Cache\CacheManagement\CacheManager"/>
             <tag name="chamilo.libraries.console.command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\ProcessResourcesCommand">
-            <argument type="service"
-                      id="Symfony\Component\Translation\Translator"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Format\Utilities\ResourceProcessor"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Cache\CacheManagement\CacheManager"/>
             <tag name="chamilo.libraries.console.command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\PackageDescriberCommand">
-            <argument type="service"
-                      id="Symfony\Component\Translation\Translator"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Format\Utilities\PackageDescriber"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Cache\CacheManagement\CacheManager"/>
             <tag name="chamilo.libraries.console.command"/>
         </service>
 
@@ -74,8 +58,6 @@
 
         <service id="Chamilo\Libraries\Console\Command\PackagesPHPUnitGeneratorCommand">
             <tag name="chamilo.libraries.console.command"/>
-            <argument type="service"
-                      id="Twig\Environment"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Vendor\PHPStan\AnalyseCommand">

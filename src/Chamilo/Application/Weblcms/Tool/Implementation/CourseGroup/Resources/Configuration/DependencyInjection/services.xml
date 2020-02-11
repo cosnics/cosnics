@@ -6,23 +6,12 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager"/>
-
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService">
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupPublicationCategoryRepository"/>
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository"/>
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Rights\WeblcmsRights"/>
-        </service>
-
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupPublicationCategoryRepository">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
-        </service>
-
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService"/>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupPublicationCategoryRepository"/>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService"/>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepository"/>
+
     </services>
 </container>

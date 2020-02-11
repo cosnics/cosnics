@@ -6,8 +6,9 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
-        <service id="Chamilo\Core\User\Roles\Storage\Repository\RoleRepository"></service>
 
-        <service id="Chamilo\Core\User\Roles\Storage\Repository\UserRoleRepository"></service>
+        <service id="Chamilo\Core\User\Roles\Storage\Repository\RoleRepository"/>
+        <service id="Chamilo\Core\User\Roles\Storage\Repository\UserRoleRepository"/>
+
     </services>
 </container>

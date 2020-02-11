@@ -15,21 +15,18 @@
 
         <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\AssignmentPublicationService"
                  class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationService">
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
-            <argument type="string">Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\EntryAttachment
+            <argument key="$publicationContext"
+                      type="string">Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\EntryAttachment
             </argument>
         </service>
 
         <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\LearningPathAssignmentPublicationService"
                  class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationService">
-            <argument type="service"
+            <argument key="$assignmentService"
+                      type="service"
                       id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
-            <argument type="string">Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment
+            <argument key="$publicationContext"
+                      type="string">Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\EntryAttachment
             </argument>
         </service>
 

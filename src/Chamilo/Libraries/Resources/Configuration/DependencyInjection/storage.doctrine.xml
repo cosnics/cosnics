@@ -6,15 +6,13 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <!-- Connection -->
         <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName">
             <argument>%chamilo.configuration.database%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName"/>
-        </service>
+        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory"/>
 
         <service id="Doctrine\DBAL\Connection">
             <factory service="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory"
@@ -22,87 +20,49 @@
         </service>
 
         <!-- Database Layer -->
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase">
-            <argument type="service"
-                      id="Doctrine\DBAL\Connection"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor"/>
-        </service>
-
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase">
-            <argument type="service"
-                      id="Doctrine\DBAL\Connection"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger"/>
-        </service>
+        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase"/>
+        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase"/>
 
         <!-- Repositories -->
-
         <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"
                  class="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache"/>
-            <argument type="service"
+            <argument key="$dataClassDatabase"
+                      type="service"
                       id="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataClass\DataClassFactory"/>
-            <argument>%chamilo.configuration.debug.enable_query_cache%</argument>
+            <argument key="$queryCacheEnabled">%chamilo.configuration.debug.enable_query_cache%</argument>
         </service>
-
-        <service id="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository"
-                 alias="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
 
         <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\NestedSetDataClassRepository"
                  class="Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache"/>
-            <argument type="service"
+            <argument key="$dataClassDatabase"
+                      type="service"
                       id="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataClass\DataClassFactory"/>
-            <argument>%chamilo.configuration.debug.enable_query_cache%</argument>
+            <argument key="$queryCacheEnabled">%chamilo.configuration.debug.enable_query_cache%</argument>
         </service>
-
-        <service id="Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository"
-                 alias="Chamilo\Libraries\Storage\DataManager\Doctrine\NestedSetDataClassRepository"/>
 
         <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Repository\StorageUnitRepository">
             <argument type="service"
                       id="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase"/>
         </service>
 
+        <service id="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository"
+                 alias="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
+
+        <service id="Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository"
+                 alias="Chamilo\Libraries\Storage\DataManager\Doctrine\NestedSetDataClassRepository"/>
+
+        <service id="Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository"
+                 alias="Chamilo\Libraries\Storage\DataManager\Doctrine\Repository\StorageUnitRepository"/>
+
         <!-- Utilities -->
 
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory">
-            <argument type="service"
-                      id="Chamilo\Libraries\Architecture\ClassnameUtilities"/>
-        </service>
-
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor"></service>
+        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory"/>
+        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor"/>
+        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor"/>
 
         <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\Cache\ConditionPartCache"/>
-            <argument>%chamilo.configuration.debug.enable_query_cache%</argument>
+            <argument key="$queryCacheEnabled">%chamilo.configuration.debug.enable_query_cache%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator"/>
-        </service>
     </services>
 </container>

@@ -6,6 +6,8 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <service id="Chamilo\Libraries\Utilities\StringUtilities"/>
+
     </services>
 </container>

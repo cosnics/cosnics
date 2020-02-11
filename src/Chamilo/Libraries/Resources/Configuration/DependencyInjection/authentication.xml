@@ -6,6 +6,7 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+        
         <service id="Chamilo\Libraries\Authentication\AuthenticationValidator"/>
     </services>
 </container>

@@ -8,22 +8,19 @@
                   public="true"/>
 
         <service id="Chamilo\Application\Weblcms\Service\CourseService">
-            <argument type="service"
+            <argument key="$courseRepository"
+                      type="service"
                       id="Chamilo\Application\Weblcms\Storage\Repository\CourseRepository"/>
-            <argument type="service"
+            <argument key="$courseSettingsService"
+                      type="service"
                       id="Chamilo\Application\Weblcms\Service\CourseSettingsService"/>
-            <argument type="service"
-                      id="Chamilo\Core\User\Service\UserService"/>
             <call method="setRightsService">
                 <argument type="service"
                           id="Chamilo\Application\Weblcms\Service\RightsService"/>
             </call>
         </service>
 
-        <service id="Chamilo\Application\Weblcms\Service\CourseSettingsService">
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\CourseSettingsController"/>
-        </service>
+        <service id="Chamilo\Application\Weblcms\Service\CourseSettingsService"/>
 
         <service id="Chamilo\Application\Weblcms\Service\PublicationService">
             <argument type="service"
@@ -38,18 +35,12 @@
             </call>
         </service>
 
-        <service id="Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator">
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Service\PublicationService"/>
-        </service>
+        <service id="Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator"/>
 
         <service id="Chamilo\Application\Weblcms\Service\RightsService">
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Rights\WeblcmsRights"/>
-            <argument type="service"
+            <argument key="$courseSettingsService"
+                      type="service"
                       id="Chamilo\Application\Weblcms\Service\CourseSettingsService"/>
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Storage\Repository\RightsLocationRepository"/>
             <call method="setCourseService">
                 <argument type="service"
                           id="Chamilo\Application\Weblcms\Service\CourseService"/>
@@ -61,27 +52,13 @@
         </service>
 
         <service id="Chamilo\Application\Weblcms\CourseSettingsController"/>
-
         <service id="Chamilo\Application\Weblcms\Rights\WeblcmsRights"/>
-
         <service id="Chamilo\Application\Weblcms\Storage\Repository\CourseRepository"/>
-
         <service id="Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository"/>
-
         <service id="Chamilo\Application\Weblcms\Storage\Repository\RightsLocationRepository"/>
-
-        <service id="Chamilo\Application\Weblcms\Service\RightsLocationFixer\RightsLocationFixer">
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Storage\Repository\RightsLocationRepository"/>
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Storage\Repository\CourseRepository"/>
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Storage\Repository\RightsLocationRepository"/>
-        </service>
+        <service id="Chamilo\Application\Weblcms\Service\RightsLocationFixer\RightsLocationFixer"/>
 
         <service id="Chamilo\Application\Weblcms\Console\Command\RightsLocationFixerCommand">
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Service\RightsLocationFixer\RightsLocationFixer"/>
             <tag name="chamilo.libraries.console.command"/>
         </service>
 

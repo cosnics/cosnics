@@ -7,13 +7,7 @@
                   autoconfigure="true"
                   public="true"/>
         <service id="Chamilo\Core\Install\Architecture\Bootstrap\Kernel">
-            <argument type="service"
-                      id="Chamilo\Libraries\Platform\ChamiloRequest"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Architecture\Factory\ApplicationFactory"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger"/>
-            <argument>%chamilo.configuration.version%</argument>
+            <argument key="$version">%chamilo.configuration.version%</argument>
         </service>
     </services>
 </container>

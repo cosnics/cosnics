@@ -6,6 +6,7 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <service id="Chamilo\Core\User\Roles\Service\RoleService">
             <argument type="service"
                       id="Chamilo\Core\User\Roles\Storage\Repository\RoleRepository"/>
@@ -17,6 +18,7 @@
             <argument type="service"
                       id="Chamilo\Core\User\Roles\Storage\Repository\UserRoleRepository"/>
         </service>
+
         <service id="Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface"
                  alias="Chamilo\Core\User\Roles\Service\UserRoleService"/>
 

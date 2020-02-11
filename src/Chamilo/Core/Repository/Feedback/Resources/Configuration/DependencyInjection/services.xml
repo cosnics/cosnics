@@ -6,10 +6,10 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <service id="Chamilo\Core\Repository\Feedback\Form\AddFeedbackFormType">
-            <argument type="service"
-                      id="Symfony\Component\Translation\Translator"/>
             <tag name="form.type"/>
         </service>
+
     </services>
 </container>

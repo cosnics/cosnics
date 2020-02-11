@@ -6,54 +6,17 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\RequestRepository">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
-        </service>
 
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\EphorusWebserviceRepositoryFactory">
-            <argument type="service"
-                      id="Chamilo\Configuration\Service\ConfigurationConsulter"/>
-            <argument type="service"
-                      id="Symfony\Component\Translation\Translator"/>
-        </service>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\RequestRepository"/>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\EphorusWebserviceRepositoryFactory"/>
 
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\EphorusWebserviceRepository">
             <factory service="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\EphorusWebserviceRepositoryFactory"
                      method="createEphorusWebserviceRepository"/>
         </service>
 
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager">
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\EphorusWebserviceRepository"/>
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\RequestRepository"/>
-            <argument type="service"
-                      id="Chamilo\Core\User\Service\UserService"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
-        </service>
-
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer">
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager"/>
-            <argument type="service"
-                      id="Chamilo\Core\User\Service\UserService"/>
-            <argument type="service"
-                      id="Twig\Environment"/>
-        </service>
-
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\ReportExporter">
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\File\ConfigurablePathBuilder"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Format\Theme"/>
-            <argument type="service"
-                      id="Twig\Environment"/>
-        </service>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager"/>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer"/>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\ReportExporter"/>
     </services>
 </container>

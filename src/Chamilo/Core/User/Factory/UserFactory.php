@@ -44,7 +44,7 @@ class UserFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Platform\Translation
+     * @var \Chamilo\Libraries\Translation\Translation
      */
     private $translationUtilities;
 
@@ -60,12 +60,13 @@ class UserFactory
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     * @param \Chamilo\Libraries\Platform\Translation $translationUtilities
+     * @param \Chamilo\Libraries\Translation\Translation $translationUtilities
      * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSettingUtilities
      */
-    public function __construct(SessionUtilities $sessionUtilities, UserService $userService, 
-        ConfigurationConsulter $configurationConsulter, Theme $themeUtilities, Translation $translationUtilities, 
-        LocalSetting $localSettingUtilities)
+    public function __construct(
+        SessionUtilities $sessionUtilities, UserService $userService, ConfigurationConsulter $configurationConsulter,
+        Theme $themeUtilities, Translation $translationUtilities, LocalSetting $localSettingUtilities
+    )
     {
         $this->sessionUtilities = $sessionUtilities;
         $this->userService = $userService;
@@ -149,7 +150,7 @@ class UserFactory
 
     /**
      *
-     * @return \Chamilo\Libraries\Platform\Translation
+     * @return \Chamilo\Libraries\Translation\Translation
      */
     public function getTranslationUtilities()
     {
@@ -158,7 +159,7 @@ class UserFactory
 
     /**
      *
-     * @param \Chamilo\Libraries\Platform\Translation $translationUtilities
+     * @param \Chamilo\Libraries\Translation\Translation $translationUtilities
      */
     public function setTranslationUtilities(Translation $translationUtilities)
     {
@@ -190,32 +191,35 @@ class UserFactory
     public function getUser()
     {
         $userIdentifier = $this->getSessionUtilities()->get_user_id();
-        
+
         if ($userIdentifier)
         {
             $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
         }
-        
+
         if ($user instanceof User)
         {
             $themeSelectionAllowed = $this->getConfigurationConsulter()->getSetting(
-                array('Chamilo\Core\User', 'allow_user_theme_selection'));
-            
+                array('Chamilo\Core\User', 'allow_user_theme_selection')
+            );
+
             if ($themeSelectionAllowed)
             {
                 $this->getThemeUtilities()->setTheme($this->getLocalSettingUtilities()->get('theme'));
             }
-            
+
             $languageSelectionAllowed = $this->getConfigurationConsulter()->getSetting(
-                array('Chamilo\Core\User', 'allow_user_change_platform_language'));
-            
+                array('Chamilo\Core\User', 'allow_user_change_platform_language')
+            );
+
             if ($languageSelectionAllowed)
             {
                 $this->getTranslationUtilities()->setLanguageIsocode(
-                    $this->getLocalSettingUtilities()->get('platform_language'));
+                    $this->getLocalSettingUtilities()->get('platform_language')
+                );
             }
         }
-        
+
         return $user;
     }
 }

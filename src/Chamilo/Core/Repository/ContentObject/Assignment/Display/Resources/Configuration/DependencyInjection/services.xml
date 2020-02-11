@@ -6,15 +6,17 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <service id="Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreFormType">
-            <argument type="service"
-                      id="Symfony\Component\Translation\Translator"/>
             <tag name="form.type"/>
         </service>
+
         <service id="Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\CodePageCorrectorFormType">
-            <argument type="service"
-                      id="Symfony\Component\Translation\Translator"/>
             <tag name="form.type"/>
         </service>
+
+        <service id="Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\AssignmentService"/>
+        <service id="Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository"/>
+
     </services>
 </container>

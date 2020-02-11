@@ -6,22 +6,15 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <service id="Chamilo\Libraries\Storage\Cache\ConditionPartCache"/>
-
         <service id="Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache"/>
-
         <service id="Chamilo\Libraries\Storage\DataClass\DataClassFactory"/>
-
-        <service id="Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator">
-            <argument type="service"
-                      id="Chamilo\Libraries\Architecture\ClassnameUtilities"/>
-        </service>
-
+        <service id="Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator"/>
         <service id="Chamilo\Libraries\Storage\DataClass\PropertyMapper"/>
-
         <service id="Chamilo\Libraries\Storage\Service\DisplayOrderHandler"/>
         <service id="Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator"/>
-
         <service id="Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository"/>
+
     </services>
 </container>

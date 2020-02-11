@@ -6,19 +6,12 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <service id="Chamilo\Core\Repository\Console\Command\ContentObjectTemplateSynchronizerCommand">
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer"/>
-            <argument type="service"
-                      id="Symfony\Component\Translation\Translator"/>
             <tag name="chamilo.libraries.console.command"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Console\Command\ResourceFixerCommand">
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Service\ResourceFixer\ResourceFixerDirector"/>
-            <argument type="service"
-                      id="Symfony\Component\Translation\Translator"/>
             <tag name="chamilo.libraries.console.command"/>
         </service>
     </services>

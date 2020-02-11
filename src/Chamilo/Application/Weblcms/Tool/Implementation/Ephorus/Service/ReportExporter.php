@@ -37,7 +37,7 @@ class ReportExporter
     protected $themeUtilities;
 
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twigRenderer;
 
@@ -48,11 +48,11 @@ class ReportExporter
      * @param \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository $contentObjectRepository
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     * @param \Twig_Environment $twigRenderer
+     * @param \Twig\Environment $twigRenderer
      */
     public function __construct(
         ReportRenderer $reportRenderer, ContentObjectRepository $contentObjectRepository,
-        ConfigurablePathBuilder $configurablePathBuilder, Theme $themeUtilities, \Twig_Environment $twigRenderer
+        ConfigurablePathBuilder $configurablePathBuilder, Theme $themeUtilities, \Twig\Environment $twigRenderer
     )
     {
         $this->reportRenderer = $reportRenderer;
@@ -65,9 +65,9 @@ class ReportExporter
     /**
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $request
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function exportRequestReport(Request $request)
     {
@@ -78,8 +78,7 @@ class ReportExporter
                 $this->themeUtilities->getCssPath(
                     'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service', false
                 ) . 'Report.css'
-            ),
-            'REPORT' => $this->reportRenderer->renderRequestReport($request)
+            ), 'REPORT' => $this->reportRenderer->renderRequestReport($request)
         ];
 
         $exportHTML = $this->twigRenderer->render(
@@ -87,8 +86,7 @@ class ReportExporter
         );
 
         $unique_file_name = Filesystem::create_unique_name(
-            $this->configurablePathBuilder->getTemporaryPath(),
-            $content_object->get_title() . '.html'
+            $this->configurablePathBuilder->getTemporaryPath(), $content_object->get_title() . '.html'
         );
 
         $full_file_name = $this->configurablePathBuilder->getTemporaryPath() . $unique_file_name;

@@ -27,12 +27,12 @@ class TeamService
 
     /**
      * TeamService constructor.
+     *
      * @param GroupService $groupService
      * @param TeamRepository $teamRepository
      */
     public function __construct(
-        GroupService $groupService,
-        TeamRepository $teamRepository
+        GroupService $groupService, TeamRepository $teamRepository
     )
     {
         $this->groupService = $groupService;
@@ -45,14 +45,20 @@ class TeamService
      */
     public function addTeamToGroup(string $groupId, int $retryCounter = 0)
     { //todo queue implementation
-        try {
+        try
+        {
             $this->teamRepository->createTeam($groupId);
-        } catch (ClientException $exception) {
-            if ($exception->getCode() == 404 && $retryCounter < 3) {//group maybe not created due to replication delay
-                $retryCounter++;
+        }
+        catch (ClientException $exception)
+        {
+            if ($exception->getCode() == 404 && $retryCounter < 3)
+            {//group maybe not created due to replication delay
+                $retryCounter ++;
                 sleep(10);
                 $this->addTeamToGroup($groupId, $retryCounter);
-            } else {
+            }
+            else
+            {
                 throw $exception;
             }
         }
@@ -60,24 +66,30 @@ class TeamService
 
     public function getTeam(string $groupId)
     {
-        try {
+        try
+        {
             return $this->teamRepository->getTeam($groupId);
-        } catch (\Exception $exception) {
+        }
+        catch (\Exception $exception)
+        {
             return null;
         }
     }
 
     /**
      * @param Group $group
+     *
      * @return string
      */
     public function getTeamUrl(Group $group)
     {
         return $this->teamRepository->getUrl($group->getId());
     }
+
     /**
      * @param User $owner
      * @param string $teamName
+     *
      * @return string
      * @throws AzureUserNotExistsException
      */

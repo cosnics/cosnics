@@ -60,7 +60,7 @@ class ContentObjectTemplateSynchronizer
                     $contentObjectNamespace, $templateName
                 );
 
-            if(!$templateRegistration instanceof TemplateRegistration)
+            if (!$templateRegistration instanceof TemplateRegistration)
             {
                 $templateRegistration = new TemplateRegistration();
                 $templateRegistration->set_name($templateName);
@@ -74,7 +74,7 @@ class ContentObjectTemplateSynchronizer
 
             $templateRegistration->set_template($template);
 
-            if(!$templateRegistration->save())
+            if (!$templateRegistration->save())
             {
                 throw new \RuntimeException('Could not save the template ' . $templateName);
             }

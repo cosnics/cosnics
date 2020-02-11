@@ -23,37 +23,12 @@
                      method="getConfigurationLoader"/>
         </service>
 
-        <service id="Chamilo\Configuration\Factory\ConfigurationLoaderFactory">
-            <argument type="service"
-                      id="Chamilo\Configuration\Service\FileConfigurationLoader"/>
-            <argument type="service"
-                      id="Chamilo\Configuration\Service\StorageConfigurationLoader"/>
-        </service>
-
-        <service id="Chamilo\Configuration\Service\FileConfigurationLoader">
-            <argument type="service"
-                      id="Chamilo\Configuration\Service\FileConfigurationLocator"/>
-        </service>
-
-        <service id="Chamilo\Configuration\Service\FileConfigurationLocator">
-            <argument type="service"
-                      id="Chamilo\Libraries\File\PathBuilder"/>
-        </service>
-
-        <service id="Chamilo\Configuration\Service\StorageConfigurationLoader">
-            <argument type="service"
-                      id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository"/>
-        </service>
-
-        <service id="Chamilo\Configuration\Service\ConfigurationService">
-            <argument type="service"
-                      id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository"/>
-        </service>
-
-        <service id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
-        </service>
+        <service id="Chamilo\Configuration\Factory\ConfigurationLoaderFactory"/>
+        <service id="Chamilo\Configuration\Service\FileConfigurationLoader"/>
+        <service id="Chamilo\Configuration\Service\FileConfigurationLocator"/>
+        <service id="Chamilo\Configuration\Service\StorageConfigurationLoader"/>
+        <service id="Chamilo\Configuration\Service\ConfigurationService"/>
+        <service id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository"/>
 
         <service id="Chamilo\Configuration\Service\FileConfigurationConsulter"
                  class="Chamilo\Configuration\Service\ConfigurationConsulter">
@@ -61,11 +36,6 @@
                       id="Chamilo\Configuration\Service\FileConfigurationLoader"/>
         </service>
 
-        <service id="Chamilo\Configuration\Package\Service\PackageFactory">
-            <argument type="service"
-                      id="Chamilo\Libraries\File\PathBuilder"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Platform\Translation"/>
-        </service>
+        <service id="Chamilo\Configuration\Package\Service\PackageFactory"/>
     </services>
 </container>

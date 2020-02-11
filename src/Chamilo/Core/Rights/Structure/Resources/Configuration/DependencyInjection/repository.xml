@@ -6,8 +6,9 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
-        <service id="Chamilo\Core\Rights\Structure\Storage\Repository\StructureLocationRepository"></service>
 
-        <service id="Chamilo\Core\Rights\Structure\Storage\Repository\StructureLocationRoleRepository"></service>
+        <service id="Chamilo\Core\Rights\Structure\Storage\Repository\StructureLocationRepository"/>
+        <service id="Chamilo\Core\Rights\Structure\Storage\Repository\StructureLocationRoleRepository"/>
+
     </services>
 </container>

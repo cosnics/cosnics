@@ -6,9 +6,8 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
-        <service id="Chamilo\Libraries\Translation\TranslatorFactory">
-            <argument type="service"
-                      id="Chamilo\Libraries\File\ConfigurablePathBuilder"/>
-        </service>
+
+        <service id="Chamilo\Libraries\Translation\TranslatorFactory"/>
+
     </services>
 </container>

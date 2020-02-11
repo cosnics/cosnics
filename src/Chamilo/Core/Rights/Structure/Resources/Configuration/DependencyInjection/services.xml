@@ -6,10 +6,8 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
-        <service id="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Loader">
-            <argument type="service"
-                      id="Chamilo\Libraries\File\Path"/>
-        </service>
+
+        <service id="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Loader"/>
 
         <service id="Chamilo\Core\Rights\Structure\Service\StructureLocationService">
             <argument type="service"
@@ -26,13 +24,14 @@
         </service>
 
         <service id="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Synchronizer">
-            <argument type="service"
+            <argument key="$structureLocationConfigurationLoader"
+                      type="service"
                       id="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Loader"/>
-            <argument type="service"
-                      id="Chamilo\Configuration\Service\RegistrationConsulter"/>
-            <argument type="service"
+            <argument key="$structureLocationService"
+                      type="service"
                       id="Chamilo\Core\Rights\Structure\Service\StructureLocationService"/>
-            <argument type="service"
+            <argument key="$structureLocationRoleService"
+                      type="service"
                       id="Chamilo\Core\Rights\Structure\Service\StructureLocationRoleService"/>
         </service>
 
@@ -45,5 +44,6 @@
             <argument type="service"
                       id="Chamilo\Core\Rights\Structure\Service\StructureLocationRoleService"/>
         </service>
+
     </services>
 </container>

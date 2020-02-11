@@ -6,90 +6,22 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
-        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder">
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
-        </service>
 
-        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService">
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository"/>
-        </service>
-
-        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService">
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"/>
-        </service>
-
-        <service id="Chamilo\Core\Repository\Service\ContentObjectCopierWrapper"/>
-
-        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeCopier">
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Service\ContentObjectCopierWrapper"/>
-        </service>
-
+        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder"/>
+        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"/>
+        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService"/>
+        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeCopier"/>
         <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService"/>
-
-        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service\PublicationService">
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
-        </service>
+        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service\PublicationService"/>
+        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\MigrationFixer"/>
+        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActivityService"/>
 
         <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Console\Command\MigrationCommand">
-            <argument type="service"
-                      id="Symfony\Component\Translation\Translator"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
-
             <tag name="chamilo.libraries.console.command"/>
-        </service>
-
-        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\MigrationFixer">
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
         </service>
 
         <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Console\Command\MigrationFixerCommand">
-            <argument type="service"
-                      id="Symfony\Component\Translation\Translator"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\MigrationFixer"/>
             <tag name="chamilo.libraries.console.command"/>
-        </service>
-
-        <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActivityService">
-            <argument type="service"
-                      id="Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Repository\ActivityRepository"/>
-            <argument type="service"
-                      id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService"/>
         </service>
 
     </services>

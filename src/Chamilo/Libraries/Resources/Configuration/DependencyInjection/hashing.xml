@@ -6,15 +6,14 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <service id="Chamilo\Libraries\Hashing\HashingUtilities">
             <factory service="Chamilo\Libraries\Hashing\HashingFactory"
                      method="getHashingUtilities"/>
         </service>
 
         <service id="Chamilo\Libraries\Hashing\HashingFactory">
-            <argument type="service"
-                      id="Chamilo\Libraries\Utilities\StringUtilities"/>
-            <argument>%chamilo.configuration.general.hashing_algorithm%</argument>
+            <argument key="$configuredHashingAlgorithm">%chamilo.configuration.general.hashing_algorithm%</argument>
         </service>
     </services>
 </container>

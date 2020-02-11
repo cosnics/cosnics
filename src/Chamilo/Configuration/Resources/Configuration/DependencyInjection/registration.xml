@@ -6,10 +6,10 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+        
         <service id="Chamilo\Configuration\Service\RegistrationConsulter">
-            <argument type="service"
-                      id="Chamilo\Libraries\Utilities\StringUtilities"/>
-            <argument type="service"
+            <argument key="$dataLoader"
+                      type="service"
                       id="Chamilo\Configuration\Service\RegistrationCacheLoader"/>
         </service>
 
@@ -19,16 +19,7 @@
                       id="Chamilo\Configuration\Service\RegistrationLoader"/>
         </service>
 
-        <service id="Chamilo\Configuration\Service\RegistrationLoader">
-            <argument type="service"
-                      id="Chamilo\Libraries\Utilities\StringUtilities"/>
-            <argument type="service"
-                      id="Chamilo\Configuration\Storage\Repository\RegistrationRepository"/>
-        </service>
-
-        <service id="Chamilo\Configuration\Storage\Repository\RegistrationRepository">
-            <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
-        </service>
+        <service id="Chamilo\Configuration\Service\RegistrationLoader"/>
+        <service id="Chamilo\Configuration\Storage\Repository\RegistrationRepository"/>
     </services>
 </container>

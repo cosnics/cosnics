@@ -6,16 +6,18 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
+
         <service id="Doctrine\ORM\EntityManager">
             <factory method="createEntityManager"
                      service="Doctrine\ORM\EntityManagerFactory"/>
         </service>
 
         <service id="Doctrine\ORM\Tools\ResolveTargetEntityListener"/>
-
         <service id="Doctrine\ORM\Configuration"/>
+
         <service id="Doctrine\ORM\MappingsConfiguration"
                  class="Chamilo\Libraries\DependencyInjection\Configuration\DoctrineORMMappingsConfiguration"/>
+
         <service id="Doctrine\ORM\MappingDriver"
                  class="Doctrine\Common\Persistence\Mapping\Driver\MappingDriver">
             <factory service="Doctrine\ORM\MappingDriverFactory"
