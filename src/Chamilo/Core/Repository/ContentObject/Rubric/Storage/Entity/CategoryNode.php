@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\TreeNodeJSONModel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,5 +47,44 @@ class CategoryNode extends TreeNode
     public function getAllowedChildTypes()
     {
         return [CriteriumNode::class];
+    }
+
+    /**
+     * @param TreeNodeJSONModel $treeNodeJSONModel
+     * @param RubricData $rubricData
+     *
+     * @return RubricNode
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
+    public static function fromJSONModel(TreeNodeJSONModel $treeNodeJSONModel, RubricData $rubricData): TreeNode
+    {
+        $node = new self($treeNodeJSONModel->getTitle(), $rubricData);
+        $node->setColor($treeNodeJSONModel->getColor());
+
+        return $node;
+    }
+
+    /**
+     * @return TreeNodeJSONModel
+     * @throws \Exception
+     */
+    public function toJSONModel(): TreeNodeJSONModel
+    {
+        return new TreeNodeJSONModel(
+            $this->getId(), $this->getTitle(), TreeNodeJSONModel::TYPE_RUBRIC, $this->getParentNodeId(), $this->getColor()
+        );
+    }
+
+    /**
+     * @param TreeNodeJSONModel $treeNodeJSONModel
+     *
+     * @return TreeNode
+     */
+    public function updateFromJSONModel(TreeNodeJSONModel $treeNodeJSONModel): TreeNode
+    {
+        parent::updateFromJSONModel($treeNodeJSONModel);
+        $this->setColor($treeNodeJSONModel->getColor());
+
+        return $this;
     }
 }

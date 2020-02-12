@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Test\Integration\Service;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricRightsService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricTreeBuilder;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricValidator;
@@ -58,7 +59,11 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
         $rubricValidator = new RubricValidator();
         $rubricTreeBuilder = new RubricTreeBuilder($rubricDataRepository);
 
-        $this->rubricService = new RubricService($rubricDataRepository, $rubricValidator, $rubricTreeBuilder);
+        $rubricRightsService = $this->getMockBuilder(RubricRightsService::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->rubricService =
+            new RubricService($rubricDataRepository, $rubricValidator, $rubricTreeBuilder, $rubricRightsService);
     }
 
     protected function tearDown()

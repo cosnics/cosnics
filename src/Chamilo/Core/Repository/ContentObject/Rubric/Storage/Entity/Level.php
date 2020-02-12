@@ -14,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *      name="repository_rubric_level"
  * )
+ *
+ * TODO: add sort
  */
 class Level
 {

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\TreeNodeJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -153,7 +154,7 @@ abstract class TreeNode
      */
     public function setRubricData(RubricData $rubricData = null): self
     {
-        if ($this->rubricData === $rubricData )
+        if ($this->rubricData === $rubricData)
         {
             return $this;
         }
@@ -161,12 +162,12 @@ abstract class TreeNode
         $oldRubricData = $this->rubricData;
         $this->rubricData = $rubricData;
 
-        if($oldRubricData instanceof RubricData)
+        if ($oldRubricData instanceof RubricData)
         {
             $oldRubricData->removeTreeNode($this);
         }
 
-        if($rubricData instanceof RubricData)
+        if ($rubricData instanceof RubricData)
         {
             $rubricData->addTreeNode($this);
         }
@@ -180,6 +181,14 @@ abstract class TreeNode
     public function getParentNode(): ?TreeNode
     {
         return $this->parentNode;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getParentNodeId(): ?int
+    {
+        return $this->parentNode instanceof TreeNode ? $this->parentNode->getId() : null;
     }
 
     /**
@@ -331,7 +340,7 @@ abstract class TreeNode
     {
         $this->children = $children;
 
-        foreach($this->children as $child)
+        foreach ($this->children as $child)
         {
             if (!$this->isChildTypeValid($child))
             {
@@ -420,6 +429,7 @@ abstract class TreeNode
      *
      * @noinspection PhpDocMissingThrowsInspection
      * @noinspection PhpUnhandledExceptionInspection
+     * @throws InvalidChildTypeException
      */
     public function removeChild(TreeNode $childToRemove): self
     {
@@ -453,6 +463,7 @@ abstract class TreeNode
      * @param int $newPosition
      *
      * @throws \InvalidArgumentException
+     * @throws InvalidChildTypeException
      *
      * @noinspection PhpDocMissingThrowsInspection
      * @noinspection PhpUnhandledExceptionInspection
@@ -481,4 +492,30 @@ abstract class TreeNode
     }
 
     abstract function getAllowedChildTypes();
+
+    /**
+     * @param TreeNodeJSONModel $treeNodeJSONModel
+     * @param RubricData $rubricData
+     *
+     * @return TreeNode
+     */
+    abstract public static function fromJSONModel(
+        TreeNodeJSONModel $treeNodeJSONModel, RubricData $rubricData
+    ): TreeNode;
+
+    /**
+     * @return TreeNodeJSONModel
+     */
+    abstract public function toJSONModel(): TreeNodeJSONModel;
+
+    /**
+     * @param TreeNodeJSONModel $treeNodeJSONModel
+     *
+     * @return TreeNode
+     */
+    public function updateFromJSONModel(TreeNodeJSONModel $treeNodeJSONModel): TreeNode
+    {
+        $this->setTitle($treeNodeJSONModel->getTitle());
+        return $this;
+    }
 }

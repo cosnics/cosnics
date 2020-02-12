@@ -2,8 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use function sprintf;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity
@@ -80,6 +82,11 @@ class RubricData
     protected $treeNodes;
 
     /**
+     * @var int
+     */
+    protected $contentObjectId;
+
+    /**
      * RubricData constructor.
      *
      * @param string $rubricTitle
@@ -87,6 +94,7 @@ class RubricData
      *
      * @noinspection PhpDocMissingThrowsInspection
      * @noinspection PhpUnhandledExceptionInspection
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
     public function __construct(string $rubricTitle, bool $useScores = true)
     {
@@ -333,6 +341,58 @@ class RubricData
         $this->lastUpdated = $lastUpdated;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getContentObjectId(): ?int
+    {
+        return $this->contentObjectId;
+    }
+
+    /**
+     * @param int $contentObjectId
+     *
+     * @return RubricData
+     */
+    public function setContentObjectId(int $contentObjectId): RubricData
+    {
+        $this->contentObjectId = $contentObjectId;
+
+        return $this;
+    }
+
+    /**
+     * @param int $treeNodeIdentifier
+     * TODO: testing!
+     *
+     * @return TreeNode
+     * @throws ObjectNotExistException
+     */
+    public function getTreeNodeById(int $treeNodeIdentifier)
+    {
+        $treeNode = $this->treeNodes->filter(function(TreeNode $treeNode) use ($treeNodeIdentifier) {
+            return $treeNode->getId() == $treeNodeIdentifier;
+        })->get(0);
+
+        if (!$treeNode instanceof TreeNode)
+        {
+            throw new ObjectNotExistException('tree node', $treeNodeIdentifier);
+        }
+
+        return $treeNode;
+    }
+
+    /**
+     * @param int|null $parentNodeId
+     *
+     * @return TreeNode|null
+     * @throws ObjectNotExistException
+     */
+    public function getParentNodeById(int $parentNodeId = null)
+    {
+        return empty($parentNodeId) ? $this->getRootNode() : $this->getTreeNodeById($parentNodeId);
     }
 
 }
