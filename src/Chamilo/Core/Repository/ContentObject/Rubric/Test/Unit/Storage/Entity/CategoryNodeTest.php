@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Test\Unit\Storage\Entity;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CategoryNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
@@ -22,7 +23,7 @@ class CategoryNodeTest extends ChamiloTestCase
     protected $rubricData;
 
     /**
-     * @var RubricNode
+     * @var CategoryNode
      */
     protected $testNode;
 
@@ -34,7 +35,9 @@ class CategoryNodeTest extends ChamiloTestCase
     public function setUp()
     {
         $this->rubricData = new RubricData('Test Rubric');
+        $this->rubricData->getRootNode()->setId(9);
         $this->testNode = new CategoryNode('Test category 1', $this->rubricData);
+        $this->testNode->setId(8);
         $this->rubricData->getRootNode()->addChild($this->testNode);
     }
 
@@ -188,6 +191,68 @@ class CategoryNodeTest extends ChamiloTestCase
         $this->testNode->setColor($color);
 
         $this->assertEquals($color, $this->testNode->getColor());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testFromJsonModel()
+    {
+        $jsonModel = new TreeNodeJSONModel(5, 'Test', TreeNodeJSONModel::TYPE_CATEGORY, 1, 'blue', 100);
+
+        $categoryNode = CategoryNode::fromJSONModel($jsonModel, $this->rubricData);
+        $this->assertEquals('Test', $categoryNode->getTitle());
+        $this->assertEquals('blue', $categoryNode->getColor());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     *
+     * @throws \Exception
+     */
+    public function testFromJsonModelWithBadType()
+    {
+        $jsonModel = new TreeNodeJSONModel(5, 'Test', TreeNodeJSONModel::TYPE_CLUSTER, 1, 'blue', 100);
+
+        $categoryNode = CategoryNode::fromJSONModel($jsonModel, $this->rubricData);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testToJSONModel()
+    {
+        $this->testNode->setColor('green');
+
+        $jsonModel = $this->testNode->toJSONModel();
+        $this->assertInstanceof(TreeNodeJSONModel::class, $jsonModel);
+        $this->assertEquals($jsonModel->getId(), 8);
+        $this->assertEquals($jsonModel->getColor(), 'green');
+        $this->assertEquals($jsonModel->getTitle(), 'Test category 1');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateFromJSONModel()
+    {
+        $jsonModel = new TreeNodeJSONModel(5, 'Test', TreeNodeJSONModel::TYPE_CATEGORY, 1, 'blue', 100);
+
+        $categoryNode = $this->testNode->updateFromJSONModel($jsonModel);
+        $this->assertEquals('Test', $categoryNode->getTitle());
+        $this->assertEquals('blue', $categoryNode->getColor());
+    }
+
+    /**
+     * @throws \Exception
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testUpdateFromJSONModelWithBadType()
+    {
+        $jsonModel = new TreeNodeJSONModel(5, 'Test', TreeNodeJSONModel::TYPE_CLUSTER, 1, 'blue', 100);
+
+        $categoryNode = $this->testNode->updateFromJSONModel($jsonModel);
     }
 }
 

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Test\Unit\Storage\Entity;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CategoryNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
@@ -34,7 +35,9 @@ class ClusterNodeTest extends ChamiloTestCase
     public function setUp()
     {
         $this->rubricData = new RubricData('Test Rubric');
+        $this->rubricData->getRootNode()->setId(9);
         $this->testNode = new ClusterNode('Test cluster 1', $this->rubricData);
+        $this->testNode->setId(8);
         $this->rubricData->getRootNode()->addChild($this->testNode);
     }
 
@@ -179,6 +182,61 @@ class ClusterNodeTest extends ChamiloTestCase
     {
         $this->testNode->setChildren(new ArrayCollection([new CriteriumNode('Test criterium 1', $this->rubricData)]));
         $this->assertTrue(true);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testFromJsonModel()
+    {
+        $jsonModel = new TreeNodeJSONModel(5, 'Test', TreeNodeJSONModel::TYPE_CLUSTER, 1, 'blue', 100);
+
+        $clusterNode = ClusterNode::fromJSONModel($jsonModel, $this->rubricData);
+        $this->assertEquals('Test', $clusterNode->getTitle());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     *
+     * @throws \Exception
+     */
+    public function testFromJsonModelWithBadType()
+    {
+        $jsonModel = new TreeNodeJSONModel(5, 'Test', TreeNodeJSONModel::TYPE_CATEGORY, 1);
+        ClusterNode::fromJSONModel($jsonModel, $this->rubricData);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testToJSONModel()
+    {
+        $jsonModel = $this->testNode->toJSONModel();
+        $this->assertInstanceof(TreeNodeJSONModel::class, $jsonModel);
+        $this->assertEquals($jsonModel->getId(), 8);
+        $this->assertEquals($jsonModel->getTitle(), 'Test cluster 1');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateFromJSONModel()
+    {
+        $jsonModel = new TreeNodeJSONModel(5, 'Test', TreeNodeJSONModel::TYPE_CLUSTER, 1);
+
+        $categoryNode = $this->testNode->updateFromJSONModel($jsonModel);
+        $this->assertEquals('Test', $categoryNode->getTitle());
+    }
+
+    /**
+     * @throws \Exception
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testUpdateFromJSONModelWithBadType()
+    {
+        $jsonModel = new TreeNodeJSONModel(5, 'Test', TreeNodeJSONModel::TYPE_CATEGORY, 1);
+        $this->testNode->updateFromJSONModel($jsonModel);
     }
 }
 

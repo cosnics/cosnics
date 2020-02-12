@@ -31,6 +31,16 @@ class RubricDataRepository extends CommonEntityRepository
             $this->saveEntity($treeNode, false);
         }
 
+        foreach($rubricData->getLevels() as $level)
+        {
+            $this->saveEntity($level, false);
+        }
+
+        foreach($rubricData->getChoices() as $choice)
+        {
+            $this->saveEntity($choice, false);
+        }
+
         $this->flush();
     }
 

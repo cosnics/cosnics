@@ -17,6 +17,12 @@ use function sprintf;
  * @ORM\Table(
  *      name="repository_rubric_data"
  * )
+ *
+ * TODO rethink the link between rubric data / criterium node / choice. When a choice is added to a criterium it should
+ * be added to the rubric data OR the rubric data should at least be validated upon setting.
+ * When a choice is deleted from the rubric, the choices should be deleted both from the rubric as well as from the
+ * criterium node
+ * When a choice is deleted from a criterium node it should also be disconnected from the rubric.
  */
 class RubricData
 {
@@ -92,7 +98,6 @@ class RubricData
      * @param string $rubricTitle
      * @param bool $useScores
      *
-     * @noinspection PhpDocMissingThrowsInspection
      * @noinspection PhpUnhandledExceptionInspection
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
@@ -176,6 +181,7 @@ class RubricData
      * @param TreeNode $rootNode
      *
      * @return RubricData
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
     public function setRootNode(TreeNode $rootNode): RubricData
     {
@@ -196,39 +202,112 @@ class RubricData
     }
 
     /**
-     * @param Level $level
+     * @param Level $levelToAdd
      *
      * @return self
      */
-    public function addLevel(Level $level): self
+    public function addLevel(Level $levelToAdd): self
     {
-        if($this->levels->contains($level))
+        if($this->levels->contains($levelToAdd))
         {
             return $this;
         }
 
-        $this->levels->add($level);
-        $level->setRubricData($this);
+        $this->levels->add($levelToAdd);
+        $levelToAdd->setRubricData($this);
+        $levelToAdd->setSort(count($this->levels));
+
+        foreach($this->getCriteriumNodes() as $criteriumNode)
+        {
+            $choice = new Choice($this);
+            $choice->setLevel($levelToAdd);
+            $criteriumNode->addChoice($choice);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Level $levelToAdd
+     * @param $sortValue
+     *
+     * @return $this
+     */
+    public function insertLevel(Level $levelToAdd, $sortValue)
+    {
+        if($this->levels->contains($levelToAdd))
+        {
+            return $this;
+        }
+
+        $this->addLevel($levelToAdd);
+        $levelToAdd->setSort($sortValue);
+
+        foreach ($this->levels as $level)
+        {
+            if ($level === $levelToAdd)
+            {
+                continue;
+            }
+
+            if ($level->getSort() >= $sortValue)
+            {
+                $level->setSort($level->getSort() + 1);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Level $levelToRemove
+     *
+     * @return self
+     */
+    public function removeLevel(Level $levelToRemove): self
+    {
+        if(!$this->levels->contains($levelToRemove))
+        {
+            return $this;
+        }
+
+        $this->levels->removeElement($levelToRemove);
+        $levelToRemove->setRubricData(null);
+
+        foreach($this->levels as $level)
+        {
+            if($level->getSort() >= $levelToRemove->getSort())
+            {
+                $level->setSort($level->getSort() - 1);
+            }
+        }
+
+        foreach($this->getChoices() as $choice)
+        {
+            if($choice->getLevel() === $levelToRemove)
+            {
+                $this->removeChoice($choice);
+            }
+        }
 
         return $this;
     }
 
     /**
      * @param Level $level
-     *
-     * @return self
+     * @param int $newSort
      */
-    public function removeLevel(Level $level): self
+    public function moveLevel(Level $level, int $newSort)
     {
-        if(!$this->levels->contains($level))
+        if (!$this->levels->contains($level))
         {
-            return $this;
+            throw new \InvalidArgumentException(
+                sprintf('The given level %s is not available in rubric data %s', $level->getId(), $this->getId())
+            );
         }
 
-        $this->levels->removeElement($level);
-        $level->setRubricData(null);
-
-        return $this;
+        $this->removeLevel($level);
+        $this->insertLevel($level, $newSort);
     }
 
     /**
@@ -263,6 +342,7 @@ class RubricData
 
         $this->choices->removeElement($choice);
         $choice->setRubricData(null);
+        $choice->setCriterium(null);
 
         return $this;
     }
@@ -271,12 +351,23 @@ class RubricData
      * @param TreeNode $treeNode
      *
      * @return self
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
     public function addTreeNode(TreeNode $treeNode): self
     {
         if($this->treeNodes->contains($treeNode))
         {
             return $this;
+        }
+
+        if($treeNode instanceof CriteriumNode)
+        {
+            foreach($this->levels as $level)
+            {
+                $choice = new Choice($this);
+                $choice->setLevel($level);
+                $treeNode->addChoice($choice);
+            }
         }
 
         $this->treeNodes->add($treeNode);
@@ -289,6 +380,7 @@ class RubricData
      * @param TreeNode $treeNode
      *
      * @return self
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
     public function removeTreeNode(TreeNode $treeNode): self
     {
@@ -299,6 +391,17 @@ class RubricData
 
         $this->treeNodes->removeElement($treeNode);
         $treeNode->setRubricData(null);
+
+        if($treeNode instanceof CriteriumNode)
+        {
+            foreach ($this->choices as $choice)
+            {
+                if ($choice->getCriterium() === $treeNode)
+                {
+                    $this->removeChoice($choice);
+                }
+            }
+        }
 
         return $this;
     }
@@ -365,16 +468,16 @@ class RubricData
 
     /**
      * @param int $treeNodeIdentifier
-     * TODO: testing!
      *
      * @return TreeNode
+     *
      * @throws ObjectNotExistException
      */
     public function getTreeNodeById(int $treeNodeIdentifier)
     {
         $treeNode = $this->treeNodes->filter(function(TreeNode $treeNode) use ($treeNodeIdentifier) {
             return $treeNode->getId() == $treeNodeIdentifier;
-        })->get(0);
+        })->first();
 
         if (!$treeNode instanceof TreeNode)
         {
@@ -382,6 +485,48 @@ class RubricData
         }
 
         return $treeNode;
+    }
+
+    /**
+     * @param int $levelIdentifier
+     *
+     * @return Level
+     *
+     * @throws ObjectNotExistException
+     */
+    public function getLevelById(int $levelIdentifier)
+    {
+        $level = $this->levels->filter(function(Level $level) use ($levelIdentifier) {
+            return $level->getId() == $levelIdentifier;
+        })->first();
+
+        if (!$level instanceof Level)
+        {
+            throw new ObjectNotExistException('level', $levelIdentifier);
+        }
+
+        return $level;
+    }
+
+    /**
+     * @param int $choiceIdentifier
+     *
+     * @return Choice
+     *
+     * @throws ObjectNotExistException
+     */
+    public function getChoiceById(int $choiceIdentifier)
+    {
+        $choice = $this->choices->filter(function(Choice $choice) use ($choiceIdentifier) {
+            return $choice->getId() == $choiceIdentifier;
+        })->first();
+
+        if (!$choice instanceof Choice)
+        {
+            throw new ObjectNotExistException('choice', $choiceIdentifier);
+        }
+
+        return $choice;
     }
 
     /**
@@ -393,6 +538,46 @@ class RubricData
     public function getParentNodeById(int $parentNodeId = null)
     {
         return empty($parentNodeId) ? $this->getRootNode() : $this->getTreeNodeById($parentNodeId);
+    }
+
+    /**
+     * @param int $possibleSort
+     *
+     * @return bool
+     */
+    public function isLevelSortValid(int $possibleSort)
+    {
+        return $possibleSort > 0 && $possibleSort <= $this->levels->count();
+    }
+
+    /**
+     * @return ArrayCollection|CriteriumNode[]
+     */
+    public function getCriteriumNodes()
+    {
+        return $this->treeNodes->filter(function(TreeNode $treeNode) {
+            return $treeNode instanceof CriteriumNode;
+        });
+    }
+
+    /**
+     * @return ArrayCollection|ClusterNode[]
+     */
+    public function getClusterNodes()
+    {
+        return $this->treeNodes->filter(function(TreeNode $treeNode) {
+            return $treeNode instanceof ClusterNode;
+        });
+    }
+
+    /**
+     * @return ArrayCollection|CategoryNode[]
+     */
+    public function getCategoryNodes()
+    {
+        return $this->treeNodes->filter(function(TreeNode $treeNode) {
+            return $treeNode instanceof CategoryNode;
+        });
     }
 
 }

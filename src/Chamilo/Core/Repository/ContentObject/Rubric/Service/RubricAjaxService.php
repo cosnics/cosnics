@@ -2,13 +2,18 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Service;
 
-use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\TreeNodeJSONModel;
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\ChoiceJSONModel;
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\LevelJSONModel;
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeJSONModel;
 use JMS\Serializer\Serializer;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Service
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ *
+ * TODO schedule objects for deletion when they are removed through ajax. Desyncing from the domain model is not enough
+ * they actually need to be set to remove in the database.
  */
 class RubricAjaxService
 {
@@ -35,17 +40,18 @@ class RubricAjaxService
     /**
      * @param int $rubricDataId
      * @param int $versionId
-     * @param string $treeNodeJSONModel
+     * @param string $treeNodeJSONData
      *
      * @return array
      *
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Exception
      */
-    public function addTreeNode(int $rubricDataId, int $versionId, string $treeNodeJSONModel)
+    public function addTreeNode(int $rubricDataId, int $versionId, string $treeNodeJSONData)
     {
-        $treeNodeJSONModel = $this->parseTreeNodeData($treeNodeJSONModel);
+        $treeNodeJSONModel = $this->parseTreeNodeData($treeNodeJSONData);
 
         $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
 
@@ -64,7 +70,7 @@ class RubricAjaxService
     /**
      * @param int $rubricDataId
      * @param int $versionId
-     * @param string $treeNodeJSONModel
+     * @param string $treeNodeJSONData
      *
      * @return array
      *
@@ -72,15 +78,14 @@ class RubricAjaxService
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function deleteTreeNode(int $rubricDataId, int $versionId, string $treeNodeJSONModel)
+    public function deleteTreeNode(int $rubricDataId, int $versionId, string $treeNodeJSONData)
     {
-        $treeNodeJSONModel = $this->parseTreeNodeData($treeNodeJSONModel);
+        $treeNodeJSONModel = $this->parseTreeNodeData($treeNodeJSONData);
 
         $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
-        $parentTreeNode = $rubricData->getParentNodeById($treeNodeJSONModel->getParentId());
         $treeNode = $rubricData->getTreeNodeById($treeNodeJSONModel->getId());
 
-        $parentTreeNode->removeChild($treeNode);
+        $rubricData->removeTreeNode($treeNode);
 
         $this->rubricService->saveRubric($rubricData);
 
@@ -93,7 +98,7 @@ class RubricAjaxService
     /**
      * @param int $rubricDataId
      * @param int $versionId
-     * @param string $treeNodeJSONModel
+     * @param string $treeNodeJSONData
      *
      * @return array
      *
@@ -101,9 +106,9 @@ class RubricAjaxService
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function updateTreeNode(int $rubricDataId, int $versionId, string $treeNodeJSONModel)
+    public function updateTreeNode(int $rubricDataId, int $versionId, string $treeNodeJSONData)
     {
-        $treeNodeJSONModel = $this->parseTreeNodeData($treeNodeJSONModel);
+        $treeNodeJSONModel = $this->parseTreeNodeData($treeNodeJSONData);
 
         $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
         $treeNode = $rubricData->getTreeNodeById($treeNodeJSONModel->getId());
@@ -121,7 +126,7 @@ class RubricAjaxService
     /**
      * @param int $rubricDataId
      * @param int $versionId
-     * @param string $treeNodeJSONModel
+     * @param string $treeNodeJSONData
      *
      * @param int $newParentId
      * @param int $newSort
@@ -133,10 +138,10 @@ class RubricAjaxService
      * @throws \Doctrine\ORM\ORMException
      */
     public function moveTreeNode(
-        int $rubricDataId, int $versionId, string $treeNodeJSONModel, int $newParentId, int $newSort
+        int $rubricDataId, int $versionId, string $treeNodeJSONData, int $newParentId, int $newSort
     )
     {
-        $treeNodeJSONModel = $this->parseTreeNodeData($treeNodeJSONModel);
+        $treeNodeJSONModel = $this->parseTreeNodeData($treeNodeJSONData);
 
         $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
         $treeNode = $rubricData->getTreeNodeById($treeNodeJSONModel->getId());
@@ -156,28 +161,54 @@ class RubricAjaxService
     }
 
     /**
-     * @param string $treeNodeData
+     * @param string $treeNodeJSONData
      *
      * @return TreeNodeJSONModel
      */
-    protected function parseTreeNodeData(string $treeNodeData)
+    protected function parseTreeNodeData(string $treeNodeJSONData)
     {
-        $treeNodeData = $this->serializer->deserialize(
-            $treeNodeData, TreeNodeJSONModel::class, 'json'
+        $treeNodeJSONModel = $this->serializer->deserialize(
+            $treeNodeJSONData, TreeNodeJSONModel::class, 'json'
         );
 
-        if (!$treeNodeData instanceof TreeNodeJSONModel)
+        if (!$treeNodeJSONModel instanceof TreeNodeJSONModel)
         {
-            throw new \RuntimeException('Could not parse the tree node JSON model');
+            throw new \RuntimeException('Could not parse the tree node JSON data');
         }
 
-        return $treeNodeData;
+        return $treeNodeJSONModel;
     }
 
     /**
      * @param int $rubricDataId
      * @param int $versionId
-     * @param string $levelJSONModel
+     * @param string $levelJSONData
+     *
+     * @return array
+     *
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function addLevel(int $rubricDataId, int $versionId, string $levelJSONData)
+    {
+        $levelJSONModel = $this->parseLevelJSONModel($levelJSONData);
+        $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
+
+        $level = $levelJSONModel->toLevel($rubricData);
+        $rubricData->addLevel($level);
+
+        $this->rubricService->saveRubric($rubricData);
+
+        return [
+            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()],
+            'level' => LevelJSONModel::fromLevel($level)
+        ];
+    }
+
+    /**
+     * @param int $rubricDataId
+     * @param int $versionId
+     * @param string $levelJSONData
      *
      * @return array
      *
@@ -185,15 +216,26 @@ class RubricAjaxService
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function addLevel(int $rubricDataId, int $versionId, string $levelJSONModel)
+    public function removeLevel(int $rubricDataId, int $versionId, string $levelJSONData)
     {
+        $levelJSONModel = $this->parseLevelJSONModel($levelJSONData);
+        $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
 
+        $level = $rubricData->getLevelById($levelJSONModel->getId());
+        $rubricData->removeLevel($level);
+
+        $this->rubricService->saveRubric($rubricData);
+
+        return [
+            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()],
+            'level' => LevelJSONModel::fromLevel($level)
+        ];
     }
 
     /**
      * @param int $rubricDataId
      * @param int $versionId
-     * @param string $levelJSONModel
+     * @param string $levelJSONData
      *
      * @return array
      *
@@ -201,15 +243,27 @@ class RubricAjaxService
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function removeLevel(int $rubricDataId, int $versionId, string $levelJSONModel)
+    public function updateLevel(int $rubricDataId, int $versionId, string $levelJSONData)
     {
+        $levelJSONModel = $this->parseLevelJSONModel($levelJSONData);
+        $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
 
+        $level = $rubricData->getLevelById($levelJSONModel->getId());
+        $levelJSONModel->updateLevel($level);
+
+        $this->rubricService->saveRubric($rubricData);
+
+        return [
+            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()],
+            'level' => LevelJSONModel::fromLevel($level)
+        ];
     }
 
     /**
      * @param int $rubricDataId
      * @param int $versionId
-     * @param string $levelJSONModel
+     * @param string $levelJSONData
+     * @param int $newSort
      *
      * @return array
      *
@@ -217,15 +271,45 @@ class RubricAjaxService
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function updateLevel(int $rubricDataId, int $versionId, string $levelJSONModel)
+    public function moveLevel(int $rubricDataId, int $versionId, string $levelJSONData, int $newSort)
     {
+        $levelJSONModel = $this->parseLevelJSONModel($levelJSONData);
+        $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
 
+        $level = $rubricData->getLevelById($levelJSONModel->getId());
+        $rubricData->moveLevel($level, $newSort);
+
+        $this->rubricService->saveRubric($rubricData);
+
+        return [
+            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()],
+            'level' => LevelJSONModel::fromLevel($level)
+        ];
+    }
+
+    /**
+     * @param string $levelJSONData
+     *
+     * @return LevelJSONModel
+     */
+    protected function parseLevelJSONModel(string $levelJSONData)
+    {
+        $levelJSONModel = $this->serializer->deserialize(
+            $levelJSONData, LevelJSONModel::class, 'json'
+        );
+
+        if (!$levelJSONModel instanceof LevelJSONModel)
+        {
+            throw new \RuntimeException('Could not parse the level JSON model');
+        }
+
+        return $levelJSONModel;
     }
 
     /**
      * @param int $rubricDataId
      * @param int $versionId
-     * @param string $levelJSONModel
+     * @param string $choiceJSONData
      *
      * @return array
      *
@@ -233,25 +317,39 @@ class RubricAjaxService
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function moveLevel(int $rubricDataId, int $versionId, string $levelJSONModel)
+    public function updateChoice(int $rubricDataId, int $versionId, string $choiceJSONData)
     {
+        $choiceJSONModel = $this->parseChoiceJSONModel($choiceJSONData);
+        $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
 
+        $choice = $rubricData->getChoiceById($choiceJSONModel->getId());
+        $choiceJSONModel->updateChoice($choice);
+
+        $this->rubricService->saveRubric($rubricData);
+
+        return [
+            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()],
+            'level' => ChoiceJSONModel::fromChoice($choice)
+        ];
     }
 
     /**
-     * @param int $rubricDataId
-     * @param int $versionId
-     * @param string $choiceJSONModel
+     * @param string $choiceJSONData
      *
-     * @return array
-     *
-     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \Doctrine\ORM\ORMException
+     * @return ChoiceJSONModel
      */
-    public function updateChoice(int $rubricDataId, int $versionId, string $choiceJSONModel)
+    protected function parseChoiceJSONModel(string $choiceJSONData)
     {
+        $choiceJSONModel = $this->serializer->deserialize(
+            $choiceJSONData, ChoiceJSONModel::class, 'json'
+        );
 
+        if (!$choiceJSONModel instanceof ChoiceJSONModel)
+        {
+            throw new \RuntimeException('Could not parse the level JSON model');
+        }
+
+        return $choiceJSONModel;
     }
 
 }

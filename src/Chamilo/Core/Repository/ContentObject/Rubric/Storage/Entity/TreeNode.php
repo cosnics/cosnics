@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
-use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\TreeNodeJSONModel;
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -151,6 +151,7 @@ abstract class TreeNode
      * @param RubricData $rubricData
      *
      * @return TreeNode
+     * @throws InvalidChildTypeException
      */
     public function setRubricData(RubricData $rubricData = null): self
     {
@@ -165,6 +166,11 @@ abstract class TreeNode
         if ($oldRubricData instanceof RubricData)
         {
             $oldRubricData->removeTreeNode($this);
+        }
+
+        if($this->getParentNode())
+        {
+            $this->setParentNode(null);
         }
 
         if ($rubricData instanceof RubricData)
@@ -199,7 +205,7 @@ abstract class TreeNode
      */
     public function setParentNode(TreeNode $newParentNode = null): TreeNode
     {
-        if ($this === $this->getRubricData()->getRootNode())
+        if ($this->getRubricData() && $this === $this->getRubricData()->getRootNode())
         {
             throw new \InvalidArgumentException('You can not change the parent node of the root node');
         }
@@ -427,7 +433,6 @@ abstract class TreeNode
      *
      * @return $this
      *
-     * @noinspection PhpDocMissingThrowsInspection
      * @noinspection PhpUnhandledExceptionInspection
      * @throws InvalidChildTypeException
      */
@@ -465,7 +470,6 @@ abstract class TreeNode
      * @throws \InvalidArgumentException
      * @throws InvalidChildTypeException
      *
-     * @noinspection PhpDocMissingThrowsInspection
      * @noinspection PhpUnhandledExceptionInspection
      */
     public function moveChild(TreeNode $childNode, int $newPosition)

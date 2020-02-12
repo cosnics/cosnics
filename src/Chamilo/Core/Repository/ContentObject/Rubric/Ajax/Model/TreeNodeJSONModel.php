@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax;
+namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CategoryNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
@@ -9,9 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
 use Hogent\Integration\Panopto\Domain\Exception\ValueNotInArrayException;
-use JMS\Serializer\Serializer;
 use OutOfRangeException;
-use function is_subclass_of;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Ajax
@@ -68,12 +66,12 @@ class TreeNodeJSONModel
      * @param int $parentId
      * @param string $type
      * @param string $color
-     * @param string $weight
+     * @param int $weight
      *
      * @throws \Exception
      */
     public function __construct(
-        int $id, string $title, string $type, int $parentId, string $color = null, int $weight = null
+        int $id, string $title, string $type, int $parentId = null, string $color = null, int $weight = null
     )
     {
         $this->id = $id;
@@ -158,7 +156,7 @@ class TreeNodeJSONModel
     /**
      * @param RubricData $rubricData
      *
-     * @return CategoryNode|ClusterNode|CriteriumNode
+     * @return TreeNode
      * @throws \Exception
      */
     public function toTreeNode(RubricData $rubricData): TreeNode

@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
-use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\TreeNodeJSONModel;
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeJSONModel;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use OutOfRangeException;
@@ -39,9 +39,9 @@ class CriteriumNode extends TreeNode
      */
     public function __construct(string $title, RubricData $rubricData, TreeNode $parentNode = null)
     {
-        parent::__construct($title, $rubricData, $parentNode);
-
         $this->choices = new ArrayCollection();
+
+        parent::__construct($title, $rubricData, $parentNode);
     }
 
     /**
@@ -126,6 +126,7 @@ class CriteriumNode extends TreeNode
 
         $this->choices->removeElement($choice);
         $choice->setCriterium(null);
+        $choice->setRubricData(null);
 
         return $this;
     }
@@ -148,7 +149,7 @@ class CriteriumNode extends TreeNode
     public static function fromJSONModel(TreeNodeJSONModel $treeNodeJSONModel, RubricData $rubricData): TreeNode
     {
         $node = new self($treeNodeJSONModel->getTitle(), $rubricData);
-        $node->setWeight($treeNodeJSONModel->getWeight());
+        $node->updateFromJSONModel($treeNodeJSONModel);
 
         return $node;
     }
@@ -172,6 +173,11 @@ class CriteriumNode extends TreeNode
      */
     public function updateFromJSONModel(TreeNodeJSONModel $treeNodeJSONModel): TreeNode
     {
+        if ($treeNodeJSONModel->getType() != TreeNodeJSONModel::TYPE_CRITERIUM)
+        {
+            throw new \InvalidArgumentException('The TreeNodeJSONModel does not have the correct type');
+        }
+
         parent::updateFromJSONModel($treeNodeJSONModel);
         $this->setWeight($treeNodeJSONModel->getWeight());
 

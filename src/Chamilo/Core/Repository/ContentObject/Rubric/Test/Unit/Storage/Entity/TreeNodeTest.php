@@ -125,6 +125,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals(1, $treeNode->getDepth());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testRemoveChild()
     {
         $clusterNode2 = $this->rootNode->getChildren()[1];
@@ -134,6 +137,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertNotContains($clusterNode2, $this->rootNode->getChildren());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testRemoveChildTwice()
     {
         $clusterNode2 = $this->rootNode->getChildren()[1];
@@ -143,6 +149,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertCount(1, $this->rootNode->getChildren());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testRemoveChildSetsCorrectSort()
     {
         $clusterNode1 = $this->rootNode->getChildren()->get(0);
@@ -151,6 +160,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals(1, $this->rootNode->getChildren()->get(1)->getSort());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testRemoveSetsCorrectParentNode()
     {
         $clusterNode1 = $this->rootNode->getChildren()->get(0);
@@ -371,6 +383,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals(2, $treeNode->getDepth());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testMoveChild()
     {
         $clusterNode1 = $this->rootNode->getChildren()[0];
@@ -380,6 +395,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals(2, $clusterNode1->getSort());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testMoveChildFixesOrders()
     {
         $clusterNode1 = $this->rootNode->getChildren()[0];
@@ -438,6 +456,9 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertEquals($title, $this->rootNode->getTitle());
     }
 
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testChangeRubricDataRemovesChoiceFromOldRubricData()
     {
         $newRubricData = new RubricData('Rubric 2');
@@ -450,6 +471,14 @@ class TreeNodeTest extends ChamiloTestCase
     {
         $this->assertTrue($this->rootNode->getChildren()[0]->hasParentNode());
         $this->assertFalse($this->rootNode->hasParentNode());
+    }
+
+    public function testSetRubricDataRemovesParentNode()
+    {
+        $clusterNode = $this->rootNode->getChildren()->first();
+        $clusterNode->setRubricData(null);
+
+        $this->assertEmpty($clusterNode->getParentNode());
     }
 }
 

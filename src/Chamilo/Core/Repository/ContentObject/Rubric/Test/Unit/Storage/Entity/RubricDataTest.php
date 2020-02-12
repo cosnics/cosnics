@@ -2,8 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Test\Unit\Storage\Entity;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CategoryNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Choice;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricNode;
@@ -72,6 +74,15 @@ class RubricDataTest extends ChamiloTestCase
         $this->assertEquals($lastUpdated, $this->rubricData->getLastUpdated());
     }
 
+    public function testGetSetContentObjectId()
+    {
+        $this->rubricData->setContentObjectId(8);
+        $this->assertEquals(8, $this->rubricData->getContentObjectId());
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
     public function testRemoveTreeNodeRemovesRubricDataFromNode()
     {
         $rootNode = $this->rubricData->getRootNode();
@@ -140,6 +151,246 @@ class RubricDataTest extends ChamiloTestCase
 
         $this->assertCount(0, $this->rubricData->getChoices());
     }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function testGetTreeNodeById()
+    {
+        $treeNode = new CategoryNode('Test', $this->rubricData);
+        $treeNode->setId(15);
+
+        $this->assertEquals($treeNode, $this->rubricData->getTreeNodeById(15));
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function testGetParentNodeById()
+    {
+        $treeNode = new CategoryNode('Test', $this->rubricData);
+        $treeNode->setId(15);
+
+        $this->assertEquals($treeNode, $this->rubricData->getParentNodeById(15));
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function testGetParentNodeByIdWhenNoIdSet()
+    {
+        $this->assertEquals($this->rubricData->getRootNode(), $this->rubricData->getParentNodeById(null));
+    }
+
+    /**
+     * @expectedException \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function testGetTreeNodeByIdFails()
+    {
+        $this->rubricData->getTreeNodeById(15);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function testGetLevelById()
+    {
+        $level = new Level($this->rubricData);
+        $level->setId(15);
+
+        $this->assertEquals($level, $this->rubricData->getLevelById(15));
+    }
+
+    /**
+     * @expectedException \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function testGetLevelByIdFails()
+    {
+        $this->rubricData->getLevelById(15);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function testGetChoiceById()
+    {
+        $choice = new Choice($this->rubricData);
+        $choice->setId(15);
+
+        $this->assertEquals($choice, $this->rubricData->getChoiceById(15));
+    }
+
+    /**
+     * @expectedException \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function testGetChoiceByIdFails()
+    {
+        $this->rubricData->getChoiceById(15);
+    }
+
+    public function testAddLevelSetsCorrectSort()
+    {
+        new Level($this->rubricData);
+        $level2 = new Level($this->rubricData);
+
+        $this->assertEquals(2, $level2->getSort());
+    }
+
+    public function testRemoveLevelCleansUpSort()
+    {
+        new Level($this->rubricData); // Level 1
+        $level2 = new Level($this->rubricData); // Level 2
+        $level3 = new Level($this->rubricData);
+
+        $this->rubricData->removeLevel($level2);
+
+        $this->assertEquals(2, $level3->getSort());
+    }
+
+    public function testMoveLevelSetsCorrectSort()
+    {
+        new Level($this->rubricData); // Level 1
+        $level2 = new Level($this->rubricData); // Level 2
+        $level3 = new Level($this->rubricData);
+        $level4 = new Level($this->rubricData);
+
+        $this->rubricData->moveLevel($level2, 3);
+
+        $this->assertEquals(3, $level2->getSort());
+        $this->assertEquals(2, $level3->getSort());
+        $this->assertEquals(4, $level4->getSort());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testMoveLevelNotInLevels()
+    {
+        $rubricData2 = new RubricData('test2');
+        $level = new Level($rubricData2);
+
+        $this->rubricData->moveLevel($level, 2);
+    }
+
+    public function testInsertLevelTwice()
+    {
+        $level = new Level($this->rubricData);
+        $this->rubricData->insertLevel($level, 2);
+
+        $this->assertCount(1, $this->rubricData->getLevels());
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
+    public function testAddLevelCreatesNewChoiceInCriteriumNode()
+    {
+        $criteriumNode = new CriteriumNode('test criterium', $this->rubricData);
+        $level = new Level($this->rubricData);
+
+        $this->assertEquals($level, $criteriumNode->getChoices()->first()->getLevel());
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
+    public function testInsertLevelCreatesNewChoiceInCriteriumNode()
+    {
+        $criteriumNode = new CriteriumNode('test criterium', $this->rubricData);
+        $level = new Level(new RubricData('temp'));
+
+        $this->rubricData->insertLevel($level, 1);
+
+        $this->assertEquals($level, $criteriumNode->getChoices()->first()->getLevel());
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
+    public function testRemoveLevelRemovesChoiceInCriteriumNode()
+    {
+        $criteriumNode = new CriteriumNode('test criterium', $this->rubricData);
+        $level = new Level($this->rubricData);
+
+        $this->assertCount(1, $criteriumNode->getChoices());
+
+        $this->rubricData->removeLevel($level);
+
+        $this->assertCount(0, $criteriumNode->getChoices());
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
+    public function testAddTreeNodeInsertsChoicesForLevel()
+    {
+        $level = new Level($this->rubricData);
+        $criteriumNode = new CriteriumNode('test criterium', $this->rubricData);
+
+        $this->assertEquals($level, $criteriumNode->getChoices()->first()->getLevel());
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
+    public function testRemoveTreeNodeRemovesChoices()
+    {
+        new Level($this->rubricData);
+        $criteriumNode = new CriteriumNode('test criterium', $this->rubricData);
+
+        $this->rubricData->removeTreeNode($criteriumNode);
+
+        $this->assertCount(0, $criteriumNode->getChoices());
+        $this->assertCount(0, $this->rubricData->getChoices());
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
+    public function testGetClusterNodes()
+    {
+        new ClusterNode('Test Cluster', $this->rubricData);
+        new CategoryNode('Test Category 1', $this->rubricData);
+        new CategoryNode('Test Category 2', $this->rubricData);
+        new CriteriumNode('Test Criterium 1', $this->rubricData);
+        new CriteriumNode('Test Criterium 2', $this->rubricData);
+        new CriteriumNode('Test Criterium 3', $this->rubricData);
+
+        $this->assertCount(1, $this->rubricData->getClusterNodes());
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
+    public function testGetCategoryNodes()
+    {
+        new ClusterNode('Test Cluster', $this->rubricData);
+        new CategoryNode('Test Category 1', $this->rubricData);
+        new CategoryNode('Test Category 2', $this->rubricData);
+        new CriteriumNode('Test Criterium 1', $this->rubricData);
+        new CriteriumNode('Test Criterium 2', $this->rubricData);
+        new CriteriumNode('Test Criterium 3', $this->rubricData);
+
+        $this->assertCount(2, $this->rubricData->getCategoryNodes());
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     */
+    public function testGetCriteriumNodes()
+    {
+        new ClusterNode('Test Cluster', $this->rubricData);
+        new CategoryNode('Test Category 1', $this->rubricData);
+        new CategoryNode('Test Category 2', $this->rubricData);
+        new CriteriumNode('Test Criterium 1', $this->rubricData);
+        new CriteriumNode('Test Criterium 2', $this->rubricData);
+        new CriteriumNode('Test Criterium 3', $this->rubricData);
+
+        $this->assertCount(3, $this->rubricData->getCriteriumNodes());
+    }
+
 
 
 }
