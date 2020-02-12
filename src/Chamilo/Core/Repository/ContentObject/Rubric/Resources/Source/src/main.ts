@@ -9,6 +9,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'jquery.fancytree/dist/skin-lion/ui.fancytree.css';
 import ScoreRubricStore from "./ScoreRubricStore";
+import { makeServer } from "./server"
+
+if (process.env.NODE_ENV === "development") {
+  makeServer();
+}
 
 Vue.config.productionTip = false;
 Vue.use(ScoreRubric);
