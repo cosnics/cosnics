@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -62,12 +63,8 @@ class ScoreForm extends FormValidator
         $this->addElement('select', Score::PROPERTY_SCORE, Translation::get('Score'), $this->getScoreChoices());
 
         $this->addElement(
-            'style_button',
-            null,
-            '',//Translation::get('Save', null, Utilities::COMMON_LIBRARIES),
-            ['id' => 'scoreSaveButton'],
-            null,
-            'floppy-save'
+            'style_button', null, '',//Translation::get('Save', null, Utilities::COMMON_LIBRARIES),
+            ['id' => 'scoreSaveButton'], null, new FontAwesomeGlyph('floppy-save')
         );
 
         $this->addElement('html', $this->twig->render(Manager::context() . ':ScoreSlider.html.twig'));

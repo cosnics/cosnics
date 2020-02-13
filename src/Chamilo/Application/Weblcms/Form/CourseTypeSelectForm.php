@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Form;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -60,7 +61,7 @@ class CourseTypeSelectForm extends FormValidator
             Translation::get('Select', null, Utilities::COMMON_LIBRARIES),
             null,
             null,
-            'arrow-right');
+            new FontAwesomeGlyph('arrow-right'));
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',

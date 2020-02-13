@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -49,14 +50,11 @@ class CourseSectionForm extends FormValidator
     {
         $this->addElement('text', CourseSection::PROPERTY_NAME, Translation::get('Name'), array("size" => "50"));
         $this->addRule(
-            CourseSection::PROPERTY_NAME,
-            Translation::get('Required', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            CourseSection::PROPERTY_NAME, Translation::get('Required', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
         $this->addElement(
-            'checkbox',
-            CourseSection::PROPERTY_VISIBLE,
-            Translation::get('Visible', null, Utilities::COMMON_LIBRARIES));
-
+            'checkbox', CourseSection::PROPERTY_VISIBLE, Translation::get('Visible', null, Utilities::COMMON_LIBRARIES)
+        );
         // $this->addElement('submit', 'course_section_sections', 'OK');
     }
 
@@ -69,16 +67,12 @@ class CourseSectionForm extends FormValidator
         $this->addElement('hidden', CourseSection::PROPERTY_ID);
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation::get('Update', null, Utilities::COMMON_LIBRARIES),
-            null,
-            null,
-            'arrow-right');
+            'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph('arrow-right')
+        );
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -88,13 +82,11 @@ class CourseSectionForm extends FormValidator
         $this->build_basic_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation::get('Create', null, Utilities::COMMON_LIBRARIES));
+            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+        );
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -120,15 +112,17 @@ class CourseSectionForm extends FormValidator
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->course_section->get_course_id()));
+            new StaticConditionVariable($this->course_section->get_course_id())
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_NAME),
-            new StaticConditionVariable($name));
+            new StaticConditionVariable($name)
+        );
         $condition = new AndCondition($conditions);
 
         $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
-            CourseSection::class_name(),
-            new DataClassRetrievesParameters($condition));
+            CourseSection::class_name(), new DataClassRetrievesParameters($condition)
+        );
 
         if ($course_sections->size() > 0)
         {
@@ -152,7 +146,8 @@ class CourseSectionForm extends FormValidator
         $course_section = $this->course_section;
         $defaults[CourseSection::PROPERTY_ID] = $course_section->get_id();
         $defaults[CourseSection::PROPERTY_NAME] = $course_section->get_name();
-        $defaults[CourseSection::PROPERTY_VISIBLE] = is_null($course_section->is_visible()) ? 1 : $course_section->is_visible();
+        $defaults[CourseSection::PROPERTY_VISIBLE] =
+            is_null($course_section->is_visible()) ? 1 : $course_section->is_visible();
         parent::setDefaults($defaults);
     }
 

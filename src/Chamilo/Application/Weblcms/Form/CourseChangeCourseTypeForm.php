@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -54,7 +55,7 @@ class CourseChangeCourseTypeForm extends FormValidator
             Translation::get('ChangeCourseType'),
             null,
             null,
-            'move');
+            new FontAwesomeGlyph( 'move'));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

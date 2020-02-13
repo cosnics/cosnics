@@ -1,45 +1,45 @@
 {
-	"name": "cosnics/libraries-protocol-microsoft-graph",
-	"version": "1.0.0",
-	"description": "Libraries Protocol Microsoft Graph",
-	"keywords": [
-		"Libraries",
-		"Protocol",
-		"Microsoft",
-		"Graph"
-	],
-	"homepage": "http://www.cosnics.org",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"thenetworg/oauth2-azure": "^1.3",
-		"microsoft/microsoft-graph": "^1.1",
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"cosnics": {
-			"name": "Microsoft Graph",
-			"context": "Chamilo\\Libraries\\Protocol\\Microsoft\\Graph",
-			"type": "Chamilo\\Libraries\\Protocol\\Microsoft",
-			"install": {
-				"default": 0,
-				"core": 0
-			},
-			"dependencies": [
-				{
-					"id": "Chamilo\\Libraries",
-					"version": ">=1.0.0"
-				}
-			]
-		}
-	}
+    "name": "cosnics/libraries-protocol-microsoft-graph",
+    "version": "1.0.0",
+    "description": "Libraries Protocol Microsoft Graph",
+    "keywords": [
+        "Libraries",
+        "Protocol",
+        "Microsoft",
+        "Graph"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "league/oauth2-client": "2.*",
+        "microsoft/microsoft-graph": "^1.1",
+        "php": ">=7.2.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Microsoft Graph",
+            "context": "Chamilo\\Libraries\\Protocol\\Microsoft\\Graph",
+            "type": "Chamilo\\Libraries\\Protocol\\Microsoft",
+            "install": {
+                "default": 0,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Libraries",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
 }

@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Ldap authentication",
     "require": {
-        "php": ">=7.0.0"
+        "php": ">=7.2.0"
     },
     "require-dev": {
     },

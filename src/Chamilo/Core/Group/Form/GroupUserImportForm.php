@@ -6,6 +6,7 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -44,12 +45,9 @@ class GroupUserImportForm extends FormValidator
         $this->addRule('file', Translation::get('OnlyCSVAllowed'), 'filetype', $allowed_upload_types);
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation::get('Import', null, Utilities::COMMON_LIBRARIES),
-            null,
-            null,
-            'import');
+            'style_submit_button', 'submit', Translation::get('Import', null, Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph('import')
+        );
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -63,19 +61,27 @@ class GroupUserImportForm extends FormValidator
         foreach ($group_users as $group_user)
         {
             if ($validated_group = $this->validate_group_user($group_user))
+            {
                 $validated_groups[] = $validated_group;
+            }
             else
-                $this->failed_elements[] = Translation::get('Invalid', null, Utilities::COMMON_LIBRARIES) . ': ' .
-                     implode(";", $group_user);
+            {
+                $this->failed_elements[] =
+                    Translation::get('Invalid', null, Utilities::COMMON_LIBRARIES) . ': ' . implode(";", $group_user);
+            }
         }
 
         if (count($this->failed_elements) > 0)
+        {
             return false;
+        }
 
         $this->process_group_users($validated_groups);
 
         if (count($this->failed_elements) > 0)
+        {
             return false;
+        }
 
         return true;
     }
@@ -90,8 +96,8 @@ class GroupUserImportForm extends FormValidator
         }
 
         // 2. Check if name & code is filled in
-        if (! $group_user['group_code'] || $group_user['group_code'] == '' || ! $group_user['username'] ||
-             $group_user['username'] == '')
+        if (!$group_user['group_code'] || $group_user['group_code'] == '' || !$group_user['username'] ||
+            $group_user['username'] == '')
         {
             return false;
         }
@@ -99,7 +105,7 @@ class GroupUserImportForm extends FormValidator
         $group_user['group_code'] = $this->retrieve_group($group_user['group_code']);
 
         // 3. Check if group exists
-        if (! $group_user['group_code'])
+        if (!$group_user['group_code'])
         {
             return false;
         }
@@ -107,17 +113,17 @@ class GroupUserImportForm extends FormValidator
         $group_user['username'] = $this->retrieve_user($group_user['username']);
 
         // 4. Check if user exists
-        if (! $group_user['username'])
+        if (!$group_user['username'])
         {
             return false;
         }
 
         $group_user['group_user'] = $this->retrieve_group_user(
-            $group_user['group_code']->get_id(),
-            $group_user['username']->get_id());
+            $group_user['group_code']->get_id(), $group_user['username']->get_id()
+        );
 
         // 5. Check if groupuser exist with delete and if it doesn't exist yet with create
-        if (($action == 'A' && $group_user['group_user']) || ($action == 'D' && ! $group_user['group_user']))
+        if (($action == 'A' && $group_user['group_user']) || ($action == 'D' && !$group_user['group_user']))
         {
             return false;
         }
@@ -129,9 +135,11 @@ class GroupUserImportForm extends FormValidator
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_CODE),
-            new StaticConditionVariable($group_code));
+            new StaticConditionVariable($group_code)
+        );
 
         $groups = DataManager::retrieves(Group::class_name(), new DataClassRetrievesParameters($condition));
+
         return $groups->next_result();
     }
 
@@ -145,13 +153,16 @@ class GroupUserImportForm extends FormValidator
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($group_id));
+            new StaticConditionVariable($group_id)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id));
+            new StaticConditionVariable($user_id)
+        );
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieves(GroupRelUser::class_name(), new DataClassRetrievesParameters($condition))->next_result();
+        return DataManager::retrieves(GroupRelUser::class_name(), new DataClassRetrievesParameters($condition))
+            ->next_result();
     }
 
     public function process_group_users($group_users)
@@ -169,7 +180,7 @@ class GroupUserImportForm extends FormValidator
                     break;
             }
 
-            if (! $succes)
+            if (!$succes)
             {
                 $this->failed_elements[] = Translation::get('Failed') . ': ' . implode(";", $group_user);
             }
@@ -181,6 +192,7 @@ class GroupUserImportForm extends FormValidator
         $group_rel_user = new GroupRelUser();
         $group_rel_user->set_group_id($group_user['group_code']->get_id());
         $group_rel_user->set_user_id($group_user['username']->get_id());
+
         return $group_rel_user->create();
     }
 

@@ -3,6 +3,8 @@ namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -90,7 +92,7 @@ class BreadcrumbTrail
                 $siteName = 'Chamilo';
             }
 
-            $this->add(new Breadcrumb($pathBuilder->getBasePath(true), $siteName, null, 'home'));
+            $this->add(new Breadcrumb($pathBuilder->getBasePath(true), $siteName, null, new FontAwesomeGlyph('home')));
         }
     }
 
@@ -186,6 +188,7 @@ class BreadcrumbTrail
     {
         $breadcrumbtrail = $this->breadcrumbtrail;
         $last_key = count($breadcrumbtrail) - 1;
+
         return $breadcrumbtrail[$last_key];
     }
 
@@ -201,7 +204,9 @@ class BreadcrumbTrail
             $this->add(
                 new Breadcrumb(
                     Path::getInstance()->getBasePath(true) . 'index.php',
-                    $this->get_setting('site_name', 'Chamilo\Core\Admin')));
+                    $this->get_setting('site_name', 'Chamilo\Core\Admin')
+                )
+            );
         }
     }
 
@@ -243,12 +248,13 @@ class BreadcrumbTrail
 
                 if ($breadcrumb->getImage())
                 {
-                    $breadCrumbHtml[] = '<img src="' . $breadcrumb->getImage() . '" title="' .
-                         htmlentities($breadcrumb->get_name()) . '">';
+                    $breadCrumbHtml[] =
+                        '<img src="' . $breadcrumb->getImage() . '" title="' . htmlentities($breadcrumb->get_name()) .
+                        '">';
                 }
-                elseif ($breadcrumb->getGlyph())
+                elseif ($breadcrumb->getInlineGlyph() instanceof InlineGlyph)
                 {
-                    $breadCrumbHtml[] = '<span class="glyphicon glyphicon-' . $breadcrumb->getGlyph() . '"></span>';
+                    $breadCrumbHtml[] = $breadcrumb->getInlineGlyph()->render();
                 }
                 else
                 {
@@ -339,6 +345,7 @@ class BreadcrumbTrail
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\Breadcrumb[] $breadcrumbtrail
+     *
      * @deprecated Deprecated method
      */
     public function set_breadcrumbtrail($breadcrumbtrail)
@@ -359,6 +366,7 @@ class BreadcrumbTrail
      *
      * @param string $variable
      * @param string $application
+     *
      * @return string
      */
     public function get_setting($variable, $application)

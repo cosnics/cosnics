@@ -5,6 +5,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -146,33 +147,24 @@ class RightsForm extends FormValidator
 
         $group = array();
 
-        if (! $has_root_location)
+        if (!$has_root_location)
         {
-            $group[] = & $this->createElement(
-                'radio',
-                null,
-                null,
-                Translation::get('InheritRights'),
-                self::INHERIT_TRUE,
-                array('class' => 'inherit_rights_selector'));
+            $group[] = &$this->createElement(
+                'radio', null, null, Translation::get('InheritRights'), self::INHERIT_TRUE,
+                array('class' => 'inherit_rights_selector')
+            );
         }
         else
         {
-            $group[] = & $this->createElement(
-                'radio',
-                null,
-                null,
-                Translation::get('InheritRights'),
-                self::INHERIT_TRUE,
-                array('class' => 'inherit_rights_selector', 'disabled' => 'disabled'));
+            $group[] = &$this->createElement(
+                'radio', null, null, Translation::get('InheritRights'), self::INHERIT_TRUE,
+                array('class' => 'inherit_rights_selector', 'disabled' => 'disabled')
+            );
         }
-        $group[] = & $this->createElement(
-            'radio',
-            null,
-            null,
-            Translation::get('UseSpecificRights'),
-            self::INHERIT_FALSE,
-            array('class' => 'specific_rights_selector'));
+        $group[] = &$this->createElement(
+            'radio', null, null, Translation::get('UseSpecificRights'), self::INHERIT_FALSE,
+            array('class' => 'specific_rights_selector')
+        );
 
         $this->addGroup($group, self::PROPERTY_INHERIT, null, '');
 
@@ -194,27 +186,18 @@ class RightsForm extends FormValidator
 
         $group = array();
 
-        $group[] = & $this->createElement(
-            'radio',
-            null,
-            null,
-            Translation::get('Everyone'),
-            self::RIGHT_OPTION_ALL,
-            array('class' => 'other_option_selected'));
-        $group[] = & $this->createElement(
-            'radio',
-            null,
-            null,
-            Translation::get('OnlyForMe'),
-            self::RIGHT_OPTION_ME,
-            array('class' => 'other_option_selected'));
-        $group[] = & $this->createElement(
-            'radio',
-            null,
-            null,
-            Translation::get('SelectSpecificEntities'),
-            self::RIGHT_OPTION_SELECT,
-            array('class' => 'entity_option_selected'));
+        $group[] = &$this->createElement(
+            'radio', null, null, Translation::get('Everyone'), self::RIGHT_OPTION_ALL,
+            array('class' => 'other_option_selected')
+        );
+        $group[] = &$this->createElement(
+            'radio', null, null, Translation::get('OnlyForMe'), self::RIGHT_OPTION_ME,
+            array('class' => 'other_option_selected')
+        );
+        $group[] = &$this->createElement(
+            'radio', null, null, Translation::get('SelectSpecificEntities'), self::RIGHT_OPTION_SELECT,
+            array('class' => 'entity_option_selected')
+        );
 
         $this->addGroup($group, $name, '', '');
 
@@ -242,25 +225,22 @@ class RightsForm extends FormValidator
         $buttons = array();
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            self::PROPERTY_SUBMIT,
-            Translation::get('Submit', null, Utilities::COMMON_LIBRARIES),
-            null,
-            null,
-            'arrow-right');
+            'style_submit_button', self::PROPERTY_SUBMIT, Translation::get('Submit', null, Utilities::COMMON_LIBRARIES),
+            null, null, new FontAwesomeGlyph('arrow-right')
+        );
 
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            self::PROPERTY_RESET,
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            'style_reset_button', self::PROPERTY_RESET, Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
 
         $this->addGroup($buttons, self::PROPERTY_BUTTONS, null, '&nbsp;', false);
 
         $this->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Portfolio\Display', true) .
-                     'RightsForm.js'));
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Portfolio\Display', true) .
+            'RightsForm.js'
+        )
+        );
     }
 
     /**
@@ -310,7 +290,7 @@ class RightsForm extends FormValidator
                 {
 
                     if ($selected_entity->get_entity_type() == 1 &&
-                         $selected_entity->get_entity_id() == Session::get_user_id())
+                        $selected_entity->get_entity_id() == Session::get_user_id())
                     {
                         $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OPTION_ME;
                         continue;

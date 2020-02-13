@@ -7,6 +7,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\Utilities;
 use Symfony\Component\Translation\Translator;
@@ -114,7 +115,7 @@ class RightsForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'style_submit_button', self::PROPERTY_SUBMIT, $translator->trans('Submit', [], Utilities::COMMON_LIBRARIES),
-            null, null, 'arrow-right'
+            null, null, new FontAwesomeGlyph('arrow-right')
         );
 
         $buttons[] = $this->createElement(
@@ -362,7 +363,7 @@ class RightsForm extends FormValidator
             $element = $this->getElement(self::PROPERTY_TARGETS . '[' . $rightIdentifier . ']');
             $element->setDefaultValues($defaultElements);
         }
-        
+
         parent::setDefaults($defaults);
     }
 }

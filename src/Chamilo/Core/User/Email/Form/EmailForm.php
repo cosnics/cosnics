@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Email\Form;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
@@ -54,7 +55,7 @@ class EmailForm extends FormValidator
             Translation::get('Email'),
             null,
             null,
-            'arrow-right');
+            new FontAwesomeGlyph('arrow-right'));
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',

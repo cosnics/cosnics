@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -54,8 +55,8 @@ class PriviligeForm extends FormValidator
             'submit', 
             Translation::get('Grant', null, Utilities::COMMON_LIBRARIES), 
             null, 
-            null, 
-            'arrow-right');
+            null,
+            new FontAwesomeGlyph('arrow-right'));
         
         $this->addElement(
             'html', 

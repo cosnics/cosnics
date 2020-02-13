@@ -14,7 +14,7 @@
 	"minimum-stability" : "dev",
 	"prefer-stable" : true,
 	"require" : {
-		"php" : ">=7.0.0",
+		"php" : ">=7.2.0",
 		"adodb/adodb-php": "5.*",
 		"chamilo/pear-libraries" : "*",
 		"doctrine/cache" : "1.10.*",
@@ -68,8 +68,8 @@
 	"scripts" : {
 		"pre-install-cmd" : "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
 		"pre-update-cmd" : "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
-		"post-update-cmd" : "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
-		"post-install-cmd" : "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
+		"old-post-update-cmd" : "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
+		"old-post-install-cmd" : "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
 		"new-post-update-cmd" : "@php console chamilo:process_resources",
 		"new-post-install-cmd" : "@php console chamilo:process_resources"
 	}

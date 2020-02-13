@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataC
 use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass\AssessmentMatrixQuestionOption;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -22,11 +23,12 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         parent::build_creation_form();
         $this->build_options_and_matches();
         $this->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion',
-                    true) . 'AssessmentMatrixQuestion.js'));
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion', true
+            ) . 'AssessmentMatrixQuestion.js'
+        )
+        );
     }
 
     protected function build_editing_form()
@@ -34,11 +36,12 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         parent::build_editing_form();
         $this->build_options_and_matches();
         $this->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion',
-                    true) . 'AssessmentMatrixQuestion.js'));
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion', true
+            ) . 'AssessmentMatrixQuestion.js'
+        )
+        );
     }
 
     public function prepareTabs()
@@ -58,7 +61,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $this->add_matches();
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array())
     {
         $object = $this->get_content_object();
         if ($object->get_number_of_options() != 0)
@@ -95,12 +98,14 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $object = new AssessmentMatrixQuestion();
         $this->set_content_object($object);
         $this->add_answers();
+
         return parent::create_content_object();
     }
 
     public function update_content_object()
     {
         $this->add_answers();
+
         return parent::update_content_object();
     }
 
@@ -120,10 +125,10 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         {
             // Create the option with it corresponding match
             $options[] = new AssessmentMatrixQuestionOption(
-                $value,
-                serialize($_POST['matches_to'][$option_id]),
+                $value, serialize($_POST['matches_to'][$option_id]),
                 $values[AssessmentMatrixQuestionOption::PROPERTY_SCORE][$option_id],
-                $values[AssessmentMatrixQuestionOption::PROPERTY_FEEDBACK][$option_id]);
+                $values[AssessmentMatrixQuestionOption::PROPERTY_FEEDBACK][$option_id]
+            );
         }
 
         foreach ($values['match'] as $match)
@@ -148,7 +153,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
 
         for ($match_number = 0; $match_number < $_SESSION['mq_number_of_matches']; $match_number ++)
         {
-            if (! in_array($match_number, $_SESSION['mq_skip_matches']))
+            if (!in_array($match_number, $_SESSION['mq_skip_matches']))
             {
                 $matches[$match_number] = $match_label ++;
             }
@@ -169,19 +174,13 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
 
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_button',
-            'change_matrix_type[]',
-            $switch_label,
-            array('class' => 'change_matrix_type'),
-            null,
-            'retweet');
+            'style_button', 'change_matrix_type[]', $switch_label, array('class' => 'change_matrix_type'), null,
+            new FontAwesomeGlyph('retweet')
+        );
         $buttons[] = $this->createElement(
-            'style_button',
-            'add_option[]',
-            Translation::get('AddMatrixQuestionOption'),
-            array('id' => 'add_option'),
-            null,
-            'plus');
+            'style_button', 'add_option[]', Translation::get('AddMatrixQuestionOption'), array('id' => 'add_option'),
+            null, new FontAwesomeGlyph('plus')
+        );
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer = $this->defaultRenderer();
@@ -212,72 +211,68 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
         {
             $group = array();
-            if (! in_array($option_number, $_SESSION['mq_skip_options']))
+            if (!in_array($option_number, $_SESSION['mq_skip_options']))
             {
                 $visual_number ++;
                 $group[] = $this->createElement('static', null, null, $visual_number);
                 $group[] = $this->create_html_editor(
                     AssessmentMatrixQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']',
-                    Translation::get('Answer'),
-                    $html_editor_options);
+                    Translation::get('Answer'), $html_editor_options
+                );
 
                 $group[] = $this->createElement(
-                    'select',
-                    'matches_to[' . $option_number . ']',
-                    Translation::get('Matches'),
-                    $matches,
-                    array('class' => 'option_matches'));
+                    'select', 'matches_to[' . $option_number . ']', Translation::get('Matches'), $matches,
+                    array('class' => 'option_matches')
+                );
                 $group[2]->setMultiple($multiple);
                 $group[] = $this->create_html_editor(
                     AssessmentMatrixQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']',
-                    Translation::get('Feedback'),
-                    $html_editor_options);
+                    Translation::get('Feedback'), $html_editor_options
+                );
                 $group[] = $this->createElement(
-                    'text',
-                    AssessmentMatrixQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']',
-                    Translation::get('Score'),
-                    'size="2"  class="input_numeric"');
+                    'text', AssessmentMatrixQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']',
+                    Translation::get('Score'), 'size="2"  class="input_numeric"'
+                );
 
                 if ($number_of_options - count($_SESSION['mq_skip_options']) > 2)
                 {
                     $group[] = $this->createElement(
-                        'image',
-                        'remove_option[' . $option_number . ']',
+                        'image', 'remove_option[' . $option_number . ']',
                         Theme::getInstance()->getCommonImagePath('Action/Delete'),
-                        array('class' => 'remove_option', 'id' => 'remove_option_' . $option_number));
+                        array('class' => 'remove_option', 'id' => 'remove_option_' . $option_number)
+                    );
                 }
                 else
                 {
-                    $group[] = & $this->createElement(
-                        'static',
-                        null,
-                        null,
-                        '<img class="remove_option" src="' .
-                             Theme::getInstance()->getCommonImagePath('Action/DeleteNa') . '" class="remove_option" />');
+                    $group[] = &$this->createElement(
+                        'static', null, null, '<img class="remove_option" src="' .
+                        Theme::getInstance()->getCommonImagePath('Action/DeleteNa') . '" class="remove_option" />'
+                    );
                 }
 
                 $this->addGroup(
-                    $group,
-                    AssessmentMatrixQuestionOption::PROPERTY_VALUE . '_' . $option_number,
-                    null,
-                    '',
-                    false);
+                    $group, AssessmentMatrixQuestionOption::PROPERTY_VALUE . '_' . $option_number, null, '', false
+                );
 
                 $this->addGroupRule(
-                    AssessmentMatrixQuestionOption::PROPERTY_VALUE . '_' . $option_number,
-                    array(
+                    AssessmentMatrixQuestionOption::PROPERTY_VALUE . '_' . $option_number, array(
                         AssessmentMatrixQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' => array(
                             array(
                                 Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
-                                'numeric'))));
+                                'numeric'
+                            )
+                        )
+                    )
+                );
 
                 $renderer->setElementTemplate(
-                    '<tr id="option_' . $option_number . '" class="' . ($visual_number % 2 == 0 ? 'row_odd' : 'row_even') .
-                         '">{element}</tr>',
-                        AssessmentMatrixQuestionOption::PROPERTY_VALUE . '_' . $option_number);
+                    '<tr id="option_' . $option_number . '" class="' .
+                    ($visual_number % 2 == 0 ? 'row_odd' : 'row_even') . '">{element}</tr>',
+                    AssessmentMatrixQuestionOption::PROPERTY_VALUE . '_' . $option_number
+                );
                 $renderer->setGroupElementTemplate(
-                    '<td>{element}</td>',
-                    AssessmentMatrixQuestionOption::PROPERTY_VALUE . '_' . $option_number);
+                    '<td>{element}</td>', AssessmentMatrixQuestionOption::PROPERTY_VALUE . '_' . $option_number
+                );
             }
         }
         $table_footer[] = '</tbody>';
@@ -287,11 +282,11 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>',
-            'question_buttons');
+            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 'question_buttons'
+        );
         $renderer->setGroupElementTemplate(
-            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>',
-            'question_buttons');
+            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 'question_buttons'
+        );
 
         $this->addElement('category');
     }
@@ -306,12 +301,9 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
 
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_button',
-            'add_match[]',
-            Translation::get('AddMatch'),
-            array('id' => 'add_match'),
-            null,
-            'plus');
+            'style_button', 'add_match[]', Translation::get('AddMatch'), array('id' => 'add_match'), null,
+            new FontAwesomeGlyph('plus')
+        );
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer = $this->defaultRenderer();
@@ -339,45 +331,40 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         {
             $group = array();
 
-            if (! in_array($match_number, $_SESSION['mq_skip_matches']))
+            if (!in_array($match_number, $_SESSION['mq_skip_matches']))
             {
                 $defaults['match_label'][$match_number] = $label ++;
                 $element = $this->createElement(
-                    'text',
-                    'match_label[' . $match_number . ']',
-                    Translation::get('Match'),
-                    'style="width: 90%;" ');
+                    'text', 'match_label[' . $match_number . ']', Translation::get('Match'), 'style="width: 90%;" '
+                );
                 $element->freeze();
                 $group[] = $element;
                 $group[] = $this->create_html_editor(
-                    'match[' . $match_number . ']',
-                    Translation::get('Match'),
-                    $html_editor_options);
+                    'match[' . $match_number . ']', Translation::get('Match'), $html_editor_options
+                );
 
                 if ($number_of_matches - count($_SESSION['mq_skip_matches']) > 2)
                 {
                     $group[] = $this->createElement(
-                        'image',
-                        'remove_match[' . $match_number . ']',
+                        'image', 'remove_match[' . $match_number . ']',
                         Theme::getInstance()->getCommonImagePath('Action/Delete'),
-                        array('class' => 'remove_match', 'id' => 'remove_match_' . $match_number));
+                        array('class' => 'remove_match', 'id' => 'remove_match_' . $match_number)
+                    );
                 }
                 else
                 {
-                    $group[] = & $this->createElement(
-                        'static',
-                        null,
-                        null,
-                        '<img class="remove_match" src="' . Theme::getInstance()->getCommonImagePath('Action/DeleteNa') .
-                             '" />');
+                    $group[] = &$this->createElement(
+                        'static', null, null, '<img class="remove_match" src="' .
+                        Theme::getInstance()->getCommonImagePath('Action/DeleteNa') . '" />'
+                    );
                 }
 
                 $this->addGroup($group, 'match_' . $match_number, null, '', false);
 
                 $renderer->setElementTemplate(
                     '<tr id="match_' . $match_number . '" class="' .
-                         ($match_number - 1 % 2 == 0 ? 'row_odd' : 'row_even') . '">{element}</tr>',
-                        'match_' . $match_number);
+                    ($match_number - 1 % 2 == 0 ? 'row_odd' : 'row_even') . '">{element}</tr>', 'match_' . $match_number
+                );
                 $renderer->setGroupElementTemplate('<td>{element}</td>', 'match_' . $match_number);
 
                 // $this->addGroupRule('match_' . $match_number, array(
@@ -397,11 +384,11 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>',
-            'question_buttons');
+            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 'question_buttons'
+        );
         $renderer->setGroupElementTemplate(
-            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>',
-            'question_buttons');
+            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 'question_buttons'
+        );
 
         $this->addElement('category');
     }
@@ -409,10 +396,11 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
     public function validate()
     {
         if (isset($_POST['add_match']) || isset($_POST['remove_match']) || isset($_POST['remove_option']) ||
-             isset($_POST['add_option']) || isset($_POST['change_matrix_type']))
+            isset($_POST['add_option']) || isset($_POST['change_matrix_type']))
         {
             return false;
         }
+
         return parent::validate();
     }
 
@@ -423,7 +411,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
      */
     public function update_number_of_options_and_matches()
     {
-        if (! $this->isSubmitted())
+        if (!$this->isSubmitted())
         {
             unset($_SESSION['mq_number_of_options']);
             unset($_SESSION['mq_skip_options']);
@@ -432,17 +420,17 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
             unset($_SESSION['mq_matrix_type']);
         }
 
-        if (! isset($_SESSION['mq_number_of_options']))
+        if (!isset($_SESSION['mq_number_of_options']))
         {
             $_SESSION['mq_number_of_options'] = 3;
         }
 
-        if (! isset($_SESSION['mq_skip_options']))
+        if (!isset($_SESSION['mq_skip_options']))
         {
             $_SESSION['mq_skip_options'] = array();
         }
 
-        if (! isset($_SESSION['mq_matrix_type']))
+        if (!isset($_SESSION['mq_matrix_type']))
         {
             $_SESSION['mq_matrix_type'] = AssessmentMatrixQuestion::MATRIX_TYPE_RADIO;
         }
@@ -458,12 +446,12 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
             $_SESSION['mq_skip_options'][] = $indexes[0];
         }
 
-        if (! isset($_SESSION['mq_number_of_matches']))
+        if (!isset($_SESSION['mq_number_of_matches']))
         {
             $_SESSION['mq_number_of_matches'] = 3;
         }
 
-        if (! isset($_SESSION['mq_skip_matches']))
+        if (!isset($_SESSION['mq_skip_matches']))
         {
             $_SESSION['mq_skip_matches'] = array();
         }
@@ -481,11 +469,12 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
 
         if (isset($_POST['change_matrix_type']))
         {
-            $_SESSION['mq_matrix_type'] = $_SESSION['mq_matrix_type'] == AssessmentMatrixQuestion::MATRIX_TYPE_RADIO ? AssessmentMatrixQuestion::MATRIX_TYPE_CHECKBOX : AssessmentMatrixQuestion::MATRIX_TYPE_RADIO;
+            $_SESSION['mq_matrix_type'] = $_SESSION['mq_matrix_type'] == AssessmentMatrixQuestion::MATRIX_TYPE_RADIO ?
+                AssessmentMatrixQuestion::MATRIX_TYPE_CHECKBOX : AssessmentMatrixQuestion::MATRIX_TYPE_RADIO;
         }
 
         $object = $this->get_content_object();
-        if (! $this->isSubmitted() && $object->get_number_of_options() != 0)
+        if (!$this->isSubmitted() && $object->get_number_of_options() != 0)
         {
             $_SESSION['mq_number_of_options'] = $object->get_number_of_options();
             $_SESSION['mq_number_of_matches'] = $object->get_number_of_matches();
@@ -493,15 +482,11 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         }
 
         $this->addElement(
-            'hidden',
-            'mq_number_of_options',
-            $_SESSION['mq_number_of_options'],
-            array('id' => 'mq_number_of_options'));
+            'hidden', 'mq_number_of_options', $_SESSION['mq_number_of_options'], array('id' => 'mq_number_of_options')
+        );
         $this->addElement(
-            'hidden',
-            'mq_number_of_matches',
-            $_SESSION['mq_number_of_matches'],
-            array('id' => 'mq_number_of_matches'));
+            'hidden', 'mq_number_of_matches', $_SESSION['mq_number_of_matches'], array('id' => 'mq_number_of_matches')
+        );
         $this->addElement('hidden', 'mq_matrix_type', $_SESSION['mq_matrix_type'], array('id' => 'mq_matrix_type'));
     }
 }

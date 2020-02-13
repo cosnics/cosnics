@@ -54,6 +54,7 @@ class StringUtilities
      * Create a \Stringy\Stringy instance with the given string and return it
      *
      * @param string $string
+     *
      * @return \Stringy\Stringy
      */
     public function createString($string)
@@ -80,17 +81,19 @@ class StringUtilities
      *
      * @param string $string
      * @param boolean $forHumans
+     *
      * @return boolean
      */
     public function hasValue($string, $forHumans = false)
     {
-        return ! $this->isNullOrEmpty($string, $forHumans);
+        return !$this->isNullOrEmpty($string, $forHumans);
     }
 
     /**
      *
      * @param string $string
      * @param boolean $forHumans
+     *
      * @return boolean
      */
     public function isNullOrEmpty($string, $forHumans = false)
@@ -100,7 +103,7 @@ class StringUtilities
             return true;
         }
 
-        if (! is_string($string))
+        if (!is_string($string))
         {
             return false;
         }
@@ -123,6 +126,7 @@ class StringUtilities
      * @param string $email
      * @param string $clickableText
      * @param string $styleClass
+     *
      * @return string
      */
     public function encryptMailLink($email, $clickableText = null, $styleClass = '')
@@ -133,7 +137,10 @@ class StringUtilities
         }
         // mailto already present?
         if (substr($email, 0, 7) != 'mailto:')
+        {
             $email = 'mailto:' . $email;
+        }
+
         // class (stylesheet) defined?
         if ($styleClass != '')
         {
@@ -143,20 +150,30 @@ class StringUtilities
         {
             $styleClass = ' class="full_url_print"';
         }
+
         // encrypt email
         $hmail = '';
+
         for ($i = 0; $i < strlen($email); $i ++)
-            $hmail .= '&#' . ord($email{$i}) . ';';
+        {
+            $hmail .= '&#' . ord($email[$i]) . ';';
+        }
+
         // encrypt clickable text if @ is present
+        $hclickable_text = '';
+
         if (strpos($clickableText, '@'))
         {
             for ($i = 0; $i < strlen($clickableText); $i ++)
-                $hclickable_text .= '&#' . ord($clickableText{$i}) . ';';
+            {
+                $hclickable_text .= '&#' . ord($clickableText[$i]) . ';';
+            }
         }
         else
         {
             $hclickable_text = htmlspecialchars($clickableText);
         }
+
         // return encrypted mailto hyperlink
         return '<a href="' . $hmail . '"' . $styleClass . '>' . $hclickable_text . '</a>';
     }
@@ -167,6 +184,7 @@ class StringUtilities
      * @param integer $length
      * @param boolean $stripTags
      * @param string $character
+     *
      * @return string
      */
     public function truncate($string, $length = 200, $stripTags = true, $character = "\xE2\x80\xA6")

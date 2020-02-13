@@ -3,6 +3,7 @@ namespace Chamilo\Core\Home\Rights\Form;
 
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -58,8 +59,8 @@ class ElementTargetEntitiesForm extends TargetEntitiesForm
             'cancel', 
             Translation::get('Cancel', null, Utilities::COMMON_LIBRARIES), 
             array('class' => 'btn-danger'), 
-            null, 
-            'remove');
+            null,
+            new FontAwesomeGlyph('remove'));
         
         $buttonGroup->setElements($buttons);
     }

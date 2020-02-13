@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -248,7 +249,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                     Translation::get('Move', null, Utilities::COMMON_LIBRARIES),
                     null,
                     null,
-                    'move');
+                    new FontAwesomeGlyph( 'move'));
                 $buttons[] = $form->createElement(
                     'style_reset_button',
                     'reset',

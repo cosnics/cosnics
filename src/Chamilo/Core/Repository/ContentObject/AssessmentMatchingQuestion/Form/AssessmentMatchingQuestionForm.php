@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\Dat
 use Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass\AssessmentMatchingQuestionOption;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -32,11 +33,12 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         parent::build_creation_form();
         $this->build_options_and_matches();
         $this->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion',
-                    true) . 'AssessmentMatchingQuestion.js'));
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion', true
+            ) . 'AssessmentMatchingQuestion.js'
+        )
+        );
     }
 
     protected function build_editing_form()
@@ -44,11 +46,12 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         parent::build_editing_form();
         $this->build_options_and_matches();
         $this->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion',
-                    true) . 'AssessmentMatchingQuestion.js'));
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion', true
+            ) . 'AssessmentMatchingQuestion.js'
+        )
+        );
     }
 
     /**
@@ -62,10 +65,8 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
 
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement(
-            'select',
-            AssessmentMatchingQuestion::PROPERTY_DISPLAY,
-            Translation::get('Display'),
-            $select_options);
+            'select', AssessmentMatchingQuestion::PROPERTY_DISPLAY, Translation::get('Display'), $select_options
+        );
         $this->addElement('category');
 
         $this->update_number_of_options_and_matches();
@@ -73,7 +74,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $this->add_matches();
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array())
     {
         $object = $this->get_content_object();
         if ($object->get_number_of_options() != 0)
@@ -115,6 +116,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $this->set_content_object($object);
         $object->set_display($values[AssessmentMatchingQuestion::PROPERTY_DISPLAY]);
         $this->add_answer();
+
         return parent::create_content_object();
     }
 
@@ -125,6 +127,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $object->set_display($values[AssessmentMatchingQuestion::PROPERTY_DISPLAY]);
 
         $this->add_answer();
+
         return parent::update_content_object();
     }
 
@@ -147,10 +150,10 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         {
             // Create the option with it corresponding match
             $options[] = new AssessmentMatchingQuestionOption(
-                $value,
-                $matches_indexes[$values[self::PROPERTY_DEFAULTS_MATCHES_TO][$option_id]],
+                $value, $matches_indexes[$values[self::PROPERTY_DEFAULTS_MATCHES_TO][$option_id]],
                 $values[AssessmentMatchingQuestionOption::PROPERTY_SCORE][$option_id],
-                $values[AssessmentMatchingQuestionOption::PROPERTY_FEEDBACK][$option_id]);
+                $values[AssessmentMatchingQuestionOption::PROPERTY_FEEDBACK][$option_id]
+            );
         }
 
         foreach ($values[self::PROPERTY_DEFAULTS_MATCH] as $match)
@@ -164,10 +167,11 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
     public function validate()
     {
         if (isset($_POST[self::PROPERTY_ADD_MATCH]) || isset($_POST[self::PROPERTY_REMOVE_MATCH]) ||
-             isset($_POST[self::PROPERTY_REMOVE_OPTION]) || isset($_POST[self::PROPERTY_ADD_OPTION]))
+            isset($_POST[self::PROPERTY_REMOVE_OPTION]) || isset($_POST[self::PROPERTY_ADD_OPTION]))
         {
             return false;
         }
+
         return parent::validate();
     }
 
@@ -178,18 +182,18 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
      */
     public function update_number_of_options_and_matches()
     {
-        if (! $this->isSubmitted())
+        if (!$this->isSubmitted())
         {
             unset($_SESSION[self::PROPERTY_MQ_NUMBER_OF_OPTIONS]);
             unset($_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS]);
             unset($_SESSION[self::PROPERTY_MQ_NUMBER_OF_MATCHES]);
             unset($_SESSION[self::PROPERTY_MQ_SKIP_MATCHES]);
         }
-        if (! isset($_SESSION[self::PROPERTY_MQ_NUMBER_OF_OPTIONS]))
+        if (!isset($_SESSION[self::PROPERTY_MQ_NUMBER_OF_OPTIONS]))
         {
             $_SESSION[self::PROPERTY_MQ_NUMBER_OF_OPTIONS] = 3;
         }
-        if (! isset($_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS]))
+        if (!isset($_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS]))
         {
             $_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS] = array();
         }
@@ -202,11 +206,11 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
             $indexes = array_keys($_POST[self::PROPERTY_REMOVE_OPTION]);
             $_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS][] = $indexes[0];
         }
-        if (! isset($_SESSION[self::PROPERTY_MQ_NUMBER_OF_MATCHES]))
+        if (!isset($_SESSION[self::PROPERTY_MQ_NUMBER_OF_MATCHES]))
         {
             $_SESSION[self::PROPERTY_MQ_NUMBER_OF_MATCHES] = 3;
         }
-        if (! isset($_SESSION[self::PROPERTY_MQ_SKIP_MATCHES]))
+        if (!isset($_SESSION[self::PROPERTY_MQ_SKIP_MATCHES]))
         {
             $_SESSION[self::PROPERTY_MQ_SKIP_MATCHES] = array();
         }
@@ -220,7 +224,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
             $_SESSION[self::PROPERTY_MQ_SKIP_MATCHES][] = $indexes[0];
         }
         $object = $this->get_content_object();
-        if (! $this->isSubmitted() && $object->get_number_of_options() != 0)
+        if (!$this->isSubmitted() && $object->get_number_of_options() != 0)
         {
             $_SESSION[self::PROPERTY_MQ_NUMBER_OF_OPTIONS] = $object->get_number_of_options();
             $_SESSION[self::PROPERTY_MQ_NUMBER_OF_MATCHES] = $object->get_number_of_matches();
@@ -240,7 +244,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
 
         for ($match_number = 0; $match_number < $_SESSION[self::PROPERTY_MQ_NUMBER_OF_MATCHES]; $match_number ++)
         {
-            if (! in_array($match_number, $_SESSION[self::PROPERTY_MQ_SKIP_MATCHES]))
+            if (!in_array($match_number, $_SESSION[self::PROPERTY_MQ_SKIP_MATCHES]))
             {
                 $matches[$match_number] = $match_label ++;
             }
@@ -248,19 +252,15 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
 
         $this->addElement('category', Translation::get('Options'));
         $this->addElement(
-            'hidden',
-            self::PROPERTY_MQ_NUMBER_OF_OPTIONS,
-            $_SESSION[self::PROPERTY_MQ_NUMBER_OF_OPTIONS],
-            array('id' => self::PROPERTY_MQ_NUMBER_OF_OPTIONS));
+            'hidden', self::PROPERTY_MQ_NUMBER_OF_OPTIONS, $_SESSION[self::PROPERTY_MQ_NUMBER_OF_OPTIONS],
+            array('id' => self::PROPERTY_MQ_NUMBER_OF_OPTIONS)
+        );
 
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_button',
-            'add_option[]',
-            Translation::get('AddMatchingQuestionOption'),
-            array('id' => self::PROPERTY_ADD_OPTION),
-            null,
-            'plus');
+            'style_button', 'add_option[]', Translation::get('AddMatchingQuestionOption'),
+            array('id' => self::PROPERTY_ADD_OPTION), null, new FontAwesomeGlyph('plus')
+        );
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer = $this->defaultRenderer();
@@ -292,69 +292,65 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         {
 
             $group = array();
-            if (! in_array($option_number, $_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS]))
+            if (!in_array($option_number, $_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS]))
             {
                 $visual_number ++;
                 $group[] = $this->createElement('static', null, null, $visual_number);
                 $group[] = $this->create_html_editor(
                     AssessmentMatchingQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']',
-                    Translation::get('Answer'),
-                    $html_editor_options);
+                    Translation::get('Answer'), $html_editor_options
+                );
                 $group[] = $this->createElement(
-                    'select',
-                    'matches_to[' . $option_number . ']',
-                    Translation::get('Matches'),
-                    $matches);
+                    'select', 'matches_to[' . $option_number . ']', Translation::get('Matches'), $matches
+                );
                 $group[] = $this->create_html_editor(
                     AssessmentMatchingQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']',
-                    Translation::get('Comment'),
-                    $html_editor_options);
+                    Translation::get('Comment'), $html_editor_options
+                );
                 $group[] = $this->createElement(
-                    'text',
-                    AssessmentMatchingQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']',
-                    Translation::get('Weight'),
-                    'size="2"  class="input_numeric"');
+                    'text', AssessmentMatchingQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']',
+                    Translation::get('Weight'), 'size="2"  class="input_numeric"'
+                );
 
                 if ($number_of_options - count($_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS]) > 2)
                 {
                     $group[] = $this->createElement(
-                        'image',
-                        'remove_option[' . $option_number . ']',
+                        'image', 'remove_option[' . $option_number . ']',
                         Theme::getInstance()->getCommonImagePath('Action/Delete'),
-                        array('class' => self::PROPERTY_REMOVE_OPTION, 'id' => 'remove_option_' . $option_number));
+                        array('class' => self::PROPERTY_REMOVE_OPTION, 'id' => 'remove_option_' . $option_number)
+                    );
                 }
                 else
                 {
-                    $group[] = & $this->createElement(
-                        'static',
-                        null,
-                        null,
-                        '<img class="remove_option" src="' . Theme::getInstance()->getCommonImagePath('Action/DeleteNa') .
-                             '" class="remove_option" />');
+                    $group[] = &$this->createElement(
+                        'static', null, null, '<img class="remove_option" src="' .
+                        Theme::getInstance()->getCommonImagePath('Action/DeleteNa') . '" class="remove_option" />'
+                    );
                 }
 
                 $this->addGroup(
-                    $group,
-                    AssessmentMatchingQuestionOption::PROPERTY_VALUE . '_' . $option_number,
-                    null,
-                    '',
-                    false);
+                    $group, AssessmentMatchingQuestionOption::PROPERTY_VALUE . '_' . $option_number, null, '', false
+                );
 
                 $this->addGroupRule(
-                    AssessmentMatchingQuestionOption::PROPERTY_VALUE . '_' . $option_number,
-                    array(
+                    AssessmentMatchingQuestionOption::PROPERTY_VALUE . '_' . $option_number, array(
                         AssessmentMatchingQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' => array(
                             array(
                                 Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
-                                'numeric'))));
+                                'numeric'
+                            )
+                        )
+                    )
+                );
 
                 $renderer->setElementTemplate(
-                    '<tr id="option_' . $option_number . '" class="' . ($visual_number % 2 == 0 ? 'row_odd' : 'row_even') .
-                         '">{element}</tr>',
-                        AssessmentMatchingQuestionOption::PROPERTY_VALUE . '_' . $option_number);
+                    '<tr id="option_' . $option_number . '" class="' .
+                    ($visual_number % 2 == 0 ? 'row_odd' : 'row_even') . '">{element}</tr>',
+                    AssessmentMatchingQuestionOption::PROPERTY_VALUE . '_' . $option_number
+                );
                 $renderer->setGroupElementTemplate(
-                    '<td>{element}</td>',
-                    AssessmentMatchingQuestionOption::PROPERTY_VALUE . '_' . $option_number);
+                    '<td>{element}</td>', AssessmentMatchingQuestionOption::PROPERTY_VALUE . '_' . $option_number
+                );
             }
         }
         $table_footer[] = '</tbody>';
@@ -364,11 +360,11 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>',
-            'question_buttons');
+            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 'question_buttons'
+        );
         $renderer->setGroupElementTemplate(
-            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>',
-            'question_buttons');
+            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 'question_buttons'
+        );
 
         $this->addElement('category');
     }
@@ -382,19 +378,15 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $this->addElement('category', Translation::get('Matches'));
 
         $this->addElement(
-            'hidden',
-            self::PROPERTY_MQ_NUMBER_OF_MATCHES,
-            $_SESSION[self::PROPERTY_MQ_NUMBER_OF_MATCHES],
-            array('id' => self::PROPERTY_MQ_NUMBER_OF_MATCHES));
+            'hidden', self::PROPERTY_MQ_NUMBER_OF_MATCHES, $_SESSION[self::PROPERTY_MQ_NUMBER_OF_MATCHES],
+            array('id' => self::PROPERTY_MQ_NUMBER_OF_MATCHES)
+        );
 
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_button',
-            'add_match[]',
-            Translation::get('AddMatch'),
-            array('id' => self::PROPERTY_ADD_MATCH),
-            null,
-            'plus');
+            'style_button', 'add_match[]', Translation::get('AddMatch'), array('id' => self::PROPERTY_ADD_MATCH), null,
+            new FontAwesomeGlyph('plus')
+        );
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer = $this->defaultRenderer();
@@ -422,45 +414,40 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         {
             $group = array();
 
-            if (! in_array($match_number, $_SESSION[self::PROPERTY_MQ_SKIP_MATCHES]))
+            if (!in_array($match_number, $_SESSION[self::PROPERTY_MQ_SKIP_MATCHES]))
             {
                 $defaults['match_label'][$match_number] = $label ++;
                 $element = $this->createElement(
-                    'text',
-                    'match_label[' . $match_number . ']',
-                    Translation::get('Match'),
-                    'style="width: 90%;" ');
+                    'text', 'match_label[' . $match_number . ']', Translation::get('Match'), 'style="width: 90%;" '
+                );
                 $element->freeze();
                 $group[] = $element;
                 $group[] = $this->create_html_editor(
-                    'match[' . $match_number . ']',
-                    Translation::get('Match'),
-                    $html_editor_options);
+                    'match[' . $match_number . ']', Translation::get('Match'), $html_editor_options
+                );
 
                 if ($number_of_matches - count($_SESSION[self::PROPERTY_MQ_SKIP_MATCHES]) > 2)
                 {
                     $group[] = $this->createElement(
-                        'image',
-                        'remove_match[' . $match_number . ']',
+                        'image', 'remove_match[' . $match_number . ']',
                         Theme::getInstance()->getCommonImagePath('Action/Delete'),
-                        array('class' => self::PROPERTY_REMOVE_MATCH, 'id' => 'remove_match_' . $match_number));
+                        array('class' => self::PROPERTY_REMOVE_MATCH, 'id' => 'remove_match_' . $match_number)
+                    );
                 }
                 else
                 {
-                    $group[] = & $this->createElement(
-                        'static',
-                        null,
-                        null,
-                        '<img class="remove_match" src="' . Theme::getInstance()->getCommonImagePath('Action/DeleteNa') .
-                             '" />');
+                    $group[] = &$this->createElement(
+                        'static', null, null, '<img class="remove_match" src="' .
+                        Theme::getInstance()->getCommonImagePath('Action/DeleteNa') . '" />'
+                    );
                 }
 
                 $this->addGroup($group, 'match_' . $match_number, null, '', false);
 
                 $renderer->setElementTemplate(
                     '<tr id="match_' . $match_number . '" class="' .
-                         ($match_number - 1 % 2 == 0 ? 'row_odd' : 'row_even') . '">{element}</tr>',
-                        'match_' . $match_number);
+                    ($match_number - 1 % 2 == 0 ? 'row_odd' : 'row_even') . '">{element}</tr>', 'match_' . $match_number
+                );
                 $renderer->setGroupElementTemplate('<td>{element}</td>', 'match_' . $match_number);
 
                 // $this->addGroupRule('match_' . $match_number, array(
@@ -480,11 +467,11 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>',
-            'question_buttons');
+            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 'question_buttons'
+        );
         $renderer->setGroupElementTemplate(
-            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>',
-            'question_buttons');
+            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 'question_buttons'
+        );
 
         $this->addElement('category');
     }

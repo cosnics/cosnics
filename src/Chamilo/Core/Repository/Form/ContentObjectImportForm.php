@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -118,7 +119,7 @@ abstract class ContentObjectImportForm extends FormValidator
             Translation::get('Import', null, Utilities::COMMON_LIBRARIES),
             array('id' => 'import_button'),
             null,
-            'import');
+            new FontAwesomeGlyph('import'));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 

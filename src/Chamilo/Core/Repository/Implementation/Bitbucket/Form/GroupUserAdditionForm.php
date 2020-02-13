@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Implementation\Bitbucket\Manager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -21,7 +22,7 @@ class GroupUserAdditionForm extends FormValidator
     public function __construct($action, $bitbucket)
     {
         parent::__construct(ClassnameUtilities::getInstance()->getClassnameFromObject($this, true), 'post', $action);
-        
+
         $this->bitbucket = $bitbucket;
         $this->build();
     }
@@ -30,25 +31,24 @@ class GroupUserAdditionForm extends FormValidator
     {
         $this->addElement('text', 'user', Translation::get('UserToAdd'));
         $this->addElement(
-            'style_submit_button', 
-            'submit', 
-            Translation::get('Create', null, Utilities::COMMON_LIBRARIES), 
-            null, 
-            null, 
-            'arrow-right');
-        
+            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph('arrow-right')
+        );
+
         $this->addElement(
-            'html', 
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
-                     'PrivilegeGrantingForm.js'));
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
+            'PrivilegeGrantingForm.js'
+        )
+        );
     }
 
     public function add_user_to_group()
     {
         $values = $this->exportValues();
+
         return $this->bitbucket->get_external_repository_manager_connector()->add_user_to_group(
-            Request::get(Manager::PARAM_EXTERNAL_REPOSITORY_GROUP), 
-            $values['user']);
+            Request::get(Manager::PARAM_EXTERNAL_REPOSITORY_GROUP), $values['user']
+        );
     }
 }

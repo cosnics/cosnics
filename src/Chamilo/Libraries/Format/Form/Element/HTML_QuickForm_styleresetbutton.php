@@ -1,5 +1,9 @@
 <?php
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'HTML_QuickForm_stylebutton.php';
+
+use \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+use \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Form\Element
@@ -16,14 +20,16 @@ class HTML_QuickForm_styleresetbutton extends HTML_QuickForm_stylebutton
      * @param string $elementLabel
      * @param string[] $attributes
      * @param string $value
-     * @param string $glyph
+     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $glyph
      */
-    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $value = null, $glyph = 'trash')
+    public function __construct(
+        $elementName = null, $elementLabel = null, $attributes = null, $value = null, InlineGlyph $glyph = null
+    )
     {
         // Quickform forces all arguments to "null", so the defaults in the constructor are not triggered
-        if (! isset($glyph))
+        if (!isset($glyph))
         {
-            $glyph = 'trash';
+            $glyph = new FontAwesomeGlyph('trash');
         }
 
         HTML_QuickForm_stylebutton::__construct($elementName, $elementLabel, $attributes, $value, $glyph);

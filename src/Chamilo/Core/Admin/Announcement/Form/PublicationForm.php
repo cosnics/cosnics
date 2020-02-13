@@ -9,6 +9,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -91,7 +92,7 @@ class PublicationForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'style_submit_button', self::PARAM_SUBMIT, Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
-            null, null, 'arrow-right'
+            null, null, new FontAwesomeGlyph('arrow-right')
         );
 
         $buttons[] = $this->createElement(
@@ -168,7 +169,7 @@ class PublicationForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'style_submit_button', self::PARAM_SUBMIT, Translation::get('Update', null, Utilities::COMMON_LIBRARIES),
-            null, null, 'arrow-right'
+            null, null, new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
             'style_reset_button', self::PARAM_RESET, Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)

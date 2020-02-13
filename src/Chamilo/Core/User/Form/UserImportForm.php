@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
@@ -90,7 +91,7 @@ class UserImportForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit', Translation::get('Import', null, Utilities::COMMON_LIBRARIES), null, null,
-            'import'
+            new FontAwesomeGlyph('import')
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

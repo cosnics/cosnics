@@ -11,6 +11,7 @@ use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
@@ -267,7 +268,7 @@ class UserForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
-            'arrow-right'
+            new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
             'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)

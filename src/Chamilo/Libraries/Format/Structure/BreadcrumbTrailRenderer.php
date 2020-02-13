@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -47,6 +48,7 @@ class BreadcrumbTrailRenderer
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
+     *
      * @return string
      */
     public function render(BreadcrumbTrail $breadcrumbTrail)
@@ -70,6 +72,7 @@ class BreadcrumbTrailRenderer
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
+     *
      * @return string
      */
     public function renderBreadcrumbs(BreadcrumbTrail $breadcrumbTrail)
@@ -91,12 +94,13 @@ class BreadcrumbTrailRenderer
 
                 if ($breadcrumb->getImage())
                 {
-                    $breadCrumbHtml[] = '<img src="' . $breadcrumb->getImage() . '" title="' .
-                         htmlentities($breadcrumb->get_name()) . '">';
+                    $breadCrumbHtml[] =
+                        '<img src="' . $breadcrumb->getImage() . '" title="' . htmlentities($breadcrumb->get_name()) .
+                        '">';
                 }
-                elseif ($breadcrumb->getGlyph())
+                elseif ($breadcrumb->getInlineGlyph() instanceof InlineGlyph)
                 {
-                    $breadCrumbHtml[] = '<span class="glyphicon glyphicon-' . $breadcrumb->getGlyph() . '"></span>';
+                    $breadCrumbHtml[] = $breadcrumb->getInlineGlyph()->render();
                 }
                 else
                 {
@@ -118,6 +122,7 @@ class BreadcrumbTrailRenderer
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
+     *
      * @return string
      */
     public function renderHelp(BreadcrumbTrail $breadcrumbTrail)
@@ -146,6 +151,7 @@ class BreadcrumbTrailRenderer
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
+     *
      * @return string
      */
     public function renderExtra(BreadcrumbTrail $breadcrumbTrail)

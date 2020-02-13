@@ -9,6 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -41,8 +42,9 @@ class CourseRequestForm extends FormValidator
 
     private $request_user_id;
 
-    public function __construct($form_type, $action, $course, $parent, $request, $multiple_users = false,
-        $request_user_id = null)
+    public function __construct(
+        $form_type, $action, $course, $parent, $request, $multiple_users = false, $request_user_id = null
+    )
     {
         parent::__construct('course_request', 'post', $action);
         $this->multiple_users = $multiple_users;
@@ -52,7 +54,7 @@ class CourseRequestForm extends FormValidator
         $this->course = $course;
         $this->user_id = $parent->get_user_id();
 
-        if (! $request_user_id)
+        if (!$request_user_id)
         {
             $request_user_id = $this->user_id;
         }
@@ -78,16 +80,12 @@ class CourseRequestForm extends FormValidator
         $this->build_request_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation::get('Create', null, Utilities::COMMON_LIBRARIES),
-            null,
-            null,
-            'arrow-right');
+            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph('arrow-right')
+        );
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -108,16 +106,16 @@ class CourseRequestForm extends FormValidator
             {
                 $order = array();
                 $order[] = new OrderBy(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-                    SORT_ASC);
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), SORT_ASC
+                );
                 $order[] = new OrderBy(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-                    SORT_ASC);
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), SORT_ASC
+                );
 
                 $parameters = new DataClassRetrievesParameters(null, null, null, $order);
                 $users_result = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                    $parameters);
+                    \Chamilo\Core\User\Storage\DataClass\User::class_name(), $parameters
+                );
                 $users = array();
                 while ($user = $users_result->next_result())
                 {
@@ -125,21 +123,18 @@ class CourseRequestForm extends FormValidator
                     $users[$user->get_id()] = $user_name;
                 }
                 $this->addElement(
-                    'select',
-                    CommonRequest::PROPERTY_USER_ID,
-                    Translation::get('User', null, \Chamilo\Core\User\Manager::context()),
-                    $users);
+                    'select', CommonRequest::PROPERTY_USER_ID,
+                    Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $users
+                );
             }
             else
             {
                 $user_name = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                    (int) $this->request_user_id)->get_fullname();
+                    \Chamilo\Core\User\Storage\DataClass\User::class_name(), (int) $this->request_user_id
+                )->get_fullname();
                 $this->addElement(
-                    'static',
-                    'user',
-                    Translation::get('User', null, \Chamilo\Core\User\Manager::context()),
-                    $user_name);
+                    'static', 'user', Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $user_name
+                );
             }
 
             $course_name = $this->course->get_title();
@@ -148,28 +143,26 @@ class CourseRequestForm extends FormValidator
             $this->add_textfield(CommonRequest::PROPERTY_SUBJECT, Translation::get('Subject'), true);
 
             $this->add_html_editor(
-                CommonRequest::PROPERTY_MOTIVATION,
-                Translation::get('Motivation'),
-                true,
-                array(FormValidatorHtmlEditorOptions::OPTION_TOOLBAR => 'BasicMarkup'));
+                CommonRequest::PROPERTY_MOTIVATION, Translation::get('Motivation'), true,
+                array(FormValidatorHtmlEditorOptions::OPTION_TOOLBAR => 'BasicMarkup')
+            );
         }
 
         if ($this->form_type == self::TYPE_VIEW)
         {
             $this->addElement(
-                'category',
-                Translation::get(ClassnameUtilities::getInstance()->getClassnameFromObject($this->request)));
+                'category', Translation::get(ClassnameUtilities::getInstance()->getClassnameFromObject($this->request))
+            );
 
             $name_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                (int) $this->request->get_user_id())->get_fullname();
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(), (int) $this->request->get_user_id()
+            )->get_fullname();
             $this->addElement(
-                'static',
-                'request',
-                Translation::get('User', null, \Chamilo\Core\User\Manager::context()),
-                $name_user);
+                'static', 'request', Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $name_user
+            );
 
-            $request_name = CourseDataManager::retrieve_by_id(Course::class_name(), $this->request->get_course_id())->get_title();
+            $request_name =
+                CourseDataManager::retrieve_by_id(Course::class_name(), $this->request->get_course_id())->get_title();
 
             $this->addElement('static', 'request', Translation::get('CourseName'), $request_name);
 
@@ -189,25 +182,21 @@ class CourseRequestForm extends FormValidator
                 case CommonRequest::ALLOWED_DECISION :
                     $this->addElement('static', 'request', Translation::get('Decision'), Translation::get('Allowed'));
                     $this->addElement(
-                        'static',
-                        'request',
-                        Translation::get('ConfirmOn', null, Utilities::COMMON_LIBRARIES),
-                        $decision_date);
+                        'static', 'request', Translation::get('ConfirmOn', null, Utilities::COMMON_LIBRARIES),
+                        $decision_date
+                    );
                     break;
                 case CommonRequest::DENIED_DECISION :
                     $this->addElement('static', 'request', Translation::get('Decision'), Translation::get('Denied'));
                     $this->addElement(
-                        'static',
-                        'request',
-                        Translation::get('ConfirmOn', null, Utilities::COMMON_LIBRARIES),
-                        $decision_date);
+                        'static', 'request', Translation::get('ConfirmOn', null, Utilities::COMMON_LIBRARIES),
+                        $decision_date
+                    );
                     break;
                 default :
                     $this->addElement(
-                        'static',
-                        'request',
-                        Translation::get('Decision'),
-                        Translation::get('NoDecisionYet'));
+                        'static', 'request', Translation::get('Decision'), Translation::get('NoDecisionYet')
+                    );
                     break;
             }
         }
@@ -238,7 +227,7 @@ class CourseRequestForm extends FormValidator
         $request->set_decision_date($values[CommonRequest::PROPERTY_DECISION_DATE]);
         $request->set_decision(CommonRequest::NO_DECISION);
 
-        if (! $request->create())
+        if (!$request->create())
         {
             return false;
         }

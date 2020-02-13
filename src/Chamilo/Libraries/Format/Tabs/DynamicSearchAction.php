@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Tabs;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -23,17 +24,18 @@ class DynamicSearchAction extends DynamicAction
     {
         $search_form = new FormValidator('search', 'post', $url);
         $search_form->addElement('text', self::PARAM_SIMPLE_SEARCH_QUERY, Translation::get('Search'), 'size="20"');
-        $search_form->addElement('style_button', 'submit', Translation::get('Search'), null, null, 'search');
+        $search_form->addElement(
+            'style_button', 'submit', Translation::get('Search'), null, null, new FontAwesomeGlyph('search')
+        );
 
         $renderer = $search_form->get_renderer();
         $renderer->setFormTemplate(
-            '<form {attributes}><div class="dynamic_search_action">{content}</div><div class="clear">&nbsp;</div></form>');
+            '<form {attributes}><div class="dynamic_search_action">{content}</div><div class="clear">&nbsp;</div></form>'
+        );
         $renderer->setElementTemplate('{element}');
 
         parent::__construct(
-            null,
-            $search_form->toHtml(),
-            Theme::getInstance()->getImagePath($namespace, 'Admin/Search'),
-            null);
+            null, $search_form->toHtml(), Theme::getInstance()->getImagePath($namespace, 'Admin/Search'), null
+        );
     }
 }

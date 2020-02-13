@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -54,9 +55,11 @@ class RepositoryFilterForm extends FormValidator
     private function build_form()
     {
         $this->renderer->setFormTemplate(
-            '<form {attributes}><div class="filter_form">{content}</div><div class="clear">&nbsp;</div></form>');
+            '<form {attributes}><div class="filter_form">{content}</div><div class="clear">&nbsp;</div></form>'
+        );
         $this->renderer->setElementTemplate(
-            '<div class="form-row"><div class="formw">{label}&nbsp;{element}</div></div>');
+            '<div class="form-row"><div class="formw">{label}&nbsp;{element}</div></div>'
+        );
 
         $select = $this->addElement('select', self::FILTER_TYPE, null, array(), array('class' => 'postback'));
 
@@ -67,7 +70,8 @@ class RepositoryFilterForm extends FormValidator
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(UserView::class_name(), UserView::PROPERTY_USER_ID),
-            new StaticConditionVariable($this->manager->get_user_id()));
+            new StaticConditionVariable($this->manager->get_user_id())
+        );
         $parameters = new DataClassRetrievesParameters($condition);
         $userviews = DataManager::retrieves(UserView::class_name(), $parameters);
 
@@ -80,7 +84,8 @@ class RepositoryFilterForm extends FormValidator
             {
                 $select->addOption(
                     Translation::get('View', null, Utilities::COMMON_LIBRARIES) . ': ' . $userview->get_name(),
-                    $userview->get_id());
+                    $userview->get_id()
+                );
             }
         }
 
@@ -108,28 +113,25 @@ class RepositoryFilterForm extends FormValidator
         }
 
         $this->addElement(
-            'style_button',
-            'submit',
-            Translation::get('Filter', null, Utilities::COMMON_LIBRARIES),
-            null,
-            null,
-            'filter');
+            'style_button', 'submit', Translation::get('Filter', null, Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph('filter')
+        );
 
         $session_filter = Session::retrieve('filter');
         $this->setDefaults(array(self::FILTER_TYPE => $session_filter, 'published' => 1));
 
         $this->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Postback.js'));
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Postback.js'
+        )
+        );
     }
 
     public function get_filter_conditions()
     {
         $filter_condition_renderer = ConditionFilterRenderer::factory(
-            FilterData::getInstance(),
-            $this->get_user_id(),
-            $this->get_allowed_content_object_types());
+            FilterData::getInstance(), $this->get_user_id(), $this->get_allowed_content_object_types()
+        );
         $filter_condition = $filter_condition_renderer->render();
 
         if ($filter_condition instanceof Condition)
@@ -147,6 +149,7 @@ class RepositoryFilterForm extends FormValidator
         $html[] = '<div style="text-align: right;">';
         $html[] = $this->renderer->toHTML();
         $html[] = '</div>';
+
         return implode('', $html);
     }
 

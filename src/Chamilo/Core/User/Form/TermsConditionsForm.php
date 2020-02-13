@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Form;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 class TermsConditionsForm extends FormValidator
@@ -20,9 +21,9 @@ class TermsConditionsForm extends FormValidator
     public function __construct($user, $action, $type)
     {
         parent::__construct('user_settings', 'post', $action);
-        
+
         $this->user = $user;
-        
+
         if ($type == self::TYPE_VIEW)
         {
             $this->build_view_form();
@@ -42,23 +43,19 @@ class TermsConditionsForm extends FormValidator
         $this->add_last_modified_date();
         $this->addElement('html', '</br>');
         $this->add_accepted_date();
-        
+
         $this->addElement('category', Translation::get('NewTermsConditions'));
         $this->addElement(
-            'textarea', 
-            'conditions', 
-            null, 
-            array('cols' => 80, 'rows' => 20, 'readonly' => '', 'style' => 'background-color: white;'));
+            'textarea', 'conditions', null,
+            array('cols' => 80, 'rows' => 20, 'readonly' => '', 'style' => 'background-color: white;')
+        );
         $this->addElement('category');
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation::get('TermsConditionsAccept'), 
-            null, 
-            null, 
-            'user');
-        
+            'style_submit_button', 'submit', Translation::get('TermsConditionsAccept'), null, null,
+            new FontAwesomeGlyph('user')
+        );
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -84,23 +81,18 @@ class TermsConditionsForm extends FormValidator
     public function build_edit_form()
     {
         $this->add_last_modified_date();
-        
+
         $this->addElement('category', Translation::get('TermsConditions'));
         $this->addElement(
-            'textarea', 
-            'conditions', 
-            null, 
-            array('cols' => 80, 'rows' => 20, 'style' => 'background-color: white;'));
+            'textarea', 'conditions', null, array('cols' => 80, 'rows' => 20, 'style' => 'background-color: white;')
+        );
         $this->addElement('category');
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation::get('TermsConditionsEdit'), 
-            null, 
-            null, 
-            'user');
-        
+            'style_submit_button', 'submit', Translation::get('TermsConditionsEdit'), null, null,
+            new FontAwesomeGlyph('user')
+        );
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -110,6 +102,7 @@ class TermsConditionsForm extends FormValidator
     public function register_terms_user()
     {
         $this->user->set_term_date(time());
+
         return $this->user->update();
     }
 
@@ -122,10 +115,10 @@ class TermsConditionsForm extends FormValidator
 
     /**
      * Sets default values.
-     * 
+     *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array())
     {
         $defaults['conditions'] = Manager::get_terms_and_conditions();
         parent::setDefaults($defaults);

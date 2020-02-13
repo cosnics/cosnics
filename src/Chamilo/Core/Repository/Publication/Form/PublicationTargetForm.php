@@ -12,6 +12,7 @@ use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
@@ -196,7 +197,7 @@ class PublicationTargetForm extends FormValidator
 
         $this->addElement(
             'style_submit_button', 'publish', Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), null,
-            null, 'ok-sign'
+            null, new FontAwesomeGlyph('ok-sign')
         );
 
         $this->addElement(

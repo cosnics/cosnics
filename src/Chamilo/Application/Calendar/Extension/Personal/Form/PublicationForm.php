@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Publication\Publisher\Form\BasePublicationForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -99,7 +100,7 @@ class PublicationForm extends BasePublicationForm
     {
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit', Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), null, null,
-            'arrow-right'
+            new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
             'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)

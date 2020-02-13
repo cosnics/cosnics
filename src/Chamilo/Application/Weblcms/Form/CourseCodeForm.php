@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Form;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -37,16 +38,12 @@ class CourseCodeForm extends FormValidator
         $this->build_code_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation::get('Subscribe'),
-            null,
-            null,
-            'arrow-right');
+            'style_submit_button', 'submit', Translation::get('Subscribe'), null, null,
+            new FontAwesomeGlyph('arrow-right')
+        );
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -60,10 +57,8 @@ class CourseCodeForm extends FormValidator
 
         $user_name = $this->user->get_fullname();
         $this->addElement(
-            'static',
-            'user',
-            Translation::get('User', null, \Chamilo\Core\User\Manager::context()),
-            $user_name);
+            'static', 'user', Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $user_name
+        );
 
         $this->add_textfield(self::TEMP_CODE, Translation::get('Code'));
 

@@ -314,8 +314,8 @@ abstract class ContentObjectForm extends FormValidator
 
     /**
      *
-     * @throws NoTemplateException
      * @return use core\repository\common\template\Template
+     * @throws NoTemplateException
      */
     protected function get_content_object_template()
     {
@@ -531,7 +531,8 @@ EOT;
             }
 
             $buttons[] = $this->createElement(
-                'style_button', 'submit', Translation::get('CompareVersions'), null, null, 'transfer'
+                'style_button', 'submit', Translation::get('CompareVersions'), null, null,
+                new FontAwesomeGlyph('transfer')
             );
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
@@ -663,25 +664,19 @@ EOT;
             case self::TYPE_COMPARE :
                 $buttons[] = $this->createElement(
                     'style_submit_button', 'submit_button',
-                    Translation::get('Compare', null, Utilities::COMMON_LIBRARIES), null, null, 'transfer'
-                );
-                break;
-            case self::TYPE_CREATE :
-                $buttons[] = $this->createElement(
-                    'style_submit_button', 'submit_button',
-                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+                    Translation::get('Compare', null, Utilities::COMMON_LIBRARIES), null, null, new FontAwesomeGlyph('transfer')
                 );
                 break;
             case self::TYPE_EDIT :
                 $buttons[] = $this->createElement(
                     'style_submit_button', 'submit_button',
-                    Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null, 'arrow-right'
+                    Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null, new FontAwesomeGlyph('arrow-right')
                 );
                 break;
             case self::TYPE_REPLY :
                 $buttons[] = $this->createElement(
                     'style_submit_button', 'submit_button',
-                    Translation::get('Reply', null, Utilities::COMMON_LIBRARIES), null, null, 'envelope'
+                    Translation::get('Reply', null, Utilities::COMMON_LIBRARIES), null, null, new FontAwesomeGlyph('envelope')
                 );
                 break;
             default :

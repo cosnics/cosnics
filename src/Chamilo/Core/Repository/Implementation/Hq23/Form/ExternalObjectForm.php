@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Implementation\Hq23\ExternalObject;
 use Chamilo\Core\Repository\Implementation\Hq23\ExternalObjectDisplay;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -102,7 +103,7 @@ class ExternalObjectForm extends FormValidator
             Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
             null,
             null,
-            'arrow-right');
+            new FontAwesomeGlyph('arrow-right'));
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',

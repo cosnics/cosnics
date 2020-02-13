@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -22,6 +23,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 ini_set("max_execution_time", - 1);
 ini_set("memory_limit", - 1);
+
 class CourseImportForm extends FormValidator
 {
     const TYPE_IMPORT = 1;
@@ -46,12 +48,9 @@ class CourseImportForm extends FormValidator
         // $this->addElement('submit', 'course_import', Translation :: get('Ok',
         // null ,Utilities:: COMMON_LIBRARIES));
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation::get('Import', null, Utilities::COMMON_LIBRARIES),
-            null,
-            null,
-            'import');
+            'style_submit_button', 'submit', Translation::get('Import', null, Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph('import')
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -63,11 +62,11 @@ class CourseImportForm extends FormValidator
 
         foreach ($csvcourses as $csvcourse)
         {
-            if (! $this->validate_data($csvcourse))
+            if (!$this->validate_data($csvcourse))
             {
                 $failures ++;
-                $this->failedcsv[] = Translation::get('Invalid', null, Utilities::COMMON_LIBRARIES) . ': ' .
-                     implode($csvcourse, ';');
+                $this->failedcsv[] =
+                    Translation::get('Invalid', null, Utilities::COMMON_LIBRARIES) . ': ' . implode($csvcourse, ';');
             }
         }
 
@@ -83,7 +82,9 @@ class CourseImportForm extends FormValidator
             $cat = DataManager::retrieve_course_categories_ordered_by_name(
                 new EqualityCondition(
                     new PropertyConditionVariable(CourseCategory::class_name(), CourseCategory::PROPERTY_NAME),
-                    new StaticConditionVariable($csvcourse['category'])))->next_result();
+                    new StaticConditionVariable($csvcourse['category'])
+                )
+            )->next_result();
 
             $catid = $cat ? $cat->get_id() : 0;
             $action = strtoupper($csvcourse['action']);
@@ -93,8 +94,10 @@ class CourseImportForm extends FormValidator
             $course_type_name = $csvcourse['course_type'];
             if ($course_type_name)
             {
-                $course_type = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_course_type_by_name(
-                    $course_type_name);
+                $course_type =
+                    \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_course_type_by_name(
+                        $course_type_name
+                    );
                 if ($course_type)
                 {
                     $course_type_id = $course_type->get_id();
@@ -113,7 +116,7 @@ class CourseImportForm extends FormValidator
 
                 $course->set_titular_id($teacher_info->get_id());
                 $language = $csvcourse[Course::PROPERTY_LANGUAGE];
-                if (! $language)
+                if (!$language)
                 {
                     $language = $this->determine_default_course_language($course);
                 }
@@ -123,17 +126,19 @@ class CourseImportForm extends FormValidator
                 {
                     // create settings
                     $setting_values = array();
-                    $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::CATEGORY] = $catid;
-                    $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::LANGUAGE] = $language;
-                    $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::TITULAR] = $course->get_titular_id();
+                    $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::CATEGORY] =
+                        $catid;
+                    $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::LANGUAGE] =
+                        $language;
+                    $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::TITULAR] =
+                        $course->get_titular_id();
 
                     $course->create_course_settings_from_values($setting_values);
                     CourseManagementRights::getInstance()->create_rights_from_values($course, array());
 
-                    if (! \Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
-                        $course->get_id(),
-                        '1',
-                        $teacher_info->get_id()))
+                    if (!\Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
+                        $course->get_id(), '1', $teacher_info->get_id()
+                    ))
                     {
                         $failures ++;
                         $this->failedcsv[] = Translation::get('SubscriptionFailed') . ':' . implode($csvcourse, ';');
@@ -150,7 +155,7 @@ class CourseImportForm extends FormValidator
                 {
                     $this->failedcsv[] = Translation::get('LanguageSettingFailed') . ':' . implode($csvcourse, ';');
                     $course->set_language($setting_language);
-                    if (! $course->update())
+                    if (!$course->update())
                     {
                         $this->failedcsv[] = Translation::get('CreationFailed') . ':' . implode($csvcourse, ';');
                     }
@@ -163,7 +168,7 @@ class CourseImportForm extends FormValidator
                 $course->set_course_type_id($course_type_id);
                 $course->set_title($csvcourse[Course::PROPERTY_TITLE]);
                 $language = $csvcourse[Course::PROPERTY_LANGUAGE];
-                if (! $language)
+                if (!$language)
                 {
                     $language = $this->determine_default_course_language($course);
                 }
@@ -174,9 +179,12 @@ class CourseImportForm extends FormValidator
                 if ($course->update())
                 {
                     $setting_values = array();
-                    $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::CATEGORY] = $catid;
-                    $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::LANGUAGE] = $language;
-                    $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::TITULAR] = $course->get_titular_id();
+                    $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::CATEGORY] =
+                        $catid;
+                    $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::LANGUAGE] =
+                        $language;
+                    $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::TITULAR] =
+                        $course->get_titular_id();
                     $course->update_course_settings_from_values($setting_values);
                 }
                 else
@@ -190,7 +198,7 @@ class CourseImportForm extends FormValidator
                 {
                     $this->failedcsv[] = Translation::get('LanguageSettingFailed') . ':' . implode($csvcourse, ';');
                     $course->set_language($setting_language);
-                    if (! $course->update())
+                    if (!$course->update())
                     {
                         $this->failedcsv[] = Translation::get('CreationFailed') . ':' . implode($csvcourse, ';');
                     }
@@ -200,7 +208,7 @@ class CourseImportForm extends FormValidator
             {
                 $course = CourseDataManager::retrieve_course_by_visual_code($csvcourse['code']);
 
-                if (! $course->delete())
+                if (!$course->delete())
                 {
                     $failures ++;
                     $this->failedcsv[] = Translation::get('DeleteFailed') . ':' . implode($csvcourse, ';');
@@ -221,7 +229,7 @@ class CourseImportForm extends FormValidator
     // TODO: Temporary solution pending implementation of user object
     public function get_teacher_info($user_name)
     {
-        if (! \Chamilo\Core\User\Storage\DataManager::is_username_available($user_name))
+        if (!\Chamilo\Core\User\Storage\DataManager::is_username_available($user_name))
         {
             return \Chamilo\Core\User\Storage\DataManager::retrieve_user_info($user_name);
         }
@@ -250,7 +258,7 @@ class CourseImportForm extends FormValidator
         // 2. check if code isn't in use for create and if code exists for
         // update / delete
         if (($action == 'A' && $this->is_course($csvcourse['code'])) ||
-             ($action != 'A' && ! $this->is_course($csvcourse['code'])))
+            ($action != 'A' && !$this->is_course($csvcourse['code'])))
         {
             $failures ++;
         }
@@ -262,13 +270,13 @@ class CourseImportForm extends FormValidator
 
         // 3. check if teacher exists
         $teacher_info = $this->get_teacher_info($csvcourse[Course::PROPERTY_TITULAR_ID]);
-        if (! isset($teacher_info))
+        if (!isset($teacher_info))
         {
             $failures ++;
         }
 
         // 4. check if category exists
-        if (! $this->is_course_category($csvcourse['category']))
+        if (!$this->is_course_category($csvcourse['category']))
         {
             $failures ++;
         }
@@ -277,7 +285,7 @@ class CourseImportForm extends FormValidator
         $course_type = $csvcourse['course_type'];
         if ($course_type)
         {
-            if (! $this->is_course_type($course_type))
+            if (!$this->is_course_type($course_type))
             {
                 $failures ++;
             }
@@ -303,7 +311,9 @@ class CourseImportForm extends FormValidator
         $cat = DataManager::retrieve_course_categories_ordered_by_name(
             new EqualityCondition(
                 new PropertyConditionVariable(CourseCategory::class_name(), CourseCategory::PROPERTY_NAME),
-                new StaticConditionVariable($category_name)))->next_result();
+                new StaticConditionVariable($category_name)
+            )
+        )->next_result();
 
         if ($cat)
         {
@@ -317,13 +327,13 @@ class CourseImportForm extends FormValidator
     {
         $course = CourseDataManager::retrieve_course_by_visual_code($course_code);
 
-        return ! empty($course);
+        return !empty($course);
     }
 
     private function determine_default_course_language($course)
     {
         return CourseSettingsController::getInstance()->get_course_type_setting(
-            $course->get_course_type_id(),
-            Course::PROPERTY_LANGUAGE);
+            $course->get_course_type_id(), Course::PROPERTY_LANGUAGE
+        );
     }
 }

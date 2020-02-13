@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Form;
 
 use Chamilo\Libraries\File\Export\Export;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -12,6 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 ini_set("max_execution_time", - 1);
 ini_set("memory_limit", - 1);
+
 class UserExportForm extends FormValidator
 {
     const TYPE_EXPORT = 1;
@@ -42,18 +44,13 @@ class UserExportForm extends FormValidator
     public function build_exporting_form()
     {
         $this->addElement(
-            'select',
-            'file_type',
-            Translation::get('OutputFileType'),
-            Export::get_supported_filetypes(array('ical')));
+            'select', 'file_type', Translation::get('OutputFileType'), Export::get_supported_filetypes(array('ical'))
+        );
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation::get('Export', null, Utilities::COMMON_LIBRARIES),
-            null,
-            null,
-            'export');
+            'style_submit_button', 'submit', Translation::get('Export', null, Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph('export')
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         $this->setDefaults(array('file_type' => 'csv'));

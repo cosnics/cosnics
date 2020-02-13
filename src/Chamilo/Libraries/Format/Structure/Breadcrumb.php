@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Structure
@@ -28,22 +30,23 @@ class Breadcrumb
 
     /**
      *
-     * @var string
+     * @var \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
      */
-    private $glyph;
+    private $inlineGlyph;
 
     /**
      *
      * @param string $url
      * @param string $name
      * @param string $image
+     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $inlineGlyph
      */
-    public function __construct($url, $name, $image = null, $glyph = null)
+    public function __construct($url, $name, $image = null, InlineGlyph $inlineGlyph = null)
     {
         $this->url = $url;
         $this->name = $name;
         $this->image = $image;
-        $this->glyph = $glyph;
+        $this->inlineGlyph = $inlineGlyph;
     }
 
     /**
@@ -102,19 +105,19 @@ class Breadcrumb
 
     /**
      *
-     * @return string
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
      */
-    public function getGlyph()
+    public function getInlineGlyph()
     {
-        return $this->glyph;
+        return $this->inlineGlyph;
     }
 
     /**
      *
-     * @param string $glyph
+     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $inlineGlyph
      */
-    public function setGlyph($glyph)
+    public function setInlineGlyph(InlineGlyph $inlineGlyph = null)
     {
-        $this->glyph = $glyph;
+        $this->inlineGlyph = $inlineGlyph;
     }
 }

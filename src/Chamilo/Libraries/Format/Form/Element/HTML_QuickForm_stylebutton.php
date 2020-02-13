@@ -1,4 +1,7 @@
 <?php
+
+use \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Form\Element
@@ -27,9 +30,11 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @param string $elementLabel
      * @param string[] $attributes
      * @param string $value
-     * @param string $glyph
+     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $glyph
      */
-    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $value = null, $glyph = null)
+    public function __construct(
+        $elementName = null, $elementLabel = null, $attributes = null, $value = null, InlineGlyph $glyph = null
+    )
     {
         HTML_QuickForm_element::__construct($elementName, null, $attributes);
 
@@ -55,7 +60,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 
     /**
      *
-     * @return string
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
      */
     public function getGlyph()
     {
@@ -64,9 +69,9 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 
     /**
      *
-     * @param string $glyph
+     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $glyph
      */
-    public function setGlyph($glyph)
+    public function setGlyph(InlineGlyph $glyph = null)
     {
         $this->glyph = $glyph;
     }
@@ -144,8 +149,8 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 
             if ($this->getGlyph())
             {
-                $html[] = $this->_getTabs() . '<span class="glyphicon glyphicon-' . $this->getGlyph() .
-                     '" aria-hidden="true"></span>' . ($this->getStyleButtonLabel() ? '&nbsp;' : '');
+                $html[] =
+                    $this->_getTabs() . $this->getGlyph()->render() . ($this->getStyleButtonLabel() ? '&nbsp;' : '');
             }
 
             if ($this->getStyleButtonLabel())
@@ -192,6 +197,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
                 $this->setValue($value);
             }
         }
+
         return true;
     }
 

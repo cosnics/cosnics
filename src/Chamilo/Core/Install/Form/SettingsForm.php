@@ -11,6 +11,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -75,31 +76,30 @@ class SettingsForm extends FormValidator
     protected function buildForm()
     {
         $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab('database', Translation::get('DatabaseComponentTitle'), null, 'addDatabaseSettings'));
+            new DynamicFormTab('database', Translation::get('DatabaseComponentTitle'), null, 'addDatabaseSettings')
+        );
         $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab('general', Translation::get('SettingsComponentTitle'), null, 'addGeneralSettings'));
+            new DynamicFormTab('general', Translation::get('SettingsComponentTitle'), null, 'addGeneralSettings')
+        );
         $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab('package', Translation::get('PackageComponentTitle'), null, 'addPackageSettings'));
+            new DynamicFormTab('package', Translation::get('PackageComponentTitle'), null, 'addPackageSettings')
+        );
 
         $this->getTabsGenerator()->render();
 
         $buttons = array();
 
         $buttons[] = $this->createElement(
-            'static',
-            null,
-            null,
+            'static', null, null,
             '<a href="' . $this->getApplication()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_LICENSE)) .
-                 '" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>' .
-                 Translation::get('Previous', null, Utilities::COMMON_LIBRARIES) . '</a>');
+            '" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>' .
+            Translation::get('Previous', null, Utilities::COMMON_LIBRARIES) . '</a>'
+        );
 
         $buttons[] = $this->createElement(
-            'style_button',
-            'next',
-            Translation::get('Next', null, Utilities::COMMON_LIBRARIES),
-            array('class' => 'btn-primary'),
-            null,
-            'chevron-right');
+            'style_button', 'next', Translation::get('Next', null, Utilities::COMMON_LIBRARIES),
+            array('class' => 'btn-primary'), null, new FontAwesomeGlyph('chevron-right')
+        );
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -109,20 +109,19 @@ class SettingsForm extends FormValidator
      */
     public function getTabsGenerator()
     {
-        if (! isset($this->tabsGenerator))
+        if (!isset($this->tabsGenerator))
         {
             $this->tabsGenerator = new DynamicFormTabsRenderer('settings', $this);
         }
+
         return $this->tabsGenerator;
     }
 
     public function addDatabaseSettings()
     {
         $this->addElement(
-            'select',
-            'database_driver',
-            Translation::get('DatabaseDriver'),
-            $this->get_database_drivers());
+            'select', 'database_driver', Translation::get('DatabaseDriver'), $this->get_database_drivers()
+        );
         $this->addElement('text', 'database_host', Translation::get('DatabaseHost'), array('size' => '40'));
         $this->addElement('text', 'database_name', Translation::get('DatabaseName'), array('size' => '40'));
 
@@ -139,91 +138,73 @@ class SettingsForm extends FormValidator
         $this->addRule('database_name', 'OnlyCharactersNumbersUnderscoresAndDollarSigns', 'regex', $pattern);
         $this->addRule(
             array('database_driver', 'database_host', 'database_username', 'database_password', 'database_name'),
-            Translation::get('CouldNotConnectToDatabase'),
-            new ValidateDatabaseConnection());
+            Translation::get('CouldNotConnectToDatabase'), new ValidateDatabaseConnection()
+        );
     }
 
     public function addGeneralSettings()
     {
         $this->addElement('category', Translation::get('GeneralProperties'));
         $this->addElement(
-            'select',
-            'platform_language',
-            Translation::get("MainLang"),
-            $this->getApplication()->getLanguages());
+            'select', 'platform_language', Translation::get("MainLang"), $this->getApplication()->getLanguages()
+        );
         $this->addElement('category');
 
         $this->addElement('category', Translation::get('Administrator'));
         $this->addElement('text', 'admin_email', Translation::get("AdminEmail"), array('size' => '40'));
         $this->addRule(
-            'admin_email',
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            'admin_email', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
         $this->addRule('admin_email', Translation::get('WrongEmail'), 'email');
         $this->addElement('text', 'admin_surname', Translation::get("AdminLastName"), array('size' => '40'));
         $this->addRule(
-            'admin_surname',
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            'admin_surname', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
         $this->addElement('text', 'admin_firstname', Translation::get("AdminFirstName"), array('size' => '40'));
         $this->addRule(
-            'admin_firstname',
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            'admin_firstname', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
         $this->addElement('text', 'admin_phone', Translation::get("AdminPhone"), array('size' => '40'));
         $this->addElement('text', 'admin_username', Translation::get("AdminLogin"), array('size' => '40'));
         $this->addRule(
-            'admin_username',
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            'admin_username', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
         $this->addElement('text', 'admin_password', Translation::get("AdminPass"), array('size' => '40'));
         $this->addRule(
-            'admin_password',
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            'admin_password', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
         $this->addElement('category');
 
         $this->addElement('category', Translation::get('Platform'));
         $this->addElement('text', 'site_name', Translation::get("CampusName"), array('size' => '40'));
         $this->addRule(
-            'site_name',
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            'site_name', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
         $this->addElement('text', 'organization_name', Translation::get("InstituteShortName"), array('size' => '40'));
         $this->addRule(
-            'organization_name',
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            'organization_name', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
         $this->addElement('text', 'organization_url', Translation::get("InstituteURL"), array('size' => '40'));
         $this->addRule(
-            'organization_url',
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
+            'organization_url', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
         $this->addElement('category');
 
         $this->addElement('category', Translation::get('Security'));
 
         $selfRegistration = array();
         $selfRegistration[] = $this->createElement(
-            'radio',
-            'self_reg',
-            null,
-            Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES),
-            1);
+            'radio', 'self_reg', null, Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
+        );
         $selfRegistration[] = $this->createElement('radio', 'self_reg', null, Translation::get('AfterApproval'), 2);
         $selfRegistration[] = $this->createElement(
-            'radio',
-            'self_reg',
-            null,
-            Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES),
-            0);
+            'radio', 'self_reg', null, Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES), 0
+        );
         $this->addGroup($selfRegistration, 'self_reg', Translation::get("AllowSelfReg"), '&nbsp;', false);
 
         $this->addElement(
-            'select',
-            'hashing_algorithm',
-            Translation::get('HashingAlgorithm'),
-            HashingUtilities::get_available_types());
+            'select', 'hashing_algorithm', Translation::get('HashingAlgorithm'), HashingUtilities::get_available_types()
+        );
         $this->addElement('category');
 
         $this->addElement('category', Translation::get('Storage'));
@@ -243,6 +224,7 @@ class SettingsForm extends FormValidator
     {
         $drivers = array();
         $drivers['mysqli'] = 'MySQL >= 4.1.3';
+
         return $drivers;
     }
 
@@ -285,7 +267,7 @@ class SettingsForm extends FormValidator
         $html = array();
 
         $html[] = '<script type="text/javascript" src="' .
-             Path::getInstance()->getJavascriptPath('Chamilo\Core\Install', true) . 'Install.js"></script>';
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Install', true) . 'Install.js"></script>';
         $html[] = '</div>';
 
         $this->addElement('html', implode(PHP_EOL, $html));
@@ -377,7 +359,8 @@ class SettingsForm extends FormValidator
                 $html[] = '<a class="' . $packageClasses . '"' . $disabled . '><img src="' . $iconSource . '"> ';
                 $this->addElement('html', implode(PHP_EOL, $html));
 
-                $checkbox_name = 'install_' . ClassnameUtilities::getInstance()->getNamespaceId($package->get_context());
+                $checkbox_name =
+                    'install_' . ClassnameUtilities::getInstance()->getNamespaceId($package->get_context());
                 $this->addElement('checkbox', 'install[' . $package->get_context() . ']');
                 $renderer->setElementTemplate('{element}', 'install[' . $package->get_context() . ']');
 
@@ -413,6 +396,7 @@ class SettingsForm extends FormValidator
     /**
      *
      * @param \Chamilo\Configuration\Package\PackageList $packageList
+     *
      * @return \Chamilo\Configuration\Package\Storage\DataClass\Package[]
      */
     public function determinePackages(PackageList $packageList)
@@ -443,6 +427,7 @@ class SettingsForm extends FormValidator
     /**
      *
      * @param \Chamilo\Configuration\Package\Storage\DataClass\Package $package
+     *
      * @return string
      */
     private function getPackageClasses(Package $package)
@@ -459,7 +444,7 @@ class SettingsForm extends FormValidator
             {
                 $sessionSettings = $this->getSessionSettings();
 
-                if (! empty($sessionSettings))
+                if (!empty($sessionSettings))
                 {
                     if ($sessionSettings['install'][$package->get_context()])
                     {
@@ -490,7 +475,7 @@ class SettingsForm extends FormValidator
      */
     protected function getSessionSettings()
     {
-        if (! isset($this->sessionSettings))
+        if (!isset($this->sessionSettings))
         {
             $sessionSettings = Session::retrieve(Manager::PARAM_SETTINGS);
 
@@ -513,7 +498,7 @@ class SettingsForm extends FormValidator
     {
         $sessionSettings = $this->getSessionSettings();
 
-        if (! empty($sessionSettings))
+        if (!empty($sessionSettings))
         {
             $defaults = $sessionSettings;
         }

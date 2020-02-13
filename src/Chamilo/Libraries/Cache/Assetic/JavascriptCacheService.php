@@ -66,7 +66,6 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Visit.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'InitHighlight.js');
 
-
         return $assets;
     }
 
@@ -76,6 +75,6 @@ class JavascriptCacheService extends AsseticCacheService
      */
     protected function getAssetFilters()
     {
-        return array(new \Assetic\Filter\JSMinFilter());
+        return array();
     }
 }

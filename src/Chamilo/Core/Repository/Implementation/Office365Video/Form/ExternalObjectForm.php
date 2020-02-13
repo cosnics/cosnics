@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Office365Video\Form;
 
 use Chamilo\Core\Repository\Implementation\Office365Video\ExternalObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -132,8 +133,8 @@ class ExternalObjectForm extends FormValidator
             'submit', 
             Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
             null, 
-            null, 
-            'arrow-right');
+            null,
+            new FontAwesomeGlyph( 'arrow-right'));
         $buttons[] = $this->createElement(
             'style_reset_button', 
             'reset', 

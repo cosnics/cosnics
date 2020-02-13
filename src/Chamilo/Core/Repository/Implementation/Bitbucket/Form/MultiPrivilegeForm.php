@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -21,11 +22,10 @@ class MultiPrivilegeForm extends FormValidator
     public function __construct($component)
     {
         parent::__construct(
-            ClassnameUtilities::getInstance()->getClassnameFromObject($this, true), 
-            'post', 
-            $component->get_url());
+            ClassnameUtilities::getInstance()->getClassnameFromObject($this, true), 'post', $component->get_url()
+        );
         $this->component = $component;
-        
+
         $this->build();
     }
 
@@ -34,42 +34,33 @@ class MultiPrivilegeForm extends FormValidator
         $this->addElement('text', 'username', Translation::get('User'));
         $this->addElement('select', self::GROUPS, Translation::get('Groups'), self::get_groups_name());
         $this->addElement(
-            'select', 
-            self::TYPES_PRIVILEGES, 
-            Translation::get('Privilege'), 
-            self::get_privileges_types());
-        
+            'select', self::TYPES_PRIVILEGES, Translation::get('Privilege'), self::get_privileges_types()
+        );
+
         $url = $this->component->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_RENDER_REPOSITORY_FEED));
         $locale = array();
         $locale['Display'] = Translation::get('AddAttachments');
         $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
         $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
         $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
-        
+
         $options = array('load_elements' => true);
-        
+
         $element_finder = $this->addElement(
-            'element_finder', 
-            'repositories', 
-            Translation::get('SelectAttachment'), 
-            $url, 
-            $locale, 
-            array(), 
-            $options);
-        
+            'element_finder', 'repositories', Translation::get('SelectAttachment'), $url, $locale, array(), $options
+        );
+
         $this->addElement(
-            'style_submit_button', 
-            'submit', 
-            Translation::get('Grant', null, Utilities::COMMON_LIBRARIES), 
-            null, 
-            null, 
-            'arrow-right');
-        
+            'style_submit_button', 'submit', Translation::get('Grant', null, Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph('arrow-right')
+        );
+
         $this->addElement(
-            'html', 
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
-                     'PrivilegeGrantingForm.js'));
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
+            'PrivilegeGrantingForm.js'
+        )
+        );
     }
 
     public function grant_privilege()
@@ -78,31 +69,30 @@ class MultiPrivilegeForm extends FormValidator
         $username = Setting::get('username', $this->component->get_external_repository()->get_id());
         $user = $values['username'];
         $group = $values['groups'];
-        
+
         foreach ($values[repositories][repository] as $repository)
         {
             if ($user)
             {
                 $success = $this->component->get_external_repository_manager_connector()->grant_user_privilege(
-                    $username . '/' . $repository, 
-                    $user, 
-                    $values['types']);
+                    $username . '/' . $repository, $user, $values['types']
+                );
             }
             else
             {
                 if ($group)
                 {
                     $success = $this->component->get_external_repository_manager_connector()->grant_group_privileges(
-                        $username . '/' . $repository, 
-                        $group, 
-                        $values['types']);
+                        $username . '/' . $repository, $group, $values['types']
+                    );
                 }
             }
-            if (! $success)
+            if (!$success)
             {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -114,6 +104,7 @@ class MultiPrivilegeForm extends FormValidator
         {
             $groups[$group_name->get_owner_username() . '/' . $group_name->get_slug()] = $group_name->get_slug();
         }
+
         return $groups;
     }
 
@@ -123,7 +114,7 @@ class MultiPrivilegeForm extends FormValidator
         $privileges_types[self::TYPE_READ] = Translation::get('Read');
         $privileges_types[self::TYPE_WRITE] = Translation::get('Write');
         $privileges_types[self::TYPE_ADMIN] = Translation::get('Admin');
-        
+
         return $privileges_types;
     }
 }

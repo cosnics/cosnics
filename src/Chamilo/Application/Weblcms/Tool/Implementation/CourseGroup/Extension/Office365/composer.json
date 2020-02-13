@@ -21,9 +21,7 @@
         }
     ],
     "require": {
-        "thenetworg/oauth2-azure": "^1.3",
-        "microsoft/microsoft-graph": "^1.1",
-        "php": ">=7.0.0"
+        "php": ">=7.2.0"
     },
     "extra": {
         "cosnics": {
@@ -37,6 +35,10 @@
             "dependencies": [
                 {
                     "id": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Libraries\\Protocol\\Microsoft\\Graph",
                     "version": ">=1.0.0"
                 }
             ]

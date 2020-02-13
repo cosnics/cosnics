@@ -94,6 +94,6 @@ class StylesheetCacheService extends AsseticCacheService
      */
     protected function getAssetFilters()
     {
-        return array(new CssImportFilter(), new CssMinFilter());
+        return array(new CssImportFilter());
     }
 }

@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Architecture\Exceptions;
 
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -56,14 +57,13 @@ class NotAllowedException extends UserException
         $form->addElement('html', '<div class="input-group">');
 
         $form->addElement(
-            'html',
-            '<div class="input-group-addon">' . $translator->getTranslation('Username') . '</div>');
+            'html', '<div class="input-group-addon">' . $translator->getTranslation('Username') . '</div>'
+        );
 
         $form->addElement(
-            'text',
-            'login',
-            Translation::get('UserName'),
-            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control'));
+            'text', 'login', Translation::get('UserName'),
+            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control')
+        );
 
         $form->addElement('html', '</div>');
         $form->addElement('html', '</div>');
@@ -72,20 +72,21 @@ class NotAllowedException extends UserException
         $form->addElement('html', '<div class="input-group">');
 
         $form->addElement(
-            'html',
-            '<div class="input-group-addon">' . $translator->getTranslation('Password') . '</div>');
+            'html', '<div class="input-group-addon">' . $translator->getTranslation('Password') . '</div>'
+        );
 
         $form->addElement(
-            'password',
-            'password',
-            Translation::get('Pass'),
-            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control'));
+            'password', 'password', Translation::get('Pass'),
+            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control')
+        );
 
         $form->addElement('html', '</div>');
         $form->addElement('html', '</div>');
 
         $form->addElement('html', '<div class="form-group text-right">');
-        $form->addElement('style_submit_button', 'submitAuth', Translation::get('Login'), null, null, 'log-in');
+        $form->addElement(
+            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null, new FontAwesomeGlyph('log-in')
+        );
         $form->addElement('html', '</div>');
 
         $form->addRule('password', Translation::get('ThisFieldIsRequired'), 'required');

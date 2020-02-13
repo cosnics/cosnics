@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
 use Chamilo\Libraries\Format\Table\Table;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -73,16 +74,15 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
         $this->addElement('html', '<div class="action-bar input-group pull-right">');
 
         $this->addElement(
-            'text',
-            self::PARAM_SIMPLE_SEARCH_QUERY,
-            Translation::get('Search', null, Utilities::COMMON_LIBRARIES),
-            array('class' => 'form-group form-control action-bar-search'));
+            'text', self::PARAM_SIMPLE_SEARCH_QUERY, Translation::get('Search', null, Utilities::COMMON_LIBRARIES),
+            array('class' => 'form-group form-control action-bar-search')
+        );
 
         $this->renderer->setElementTemplate('{element} ', self::PARAM_SIMPLE_SEARCH_QUERY);
 
         $this->addElement('html', '<div class="input-group-btn">');
 
-        $this->addElement('style_button', 'submit', null, null, 'submit', 'search');
+        $this->addElement('style_button', 'submit', null, null, 'submit', new FontAwesomeGlyph('search'));
 
         $buttonElementTemplate = '{element}';
 
@@ -90,7 +90,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
 
         if ($this->getQuery())
         {
-            $this->addElement('style_button', 'clear', null, null, 'clear', 'remove');
+            $this->addElement('style_button', 'clear', null, null, 'clear', new FontAwesomeGlyph('remove'));
             $this->renderer->setElementTemplate($buttonElementTemplate, 'clear');
         }
 
@@ -104,6 +104,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     public function render()
     {
         $this->accept($this->renderer);
+
         return $this->renderer->toHTML();
     }
 
@@ -116,7 +117,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     {
         $query = Request::post(self::PARAM_SIMPLE_SEARCH_QUERY);
 
-        if (! $query)
+        if (!$query)
         {
             $query = Request::get(self::PARAM_SIMPLE_SEARCH_QUERY);
         }
@@ -130,7 +131,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      */
     public function clearFormSubmitted()
     {
-        return ! is_null(Request::post('clear'));
+        return !is_null(Request::post('clear'));
     }
 
     /**

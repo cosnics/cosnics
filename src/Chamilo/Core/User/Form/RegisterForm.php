@@ -7,6 +7,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
@@ -169,7 +170,7 @@ class RegisterForm extends FormValidator
         }
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Register'), null, null, 'user'
+            'style_submit_button', 'submit', Translation::get('Register'), null, null, new FontAwesomeGlyph('user')
         );
         $buttons[] = $this->createElement(
             'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
