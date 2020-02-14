@@ -30,7 +30,6 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
         if (!isset($glyph))
         {
             $glyph = new FontAwesomeGlyph('ok');
-            $glyph = 'ok';
         }
 
         HTML_QuickForm_stylebutton::__construct($elementName, $elementLabel, $attributes, $value, $glyph);
