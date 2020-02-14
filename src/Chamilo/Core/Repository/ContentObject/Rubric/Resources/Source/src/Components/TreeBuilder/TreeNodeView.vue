@@ -1,14 +1,15 @@
 <template>
-    <li class="list-group-item tree-list-group-item w-100" :id="treeNode.id" :ref="treeNode.id">
+    <li class="list-group-item tree-list-group-item w-100" :id="treeNode.id" :ref="treeNode.id"
+        :style="treeListGroupItemStyle">
         <div class="tree-list-group-item-content">
-            <div class="spacer">
+            <div class="spacer" v-if="treeNode.canHaveChildren()">
                 <i v-if="!collapsed && treeNode.canHaveChildren()" class="fa fa-caret-down pull-left caret-toggle"
                    v-on:click="collapsed = !collapsed"></i>
                 <i v-if="collapsed && treeNode.canHaveChildren()" class="fa fa-caret-right pull-left caret-toggle"
                    v-on:click="collapsed = !collapsed"></i>
             </div>
             <div class="w-100">
-                <button type="button" class="list-group-item list-group-item-button w-100" :style="color"
+                <button type="button" class="list-group-item list-group-item-button w-100" :style="categoryHeaderColor"
                         v-on:click="store.selectedTreeNode = treeNode">
                     <i class="fa fa-1x fa-bars handle-icon handle"></i>
                     <i v-if="treeNode.canHaveChildren() && treeNode" :class="folderIcon" class="fa folder-icon"></i>
@@ -16,7 +17,8 @@
                 </button>
             </div>
         </div>
-        <ul class="list-group tree-list-group" v-if="!collapsed && treeNode.canHaveChildren()">
+        <ul class="list-group tree-list-group" v-if="!collapsed && treeNode.canHaveChildren()"
+            :style="categoryContainerColor">
             <draggable handle=".handle" v-model="children" group="tree" :move="checkMove"
                        :animation="250" ghost-class="ghost" :filter="'.action-list-group-item'" :invertSwap="true"
                        @change="onChange"
@@ -135,21 +137,41 @@
             };
         }
 
-        get color() {
+        get categoryHeaderColor() {
             if (this.treeNode instanceof Category)
                 return {
                     'background-color': 'rgba(' + this.treeNode.rgbColor(0.7) + ')',
-                    color: 'white'
-                };
-            else if (this.treeNode.parent instanceof Category) {
+                    color: 'white',
+                    'border-bottom-left-radius': this.collapsed ? 'inherit': '0px',
+                    'border-bottom-right-radius': this.collapsed ? 'inherit': '0px'
+                }
+            else {
+                return {};
+            }
+        }
+
+        get treeListGroupItemStyle() {
+            if (this.treeNode instanceof Criterium && this.treeNode.parent instanceof Category)
                 return {
+                    'padding-left': '0px'
+                }
+            else return {};
+        }
+
+        get categoryContainerColor() {
+            if (this.treeNode instanceof Category) {
+                return {
+                    'margin-left': '12px',
                     'border': '1px solid',
-                    'border-color': 'rgba(' + this.treeNode.parent.rgbColor(0.7) + ')',
-                };
+                    'border-color': 'rgba(' + this.treeNode.rgbColor(0.7) + ')',
+                    'border-bottom-left-radius': '5px',
+                    'border-bottom-right-radius': '5px',
+                }
             } else {
                 return {};
             }
         }
+
     }
 </script>
 
@@ -175,7 +197,6 @@
     .empty-list-group-item {
         margin-left: 40px;
         padding-left: 5px;
-        border: 2px dashed #cacaca;
         padding-top: 4px;
         padding-bottom: 4px;
         color: #cacaca;
