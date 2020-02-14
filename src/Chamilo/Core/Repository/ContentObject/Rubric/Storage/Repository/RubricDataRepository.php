@@ -2,7 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Choice;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\CommonEntityRepository;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\PessimisticLockException;
@@ -79,6 +82,36 @@ class RubricDataRepository extends CommonEntityRepository
         catch(PessimisticLockException $ex) {} // The doc throws a pessimistic lock exception which is impossible, just catching it here so it doesn't go to the other docblocks
 
         return $rubricData;
+    }
+
+    /**
+     * @param TreeNode $treeNode
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeTreeNode(TreeNode $treeNode)
+    {
+        $this->removeEntity($treeNode);
+    }
+
+    /**
+     * @param Level $level
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeLevel(Level $level)
+    {
+        $this->removeEntity($level);
+    }
+
+    /**
+     * @param Choice $choice
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeChoice(Choice $choice)
+    {
+        $this->removeEntity($choice);
     }
 
 }

@@ -25,6 +25,8 @@ class CriteriumNode extends TreeNode
 
     /**
      * @var Choice[] | ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Choice", mappedBy="criterium")
      */
     protected $choices;
 

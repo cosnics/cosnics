@@ -282,12 +282,9 @@ class RubricData
             }
         }
 
-        foreach($this->getChoices() as $choice)
+        foreach($levelToRemove->getChoices() as $choice)
         {
-            if($choice->getLevel() === $levelToRemove)
-            {
-                $this->removeChoice($choice);
-            }
+            $this->removeChoice($choice);
         }
 
         return $this;
@@ -401,6 +398,11 @@ class RubricData
                     $this->removeChoice($choice);
                 }
             }
+        }
+
+        foreach($treeNode->getChildren() as $child)
+        {
+            $this->removeTreeNode($child);
         }
 
         return $this;

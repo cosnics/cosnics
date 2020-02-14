@@ -2,7 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Service;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricDataRepository;
 
 /**
@@ -74,5 +77,67 @@ class RubricService
         $rubricData->setLastUpdated(new \DateTime());
         $this->rubricValidator->validateRubric($rubricData);
         $this->rubricDataRepository->saveRubricData($rubricData);
+    }
+
+    /**
+     * Removes the tree node from the database. If the tree node has choices they are removed from the
+     * database as well
+     *
+     * @param TreeNode $treeNode
+     *
+     * @throws \Exception
+     */
+    public function removeTreeNodeFromDatabase(TreeNode $treeNode)
+    {
+        if ($treeNode->getRubricData() instanceof RubricData)
+        {
+            throw new \RuntimeException(
+                'First disconnect the tree node from the rubric data before removing it from the database.'
+            );
+        }
+
+        $this->rubricDataRepository->executeTransaction(
+            function () use ($treeNode) {
+                $this->rubricDataRepository->removeTreeNode($treeNode);
+                if ($treeNode instanceof CriteriumNode)
+                {
+                    foreach ($treeNode->getChoices() as $choice)
+                    {
+                        $this->rubricDataRepository->removeChoice($choice);
+                    }
+                }
+
+                foreach($treeNode->getChildren() as $child)
+                {
+                    $this->removeTreeNodeFromDatabase($child);
+                }
+            }
+        );
+    }
+
+    /**
+     * @param Level $level
+     *
+     * @throws \Exception
+     */
+    public function removeLevelFromDatabase(Level $level)
+    {
+        if($level->getRubricData() instanceof RubricData)
+        {
+            throw new \RuntimeException(
+                'First disconnect the level from the rubric data before removing it from the database.'
+            );
+        }
+
+        $this->rubricDataRepository->executeTransaction(
+            function () use ($level) {
+                $this->rubricDataRepository->removeLevel($level);
+                foreach ($level->getChoices() as $choice)
+                {
+                    $this->rubricDataRepository->removeChoice($choice);
+                }
+            }
+        );
+
     }
 }
