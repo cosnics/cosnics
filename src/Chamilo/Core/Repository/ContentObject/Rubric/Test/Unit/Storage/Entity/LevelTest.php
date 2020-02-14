@@ -87,5 +87,24 @@ class LevelTest extends ChamiloTestCase
 
         $this->assertNotContains($this->level, $this->rubricData->getLevels());
     }
+
+    public function testSetGetSort()
+    {
+        $this->level->setSort(1);
+        $this->assertEquals(1, $this->level->getSort());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSetSortInvalid()
+    {
+        $this->level->setSort(2);
+    }
+
+    public function testSortSetOnCreation()
+    {
+        $this->assertEquals(1, $this->level->getSort());
+    }
 }
 

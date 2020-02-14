@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
-use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\TreeNodeJSONModel;
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeJSONModel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,7 +31,27 @@ class RubricNode extends TreeNode
      */
     public static function fromJSONModel(TreeNodeJSONModel $treeNodeJSONModel, RubricData $rubricData): TreeNode
     {
-        return new self($treeNodeJSONModel->getTitle(), $rubricData);
+        $node = new self($treeNodeJSONModel->getTitle(), $rubricData);
+        $node->updateFromJSONModel($treeNodeJSONModel);
+
+        return $node;
+    }
+
+    /**
+     * @param TreeNodeJSONModel $treeNodeJSONModel
+     *
+     * @return TreeNode
+     */
+    public function updateFromJSONModel(TreeNodeJSONModel $treeNodeJSONModel): TreeNode
+    {
+        if ($treeNodeJSONModel->getType() != TreeNodeJSONModel::TYPE_RUBRIC)
+        {
+            throw new \InvalidArgumentException('The TreeNodeJSONModel does not have the correct type');
+        }
+
+        parent::updateFromJSONModel($treeNodeJSONModel);
+
+        return $this;
     }
 
     /**

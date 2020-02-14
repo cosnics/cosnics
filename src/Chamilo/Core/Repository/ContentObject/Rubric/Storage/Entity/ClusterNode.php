@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
-use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\TreeNodeJSONModel;
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeJSONModel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,12 +26,32 @@ class ClusterNode extends TreeNode
      * @param TreeNodeJSONModel $treeNodeJSONModel
      * @param RubricData $rubricData
      *
-     * @return RubricNode
+     * @return ClusterNode
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
     public static function fromJSONModel(TreeNodeJSONModel $treeNodeJSONModel, RubricData $rubricData): TreeNode
     {
-        return new self($treeNodeJSONModel->getTitle(), $rubricData);
+        $node = new self($treeNodeJSONModel->getTitle(), $rubricData);
+        $node->updateFromJSONModel($treeNodeJSONModel);
+
+        return $node;
+    }
+
+    /**
+     * @param TreeNodeJSONModel $treeNodeJSONModel
+     *
+     * @return TreeNode
+     */
+    public function updateFromJSONModel(TreeNodeJSONModel $treeNodeJSONModel): TreeNode
+    {
+        if ($treeNodeJSONModel->getType() != TreeNodeJSONModel::TYPE_CLUSTER)
+        {
+            throw new \InvalidArgumentException('The TreeNodeJSONModel does not have the correct type');
+        }
+
+        parent::updateFromJSONModel($treeNodeJSONModel);
+
+        return $this;
     }
 
     /**

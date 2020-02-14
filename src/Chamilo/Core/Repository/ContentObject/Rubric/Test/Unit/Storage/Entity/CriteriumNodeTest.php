@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Test\Unit\Storage\Entity;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CategoryNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Choice;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
@@ -35,7 +36,9 @@ class CriteriumNodeTest extends ChamiloTestCase
     public function setUp()
     {
         $this->rubricData = new RubricData('Test Rubric');
+        $this->rubricData->getRootNode()->setId(5);
         $this->testNode = new CriteriumNode('Test criterium 1', $this->rubricData);
+        $this->testNode->setId(8);
         $this->rubricData->getRootNode()->addChild($this->testNode);
     }
 
@@ -192,6 +195,22 @@ class CriteriumNodeTest extends ChamiloTestCase
         $this->assertEquals($weight, $this->testNode->getWeight());
     }
 
+    /**
+     * @expectedException \OutOfRangeException
+     */
+    public function testSetWeightWithInvalidValue()
+    {
+        $this->testNode->setWeight(-1);
+    }
+
+    /**
+     * @expectedException \OutOfRangeException
+     */
+    public function testSetWeightWithInvalidValueMax()
+    {
+        $this->testNode->setWeight(101);
+    }
+
     public function testAddChoiceSetsCriteriumInChoice()
     {
         $choice = new Choice($this->rubricData);
@@ -219,6 +238,78 @@ class CriteriumNodeTest extends ChamiloTestCase
         $choice = new Choice($this->rubricData);
         $this->testNode->removeChoice($choice);
         $this->assertNull($choice->getCriterium());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testFromJsonModel()
+    {
+        $jsonModel = new TreeNodeJSONModel(5, 'Test', TreeNodeJSONModel::TYPE_CRITERIUM, 1, 'blue', 100);
+
+        $categoryNode = CriteriumNode::fromJSONModel($jsonModel, $this->rubricData);
+        $this->assertEquals('Test', $categoryNode->getTitle());
+        $this->assertEquals(100, $categoryNode->getWeight());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     *
+     * @throws \Exception
+     */
+    public function testFromJsonModelWithBadType()
+    {
+        $jsonModel = new TreeNodeJSONModel(5, 'Test', TreeNodeJSONModel::TYPE_CATEGORY, 1, 'blue', 100);
+
+        CriteriumNode::fromJSONModel($jsonModel, $this->rubricData);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testToJSONModel()
+    {
+        $this->testNode->setWeight(100);
+
+        $jsonModel = $this->testNode->toJSONModel();
+        $this->assertInstanceof(TreeNodeJSONModel::class, $jsonModel);
+        $this->assertEquals($jsonModel->getId(), 8);
+        $this->assertEquals($jsonModel->getWeight(), 100);
+        $this->assertEquals($jsonModel->getTitle(), 'Test criterium 1');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateFromJSONModel()
+    {
+        $jsonModel = new TreeNodeJSONModel(5, 'Test', TreeNodeJSONModel::TYPE_CRITERIUM, 1, 'blue', 100);
+
+        $categoryNode = $this->testNode->updateFromJSONModel($jsonModel);
+        $this->assertEquals('Test', $categoryNode->getTitle());
+        $this->assertEquals(100, $categoryNode->getWeight());
+    }
+
+    /**
+     * @throws \Exception
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testUpdateFromJSONModelWithBadType()
+    {
+        $jsonModel = new TreeNodeJSONModel(5, 'Test', TreeNodeJSONModel::TYPE_CATEGORY, 1, 'blue', 100);
+
+        $this->testNode->updateFromJSONModel($jsonModel);
+    }
+
+    public function testRemoveChoiceRemovesChoiceFromRubricData()
+    {
+        $choice = new Choice($this->rubricData);
+        $this->testNode->addChoice($choice);
+
+        $this->testNode->removeChoice($choice);
+
+        $this->assertCount(0, $this->rubricData->getChoices());
     }
 }
 

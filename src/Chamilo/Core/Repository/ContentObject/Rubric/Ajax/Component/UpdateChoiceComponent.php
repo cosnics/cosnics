@@ -7,7 +7,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UpdateLevelComponent extends Manager
+class UpdateChoiceComponent extends Manager
 {
     /**
      * @return array

@@ -14,8 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *      name="repository_rubric_level"
  * )
- *
- * TODO: add sort
  */
 class Level
 {
@@ -55,6 +53,13 @@ class Level
      * @ORM\Column(name="is_default", type="boolean")
      */
     protected $isDefault;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sort", type="integer")
+     */
+    protected $sort;
 
     /**
      * @var RubricData
@@ -170,6 +175,36 @@ class Level
     public function setIsDefault(bool $isDefault): Level
     {
         $this->isDefault = $isDefault;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSort(): ?int
+    {
+        return $this->sort;
+    }
+
+    /**
+     * @param int $sort
+     *
+     * @return Level
+     */
+    public function setSort(int $sort): Level
+    {
+        if (!$this->rubricData->isLevelSortValid($sort))
+        {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The given level sort must be between 1 and %s, %s given',
+                    $this->rubricData->getLevels()->count(), $sort
+                )
+            );
+        }
+
+        $this->sort = $sort;
 
         return $this;
     }
