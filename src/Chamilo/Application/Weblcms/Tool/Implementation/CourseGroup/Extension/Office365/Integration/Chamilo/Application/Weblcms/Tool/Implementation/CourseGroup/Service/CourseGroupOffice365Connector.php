@@ -83,7 +83,9 @@ class CourseGroupOffice365Connector
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @throws AzureUserNotExistsException
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function createGroupFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
@@ -116,6 +118,7 @@ class CourseGroupOffice365Connector
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws GroupNotExistsException
      */
     public function createGroupAndTeamFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
@@ -132,7 +135,9 @@ class CourseGroupOffice365Connector
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @throws AzureUserNotExistsException
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function createOrUpdateGroupFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
@@ -176,12 +181,13 @@ class CourseGroupOffice365Connector
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws GroupNotExistsException
      */
     public function createOrUpdateTeamFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
         $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
 
-        if (!$reference->isLinked())
+        if (!$reference instanceof CourseGroupOffice365Reference || !$reference->isLinked())
         {
             $office365GroupId = $this->createOrUpdateGroupFromCourseGroup($courseGroup, $user);
         }
@@ -209,7 +215,7 @@ class CourseGroupOffice365Connector
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function unlinkOffice365GroupFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
@@ -269,6 +275,8 @@ class CourseGroupOffice365Connector
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function subscribeUser(CourseGroup $courseGroup, User $user)
     {
@@ -286,6 +294,10 @@ class CourseGroupOffice365Connector
         {
 
         }
+        catch(GroupNotExistsException $ex)
+        {
+
+        }
     }
 
     /**
@@ -293,6 +305,8 @@ class CourseGroupOffice365Connector
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function unsubscribeUser(CourseGroup $courseGroup, User $user)
     {
@@ -311,12 +325,19 @@ class CourseGroupOffice365Connector
         {
 
         }
+        catch(GroupNotExistsException $ex)
+        {
+
+        }
     }
 
     /**
      * Syncs the CourseGroup and course teacher subscriptions to the O365 connected group
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     *
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function syncCourseGroupSubscriptions(CourseGroup $courseGroup)
     {
@@ -369,6 +390,7 @@ class CourseGroupOffice365Connector
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param string $office365GroupId
      *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     protected function subscribeCourseGroupUsers(CourseGroup $courseGroup, $office365GroupId)
     {
@@ -383,6 +405,10 @@ class CourseGroupOffice365Connector
             {
 
             }
+            catch(GroupNotExistsException $ex)
+            {
+
+            }
         }
     }
 
@@ -391,6 +417,8 @@ class CourseGroupOffice365Connector
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param string $office365GroupId
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     protected function subscribeTeachers(CourseGroup $courseGroup, $office365GroupId)
     {
@@ -405,6 +433,10 @@ class CourseGroupOffice365Connector
                 $this->groupService->addMemberToGroup($office365GroupId, $user);
             }
             catch (AzureUserNotExistsException $ex)
+            {
+
+            }
+            catch(GroupNotExistsException $ex)
             {
 
             }

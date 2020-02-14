@@ -20,7 +20,7 @@ class Header extends BaseHeader
     protected function addDefaultHeaders()
     {
         parent::addDefaultHeaders();
-        $this->addGoogleAnalyticsTracking();
+//        $this->addGoogleAnalyticsTracking(); REMOVE THIS FOR GDPR COMPLIANCE FOR NOW
     }
 
     /**

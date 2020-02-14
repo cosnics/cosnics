@@ -41,6 +41,7 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function createGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
@@ -60,6 +61,7 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function updateGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
@@ -79,6 +81,8 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function deleteGroup(CourseGroup $courseGroup, User $user)
     {
@@ -90,6 +94,8 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function subscribeUser(CourseGroup $courseGroup, User $user)
     {
@@ -101,6 +107,8 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function unsubscribeUser(CourseGroup $courseGroup, User $user)
     {
