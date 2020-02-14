@@ -57,8 +57,7 @@ class AnnouncementComponent extends Manager
         $publications = $this->get_content(self::TOOL_ANNOUNCEMENT);
         
         ksort($publications);
-        $icon = $this->get_new_announcements_icon();
-        
+
         $data = array();
         
         foreach ($publications as $publication)
@@ -142,17 +141,6 @@ class AnnouncementComponent extends Manager
             }
         }
         return $unique_publications;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    private function get_new_announcements_icon()
-    {
-        return Theme::getInstance()->getImagePath(
-            \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace(self::TOOL_ANNOUNCEMENT), 
-            'Logo/' . Theme::ICON_MINI . 'New');
     }
 
     /**

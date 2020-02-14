@@ -285,11 +285,6 @@ class PanelToolListRenderer extends ToolListRenderer
             
             if ($section->get_type() != CourseSection::TYPE_ADMIN && $toolIsVisible && $this->isCourseAdmin())
             {
-                if ($parent->tool_has_new_publications($tool->get_name(), $this->getCourse()))
-                {
-                    $new = 'New';
-                }
-                
                 $visibilityUrl = $parent->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::ACTION_MAKE_TOOL_INVISIBLE, 
