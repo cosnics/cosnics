@@ -13,7 +13,6 @@ export default class ScoreRubricStore {
     public queue = new PQueue({concurrency: 1});
 
     constructor() {
-
     }
 
     async fetchData() {
@@ -27,9 +26,38 @@ export default class ScoreRubricStore {
 
     async save() {
         this.isSaving = true;
+
         (async () => {
             await this.queue.add(() => axios.get('/api/save'));
         })();
+    }
+
+    async removeChild(child: TreeNode, parent: TreeNode) {
+        this.isSaving = true;
+        (async () => {
+            await this.queue.add(() => axios.get('/api/save'));
+        })();
+        this.queue.onIdle().then(() => this.isSaving = false);
+    }
+
+    async addChild(child: TreeNode, parent: TreeNode, index: number = 0) {
+        this.isSaving = true;
+        (async () => {
+            await this.queue.add(() => axios.get('/api/save'));
+        })();
+        this.queue.onIdle().then(() => this.isSaving = false);
+    }
+
+    async moveChild(child: TreeNode, parent: TreeNode, newIndex:number) {
+        this.isSaving = true;
+        (async () => {
+            await this.queue.add(() => axios.get('/api/save'));
+        })();
+        this.queue.onIdle().then(() => this.isSaving = false);
+    }
+
+    async removeTreeNode(node:TreeNode){
+        this.isSaving = true;
         (async () => {
             await this.queue.add(() => axios.get('/api/save'));
         })();

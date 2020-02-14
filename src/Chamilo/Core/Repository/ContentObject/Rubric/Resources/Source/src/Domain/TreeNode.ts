@@ -55,12 +55,9 @@ export default abstract class TreeNode implements TreeNodeInterface {
         return this.title;
     }
 
-    addChild(treeNode: TreeNode, index?:number): void {
+    addChild(treeNode: TreeNode, index:number = 0): void {
         treeNode.parent = this;
-        if(!index)
-            this._children.push(treeNode);
-        else
-            this._children.splice(index, 0, treeNode);
+        this._children.splice(index, 0, treeNode);
 
         if(this.parent)
             this.parent.notifyAddChild(treeNode);
@@ -79,7 +76,6 @@ export default abstract class TreeNode implements TreeNodeInterface {
             this.parent.notifyRemoveChild(treeNodeContainer, treeNode);
     }
 
-    @logMethod
     removeChild(treeNode: TreeNode): void {
         if(treeNode.parent !== this) {
             throw new Error("treeNode: " + treeNode.title + " not part of treeNode: " + this.title);
@@ -90,6 +86,18 @@ export default abstract class TreeNode implements TreeNodeInterface {
             this.parent.notifyRemoveChild(this, treeNode);
         treeNode.parent = null;
     }
+
+    moveChild(child: TreeNode, newIndex:number, oldIndex?:number) {
+        if(child.parent !== this) {
+            throw new Error("treeNode: " + child.title + " not part of treeNode: " + this.title);
+        }
+
+        if(!oldIndex)
+            oldIndex = this.children.indexOf(child);
+
+        this.moveItemInArray(this.children, oldIndex, newIndex);
+    }
+
 
     /*static moveTreeNodeToContainerAtIndex(treeNode: TreeNode, container: TreeNode, index:number ) {
         ContainerManager.removeTreeNodeFromContainer(treeNode, container);

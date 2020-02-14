@@ -1,23 +1,30 @@
 <template>
     <div id="app">
-        <div class="container-fluid">
+        <div class="container-fluid rubric-container">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <transition name="fade">
                 <div v-if="store.isSaving" class="float-left save-alert">
-                    <div v-if="store.queue.pending !== 0 || store.queue.size !==0" class="alert alert-info"
+                    <div class="alert alert-info"
                          role="alert">
-                            Processing {{store.queue.pending + store.queue.size}} saves
-                    </div>
-                    <div v-else class="alert alert-success" role="alert">
-                            All changes saved!
+                        Processing {{store.queue.pending + store.queue.size}} saves
                     </div>
                 </div>
+                <div v-else class="alert alert-success save-alert" role="alert">
+                    All changes saved!
+                </div>
             </transition>
-            <score-rubric-tree-builder v-if="!store.isLoading"/>
+
+            <div v-if="!store.isLoading">
+                <score-rubric-tree-builder class="w-100" v-if="!store.isLoading && !viewFullRubric"/>
+                <score-rubric-builder class="w-100" v-if="!store.isLoading && viewFullRubric"></score-rubric-builder>
+                <button class="btn btn-default pull-left full-rubric-btn" @click="viewFullRubric=!viewFullRubric">Bekijk
+                    Volledige Rubric
+                </button>
+            </div>
             <div v-else>Spinner! Loading!</div>
         </div>
-    </div>
+        </div>
 </template>
 
 <script lang="ts">
@@ -31,6 +38,7 @@
         },
     })
     export default class App extends Vue {
+        viewFullRubric: boolean = false;
 
         get store(): ScoreRubricStore {
             return this.$root.$data.store;
@@ -38,7 +46,6 @@
 
         async mounted() {
             await this.store.fetchData();
-            await this.store.save();
         }
     }
 </script>
@@ -65,4 +72,18 @@
     {
         opacity: 0;
     }
+
+    .rubric-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .w-100 {
+        width: 100%;
+    }
+
+    .full-rubric-btn {
+        width: 200px;
+    }
+
 </style>

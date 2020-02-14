@@ -21,7 +21,7 @@ export function makeServer({ environment = "development" } = {}) {
     cluster1.collapsed = true;
     const category1 = new Category("Professioneel Communiceren");
     cluster1.addCategory(category1);
-    category1.color = "red";
+    category1.color = "#1FBC9C";
 
     const criterium1 = new Criterium("Volledigheid antwoorden");
     const criterium2 = new Criterium("Onderbouwde mening");
@@ -31,7 +31,7 @@ export function makeServer({ environment = "development" } = {}) {
     category1.addCriterium(criterium2);
     //category1.addCriterium(criterium3);
     const category2 = new Category("Categorie 2");
-    category2.color = "green";
+    category2.color = "#2980B9";
     cluster1.addCategory(category2);
 
     const criteria21 = new Criterium("Volledigheid antwoorden");
@@ -44,7 +44,7 @@ export function makeServer({ environment = "development" } = {}) {
     const cluster2 = new Cluster('Een tweede cluster');
     cluster2.collapsed = true;
     const category3 = new Category('Categorie 3');
-    category3.color = 'blue';
+    category3.color = '#F39C19';
 
     category3.addCriterium(new Criterium('Nog een laatste criterium'));
 
@@ -74,7 +74,7 @@ export function makeServer({ environment = "development" } = {}) {
                 return {
                     data: "ok!"
                 }
-            }, { timing: 2000 });
+            }, { timing: 500 });
         }
     });
 

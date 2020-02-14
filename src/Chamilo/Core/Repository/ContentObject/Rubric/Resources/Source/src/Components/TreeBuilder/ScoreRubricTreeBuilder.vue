@@ -2,14 +2,14 @@
     <div class="container-fluid">
         <levels-table></levels-table>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-sm-4 col-md-3 tree-menu-column">
                 <div class="rubric-tree">
-                    <ul class="list-group">
+                    <ul class="list-group rubric-list-group">
                         <tree-node-view :tree-node="store.rubric"></tree-node-view>
                     </ul>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-sm-8 col-md-9 content-column">
                 <criterium-node-builder v-if="selectedNodeIsCriterium" :criterium="store.selectedTreeNode"></criterium-node-builder>
                 <category-node-builder v-if="selectedNodeIsCategory" :category="store.selectedTreeNode"></category-node-builder>
                 <cluster-node-builder v-if="selectedNodeIsCluster" :cluster="store.selectedTreeNode"></cluster-node-builder>
@@ -109,85 +109,6 @@
 
 
         mounted() {
-            /*let tree = createTree('#tree', {
-                extensions: ['dnd', 'edit'],
-                source: this.treeData,
-                checkbox: false,
-                "activate": (event: any, data:any) => {
-                    this.selectedTreeNode = data.node.data.treeNode;
-                },
-                dnd: {
-                    // Available options with their default:
-                    autoExpandMS: 250,   // Expand nodes after n milliseconds of hovering
-                    draggable: null,      // Additional options passed to jQuery UI draggable
-                    droppable: null,      // Additional options passed to jQuery UI droppable
-                    dropMarkerOffsetX: -24,  // absolute position offset for .fancytree-drop-marker
-                    // relatively to ..fancytree-title (icon/img near a node accepting drop)
-                    dropMarkerInsertOffsetX: -16, // additional offset for drop-marker with hitMode = "before"/"after"
-                    focusOnClick: false,  // Focus, although draggable cancels mousedown event (#270)
-                    preventRecursiveMoves: true, // Prevent dropping nodes on own descendants
-                    preventVoidMoves: true,      // Prevent dropping nodes 'before self', etc.
-                    smartRevert: true,    // set draggable.revert = true if drop was rejected
-
-                    // Events that make tree nodes draggable
-                    dragStart: function (node:any, data:any) {
-                        return !node.getParent().isRoot();
-
-                    },
-                    initHelper: null,     // Callback(sourceNode, data)
-                    updateHelper: null,   // Callback(sourceNode, data)
-
-                    // Events that make tree nodes accept draggables
-                    dragEnter: (node:any, data:any) => {
-                        if(node.getParent().isRoot()) {
-                            return [];
-                        }
-
-                        if(data.otherNode.data.treeNode instanceof Category){
-                             if(node.data.treeNode instanceof Category)
-                                 return ['before', 'after'];
-                             if(node.getParent().data.treeNode instanceof Category)//drop check on criterium
-                                 return false;
-                        }
-
-                        if(data.otherNode.data.treeNode instanceof Cluster){
-                            if(node.data.treeNode instanceof Category)
-                                return false;
-                            if(node.data.treeNode instanceof Cluster)
-                                return ['before', 'after'];
-                            if(node.getParent().data.treeNode instanceof Category)//drop check on criterium
-                                return false;
-                            if(node.getParent().data.treeNode instanceof Cluster)//drop check on criterium
-                                return false;
-                        }
-
-                        if (!node.isFolder()) {
-                            return ["before", "after"];
-                        }
-                        return true;
-                    },      // Callback(targetNode, data)
-                    dragExpand: function(node:any, data:any) {
-                        // return false to prevent auto-expanding data.node on hover
-                    },
-                    dragOver: function(node:any, data:any) {
-                    },
-                    dragLeave: function(node:any, data:any) {
-                    },
-                    dragStop: function(node:any, data:any) {
-                    },
-                    dragDrop: (node:any, data:any) => {
-                        data.otherNode.moveTo(node, data.hitMode); //warning: this could be troublesome with reactivity!
-                        let child:TreeNode = data.otherNode.data.treeNode;
-                        if(child.parent === null)
-                            return false;//cannot move root
-                        child.parent.removeChild(child);
-                        let newParent:TreeNode = data.otherNode.getParent().data.treeNode;
-                        newParent.addChild(child, data.otherNode.getIndex() + 1)
-                    }
-                },
-            });
-            tree.expandAll();
-            */
         }
     }
     //todo replace border with padding
@@ -200,5 +121,16 @@
 <style scoped>
     .rubric-tree {
         text-align: left;
+        border-right: 1px solid #f5f7fb;
+    }
+
+    .rubric-list-group {
+        margin-right: 10px;
+    }
+    .tree-menu-column {
+        padding-right: 5px;
+    }
+    .content-column {
+        padding-left: 20px;
     }
 </style>

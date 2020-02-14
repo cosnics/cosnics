@@ -1,7 +1,5 @@
 <template>
     <b-container fluid>
-        <Configuration class="configuration"/>
-        <LevelsTable/>
         <div class="">
             <table class="rubric-table table table-condensed table-striped" v-for="(cluster) in store.rubric.clusters">
                 <caption>
@@ -29,8 +27,7 @@
                 </thead>
                 <tbody v-if="!cluster.collapsed" v-for="category in cluster.categories">
                 <tr v-for="(criterium, index) in category.criteria" class="category-tr">
-                    <td v-if="index === 0" :rowspan="category.criteria.length + 1" class="category-td"
-                        :class="'category-' + category.color">
+                    <td v-if="index === 0" :rowspan="category.criteria.length + 1" class="category-td" :style="categoryColor(category)">
                         <div class="spacer"></div>
                         <div class="category-row">
                             {{category.title}}
@@ -74,8 +71,9 @@
                 </tbody>
                 <tbody v-if="!cluster.collapsed">
                 <tr>
-                    <td >
-                        <button class="btn btn-sm btn-primary pull-left" v-on:click="cluster.addCategory(getDefaultCategory())">
+                    <td>
+                        <button class="btn btn-sm btn-primary pull-left"
+                                v-on:click="cluster.addCategory(getDefaultCategory())">
                             <i class="fa fa-plus" aria-hidden="true"></i> Voeg Categorie toe
                         </button>
                     </td>
@@ -154,6 +152,13 @@
         getDefaultCriterium() {
             return new Criterium("");
         }
+
+        categoryColor(category: Category) {
+            return {
+                'background-color': 'rgba(' + category.rgbColor(0.7) + ')',
+                color: 'white'
+            };
+        }
     }
     //todo replace border with padding
 </script>
@@ -190,10 +195,6 @@
         align-self: flex-start;
     }
 
-    .category-tr {
-        height: 100%;
-    }
-
     .category-td {
         height: 100%;
         padding: 0;
@@ -207,18 +208,6 @@
         width: 100%;
         color: white;
         font-size: 20px;
-    }
-
-    .category-red {
-        background: red;
-    }
-
-    .category-green {
-        background: green;
-    }
-
-    .category-blue {
-        background: blue;
     }
 
     .category-title {
@@ -366,11 +355,11 @@
 
     .add-cluster-row {
         margin-left: 1px;
-        margin-bottom:8px;
+        margin-bottom: 8px;
     }
 
     .max-rubric-score-row {
-        padding-top:2px;
+        padding-top: 2px;
         margin-left: 4px;
         border-top: 1px solid #ddd;
     }

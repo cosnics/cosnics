@@ -64,7 +64,7 @@ test('choices', () => {
 test('relations', () => {
     expect(rubric.children).toEqual([cluster]);
     expect(cluster.parent).toEqual(rubric);
-    expect(cluster.children).toEqual([category, clusterCriterium]);
+    expect(cluster.children).toEqual([clusterCriterium, category]);
     expect(category.parent).toEqual(cluster);
     expect(clusterCriterium.parent).toEqual(cluster);
     expect(category.children).toEqual([categoryCriterium]);

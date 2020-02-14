@@ -1,5 +1,5 @@
 <template>
-    <li class="list-group-item tree-list-group-item" :id="treeNode.id" :ref="treeNode.id">
+    <li class="list-group-item tree-list-group-item w-100" :id="treeNode.id" :ref="treeNode.id">
         <div class="tree-list-group-item-content">
             <div class="spacer">
                 <i v-if="!collapsed && treeNode.canHaveChildren()" class="fa fa-caret-down pull-left caret-toggle"
@@ -7,17 +7,20 @@
                 <i v-if="collapsed && treeNode.canHaveChildren()" class="fa fa-caret-right pull-left caret-toggle"
                    v-on:click="collapsed = !collapsed"></i>
             </div>
-            <div>
-                <button type="button" class="list-group-item" v-on:click="store.selectedTreeNode = treeNode">
-                    <i class="fa fa-bars handle-icon handle"></i>
-                    <i v-if="treeNode.canHaveChildren()" class="fa fa-folder-o folder-icon"></i>
+            <div class="w-100">
+                <button type="button" class="list-group-item list-group-item-button w-100" :style="color"
+                        v-on:click="store.selectedTreeNode = treeNode">
+                    <i class="fa fa-1x fa-bars handle-icon handle"></i>
+                    <i v-if="treeNode.canHaveChildren() && treeNode" :class="folderIcon" class="fa folder-icon"></i>
                     {{treeNode.title}}
                 </button>
             </div>
         </div>
         <ul class="list-group tree-list-group" v-if="!collapsed && treeNode.canHaveChildren()">
             <draggable handle=".handle" v-model="children" group="tree" :move="checkMove"
-                       :animation="250" ghost-class="ghost" :filter="'.action-list-group-item'" :invertSwap="true">
+                       :animation="250" ghost-class="ghost" :filter="'.action-list-group-item'" :invertSwap="true"
+                       @change="onChange"
+            >
                 <tree-node-view
                         v-for="child in treeNode.children"
                         :treeNode="child"
@@ -25,36 +28,10 @@
                         v-bind:key="child.id"
                 />
                 <li v-if="treeNode.canHaveChildren() && !treeNode.hasChildren()"
-                    class="list-group-item tree-list-group-item action-list-group-item">
+                    class="list-group-item tree-list-group-item empty-list-group-item">
                     Geen items
                 </li>
             </draggable>
-            <!--draggable v-if="treeNode.canHaveChildren() && !treeNode.hasChildren()" group="action" :filter="'.action-list-group-item'">
-
-                <li v-if="treeNode.constructor.name !== 'Criterium'"
-                    class="list-group-item tree-list-group-item action-list-group-item">
-                    Geen items
-                    <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                        <button type="button" class="btn btn-default"
-                                v-on:click="store.selectedTreeNode = treeNode">
-                            <i class="fa fa-plus"></i>
-                            Voeg Criterium Toe
-                        </button>
-                        <button v-if="this.treeNode.constructor.name !== 'Category'" type="button"
-                                class="btn btn-default"
-                                v-on:click="store.selectedTreeNode = treeNode">
-                            <i class="fa fa-plus"></i>
-                            Voeg Categorie Toe
-                        </button>
-                        <button v-if="this.treeNode.constructor.name !== 'Category' && this.treeNode.constructor.name !== 'Cluster'"
-                                type="button" class="btn btn-default"
-                                v-on:click="store.selectedTreeNode = treeNode">
-                            <i class="fa fa-plus"></i>
-                            Voeg Cluster Toe
-                        </button>
-                    </div>
-                </li>
-            </draggable!-->
         </ul>
     </li>
 </template>
@@ -89,8 +66,8 @@
         }
 
         get children() {
-            let children = this.treeNode.children;
-            if(children.length > 0) {
+            let children = this.treeNode.children.slice();  //we give a copy to the tree, because we want to manipulate the array and save changes in backend. See onChange event
+            if (children.length > 0) {
                 return children;
             }
 
@@ -102,32 +79,43 @@
             ]
         }
 
-        set children(value: any){
-
+        set children(value: any) {
             let fakeElementIndex = value.findIndex((child: any) => child.fakeNode);
-            if(fakeElementIndex > -1)
-            {
+            if (fakeElementIndex > -1) {
                 value.splice(fakeElementIndex, 1);
             }
 
-            this.treeNode.children = value;
-            this.treeNode.children.forEach(child => child.parent = this.treeNode);
+            //setting children is handled in onchange event.
         }
 
-        placeHolder(parentNode: TreeNode) {
-            return {
-                'parent': parentNode,
+        onChange(evt: any) {
+            if (evt.added && evt.added.element) {
+                /*
+                Todo: encapsulate
+                 */
+                (evt.added.element as TreeNode).parent!.removeChild(evt.added.element);//move
+                this.treeNode.addChild(evt.added.element, evt.added.newIndex); //move
+                this.store.moveChild(evt.added.element, this.treeNode, evt.added.newIndex);
+                this.children = this.treeNode.children.slice();
+
+            } else if (evt.removed) { //remove is called as part of a move, so we handle it in the add part. This way we can encapsulate a move.
+                //do nothing because it is handled in 'added'
+            } else if (evt.moved) { //moved in same list
+                this.treeNode.moveChild(evt.moved.element, evt.moved.newIndex, evt.moved.oldIndex);
+                this.store.moveChild(evt.moved.element, this.treeNode, evt.moved.newIndex);
+                this.children = this.treeNode.children.slice();
+            } else {
+                console.log("unsupported action");
             }
         }
 
         checkMove(evt: any) {
-            if(!evt.relatedContext.element) {
-                console.log(evt);
+            if (!evt.relatedContext.element) {
                 return false;
             }
 
-            let draggedTreeNode:TreeNode = evt.draggedContext.element;
-            let parentTreeNode:TreeNode = evt.relatedContext.element.parent;
+            let draggedTreeNode: TreeNode = evt.draggedContext.element;
+            let parentTreeNode: TreeNode = evt.relatedContext.element.parent;
 
             if (parentTreeNode instanceof Rubric) {
                 return true;
@@ -139,57 +127,27 @@
             return false;
         }
 
-        getGroup(to: any) {
-            if (this.treeNode.parent instanceof Rubric) {
-                return {
-                    name: "rubric-child",
-                    put: (toGroup: any, fromGroup: any, element: any, meh: any, bleh: any) => {
-                        // let draggedTreeNode = element._underlying_vm_;
-                        // if (this.treeNode instanceof Criterium)
-                        //     return false;
-                        // if (this.treeNode instanceof Category) {
-                        //     if (!(draggedTreeNode instanceof Criterium))
-                        //         return false;
-                        //     else return true;
-                        // }
-                        // if (this.treeNode instanceof Cluster) {
-                        //     if (!(draggedTreeNode instanceof Category || draggedTreeNode instanceof Criterium))
-                        //         return false;
-                        //     else
-                        //         return true;
-                        // }
-                        //
-                        // return true;
-                    }
+        get folderIcon() {
+            return {
+                'fa-folder-o': this.treeNode instanceof Category,
+                'fa-map-o': this.treeNode instanceof Cluster,
+                'fa-institution': this.treeNode instanceof Rubric
+            };
+        }
 
-                }
-            } else if (this.treeNode.parent instanceof Category) {
+        get color() {
+            if (this.treeNode instanceof Category)
                 return {
-                    name: "category-child",
-                    put: (toGroup: any, fromGroup: any, element: any, meh: any, bleh: any) => {
-                        // return false;
-                    }
-                }
-            } else if (this.treeNode.parent instanceof Cluster) {
+                    'background-color': 'rgba(' + this.treeNode.rgbColor(0.7) + ')',
+                    color: 'white'
+                };
+            else if (this.treeNode.parent instanceof Category) {
                 return {
-                    name: "cluster-child",
-                    put: (toGroup: any, fromGroup: any, element: any, meh: any, bleh: any) => {
-                        // let draggedTreeNode = element._underlying_vm_;
-                        // if (this.treeNode instanceof Criterium)
-                        //     return false;
-                        // else if (draggedTreeNode instanceof Category || draggedTreeNode instanceof Cluster)
-                        //     return false;
-                        //
-                        // return true;
-                    }
-                }
+                    'border': '1px solid',
+                    'border-color': 'rgba(' + this.treeNode.parent.rgbColor(0.7) + ')',
+                };
             } else {
-                return {
-                    name: "root-child",
-                    put: (toGroup: any, fromGroup: any, element: any, meh: any, bleh: any) => {
-                        // return true
-                    }
-                }
+                return {};
             }
         }
     }
@@ -201,32 +159,37 @@
     }
 
     .tree-list-group {
-        margin-bottom: 5px;
+        margin-bottom: 2px;
         border: none;
     }
 
     .tree-list-group-item {
+        margin-top: 2px;
+        margin-bottom: 2px;
         padding-top: 0px;
         padding-bottom: 0px;
         padding-right: 0px;
         border: none;
     }
 
-    .action-list-group-item {
+    .empty-list-group-item {
         margin-left: 40px;
-        padding-left: 0px;
-        border: slategray dotted 1px;
+        padding-left: 5px;
+        border: 2px dashed #cacaca;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        color: #cacaca;
     }
 
     .tree-list-group-item-content {
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
     }
 
     .handle {
         cursor: grab;
+        opacity: 0.3;
     }
+
     .handle:active {
         cursor: grabbing;
     }
@@ -248,8 +211,23 @@
     .handle-icon {
         margin-right: 5px;
     }
+
     .ghost {
-        opacity: 0.5;
-        background: #c8ebfb;
+        opacity: 0.7;
+        border-left: solid 5px #c8ebfb;
+    }
+
+    .list-group-item-button {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border: none;
+        color: #333;
+        background-color: #fff;
+        text-align: left;
+        padding-left: 10px;
+    }
+
+    .w-100 {
+        width: 100%;
     }
 </style>

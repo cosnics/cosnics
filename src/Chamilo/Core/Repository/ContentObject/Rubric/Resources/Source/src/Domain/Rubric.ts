@@ -60,7 +60,7 @@ export default class Rubric extends TreeNode {
     }
 
     protected notifyRemoveChild(parent: TreeNode, treeNode: TreeNode): void {
-        let criteriaToBeRemoved = this.getAllCriteria(parent);
+        let criteriaToBeRemoved = this.getAllCriteria(treeNode);
         criteriaToBeRemoved.forEach(criterium => this.removeChoicesByCriterium(criterium));
     }
 
