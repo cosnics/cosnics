@@ -1,8 +1,0 @@
-<?php
-namespace Chamilo\Core\Repository\Implementation\Slideshare\Table\ExternalObjectGallery;
-
-use Chamilo\Core\Repository\External\Table\ExternalObjectGallery\DefaultExternalObjectGalleryTablePropertyModel;
-
-class ExternalObjectGalleryTablePropertyModel extends DefaultExternalObjectGalleryTablePropertyModel
-{
-}

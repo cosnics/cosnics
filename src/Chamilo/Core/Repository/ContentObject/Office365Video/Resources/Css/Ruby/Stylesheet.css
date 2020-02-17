@@ -1,9 +1,0 @@
-@import
-url
-(
-'../Aqua'
-);
-ul.tree-menu li div a.office365_video, ul.tree-menu li div a.type_office365_video,
-	ul.tree-menu li div a.type_office365_video_default {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
