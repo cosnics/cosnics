@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -70,6 +71,13 @@ class Level
     protected $rubricData;
 
     /**
+     * @var Choice[] | ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Choice", mappedBy="criterium")
+     */
+    protected $choices;
+
+    /**
      * Level constructor.
      *
      * @param RubricData $rubricData
@@ -77,6 +85,7 @@ class Level
     public function __construct(RubricData $rubricData)
     {
         $this->setRubricData($rubricData);
+        $this->choices = new ArrayCollection();
     }
 
     /**
@@ -243,6 +252,14 @@ class Level
         }
 
         return $this;
+    }
+
+    /**
+     * @return Choice[]|ArrayCollection
+     */
+    public function getChoices()
+    {
+        return $this->choices;
     }
 
 }

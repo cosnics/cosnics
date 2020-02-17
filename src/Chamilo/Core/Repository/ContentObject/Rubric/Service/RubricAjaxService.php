@@ -88,6 +88,7 @@ class RubricAjaxService
         $rubricData->removeTreeNode($treeNode);
 
         $this->rubricService->saveRubric($rubricData);
+        $this->rubricService->removeTreeNodeFromDatabase($treeNode);
 
         return [
             'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()],
@@ -225,6 +226,7 @@ class RubricAjaxService
         $rubricData->removeLevel($level);
 
         $this->rubricService->saveRubric($rubricData);
+        $this->rubricService->removeLevelFromDatabase($level);
 
         return [
             'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()],

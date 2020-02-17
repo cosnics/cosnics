@@ -20,7 +20,6 @@ abstract class CommonEntityRepository extends EntityRepository
      * @param bool $flush
      *
      * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function saveEntity($entity, $flush = true)
     {
@@ -36,7 +35,6 @@ abstract class CommonEntityRepository extends EntityRepository
      * @param bool $flush
      *
      * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function removeEntity($entity, $flush = true)
     {

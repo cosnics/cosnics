@@ -75,7 +75,7 @@ abstract class TreeNode
     /**
      * @var TreeNode[] | ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="TreeNode", mappedBy="parentNode", cascade={"persist", "refresh"})
+     * @ORM\OneToMany(targetEntity="TreeNode", mappedBy="parentNode", cascade={"persist", "refresh", "remove"})
      * @ORM\OrderBy({"sort" = "asc"})
      */
     protected $children;

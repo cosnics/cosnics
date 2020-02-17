@@ -65,7 +65,7 @@ class Choice
     /**
      * @var CriteriumNode
      *
-     * @ORM\OneToOne(targetEntity="CriteriumNode")
+     * @ORM\ManyToOne(targetEntity="CriteriumNode")
      * @ORM\JoinColumn(name="criterium_id", referencedColumnName="id")
      */
     protected $criterium;
