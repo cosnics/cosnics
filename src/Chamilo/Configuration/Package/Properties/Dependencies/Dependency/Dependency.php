@@ -46,7 +46,7 @@ class Dependency
 
     /**
      *
-     * @param $id the $id to set
+     * @param string $id
      */
     public function set_id($id)
     {
@@ -74,15 +74,16 @@ class Dependency
     /**
      *
      * @param string $type
-     * @throws Exception
+     *
      * @return Dependency
+     * @throws Exception
      */
     public static function factory($type)
     {
-        $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
-             'Dependency';
+        $class =
+            __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . 'Dependency';
 
-        if (! class_exists($class))
+        if (!class_exists($class))
         {
             throw new Exception(Translation::get('TypeDoesNotExist', array('type' => $type)));
         }
@@ -106,45 +107,49 @@ class Dependency
         $parameters['REQUIREMENT'] = $this->as_html();
 
         $message = Translation::get('DependencyCheckRegistration') . ': ' . $this->as_html() . ' ' . Translation::get(
-            'Found',
-            array(),
-            Utilities::COMMON_LIBRARIES) . ': ';
+                'Found', array(), Utilities::COMMON_LIBRARIES
+            ) . ': ';
         $registration = \Chamilo\Configuration\Configuration::registration($this->get_id());
 
         if (empty($registration))
         {
             $parameters['CURRENT'] = '--' . Translation::get('Nothing', array(), Utilities::COMMON_LIBRARIES) . '--';
             $this->logger->add_message(Translation::get('CurrentDependency', $parameters), MessageLogger::TYPE_ERROR);
+
             return false;
         }
         else
         {
             $target_version = \Composer\Semver\Semver::satisfies(
-                $registration[Registration::PROPERTY_VERSION],
-                $this->get_version());
+                $registration[Registration::PROPERTY_VERSION], $this->get_version()
+            );
 
-            if (! $target_version)
+            if (!$target_version)
             {
-                $parameters['CURRENT'] = '--' . Translation::get('WrongVersion', array(), Utilities::COMMON_LIBRARIES) . '--';
+                $parameters['CURRENT'] =
+                    '--' . Translation::get('WrongVersion', array(), Utilities::COMMON_LIBRARIES) . '--';
                 $this->logger->add_message(
-                    Translation::get('CurrentDependency', $parameters),
-                    MessageLogger::TYPE_ERROR);
+                    Translation::get('CurrentDependency', $parameters), MessageLogger::TYPE_ERROR
+                );
+
                 return false;
             }
             else
             {
-                if (! $registration[Registration::PROPERTY_STATUS])
+                if (!$registration[Registration::PROPERTY_STATUS])
                 {
-                    $parameters['CURRENT'] = '--' .
-                         Translation::get('InactiveObject', array(), Utilities::COMMON_LIBRARIES) . '--';
+                    $parameters['CURRENT'] =
+                        '--' . Translation::get('InactiveObject', array(), Utilities::COMMON_LIBRARIES) . '--';
                     $this->logger->add_message(
-                        Translation::get('CurrentDependency', $parameters),
-                        MessageLogger::TYPE_ERROR);
+                        Translation::get('CurrentDependency', $parameters), MessageLogger::TYPE_ERROR
+                    );
+
                     return false;
                 }
                 else
                 {
                     $this->logger->add_message($parameters['REQUIREMENT']);
+
                     return true;
                 }
             }
@@ -165,37 +170,10 @@ class Dependency
         return Translation::get('Dependency', $parameters);
     }
 
-    public function compare($type, $reference, $value)
-    {
-        switch ($type)
-        {
-            case self::COMPARE_EQUAL :
-                return ($reference == $value);
-                break;
-            case self::COMPARE_NOT_EQUAL :
-                return ($reference != $value);
-                break;
-            case self::COMPARE_GREATER_THEN :
-                return ($value > $reference);
-                break;
-            case self::COMPARE_GREATER_THEN_OR_EQUAL :
-                return ($value >= $reference);
-                break;
-            case self::COMPARE_LESS_THEN :
-                return ($value < $reference);
-                break;
-            case self::COMPARE_LESS_THEN_OR_EQUAL :
-                return ($value <= $reference);
-                break;
-            default :
-                return false;
-                break;
-        }
-    }
-
     public static function from_dom_node($dom_xpath, $dom_node)
     {
         $class = self::type($dom_node->getAttribute('type'));
+
         return $class::dom_node($dom_xpath, $dom_node);
     }
 
@@ -207,17 +185,20 @@ class Dependency
         $version = new Version($version_node->nodeValue, $version_node->getAttribute('operator'));
 
         $dependency->set_version($version);
+
         return $dependency;
     }
 
     public static function type($type)
     {
-        return __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . 'Dependency';
+        return __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
+            'Dependency';
     }
 
     /**
      *
      * @param string $context
+     *
      * @return boolean
      */
     public function needs($context)

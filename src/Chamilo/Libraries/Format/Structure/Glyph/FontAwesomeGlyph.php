@@ -10,6 +10,42 @@ namespace Chamilo\Libraries\Format\Structure\Glyph;
  */
 class FontAwesomeGlyph extends InlineGlyph
 {
+    /**
+     * @var string
+     */
+    private $style;
+
+    /**
+     * @param string $type
+     * @param string[] $extraClasses
+     * @param string $title
+     * @param string $style
+     */
+    public function __construct($type, $extraClasses = array(), $title = null, $style = 'fa')
+    {
+        parent::__construct($type, $extraClasses, $title);
+        $this->style = $style;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStyle(): string
+    {
+        return $this->style;
+    }
+
+    /**
+     * @param string $style
+     *
+     * @return FontAwesomeGlyph
+     */
+    public function setStyle(string $style): FontAwesomeGlyph
+    {
+        $this->style = $style;
+
+        return $this;
+    }
 
     /**
      *
@@ -19,7 +55,7 @@ class FontAwesomeGlyph extends InlineGlyph
     {
         $baseClassNames = parent::getBaseClassNames();
 
-        $baseClassNames[] = 'fa';
+        $baseClassNames[] = $this->getStyle();
         $baseClassNames[] = 'fa-' . $this->getType();
 
         return $baseClassNames;

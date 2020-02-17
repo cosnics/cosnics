@@ -29,7 +29,7 @@
             "type": "Chamilo\\Libraries\\Authentication",
             "install": {
                 "core": 1,
-                "default": 0
+                "default": 1
             },
             "dependencies": [
                 {

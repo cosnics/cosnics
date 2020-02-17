@@ -53,19 +53,14 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $selectedContentObjects
      *
      * @return \Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm
+     * @throws \Exception
      */
     public function getPublicationForm($selectedContentObjects = array())
     {
         if (!isset($this->publicationForm))
         {
-            $selectedContentObjectIdentifiers = array();
-            foreach ($selectedContentObjects as $selectedContentObject)
-            {
-                $selectedContentObjectIdentifiers[] = $selectedContentObject->getId();
-            }
-
             $this->publicationForm = new PublicationForm(
-                $selectedContentObjectIdentifiers, $this->getUser(), $this->get_url(), $selectedContentObjects
+                $this->getUser(), $this->get_url(), $selectedContentObjects
             );
         }
 

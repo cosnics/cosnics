@@ -15,26 +15,19 @@ class Dependencies
 
     /**
      *
-     * @var int
-     */
-    private $operator;
-
-    /**
-     *
-     * @var multitype:\configuration\package\Dependency
+     * @var \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency[]
      */
     private $dependencies;
 
     /**
      *
-     * @var \libraries\format\MessageLogger
+     * @var \Chamilo\Libraries\Format\MessageLogger
      */
     protected $logger;
 
     /**
      *
-     * @param int $operator
-     * @param \configuration\package\Dependency $dependencies
+     * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency[] $dependencies
      */
     public function __construct($dependencies = array())
     {
@@ -45,7 +38,7 @@ class Dependencies
 
     /**
      *
-     * @return \libraries\format\MessageLogger
+     * @return \Chamilo\Libraries\Format\MessageLogger
      */
     public function get_logger()
     {
@@ -54,7 +47,7 @@ class Dependencies
 
     /**
      *
-     * @return multitype:\configuration\package\Dependency
+     * @return \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency[]
      */
     public function get_dependencies()
     {
@@ -63,7 +56,7 @@ class Dependencies
 
     /**
      *
-     * @param multitype:\configuration\package\Dependency $dependencies
+     * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency[] $dependencies
      */
     public function set_dependencies($dependencies)
     {
@@ -72,7 +65,7 @@ class Dependencies
 
     /**
      *
-     * @param \configuration\package\Dependency $dependency
+     * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency $dependency
      */
     public function add_dependency($dependency)
     {
@@ -132,6 +125,7 @@ class Dependencies
                 return true;
             }
         }
+
         return false;
     }
 }

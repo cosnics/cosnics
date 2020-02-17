@@ -29,8 +29,8 @@
             "context": "Chamilo\\Libraries\\Authentication\\Cas",
             "type": "Chamilo\\Libraries\\Authentication",
             "install": {
-                "core": 0,
-                "default": 0
+                "core": 1,
+                "default": 1
             },
             "dependencies": [
                 {

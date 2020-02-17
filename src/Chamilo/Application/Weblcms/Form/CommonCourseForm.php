@@ -626,7 +626,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         
         foreach ($entities as $entity)
         {
-            $types->add_element_type($entity::get_element_finder_type());
+            $types->add_element_type($entity->get_element_finder_type());
         }
         
         $this->entities = $entities;
