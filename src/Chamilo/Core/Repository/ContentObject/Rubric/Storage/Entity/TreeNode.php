@@ -168,11 +168,6 @@ abstract class TreeNode
             $oldRubricData->removeTreeNode($this);
         }
 
-        if($this->getParentNode())
-        {
-            $this->setParentNode(null);
-        }
-
         if ($rubricData instanceof RubricData)
         {
             $rubricData->addTreeNode($this);

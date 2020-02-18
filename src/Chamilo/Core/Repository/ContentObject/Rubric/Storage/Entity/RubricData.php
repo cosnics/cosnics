@@ -18,8 +18,6 @@ use function sprintf;
  *      name="repository_rubric_data"
  * )
  *
- * TODO rethink the link between rubric data / criterium node / choice. When a choice is added to a criterium it should
- * be added to the rubric data OR the rubric data should at least be validated upon setting.
  * When a choice is deleted from the rubric, the choices should be deleted both from the rubric as well as from the
  * criterium node
  * When a choice is deleted from a criterium node it should also be disconnected from the rubric.
@@ -89,8 +87,17 @@ class RubricData
 
     /**
      * @var int
+     *
+     * @ORM\Column(name="content_object_id", type="integer", nullable=true)
      */
     protected $contentObjectId;
+
+    /**
+     * Keeps track of removed entities so they can be removed from the database after
+     *
+     * @var ArrayCollection
+     */
+    protected $removedEntities;
 
     /**
      * RubricData constructor.
@@ -106,6 +113,7 @@ class RubricData
         $this->choices = new ArrayCollection();
         $this->levels = new ArrayCollection();
         $this->treeNodes = new ArrayCollection();
+        $this->removedEntities = new ArrayCollection();
 
         $rootNode = new RubricNode($rubricTitle, $this);
         $this->setRootNode($rootNode);
@@ -287,6 +295,8 @@ class RubricData
             $this->removeChoice($choice);
         }
 
+        $this->removedEntities->add($levelToRemove);
+
         return $this;
     }
 
@@ -340,6 +350,8 @@ class RubricData
         $this->choices->removeElement($choice);
         $choice->setRubricData(null);
         $choice->setCriterium(null);
+        $choice->setLevel(null);
+        $this->removedEntities->add($choice);
 
         return $this;
     }
@@ -388,15 +400,13 @@ class RubricData
 
         $this->treeNodes->removeElement($treeNode);
         $treeNode->setRubricData(null);
+        $treeNode->setParentNode(null);
 
         if($treeNode instanceof CriteriumNode)
         {
-            foreach ($this->choices as $choice)
+            foreach ($treeNode->getChoices() as $choice)
             {
-                if ($choice->getCriterium() === $treeNode)
-                {
-                    $this->removeChoice($choice);
-                }
+                $this->removeChoice($choice);
             }
         }
 
@@ -404,6 +414,8 @@ class RubricData
         {
             $this->removeTreeNode($child);
         }
+
+        $this->removedEntities->add($treeNode);
 
         return $this;
     }
@@ -580,6 +592,14 @@ class RubricData
         return $this->treeNodes->filter(function(TreeNode $treeNode) {
             return $treeNode instanceof CategoryNode;
         });
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRemovedEntities(): ?ArrayCollection
+    {
+        return $this->removedEntities;
     }
 
 }

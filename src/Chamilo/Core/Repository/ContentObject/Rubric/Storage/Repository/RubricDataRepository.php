@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\CommonEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\PessimisticLockException;
 
@@ -42,6 +43,13 @@ class RubricDataRepository extends CommonEntityRepository
         foreach($rubricData->getChoices() as $choice)
         {
             $this->saveEntity($choice, false);
+        }
+
+        $this->flush();
+
+        foreach($rubricData->getRemovedEntities() as $removedEntity)
+        {
+            $this->removeEntity($removedEntity, false);
         }
 
         $this->flush();
@@ -113,5 +121,4 @@ class RubricDataRepository extends CommonEntityRepository
     {
         $this->removeEntity($choice);
     }
-
 }

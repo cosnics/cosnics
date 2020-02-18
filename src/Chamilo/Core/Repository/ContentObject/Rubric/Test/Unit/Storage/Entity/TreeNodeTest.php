@@ -473,13 +473,6 @@ class TreeNodeTest extends ChamiloTestCase
         $this->assertFalse($this->rootNode->hasParentNode());
     }
 
-    public function testSetRubricDataRemovesParentNode()
-    {
-        $clusterNode = $this->rootNode->getChildren()->first();
-        $clusterNode->setRubricData(null);
-
-        $this->assertEmpty($clusterNode->getParentNode());
-    }
 }
 
 

@@ -18,7 +18,7 @@ class DeleteTreeNodeComponent extends Manager
      */
     function runAjaxComponent()
     {
-        return $this->getRubricAjaxService()->deleteTreeNode(
+        return $this->getRubricAjaxService()->removeTreeNode(
             $this->getRubricDataId(), $this->getVersion(), $this->getTreeNodeData()
         );
     }

@@ -96,8 +96,6 @@ class ChoiceTest extends ChamiloTestCase
         $this->assertContains($this->choice, $criterium->getChoices());
     }
 
-    //TODO when change rubric data remove from old rubric data
-
     /**
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */

@@ -128,7 +128,6 @@ class CriteriumNode extends TreeNode
 
         $this->choices->removeElement($choice);
         $choice->setCriterium(null);
-        $choice->setRubricData(null);
 
         return $this;
     }

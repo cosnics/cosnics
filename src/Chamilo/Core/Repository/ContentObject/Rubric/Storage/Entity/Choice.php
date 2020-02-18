@@ -31,12 +31,12 @@ class Choice
      *
      * @ORM\Column(name="selected", type="boolean")
      */
-    protected $selected;
+    protected $selected = false;
 
     /**
      * @var string
      *
-     *  @ORM\Column(name="feedback", type="text")
+     *  @ORM\Column(name="feedback", type="text", nullable=true)
      */
     protected $feedback;
 
@@ -45,14 +45,14 @@ class Choice
      *
      * @ORM\Column(name="has_fixed_score", type="boolean")
      */
-    protected $hasFixedScore;
+    protected $hasFixedScore = false;
 
     /**
      * @var int
      *
      * @ORM\Column(name="fixed_score", type="integer")
      */
-    protected $fixedScore;
+    protected $fixedScore = 0;
 
     /**
      * @var Level
@@ -201,9 +201,25 @@ class Choice
      *
      * @return Choice
      */
-    public function setLevel(Level $level): Choice
+    public function setLevel(Level $level = null): Choice
     {
+        if($this->level === $level)
+        {
+            return $this;
+        }
+
+        $oldLevel = $this->level;
         $this->level = $level;
+
+        if($oldLevel instanceof Level)
+        {
+            $oldLevel->removeChoice($this);
+        }
+
+        if($level instanceof Level)
+        {
+            $level->addChoice($this);
+        }
 
         return $this;
     }

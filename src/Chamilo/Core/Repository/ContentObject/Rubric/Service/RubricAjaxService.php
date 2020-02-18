@@ -11,9 +11,6 @@ use JMS\Serializer\Serializer;
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Service
  *
  * @author Sven Vanpoucke - Hogeschool Gent
- *
- * TODO schedule objects for deletion when they are removed through ajax. Desyncing from the domain model is not enough
- * they actually need to be set to remove in the database.
  */
 class RubricAjaxService
 {
@@ -78,7 +75,7 @@ class RubricAjaxService
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function deleteTreeNode(int $rubricDataId, int $versionId, string $treeNodeJSONData)
+    public function removeTreeNode(int $rubricDataId, int $versionId, string $treeNodeJSONData)
     {
         $treeNodeJSONModel = $this->parseTreeNodeData($treeNodeJSONData);
 
@@ -88,7 +85,6 @@ class RubricAjaxService
         $rubricData->removeTreeNode($treeNode);
 
         $this->rubricService->saveRubric($rubricData);
-        $this->rubricService->removeTreeNodeFromDatabase($treeNode);
 
         return [
             'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()],
@@ -226,7 +222,6 @@ class RubricAjaxService
         $rubricData->removeLevel($level);
 
         $this->rubricService->saveRubric($rubricData);
-        $this->rubricService->removeLevelFromDatabase($level);
 
         return [
             'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()],

@@ -37,7 +37,7 @@ class Level
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected $description;
 
@@ -46,14 +46,14 @@ class Level
      *
      * @ORM\Column(name="score", type="integer")
      */
-    protected $score;
+    protected $score = 0;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="is_default", type="boolean")
      */
-    protected $isDefault;
+    protected $isDefault = false;
 
     /**
      * @var int
@@ -84,8 +84,8 @@ class Level
      */
     public function __construct(RubricData $rubricData)
     {
-        $this->setRubricData($rubricData);
         $this->choices = new ArrayCollection();
+        $this->setRubricData($rubricData);
     }
 
     /**
@@ -260,6 +260,42 @@ class Level
     public function getChoices()
     {
         return $this->choices;
+    }
+
+    /**
+     * @param Choice $choice
+     *
+     * @return $this
+     */
+    public function addChoice(Choice $choice)
+    {
+        if($this->choices->contains($choice))
+        {
+            return $this;
+        }
+
+        $this->choices->add($choice);
+        $choice->setLevel($this);
+
+        return $this;
+    }
+
+    /**
+     * @param Choice $choice
+     *
+     * @return self
+     */
+    public function removeChoice(Choice $choice): self
+    {
+        if(!$this->choices->contains($choice))
+        {
+            return $this;
+        }
+
+        $this->choices->removeElement($choice);
+        $choice->setLevel(null);
+
+        return $this;
     }
 
 }

@@ -309,21 +309,6 @@ class RubricDataTest extends ChamiloTestCase
     /**
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
-    public function testRemoveLevelRemovesChoiceInCriteriumNode()
-    {
-        $criteriumNode = new CriteriumNode('test criterium', $this->rubricData);
-        $level = new Level($this->rubricData);
-
-        $this->assertCount(1, $criteriumNode->getChoices());
-
-        $this->rubricData->removeLevel($level);
-
-        $this->assertCount(0, $criteriumNode->getChoices());
-    }
-
-    /**
-     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
-     */
     public function testAddTreeNodeInsertsChoicesForLevel()
     {
         $level = new Level($this->rubricData);
@@ -342,7 +327,6 @@ class RubricDataTest extends ChamiloTestCase
 
         $this->rubricData->removeTreeNode($criteriumNode);
 
-        $this->assertCount(0, $criteriumNode->getChoices());
         $this->assertCount(0, $this->rubricData->getChoices());
     }
 
@@ -391,7 +375,82 @@ class RubricDataTest extends ChamiloTestCase
         $this->assertCount(3, $this->rubricData->getCriteriumNodes());
     }
 
+    public function testRemoveTreeNodeAddsTreeNodeToRemovedEntities()
+    {
+        $node = new CriteriumNode('Test Criterium 1', $this->rubricData);
+        $this->rubricData->removeTreeNode($node);
 
+        $this->assertContains($node, $this->rubricData->getRemovedEntities());
+    }
+
+    public function testRemoveTreeNodeRemovesChoicesInNode()
+    {
+        $node = new CriteriumNode('Test Criterium 1', $this->rubricData);
+        new Level($this->rubricData);
+
+        $this->rubricData->removeTreeNode($node);
+
+        $this->assertCount(0, $node->getChoices());
+        $this->assertCount(0, $this->rubricData->getChoices());
+
+    }
+
+    public function testRemoveTreeNodeRemovesSubNodes()
+    {
+        $clusterNode = new ClusterNode('Test Cluster', $this->rubricData);
+        $categoryNode = new CategoryNode('Test Category 1', $this->rubricData);
+
+        $clusterNode->addChild($categoryNode);
+
+        $this->rubricData->removeTreeNode($clusterNode);
+
+        $this->assertNotContains($categoryNode, $this->rubricData->getTreeNodes());
+    }
+
+    public function testRemoveTreeNodeAddsSubNodes()
+    {
+        $clusterNode = new ClusterNode('Test Cluster', $this->rubricData);
+        $categoryNode = new CategoryNode('Test Category 1', $this->rubricData);
+
+        $clusterNode->addChild($categoryNode);
+
+        $this->rubricData->removeTreeNode($clusterNode);
+
+        $this->assertNotContains($categoryNode, $this->rubricData->getTreeNodes());
+    }
+
+    public function testRemoveTreeNodeAddsChoicesToRemovedEntities()
+    {
+        $node = new CriteriumNode('Test Criterium 1', $this->rubricData);
+        new Level($this->rubricData);
+
+        $choice = $node->getChoices()->first();
+
+        $this->rubricData->removeTreeNode($node);
+        $this->assertContains($choice, $this->rubricData->getRemovedEntities());
+    }
+
+    public function testRemoveLevelRemovesChoices()
+    {
+        $node = new CriteriumNode('Test Criterium 1', $this->rubricData);
+        $level = new Level($this->rubricData);
+
+        $this->rubricData->removeLevel($level);
+
+        $this->assertCount(0, $this->rubricData->getChoices());
+        $this->assertCount(0, $node->getChoices());
+    }
+
+    public function testRemoveLevelAddsChoicesToRemovedEntities()
+    {
+        $node = new CriteriumNode('Test Criterium 1', $this->rubricData);
+        $level = new Level($this->rubricData);
+
+        $choice = $node->getChoices()->first();
+
+        $this->rubricData->removeLevel($level);
+        $this->assertContains($choice, $this->rubricData->getRemovedEntities());
+    }
 
 }
 

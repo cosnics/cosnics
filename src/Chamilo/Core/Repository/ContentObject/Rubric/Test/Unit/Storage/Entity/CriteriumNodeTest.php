@@ -301,15 +301,5 @@ class CriteriumNodeTest extends ChamiloTestCase
 
         $this->testNode->updateFromJSONModel($jsonModel);
     }
-
-    public function testRemoveChoiceRemovesChoiceFromRubricData()
-    {
-        $choice = new Choice($this->rubricData);
-        $this->testNode->addChoice($choice);
-
-        $this->testNode->removeChoice($choice);
-
-        $this->assertCount(0, $this->rubricData->getChoices());
-    }
 }
 
