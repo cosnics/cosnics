@@ -1,3 +1,4 @@
+{{ HEADER|raw }}
 <div>
 
     {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Rubric' %}
@@ -6,7 +7,11 @@
     {{ getCss('cosnics-rubric.css', appContext) }}
 
     <div id="builder">
-        <score-rubric-builder></score-rubric-builder>
+        <score-rubric-tree-builder class="w-100" v-if="!viewFullRubric"></score-rubric-tree-builder>
+        <score-rubric-builder class="w-100" v-if="viewFullRubric"></score-rubric-builder>
+        <button class="btn btn-default pull-left full-rubric-btn" @click="viewFullRubric=!viewFullRubric">Bekijk
+            Volledige Rubric
+        </button>
     </div>
 
     <script>
@@ -16,11 +21,101 @@
         var app = new Vue({
             el: '#builder',
             data: {
+                "viewFullRubric": false,
                 "store": {
-                    rubric: Vue.prototype.$getRubricFromJSON(
-                        '{"useScores":true,"title":"my_rubric","levels":[{"id":"x71v4tjlrqve5qlsp5or","title":"level1","description":"bad","score":10,"isDefault":false},{"id":"4suq88i9xytw8cu1wcjvm9","title":"level2","description":"good","score":10,"isDefault":false}],"clusters":[{"title":"my cluster","categories":[{"title":"category1","color":"blue","criteria":[{"id":"g5w8birn51ctnkzztvfp28","title":"categoryCriterium","weight":100}]}],"criteria":[{"id":"lraueq7apq9f2qp5t8nna","title":"clusterCriterium","weight":100}]}],"choices":[{"criteriumId":"lraueq7apq9f2qp5t8nna","levelId":"x71v4tjlrqve5qlsp5or","choice":{"selected":false,"feedback":"a","hasFixedScore":false,"fixedScore":10}},{"criteriumId":"lraueq7apq9f2qp5t8nna","levelId":"4suq88i9xytw8cu1wcjvm9","choice":{"selected":false,"feedback":"b","hasFixedScore":false,"fixedScore":10}},{"criteriumId":"g5w8birn51ctnkzztvfp28","levelId":"x71v4tjlrqve5qlsp5or","choice":{"selected":false,"feedback":"c","hasFixedScore":false,"fixedScore":10}},{"criteriumId":"g5w8birn51ctnkzztvfp28","levelId":"4suq88i9xytw8cu1wcjvm9","choice":{"selected":true,"feedback":"d","hasFixedScore":false,"fixedScore":10}}]}'),
+                    rubric: Vue.prototype.$getRubricFromJSON({
+                        "useScores":true,
+                        "title":"my_rubric",
+                        "levels": [
+                            {
+                                "id":"x71v4tjlrqve5qlsp5or",
+                                "title":"level1",
+                                "description":"bad",
+                                "score":10,
+                                "isDefault":false
+                            },
+                            {
+                                "id":"4suq88i9xytw8cu1wcjvm9",
+                                "title":"level2",
+                                "description":"good",
+                                "score":10,
+                                "isDefault":false
+                            }
+                        ],
+                        "clusters": [
+                            {
+                                "title":"my cluster",
+                                "categories": [
+                                    {
+                                        "title":"category1",
+                                        "color":"#2980B9",
+                                        "criteria": [
+                                            {
+                                                "id":"g5w8birn51ctnkzztvfp28",
+                                                "title":"categoryCriterium",
+                                                "weight":100
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "criteria": [
+                                    {
+                                        "id":"lraueq7apq9f2qp5t8nna",
+                                        "title":"clusterCriterium",
+                                        "weight":100
+                                    }
+                                ]
+                            }
+                        ],
+                        "choices": [
+                            {
+                                "criteriumId":"lraueq7apq9f2qp5t8nna",
+                                "levelId":"x71v4tjlrqve5qlsp5or",
+                                "choice": {
+                                    "selected":false,
+                                    "feedback":"a",
+                                    "hasFixedScore":false,
+                                    "fixedScore":10
+                                }
+                            },
+                            {
+                                "criteriumId":"lraueq7apq9f2qp5t8nna",
+                                "levelId":"4suq88i9xytw8cu1wcjvm9",
+                                "choice": {
+                                    "selected":false,
+                                    "feedback":"b",
+                                    "hasFixedScore":false,
+                                    "fixedScore":10
+                                }
+                            },
+                            {
+                                "criteriumId":"g5w8birn51ctnkzztvfp28",
+                                "levelId":"x71v4tjlrqve5qlsp5or",
+                                "choice": {
+                                    "selected":false,
+                                    "feedback":"c",
+                                    "hasFixedScore":false,
+                                    "fixedScore":10
+                                }
+                            },
+                            {
+                                "criteriumId":"g5w8birn51ctnkzztvfp28",
+                                "levelId":"4suq88i9xytw8cu1wcjvm9",
+                                "choice": {
+                                    "selected":true,
+                                    "feedback":"d",
+                                    "hasFixedScore":false,
+                                    "fixedScore":10
+                                }
+                            }
+                        ]
+                    }),
+                    selectedTreeNode: this.rubric,
                     onSave: function () {
-                        alert("saved!");
+                        console.log("save")
+                    },
+                    moveChild: function(treeNode) {
+                        console.log(treeNode);
                     }
                 }
             }
@@ -28,3 +123,4 @@
     </script>
 
 </div>
+{{ FOOTER|raw }}

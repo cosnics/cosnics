@@ -42,7 +42,8 @@ class DependencyInjectionExtension extends Extension implements IConfigurableExt
             )
         );
 
-//        $loader->load('services.xml');
+        $loader->load('services.xml');
+        $loader->load('repositories.xml');
     }
 
     /**

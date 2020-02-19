@@ -12,7 +12,7 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\PessimisticLockException;
 
 /**
- * Class RubricRepository
+ * Class RubricDataRepository
  *
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository
  *
@@ -65,7 +65,7 @@ class RubricDataRepository extends CommonEntityRepository
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function findEntireRubricById(int $rubricDataId, int $expectedVersion)
+    public function findEntireRubricById(int $rubricDataId, int $expectedVersion = null)
     {
         $qb = $this->createQueryBuilder('rd')
             ->addSelect('tn')
@@ -83,11 +83,17 @@ class RubricDataRepository extends CommonEntityRepository
 
         $rubricData = $qb->getQuery()->getSingleResult();
 
-        try
+        if(!is_null($expectedVersion))
         {
-            $this->getEntityManager()->lock($rubricData, LockMode::OPTIMISTIC, $expectedVersion);
+            try
+            {
+                $this->getEntityManager()->lock($rubricData, LockMode::OPTIMISTIC, $expectedVersion);
+            }
+            catch (PessimisticLockException $ex)
+            {
+                // The doc throws a pessimistic lock exception which is impossible, just catching it here so it doesn't go to the other docblocks
+            }
         }
-        catch(PessimisticLockException $ex) {} // The doc throws a pessimistic lock exception which is impossible, just catching it here so it doesn't go to the other docblocks
 
         return $rubricData;
     }

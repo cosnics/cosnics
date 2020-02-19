@@ -3,7 +3,10 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
 
-        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricDataRepository" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricTreeBuilder" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricValidator" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricAjaxService" autowire="true" />
 
     </services>
 </container>

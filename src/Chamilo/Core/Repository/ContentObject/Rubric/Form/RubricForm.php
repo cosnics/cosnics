@@ -37,10 +37,6 @@ class RubricForm extends ContentObjectForm
     public function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
         parent::build_creation_form($htmleditor_options, $in_tab);
-
-        $this->addElement(
-            'html', $this->getTwig()->render('Chamilo\Core\Repository\ContentObject\Rubric:RubricBuilder.html.twig')
-        );
     }
 
     /**
@@ -54,13 +50,5 @@ class RubricForm extends ContentObjectForm
         }
 
         return $this->container;
-    }
-
-    /**
-     * @return Twig_Environment
-     */
-    protected function getTwig()
-    {
-        return $this->getContainer()->get('twig.environment');
     }
 }

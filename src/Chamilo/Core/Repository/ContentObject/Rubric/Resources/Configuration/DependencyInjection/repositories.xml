@@ -8,10 +8,6 @@
             <argument>Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData</argument>
         </service>
 
-        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\TreeNodeRepository">
-            <factory service="doctrine.orm.entity_manager" method="getRepository" />
-            <argument>Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode</argument>
-        </service>
 
     </services>
 </container>

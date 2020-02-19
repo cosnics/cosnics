@@ -35,11 +35,10 @@ class RubricTreeBuilder
      *
      * @return RubricData
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
-    public function buildRubricTreeByRubricDataId(int $rubricDataId, int $expectedVersion)
+    public function buildRubricTreeByRubricDataId(int $rubricDataId, int $expectedVersion = null)
     {
         $rubricData = $this->rubricDataRepository->findEntireRubricById($rubricDataId, $expectedVersion);
 

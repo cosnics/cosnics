@@ -2,8 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Display\Component\AjaxComponent;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricAjaxService;
 use Chamilo\Libraries\Architecture\AjaxManager;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Response\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -30,6 +32,17 @@ abstract class Manager extends AjaxManager
     const PARAM_LEVEL_DATA = 'LevelData';
     const PARAM_CHOICE_DATA = 'ChoiceData';
 
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        if ($applicationConfiguration->getApplication() instanceof AjaxComponent)
+        {
+            throw new \RuntimeException(
+                'This component can only be run through the ajax component from the rubric complex display'
+            );
+        }
+        parent::__construct($applicationConfiguration);
+    }
+
     /**
      * @return string|Response
      */
@@ -44,6 +57,7 @@ abstract class Manager extends AjaxManager
         catch (\Exception $ex)
         {
             $this->getExceptionLogger()->logException($ex);
+
             return new AjaxExceptionResponse($ex);
         }
     }
