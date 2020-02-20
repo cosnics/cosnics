@@ -86,7 +86,7 @@ class AttemptBrowserComponent extends Manager
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit'), Theme::getInstance()->getCommonImagePath('Action/Edit'), $this->get_url(
+                Translation::get('Edit'), new FontAwesomeGlyph('pencil'), $this->get_url(
                 array(self::PARAM_ACTION => self::ACTION_EDIT_ATTEMPT, self::PARAM_ATTEMPT => $attempt->get_id())
             ), ToolbarItem::DISPLAY_ICON
             )
@@ -124,7 +124,7 @@ class AttemptBrowserComponent extends Manager
         $commonActions = new ButtonGroup();
         $commonActions->addButton(
             new Button(
-                Translation::get('CreateAttempt'), Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                Translation::get('CreateAttempt'), new FontAwesomeGlyph('plus'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_ATTEMPT))
             )
         );

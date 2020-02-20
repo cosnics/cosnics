@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
@@ -130,7 +131,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 $commonActions->addButton(
                     new Button(
                         $translator->trans('Publish', [], Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Publish'),
+                        new FontAwesomeGlyph('share-square-o'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
@@ -139,16 +140,15 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $commonActions->addButton(
                 new Button(
-                    $translator->trans('ShowAll', [], Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'), $this->get_url(),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $translator->trans('ShowAll', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $toolActions->addButton(
                 new Button(
                     $translator->trans('ShowToday', [], Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/Day'),
+                    new FontAwesomeGlyph('calendar-day', array(), null, 'fas'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_TODAY)), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -156,7 +156,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $toolActions->addButton(
                 new Button(
                     $translator->trans('ShowThisWeek', [], Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/Week'),
+                    new FontAwesomeGlyph('calendar-week', array(), null, 'fas'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_THIS_WEEK)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -165,7 +165,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $toolActions->addButton(
                 new Button(
                     $translator->trans('ShowThisMonth', [], Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/Month'),
+                    new FontAwesomeGlyph('calendar-alt', array(), null, 'fas'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_THIS_MONTH)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )

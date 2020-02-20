@@ -35,14 +35,13 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $type = $content_object->get_type();
                 $icon = $content_object->get_icon_path();
                 $url = '<img src="' . $icon . '" alt="' . htmlentities(
-                    Translation::get('TypeName', null, ContentObject::get_content_object_type_namespace($type))) . '"/>';
+                        Translation::get('TypeName', null, ContentObject::get_content_object_type_namespace($type))
+                    ) . '"/>';
+
                 return $url;
             case Theme::getInstance()->getCommonImage(
-                'Action/Category',
-                'png',
-                Translation::get('Type'),
-                null,
-                ToolbarItem::DISPLAY_ICON) :
+                'Action/Category', 'png', Translation::get('Type'), null, ToolbarItem::DISPLAY_ICON
+            ) :
                 return $content_object->get_icon_image(Theme::ICON_MINI);
 
             case ContentObject::PROPERTY_TITLE :
@@ -52,11 +51,12 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
                 if ($content_object instanceof ComplexContentObjectSupport)
                 {
-                    $title_short = '<a href="' .
-                         $this->get_component()->get_url(
+                    $title_short = '<a href="' . $this->get_component()->get_url(
                             array(
-                                \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $cloi->get_id())) .
-                         '">' . $title_short . '</a>';
+                                \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $cloi->get_id(
+                                )
+                            )
+                        ) . '">' . $title_short . '</a>';
                 }
                 else
                 {
@@ -66,18 +66,21 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return $title_short;
             case ContentObject::PROPERTY_DESCRIPTION :
                 $description = $content_object->get_description();
+
                 return StringUtilities::getInstance()->truncate($description, 75);
             case Translation::get(ComplexTableColumnModel::SUBITEMS) :
                 if ($cloi->is_complex())
                 {
                     $condition = new EqualityCondition(
-                        ComplexContentObjectItem::PROPERTY_PARENT,
-                        $cloi->get_ref(),
-                        ComplexContentObjectItem::get_table_name());
+                        ComplexContentObjectItem::PROPERTY_PARENT, $cloi->get_ref(),
+                        ComplexContentObjectItem::get_table_name()
+                    );
+
                     return DataManager::count_complex_content_object_items(
-                        ComplexContentObjectItem::class_name(),
-                        $condition);
+                        ComplexContentObjectItem::class_name(), $condition
+                    );
                 }
+
                 return 0;
         }
 
@@ -102,33 +105,36 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Edit'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
                 $this->get_component()->get_complex_content_object_item_edit_url($cloi->get_id()),
-                ToolbarItem::DISPLAY_ICON));
+                ToolbarItem::DISPLAY_ICON
+            )
+        );
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('CopyEdit', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Copy'),
+                Translation::get('CopyEdit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('files-o'),
                 $this->get_component()->get_complex_content_object_item_copy_url($cloi->get_id()),
-                ToolbarItem::DISPLAY_ICON,
-                true));
+                ToolbarItem::DISPLAY_ICON, true
+            )
+        );
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('times'),
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->get_component()->get_complex_content_object_item_delete_url($cloi->get_id()),
-                ToolbarItem::DISPLAY_ICON,
-                true));
+                ToolbarItem::DISPLAY_ICON, true
+            )
+        );
 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('ChangeParent', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Move'),
+                new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal'), null, 'fas'),
                 $this->get_component()->get_complex_content_object_parent_changer_url($cloi->get_id()),
-                ToolbarItem::DISPLAY_ICON));
+                ToolbarItem::DISPLAY_ICON
+            )
+        );
 
         $allowed = $this->check_move_allowed($cloi);
 
@@ -136,42 +142,42 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Up'),
+                    Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-up'),
                     $this->get_component()->get_complex_content_object_item_move_url(
-                        $cloi->get_id(),
-                        Manager::PARAM_DIRECTION_UP),
-                    ToolbarItem::DISPLAY_ICON));
+                        $cloi->get_id(), Manager::PARAM_DIRECTION_UP
+                    ), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('MoveUpNotAvailable', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/UpNa'),
-                    null,
-                    ToolbarItem::DISPLAY_ICON));
+                    new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
         if ($allowed["movedown"])
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Down'),
+                    Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-down'),
                     $this->get_component()->get_complex_content_object_item_move_url(
-                        $cloi->get_id(),
-                        Manager::PARAM_DIRECTION_DOWN),
-                    ToolbarItem::DISPLAY_ICON));
+                        $cloi->get_id(), Manager::PARAM_DIRECTION_DOWN
+                    ), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('MoveDownNotAvailable', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/DownNa'),
-                    null,
-                    ToolbarItem::DISPLAY_ICON));
+                    new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
         return $toolbar->as_html();
@@ -183,8 +189,8 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $movedown_allowed = true;
 
         $count = DataManager::count_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
-            $this->get_component()->get_table_condition(__CLASS__));
+            ComplexContentObjectItem::class_name(), $this->get_component()->get_table_condition(__CLASS__)
+        );
         if ($count == 1)
         {
             $moveup_allowed = false;

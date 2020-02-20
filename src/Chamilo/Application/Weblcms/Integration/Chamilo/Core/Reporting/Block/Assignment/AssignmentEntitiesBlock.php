@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableColumnModel;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -34,6 +35,7 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
     private static $COLUMN_NUMBER_OF_FEEDBACKS;
 
     private static $COLUMN_NUMBER_OF_SUBMISSIONS;
+
     const STATISTICS_FIRST_SUBMISSION = 0;
     const STATISTICS_LAST_SUBMISSION = 1;
     const STATISTICS_AVERAGE_SCORE = 2;
@@ -70,9 +72,10 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
     public function get_title()
     {
         $contentObjectPublication = $this->getContentObjectPublication();
-        $assignmentPublication = $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
-        $entityType = ($assignmentPublication instanceof Publication) ?
-            $assignmentPublication->getEntityType() : Entry::ENTITY_TYPE_USER;
+        $assignmentPublication =
+            $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
+        $entityType = ($assignmentPublication instanceof Publication) ? $assignmentPublication->getEntityType() :
+            Entry::ENTITY_TYPE_USER;
 
         return $this->getEntityServiceManager()->getEntityServiceByType($entityType)->getPluralEntityName();
     }
@@ -91,12 +94,8 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
 
         $this->reportingData->set_rows(
             array(
-                self::$COLUMN_NAME,
-                self::$COLUMN_FIRST_SUBMISSION,
-                self::$COLUMN_LAST_SUBMISSION,
-                self::$COLUMN_NUMBER_OF_SUBMISSIONS,
-                self::$COLUMN_NUMBER_OF_FEEDBACKS,
-                self::$COLUMN_LAST_SCORE,
+                self::$COLUMN_NAME, self::$COLUMN_FIRST_SUBMISSION, self::$COLUMN_LAST_SUBMISSION,
+                self::$COLUMN_NUMBER_OF_SUBMISSIONS, self::$COLUMN_NUMBER_OF_FEEDBACKS, self::$COLUMN_LAST_SCORE,
                 self::$COLUMN_ACTIONS
             )
         );
@@ -105,17 +104,17 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
         /** @var Assignment $assignment */
         $assignment = $contentObjectPublication->getContentObject();
 
-        $assignmentPublication = $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
-        $entityType = ($assignmentPublication instanceof Publication) ?
-            $assignmentPublication->getEntityType() : Entry::ENTITY_TYPE_USER;
+        $assignmentPublication =
+            $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
+        $entityType = ($assignmentPublication instanceof Publication) ? $assignmentPublication->getEntityType() :
+            Entry::ENTITY_TYPE_USER;
 
         $entityService = $this->getEntityServiceForEntityType($entityType);
         $entities = $entityService->retrieveEntities($contentObjectPublication);
 
         $count = 0;
 
-        $img = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Statistics') . '" title="' .
-            Translation::get('Details') . '" />';
+        $glyph = new FontAwesomeGlyph('pie-chart');
 
         $detailParams = $this->get_parent()->get_parameters();
         $detailParams[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
@@ -129,8 +128,7 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
             $entityId = $entity[Entry::PROPERTY_ENTITY_ID];
 
             $url = $this->getEntityUrl(
-                $contentObjectPublication->get_course_id(), $contentObjectPublication->getId(), $entityType,
-                $entityId
+                $contentObjectPublication->get_course_id(), $contentObjectPublication->getId(), $entityType, $entityId
             );
 
             $name = $this->createLink($url, $entityService->renderEntityNameByArray($entity));
@@ -139,39 +137,36 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
 
             $this->reportingData->add_data_category_row($count, self::$COLUMN_NAME, $name);
             $this->reportingData->add_data_category_row(
-                $count,
-                self::$COLUMN_FIRST_SUBMISSION,
-                $this->format_date_html($entity[EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE], $assignment->get_end_time())
+                $count, self::$COLUMN_FIRST_SUBMISSION, $this->format_date_html(
+                $entity[EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE], $assignment->get_end_time()
+            )
             );
             $this->reportingData->add_data_category_row(
-                $count,
-                self::$COLUMN_LAST_SUBMISSION,
-                $this->format_date_html($entity[EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE], $assignment->get_end_time())
+                $count, self::$COLUMN_LAST_SUBMISSION, $this->format_date_html(
+                $entity[EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE], $assignment->get_end_time()
+            )
             );
             $this->reportingData->add_data_category_row(
-                $count,
-                self::$COLUMN_NUMBER_OF_SUBMISSIONS,
-                $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT]
+                $count, self::$COLUMN_NUMBER_OF_SUBMISSIONS, $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT]
             );
             $this->reportingData->add_data_category_row(
-                $count,
-                self::$COLUMN_NUMBER_OF_FEEDBACKS,
+                $count, self::$COLUMN_NUMBER_OF_FEEDBACKS,
                 $this->getAssignmentService()->countFeedbackForContentObjectPublicationByEntityTypeAndEntityId(
                     $contentObjectPublication, $entityType, $entityId
                 )
             );
             $this->reportingData->add_data_category_row(
-                $count,
-                self::$COLUMN_LAST_SCORE,
-                $this->format_score_html($this->getAssignmentService()->getLastScoreForContentObjectPublicationEntityTypeAndId(
+                $count, self::$COLUMN_LAST_SCORE, $this->format_score_html(
+                $this->getAssignmentService()->getLastScoreForContentObjectPublicationEntityTypeAndId(
                     $contentObjectPublication, $entityType, $entityId
-                ))
-        );
+                )
+            )
+            );
 
             $detailParams[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID] =
                 $entityId;
 
-            $link = $this->createLink($this->get_parent()->get_url($detailParams), $img);
+            $link = $this->createLink($this->get_parent()->get_url($detailParams), $glyph->render());
             $this->reportingData->add_data_category_row($count, self::$COLUMN_ACTIONS, $link);
 
             $count ++;

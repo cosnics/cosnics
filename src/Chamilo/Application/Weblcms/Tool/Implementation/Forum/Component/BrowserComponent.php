@@ -655,7 +655,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $dropdownButton->addSubButton(
                 new SubButton(
                     Translation::get('Move', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('folder-open'),
+                    new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal'), null, 'fas'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],

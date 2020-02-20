@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -280,21 +281,21 @@ class BrowserComponent extends Manager implements TableSupport
             $commonActions->addButton(
                 new Button(
                     Translation::get('Add', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Add'),
+                    new FontAwesomeGlyph('plus'),
                     $this->get_create_group_url($this->get_group()),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
 
             $commonActions->addButton(
                 new Button(
                     Translation::get('Root', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Home'),
+                    new FontAwesomeGlyph('home'),
                     $this->get_group_viewing_url($this->get_root_group()),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
 
             $commonActions->addButton(
                 new Button(
                     Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    new FontAwesomeGlyph('folder'),
                     $this->get_url(array(self::PARAM_GROUP_ID => $this->get_group())),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
             $buttonToolbar->addButtonGroup($commonActions);
@@ -316,7 +317,7 @@ class BrowserComponent extends Manager implements TableSupport
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Edit'),
+                new FontAwesomeGlyph('pencil'),
                 $this->get_group_editing_url($group),
                 ToolbarItem::DISPLAY_ICON_AND_LABEL));
 
@@ -325,7 +326,7 @@ class BrowserComponent extends Manager implements TableSupport
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                    new FontAwesomeGlyph('times'),
                     $this->get_group_delete_url($group),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
         }
@@ -333,7 +334,7 @@ class BrowserComponent extends Manager implements TableSupport
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('AddUsers'),
-                Theme::getInstance()->getCommonImagePath('Action/Subscribe'),
+                new FontAwesomeGlyph('plus-circle'),
                 $this->get_group_suscribe_user_browser_url($group),
                 ToolbarItem::DISPLAY_ICON_AND_LABEL));
 
@@ -348,7 +349,7 @@ class BrowserComponent extends Manager implements TableSupport
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Truncate'),
-                    Theme::getInstance()->getCommonImagePath('Action/RecycleBin'),
+                    new FontAwesomeGlyph('trash'),
                     $this->get_group_emptying_url($group),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
         }
@@ -357,7 +358,7 @@ class BrowserComponent extends Manager implements TableSupport
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('TruncateNA'),
-                    Theme::getInstance()->getCommonImagePath('Action/RecycleBinNa'),
+                    new FontAwesomeGlyph('trash', array('text-muted')),
                     null,
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
         }
@@ -365,7 +366,7 @@ class BrowserComponent extends Manager implements TableSupport
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('Metadata', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Metadata'),
+                new FontAwesomeGlyph('info-circle'),
                 $this->get_group_metadata_url($group),
                 ToolbarItem::DISPLAY_ICON_AND_LABEL));
 

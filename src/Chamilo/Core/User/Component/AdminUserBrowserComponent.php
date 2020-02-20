@@ -12,12 +12,12 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -45,7 +45,7 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
         $this->checkAuthorization(Manager::context(), 'ManageUsers');
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -79,8 +79,10 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
         $parameters = parent::get_parameters();
         if (isset($this->buttonToolbarRenderer))
         {
-            $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+            $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
+                $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         }
+
         return $parameters;
     }
 
@@ -103,7 +105,7 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
 
             $buttonToolbar = new ButtonToolBar($this->get_url(parent::get_parameters()));
@@ -113,25 +115,26 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Add', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Add'),
+                        Translation::get('Add', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
                         $this->get_url(array(Application::PARAM_ACTION => self::ACTION_CREATE_USER)),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Report'),
-                        Theme::getInstance()->getCommonImagePath('Action/Reporting'),
-                        $this->get_reporting_url(),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                        new FontAwesomeGlyph('chart-pie', array(), null, 'fas'),
+                        $this->get_reporting_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Show', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_url(),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    Translation::get('Show', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $buttonToolbar->addButtonGroup($commonActions);
 

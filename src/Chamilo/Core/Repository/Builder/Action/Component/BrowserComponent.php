@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
@@ -57,10 +58,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         $html[] = ContentObjectRenditionImplementation::launch(
-            $this->get_root_content_object(),
-            ContentObjectRendition::FORMAT_HTML,
-            ContentObjectRendition::VIEW_FULL,
-            $this);
+            $this->get_root_content_object(), ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL,
+            $this
+        );
 
         $html[] = $this->get_creation_links($content_object);
         $html[] = '<div class="clearfix"></div>';
@@ -96,7 +96,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $buttonToolbarRenderer = parent::getButtonToolbarRenderer($content_object);
 
-        if (! $buttonToolbarRenderer instanceof ButtonToolBarRenderer)
+        if (!$buttonToolbarRenderer instanceof ButtonToolBarRenderer)
         {
             $buttonToolbar = new ButtonToolBar();
         }
@@ -112,15 +112,14 @@ class BrowserComponent extends Manager implements DelegateComponent
         $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
         $commonActions->addButton(
             new Button(
-                Translation::get('Preview', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Preview'),
-                $this->get_parent()->get_preview_content_object_url(),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL,
-                false,
-                $onclick,
-                '_blank'));
+                Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('desktop'),
+                $this->get_parent()->get_preview_content_object_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL, false,
+                $onclick, '_blank'
+            )
+        );
 
         $buttonToolbar->addButtonGroup($commonActions);
+
         return new ButtonToolBarRenderer($buttonToolbar);
     }
 }

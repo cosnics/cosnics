@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -102,15 +103,15 @@ class BrowseComponent extends Manager implements TableSupport
             
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Add', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Add'), 
+                    Translation::get('Add', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('plus'),
                     $this->get_create_course_type_url(), 
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('folder'),
                     $this->get_url(), 
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
@@ -123,9 +124,9 @@ class BrowseComponent extends Manager implements TableSupport
     }
 
     /**
-     * Returns the condition for the table
-     * 
-     * @return \libraries\storage\Condition
+     * @param string $object_table_class_name
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_table_condition($object_table_class_name)
     {

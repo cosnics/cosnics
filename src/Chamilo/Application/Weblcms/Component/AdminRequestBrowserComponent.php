@@ -17,6 +17,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
@@ -35,6 +36,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package application.lib.weblcms.weblcms_manager.component
  */
+
 /**
  * Weblcms component which allows the the platform admin to browse the request
  */
@@ -91,7 +93,7 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         $html[] = '<div style="clear: both;"></div>';
         $html[] = $this->buttonToolbarRenderer->render() . '<br />';
         $html[] = '<div style="float: left; padding-right: 20px; width: 18%; overflow: auto; height: 100%;">' .
-             $menu->render_as_tree() . '</div>';
+            $menu->render_as_tree() . '</div>';
         $html[] = '<div style="float: right; width: 80%;">';
         if ($this->request_view && $this->request_type)
         {
@@ -101,22 +103,23 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         $html[] = '<div style="clear: both;"></div>';
         $html[] = '</div>';
         $html[] = '</div>';
+
         return implode($html, "\n");
     }
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_url(),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
             $buttonToolbar->addButtonGroup($commonActions);
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
@@ -151,10 +154,12 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
             $conditions = array();
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_MOTIVATION),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_SUBJECT),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
 
             $search_conditions = new OrCondition($conditions);
         }
@@ -169,17 +174,20 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
             case self::PENDING_REQUEST_VIEW :
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION),
-                    new StaticConditionVariable(CourseRequest::NO_DECISION));
+                    new StaticConditionVariable(CourseRequest::NO_DECISION)
+                );
                 break;
             case self::ALLOWED_REQUEST_VIEW :
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION),
-                    new StaticConditionVariable(CourseRequest::ALLOWED_DECISION));
+                    new StaticConditionVariable(CourseRequest::ALLOWED_DECISION)
+                );
                 break;
             case self::DENIED_REQUEST_VIEW :
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION),
-                    new StaticConditionVariable(CourseRequest::DENIED_DECISION));
+                    new StaticConditionVariable(CourseRequest::DENIED_DECISION)
+                );
                 break;
         }
 
@@ -216,17 +224,23 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
             $redirect = new Redirect(
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
-                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER));
+                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
+                )
+            );
 
             $breadcrumbtrail->add(
-                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin')));
+                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
+            );
 
             $redirect = new Redirect(
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
                     DynamicTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
-                        self::package())));
+                        self::package()
+                    )
+                )
+            );
 
             $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));
         }

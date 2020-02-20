@@ -124,8 +124,8 @@ abstract class BlogLayout
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Edit'), 
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('pencil'),
                     $this->get_parent()->get_complex_content_object_item_update_url($complex_blog_item), 
                     ToolbarItem::DISPLAY_ICON));
         }

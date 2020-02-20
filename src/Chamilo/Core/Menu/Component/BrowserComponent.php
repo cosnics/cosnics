@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -132,7 +133,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                     new Button(
 
                         $translator->trans('Rights', [], Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Rights'),
+                        new FontAwesomeGlyph('lock'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS)),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )

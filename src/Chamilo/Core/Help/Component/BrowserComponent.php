@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -23,6 +24,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package help.lib.help_manager.component
  */
+
 /**
  * Weblcms component which allows the user to manage his or her user subscriptions
  */
@@ -40,7 +42,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -61,7 +63,8 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_user_html()
     {
         $parameters = $this->get_parameters();
-        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
+            $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
         $table = new HelpItemTable($this);
 
@@ -84,8 +87,8 @@ class BrowserComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $condition = new PatternMatchCondition(
-                new PropertyConditionVariable(HelpItem::class_name(), HelpItem::PROPERTY_NAME),
-                '*' . $query . '*');
+                new PropertyConditionVariable(HelpItem::class_name(), HelpItem::PROPERTY_NAME), '*' . $query . '*'
+            );
         }
 
         return $condition;
@@ -93,18 +96,20 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar(
-                $this->get_url(array(Manager::PARAM_HELP_ITEM => $this->get_help_item())));
+                $this->get_url(array(Manager::PARAM_HELP_ITEM => $this->get_help_item()))
+            );
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->get_url(array(Manager::PARAM_HELP_ITEM => $this->get_help_item())),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $buttonToolbar->addButtonGroup($commonActions);
 

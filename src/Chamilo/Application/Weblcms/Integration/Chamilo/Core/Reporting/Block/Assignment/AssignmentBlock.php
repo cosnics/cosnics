@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
@@ -39,9 +40,8 @@ class AssignmentBlock extends AssignmentReportingManager
 
         $course_id = $this->getCourseId();
 
-        $img = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Statistics') . '" title="' .
-            Translation::get('Details') . '" />';
         $count = 1;
+        $glyph = new FontAwesomeGlyph('pie-chart');
 
         $publicationsById = [];
 
@@ -83,7 +83,8 @@ class AssignmentBlock extends AssignmentReportingManager
             $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
                 AssignmentEntitiesTemplate::class_name();
             $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publicationId;
-            $link = $this->createLink($this->get_parent()->get_url($params), $img);
+
+            $link = $this->createLink($this->get_parent()->get_url($params), $glyph->render());
 
             $url = $this->getAssignmentUrl($course_id, $publicationId);
 

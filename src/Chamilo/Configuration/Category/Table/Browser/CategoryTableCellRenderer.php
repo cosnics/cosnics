@@ -3,6 +3,7 @@ namespace Chamilo\Configuration\Category\Table\Browser;
 
 use Chamilo\Configuration\Category\Interfaces\CategoryVisibilitySupported;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -18,6 +19,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package application.common.category_manager.component.category_browser
  */
+
 /**
  * Cell renderer for the learning object browser table
  */
@@ -34,17 +36,23 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             case CategoryTableColumnModel::CATEGORY :
                 $img = Theme::getInstance()->getCommonImagePath('TreemenuTypes/Category');
+
                 return '<img src="' . $img . '"alt="category" />';
             case PlatformCategory::PROPERTY_NAME :
                 $url = $this->get_component()->get_browse_categories_url($category->get_id());
+
                 return '<a href="' . $url . '" alt="' . $category->get_name() . '">' . $category->get_name() . '</a>';
             case CategoryTableColumnModel::SUBCATEGORIES :
                 $count = $this->get_component()->get_parent()->count_categories(
                     new EqualityCondition(
                         new PropertyConditionVariable($class_name, PlatformCategory::PROPERTY_PARENT),
-                        new StaticConditionVariable($category->get_id())));
+                        new StaticConditionVariable($category->get_id())
+                    )
+                );
+
                 return $count;
         }
+
         return parent::render_cell($column, $category);
     }
 
@@ -65,28 +73,31 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             if ($this->get_component()->get_parent()->allowed_to_change_category_visibility($category->get_id()))
             {
-                $image = 'Action/Visible';
+                $glyph = new FontAwesomeGlyph('eye');
                 $text = 'Visible';
-                if (! $category->get_visibility())
+
+                if (!$category->get_visibility())
                 {
-                    $image = 'Action/VisibleNa';
+                    $glyph = new FontAwesomeGlyph('eye', array('text-muted'));
                     $text = 'Invisible';
                 }
+
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get($text, null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath($image),
+                        Translation::get($text, null, Utilities::COMMON_LIBRARIES), $glyph,
                         $this->get_component()->get_toggle_visibility_category_url($category->get_id()),
-                        ToolbarItem::DISPLAY_ICON));
+                        ToolbarItem::DISPLAY_ICON
+                    )
+                );
             }
             else
             {
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('VisibleNA', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/VisibleNa'),
-                        null,
-                        ToolbarItem::DISPLAY_ICON));
+                        new FontAwesomeGlyph('eye', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                    )
+                );
             }
         }
 
@@ -94,29 +105,29 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Edit'),
-                    $this->get_component()->get_update_category_url($category->get_id()),
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                    $this->get_component()->get_update_category_url($category->get_id()), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('EditNA', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/EditNa'),
-                    null,
-                    ToolbarItem::DISPLAY_ICON));
+                    new FontAwesomeGlyph('pencil', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
         if ($this->get_component()->supports_impact_view($category->get_id()))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'),
-                    $this->get_component()->get_impact_view_url($category->get_id()),
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    $this->get_component()->get_impact_view_url($category->get_id()), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
         else
         {
@@ -124,21 +135,20 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Delete'),
-                        $this->get_component()->get_delete_category_url($category->get_id()),
-                        ToolbarItem::DISPLAY_ICON,
-                        true));
+                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        $this->get_component()->get_delete_category_url($category->get_id()), ToolbarItem::DISPLAY_ICON,
+                        true
+                    )
+                );
             }
             else
             {
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/DeleteNa'),
-                        null,
-                        ToolbarItem::DISPLAY_ICON,
-                        true));
+                        new FontAwesomeGlyph('times', array('text-muted')), null, ToolbarItem::DISPLAY_ICON, true
+                    )
+                );
             }
         }
 
@@ -146,38 +156,38 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Up'),
-                    $this->get_component()->get_move_category_url($category->get_id(), - 1),
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-up'),
+                    $this->get_component()->get_move_category_url($category->get_id(), - 1), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('MoveUpNA', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/UpNa'),
-                    null,
-                    ToolbarItem::DISPLAY_ICON));
+                    new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
         if ($category->get_display_order() < $count)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Down'),
-                    $this->get_component()->get_move_category_url($category->get_id(), 1),
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-down'),
+                    $this->get_component()->get_move_category_url($category->get_id(), 1), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('MoveDownNA', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/DownNa'),
-                    null,
-                    ToolbarItem::DISPLAY_ICON));
+                    new FontAwesomeGlyph('sort-down', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
         if ($this->get_component()->get_subcategories_allowed())
@@ -187,18 +197,21 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('Move', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Move'),
+                        new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal'), null, 'fas'),
                         $this->get_component()->get_change_category_parent_url($category->get_id()),
-                        ToolbarItem::DISPLAY_ICON));
+                        ToolbarItem::DISPLAY_ICON
+                    )
+                );
             }
             else
             {
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('MoveNA', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/MoveNa'),
-                        null,
-                        ToolbarItem::DISPLAY_ICON));
+                        new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal', 'text-muted'), null, 'fas'),
+                        null, ToolbarItem::DISPLAY_ICON
+                    )
+                );
             }
         }
 

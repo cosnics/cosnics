@@ -36,10 +36,9 @@ class BrowserComponent extends Manager
         $toolActions = array();
 
         $toolActions[] = new Button(
-            Translation::get('Download'),
-            new FontAwesomeGlyph('download'),
-            $this->get_url(array(self::PARAM_ACTION => self::ACTION_ZIP_AND_DOWNLOAD)),
-            Button::DISPLAY_ICON_AND_LABEL);
+            Translation::get('Download'), new FontAwesomeGlyph('download'),
+            $this->get_url(array(self::PARAM_ACTION => self::ACTION_ZIP_AND_DOWNLOAD)), Button::DISPLAY_ICON_AND_LABEL
+        );
 
         return $toolActions;
     }
@@ -52,45 +51,37 @@ class BrowserComponent extends Manager
         $showActions[] = new SubButtonHeader(Translation::get('ViewPeriodHeader'));
 
         $showActions[] = new SubButton(
-            Translation::get('PeriodAll', null, Utilities::COMMON_LIBRARIES),
-            Theme::getInstance()->getCommonImagePath('Action/Browser'),
+            Translation::get('PeriodAll', null, Utilities::COMMON_LIBRARIES), null,
             $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null)),
-            Button::DISPLAY_LABEL,
-            false,
-            $filter == '' ? 'selected' : 'not-selected');
+            Button::DISPLAY_LABEL, false, $filter == '' ? 'selected' : 'not-selected'
+        );
 
         $showActions[] = new SubButton(
-            Translation::get('PeriodToday', null, Utilities::COMMON_LIBRARIES),
-            Theme::getInstance()->getCommonImagePath('Action/Browser'),
-            $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
-                    self::PARAM_FILTER => self::FILTER_TODAY)),
-            Button::DISPLAY_LABEL,
-            false,
-            $filter == self::FILTER_TODAY ? 'selected' : 'not-selected');
+            Translation::get('PeriodToday', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+            array(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
+                self::PARAM_FILTER => self::FILTER_TODAY
+            )
+        ), Button::DISPLAY_LABEL, false, $filter == self::FILTER_TODAY ? 'selected' : 'not-selected'
+        );
 
         $showActions[] = new SubButton(
-            Translation::get('PeriodWeek', null, Utilities::COMMON_LIBRARIES),
-            Theme::getInstance()->getCommonImagePath('Action/Browser'),
-            $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
-                    self::PARAM_FILTER => self::FILTER_THIS_WEEK)),
-            Button::DISPLAY_LABEL,
-            false,
-            $filter == self::FILTER_THIS_WEEK ? 'selected' : 'not-selected');
+            Translation::get('PeriodWeek', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+            array(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
+                self::PARAM_FILTER => self::FILTER_THIS_WEEK
+            )
+        ), Button::DISPLAY_LABEL, false, $filter == self::FILTER_THIS_WEEK ? 'selected' : 'not-selected'
+        );
 
         $showActions[] = new SubButton(
-            Translation::get('PeriodMonth', null, Utilities::COMMON_LIBRARIES),
-            Theme::getInstance()->getCommonImagePath('Action/Browser'),
-            $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
-                    self::PARAM_FILTER => self::FILTER_THIS_MONTH)),
-            Button::DISPLAY_LABEL,
-            false,
-            $filter == self::FILTER_THIS_MONTH ? 'selected' : 'not-selected');
+            Translation::get('PeriodMonth', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+            array(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
+                self::PARAM_FILTER => self::FILTER_THIS_MONTH
+            )
+        ), Button::DISPLAY_LABEL, false, $filter == self::FILTER_THIS_MONTH ? 'selected' : 'not-selected'
+        );
 
         $showActions[] = new SubButtonDivider();
 
@@ -124,15 +115,14 @@ class BrowserComponent extends Manager
         {
             $conditions[] = new InequalityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(),
-                    ContentObjectPublication::PROPERTY_MODIFIED_DATE),
-                InequalityCondition::GREATER_THAN_OR_EQUAL,
-                new StaticConditionVariable($time));
+                    ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
+            );
         }
 
         $browser_type = $this->get_browser_type();
         if ($browser_type == ContentObjectPublicationListRenderer::TYPE_GALLERY ||
-             $browser_type == ContentObjectPublicationListRenderer::TYPE_SLIDESHOW)
+            $browser_type == ContentObjectPublicationListRenderer::TYPE_SLIDESHOW)
         {
             $classes = array();
 
@@ -150,19 +140,18 @@ class BrowserComponent extends Manager
                 foreach ($image_types as $image_type)
                 {
                     $image_conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable($class, $class::PROPERTY_FILENAME),
-                        '*.' . $image_type);
+                        new PropertyConditionVariable($class, $class::PROPERTY_FILENAME), '*.' . $image_type
+                    );
                 }
 
                 $image_condition = new OrCondition($image_conditions);
 
                 $image_subselect_conditions[] = new SubselectCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(),
-                        ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID),
-                    new PropertyConditionVariable($class, $class::PROPERTY_ID),
-                    $class::get_table_name(),
-                    $image_condition);
+                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
+                    ), new PropertyConditionVariable($class, $class::PROPERTY_ID), $class::get_table_name(),
+                    $image_condition
+                );
             }
 
             $conditions[] = new OrCondition($image_subselect_conditions);
@@ -182,9 +171,11 @@ class BrowserComponent extends Manager
             new TableFormAction(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD_SELECTED_PUBLICATIONS)),
-                Translation::get('DownloadSelected'),
-                false));
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD_SELECTED_PUBLICATIONS
+                    )
+                ), Translation::get('DownloadSelected'), false
+            )
+        );
     }
 
     /**

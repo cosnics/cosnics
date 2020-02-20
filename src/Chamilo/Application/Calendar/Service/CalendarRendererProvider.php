@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
@@ -130,13 +131,13 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         {
             $actions[] = new ToolbarItem(
                 Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Edit'),
+                new FontAwesomeGlyph('pencil'),
                 $this->getPublicationEditingUrl($event->getId()),
                 ToolbarItem::DISPLAY_ICON);
 
             $actions[] = new ToolbarItem(
                 Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                new FontAwesomeGlyph('times'),
                 $this->getPublicationDeletingUrl($event->getId()),
                 ToolbarItem::DISPLAY_ICON,
                 true);

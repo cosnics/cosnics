@@ -9,6 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
@@ -22,8 +23,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider implements
-    \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport
+class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider
+    implements \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport
 {
 
     /**
@@ -38,7 +39,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository $dataProviderRepository
      * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
      * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
-     * @param string[] $displayParameters;
+     * @param string[] $displayParameters ;
      */
     public function __construct(Application $renderer, User $dataUser, User $viewingUser, $displayParameters)
     {
@@ -76,23 +77,24 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         if ($event->getContext() == \Chamilo\Application\Weblcms\Manager::package())
         {
             $actions[] = new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Edit'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
                 $this->getRenderer()->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $event->getId())),
-                ToolbarItem::DISPLAY_ICON);
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $event->getId()
+                    )
+                ), ToolbarItem::DISPLAY_ICON
+            );
 
             $actions[] = new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->getRenderer()->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $event->getId())),
-                ToolbarItem::DISPLAY_ICON,
-                true);
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $event->getId()
+                    )
+                ), ToolbarItem::DISPLAY_ICON, true
+            );
         }
 
         return $actions;
@@ -114,13 +116,12 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         {
 
             if (method_exists(
-                $this->getRenderer()->get_parent(),
-                'convert_content_object_publication_to_calendar_event'))
+                $this->getRenderer()->get_parent(), 'convert_content_object_publication_to_calendar_event'
+            ))
             {
                 $object = $this->getRenderer()->get_parent()->convert_content_object_publication_to_calendar_event(
-                    $publication,
-                    $startTime,
-                    $endTime);
+                    $publication, $startTime, $endTime
+                );
             }
             else
             {
@@ -147,6 +148,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     public function getUrl($parameters = array(), $filterParameters = array(), $encodeEntities = false)
     {
         $redirect = new Redirect($parameters, $filterParameters, $encodeEntities);
+
         return $redirect->getUrl();
     }
 

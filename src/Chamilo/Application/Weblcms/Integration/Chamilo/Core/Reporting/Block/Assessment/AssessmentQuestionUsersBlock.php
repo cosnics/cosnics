@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\Asse
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -35,9 +36,6 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
             ComplexContentObjectItem::class_name(), 
             $question_id);
         
-        $img = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
-             Translation::get('Details') . '" />';
-        
         $users_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_users(
             $publication_id, 
             $course_id);
@@ -51,6 +49,8 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
         }
         
         $count = 0;
+        $glyph = new FontAwesomeGlyph('pie-chart');
+
         while ($user = $users_resultset->next_result())
         {
             $user_attempts = $user_question_attempts[$user->get_id()];
@@ -67,7 +67,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
                 $params = $this->get_parent()->get_parameters();
                 $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = AssessmentQuestionAttemptsUserTemplate::class_name();
                 $params[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $user->get_id();
-                $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $img . '</a>';
+                $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $glyph->render() . '</a>';
             }
             else
             {

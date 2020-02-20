@@ -30,52 +30,44 @@ class BrowserComponent extends Manager
     {
         $showActions = array();
         $filter = $this->getFilter();
-        
+
         $showActions[] = new SubButtonHeader(Translation::get('ViewPeriodHeader'));
-        
+
         $showActions[] = new SubButton(
-            Translation::get('PeriodAll', null, Utilities::COMMON_LIBRARIES), 
-            Theme::getInstance()->getCommonImagePath('Action/Browser'), 
-            $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null)), 
-            Button::DISPLAY_LABEL, 
-            false, 
-            $filter == '' ? 'selected' : 'not-selected');
-        
+            Translation::get('PeriodAll', null, Utilities::COMMON_LIBRARIES), null,
+            $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null)),
+            Button::DISPLAY_LABEL, false, $filter == '' ? 'selected' : 'not-selected'
+        );
+
         $showActions[] = new SubButton(
-            Translation::get('PeriodToday', null, Utilities::COMMON_LIBRARIES), 
-            Theme::getInstance()->getCommonImagePath('Action/Browser'), 
-            $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null, 
-                    self::PARAM_FILTER => self::FILTER_TODAY)), 
-            Button::DISPLAY_LABEL, 
-            false, 
-            $filter == self::FILTER_TODAY ? 'selected' : 'not-selected');
-        
+            Translation::get('PeriodToday', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+            array(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
+                self::PARAM_FILTER => self::FILTER_TODAY
+            )
+        ), Button::DISPLAY_LABEL, false, $filter == self::FILTER_TODAY ? 'selected' : 'not-selected'
+        );
+
         $showActions[] = new SubButton(
-            Translation::get('PeriodWeek', null, Utilities::COMMON_LIBRARIES), 
-            Theme::getInstance()->getCommonImagePath('Action/Browser'), 
-            $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null, 
-                    self::PARAM_FILTER => self::FILTER_THIS_WEEK)), 
-            Button::DISPLAY_LABEL, 
-            false, 
-            $filter == self::FILTER_THIS_WEEK ? 'selected' : 'not-selected');
-        
+            Translation::get('PeriodWeek', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+            array(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
+                self::PARAM_FILTER => self::FILTER_THIS_WEEK
+            )
+        ), Button::DISPLAY_LABEL, false, $filter == self::FILTER_THIS_WEEK ? 'selected' : 'not-selected'
+        );
+
         $showActions[] = new SubButton(
-            Translation::get('PeriodMonth', null, Utilities::COMMON_LIBRARIES), 
-            Theme::getInstance()->getCommonImagePath('Action/Browser'), 
-            $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null, 
-                    self::PARAM_FILTER => self::FILTER_THIS_MONTH)), 
-            Button::DISPLAY_LABEL, 
-            false, 
-            $filter == self::FILTER_THIS_MONTH ? 'selected' : 'not-selected');
-        
+            Translation::get('PeriodMonth', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+            array(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
+                self::PARAM_FILTER => self::FILTER_THIS_MONTH
+            )
+        ), Button::DISPLAY_LABEL, false, $filter == self::FILTER_THIS_MONTH ? 'selected' : 'not-selected'
+        );
+
         $showActions[] = new SubButtonDivider();
-        
+
         return $showActions;
     }
 
@@ -88,66 +80,63 @@ class BrowserComponent extends Manager
     {
         $conditions = array();
         $filter = Request::get(self::PARAM_FILTER);
-        
+
         switch ($filter)
         {
             case self::FILTER_TODAY :
                 $time = mktime(0, 0, 0, date('m', time()), date('d', time()), date('Y', time()));
                 $conditions[] = new InequalityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), 
-                        ContentObjectPublication::PROPERTY_MODIFIED_DATE), 
-                    InequalityCondition::GREATER_THAN_OR_EQUAL, 
-                    new StaticConditionVariable($time));
+                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                    ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
+                );
                 break;
             case self::FILTER_THIS_WEEK :
                 $time = strtotime('Next Monday', strtotime('-1 Week', time()));
                 $conditions[] = new InequalityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), 
-                        ContentObjectPublication::PROPERTY_MODIFIED_DATE), 
-                    InequalityCondition::GREATER_THAN_OR_EQUAL, 
-                    new StaticConditionVariable($time));
+                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                    ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
+                );
                 break;
             case self::FILTER_THIS_MONTH :
                 $time = mktime(0, 0, 0, date('m', time()), 1, date('Y', time()));
                 $conditions[] = new InequalityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), 
-                        ContentObjectPublication::PROPERTY_MODIFIED_DATE), 
-                    InequalityCondition::GREATER_THAN_OR_EQUAL, 
-                    new StaticConditionVariable($time));
+                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                    ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
+                );
                 break;
         }
-        
+
         return $conditions;
     }
 
     public function convert_content_object_publication_to_calendar_event($publication, $from_time, $to_time)
     {
         $calendar_event = ContentObject::factory(CalendarEvent::class_name());
-        
+
         $calendar_event->set_title($publication[ContentObject::PROPERTY_TITLE]);
         $calendar_event->set_description($publication[ContentObject::PROPERTY_DESCRIPTION]);
         $calendar_event->set_start_date($publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE]);
         $calendar_event->set_end_date($publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE]);
         $calendar_event->set_frequency(CalendarEvent::FREQUENCY_NONE);
-        
+
         return $calendar_event;
     }
 
     /**
      * "Overrides" the default value of the generic browser component.
-     * 
+     *
      * @return ObjectTableOrder
      */
     public function get_default_order_property()
     {
         return new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
-                ContentObjectPublication::PROPERTY_MODIFIED_DATE), 
-            SORT_DESC);
+                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+            ), SORT_DESC
+        );
     }
 
     public function get_additional_parameters()

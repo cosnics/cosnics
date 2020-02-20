@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
@@ -81,8 +82,8 @@ class BrowserComponent extends Manager implements TableSupport
             
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Create'), 
+                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('plus'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))));
             
             $buttonToolbar->addButtonGroup($commonActions);

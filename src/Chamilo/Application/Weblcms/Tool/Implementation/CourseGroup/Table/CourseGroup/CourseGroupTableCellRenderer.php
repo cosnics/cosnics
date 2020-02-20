@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
@@ -35,12 +36,15 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
         {
             case CourseGroup::PROPERTY_NAME :
                 if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT) ||
-                     $course_group->is_member($this->get_component()->get_user()))
+                    $course_group->is_member($this->get_component()->get_user()))
                 {
                     $url = $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_GROUP_DETAILS,
-                            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP => $course_group->get_id()));
+                            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP => $course_group->get_id()
+                        )
+                    );
+
                     return '<a href="' . $url . '">' . $course_group->get_name() . '</a>';
                 }
                 else
@@ -52,6 +56,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             case CourseGroupTableColumnModel::COLUMN_NUMBER_OF_MEMBERS :
                 return $course_group->count_members();
         }
+
         return parent::render_cell($column, $course_group);
     }
 
@@ -69,10 +74,10 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             $edit_url = $this->get_component()->get_url($parameters);
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Edit'),
-                    $edit_url,
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                    $edit_url, ToolbarItem::DISPLAY_ICON
+                )
+            );
 
             $parameters = array();
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
@@ -81,8 +86,8 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
 
             $confirm_messages = array();
             $confirm_messages[] = Translation::get('DeleteConfirm', array('NAME' => $course_group->geT_name())); // TODO
-                                                                                                                 // ::
-                                                                                                                 // Better
+            // ::
+            // Better
             if ($course_group->has_children())
             {
                 $confirm_messages[] = Translation::get('DeleteConfirmChildren');
@@ -91,26 +96,23 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'),
-                    $delete_url,
-                    ToolbarItem::DISPLAY_ICON,
-                    true,
-                    null,
-                    null,
-                    $confirm_message));
+                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    $delete_url, ToolbarItem::DISPLAY_ICON, true, null, null, $confirm_message
+                )
+            );
         }
 
         $user = $this->get_component()->get_user();
 
-        if (! $this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
-            if ($course_group->is_self_registration_allowed() && ($course_group->count_members() <
-                 $course_group->get_max_number_of_members() || $course_group->get_max_number_of_members() == 0))
+            if ($course_group->is_self_registration_allowed() &&
+                ($course_group->count_members() < $course_group->get_max_number_of_members() ||
+                    $course_group->get_max_number_of_members() == 0))
             {
-                if (! $course_group->is_member($user) && DataManager::more_subscriptions_allowed_for_user_in_group(
-                    $course_group->get_parent_id(),
-                    $user->get_id()))
+                if (!$course_group->is_member($user) && DataManager::more_subscriptions_allowed_for_user_in_group(
+                        $course_group->get_parent_id(), $user->get_id()
+                    ))
                 {
                     $parameters = array();
                     $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
@@ -118,10 +120,10 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
                     $subscribe_url = $this->get_component()->get_url($parameters);
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('Subscribe'),
-                            Theme::getInstance()->getCommonImagePath('Action/Subscribe'),
-                            $subscribe_url,
-                            ToolbarItem::DISPLAY_ICON));
+                            Translation::get('Subscribe'), new FontAwesomeGlyph('plus-circle'), $subscribe_url,
+                            ToolbarItem::DISPLAY_ICON
+                        )
+                    );
                 }
             }
         }
@@ -133,14 +135,14 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             $subscribe_url = $this->get_component()->get_url($parameters);
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Subscribe'),
-                    Theme::getInstance()->getCommonImagePath('Action/Subscribe'),
-                    $subscribe_url,
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('Subscribe'), new FontAwesomeGlyph('plus-circle'), $subscribe_url,
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
-        if (! $this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT) &&
-             $course_group->is_self_unregistration_allowed() && $course_group->is_member($user))
+        if (!$this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT) &&
+            $course_group->is_self_unregistration_allowed() && $course_group->is_member($user))
         {
             $parameters = array();
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
@@ -148,10 +150,10 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             $unsubscribe_url = $this->get_component()->get_url($parameters);
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Unsubscribe'),
-                    Theme::getInstance()->getCommonImagePath('Action/Unsubscribe'),
-                    $unsubscribe_url,
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('Unsubscribe'), new FontAwesomeGlyph('minus-square'), $unsubscribe_url,
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
         return $toolbar->as_html();

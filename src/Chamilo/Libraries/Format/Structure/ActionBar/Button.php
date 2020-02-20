@@ -14,8 +14,6 @@ class Button extends AbstractButton
 
     /**
      *
-     * @todo Move this to trait once everyone moves to PHP 5.6. Currently not working in trait due to bug
-     *       https://bugs.php.net/bug.php?id=65576
      * @param string $label
      * @param string $imagePath
      * @param string $action
@@ -23,9 +21,14 @@ class Button extends AbstractButton
      * @param boolean $confirmation
      * @param string $classes
      * @param string $target
+     *
+     * @todo Move this to trait once everyone moves to PHP 5.6. Currently not working in trait due to bug
+     *       https://bugs.php.net/bug.php?id=65576
      */
-    public function __construct($label = null, $imagePath = null, $action = null, $display = self :: DISPLAY_ICON_AND_LABEL, $confirmation = false, $classes = null,
-        $target = null)
+    public function __construct(
+        $label = null, $imagePath = null, $action = null, $display = self::DISPLAY_ICON_AND_LABEL,
+        $confirmation = false, $classes = null, $target = null
+    )
     {
         parent::__construct($label, $imagePath, $display, $classes);
         $this->initialize($action, $confirmation, $target);

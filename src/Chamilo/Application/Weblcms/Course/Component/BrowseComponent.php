@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -170,15 +171,15 @@ class BrowseComponent extends Manager implements TableSupport
             
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('folder'),
                     $this->get_url(), 
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Add', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Add'), 
+                    Translation::get('Add', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('plus'),
                     $this->get_create_course_url(), 
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
             

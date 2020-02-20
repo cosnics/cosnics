@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -56,7 +57,7 @@ class BrowserComponent extends Manager implements TableSupport
         if ($this->get_subcategories_allowed())
         {
             $html[] = '<div style="float: left; padding-right: 20px; width: 18%; overflow: auto; height: 100%;">' .
-                 $menu->render_as_tree() . '</div>';
+                $menu->render_as_tree() . '</div>';
         }
 
         $html[] = $this->get_user_html();
@@ -68,10 +69,11 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_user_html()
     {
         $parameters = array_merge(
-            $this->get_parameters(),
-            array(
+            $this->get_parameters(), array(
                 self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES,
-                self::PARAM_CATEGORY_ID => $this->get_category_id()));
+                self::PARAM_CATEGORY_ID => $this->get_category_id()
+            )
+        );
         $table = new CategoryTable($this);
         $html = array();
 
@@ -98,15 +100,16 @@ class BrowserComponent extends Manager implements TableSupport
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($class_name, PlatformCategory::PROPERTY_PARENT),
-            new StaticConditionVariable($cat_id));
+            new StaticConditionVariable($cat_id)
+        );
 
         $search = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($search) && ($search != ''))
         {
             $conditions = array();
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable($class_name, PlatformCategory::PROPERTY_NAME),
-                '*' . $search . '*');
+                new PropertyConditionVariable($class_name, PlatformCategory::PROPERTY_NAME), '*' . $search . '*'
+            );
             $orcondition = new OrCondition($conditions);
 
             $conditions = array();
@@ -114,6 +117,7 @@ class BrowserComponent extends Manager implements TableSupport
             $conditions[] = $condition;
             $condition = new AndCondition($conditions);
         }
+
         return $condition;
     }
 
@@ -125,7 +129,7 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_category_id()
     {
         $category_id = (Request::get(self::PARAM_CATEGORY_ID) ? Request::get(self::PARAM_CATEGORY_ID) : 0);
-        if (is_array($category_id) && ! empty($category_id))
+        if (is_array($category_id) && !empty($category_id))
         {
             $category_id = $category_id[0];
             $this->set_parameter(self::PARAM_CATEGORY_ID, $category_id);
@@ -136,20 +140,21 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar(
-                $this->get_url(array(self::PARAM_CATEGORY_ID => $this->get_category_id())));
+                $this->get_url(array(self::PARAM_CATEGORY_ID => $this->get_category_id()))
+            );
             $commonActions = new ButtonGroup();
 
             if ($this->get_parent()->allowed_to_add_category($this->get_category_id()))
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Add', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Add'),
-                        $this->get_create_category_url($this->get_category_id()),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                        Translation::get('Add', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
+                        $this->get_create_category_url($this->get_category_id()), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
 
             $buttonToolbar->addButtonGroup($commonActions);

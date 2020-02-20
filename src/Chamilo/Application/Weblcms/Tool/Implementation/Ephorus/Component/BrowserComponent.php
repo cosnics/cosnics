@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -131,17 +132,13 @@ class BrowserComponent extends Manager implements TableSupport
             $commonActions->addButton(
                 new Button(
                     Translation::get(
-                        'AddDocument',
-                        array(),
+                        'AddDocument', array(),
                         ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
-                    ),
-                    Theme::getInstance()->getCommonImagePath('Action/Add'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_PUBLISH_DOCUMENT
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    ), new FontAwesomeGlyph('plus'), $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_PUBLISH_DOCUMENT
+                    )
+                ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
