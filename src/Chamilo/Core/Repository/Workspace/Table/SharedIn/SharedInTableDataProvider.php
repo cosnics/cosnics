@@ -29,8 +29,8 @@ class SharedInTableDataProvider extends ShareTableDataProvider
     public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
         return $this->getContentObjectRelationService()->getWorkspacesForContentObject(
-            $this->getWorkspaceService(), 
-            $this->getSelectedContentObject());
+            $this->getWorkspaceService(), $this->getSelectedContentObject()
+        );
     }
 
     /**
@@ -40,7 +40,8 @@ class SharedInTableDataProvider extends ShareTableDataProvider
     public function count_data($condition)
     {
         return $this->getContentObjectRelationService()->countWorkspacesForContentObject(
-            $this->getSelectedContentObject());
+            $this->getSelectedContentObject()
+        );
     }
 
     /**
@@ -49,11 +50,12 @@ class SharedInTableDataProvider extends ShareTableDataProvider
      */
     protected function getContentObjectRelationService()
     {
-        if (! isset($this->contentObjectRelationService))
+        if (!isset($this->contentObjectRelationService))
         {
-            $this->contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $this->contentObjectRelationService =
+                new ContentObjectRelationService(new ContentObjectRelationRepository());
         }
-        
+
         return $this->contentObjectRelationService;
     }
 
@@ -63,6 +65,6 @@ class SharedInTableDataProvider extends ShareTableDataProvider
      */
     protected function getSelectedContentObject()
     {
-        return $this->get_table()->get_component()->get_object();
+        return $this->get_table()->get_component()->getContentObject();
     }
 }

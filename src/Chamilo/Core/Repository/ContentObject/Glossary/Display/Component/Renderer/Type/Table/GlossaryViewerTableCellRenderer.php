@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\GlossaryItem\Storage\DataClass\GlossaryItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -63,8 +64,8 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer impleme
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'), 
+                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('times'),
                     $component->get_complex_content_object_item_delete_url($glossary_item), 
                     ToolbarItem::DISPLAY_ICON, 
                     true));

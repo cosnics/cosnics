@@ -13,6 +13,7 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
@@ -398,7 +399,7 @@ abstract class Manager extends Application implements NoContextComponent
         {
             $toolbar_items[self::ACTION_DELETE_EXTERNAL_REPOSITORY] = new ToolbarItem(
                 Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                new FontAwesomeGlyph('times'),
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_DELETE_EXTERNAL_REPOSITORY,

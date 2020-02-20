@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -107,8 +108,8 @@ class GroupBrowserComponent extends Manager
         
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
+                new FontAwesomeGlyph('times'),
                 $this->get_url(
                     array(self::PARAM_ACTION => self::ACTION_DELETE_GROUP, self::PARAM_GROUP => $group->get_id())), 
                 ToolbarItem::DISPLAY_ICON));

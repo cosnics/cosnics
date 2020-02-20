@@ -77,7 +77,7 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
             $toolbar->add_item(
                 new ToolbarItem(
                     $this->getTranslator()->trans('Delete', [], Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'), $this->get_component()->get_url(
+                    new FontAwesomeGlyph('times'), $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE,
                         Manager::PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID => $record[RightsLocationEntityRightGroup::PROPERTY_ID]

@@ -225,7 +225,7 @@ class OrderingQuestionForm extends ContentObjectForm
                 {
                     $group[] = &$this->createElement(
                         'image', 'remove[' . $option_number . ']',
-                        Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                        new FontAwesomeGlyph('times'),
                         array('class' => 'remove_option', 'id' => 'remove_' . $option_number)
                     );
                 }

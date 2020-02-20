@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -98,7 +99,7 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                new FontAwesomeGlyph('times'),
                 $this->get_component()->get_content_object_deletion_url($content_object),
                 ToolbarItem::DISPLAY_ICON,
                 true));

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Component\Rende
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\Component\Renderer\GlossaryRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -109,8 +110,8 @@ class ListGlossaryRenderer extends GlossaryRenderer
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete'), 
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'), 
+                    Translation::get('Delete'),
+                    new FontAwesomeGlyph('times'),
                     $component->get_complex_content_object_item_delete_url($complex_content_object_item), 
                     ToolbarItem::DISPLAY_ICON, 
                     true));

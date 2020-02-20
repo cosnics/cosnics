@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Blog\Display\Component\Viewer;
 use Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass\Blog;
 use Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -133,8 +134,8 @@ abstract class BlogLayout
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'), 
+                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('times'),
                     $this->get_parent()->get_complex_content_object_item_delete_url($complex_blog_item), 
                     ToolbarItem::DISPLAY_ICON, 
                     true));

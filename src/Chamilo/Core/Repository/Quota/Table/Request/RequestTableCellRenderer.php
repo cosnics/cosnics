@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -125,7 +126,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'), $this->get_component()->get_url(
+                    new FontAwesomeGlyph('times'), $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE, Manager::PARAM_REQUEST_ID => $object->get_id()
                     )

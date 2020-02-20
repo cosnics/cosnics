@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -117,7 +118,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                new FontAwesomeGlyph('times'),
                 $this->get_component()->get_complex_content_object_item_delete_url($cloi->get_id()),
                 ToolbarItem::DISPLAY_ICON,
                 true));

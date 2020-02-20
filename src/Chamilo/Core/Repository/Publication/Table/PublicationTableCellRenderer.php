@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Publication\Table;
 
 use Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -56,7 +57,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                new FontAwesomeGlyph('times'),
                 $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE,

@@ -20,6 +20,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -60,7 +61,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
-        if (! RightsService::getInstance()->canViewContentObjects($this->get_user(), $this->getWorkspace()))
+        if (!RightsService::getInstance()->canViewContentObjects($this->get_user(), $this->getWorkspace()))
         {
             throw new NotAllowedException();
         }
@@ -76,7 +77,9 @@ class BrowserComponent extends Manager implements DelegateComponent
             $trail->add(
                 new Breadcrumb(
                     $this->get_url(),
-                    Translation::get('SearchResultsFor', null, Utilities::COMMON_LIBRARIES) . ' ' . $query));
+                    Translation::get('SearchResultsFor', null, Utilities::COMMON_LIBRARIES) . ' ' . $query
+                )
+            );
         }
 
         $filterData = FilterData::getInstance($this->getWorkspace());
@@ -126,14 +129,14 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function get_available_renderers()
     {
         return array(
-            ContentObjectRenderer::TYPE_TABLE,
-            ContentObjectRenderer::TYPE_GALLERY,
-            ContentObjectRenderer::TYPE_SLIDESHOW);
+            ContentObjectRenderer::TYPE_TABLE, ContentObjectRenderer::TYPE_GALLERY,
+            ContentObjectRenderer::TYPE_SLIDESHOW
+        );
     }
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
 
@@ -146,42 +149,62 @@ class BrowserComponent extends Manager implements DelegateComponent
                     new Button(
                         Translation::get(
                             'CreateObjectType',
-                            array('TYPE' => $template_registration->get_template()->translate('TypeName'))),
-                        Theme::getInstance()->getCommonImagePath('Action/Create'),
-                        $this->get_url(
-                            array(
-                                Application::PARAM_ACTION => self::ACTION_CREATE_CONTENT_OBJECTS,
-                                TypeSelector::PARAM_SELECTION => $filter_type)),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL,
-                        false,
-                        'btn-primary'));
+                            array('TYPE' => $template_registration->get_template()->translate('TypeName'))
+                        ), new FontAwesomeGlyph('plus'), $this->get_url(
+                        array(
+                            Application::PARAM_ACTION => self::ACTION_CREATE_CONTENT_OBJECTS,
+                            TypeSelector::PARAM_SELECTION => $filter_type
+                        )
+                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'btn-primary'
+                    )
+                );
             }
 
             $buttonToolbar->addItem(
                 new Button(
-                    Translation::get('ManageCategories'),
-                    Theme::getInstance()->getCommonImagePath('Action/Category'),
+                    Translation::get('ManageCategories'), new FontAwesomeGlyph('folder'),
                     $this->get_url(array(Application::PARAM_ACTION => self::ACTION_MANAGE_CATEGORIES)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $buttonToolbar->addItem(
                 new Button(
-                    Translation::get('ExportCategory'),
-                    Theme::getInstance()->getCommonImagePath('Action/Backup'),
-                    $this->get_url(
-                        array(
-                            Application::PARAM_ACTION => self::ACTION_EXPORT_CONTENT_OBJECTS,
-                            FilterData::FILTER_CATEGORY => FilterData::getInstance($this->getWorkspace())->get_filter_property(
-                                FilterData::FILTER_CATEGORY))),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    Translation::get('ExportCategory'), new FontAwesomeGlyph('upload'), $this->get_url(
+                    array(
+                        Application::PARAM_ACTION => self::ACTION_EXPORT_CONTENT_OBJECTS,
+                        FilterData::FILTER_CATEGORY => FilterData::getInstance($this->getWorkspace())
+                            ->get_filter_property(
+                                FilterData::FILTER_CATEGORY
+                            )
+                    )
+                ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $renderers = $this->get_available_renderers();
 
             if (count($renderers) > 1)
             {
+                switch ($this->get_renderer())
+                {
+                    case ContentObjectRenderer::TYPE_TABLE:
+                        $glyph = 'table';
+                        break;
+                    case ContentObjectRenderer::TYPE_GALLERY:
+                        $glyph = 'picture-o';
+                        break;
+                    case ContentObjectRenderer::TYPE_SLIDESHOW:
+                        $glyph = 'play-circle';
+                        break;
+                    default:
+                        $glyph = 'table';
+                }
+
                 $viewActions = new DropdownButton(
                     Translation::get($this->get_renderer() . 'View', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('View/' . $this->get_renderer()));
+                    new FontAwesomeGlyph($glyph)
+                );
                 $buttonToolbar->addItem($viewActions);
 
                 foreach ($renderers as $renderer)
@@ -201,22 +224,17 @@ class BrowserComponent extends Manager implements DelegateComponent
                         new SubButton(
                             Translation::get(
                                 (string) StringUtilities::getInstance()->createString($renderer)->upperCamelize() .
-                                     'View',
-                                    null,
-                                    Utilities::COMMON_LIBRARIES),
-                            Theme::getInstance()->getImagePath(
-                                'Chamilo\Core\Repository',
-                                'View/' . StringUtilities::getInstance()->createString($renderer)->upperCamelize()),
-                            $action,
-                            Button::DISPLAY_LABEL,
-                            false,
-                            $classes));
+                                'View', null, Utilities::COMMON_LIBRARIES
+                            ), null, $action, Button::DISPLAY_LABEL, false, $classes
+                        )
+                    );
                 }
             }
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer(
                 $buttonToolbar,
-                new FilterDataButtonSearchForm($this->get_url(), FilterData::getInstance($this->getWorkspace())));
+                new FilterDataButtonSearchForm($this->get_url(), FilterData::getInstance($this->getWorkspace()))
+            );
         }
 
         return $this->buttonToolbarRenderer;
@@ -227,11 +245,13 @@ class BrowserComponent extends Manager implements DelegateComponent
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
-            new StaticConditionVariable(ContentObject::STATE_NORMAL));
+            new StaticConditionVariable(ContentObject::STATE_NORMAL)
+        );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->get_user_id()));
+            new StaticConditionVariable($this->get_user_id())
+        );
 
         $types = DataManager::get_active_helper_types();
 
@@ -240,12 +260,14 @@ class BrowserComponent extends Manager implements DelegateComponent
             $conditions[] = new NotCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
-                    new StaticConditionVariable($type)));
+                    new StaticConditionVariable($type)
+                )
+            );
         }
 
         $filter_condition_renderer = ConditionFilterRenderer::factory(
-            FilterData::getInstance($this->getWorkspace()),
-            $this->getWorkspace());
+            FilterData::getInstance($this->getWorkspace()), $this->getWorkspace()
+        );
 
         $filter_condition = $filter_condition_renderer->render();
 
@@ -271,9 +293,10 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         return parent::get_additional_parameters(
             array(
-                self::PARAM_RENDERER,
-                ContentObject::PROPERTY_PARENT_ID,
-                \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID));
+                self::PARAM_RENDERER, ContentObject::PROPERTY_PARENT_ID,
+                \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID
+            )
+        );
     }
 
     /**

@@ -15,6 +15,9 @@
 
         <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\AssignmentPublicationService"
                  class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationService">
+            <argument key="$assignmentService"
+                      type="service"
+                      id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService"/>
             <argument key="$publicationContext"
                       type="string">Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\Assignment\EntryAttachment
             </argument>

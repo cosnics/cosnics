@@ -9,7 +9,7 @@ class ExternalLinkTableDataProvider extends DataClassTableDataProvider
 
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return new ArrayResultSet(array($this->get_component()->get_object()->get_synchronization_data()));
+        return new ArrayResultSet(array($this->get_component()->getContentObject()->get_synchronization_data()));
     }
 
     public function count_data($condition)

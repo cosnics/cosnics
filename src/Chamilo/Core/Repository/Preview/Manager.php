@@ -145,7 +145,7 @@ abstract class Manager extends Application
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('ResetDisplayPreview'),
-                        new FontAwesomeGlyph('repeat'),
+                        new FontAwesomeGlyph('undo'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_RESET)),
                         SubButton::DISPLAY_ICON_AND_LABEL,
                         true));

@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -120,7 +121,7 @@ class TreeNodeAttemptTableCellRenderer extends TableCellRenderer implements Tabl
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('DeleteAttempt'),
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                    new FontAwesomeGlyph('times'),
                     $delete_url,
                     ToolbarItem::DISPLAY_ICON,
                     true
