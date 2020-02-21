@@ -106,13 +106,13 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $legend_items = array();
 
         $legend_items[] = new ToolbarItem(
-            Translation::get('CourseUser'), Theme::getInstance()->getCommonImagePath('Treemenu/User'), null,
-            ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'legend'
+            Translation::get('CourseUser'), new FontAwesomeGlyph('user'), null, ToolbarItem::DISPLAY_ICON_AND_LABEL,
+            false, 'legend'
         );
 
         $legend_items[] = new ToolbarItem(
-            Translation::get('LinkedUser'), Theme::getInstance()->getCommonImagePath('Treemenu/UserPlatform'), null,
-            ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'legend'
+            Translation::get('LinkedUser'), new FontAwesomeGlyph('link'), null, ToolbarItem::DISPLAY_ICON_AND_LABEL,
+            false, 'legend'
         );
 
         $legend = new Toolbar();

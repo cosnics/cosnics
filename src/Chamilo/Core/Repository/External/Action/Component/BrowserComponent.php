@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\External\Action\Component;
 
+use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
 use Chamilo\Core\Repository\External\Action\Manager;
 use Chamilo\Core\Repository\External\Action\Menu;
 use Chamilo\Core\Repository\External\Renderer\Renderer;
@@ -11,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -33,9 +35,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $search_url = '#';
             $search = array();
-            
+
             $search['title'] = Translation::get('SearchResults');
-            
+
             $search['url'] = $search_url;
             $search['class'] = 'search_results';
             $extra[] = $search;
@@ -44,17 +46,17 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $search_url = null;
         }
-        
+
         $menu = new Menu(
-            Request::get(\Chamilo\Core\Repository\External\Manager::PARAM_EXTERNAL_REPOSITORY_ID), 
-            $this->get_parent(), 
-            $extra);
-        
+            Request::get(\Chamilo\Core\Repository\External\Manager::PARAM_EXTERNAL_REPOSITORY_ID), $this->get_parent(),
+            $extra
+        );
+
         if ($search_url)
         {
             $menu->forceCurrentUrl($search_url);
         }
-        
+
         $html = array();
         if ($menu->count_menu_items() > 0)
         {
@@ -62,7 +64,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html[] = $menu->render_as_tree();
             $html[] = '</div>';
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -70,19 +72,19 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        
+
         $html = array();
-        
+
         if (isset($query) && $query != '')
         {
             $this->set_parameter(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $query);
         }
-        
+
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
-        
+
         $html[] = '<div class="row">';
-        
+
         if ($this->get_menu() == null)
         {
             $menu = $this->render_menu();
@@ -95,23 +97,23 @@ class BrowserComponent extends Manager implements DelegateComponent
             $menu[] = '</div>';
             $menu = implode(PHP_EOL, $menu);
         }
-        
+
         if ($menu)
         {
             $html[] = $menu;
             $html[] = '<div class="col-md-10">';
         }
-        
+
         $html[] = Renderer::factory($this->get_parent()->get_renderer(), $this)->as_html();
-        
+
         if ($menu)
         {
             $html[] = '</div>';
         }
-        
+
         $html[] = '</div>';
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -122,33 +124,49 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             return $this->translate_search_query($query);
         }
-        
+
         return null;
     }
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
-            
+
             $renderers = $this->get_parent()->get_available_renderers();
-            
+
             if (count($renderers) > 1)
             {
                 $currentRenderer = $this->get_parent()->get_renderer();
-                
+
+                switch ($currentRenderer)
+                {
+                    case ContentObjectRenderer::TYPE_TABLE:
+                        $glyph = new FontAwesomeGlyph('table');
+                        break;
+                    case ContentObjectRenderer::TYPE_GALLERY:
+                        $glyph = new FontAwesomeGlyph('picture-o');
+                        break;
+                    case ContentObjectRenderer::TYPE_SLIDESHOW:
+                        $glyph = new FontAwesomeGlyph('play-circle');
+                        break;
+                    default:
+                        $glyph = new FontAwesomeGlyph('table');
+                }
+
                 $viewActions = new DropdownButton(
-                    Translation::get($currentRenderer . 'View', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('View/' . $currentRenderer));
+                    Translation::get($currentRenderer . 'View', null, Utilities::COMMON_LIBRARIES), $glyph->render()
+                );
                 $buttonToolbar->addItem($viewActions);
-                
+
                 foreach ($renderers as $renderer)
                 {
                     if ($currentRenderer != $renderer)
                     {
                         $action = $this->get_url(
-                            array(\Chamilo\Core\Repository\External\Manager::PARAM_RENDERER => $renderer));
+                            array(\Chamilo\Core\Repository\External\Manager::PARAM_RENDERER => $renderer)
+                        );
                         $classes = '';
                     }
                     else
@@ -156,27 +174,21 @@ class BrowserComponent extends Manager implements DelegateComponent
                         $action = '';
                         $classes = 'selected';
                     }
-                    
+
                     $viewActions->addSubButton(
                         new SubButton(
                             Translation::get(
                                 (string) StringUtilities::getInstance()->createString($renderer)->upperCamelize() .
-                                     'View', 
-                                    null, 
-                                    Utilities::COMMON_LIBRARIES), 
-                            Theme::getInstance()->getImagePath(
-                                'Chamilo\Core\Repository', 
-                                'View/' . StringUtilities::getInstance()->createString($renderer)->upperCamelize()), 
-                            $action, 
-                            Button::DISPLAY_LABEL, 
-                            false, 
-                            $classes));
+                                'View', null, Utilities::COMMON_LIBRARIES
+                            ), null, $action, Button::DISPLAY_LABEL, false, $classes
+                        )
+                    );
                 }
             }
-            
+
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-        
+
         return $this->buttonToolbarRenderer;
     }
 

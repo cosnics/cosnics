@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Storage\DataManager;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -22,7 +23,7 @@ class ChangeSectionComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
+        if (!$this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
@@ -54,7 +55,9 @@ class ChangeSectionComponent extends Manager
                     }
                 }
                 else
+                {
                     $tools[$tool->section][] = $tool;
+                }
             }
             else
             {
@@ -63,8 +66,8 @@ class ChangeSectionComponent extends Manager
         }
 
         $section = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            CourseSection::class_name(),
-            (int) $target);
+            CourseSection::class_name(), (int) $target
+        );
 
         $this->show_section_tools($section, $tools[$section->get_id()]);
     }
@@ -85,6 +88,7 @@ class ChangeSectionComponent extends Manager
             if ($tool->visible || $section->get_name() == 'course_admin')
             {
                 $lcms_action = 'make_invisible';
+                $glyph = new FontAwesomeGlyph('eye');
                 $visible_image = 'Action/Visible';
                 $new = '';
                 if ($parent->tool_has_new_publications($tool->name))
@@ -97,12 +101,13 @@ class ChangeSectionComponent extends Manager
             else
             {
                 $lcms_action = 'make_visible';
-                $visible_image = 'Action/Invisible';
+                $glyph = new FontAwesomeGlyph('eye', array('text-muted'));
                 $tool_image = 'Tool' . $tool->name . 'Na';
                 $link_class = ' class="invisible"';
             }
             $title = htmlspecialchars(
-                Translation::get(\Chamilo\Application\Weblcms\Tool\Manager::type_to_class($tool->name) . 'Title'));
+                Translation::get(\Chamilo\Application\Weblcms\Tool\Manager::type_to_class($tool->name) . 'Title')
+            );
             $row = $count / $number_of_columns;
             $col = $count % $number_of_columns;
             $html = array();
@@ -119,32 +124,33 @@ class ChangeSectionComponent extends Manager
                 if ($is_course_admin && $section->get_name() != 'course_admin')
                 {
                     $html[] = '<a href="' . $parent->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Manager::PARAM_COMPONENT_ACTION => $lcms_action,
-                            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => $tool->name)) . '"><img src="' .
-                         Theme::getInstance()->getCommonImagePath($visible_image) .
-                         '" style="vertical-align: middle;" alt=""/></a>';
+                            array(
+                                \Chamilo\Application\Weblcms\Manager::PARAM_COMPONENT_ACTION => $lcms_action,
+                                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => $tool->name
+                            )
+                        ) . '">' . $glyph->render() . '</a>';
                     $html[] = '&nbsp;&nbsp;&nbsp;';
                 }
 
                 // Show tool-icon + name
 
                 $html[] = '<img ' . $id . ' src="' . Theme::getInstance()->getImagePath(
-                    'Chamilo\Application\Weblcms\Tool\Implementation\CourseSections',
-                    $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '"/>';
+                        'Chamilo\Application\Weblcms\Tool\Implementation\CourseSections', $tool_image
+                    ) . '" style="vertical-align: middle;" alt="' . $title . '"/>';
                 $html[] = '&nbsp;';
                 $html[] = '<a href="' . $parent->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Manager::PARAM_COMPONENT_ACTION => null,
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => $tool->name),
-                    true) . '" ' . $link_class . '>';
+                        array(
+                            \Chamilo\Application\Weblcms\Manager::PARAM_COMPONENT_ACTION => null,
+                            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => $tool->name
+                        ), true
+                    ) . '" ' . $link_class . '>';
                 $html[] = $title;
                 $html[] = '</a>';
                 if ($section->get_type() == CourseSection::TYPE_TOOL)
                 {
                     $html[] = '</div>';
                     $html[] = '<script type="text/javascript">$("#tool_' . $tool->id .
-                         '").draggable({ handle: "div", revert: true, helper: "original"});</script>';
+                        '").draggable({ handle: "div", revert: true, helper: "original"});</script>';
                 }
 
                 $table->setCellContents($row, $col, implode(PHP_EOL, $html));

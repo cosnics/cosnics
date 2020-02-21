@@ -35,9 +35,9 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         switch ($column->get_name())
         {
             case CategoryTableColumnModel::CATEGORY :
-                $img = Theme::getInstance()->getCommonImagePath('TreemenuTypes/Category');
+                $glyph = new FontAwesomeGlyph('folder');
 
-                return '<img src="' . $img . '"alt="category" />';
+                return $glyph->render();
             case PlatformCategory::PROPERTY_NAME :
                 $url = $this->get_component()->get_browse_categories_url($category->get_id());
 

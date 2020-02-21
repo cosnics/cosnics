@@ -354,93 +354,22 @@ abstract class ContentObjectPublicationListRenderer
         );
         if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
         {
-            $visibility_img = 'Action/Invisible';
+            $glyph = new FontAwesomeGlyph('eye', array('text-muted'));
         }
 
         elseif ($publication[ContentObjectPublication::PROPERTY_FROM_DATE] == 0 &&
             $publication[ContentObjectPublication::PROPERTY_TO_DATE] == 0)
         {
-            $visibility_img = 'Action/Visible';
+            $glyph = new FontAwesomeGlyph('eye');
         }
         else
         {
-            $visibility_img = 'Action/Period';
+            $glyph = new FontAwesomeGlyph('clock-o');
             $visibility_url = 'javascript:void(0)';
         }
-        $visibility_link = '<a href="' . $visibility_url . '"><img src="' . Theme::getInstance()->getCommonImagePath(
-                $visibility_img
-            ) . '"  alt=""/></a>';
+        $visibility_link = '<a href="' . $visibility_url . '">' . $glyph->render() . '</a>';
 
         return $visibility_link;
-    }
-
-    /**
-     * Renders the means to edit the given publication.
-     *
-     * @param $publication ContentObjectPublication The publication.
-     *
-     * @return string The HTML rendering.
-     */
-    public function render_edit_action($publication)
-    {
-        $edit_url = $this->get_url(
-            array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE,
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-            ), array(), true
-        );
-
-        $glyph = new FontAwesomeGlyph('pencil');
-
-        return '<a href="' . $edit_url . '">' . $glyph->render() . '</a>';
-    }
-
-    public function render_top_action($publication)
-    {
-        return '<a href="#top"><img src="' . Theme::getInstance()->getCommonImagePath('Action/AjaxAdd') .
-            '"  alt=""/></a>';
-    }
-
-    /**
-     * Renders the means to delete the given publication.
-     *
-     * @param $publication ContentObjectPublication The publication.
-     *
-     * @return string The HTML rendering.
-     */
-    public function render_delete_action($publication)
-    {
-        $delete_url = $this->get_url(
-            array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE,
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-            ), array(), true
-        );
-
-        $glyph = new FontAwesomeGlyph('times');
-
-        return '<a href="' . $delete_url . '" onclick="return confirm(\'' .
-            addslashes(htmlentities(Translation::get('ConfirmYourChoice'))) . '\');">' . $glyph->render() . '</a>';
-    }
-
-    /**
-     * Renders the means to give feedback to the given publication
-     *
-     * @param $publication ContentObjectPublication The publication
-     */
-    public function render_feedback_action($publication)
-    {
-        $feedback_url = $this->get_url(
-            array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => 'view'
-            ), array(), true
-        );
-        $feedback_link = '<a href="' . $feedback_url . '"><img src="' . Theme::getInstance()->getCommonImagePath(
-                'Action/Browser'
-            ) . '" alt=""/></a>';
-
-        return $feedback_link;
     }
 
     /**
@@ -1005,31 +934,31 @@ abstract class ContentObjectPublicationListRenderer
                 $publication[ContentObjectPublication::PROPERTY_TO_DATE] == 0)
             {
                 $variable = 'PeriodForever';
-                $visibility_image = 'Action/Period';
+                $glyph = new FontAwesomeGlyph('clock-o');
             }
             else
             {
                 if (time() < $publication[ContentObjectPublication::PROPERTY_FROM_DATE])
                 {
                     $variable = 'PeriodBefore';
-                    $visibility_image = 'Action/PeriodBefore';
+                    $glyph = new FontAwesomeGlyph('history', array(), null, 'fas');
                 }
                 elseif (time() > $publication[ContentObjectPublication::PROPERTY_TO_DATE])
                 {
                     $variable = 'PeriodAfter';
+                    $glyph = new FontAwesomeGlyph('history', array('fa-flip-horizontal'), null, 'fas');
                     $visibility_image = 'Action/PeriodAfter';
                 }
                 else
                 {
                     $variable = 'PeriodCurrent';
-                    $visibility_image = 'Action/Period';
+                    $glyph = new FontAwesomeGlyph('clock-o');
                 }
             }
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get($variable, null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath($visibility_image), $this->get_url(
+                    Translation::get($variable, null, Utilities::COMMON_LIBRARIES), $glyph, $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
@@ -1040,19 +969,18 @@ abstract class ContentObjectPublicationListRenderer
 
             if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
             {
-                $visibility_image = 'Action/Invisible';
+                $glyph = new FontAwesomeGlyph('eye', array('text-muted'));
                 $visibilityTranslation = Translation::get('MakeVisible', null, Manager::context());
             }
             else
             {
+                $glyph = new FontAwesomeGlyph('eye');
                 $visibilityTranslation = Translation::get('MakeInvisible', null, Manager::context());
-                $visibility_image = 'Action/Visible';
             }
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    $visibilityTranslation, Theme::getInstance()->getCommonImagePath($visibility_image),
-                    $visibility_url, ToolbarItem::DISPLAY_ICON
+                    $visibilityTranslation, $glyph, $visibility_url, ToolbarItem::DISPLAY_ICON
                 )
             );
 

@@ -18,6 +18,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -97,7 +98,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
             $toolActions->addButton(
                 new Button(
-                    Translation::get('ExportIcal'), Theme::getInstance()->getCommonImagePath('Export/Csv'), $ical_url
+                    Translation::get('ExportIcal'), new FontAwesomeGlyph('upload'), $ical_url
                 )
             );
 
@@ -114,8 +115,8 @@ class ViewerComponent extends Manager implements DelegateComponent
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Edit'), $editUrl
+                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                        $editUrl
                     )
                 );
             }
@@ -131,8 +132,8 @@ class ViewerComponent extends Manager implements DelegateComponent
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Delete'), $deleteUrl
+                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        $deleteUrl
                     )
                 );
             }
