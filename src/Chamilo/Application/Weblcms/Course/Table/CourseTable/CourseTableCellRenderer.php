@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Course\Table\CourseTable;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
@@ -85,24 +86,25 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
         
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('ViewCourseHome'), 
-                Theme::getInstance()->getCommonImagePath('Action/Home'), 
+                Translation::get('ViewCourseHome'),
+                new FontAwesomeGlyph('home'),
                 $this->get_component()->get_view_course_home_url($course[Course::PROPERTY_ID]), 
                 ToolbarItem::DISPLAY_ICON));
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
-                $this->get_component()->get_update_course_url($course[Course::PROPERTY_ID]), 
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
+                new FontAwesomeGlyph('pencil'),
+                $this->get_component()->get_update_course_url($course[Course::PROPERTY_ID]),
                 ToolbarItem::DISPLAY_ICON));
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
-                $this->get_component()->get_delete_course_url($course[Course::PROPERTY_ID]), 
-                ToolbarItem::DISPLAY_ICON, 
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
+                new FontAwesomeGlyph('times'),
+                $this->get_component()->get_delete_course_url($course[Course::PROPERTY_ID]),
+                ToolbarItem::DISPLAY_ICON,
+                true));
                 true));
         
         return $toolbar->as_html();
