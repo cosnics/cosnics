@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -28,18 +29,13 @@ class CourseUserAssignmentInformationBlock extends AssignmentReportingManager
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
             array(
-                Translation::get('Title'),
-                Translation::get('NumberOfSubmissions'),
-                Translation::get('LastSubmission'),
-                Translation::get('NumberOfFeedbacks'),
-                Translation::get('LastScore'),
-                Translation::get('Submissions')
+                Translation::get('Title'), Translation::get('NumberOfSubmissions'), Translation::get('LastSubmission'),
+                Translation::get('NumberOfFeedbacks'), Translation::get('LastScore'), Translation::get('Submissions')
             )
         );
 
-        $userId = $this->get_user_id();
-        $img = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
-            Translation::get('Details') . '" />';
+        $userId = $this->get_user_id();;
+        $glyph = new FontAwesomeGlyph('pie-chart');
 
         $courseId = $this->get_parent()->get_parent()->get_parent()->get_parameter(
             \Chamilo\Application\Weblcms\Manager::PARAM_COURSE
@@ -83,19 +79,16 @@ class CourseUserAssignmentInformationBlock extends AssignmentReportingManager
 
             $params_detail[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] =
                 $publication[ContentObjectPublication::PROPERTY_ID];
-            $link = $this->createLink($this->get_parent()->get_url($params_detail), $img);
+            $link = $this->createLink($this->get_parent()->get_url($params_detail), $glyph->render());
 
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row(
-                $key,
-                Translation::get('Title'),
+                $key, Translation::get('Title'),
                 $this->createLink($url_title, $publication[ContentObject::PROPERTY_TITLE], '_blank')
             );
 
             $reporting_data->add_data_category_row(
-                $key,
-                Translation::get('NumberOfSubmissions'),
-                $entryStatistics[AssignmentRepository::ENTRIES_COUNT]
+                $key, Translation::get('NumberOfSubmissions'), $entryStatistics[AssignmentRepository::ENTRIES_COUNT]
             );
 
             $lastScore = $this->get_score_bar(

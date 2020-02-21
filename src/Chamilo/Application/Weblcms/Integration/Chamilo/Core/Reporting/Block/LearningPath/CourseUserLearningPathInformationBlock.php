@@ -15,6 +15,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -53,8 +54,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
 
-        $img = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
-            Translation::get('Details') . '" />';
+        $glyph = new FontAwesomeGlyph('pie-chart');
 
         $conditions = array();
         $conditions[] = new EqualityCondition(
@@ -111,7 +111,9 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
             $params_detail[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_USER_ID] =
                 $this->get_user_id();
 
-            $link = '<a href="' . $this->get_parent()->get_url($params_detail) . '" target="_blank">' . $img . '</a>';
+            $link =
+                '<a href="' . $this->get_parent()->get_url($params_detail) . '" target="_blank">' . $glyph->render() .
+                '</a>';
 
             $user = new User();
             $user->setId($this->get_user_id());
