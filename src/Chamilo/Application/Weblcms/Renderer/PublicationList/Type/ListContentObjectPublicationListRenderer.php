@@ -109,6 +109,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      * @param $publication ContentObjectPublication The publication.
      * @param $first boolean True if the publication is the first in the list it is a part of.
      * @param $last boolean True if the publication is the last in the list it is a part of.
+     *
      * @return string The rendered HTML.
      */
     public function render_publication($publication, $first = false, $last = false, $position = 0)
@@ -153,6 +154,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     /**
      *
      * @param string[] $publication
+     *
      * @return string
      */
     public function renderPublicationBody($publication)
@@ -171,6 +173,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     /**
      *
      * @param string[] $publication
+     *
      * @return string
      */
     public function renderPublicationActions($publication)
@@ -188,10 +191,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $buttonGroup = new ButtonGroup();
 
         $dropdownButton = new DropdownButton(
-            Translation::get('Actions'),
-            new FontAwesomeGlyph('cog'),
-            Button::DISPLAY_ICON,
-            'btn-link');
+            Translation::get('Actions'), new FontAwesomeGlyph('cog'), Button::DISPLAY_ICON, 'btn-link'
+        );
         $dropdownButton->setDropdownClasses('dropdown-menu-right');
 
         $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];
@@ -202,44 +203,45 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $details_url = $this->get_url(
             array(
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW));
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW
+            )
+        );
         $dropdownButton->addSubButton(
             new SubButton(
-                Translation::get('ViewDetails', null, Manager::context()),
-                Theme::getInstance()->getCommonImagePath('Action/Details'),
-                $details_url,
-                SubButton::DISPLAY_LABEL));
+                Translation::get('ViewDetails', null, Manager::context()), null, $details_url, SubButton::DISPLAY_LABEL
+            )
+        );
 
         if ($content_object instanceof ComplexContentObjectSupport)
         {
             $dropdownButton->addSubButton(
                 new SubButton(
-                    Translation::get('DisplayComplex'),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_complex_display_url($publication_id),
-                    SubButton::DISPLAY_LABEL));
+                    Translation::get('DisplayComplex'), null, $this->get_complex_display_url($publication_id),
+                    SubButton::DISPLAY_LABEL
+                )
+            );
         }
 
         $has_edit_right = $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication);
 
         if ($has_edit_right && $publication[ContentObjectPublication::PROPERTY_TOOL] == self::TOOL_TYPE_ANNOUNCEMENT)
         {
-            if (! $publication[ContentObjectPublication::PROPERTY_EMAIL_SENT] &&
-                 $this->isPublicationVisible($publication))
+            if (!$publication[ContentObjectPublication::PROPERTY_EMAIL_SENT] &&
+                $this->isPublicationVisible($publication))
             {
                 $email_url = $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MAIL_PUBLICATION));
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MAIL_PUBLICATION
+                    )
+                );
 
                 $buttonGroup->addButton(
                     new Button(
-                        Translation::get('SendByEMail'),
-                        new FontAwesomeGlyph('envelope'),
-                        $email_url,
-                        Button::DISPLAY_ICON,
-                        true,
-                        'btn-link'));
+                        Translation::get('SendByEMail'), new FontAwesomeGlyph('envelope'), $email_url,
+                        Button::DISPLAY_ICON, true, 'btn-link'
+                    )
+                );
             }
         }
 
@@ -248,23 +250,23 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $canEditContentObject = $repositoryRightsService->canEditContentObject($this->get_user(), $content_object);
         $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
-            $this->get_user(),
-            new ContentObjectPublication($publication),
-            $this->tool_browser->get_application()->get_course());
+            $this->get_user(), new ContentObjectPublication($publication),
+            $this->tool_browser->get_application()->get_course()
+        );
 
         if ($canEditContentObject || $canEditPublicationContentObject)
         {
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('EditContentObject', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('pencil'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_CONTENT_OBJECT,
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id)),
-                    Button::DISPLAY_ICON,
-                    false,
-                    'btn-link'));
+                    new FontAwesomeGlyph('pencil'), $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_CONTENT_OBJECT,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                    )
+                ), Button::DISPLAY_ICON, false, 'btn-link'
+                )
+            );
         }
 
         if ($has_edit_right)
@@ -276,36 +278,39 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id)),
-                    SubButton::DISPLAY_LABEL));
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                        )
+                    ), SubButton::DISPLAY_LABEL
+                )
+            );
 
-            if ($content_object instanceof ComplexContentObjectSupport && ($content_object->get_owner_id() ==
-                 $this->get_tool_browser()->get_user_id()))
+            if ($content_object instanceof ComplexContentObjectSupport &&
+                ($content_object->get_owner_id() == $this->get_tool_browser()->get_user_id()))
             {
                 if (\Chamilo\Core\Repository\Builder\Manager::exists($content_object->package()))
                 {
                     $dropdownButton->addSubButton(
                         new SubButton(
-                            Translation::get('BuildComplexObject', null, Utilities::COMMON_LIBRARIES),
-                            Theme::getInstance()->getCommonImagePath('Action/Build'),
-                            $this->get_complex_builder_url($publication_id),
-                            SubButton::DISPLAY_LABEL));
+                            Translation::get('BuildComplexObject', null, Utilities::COMMON_LIBRARIES), null,
+                            $this->get_complex_builder_url($publication_id), SubButton::DISPLAY_LABEL
+                        )
+                    );
 
                     $dropdownButton->addSubButton(
                         new SubButton(
-                            Translation::get('Preview', null, Utilities::COMMON_LIBRARIES),
-                            Theme::getInstance()->getCommonImagePath('Action/Preview'),
-                            $this->get_complex_display_url($publication_id),
-                            SubButton::DISPLAY_LABEL));
+                            Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), null,
+                            $this->get_complex_display_url($publication_id), SubButton::DISPLAY_LABEL
+                        )
+                    );
                 }
                 else
                 {
                     $dropdownButton->addSubButton(
                         new SubButton(
-                            Translation::get('BuildPreview', null, Utilities::COMMON_LIBRARIES),
-                            Theme::getInstance()->getCommonImagePath('Action/BuildPreview'),
-                            $this->get_complex_display_url($publication_id),
-                            SubButton::DISPLAY_LABEL));
+                            Translation::get('BuildPreview', null, Utilities::COMMON_LIBRARIES), null,
+                            $this->get_complex_display_url($publication_id), SubButton::DISPLAY_LABEL
+                        )
+                    );
                 }
             }
 
@@ -318,34 +323,36 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
             if ($show_move)
             {
-                if (! $first_row)
+                if (!$first_row)
                 {
                     $dropdownButton->addSubButton(
                         new SubButton(
-                            Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES),
-                            Theme::getInstance()->getCommonImagePath('Action/Up'),
-                            $this->get_url(
-                                array(
-                                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
-                                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
-                                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => $true_up,
-                                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $publication_type)),
-                            SubButton::DISPLAY_LABEL));
+                            Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => $true_up,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $publication_type
+                            )
+                        ), SubButton::DISPLAY_LABEL
+                        )
+                    );
                 }
 
-                if (! $last_row)
+                if (!$last_row)
                 {
                     $dropdownButton->addSubButton(
                         new SubButton(
-                            Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES),
-                            Theme::getInstance()->getCommonImagePath('Action/Down'),
-                            $this->get_url(
-                                array(
-                                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
-                                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
-                                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => $true_down,
-                                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $publication_type)),
-                            SubButton::DISPLAY_LABEL));
+                            Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => $true_down,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $publication_type
+                            )
+                        ), SubButton::DISPLAY_LABEL
+                        )
+                    );
                 }
             }
 
@@ -353,7 +360,9 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_TOGGLE_VISIBILITY,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $publication_type));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $publication_type
+                )
+            );
 
             // New functionality in old code
 
@@ -395,35 +404,33 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
             if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
             {
-                $visibility_image = 'Action/Invisible';
                 $visibilityTranslation = Translation::get('MakeVisible', null, Manager::context());
             }
             else
             {
                 $visibilityTranslation = Translation::get('MakeInvisible', null, Manager::context());
-                $visibility_image = 'Action/Visible';
             }
 
             $dropdownButton->addSubButton(
                 new SubButton(
-                    $visibilityTranslation,
-                    Theme::getInstance()->getCommonImagePath($visibility_image),
-                    $visibility_url,
-                    SubButton::DISPLAY_LABEL));
+                    $visibilityTranslation, null, $visibility_url, SubButton::DISPLAY_LABEL
+                )
+            );
 
             // Move the publication
             if ($this->get_tool_browser()->get_parent() instanceof Categorizable &&
-                 $this->get_tool_browser()->hasCategories())
+                $this->get_tool_browser()->hasCategories())
             {
                 $dropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('MoveToCategory', null, Manager::context()),
-                        Theme::getInstance()->getCommonImagePath('Action/Move'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id)),
-                        SubButton::DISPLAY_LABEL));
+                        Translation::get('MoveToCategory', null, Manager::context()), null, $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                        )
+                    ), SubButton::DISPLAY_LABEL
+                    )
+                );
             }
         }
 
@@ -433,36 +440,37 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         {
             $dropdownButton->addSubButton(
                 new SubButton(
-                    Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Rights'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id)),
-                    SubButton::DISPLAY_LABEL));
+                    Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                    )
+                ), SubButton::DISPLAY_LABEL
+                )
+            );
         }
 
         if ($this->is_allowed(WeblcmsRights::DELETE_RIGHT, $publication))
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE,
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id)),
-                    Button::DISPLAY_ICON,
-                    Translation::get('ConfirmDeletePublication', null, 'Chamilo\Application\Weblcms'),
-                    'btn-link'));
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                        )
+                    ), Button::DISPLAY_ICON,
+                    Translation::get('ConfirmDeletePublication', null, 'Chamilo\Application\Weblcms'), 'btn-link'
+                )
+            );
         }
 
         if (method_exists($this->get_tool_browser()->get_parent(), 'addContentObjectPublicationButtons'))
         {
             $this->get_tool_browser()->get_parent()->addContentObjectPublicationButtons(
-                $publication,
-                $buttonGroup,
-                $dropdownButton);
+                $publication, $buttonGroup, $dropdownButton
+            );
         }
 
         $buttonGroup->addButton($dropdownButton);
@@ -475,6 +483,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     /**
      *
      * @param string[] $publication
+     *
      * @return boolean
      */
     public function hasPublicationBeenModified($publication)
@@ -483,8 +492,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $publicationModificationDate = $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE];
 
         $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(),
-            $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+            ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+        );
 
         $publicationModified = $publicationModificationDate > $publicationCreationDate;
         $contentObjectModified = $contentObject->get_modification_date() > $publicationCreationDate;
@@ -504,6 +513,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      * Returns whether or not the publication is visible
      *
      * @param $publication
+     *
      * @return bool
      */
     protected function isPublicationVisible($publication)
@@ -527,6 +537,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     /**
      *
      * @param string[] $publication
+     *
      * @return string
      */
     public function renderVisiblePublicationDate($publication)
@@ -535,8 +546,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $publicationModificationDate = $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE];
 
         $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(),
-            $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+            ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+        );
 
         $publicationModified = $publicationModificationDate > $publicationCreationDate;
         $contentObjectModified = $contentObject->get_modification_date() > $publicationCreationDate;
@@ -590,20 +601,24 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     /**
      *
      * @param string[] $publication
+     *
      * @return string
      */
     public function getTitleUrl($publication)
     {
         $titleParameters = array(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]);
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+        );
 
         if ($this->get_content_object_from_publication($publication) instanceof ComplexContentObjectSupport)
         {
-            $titleParameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
+            $titleParameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
+                \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
         }
         else
         {
-            $titleParameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
+            $titleParameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
+                \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
         }
 
         return $this->get_url($titleParameters);
@@ -612,6 +627,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     /**
      *
      * @param string[] $publication
+     *
      * @return string
      */
     public function renderPublicationHeader($publication)
@@ -623,7 +639,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $html[] = '<div class="col-xs-12 col-sm-10 panel-publication-header-title">';
         $html[] = '<h3>';
         $html[] = '<a class="title" href="' . $this->getTitleUrl($publication) . '">' . $this->render_title(
-            $publication) . '</a>';
+                $publication
+            ) . '</a>';
         $html[] = '<span class="labels">' . $this->renderPublicationLabels($publication) . '</span>';
         $html[] = '</h3>';
         $html[] = '<small>' . $this->render_repository_viewer($publication) . '</small>';
@@ -644,6 +661,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     /**
      *
      * @param string[] $publication
+     *
      * @return string
      */
     public function renderPublicationLabels($publication)
@@ -658,7 +676,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
             $checkboxHtml[] = '<span class="label-checkbox checkbox checkbox-primary">';
             $checkboxHtml[] = '<input type="checkbox" class="publication-select styled styled-primary" name="' .
-                 Manager::PARAM_PUBLICATION . '[]" value="' . $publication[ContentObjectPublication::PROPERTY_ID] . '"/>';
+                Manager::PARAM_PUBLICATION . '[]" value="' . $publication[ContentObjectPublication::PROPERTY_ID] .
+                '"/>';
             $checkboxHtml[] = '<label></label>';
             $checkboxHtml[] = '</span>';
 
@@ -672,19 +691,20 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         else
         {
             $hasLimitedPeriod = $publication[ContentObjectPublication::PROPERTY_FROM_DATE] != 0 &&
-                 $publication[ContentObjectPublication::PROPERTY_TO_DATE] != 0;
+                $publication[ContentObjectPublication::PROPERTY_TO_DATE] != 0;
 
             if ($hasLimitedPeriod)
             {
                 if (time() < $publication[ContentObjectPublication::PROPERTY_FROM_DATE])
                 {
                     $html[] = '<span class="label label-warning">' . Translation::get('PublicationLabelNotYetVisible') .
-                         '</span>';
+                        '</span>';
                 }
                 elseif (time() > $publication[ContentObjectPublication::PROPERTY_TO_DATE])
                 {
-                    $html[] = '<span class="label label-warning">' . Translation::get('PublicationLabelNoLongerVisible') .
-                         '</span>';
+                    $html[] =
+                        '<span class="label label-warning">' . Translation::get('PublicationLabelNoLongerVisible') .
+                        '</span>';
                 }
             }
         }
@@ -710,6 +730,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     /**
      *
      * @param string[] $publication
+     *
      * @return string
      */
     public function renderPublicationFooter($publication)
@@ -739,6 +760,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     /**
      *
      * @param string $publication
+     *
      * @return string
      */
     public function renderVisibilityData($publication)
@@ -752,7 +774,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $html[] = '</span>';
         }
         elseif ($publication[ContentObjectPublication::PROPERTY_FROM_DATE] != 0 ||
-             $publication[ContentObjectPublication::PROPERTY_TO_DATE] != 0)
+            $publication[ContentObjectPublication::PROPERTY_TO_DATE] != 0)
         {
             $html[] = '<span class="glyphicon glyphicon-eye-open"></span>';
             $html[] = $this->render_publication_period($publication);
@@ -770,10 +792,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         if (is_null($this->pager))
         {
             $this->pager = new Pager(
-                $this->getNumberOfItemsPerPage(),
-                1,
-                $this->getNumberOfItems(),
-                $this->getCurrentPageNumber());
+                $this->getNumberOfItemsPerPage(), 1, $this->getNumberOfItems(), $this->getCurrentPageNumber()
+            );
         }
 
         return $this->pager;
@@ -802,8 +822,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         if (is_null($this->numberOfItemsPerPage))
         {
             $this->numberOfItemsPerPage = $this->get_tool_browser()->getRequest()->query->get(
-                self::PARAM_PER_PAGE,
-                self::DEFAULT_PER_PAGE);
+                self::PARAM_PER_PAGE, self::DEFAULT_PER_PAGE
+            );
         }
 
         return $this->numberOfItemsPerPage;
@@ -855,6 +875,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     public function get_page_publications()
     {
         $pager = $this->getPager();
+
         return $this->get_publications($pager->getCurrentRangeOffset(), $this->getNumberOfItemsPerPage());
     }
 
@@ -872,7 +893,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $firstFormAction = array_shift($tableFormActions);
 
             $html[] = '<form class="form-list-view" method="post" action="' . $firstFormAction->get_action() .
-                 '" name="form_' . $this->getListName() . '">';
+                '" name="form_' . $this->getListName() . '">';
         }
 
         $html[] = '<div class="row">';
@@ -931,7 +952,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $html[] = '<input type="submit" name="Submit" value="Submit" class="hidden" />';
             $html[] = '</form>';
             $html[] = ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'list.view.selector.js');
+                Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'list.view.selector.js'
+            );
         }
 
         return implode(PHP_EOL, $html);
@@ -959,9 +981,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $translationVariables[PagerRenderer::PAGE_SELECTOR_TRANSLATION_ROW] = 'NumberOfPublicationsPerPage';
 
         return $this->getPagerRenderer()->renderItemsPerPageSelector(
-            $queryParameters,
-            self::PARAM_PER_PAGE,
-            $translationVariables);
+            $queryParameters, self::PARAM_PER_PAGE, $translationVariables
+        );
     }
 
     /**
@@ -990,42 +1011,34 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('square-o'),
-                '#',
-                Button::DISPLAY_ICON_AND_LABEL,
-                false,
-                'btn-sm select-all'));
+                Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('square-o'), '#',
+                Button::DISPLAY_ICON_AND_LABEL, false, 'btn-sm select-all'
+            )
+        );
 
         $buttonToolBar->addItem(
             new Button(
                 Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('check-square-o'),
-                '#',
-                Button::DISPLAY_ICON_AND_LABEL,
-                false,
-                'btn-sm select-none'));
+                new FontAwesomeGlyph('check-square-o'), '#', Button::DISPLAY_ICON_AND_LABEL, false, 'btn-sm select-none'
+            )
+        );
 
         $actionButtonGroup = new ButtonGroup();
 
         $button = new SplitDropdownButton(
-            $firstAction->get_title(),
-            null,
-            $firstAction->get_action(),
-            Button::DISPLAY_LABEL,
-            $firstAction->getConfirmation(),
-            'btn-sm btn-table-action');
+            $firstAction->get_title(), null, $firstAction->get_action(), Button::DISPLAY_LABEL,
+            $firstAction->getConfirmation(), 'btn-sm btn-table-action'
+        );
         $button->setDropdownClasses('btn-table-action');
 
         foreach ($formActions as $formAction)
         {
             $button->addSubButton(
                 new SubButton(
-                    $formAction->get_title(),
-                    null,
-                    $formAction->get_action(),
-                    Button::DISPLAY_LABEL,
-                    $formAction->getConfirmation()));
+                    $formAction->get_title(), null, $formAction->get_action(), Button::DISPLAY_LABEL,
+                    $formAction->getConfirmation()
+                )
+            );
         }
 
         $actionButtonGroup->addButton($button);
@@ -1038,7 +1051,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = $buttonToolBarRenderer->render();
         $html[] = '<input type="hidden" name="' . $this->getListName() . '_namespace" value="' .
-             $this->get_actions()->get_namespace() . '"/>';
+            $this->get_actions()->get_namespace() . '"/>';
         $html[] = '<input type="hidden" name="table_name" value="' . $this->getListName() . '"/>';
 
         return implode(PHP_EOL, $html);

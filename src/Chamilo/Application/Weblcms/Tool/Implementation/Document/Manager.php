@@ -25,8 +25,8 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * This tool allows a user to publish documents in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable,
-    IntroductionTextSupportInterface
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
+    implements Categorizable, IntroductionTextSupportInterface
 {
     const ACTION_VIEW_DOCUMENTS = 'Viewer';
     const ACTION_DOWNLOAD = 'Downloader';
@@ -68,6 +68,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_GALLERY;
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_SLIDESHOW;
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
+
         return $browser_types;
     }
 
@@ -81,18 +82,20 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Download'),
-                    Theme::getInstance()->getCommonImagePath('Action/Download'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD,
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObject::PROPERTY_ID])),
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('Download'), new FontAwesomeGlyph('download'), $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObject::PROPERTY_ID]
+                    )
+                ), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
     }
 
-    public function addContentObjectPublicationButtons($publication, ButtonGroup $buttonGroup,
-        DropdownButton $dropdownButton)
+    public function addContentObjectPublicationButtons(
+        $publication, ButtonGroup $buttonGroup, DropdownButton $dropdownButton
+    )
     {
         $class = $publication[ContentObject::PROPERTY_TYPE];
         $content_object = new $class($publication);
@@ -102,15 +105,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         {
             $buttonGroup->prependButton(
                 new Button(
-                    Translation::get('Download'),
-                    new FontAwesomeGlyph('download'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD,
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObject::PROPERTY_ID])),
-                    Button::DISPLAY_ICON,
-                    false,
-                    'btn-link'));
+                    Translation::get('Download'), new FontAwesomeGlyph('download'), $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObject::PROPERTY_ID]
+                    )
+                ), Button::DISPLAY_ICON, false, 'btn-link'
+                )
+            );
         }
     }
 }

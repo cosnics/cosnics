@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Calendar\Table\Type;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Calendar\Table\Calendar;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -102,9 +103,8 @@ class MiniWeekCalendar extends Calendar
         {
             $weekDay = strtotime('+' . $day . ' days', $firstDay);
             $this->setCellContents(
-                $day + 1,
-                0,
-                Translation::get(date('l', $weekDay) . 'Long', null, Utilities::COMMON_LIBRARIES));
+                $day + 1, 0, Translation::get(date('l', $weekDay) . 'Long', null, Utilities::COMMON_LIBRARIES)
+            );
         }
 
         $this->updateColAttributes(0, 'class="week_hours"');
@@ -117,7 +117,8 @@ class MiniWeekCalendar extends Calendar
             $this->setCellContents(0, $hour / $this->getHourStep() + 1, $cellContent);
             $this->updateColAttributes(
                 $hour / $this->getHourStep() + 1,
-                'style="width: 8%; height: 15px; padding-left: 0px; padding-right: 0px;"');
+                'style="width: 8%; height: 15px; padding-left: 0px; padding-right: 0px;"'
+            );
 
             for ($day = 0; $day < 7; $day ++)
             {
@@ -133,9 +134,8 @@ class MiniWeekCalendar extends Calendar
                 if (count($class) > 0)
                 {
                     $this->updateCellAttributes(
-                        $day + 1,
-                        $hour / $this->getHourStep() + 1,
-                        'class="' . implode(' ', $class) . '"');
+                        $day + 1, $hour / $this->getHourStep() + 1, 'class="' . implode(' ', $class) . '"'
+                    );
                 }
             }
         }
@@ -190,24 +190,25 @@ class MiniWeekCalendar extends Calendar
         $navigation->updateCellAttributes(0, 0, 'class="navigation-previous" style="text-align: left;"');
         $navigation->updateCellAttributes(0, 1, 'class="navigation-title" style="text-align: center;"');
         $navigation->updateCellAttributes(0, 2, 'class="navigation-next" style="text-align: right;"');
+
+        $glyph = new FontAwesomeGlyph('backward');
         $navigation->setCellContents(
-            0,
-            0,
-            '<a href="' . str_replace(Calendar::TIME_PLACEHOLDER, $prev, $urlFormat) . '"><img src="' .
-                 Theme::getInstance()->getCommonImagePath('Action/Prev') .
-                 '" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
+            0, 0,
+            '<a href="' . str_replace(Calendar::TIME_PLACEHOLDER, $prev, $urlFormat) . '">' . $glyph->render() . '</a> '
+        );
+
         $navigation->setCellContents(
-            0,
-            1,
+            0, 1,
             htmlentities(Translation::get('Week', null, Utilities::COMMON_LIBRARIES)) . ' ' . $weekNumber . ' : ' .
-                 date('l d M Y', $this->getStartTime()) . ' - ' .
-                 date('l d M Y', strtotime('+6 Days', $this->getStartTime())));
+            date('l d M Y', $this->getStartTime()) . ' - ' .
+            date('l d M Y', strtotime('+6 Days', $this->getStartTime()))
+        );
+
+        $glyph = new FontAwesomeGlyph('forward');
         $navigation->setCellContents(
-            0,
-            2,
-            ' <a href="' . str_replace(Calendar::TIME_PLACEHOLDER, $next, $urlFormat) . '"><img src="' .
-                 Theme::getInstance()->getCommonImagePath('Action/Next') .
-                 '" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
+            0, 2, ' <a href="' . str_replace(Calendar::TIME_PLACEHOLDER, $next, $urlFormat) . '">' . $glyph->render() .
+            '</a> '
+        );
 
         $this->navigationHtml = $navigation->toHtml();
     }
@@ -221,6 +222,7 @@ class MiniWeekCalendar extends Calendar
     {
         $this->add_events();
         $html = parent::toHtml();
+
         return $this->navigationHtml . $html;
     }
 }

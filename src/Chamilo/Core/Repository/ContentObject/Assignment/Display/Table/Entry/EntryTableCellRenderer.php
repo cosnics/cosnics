@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
@@ -116,7 +117,7 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('ViewEntry'),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    new FontAwesomeGlyph('folder'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
@@ -140,7 +141,7 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Download'),
-                    Theme::getInstance()->getCommonImagePath('Action/Download'),
+                    new FontAwesomeGlyph('download'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD,
@@ -156,7 +157,7 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('DownloadNotPossible'),
-                    Theme::getInstance()->getCommonImagePath('Action/DownloadNa'),
+                    new FontAwesomeGlyph('download', array('text-muted')),
                     null,
                     ToolbarItem::DISPLAY_ICON
                 )

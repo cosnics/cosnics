@@ -122,7 +122,7 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
                 );
 
                 $commonActions->addButton(
-                    new Button(
+                    new Button(Translation::get('Reporting', null, Utilities::COMMON_LIBRARIES),
                         new FontAwesomeGlyph('chart-pie', array(), null, 'fas'),
                         $this->get_reporting_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )

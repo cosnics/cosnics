@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
@@ -90,8 +91,8 @@ class DirectSubscribedPlatformGroupTableCellRenderer extends RecordTableCellRend
                 
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('UnsubscribeGroup'), 
-                        Theme::getInstance()->getCommonImagePath('Action/Unsubscribe'), 
+                        Translation::get('UnsubscribeGroup'),
+                        new FontAwesomeGlyph('minus-square'),
                         $this->get_component()->get_url($parameters), 
                         ToolbarItem::DISPLAY_ICON));
             }

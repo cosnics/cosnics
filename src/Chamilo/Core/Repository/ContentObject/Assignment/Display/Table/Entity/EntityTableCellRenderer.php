@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
@@ -52,15 +53,14 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
                 break;
             case EntityTableColumnModel::PROPERTY_FEEDBACK_COUNT :
                 return $this->getAssignmentDataProvider()->countFeedbackByEntityTypeAndEntityId(
-                    $this->getAssignmentDataProvider()->getCurrentEntityType(),
-                    $entity[Entry::PROPERTY_ENTITY_ID]
+                    $this->getAssignmentDataProvider()->getCurrentEntityType(), $entity[Entry::PROPERTY_ENTITY_ID]
                 );
             case EntityTableColumnModel::PROPERTY_LAST_SCORE:
                 $lastScore = $this->getAssignmentDataProvider()->getLastScoreForEntityTypeAndId(
                     $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]
                 );
 
-                if(is_null($lastScore))
+                if (is_null($lastScore))
                 {
                     return null;
                 }
@@ -95,37 +95,33 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewLastEntry'),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
-                            Manager::PARAM_ENTITY_TYPE => $entity[Entry::PROPERTY_ENTITY_TYPE],
-                            Manager::PARAM_ENTITY_ID => $entity[Entry::PROPERTY_ENTITY_ID]
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
+                    Translation::get('ViewLastEntry'), new FontAwesomeGlyph('folder'), $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
+                        Manager::PARAM_ENTITY_TYPE => $entity[Entry::PROPERTY_ENTITY_TYPE],
+                        Manager::PARAM_ENTITY_ID => $entity[Entry::PROPERTY_ENTITY_ID]
+                    )
+                ), ToolbarItem::DISPLAY_ICON
                 )
             );
         }
 
         $hasEntries = $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0;
 
-        if ($this->getRightsService()->canUserDownloadEntriesFromEntity($this->get_component()->getUser(), $this->get_component()->getAssignment(), $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]) &&
-            $hasEntries)
+        if ($this->getRightsService()->canUserDownloadEntriesFromEntity(
+                $this->get_component()->getUser(), $this->get_component()->getAssignment(),
+                $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]
+            ) && $hasEntries)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('DownloadAll'),
-                    Theme::getInstance()->getCommonImagePath('Action/Download'),
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD,
-                            Manager::PARAM_ENTITY_TYPE => $entity[Entry::PROPERTY_ENTITY_TYPE],
-                            Manager::PARAM_ENTITY_ID => $entity[Entry::PROPERTY_ENTITY_ID]
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
+                    Translation::get('DownloadAll'), new FontAwesomeGlyph('download'), $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD,
+                        Manager::PARAM_ENTITY_TYPE => $entity[Entry::PROPERTY_ENTITY_TYPE],
+                        Manager::PARAM_ENTITY_ID => $entity[Entry::PROPERTY_ENTITY_ID]
+                    )
+                ), ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -134,16 +130,13 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('AddNewEntry'),
-                    Theme::getInstance()->getCommonImagePath('Action/Add'),
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_CREATE,
-                            Manager::PARAM_ENTITY_TYPE => $entity[Entry::PROPERTY_ENTITY_TYPE],
-                            Manager::PARAM_ENTITY_ID => $entity[Entry::PROPERTY_ENTITY_ID]
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
+                    Translation::get('AddNewEntry'), new FontAwesomeGlyph('plus'), $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_CREATE,
+                        Manager::PARAM_ENTITY_TYPE => $entity[Entry::PROPERTY_ENTITY_TYPE],
+                        Manager::PARAM_ENTITY_ID => $entity[Entry::PROPERTY_ENTITY_ID]
+                    )
+                ), ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -161,8 +154,7 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
     protected function formatDate($date)
     {
         $formatted_date = DatetimeUtilities::format_locale_date(
-            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
-            $date
+            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), $date
         );
 
         if ($this->getAssignmentDataProvider()->isDateAfterAssignmentEndTime($date))
@@ -190,7 +182,8 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Table\Table | \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
+     * @return \Chamilo\Libraries\Format\Table\Table |
+     *     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
      */
     protected function getTable()
     {
@@ -203,11 +196,9 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
         $hasEntries = $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0;
 
         return $this->getRightsService()->canUserViewEntity(
-                $this->get_component()->getUser(),
-                $this->get_component()->getAssignment(),
-                $entity[Entry::PROPERTY_ENTITY_TYPE],
-                $entity[Entry::PROPERTY_ENTITY_ID])
-            && $hasEntries;
+                $this->get_component()->getUser(), $this->get_component()->getAssignment(),
+                $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]
+            ) && $hasEntries;
     }
 
     protected function getEntityUrl($entity)

@@ -16,6 +16,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -77,26 +78,24 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Reporting'), Theme::getInstance()->getCommonImagePath('Action/Statistics'),
-                        $this->get_url(
-                            array(
-                                Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
-                            )
-                        ), ToolbarItem::DISPLAY_ICON
+                        Translation::get('Statistics'), new FontAwesomeGlyph('bar-chart'), $this->get_url(
+                        array(
+                            Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
+                        )
+                    ), ToolbarItem::DISPLAY_ICON
                     )
                 );
 
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('ExportRawResults'), Theme::getInstance()->getCommonImagePath('Action/Export'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                            )
-                        ), ToolbarItem::DISPLAY_ICON
+                        Translation::get('ExportRawResults'), new FontAwesomeGlyph('export'), $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                        )
+                    ), ToolbarItem::DISPLAY_ICON
                     )
                 );
             }
@@ -107,8 +106,8 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('StatisticsNA'),
-                        Theme::getInstance()->getCommonImagePath('Action/StatisticsNa'), null, ToolbarItem::DISPLAY_ICON
+                        Translation::get('StatisticsNA'), new FontAwesomeGlyph('bar-chart', array('text-muted')), null,
+                        ToolbarItem::DISPLAY_ICON
                     )
                 );
             }
@@ -133,26 +132,24 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             {
                 $dropdownButton->prependSubButton(
                     new SubButton(
-                        Translation::get('Statistics'), Theme::getInstance()->getCommonImagePath('Action/Statistics'),
-                        $this->get_url(
-                            array(
-                                Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
-                            )
-                        ), SubButton::DISPLAY_LABEL
+                        Translation::get('Statistics'), new FontAwesomeGlyph('bar-chart'), $this->get_url(
+                        array(
+                            Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
+                        )
+                    ), SubButton::DISPLAY_LABEL
                     )
                 );
 
                 $dropdownButton->prependSubButton(
                     new SubButton(
-                        Translation::get('ExportRawResults'), Theme::getInstance()->getCommonImagePath('Action/Export'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                            )
-                        ), SubButton::DISPLAY_LABEL
+                        Translation::get('ExportRawResults'), new FontAwesomeGlyph('export'), $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                        )
+                    ), SubButton::DISPLAY_LABEL
                     )
                 );
             }

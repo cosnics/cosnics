@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -56,8 +57,8 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                 $toolbar = new Toolbar();
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('ViewPublications'), 
-                        Theme::getInstance()->getCommonImagePath('Action/Reporting'), 
+                        Translation::get('ViewPublications'),
+                        new FontAwesomeGlyph('pie-chart'),
                         $url, 
                         ToolbarItem::DISPLAY_ICON));
 
@@ -72,8 +73,8 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                         
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('ViewScores'), 
-                                Theme::getInstance()->getCommonImagePath('Action/ViewResults'), 
+                                Translation::get('ViewScores'),
+                                Theme::getInstance()->getCommonImagePath('Action/ViewResults'),
                                 $url_detail, 
                                 ToolbarItem::DISPLAY_ICON));
                         
@@ -87,8 +88,8 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                         
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('ViewScores'), 
-                                Theme::getInstance()->getCommonImagePath('Action/ViewResults'), 
+                                Translation::get('ViewScores'),
+                                new FontAwesomeGlyph('line-chart'),
                                 $url_detail, 
                                 ToolbarItem::DISPLAY_ICON));
                         
@@ -102,8 +103,8 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                         
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('ViewProgressUsers'), 
-                                Theme::getInstance()->getCommonImagePath('Action/ViewResults'), 
+                                Translation::get('ViewProgressUsers'),
+                                new FontAwesomeGlyph('line-chart'),
                                 $url_detail, 
                                 ToolbarItem::DISPLAY_ICON));
                         break;

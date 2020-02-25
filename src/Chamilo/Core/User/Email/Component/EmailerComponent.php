@@ -6,6 +6,7 @@ use Chamilo\Core\User\Email\Form\EmailForm;
 use Chamilo\Core\User\Email\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -32,9 +33,8 @@ class EmailerComponent extends Manager
         {
             $success = $form->email();
             $this->redirect(
-                Translation::get($success ? 'EmailSent' : 'EmailNotSent'),
-                ($success ? false : true),
-                array());
+                Translation::get($success ? 'EmailSent' : 'EmailNotSent'), ($success ? false : true), array()
+            );
         }
         else
         {
@@ -63,6 +63,8 @@ class EmailerComponent extends Manager
         $html[] = '<div class="panel-body">';
         $html[] = '<ul class="attachments_list">';
 
+        $glyph = new FontAwesomeGlyph('users');
+
         foreach ($target_users as $target_user)
         {
             if (is_object($target_user) && $target_user instanceof User)
@@ -70,8 +72,7 @@ class EmailerComponent extends Manager
                 $target_user = $target_user->get_fullname() . ' &lt;' . $target_user->get_email() . '&gt;';
             }
 
-            $html[] = '<li><img src="' . Theme::getInstance()->getCommonImagePath('Treemenu/Group') . '" alt="user"/> ' .
-                 $target_user . '</li>';
+            $html[] = '<li>' . $glyph->render() . ' ' . $target_user . '</li>';
         }
 
         $html[] = '</ul>';

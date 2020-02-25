@@ -70,7 +70,8 @@ class InstanceForm extends FormValidator
         $tabs_generator = new DynamicFormTabsRenderer($this->getAttribute('name'), $this);
         $tabs_generator->add_tab(
             new DynamicFormTab(
-                'general', 'General', Theme::getInstance()->getCommonImagePath('Place/Tab/View'), 'build_general_form'
+                'general', 'General', new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas'),
+                'build_general_form'
             )
         );
 
@@ -78,7 +79,7 @@ class InstanceForm extends FormValidator
         {
             $tabs_generator->add_tab(
                 new DynamicFormTab(
-                    'settings', 'Settings', Theme::getInstance()->getCommonImagePath('Place/Tab/Settings'),
+                    'settings', 'Settings', new FontAwesomeGlyph('cog', array('fa-lg'), null, 'fas'),
                     'build_settings_form'
                 )
             );

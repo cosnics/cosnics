@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\T
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\ToolPublicationsDetailTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -20,8 +21,7 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
 
         $reporting_data->add_row(Translation::get('ViewPublications'));
 
-        $img = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
-            Translation::get('ViewPublications') . '" />';
+        $glyph = new FontAwesomeGlyph('pie-chart', array(), Translation::get('ViewPublications'));
 
         $tool_names = $reporting_data->get_categories();
         foreach ($tool_names as $tool_name)
@@ -37,7 +37,7 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
                     $tool_name;
                 $link_pub = '<a href="' . $this->get_parent()->get_url(
                         $params, array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID)
-                    ) . '">' . $img . '</a>';
+                    ) . '">' . $glyph->render() . '</a>';
 
                 $reporting_data->add_data_category_row($tool_name, Translation::get('ViewPublications'), $link_pub);
             }
@@ -54,8 +54,7 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
     public function retrieve_course_summary_data()
     {
         return WeblcmsTrackingDataManager::retrieve_tools_access_summary_data(
-            $this->getCourseId(),
-            $this->get_user_id()
+            $this->getCourseId(), $this->get_user_id()
         );
     }
 
@@ -74,10 +73,8 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
-                ContentObjectPublication::PROPERTY_PUBLISHER_ID
-            ),
-            new StaticConditionVariable($this->get_user_id())
+                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_PUBLISHER_ID
+            ), new StaticConditionVariable($this->get_user_id())
         );
 
         return new AndCondition($conditions);

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Group\Table\Group;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -30,91 +31,93 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
                 {
                     $title_short = mb_substr($title_short, 0, 50) . '&hellip;';
                 }
+
                 return '<a href="' . htmlentities($this->get_component()->get_group_viewing_url($group)) . '" title="' .
-                     $title . '">' . $title_short . '</a>';
+                    $title . '">' . $title_short . '</a>';
             case Group::PROPERTY_DESCRIPTION :
                 $description = strip_tags(parent::render_cell($column, $group));
                 if (strlen($description) > 175)
                 {
                     $description = mb_substr($description, 0, 170) . '&hellip;';
                 }
+
                 return StringUtilities::getInstance()->truncate($description);
             case Translation::get(GroupTableColumnModel::USERS, null, \Chamilo\Core\User\Manager::context()) :
                 return $group->count_users();
             case Translation::get(GroupTableColumnModel::SUBGROUPS) :
                 return $group->count_subgroups(true, true);
         }
-        
+
         return parent::render_cell($column, $group);
     }
 
     public function get_actions($group)
     {
         $toolbar = new Toolbar();
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
-                $this->get_component()->get_group_editing_url($group), 
-                ToolbarItem::DISPLAY_ICON));
-        
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                $this->get_component()->get_group_editing_url($group), ToolbarItem::DISPLAY_ICON
+            )
+        );
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('AddUsers'), 
-                Theme::getInstance()->getCommonImagePath('Action/Subscribe'), 
-                $this->get_component()->get_group_suscribe_user_browser_url($group), 
-                ToolbarItem::DISPLAY_ICON));
-        
+                Translation::get('AddUsers'), new FontAwesomeGlyph('plus-circle'),
+                $this->get_component()->get_group_suscribe_user_browser_url($group), ToolbarItem::DISPLAY_ICON
+            )
+        );
+
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID), 
-            new StaticConditionVariable($group->get_id()));
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($group->get_id())
+        );
         $users = $this->get_component()->retrieve_group_rel_users($condition);
         $visible = ($users->size() > 0);
-        
+
         if ($visible)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Truncate'), 
-                    Theme::getInstance()->getCommonImagePath('Action/RecycleBin'), 
-                    $this->get_component()->get_group_emptying_url($group), 
-                    ToolbarItem::DISPLAY_ICON, 
-                    true));
+                    Translation::get('Truncate'), new FontAwesomeGlyph('trash'),
+                    $this->get_component()->get_group_emptying_url($group), ToolbarItem::DISPLAY_ICON, true
+                )
+            );
         }
         else
         {
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('TruncateNA'), 
-                    Theme::getInstance()->getCommonImagePath('Action/RecycleBinNa'), 
-                    null, 
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('TruncateNA'), new FontAwesomeGlyph('trash', array('text-muted')), null,
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
-                $this->get_component()->get_group_delete_url($group), 
-                ToolbarItem::DISPLAY_ICON, 
-                true));
-        
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                $this->get_component()->get_group_delete_url($group), ToolbarItem::DISPLAY_ICON, true
+            )
+        );
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Move', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Move'), 
-                $this->get_component()->get_move_group_url($group), 
-                ToolbarItem::DISPLAY_ICON));
-        
+                Translation::get('Move', null, Utilities::COMMON_LIBRARIES),
+                new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal'), null, 'fas'),
+                $this->get_component()->get_move_group_url($group), ToolbarItem::DISPLAY_ICON
+            )
+        );
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Metadata'), 
-                Theme::getInstance()->getCommonImagePath('Action/Metadata'), 
-                $this->get_component()->get_group_metadata_url($group), 
-                ToolbarItem::DISPLAY_ICON));
-        
+                Translation::get('Metadata'), new FontAwesomeGlyph('info-circle'),
+                $this->get_component()->get_group_metadata_url($group), ToolbarItem::DISPLAY_ICON
+            )
+        );
+
         return $toolbar->as_html();
     }
 }

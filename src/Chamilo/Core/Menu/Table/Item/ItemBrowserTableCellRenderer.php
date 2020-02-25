@@ -10,6 +10,7 @@ use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -212,9 +213,8 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Edit', [], Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Edit'), $this->getItemEditingUrl($item),
-                ToolbarItem::DISPLAY_ICON
+                $translator->trans('Edit', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                $this->getItemEditingUrl($item), ToolbarItem::DISPLAY_ICON
             )
         );
 
@@ -222,9 +222,8 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('Rights', [], Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Rights'), $this->getItemRightsUrl($item),
-                    ToolbarItem::DISPLAY_ICON
+                    $translator->trans('Rights', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('lock'),
+                    $this->getItemRightsUrl($item), ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -234,7 +233,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     $translator->trans('MoveUpNA', [], Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/UpNa'), null, ToolbarItem::DISPLAY_ICON
+                    new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -242,8 +241,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('MoveUp', [], Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Up'),
+                    $translator->trans('MoveUp', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-up'),
                     $this->getItemMovingUrl($item, ItemService::PARAM_DIRECTION_UP), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -254,7 +252,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     $translator->trans('MoveDownNA', [], Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/DownNa'), null, ToolbarItem::DISPLAY_ICON
+                    new FontAwesomeGlyph('sort-down', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -262,8 +260,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('MoveDown', [], Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Down'),
+                    $translator->trans('MoveDown', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-down'),
                     $this->getItemMovingUrl($item, ItemService::PARAM_DIRECTION_DOWN), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -271,9 +268,8 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Delete', [], Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Delete'), $this->getItemDeletingUrl($item),
-                ToolbarItem::DISPLAY_ICON, true
+                $translator->trans('Delete', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                $this->getItemDeletingUrl($item), ToolbarItem::DISPLAY_ICON, true
             )
         );
 

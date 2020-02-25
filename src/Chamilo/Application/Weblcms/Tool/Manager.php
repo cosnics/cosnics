@@ -824,7 +824,7 @@ abstract class Manager extends Application
             );
 
             return new Button(
-                Translation::get('AccessDetails'), Theme::getInstance()->getCommonImagePath('Action/Reporting'), $url
+                Translation::get('AccessDetails'), new FontAwesomeGlyph('pie-chart'), $url
             );
         }
         else

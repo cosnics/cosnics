@@ -10,6 +10,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -270,7 +271,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $toolbar = new Toolbar(Toolbar::TYPE_VERTICAL);
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('MainPage'), Theme::getInstance()->getCommonImagePath('Action/Home'), $this->get_url(
+                Translation::get('MainPage'), new FontAwesomeGlyph('home'), $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_VIEW_WIKI,
                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => null
@@ -280,14 +281,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         );
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Contents'), Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                Translation::get('Contents'), new FontAwesomeGlyph('folder'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI)),
                 ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
         );
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Statistics'), Theme::getInstance()->getCommonImagePath('Action/Statistics'),
+                Translation::get('Statistics'), new FontAwesomeGlyph('bar-chart'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_STATISTICS)),
                 ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
@@ -316,7 +317,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $toolbar = new Toolbar(Toolbar::TYPE_VERTICAL);
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('AddWikiPage'), Theme::getInstance()->getCommonImagePath('Action/Create'),
+                Translation::get('AddWikiPage'), new FontAwesomeGlyph('plus'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_PAGE)),
                 ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
@@ -419,9 +420,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                     ($this->get_action() == self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM ? ' class="current"' : '') .
                     ' href="' . $delete_url . '" onClick="return confirm(\'' . Translation::get(
                         'WikiDeleteConfirm', array(
-                            'WIKIPAGENAME' => $complex_wiki_page_properties['default_properties']['title'],
-                            'WIKINAME' => $this->get_root_content_object()->get_title()
-                        ), __NAMESPACE__
+                        'WIKIPAGENAME' => $complex_wiki_page_properties['default_properties']['title'],
+                        'WIKINAME' => $this->get_root_content_object()->get_title()
+                    ), __NAMESPACE__
                     ) . '\')">' . Translation::get('WikiDelete') . '</a></li>';
             }
             else

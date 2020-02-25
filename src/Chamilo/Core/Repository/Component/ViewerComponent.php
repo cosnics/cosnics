@@ -144,7 +144,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
                     'external_instances', $translator->trans('ExternalInstances', array(), self::package()),
-                    new FontAwesomeGlyph('globe'), $browser->render()
+                    new FontAwesomeGlyph('globe', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
         }
@@ -157,7 +157,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
                     LinkTable::TYPE_PUBLICATIONS, $translator->trans('Publications', array(), self::package()),
-                    new FontAwesomeGlyph('share-square-o'), $browser->render()
+                    new FontAwesomeGlyph('share-square-o', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
         }
@@ -178,7 +178,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $dynamicTabsRenderer->add_tab(
                     new DynamicContentTab(
                         $tabName, $translator->trans('SharedIn', array(), self::package()),
-                        new FontAwesomeGlyph('lock'), $browser->render()
+                        new FontAwesomeGlyph('lock', array('fa-lg'), null, 'fas'), $browser->render()
                     )
                 );
             }
@@ -192,7 +192,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
                     LinkTable::TYPE_PARENTS, $translator->trans('UsedIn', array(), self::package()),
-                    new FontAwesomeGlyph('arrow-up'), $browser->render()
+                    new FontAwesomeGlyph('arrow-up', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
         }
@@ -205,7 +205,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
                     LinkTable::TYPE_CHILDREN, $translator->trans('Uses', array(), self::package()),
-                    new FontAwesomeGlyph('arrow-down'), $browser->render()
+                    new FontAwesomeGlyph('arrow-down', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
         }
@@ -232,7 +232,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
                     LinkTable::TYPE_ATTACHES, $translator->trans('Attaches', array(), self::package()),
-                    new FontAwesomeGlyph('paperclip'), $browser->render()
+                    new FontAwesomeGlyph('paperclip', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
         }
@@ -245,7 +245,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
                     LinkTable::TYPE_INCLUDED_IN, $translator->trans('IncludedIn', array(), self::package()),
-                    new FontAwesomeGlyph('expand-arrows-alt', array(), null, 'fas'), $browser->render()
+                    new FontAwesomeGlyph('expand-arrows-alt', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
         }
@@ -258,7 +258,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
                     LinkTable::TYPE_INCLUDES, $translator->trans('Includes', array(), self::package()),
-                    new FontAwesomeGlyph('compress-arrows-alt', array(), null, 'fas'), $browser->render()
+                    new FontAwesomeGlyph('compress-arrows-alt', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
         }

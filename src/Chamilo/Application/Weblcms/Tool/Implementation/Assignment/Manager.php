@@ -11,6 +11,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentDataProvider;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
@@ -72,40 +73,37 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     {
         $toolbar->insert_item(
             new ToolbarItem(
-                Translation::get('BrowseSubmitters'), Theme::getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                    )
-                ), ToolbarItem::DISPLAY_ICON
+                Translation::get('BrowseSubmitters'), new FontAwesomeGlyph('folder'), $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                )
+            ), ToolbarItem::DISPLAY_ICON
             ), 0
         );
 
         $toolbar->insert_item(
             new ToolbarItem(
-                Translation::get('SubmissionSubmit'), Theme::getInstance()->getCommonImagePath('Action/Add'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
-                    )
-                ), ToolbarItem::DISPLAY_ICON
+                Translation::get('SubmissionSubmit'), new FontAwesomeGlyph('plus'), $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
+                )
+            ), ToolbarItem::DISPLAY_ICON
             ), 1
         );
 
         $toolbar->insert_item(
             new ToolbarItem(
-                Translation::get('Reporting'), Theme::getInstance()->getCommonImagePath('Action/Reporting'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Reporting',
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => AssignmentEntitiesTemplate::class
-                    )
-                ), ToolbarItem::DISPLAY_ICON, false, null, '_blank'
+                Translation::get('Reporting'), new FontAwesomeGlyph('pie-chart'), $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Reporting',
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                    \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => AssignmentEntitiesTemplate::class
+                )
+            ), ToolbarItem::DISPLAY_ICON, false, null, '_blank'
             ), 2
         );
 
@@ -206,9 +204,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
      */
     public function getAssignmentDataProvider()
     {
-        return $this->getService(
-            'chamilo.application.weblcms.tool.implementation.assignment.service.assignment_data_provider'
-        );
+        return $this->getService(AssignmentDataProvider::class);
     }
 
     /**
@@ -216,9 +212,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
      */
     public function getPublicationRepository()
     {
-        return $this->getService(
-            'chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository'
-        );
+        return $this->getService(PublicationRepository::class);
     }
 
     /**

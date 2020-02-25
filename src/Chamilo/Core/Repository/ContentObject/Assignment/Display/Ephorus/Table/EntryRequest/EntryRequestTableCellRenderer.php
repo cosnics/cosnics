@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -22,8 +23,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @author Tom Goethals - Hogeschool Gent
  */
-class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implements
-    TableCellRendererActionsColumnSupport
+class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
     const EPHORUS_TRANSLATION_CONTEXT = 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus';
 
@@ -42,8 +42,7 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
             case ContentObject::PROPERTY_DESCRIPTION :
                 return Utilities::htmlentities(
                     StringUtilities::getInstance()->truncate(
-                        $object->get_default_property(ContentObject::PROPERTY_DESCRIPTION),
-                        50
+                        $object->get_default_property(ContentObject::PROPERTY_DESCRIPTION), 50
                     )
                 );
             case EntryRequestTableColumnModel::COLUMN_NAME_AUTHOR :
@@ -54,16 +53,14 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
                 if ($object->get_optional_property(Request::PROPERTY_REQUEST_TIME))
                 {
                     return DatetimeUtilities::format_locale_date(
-                        null,
-                        $object->get_optional_property(Request::PROPERTY_REQUEST_TIME)
+                        null, $object->get_optional_property(Request::PROPERTY_REQUEST_TIME)
                     );
                 }
 
                 return '-';
             case Entry::PROPERTY_SUBMITTED :
                 return DatetimeUtilities::format_locale_date(
-                    null,
-                    $object->get_optional_property(Entry::PROPERTY_SUBMITTED)
+                    null, $object->get_optional_property(Entry::PROPERTY_SUBMITTED)
                 );
             case Request::PROPERTY_STATUS :
                 if ($object->get_optional_property(Request::PROPERTY_STATUS) > 0)
@@ -116,14 +113,13 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('ViewResult', null, self::EPHORUS_TRANSLATION_CONTEXT),
-                    Theme::getInstance()->getCommonImagePath('Action/Reporting'),
-                    $this->get_component()->get_url(
-                        array(
-                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::ACTION_VIEW_RESULT,
-                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ENTRY_ID => $object->getId()
+                    new FontAwesomeGlyph('pie-chart'), $this->get_component()->get_url(
+                    array(
+                        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::ACTION_VIEW_RESULT,
+                        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ENTRY_ID => $object->getId(
                         )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
+                    )
+                ), ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -134,26 +130,24 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
             {
                 if (!$object->get_optional_property(Request::PROPERTY_VISIBLE_IN_INDEX))
                 {
-                    $icon = 'Action/Invisible';
+                    $glyph = new FontAwesomeGlyph('eye', array('text-muted'));
                     $translation = Translation::get('AddDocumentToIndex', null, self::EPHORUS_TRANSLATION_CONTEXT);
                 }
                 else
                 {
-                    $icon = 'Action/Visible';
+                    $glyph = new FontAwesomeGlyph('eye');
                     $translation = Translation::get('RemoveDocumentFromIndex', null, self::EPHORUS_TRANSLATION_CONTEXT);
                 }
 
                 $toolbar->add_item(
                     new ToolbarItem(
-                        $translation,
-                        Theme::getInstance()->getCommonImagePath($icon),
-                        $this->get_component()->get_url(
-                            array(
-                                \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::ACTION_CHANGE_INDEX_VISIBILITY,
-                                \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ENTRY_ID => $object->getId()
+                        $translation, $glyph, $this->get_component()->get_url(
+                        array(
+                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::ACTION_CHANGE_INDEX_VISIBILITY,
+                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ENTRY_ID => $object->getId(
                             )
-                        ),
-                        ToolbarItem::DISPLAY_ICON
+                        )
+                    ), ToolbarItem::DISPLAY_ICON
                     )
                 );
             }
@@ -163,13 +157,13 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('AddDocument', null, self::EPHORUS_TRANSLATION_CONTEXT),
-                    Theme::getInstance()->getCommonImagePath('Action/Up'),
-                    $this->get_component()->get_url(
-                        array(
-                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::ACTION_CREATE,
-                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ENTRY_ID => $object->getId()
+                    new FontAwesomeGlyph('upload'), $this->get_component()->get_url(
+                    array(
+                        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::ACTION_CREATE,
+                        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ENTRY_ID => $object->getId(
                         )
                     )
+                )
                 )
             );
         }

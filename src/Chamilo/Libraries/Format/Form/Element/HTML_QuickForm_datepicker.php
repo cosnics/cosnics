@@ -1,8 +1,11 @@
 <?php
+
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+
 /**
  * Form element to select a date and hour (with popup datepicker)
  *
@@ -20,9 +23,11 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
     /**
      * Constructor
      */
-    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $include_time_picker = true)
+    public function __construct(
+        $elementName = null, $elementLabel = null, $attributes = null, $include_time_picker = true
+    )
     {
-        if (! isset($attributes['form_name']))
+        if (!isset($attributes['form_name']))
         {
             return;
         }
@@ -34,8 +39,10 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $this->_appendName = true;
         $this->_type = 'datepicker';
 
-        $popup_link = '<a href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName . '\')"><img src="' .
-             Theme::getInstance()->getCommonImagePath('Action/CalendarSelect') . '" style="vertical-align:middle;"/></a>';
+        $glyph = new FontAwesomeGlyph('calendar-alt');
+
+        $popup_link = '<a href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName . '\')">' .
+            $glyph->render() . '</a>';
         $special_chars = array('D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' ');
         $hour_minute_devider = Translation::get('HourMinuteDivider', null, Utilities::COMMON_LIBRARIES);
 
@@ -54,7 +61,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         }
 
         // If translation not available in PEAR::HTML_QuickForm_date, add the Chamilo-translation
-        if (! array_key_exists($editor_lang, $this->_locale))
+        if (!array_key_exists($editor_lang, $this->_locale))
         {
             $this->_locale[$editor_lang]['months_long'] = array(
                 Translation::get("JanuaryLong", null, Utilities::COMMON_LIBRARIES),
@@ -68,7 +75,8 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
                 Translation::get("SeptemberLong", null, Utilities::COMMON_LIBRARIES),
                 Translation::get("OctoberLong", null, Utilities::COMMON_LIBRARIES),
                 Translation::get("NovemberLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("DecemberLong", null, Utilities::COMMON_LIBRARIES));
+                Translation::get("DecemberLong", null, Utilities::COMMON_LIBRARIES)
+            );
         }
 
         $this->include_time_picker = $include_time_picker;
@@ -94,6 +102,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
     public function toHtml()
     {
         $js = $this->getElementJS();
+
         return $js . parent::toHtml();
     }
 
@@ -112,6 +121,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $js .= 'var path = \'' . Path::getInstance()->namespaceToFullPath('Chamilo\Configuration', true) . '\';' . "\n";
         $js .= 'var max_year="' . (date('Y') + 10) . '";';
         $js .= '</script>';
+
         return $js;
     }
 
@@ -131,7 +141,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         }
         elseif (is_scalar($value))
         {
-            if (! is_numeric($value))
+            if (!is_numeric($value))
             {
                 $value = strtotime($value);
             }
@@ -146,22 +156,11 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
             $arr = explode('-', date('w-j-n-Y-g-G-i-s-a-A-W', (int) $value));
 
             $value = array(
-                'D' => $arr[0],
-                'l' => $arr[0],
-                'd' => $arr[1],
-                'M' => $arr[2],
-                'm' => $arr[2],
-                'F' => $arr[2],
-                'Y' => $arr[3],
-                'y' => $arr[3],
-                'h' => $arr[4],
-                'g' => $arr[4],
-                'H' => $arr[5],
-                'i' => $this->_trimLeadingZeros($arr[6]),
-                's' => $this->_trimLeadingZeros($arr[7]),
-                'a' => $arr[8],
-                'A' => $arr[9],
-                'W' => $this->_trimLeadingZeros($arr[10]));
+                'D' => $arr[0], 'l' => $arr[0], 'd' => $arr[1], 'M' => $arr[2], 'm' => $arr[2], 'F' => $arr[2],
+                'Y' => $arr[3], 'y' => $arr[3], 'h' => $arr[4], 'g' => $arr[4], 'H' => $arr[5],
+                'i' => $this->_trimLeadingZeros($arr[6]), 's' => $this->_trimLeadingZeros($arr[7]), 'a' => $arr[8],
+                'A' => $arr[9], 'W' => $this->_trimLeadingZeros($arr[10])
+            );
         }
         else
         {

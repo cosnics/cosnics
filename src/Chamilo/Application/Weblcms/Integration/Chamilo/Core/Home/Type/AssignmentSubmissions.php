@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -16,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 
 /**
  * A notificationblock for new assignment submissions (assignmenttool)
@@ -167,9 +169,7 @@ class AssignmentSubmissions extends Block
      */
     protected function getAssignmentService()
     {
-        return $this->getService(
-            'chamilo.application.weblcms.integration.chamilo.core.tracking.service.assignment_service'
-        );
+        return $this->getService(AssignmentService::class);
     }
 
     /**
@@ -177,8 +177,6 @@ class AssignmentSubmissions extends Block
      */
     protected function getPublicationRepository()
     {
-        return $this->getService(
-            'chamilo.application.weblcms.tool.implementation.assignment.storage.repository.publication_repository'
-        );
+        return $this->getService(PublicationRepository::class);
     }
 }

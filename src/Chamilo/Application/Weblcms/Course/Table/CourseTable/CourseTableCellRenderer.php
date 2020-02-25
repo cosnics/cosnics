@@ -105,7 +105,6 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
                 $this->get_component()->get_delete_course_url($course[Course::PROPERTY_ID]),
                 ToolbarItem::DISPLAY_ICON,
                 true));
-                true));
         
         return $toolbar->as_html();
     }

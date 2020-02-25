@@ -9,6 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
@@ -70,7 +71,7 @@ abstract class Manager extends Application
         {
             return new ToolbarItem(
                 Translation::get('Help'),
-                Theme::getInstance()->getCommonImagePath('Action/Help'),
+                new FontAwesomeGlyph('question-circle'),
                 $help_item ? $help_item->get_url() : '',
                 ToolbarItem::DISPLAY_ICON_AND_LABEL,
                 false,

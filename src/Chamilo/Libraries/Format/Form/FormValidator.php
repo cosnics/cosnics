@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Format\Form;
 
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Security;
@@ -114,9 +115,10 @@ EOT;
 
         $this->renderer->setHeaderTemplate($header_template);
 
+        $glyph = new FontAwesomeGlyph('star', array('text-danger', 'fa-xs'), null, 'fas');
+
         HTML_QuickForm::setRequiredNote(
-            '<span class="form_required"><img src="' . Theme::getInstance()->getCommonImagePath('Action/Required') .
-            '" alt="*" title ="*"/>&nbsp;<small>' .
+            '<span class="form_required">&nbsp;' . $glyph->render() . '&nbsp;<small>' .
             Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES) . '</small></span>'
         );
         $required_note_template = <<<EOT
@@ -137,12 +139,12 @@ EOT;
     public function getElementTemplate($extraClasses = null)
     {
         $element_template = array();
+        $glyph = new FontAwesomeGlyph('star', array('text-danger', 'fa-xs'), null, 'fas');
 
         $element_template[] = '<div class="form-row row ' . $extraClasses . '">';
         $element_template[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label control-label">';
-        $element_template[] = '{label}<!-- BEGIN required --><span class="form_required"><img src="' .
-            Theme::getInstance()->getCommonImagePath('Action/Required') .
-            '" alt="*" title ="*"/></span> <!-- END required -->';
+        $element_template[] = '{label}<!-- BEGIN required --><span class="form_required">&nbsp;' . $glyph->render() .
+            '</span> <!-- END required -->';
         $element_template[] = '</div>';
         $element_template[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
         $element_template[] =
@@ -699,7 +701,7 @@ EOT;
      * @param string $elementLabel
      * @param string[] $attributes
      * @param string $noSelection
-     * @param unknown $legend
+     * @param string $legend
      */
     public function add_receivers($elementName, $elementLabel, $attributes, $noSelection = 'Everybody', $legend = null)
     {
@@ -763,7 +765,7 @@ EOT;
      * @param string $elementName
      * @param string $elementLabel
      * @param string[] $attributes
-     * @param unknown $legend
+     * @param string $legend
      */
     public function add_element_finder_with_legend($elementName, $elementLabel, $attributes, $legend = null)
     {
@@ -879,9 +881,10 @@ EOT;
     public function add_progress_bar($delay = 2)
     {
         $this->with_progress_bar = true;
+        $glyph = new FontAwesomeGlyph('fa-spinner', array('fa-spin'), null, 'fas');
+
         $this->updateAttributes(
-            "onsubmit=\"javascript: myUpload.start('dynamic_div','" .
-            Theme::getInstance()->getCommonImagePath('Action/ProgressBar', 'gif') . "','" .
+            "onsubmit=\"javascript: myUpload.start('dynamic_div','" . $glyph->render() . "','" .
             Translation::get('PleaseStandBy') . "','" . $this->getAttribute('id') . "');\""
         );
         $this->addElement(
@@ -1430,8 +1433,8 @@ EOT;
 
         if ($markRequired)
         {
-            $label .= '<span class="form_required"><img src="' .
-                Theme::getInstance()->getCommonImagePath('Action/Required') . '" alt="*" title ="*"/></span>';
+            $glyph = new FontAwesomeGlyph('star', array('text-danger', 'fa-xs'), null, 'fas');
+            $label .= '<span class="form_required">&nbsp;' . $glyph->render() . '</span>';
         }
 
         $this->addElement('static', $elementName . '_static_data', $label, implode(PHP_EOL, $dropzoneHtml));

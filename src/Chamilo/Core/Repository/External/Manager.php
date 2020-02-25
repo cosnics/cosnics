@@ -80,8 +80,8 @@ abstract class Manager extends Application implements NoContextComponent
         $this->set_parameter(self::PARAM_EMBEDDED, Request::get(self::PARAM_EMBEDDED, 0));
 
         $this->external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(),
-            $external_instance_id);
+            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), $external_instance_id
+        );
 
         $external_repository_manager_action = Request::get(self::PARAM_ACTION);
         if ($external_repository_manager_action)
@@ -135,7 +135,7 @@ abstract class Manager extends Application implements NoContextComponent
      */
     public function is_stand_alone()
     {
-        return ! (boolean) $this->get_parameter(self::PARAM_EMBEDDED);
+        return !(boolean) $this->get_parameter(self::PARAM_EMBEDDED);
     }
 
     public function any_object_selected()
@@ -148,7 +148,7 @@ abstract class Manager extends Application implements NoContextComponent
 
         $html = array();
 
-        if (! $this->is_stand_alone())
+        if (!$this->is_stand_alone())
         {
             Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
         }
@@ -168,7 +168,8 @@ abstract class Manager extends Application implements NoContextComponent
         }
 
         $this->tabs = new DynamicVisualTabsRenderer(
-            ClassnameUtilities::getInstance()->getClassnameFromObject($this, true));
+            ClassnameUtilities::getInstance()->getClassnameFromObject($this, true)
+        );
 
         foreach ($external_repository_actions as $external_repository_action)
         {
@@ -191,25 +192,26 @@ abstract class Manager extends Application implements NoContextComponent
 
             $label = htmlentities(
                 Translation::get(
-                    (string) StringUtilities::getInstance()->createString($external_repository_action)->upperCamelize() .
-                         'Title'));
+                    (string) StringUtilities::getInstance()->createString($external_repository_action)->upperCamelize(
+                    ) . 'Title'
+                )
+            );
             $link = $this->get_url($parameters);
 
             $icon = 'Place/Tab/' . $external_repository_action;
             $icon_path = Theme::getInstance()->getImagePath($this->get_external_repository()->get_type(), $icon);
             $icon_system_path = Theme::getInstance()->getImagePath(
-                $this->get_external_repository()->get_type(),
-                $icon,
-                'png',
-                false);
+                $this->get_external_repository()->get_type(), $icon, 'png', false
+            );
 
-            if (! file_exists($icon_system_path))
+            if (!file_exists($icon_system_path))
             {
                 $icon_path = Theme::getInstance()->getCommonImagePath($icon);
             }
 
             $this->tabs->add_tab(
-                new DynamicVisualTab($external_repository_action, $label, $icon_path, $link, $selected));
+                new DynamicVisualTab($external_repository_action, $label, $icon_path, $link, $selected)
+            );
         }
 
         $html[] = $this->tabs->header();
@@ -232,7 +234,7 @@ abstract class Manager extends Application implements NoContextComponent
         $has_setting = $this->get_external_repository()->has_settings();
         $has_user_setting = $this->get_external_repository()->has_user_settings();
 
-        if (! ((! $has_setting) || (! $has_user_setting && ! $is_platform)))
+        if (!((!$has_setting) || (!$has_user_setting && !$is_platform)))
         {
             $actions[] = self::ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
         }
@@ -264,7 +266,8 @@ abstract class Manager extends Application implements NoContextComponent
     {
         return array(
             self::PARAM_ACTION => self::ACTION_VIEW_EXTERNAL_REPOSITORY,
-            self::PARAM_EXTERNAL_REPOSITORY_ID => $external_instance_sync->get_external_object_id());
+            self::PARAM_EXTERNAL_REPOSITORY_ID => $external_instance_sync->get_external_object_id()
+        );
     }
 
     /**
@@ -282,15 +285,14 @@ abstract class Manager extends Application implements NoContextComponent
      * @param $order_property ObjectTableOrder
      * @param $offset int
      * @param $count int
+     *
      * @return ArrayResultSet
      */
     public function retrieve_external_repository_objects($condition, $order_property, $offset, $count)
     {
         return $this->get_external_repository_manager_connector()->retrieve_external_repository_objects(
-            $condition,
-            $order_property,
-            $offset,
-            $count);
+            $condition, $order_property, $offset, $count
+        );
     }
 
     /**
@@ -340,6 +342,7 @@ abstract class Manager extends Application implements NoContextComponent
     /**
      *
      * @param \core\repository\external\ExternalObject $object
+     *
      * @return string
      */
     abstract public function get_external_repository_object_viewing_url($object);
@@ -347,6 +350,7 @@ abstract class Manager extends Application implements NoContextComponent
     /**
      *
      * @param $id string
+     *
      * @return ExternalObject
      */
     public function retrieve_external_repository_object($id)
@@ -357,6 +361,7 @@ abstract class Manager extends Application implements NoContextComponent
     /**
      *
      * @param $id string
+     *
      * @return boolean
      */
     public function delete_external_repository_object($id)
@@ -367,6 +372,7 @@ abstract class Manager extends Application implements NoContextComponent
     /**
      *
      * @param $id string
+     *
      * @return boolean
      */
     public function export_external_repository_object($id)
@@ -377,6 +383,7 @@ abstract class Manager extends Application implements NoContextComponent
     /**
      *
      * @param $object ExternalObject
+     *
      * @return array
      */
     public function get_external_repository_object_actions(ExternalObject $object)
@@ -386,52 +393,56 @@ abstract class Manager extends Application implements NoContextComponent
         if ($object->is_editable())
         {
             $toolbar_items[self::ACTION_EDIT_EXTERNAL_REPOSITORY] = new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Edit'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_EDIT_EXTERNAL_REPOSITORY,
-                        self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())),
-                ToolbarItem::DISPLAY_ICON);
+                        self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
+                    )
+                ), ToolbarItem::DISPLAY_ICON
+            );
         }
 
         if ($object->is_deletable())
         {
             $toolbar_items[self::ACTION_DELETE_EXTERNAL_REPOSITORY] = new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('times'),
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_DELETE_EXTERNAL_REPOSITORY,
-                        self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())),
-                ToolbarItem::DISPLAY_ICON);
+                        self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
+                    )
+                ), ToolbarItem::DISPLAY_ICON
+            );
         }
 
         if ($object->is_usable())
         {
-            if (! $this->is_stand_alone())
+            if (!$this->is_stand_alone())
             {
                 $toolbar_items[] = new ToolbarItem(
                     Translation::get('Select', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Publish'),
-                    $this->get_url(
-                        array(
-                            self::PARAM_ACTION => self::ACTION_SELECT_EXTERNAL_REPOSITORY,
-                            self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())),
-                    ToolbarItem::DISPLAY_ICON);
+                    new FontAwesomeGlyph('share-square-o'), $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_SELECT_EXTERNAL_REPOSITORY,
+                        self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
+                    )
+                ), ToolbarItem::DISPLAY_ICON
+                );
             }
             else
             {
                 if ($object->is_importable())
                 {
                     $toolbar_items[self::ACTION_IMPORT_EXTERNAL_REPOSITORY] = new ToolbarItem(
-                        Translation::get('Import', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Import'),
+                        Translation::get('Import', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('upload'),
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_IMPORT_EXTERNAL_REPOSITORY,
-                                self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())),
-                        ToolbarItem::DISPLAY_ICON);
+                                self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
+                            )
+                        ), ToolbarItem::DISPLAY_ICON
+                    );
                 }
                 else
                 {
@@ -439,13 +450,14 @@ abstract class Manager extends Application implements NoContextComponent
                     {
                         case \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData::SYNC_STATUS_INTERNAL :
                             $toolbar_items[self::ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY] = new ToolbarItem(
-                                Translation::get('UpdateRepositoryObject'),
-                                Theme::getInstance()->getCommonImagePath('Action/Synchronize'),
+                                Translation::get('UpdateRepositoryObject'), new FontAwesomeGlyph('sync'),
                                 $this->get_url(
                                     array(
                                         self::PARAM_ACTION => self::ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY,
-                                        self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())),
-                                ToolbarItem::DISPLAY_ICON);
+                                        self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
+                                    )
+                                ), ToolbarItem::DISPLAY_ICON
+                            );
                             break;
                         case \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData::SYNC_STATUS_EXTERNAL :
                             if ($object->is_editable())
@@ -453,42 +465,48 @@ abstract class Manager extends Application implements NoContextComponent
                                 $toolbar_items[self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY] = new ToolbarItem(
                                     Translation::get(
                                         'UpdateExternalObject',
-                                        array('TYPE' => $this->get_external_repository()->get_title())),
-                                    Theme::getInstance()->getImagePath($object::context(), 'Logo/16'),
+                                        array('TYPE' => $this->get_external_repository()->get_title())
+                                    ), Theme::getInstance()->getImagePath($object::context(), 'Logo/16'),
                                     $this->get_url(
                                         array(
                                             self::PARAM_ACTION => self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY,
-                                            self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())),
-                                    ToolbarItem::DISPLAY_ICON);
+                                            self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
+                                        )
+                                    ), ToolbarItem::DISPLAY_ICON
+                                );
                             }
                             break;
                         case \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData::SYNC_STATUS_CONFLICT :
                             $toolbar_items[self::ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY] = new ToolbarItem(
-                                Translation::get('UpdateRepositoryObject'),
-                                Theme::getInstance()->getCommonImagePath('Action/Synchronize'),
+                                Translation::get('UpdateRepositoryObject'), new FontAwesomeGlyph('sync'),
                                 $this->get_url(
                                     array(
                                         self::PARAM_ACTION => self::ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY,
-                                        self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())),
-                                ToolbarItem::DISPLAY_ICON);
+                                        self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
+                                    )
+                                ), ToolbarItem::DISPLAY_ICON
+                            );
                             if ($object->is_editable())
                             {
                                 $toolbar_items[self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY] = new ToolbarItem(
                                     Translation::get(
                                         'UpdateExternalObject',
-                                        array('TYPE' => $this->get_external_repository()->get_name())),
-                                    Theme::getInstance()->getImagePath($object::context(), 'Logo/16'),
+                                        array('TYPE' => $this->get_external_repository()->get_name())
+                                    ), Theme::getInstance()->getImagePath($object::context(), 'Logo/16'),
                                     $this->get_url(
                                         array(
                                             self::PARAM_ACTION => self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY,
-                                            self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())),
-                                    ToolbarItem::DISPLAY_ICON);
+                                            self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
+                                        )
+                                    ), ToolbarItem::DISPLAY_ICON
+                                );
                             }
                             break;
                     }
                 }
             }
         }
+
         return $toolbar_items;
     }
 
@@ -507,6 +525,7 @@ abstract class Manager extends Application implements NoContextComponent
         else
         {
             $renderers = $this->get_available_renderers();
+
             return $renderers[0];
         }
     }
@@ -529,17 +548,19 @@ abstract class Manager extends Application implements NoContextComponent
     /**
      *
      * @param $type string
+     *
      * @return boolean
      */
     public static function exists($type)
     {
         $path = Path::getInstance()->namespaceToFullPath(__NAMESPACE__) . '../implementation';
         $external_repository_path = $path . '/' . $type;
-        $external_repository_manager_path = $external_repository_path . '/php/' . $type .
-             '_external_repository_manager.class.php';
+        $external_repository_manager_path =
+            $external_repository_path . '/php/' . $type . '_external_repository_manager.class.php';
 
         if (file_exists($external_repository_path) && is_dir($external_repository_path) && file_exists(
-            $external_repository_manager_path))
+                $external_repository_manager_path
+            ))
         {
             return true;
         }
@@ -569,15 +590,17 @@ abstract class Manager extends Application implements NoContextComponent
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_TYPE),
-            new StaticConditionVariable('Chamilo\Core\Repository\Implementation'));
+            new StaticConditionVariable('Chamilo\Core\Repository\Implementation')
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_STATUS),
-            new StaticConditionVariable($status));
+            new StaticConditionVariable($status)
+        );
         $condition = new AndCondition($conditions);
 
         return \Chamilo\Core\Repository\Storage\DataManager::retrieves(
-            Registration::class_name(),
-            new DataClassRetrievesParameters($condition));
+            Registration::class_name(), new DataClassRetrievesParameters($condition)
+        );
     }
 
     public static function get_repository_menu_parameter()
@@ -609,6 +632,7 @@ abstract class Manager extends Application implements NoContextComponent
     {
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Repository\External\Action\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 }

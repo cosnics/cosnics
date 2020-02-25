@@ -4,6 +4,7 @@ namespace Chamilo\Application\Portfolio\Favourite\Table\Favourite;
 use Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite;
 use Chamilo\Application\Portfolio\Favourite\Storage\Repository\FavouriteRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
@@ -41,22 +42,26 @@ class FavouriteTableCellRenderer extends RecordTableCellRenderer implements Tabl
                         \Chamilo\Application\Portfolio\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_BROWSE_FAVOURITES,
                         \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Favourite\Manager::ACTION_DELETE,
                         \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_FAVOURITE_ID => $result[UserFavourite::PROPERTY_ID],
-                        \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_SOURCE => \Chamilo\Application\Portfolio\Favourite\Manager::SOURCE_FAVOURITES_BROWSER)),
-                ToolbarItem::DISPLAY_ICON,
-                true));
+                        \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_SOURCE => \Chamilo\Application\Portfolio\Favourite\Manager::SOURCE_FAVOURITES_BROWSER
+                    )
+                ), ToolbarItem::DISPLAY_ICON, true
+            )
+        );
 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::getInstance()->getTranslation(
                     'ShowPortfolio',
                     array('USER' => $result[User::PROPERTY_FIRSTNAME] . ' ' . $result[User::PROPERTY_LASTNAME]),
-                    \Chamilo\Application\Portfolio\Manager::context()),
-                Theme::getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_component()->get_url(
-                    array(
-                        \Chamilo\Application\Portfolio\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_HOME,
-                        \Chamilo\Application\Portfolio\Manager::PARAM_USER_ID => $result[FavouriteRepository::PROPERTY_USER_ID])),
-                ToolbarItem::DISPLAY_ICON));
+                    \Chamilo\Application\Portfolio\Manager::context()
+                ), new FontAwesomeGlyph('folder'), $this->get_component()->get_url(
+                array(
+                    \Chamilo\Application\Portfolio\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_HOME,
+                    \Chamilo\Application\Portfolio\Manager::PARAM_USER_ID => $result[FavouriteRepository::PROPERTY_USER_ID]
+                )
+            ), ToolbarItem::DISPLAY_ICON
+            )
+        );
 
         return $toolbar->as_html();
     }

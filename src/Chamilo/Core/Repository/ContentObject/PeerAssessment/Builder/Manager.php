@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -168,7 +169,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
                     $toolActions->addButton(
                         new Button(
                             Translation::get('PeerAssessmentBuilderSettingsEditorComponent'),
-                            Theme::getInstance()->getCommonImagePath('Action/Config'),
+                            new FontAwesomeGlyph('cog'),
                             $this->get_url(array(self::PARAM_ACTION => self::ACTION_EDIT_SETTINGS))
                         )
                     );
@@ -178,7 +179,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
                     $toolActions->addButton(
                         new Button(
                             Translation::get('PeerAssessmentBuilderAttemptBrowserComponent'),
-                            Theme::getInstance()->getCommonImagePath('Action/Period'),
+                            new FontAwesomeGlyph('clock-o'),
                             $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_ATTEMPTS))
                         )
                     );
@@ -188,7 +189,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
                     $toolActions->addButton(
                         new Button(
                             Translation::get('PeerAssessmentBuilderGroupCreatorComponent'),
-                            Theme::getInstance()->getCommonImagePath('Treemenu/Group'),
+                            new FontAwesomeGlyph('users'),
                             $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_GROUPS))
                         )
                     );
@@ -204,7 +205,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
                         $toolActions->addButton(
                             new Button(
                                 Translation::get('PeerAssessmentBuilderBrowserComponent'),
-                                Theme::getInstance()->getCommonImagePath('Action/Build'),
+                                new FontAwesomeGlyph('cubes'),
                                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE))
                             )
                         );
@@ -214,7 +215,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
                 $toolActions->addButton(
                     new Button(
                         Translation::get('ToolComplexDisplay'),
-                        Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                        new FontAwesomeGlyph('desktop'),
                         $this->get_url($this->get_complex_display_params())
                     )
                 );
