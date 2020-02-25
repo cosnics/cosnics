@@ -277,7 +277,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('ViewAsUser'), new FontAwesomeGlyph('sign-in'), $view_as_url,
+                                Translation::get('ViewAsUser'), new FontAwesomeGlyph('mask'), $view_as_url,
                                 ToolbarItem::DISPLAY_ICON
                             )
                         );

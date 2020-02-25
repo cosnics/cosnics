@@ -3,14 +3,14 @@ namespace Chamilo\Libraries\Format\Slideshow;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -20,8 +20,9 @@ use Chamilo\Libraries\File\Redirect;
  */
 class SlideshowRenderer
 {
-    const PARAM_INDEX = 'slideshow';
     const PARAM_AUTOPLAY = 'autoplay';
+
+    const PARAM_INDEX = 'slideshow';
 
     /**
      *
@@ -87,8 +88,10 @@ class SlideshowRenderer
      * @param integer $slideshowIndex
      * @param integer $slideshowAutoplay
      */
-    public function __construct(ContentObject $contentObject = null, $contentObjectCount, $contentObjectRenditionImplementation,
-        $slideActions, $actionParameters, $slideshowIndex, $slideshowAutoplay)
+    public function __construct(
+        ContentObject $contentObject = null, $contentObjectCount, $contentObjectRenditionImplementation, $slideActions,
+        $actionParameters, $slideshowIndex, $slideshowAutoplay
+    )
     {
         $this->contentObject = $contentObject;
         $this->contentObjectCount = $contentObjectCount;
@@ -97,6 +100,114 @@ class SlideshowRenderer
         $this->actionParameters = $actionParameters;
         $this->slideshowIndex = $slideshowIndex;
         $this->slideshowAutoPlay = $slideshowAutoplay;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $slideshowIndex = $this->getSlideshowIndex();
+        $contentObject = $this->getContentObject();
+        $contentObjectCount = $this->getContentObjectCount();
+
+        if ($contentObjectCount == 0)
+        {
+            $html[] = Display::normal_message(Translation::get('SlideshowNoContentAvailable'), true);
+
+            return implode(PHP_EOL, $html);
+        }
+
+        $html = array();
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-12">';
+
+        $html[] = '<div class="alert alert-info">' . Translation::get('BrowserWarningPreview') . '</div>';
+
+        $html[] = '<div class="panel panel-default panel-slideshow">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] =
+            '<h3 class="panel-title">' . htmlspecialchars($contentObject->get_title()) . ' - ' . ($slideshowIndex + 1) .
+            '/' . $contentObjectCount . '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
+
+        $html[] = '<table class="table-slideshow">';
+        $html[] = '<tbody>';
+        $html[] = '<tr>';
+
+        $html[] = '<td class="control control-left">';
+        $html[] = $this->renderPreviousNavigation();
+        $html[] = '</td>';
+
+        $html[] = '<td class="thumbnail-container">';
+        $html[] = $this->getContentObjectRenditionImplementation()->render();
+        $html[] = '</td>';
+
+        $html[] = '<td class="control control-right">';
+        $html[] = $this->renderNextNavigation();
+        $html[] = '</td>';
+
+        $html[] = '</tr>';
+        $html[] = '</tbody>';
+        $html[] = '</table>';
+
+        $html[] = '<div class="row panel-slideshow-actions">';
+        $html[] = '<div class="col-xs-12">';
+        $html[] = $this->renderButtonToolbar();
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = $this->renderSlidshowAutoplay();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @param integer $slideshowIndex
+     * @param integer $slideshowAutoPlay
+     *
+     * @return string
+     */
+    public function determineUrl($slideshowIndex, $slideshowAutoPlay)
+    {
+        $parameters = $this->getActionParameters();
+
+        $parameters[self::PARAM_INDEX] = $slideshowIndex;
+        $parameters[self::PARAM_AUTOPLAY] = $slideshowAutoPlay;
+
+        $redirect = new Redirect($parameters);
+
+        return $redirect->getUrl();
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getActionParameters()
+    {
+        return $this->actionParameters;
+    }
+
+    /**
+     *
+     * @param string[] $actionParameters
+     */
+    public function setActionParameters($actionParameters)
+    {
+        $this->actionParameters = $actionParameters;
     }
 
     /**
@@ -149,7 +260,8 @@ class SlideshowRenderer
      * @param \Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation $contentObjectRenditionImplementation
      */
     public function setContentObjectRenditionImplementation(
-        ContentObjectRenditionImplementation $contentObjectRenditionImplementation)
+        ContentObjectRenditionImplementation $contentObjectRenditionImplementation
+    )
     {
         $this->contentObjectRenditionImplementation = $contentObjectRenditionImplementation;
     }
@@ -174,20 +286,20 @@ class SlideshowRenderer
 
     /**
      *
-     * @return string[]
+     * @return integer
      */
-    public function getActionParameters()
+    public function getSlideshowAutoPlay()
     {
-        return $this->actionParameters;
+        return $this->slideshowAutoPlay;
     }
 
     /**
      *
-     * @param string[] $actionParameters
+     * @param integer $slideshowAutoPlay
      */
-    public function setActionParameters($actionParameters)
+    public function setSlideshowAutoPlay($slideshowAutoPlay)
     {
-        $this->actionParameters = $actionParameters;
+        $this->slideshowAutoPlay = $slideshowAutoPlay;
     }
 
     /**
@@ -210,145 +322,30 @@ class SlideshowRenderer
 
     /**
      *
-     * @return integer
+     * @return boolean
      */
-    public function getSlideshowAutoPlay()
+    public function isFirst()
     {
-        return $this->slideshowAutoPlay;
+        if (!isset($this->isFirst))
+        {
+            $this->isFirst = ($this->getSlideshowIndex() == 0);
+        }
+
+        return $this->isFirst;
     }
 
     /**
      *
-     * @param integer $slideshowAutoPlay
+     * @return boolean
      */
-    public function setSlideshowAutoPlay($slideshowAutoPlay)
+    public function isLast()
     {
-        $this->slideshowAutoPlay = $slideshowAutoPlay;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $slideshowIndex = $this->getSlideshowIndex();
-        $contentObject = $this->getContentObject();
-        $contentObjectCount = $this->getContentObjectCount();
-
-        if ($contentObjectCount == 0)
+        if (!isset($this->isLast))
         {
-            $html[] = Display::normal_message(Translation::get('SlideshowNoContentAvailable'), true);
-            return implode(PHP_EOL, $html);
+            $this->isLast = ($this->getSlideshowIndex() == ($this->getContentObjectCount() - 1));
         }
 
-        $html = array();
-
-        $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12">';
-
-        $html[] = '<div class="alert alert-info">' . Translation::get('BrowserWarningPreview') . '</div>';
-
-        $html[] = '<div class="panel panel-default panel-slideshow">';
-
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">' . htmlspecialchars($contentObject->get_title()) . ' - ' .
-             ($slideshowIndex + 1) . '/' . $contentObjectCount . '</h3>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="panel-body">';
-
-        $html[] = '<table class="table-slideshow">';
-        $html[] = '<tbody>';
-        $html[] = '<tr>';
-
-        $html[] = '<td class="control control-left">';
-        $html[] = $this->renderPreviousNavigation();
-        $html[] = '</td>';
-
-        $html[] = '<td class="thumbnail-container">';
-        $html[] = $this->getContentObjectRenditionImplementation()->render();
-        $html[] = '</td>';
-
-        $html[] = '<td class="control control-right">';
-        $html[] = $this->renderNextNavigation();
-        $html[] = '</td>';
-
-        $html[] = '</tr>';
-        $html[] = '</tbody>';
-        $html[] = '</table>';
-
-        $html[] = '<div class="row panel-slideshow-actions">';
-        $html[] = '<div class="col-xs-12">';
-        $html[] = $this->renderButtonToolbar();
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = $this->renderSlidshowAutoplay();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderPreviousNavigation()
-    {
-        $html = array();
-
-        if (! $this->isFirst())
-        {
-            $html[] = '<a href="' . $this->determineUrl(0, $this->getSlideshowAutoPlay()) .
-                 '"><span class="glyphicon glyphicon-step-backward"></span></a>';
-
-            $slideshowIndex = $this->getSlideshowIndex() - 1;
-
-            $html[] = '<a href="' . $this->determineUrl($slideshowIndex, $this->getSlideshowAutoPlay()) .
-                 '"><span class="glyphicon glyphicon-triangle-left"></span></a>';
-        }
-        else
-        {
-            $html[] = '<span class="glyphicon glyphicon-step-backward disabled"></span>';
-            $html[] = '<span class="glyphicon glyphicon-triangle-left disabled"></span>';
-        }
-
-        return implode('', $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderNextNavigation()
-    {
-        $html = array();
-
-        if (! $this->isLast())
-        {
-            $slideshowIndex = $this->getSlideshowIndex() + 1;
-
-            $html[] = '<a href="' . $this->determineUrl($slideshowIndex, $this->getSlideshowAutoPlay()) .
-                 '"><span class="glyphicon glyphicon-triangle-right"></span></a>';
-
-            $slideshowIndex = $this->getContentObjectCount() - 1;
-
-            $html[] = '<a href="' . $this->determineUrl($slideshowIndex, $this->getSlideshowAutoPlay()) .
-                 '"><span class="glyphicon glyphicon-step-forward"></span></a>';
-        }
-        else
-        {
-            $html[] = '<span class="glyphicon glyphicon-triangle-right disabled"></span>';
-            $html[] = '<span class="glyphicon glyphicon-step-forward disabled"></span>';
-        }
-
-        return implode('', $html);
+        return $this->isLast;
     }
 
     /**
@@ -367,24 +364,90 @@ class SlideshowRenderer
         {
             $actionsToolBar->add_item(
                 new ToolbarItem(
-                    Translation::get('Stop', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Stop'),
-                    $this->determineUrl($slideshowIndex, 0),
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('Stop', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('stop'),
+                    $this->determineUrl($slideshowIndex, 0), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
         else
         {
             $actionsToolBar->add_item(
                 new ToolbarItem(
-                    Translation::get('Play', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Play'),
-                    $this->determineUrl($slideshowIndex, 1),
-                    ToolbarItem::DISPLAY_ICON));
+                    Translation::get('Play', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('play'),
+                    $this->determineUrl($slideshowIndex, 1), ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
         $actionsToolBarRenderer = new ButtonToolBarRenderer($actionsToolBar->convertToButtonToolBar(false));
 
         return $actionsToolBarRenderer->render();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderNextNavigation()
+    {
+        $html = array();
+
+        if (!$this->isLast())
+        {
+            $slideshowIndex = $this->getSlideshowIndex() + 1;
+
+            $glyph = new FontAwesomeGlyph('step-forward', array('fa-md'), null, 'fas');
+            $html[] = '<a href="' . $this->determineUrl($slideshowIndex, $this->getSlideshowAutoPlay()) . '">' .
+                $glyph->render() . '</a>';
+
+            $slideshowIndex = $this->getContentObjectCount() - 1;
+
+            $glyph = new FontAwesomeGlyph('fast-forward', array('fa-md'), null, 'fas');
+            $html[] = '<a href="' . $this->determineUrl($slideshowIndex, $this->getSlideshowAutoPlay()) . '">' .
+                $glyph->render() . '</span></a>';
+        }
+        else
+        {
+            $glyph = new FontAwesomeGlyph('step-forward', array('fa-md', 'text-muted'), null, 'fas');
+            $html[] = $glyph->render();
+
+            $glyph = new FontAwesomeGlyph('fast-forward', array('fa-md', 'text-muted'), null, 'fas');
+            $html[] = $glyph->render();
+        }
+
+        return implode('', $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderPreviousNavigation()
+    {
+        $html = array();
+
+        if (!$this->isFirst())
+        {
+            $glyph = new FontAwesomeGlyph('fast-backward', array('fa-md'), null, 'fas');
+            $html[] =
+                '<a href="' . $this->determineUrl(0, $this->getSlideshowAutoPlay()) . '">' . $glyph->render() . '</a>';
+
+            $slideshowIndex = $this->getSlideshowIndex() - 1;
+
+            $glyph = new FontAwesomeGlyph('step-backward', array('fa-md'), null, 'fas');
+            $html[] = '<a href="' . $this->determineUrl($slideshowIndex, $this->getSlideshowAutoPlay()) . '">' .
+                $glyph->render() . '</span></a>';
+        }
+        else
+        {
+            $glyph = new FontAwesomeGlyph('fast-backward', array('fa-md', 'text-muted'), null, 'fas');
+            $html[] = $glyph->render();
+
+            $glyph = new FontAwesomeGlyph('step-backward', array('fa-md', 'text-muted'), null, 'fas');
+            $html[] = $glyph->render();
+        }
+
+        return implode('', $html);
     }
 
     /**
@@ -399,7 +462,7 @@ class SlideshowRenderer
 
         if ($slideshowAutoplay)
         {
-            if (! $this->isLast())
+            if (!$this->isLast())
             {
                 $slideshowIndex = $this->getSlideshowIndex() + 1;
                 $autoplayUrl = $this->determineUrl($slideshowIndex, 1);
@@ -413,49 +476,5 @@ class SlideshowRenderer
         }
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function isLast()
-    {
-        if (! isset($this->isLast))
-        {
-            $this->isLast = ($this->getSlideshowIndex() == ($this->getContentObjectCount() - 1));
-        }
-
-        return $this->isLast;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function isFirst()
-    {
-        if (! isset($this->isFirst))
-        {
-            $this->isFirst = ($this->getSlideshowIndex() == 0);
-        }
-        return $this->isFirst;
-    }
-
-    /**
-     *
-     * @param integer $slideshowIndex
-     * @param integer $slideshowAutoPlay
-     * @return string
-     */
-    public function determineUrl($slideshowIndex, $slideshowAutoPlay)
-    {
-        $parameters = $this->getActionParameters();
-
-        $parameters[self::PARAM_INDEX] = $slideshowIndex;
-        $parameters[self::PARAM_AUTOPLAY] = $slideshowAutoPlay;
-
-        $redirect = new Redirect($parameters);
-        return $redirect->getUrl();
     }
 }

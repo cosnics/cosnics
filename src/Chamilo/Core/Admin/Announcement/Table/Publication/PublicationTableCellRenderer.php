@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
@@ -117,51 +118,51 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', array(), Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Edit'), $this->get_component()->get_url(
-                    array(
-                        Manager::PARAM_ACTION => Manager::ACTION_EDIT,
-                        Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication::PROPERTY_ID]
-                    )
-                ), ToolbarItem::DISPLAY_ICON
+                    Translation::get('Edit', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                    $this->get_component()->get_url(
+                        array(
+                            Manager::PARAM_ACTION => Manager::ACTION_EDIT,
+                            Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication::PROPERTY_ID]
+                        )
+                    ), ToolbarItem::DISPLAY_ICON
                 )
             );
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', array(), Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Delete'), $this->get_component()->get_url(
-                    array(
-                        Manager::PARAM_ACTION => Manager::ACTION_DELETE,
-                        Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication::PROPERTY_ID]
-                    )
-                ), ToolbarItem::DISPLAY_ICON, true
+                    Translation::get('Delete', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    $this->get_component()->get_url(
+                        array(
+                            Manager::PARAM_ACTION => Manager::ACTION_DELETE,
+                            Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication::PROPERTY_ID]
+                        )
+                    ), ToolbarItem::DISPLAY_ICON, true
                 )
             );
 
             if ($publication[Publication::PROPERTY_HIDDEN])
             {
-                $visibility_img = 'Action/Invisible';
+                $glyph = new FontAwesomeGlyph('eye', array('text-muted'));
             }
             elseif ($publication[Publication::PROPERTY_FROM_DATE] == 0 &&
                 $publication[Publication::PROPERTY_TO_DATE] == 0)
             {
-                $visibility_img = 'Action/Visible';
+                $glyph = new FontAwesomeGlyph('eye');
             }
             else
             {
-                $visibility_img = 'Action/Period';
+                $glyph = new FontAwesomeGlyph('clock-o');
             }
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Hide', array(), Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath($visibility_img), $this->get_component()->get_url(
-                    array(
-                        Manager::PARAM_ACTION => Manager::ACTION_HIDE,
-                        Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication::PROPERTY_ID]
-                    )
-                ), ToolbarItem::DISPLAY_ICON
+                    Translation::get('Hide', array(), Utilities::COMMON_LIBRARIES), $glyph,
+                    $this->get_component()->get_url(
+                        array(
+                            Manager::PARAM_ACTION => Manager::ACTION_HIDE,
+                            Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication::PROPERTY_ID]
+                        )
+                    ), ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -222,8 +223,8 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
 
                 if ($publication[Publication::PROPERTY_EMAIL_SENT])
                 {
-                    $email_icon = ' - <img src="' . Theme::getInstance()->getCommonImagePath('Action/Email') . '" alt=""
-                        style="vertical-align: middle;" title="' . Translation::get('SentByEmail') . '"/>';
+                    $glyph = new FontAwesomeGlyph('envelope', array(), Translation::get('SentByEmail'));
+                    $email_icon = ' - ' . $glyph->render();
 
                     $data .= $email_icon;
                 }

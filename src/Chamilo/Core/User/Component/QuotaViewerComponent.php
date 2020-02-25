@@ -11,8 +11,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -20,6 +20,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @package user.lib.user_manager.component
  */
+
 /**
  * User manager component which displays the quota to the user.
  * This component displays two progress-bars. The first one
@@ -42,21 +43,21 @@ class QuotaViewerComponent extends Manager
     {
         $this->checkAuthorization(Manager::context(), 'ManageUsers');
 
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
 
         $selected_user_id = Request::get(self::PARAM_USER_USER_ID);
-        if (! $selected_user_id)
+        if (!$selected_user_id)
         {
             $this->selected_user = $this->get_user();
         }
         else
         {
             $this->selected_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(),
-                (int) $selected_user_id);
+                User::class_name(), (int) $selected_user_id
+            );
         }
         $this->calculator = new Calculator($this->selected_user);
 
@@ -68,8 +69,11 @@ class QuotaViewerComponent extends Manager
         $html[] = '<h3>' . htmlentities(Translation::get('UsedDiskSpace')) . '</h3>';
         $html[] = Calculator::getBar(
             $this->calculator->getUserDiskQuotaPercentage(),
-            Filesystem::format_file_size($this->calculator->getUsedUserDiskQuota()) . ' / ' . Filesystem::format_file_size(
-                $this->calculator->getMaximumUserDiskQuota()));
+            Filesystem::format_file_size($this->calculator->getUsedUserDiskQuota()) . ' / ' .
+            Filesystem::format_file_size(
+                $this->calculator->getMaximumUserDiskQuota()
+            )
+        );
         $html[] = '<div style="clear: both;">&nbsp;</div>';
 
         $html[] = $this->render_footer();
@@ -84,13 +88,14 @@ class QuotaViewerComponent extends Manager
 
         $commonActions->addButton(
             new Button(
-                Translation::get('EditUser'),
-                Theme::getInstance()->getCommonImagePath('Action/Edit'),
-                $this->get_url(
-                    array(
-                        Application::PARAM_ACTION => self::ACTION_UPDATE_USER,
-                        self::PARAM_USER_USER_ID => $this->selected_user->get_id())),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                Translation::get('EditUser'), new FontAwesomeGlyph('pencil'), $this->get_url(
+                array(
+                    Application::PARAM_ACTION => self::ACTION_UPDATE_USER,
+                    self::PARAM_USER_USER_ID => $this->selected_user->get_id()
+                )
+            ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+            )
+        );
 
         $buttonToolbar->addButtonGroup($commonActions);
 

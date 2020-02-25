@@ -36,8 +36,8 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                 $url = $publication_attributes->get_url();
 
                 return '<a href="' . $url . '"><span title="' . htmlentities($publication_attributes->get_title()) .
-                    '">' .
-                    StringUtilities::getInstance()->truncate($publication_attributes->get_title(), 50) . '</span></a>';
+                    '">' . StringUtilities::getInstance()->truncate($publication_attributes->get_title(), 50) .
+                    '</span></a>';
             case Attributes::PROPERTY_DATE :
                 return date('Y-m-d, H:i', $publication_attributes->get_date());
         }
@@ -56,8 +56,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('times'),
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE,
@@ -65,9 +64,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                         Manager::PARAM_PUBLICATION_APPLICATION => $publication_attributes->get_application(),
                         Manager::PARAM_PUBLICATION_CONTEXT => $publication_attributes->getPublicationContext()
                     )
-                ),
-                ToolbarItem::DISPLAY_ICON,
-                true
+                ), ToolbarItem::DISPLAY_ICON, true
             )
         );
 
@@ -75,16 +72,14 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Update', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Revert'),
+                    Translation::get('Update', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('undo'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
                             Manager::PARAM_PUBLICATION_APPLICATION => $publication_attributes->get_application(),
                             Manager::PARAM_PUBLICATION_ID => $publication_attributes->get_id()
                         )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
+                    ), ToolbarItem::DISPLAY_ICON
                 )
             );
         }

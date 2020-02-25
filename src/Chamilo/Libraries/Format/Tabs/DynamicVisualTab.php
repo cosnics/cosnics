@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Tabs;
 
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -73,8 +74,10 @@ class DynamicVisualTab extends DynamicTab
      * @param integer $display
      * @param integer $target
      */
-    public function __construct($id, $name, $image, $link, $selected = false, $confirmation = false,
-        $position = self :: POSITION_LEFT, $display = self :: DISPLAY_BOTH, $target = self :: TARGET_WINDOW)
+    public function __construct(
+        $id, $name, $image, $link, $selected = false, $confirmation = false, $position = self :: POSITION_LEFT,
+        $display = self :: DISPLAY_BOTH, $target = self :: TARGET_WINDOW
+    )
     {
         parent::__construct($id, $name, $image);
         $this->link = $link;
@@ -237,11 +240,12 @@ class DynamicVisualTab extends DynamicTab
             if ($this->needs_confirmation())
             {
                 $link[] = 'onclick="return confirm(\'' . addslashes(
-                    htmlentities(
-                        $this->get_confirmation() === true ? Translation::get(
-                            'Confirm',
-                            null,
-                            Utilities::COMMON_LIBRARIES) : $this->get_confirmation())) . '\');"';
+                        htmlentities(
+                            $this->get_confirmation() === true ? Translation::get(
+                                'Confirm', null, Utilities::COMMON_LIBRARIES
+                            ) : $this->get_confirmation()
+                        )
+                    ) . '\');"';
             }
         }
         elseif ($this->get_link() && $this->get_target() == self::TARGET_POPUP)
@@ -257,20 +261,29 @@ class DynamicVisualTab extends DynamicTab
 
         $html[] = implode(' ', $link);
 
-        if ($this->get_image() && $this->get_display() != self::DISPLAY_TEXT)
+        if ($this->get_display() != self::DISPLAY_TEXT)
         {
-            $html[] = '<img src="' . $this->get_image() . '" border="0" style="vertical-align: middle;" alt="' .
-                 $this->get_name() . '" title="' . htmlentities($this->get_name()) . '"/>';
+            if ($this->get_image() instanceof InlineGlyph)
+            {
+                $html[] = $this->get_image()->render();
+            }
+            else
+            {
+                $html[] = '<img src="' . $this->get_image() . '" border="0" style="vertical-align: middle;" alt="' .
+                    $this->get_name() . '" title="' . htmlentities($this->get_name()) . '"/>';
+            }
         }
 
-        if ($this->get_name() && (($this->get_display() == self::DISPLAY_BOTH_SELECTED && $this->get_selected() == true) ||
-             $this->get_display() == self::DISPLAY_ICON || $this->get_display() == self::DISPLAY_BOTH))
+        if ($this->get_name() &&
+            (($this->get_display() == self::DISPLAY_BOTH_SELECTED && $this->get_selected() == true) ||
+                $this->get_display() == self::DISPLAY_ICON || $this->get_display() == self::DISPLAY_BOTH))
         {
             $html[] = '<span class="title">' . $this->get_name() . '</span>';
         }
 
         $html[] = '</a>';
         $html[] = '</li>';
+
         return implode(PHP_EOL, $html);
     }
 

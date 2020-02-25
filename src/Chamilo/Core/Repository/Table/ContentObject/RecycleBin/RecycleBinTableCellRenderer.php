@@ -42,46 +42,48 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
                 {
                     $title_short = substr($title_short, 0, 50) . '&hellip;';
                 }
+
                 return '<a href="' .
-                     htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) . '" title="' .
-                     htmlentities($title) . '">' . $title_short . '</a>';
+                    htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
+                    '" title="' . htmlentities($title) . '">' . $title_short . '</a>';
             case Translation::get(RecycleBinTableColumnModel::ORIGINAL_LOCATION) :
                 $pid = $content_object->get_parent_id();
-                if (! isset($this->parent_title_cache[$pid]))
+                if (!isset($this->parent_title_cache[$pid]))
                 {
                     $category = DataManager::retrieve_categories(
                         new EqualityCondition(
                             new PropertyConditionVariable(
-                                RepositoryCategory::class_name(),
-                                RepositoryCategory::PROPERTY_ID),
-                            new StaticConditionVariable($pid)))->next_result();
+                                RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID
+                            ), new StaticConditionVariable($pid)
+                        )
+                    )->next_result();
 
-                    $this->parent_title_cache[$pid] = '<a href="' .
-                         htmlentities(
+                    $this->parent_title_cache[$pid] = '<a href="' . htmlentities(
                             $this->get_component()->get_url(
                                 array(
                                     Manager::PARAM_CATEGORY_ID => $pid,
-                                    Manager::PARAM_ACTION => Manager::ACTION_BROWSE_CONTENT_OBJECTS))) . '" title="' .
-                         htmlentities(Translation::get('BrowseThisCategory')) . '">' . ($category ? $category->get_name() : Translation::get(
-                            'Root',
-                            null,
-                            Utilities::COMMON_LIBRARIES)) . '</a>';
+                                    Manager::PARAM_ACTION => Manager::ACTION_BROWSE_CONTENT_OBJECTS
+                                )
+                            )
+                        ) . '" title="' . htmlentities(Translation::get('BrowseThisCategory')) . '">' .
+                        ($category ? $category->get_name() : Translation::get(
+                            'Root', null, Utilities::COMMON_LIBRARIES
+                        )) . '</a>';
                 }
 
                 return $this->parent_title_cache[$pid];
 
             case Theme::getInstance()->getCommonImage(
-                'Action/Category',
-                'png',
-                Translation::get('Type'),
-                null,
-                ToolbarItem::DISPLAY_ICON) :
+                'Action/Category', 'png', Translation::get('Type'), null, ToolbarItem::DISPLAY_ICON
+            ) :
                 return $content_object->get_icon_image(Theme::ICON_MINI);
 
             case ContentObject::PROPERTY_DESCRIPTION :
                 return Utilities::htmlentities(
-                    StringUtilities::getInstance()->truncate($content_object->get_description(), 50));
+                    StringUtilities::getInstance()->truncate($content_object->get_description(), 50)
+                );
         }
+
         return parent::render_cell($column, $content_object);
     }
 
@@ -91,18 +93,19 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Restore', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Restore'),
-                $this->get_component()->get_content_object_restoring_url($content_object),
-                ToolbarItem::DISPLAY_ICON));
+                Translation::get('Restore', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('undo'),
+                $this->get_component()->get_content_object_restoring_url($content_object), ToolbarItem::DISPLAY_ICON
+            )
+        );
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('times'),
-                $this->get_component()->get_content_object_deletion_url($content_object),
-                ToolbarItem::DISPLAY_ICON,
-                true));
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                $this->get_component()->get_content_object_deletion_url($content_object), ToolbarItem::DISPLAY_ICON,
+                true
+            )
+        );
+
         return $toolbar->as_html();
     }
 }

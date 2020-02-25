@@ -8,8 +8,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -72,27 +72,18 @@ class ResultViewerComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     Translation::get(
-                        'PrintReport',
-                        array(), self::EPHORUS_TRANSLATION_CONTEXT
-                    ),
-                    Theme::getInstance()->getCommonImagePath('Action/Item'),
-                    '#',
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL,
-                    false,
-                    'print_button'
+                        'PrintReport', array(), self::EPHORUS_TRANSLATION_CONTEXT
+                    ), new FontAwesomeGlyph('item'), '#', ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'print_button'
                 )
             );
 
             $commonActions->addButton(
                 new Button(
                     Translation::get(
-                        'ExportReport',
-                        array(), self::EPHORUS_TRANSLATION_CONTEXT
-                    ),
-                    Theme::getInstance()->getCommonImagePath('Action/Export'),
+                        'ExportReport', array(), self::EPHORUS_TRANSLATION_CONTEXT
+                    ), new FontAwesomeGlyph('export'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT_RESULT)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL,
-                    false
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL, false
                 )
             );
 

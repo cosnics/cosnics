@@ -11,13 +11,13 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCountCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -60,6 +60,17 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $breadcrumbtrail->add(
+            new Breadcrumb(
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
+                Translation::get('RepositoryManagerBrowserComponent')
+            )
+        );
+        $breadcrumbtrail->add_help('repository_recycle_bin_browser');
+    }
+
     /**
      * Display content objects in the recycle bin.
      *
@@ -95,18 +106,18 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('EmptyRecycleBin'),
-                    Theme::getInstance()->getCommonImagePath('Treemenu/Trash'),
-                    $this->get_url(array(self::PARAM_EMPTY_RECYCLE_BIN => 1)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL,
-                    Translation::get('ConfirmEmptyRecycleBin')));
+                    Translation::get('EmptyRecycleBin'), new FontAwesomeGlyph('trash'),
+                    $this->get_url(array(self::PARAM_EMPTY_RECYCLE_BIN => 1)), ToolbarItem::DISPLAY_ICON_AND_LABEL,
+                    Translation::get('ConfirmEmptyRecycleBin')
+                )
+            );
 
             $buttonToolbar->addButtonGroup($commonActions);
 
@@ -116,18 +127,10 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
-                Translation::get('RepositoryManagerBrowserComponent')));
-        $breadcrumbtrail->add_help('repository_recycle_bin_browser');
-    }
-
     /*
      * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
      */
+
     public function get_table_condition($table_class_name)
     {
         return $this->get_current_user_recycle_bin_conditions();

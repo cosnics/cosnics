@@ -12,6 +12,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -120,9 +121,8 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
             case 'published_for' :
                 if ($publication[ContentObjectPublication::PROPERTY_EMAIL_SENT])
                 {
-                    $email_icon = ' - <img src="' . Theme::getInstance()->getCommonImagePath('Action/Email') . '" alt=""
-                        style="vertical-align: middle;" title="' .
-                         Translation::get('SentByEmail') . '"/>';
+                    $glyph = new FontAwesomeGlyph('envelope', array(), Translation::get('SentByEmail'));
+                    $email_icon = ' - ' . $glyph->render();
                 }
                 $data = '<div style="float: left;">' . $this->render_publication_targets($publication) . '</div>' .
                      $email_icon;
