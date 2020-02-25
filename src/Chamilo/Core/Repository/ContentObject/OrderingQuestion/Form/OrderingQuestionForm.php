@@ -8,7 +8,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -19,108 +18,14 @@ use Chamilo\Libraries\Translation\Translation;
 class OrderingQuestionForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    public function addHintTab()
     {
-        parent::build_creation_form();
-        $this->addElement('category', Translation::get('Items'));
-        $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\OrderingQuestion', true) .
-            'OrderingQuestion.js'
-        )
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab(
+                'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', array('ident-sm')),
+                'buildHintForm'
+            )
         );
-        $this->add_options();
-        $this->addElement('category');
-    }
-
-    protected function build_editing_form()
-    {
-        parent::build_editing_form();
-        $this->addElement('category', Translation::get('Items'));
-        $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\OrderingQuestion', true) .
-            'OrderingQuestion.js'
-        )
-        );
-        $this->add_options();
-        $this->addElement('category');
-    }
-
-    public function setDefaults($defaults = array())
-    {
-        if (!$this->isSubmitted())
-        {
-            $object = $this->get_content_object();
-            $defaults[OrderingQuestion::PROPERTY_HINT] = $object->get_hint();
-
-            if ($object->get_number_of_options() != 0)
-            {
-                $options = $object->get_options();
-                foreach ($options as $index => $option)
-                {
-                    $defaults[OrderingQuestionOption::PROPERTY_VALUE][$index] = $option->get_value();
-                    $defaults[OrderingQuestionOption::PROPERTY_SCORE][$index] = $option->get_score();
-                    $defaults[OrderingQuestionOption::PROPERTY_FEEDBACK][$index] = $option->get_feedback();
-                    $defaults[OrderingQuestionOption::PROPERTY_ORDER][$index] = $option->get_order();
-                }
-            }
-            else
-            {
-                $number_of_options = intval($_SESSION['ordering_number_of_options']);
-
-                for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
-                {
-                    $defaults[OrderingQuestionOption::PROPERTY_SCORE][$option_number] = 1;
-                    $defaults[OrderingQuestionOption::PROPERTY_ORDER][$option_number] = $option_number + 1;
-                }
-            }
-        }
-        parent::setDefaults($defaults);
-    }
-
-    public function create_content_object()
-    {
-        $object = new OrderingQuestion();
-        $object->set_hint($this->exportValue(OrderingQuestion::PROPERTY_HINT));
-        $this->set_content_object($object);
-        $this->add_options_to_object();
-
-        return parent::create_content_object();
-    }
-
-    public function update_content_object()
-    {
-        $this->get_content_object()->set_hint($this->exportValue(OrderingQuestion::PROPERTY_HINT));
-        $this->add_options_to_object();
-
-        return parent::update_content_object();
-    }
-
-    private function add_options_to_object()
-    {
-        $object = $this->get_content_object();
-        $values = $this->exportValues();
-        $options = array();
-        foreach ($values[OrderingQuestionOption::PROPERTY_VALUE] as $option_id => $value)
-        {
-            $order = $values[OrderingQuestionOption::PROPERTY_ORDER][$option_id];
-            $score = $values[OrderingQuestionOption::PROPERTY_SCORE][$option_id];
-            $feedback = $values[OrderingQuestionOption::PROPERTY_FEEDBACK][$option_id];
-
-            $options[] = new OrderingQuestionOption($value, $order, $score, $feedback);
-        }
-        $object->set_options($options);
-    }
-
-    public function validate()
-    {
-        if (isset($_POST['add']) || isset($_POST['remove']) || isset($_POST['change_answer_type']))
-        {
-            return false;
-        }
-
-        return parent::validate();
     }
 
     /**
@@ -223,19 +128,16 @@ class OrderingQuestionForm extends ContentObjectForm
 
                 if ($number_of_options - count($_SESSION['ordering_skip_options']) > 2)
                 {
-                    $group[] = &$this->createElement(
-                        'image', 'remove[' . $option_number . ']',
-                        new FontAwesomeGlyph('times'),
-                        array('class' => 'remove_option', 'id' => 'remove_' . $option_number)
+                    $group[] = $this->createElement(
+                        'style_button', 'remove[' . $option_number . ']', null,
+                        array('class' => 'remove_option', 'id' => 'remove_' . $option_number), null,
+                        new FontAwesomeGlyph('times', array(), null, 'fas')
                     );
                 }
                 else
                 {
-                    $group[] = &$this->createElement(
-                        'static', null, null,
-                        '<img src="' . Theme::getInstance()->getCommonImagePath('Action/DeleteNa') .
-                        '" class="remove_option" />'
-                    );
+                    $glyph = new FontAwesomeGlyph('times', array('text-muted', 'remove_option'));
+                    $group[] = &$this->createElement('static', null, null, $glyph->render());
                 }
 
                 $this->addGroup($group, OrderingQuestionOption::PROPERTY_VALUE . '_' . $option_number, null, '', false);
@@ -275,22 +177,20 @@ class OrderingQuestionForm extends ContentObjectForm
         );
     }
 
-    public function prepareTabs()
+    private function add_options_to_object()
     {
-        $this->addDefaultTab();
-        $this->addHintTab();
-        $this->addInstructionsTab();
-        $this->addMetadataTabs();
-    }
+        $object = $this->get_content_object();
+        $values = $this->exportValues();
+        $options = array();
+        foreach ($values[OrderingQuestionOption::PROPERTY_VALUE] as $option_id => $value)
+        {
+            $order = $values[OrderingQuestionOption::PROPERTY_ORDER][$option_id];
+            $score = $values[OrderingQuestionOption::PROPERTY_SCORE][$option_id];
+            $feedback = $values[OrderingQuestionOption::PROPERTY_FEEDBACK][$option_id];
 
-    public function addHintTab()
-    {
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab(
-                'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', array('ident-sm')),
-                'buildHintForm'
-            )
-        );
+            $options[] = new OrderingQuestionOption($value, $order, $score, $feedback);
+        }
+        $object->set_options($options);
     }
 
     public function buildHintForm()
@@ -306,5 +206,101 @@ class OrderingQuestionForm extends ContentObjectForm
             Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), false,
             $htmlEditorOptions
         );
+    }
+
+    protected function build_creation_form()
+    {
+        parent::build_creation_form();
+        $this->addElement('category', Translation::get('Items'));
+        $this->addElement(
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\OrderingQuestion', true) .
+            'OrderingQuestion.js'
+        )
+        );
+        $this->add_options();
+        $this->addElement('category');
+    }
+
+    protected function build_editing_form()
+    {
+        parent::build_editing_form();
+        $this->addElement('category', Translation::get('Items'));
+        $this->addElement(
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\OrderingQuestion', true) .
+            'OrderingQuestion.js'
+        )
+        );
+        $this->add_options();
+        $this->addElement('category');
+    }
+
+    public function create_content_object()
+    {
+        $object = new OrderingQuestion();
+        $object->set_hint($this->exportValue(OrderingQuestion::PROPERTY_HINT));
+        $this->set_content_object($object);
+        $this->add_options_to_object();
+
+        return parent::create_content_object();
+    }
+
+    public function prepareTabs()
+    {
+        $this->addDefaultTab();
+        $this->addHintTab();
+        $this->addInstructionsTab();
+        $this->addMetadataTabs();
+    }
+
+    public function setDefaults($defaults = array())
+    {
+        if (!$this->isSubmitted())
+        {
+            $object = $this->get_content_object();
+            $defaults[OrderingQuestion::PROPERTY_HINT] = $object->get_hint();
+
+            if ($object->get_number_of_options() != 0)
+            {
+                $options = $object->get_options();
+                foreach ($options as $index => $option)
+                {
+                    $defaults[OrderingQuestionOption::PROPERTY_VALUE][$index] = $option->get_value();
+                    $defaults[OrderingQuestionOption::PROPERTY_SCORE][$index] = $option->get_score();
+                    $defaults[OrderingQuestionOption::PROPERTY_FEEDBACK][$index] = $option->get_feedback();
+                    $defaults[OrderingQuestionOption::PROPERTY_ORDER][$index] = $option->get_order();
+                }
+            }
+            else
+            {
+                $number_of_options = intval($_SESSION['ordering_number_of_options']);
+
+                for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
+                {
+                    $defaults[OrderingQuestionOption::PROPERTY_SCORE][$option_number] = 1;
+                    $defaults[OrderingQuestionOption::PROPERTY_ORDER][$option_number] = $option_number + 1;
+                }
+            }
+        }
+        parent::setDefaults($defaults);
+    }
+
+    public function update_content_object()
+    {
+        $this->get_content_object()->set_hint($this->exportValue(OrderingQuestion::PROPERTY_HINT));
+        $this->add_options_to_object();
+
+        return parent::update_content_object();
+    }
+
+    public function validate()
+    {
+        if (isset($_POST['add']) || isset($_POST['remove']) || isset($_POST['change_answer_type']))
+        {
+            return false;
+        }
+
+        return parent::validate();
     }
 }

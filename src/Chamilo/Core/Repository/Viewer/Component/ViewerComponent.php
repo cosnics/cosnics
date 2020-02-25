@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Viewer\Component;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -26,14 +27,12 @@ class ViewerComponent extends Manager
 
         if ($contentObjectIdentifier)
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
-                $contentObjectIdentifier
+            $content_object = DataManager::retrieve_by_id(
+                ContentObject::class_name(), $contentObjectIdentifier
             );
 
             $canEditContentObject = RightsService::getInstance()->canEditContentObject(
-                $this->get_user(),
-                $content_object
+                $this->get_user(), $content_object
             );
             $canUseContentObject =
                 RightsService::getInstance()->canUseContentObject($this->get_user(), $content_object);
@@ -45,14 +44,9 @@ class ViewerComponent extends Manager
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Publish'),
-                        $this->get_url(
-                            array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object->get_id())),
-                            false
-                        ),
-                        Button::DISPLAY_ICON_AND_LABEL,
-                        false,
-                        'btn-primary'
+                        new FontAwesomeGlyph('share-square-o'), $this->get_url(
+                        array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object->get_id())), false
+                    ), Button::DISPLAY_ICON_AND_LABEL, false, 'btn-primary'
                     )
                 );
             }
@@ -61,18 +55,14 @@ class ViewerComponent extends Manager
             {
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('EditAndPublish'),
-                        Theme::getInstance()->getCommonImagePath('Action/Editpublish'),
-                        $this->get_url(
-                            array_merge(
-                                $this->get_parameters(),
-                                array(
-                                    self::PARAM_TAB => self::TAB_CREATOR,
-                                    self::PARAM_ACTION => self::ACTION_CREATOR,
-                                    self::PARAM_EDIT_ID => $content_object->get_id()
-                                )
+                        Translation::get('EditAndPublish'), new FontAwesomeGlyph('edit'), $this->get_url(
+                        array_merge(
+                            $this->get_parameters(), array(
+                                self::PARAM_TAB => self::TAB_CREATOR, self::PARAM_ACTION => self::ACTION_CREATOR,
+                                self::PARAM_EDIT_ID => $content_object->get_id()
                             )
                         )
+                    )
                     )
                 );
             }
@@ -83,16 +73,23 @@ class ViewerComponent extends Manager
 
             $html[] = $this->render_header();
             $html[] = ContentObjectRenditionImplementation::launch(
-                $content_object,
-                ContentObjectRendition::FORMAT_HTML,
-                ContentObjectRendition::VIEW_FULL,
-                $this
+                $content_object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL, $this
             );
             $html[] = $buttonToolbarRenderer->render();
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $breadcrumbtrail->add_help('repo_viewer_viewer');
+        $breadcrumbtrail->add(
+            new Breadcrumb(
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSER)), Translation::get('BrowserComponent')
+            )
+        );
     }
 
     /**
@@ -102,7 +99,7 @@ class ViewerComponent extends Manager
      */
     public function get_content_object_display_attachment_url($attachment)
     {
-        if(!$attachment instanceof ContentObject)
+        if (!$attachment instanceof ContentObject)
         {
             return null;
         }
@@ -119,16 +116,5 @@ class ViewerComponent extends Manager
         );
 
         return $redirect->getUrl();
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repo_viewer_viewer');
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSER)),
-                Translation::get('BrowserComponent')
-            )
-        );
     }
 }

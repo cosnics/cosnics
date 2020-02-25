@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -422,8 +423,18 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
         $class = $invisible ? ' invisible' : '';
 
-        $html[] = '<div class="announcements level_' . $level . '"  style="background-image: url(' . $image . ')">';
-        $html[] = '<div class="title' . $class . '">';
+        if ($image instanceof InlineGlyph)
+        {
+            $html[] = '<div class="announcements level_' . $level . '" >';
+            $html[] = '<div class="title' . $class . '">';
+            $html[] = $image->render();
+        }
+        else
+        {
+            $html[] = '<div class="announcements level_' . $level . '"  style="background-image: url(' . $image . ')">';
+            $html[] = '<div class="title' . $class . '">';
+        }
+
         $html[] = $title;
         $html[] = '</div>';
         $html[] = '<div class="description' . $class . '">';

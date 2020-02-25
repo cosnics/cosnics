@@ -179,7 +179,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
 
                     $commonActions->addButton(
                         new Button(
-                            Translation::get('RawExportResults'), new FontAwesomeGlyph('export'), $this->get_url(
+                            Translation::get('RawExportResults'), new FontAwesomeGlyph('upload'), $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_RAW_EXPORT_RESULTS,
                                 self::PARAM_ASSESSMENT => Request::get(self::PARAM_ASSESSMENT)

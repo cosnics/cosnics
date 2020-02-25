@@ -8,7 +8,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -62,13 +61,37 @@ class DirectGroupSubscribeBrowserComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * Renders the action bar
+     *
+     * @return string The html
+     * @todo add toolbar items
+     */
+    public function render_action_bar()
+    {
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+
+        $buttonToolbar = $this->buttonToolbarRenderer->getButtonToolBar();
+        $commonActions = new ButtonGroup();
+        $commonActions->addButton(
+            new Button(
+                Translation::get('CreateGroup'), new FontAwesomeGlyph('plus'),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER))
+            )
+        );
+
+        $buttonToolbar->addButtonGroup($commonActions);
+
+        return $this->buttonToolbarRenderer->render();
+    }
+
     private function render_groups(array $groups)
     {
         // TODO date locale doesn't work
         $html = array();
-        $level = 1;
+        $level = 0;
 
-        $image = Theme::getInstance()->getCommonImagePath('Treemenu/Group');
+        $glyph = new FontAwesomeGlyph('users');
 
         // loop through all the attempts and render them
         foreach ($groups as $g)
@@ -98,7 +121,7 @@ class DirectGroupSubscribeBrowserComponent extends Manager
                 $actions = $this->render_toolbar($g);
                 $level = $level == 1 ? 2 : 1;
 
-                $html[] = Manager::render_list_item($title, $description, '$info', $actions, $level, false, $image);
+                $html[] = Manager::render_list_item($title, $description, '$info', $actions, $level, false, $glyph);
             }
         }
 
@@ -137,29 +160,5 @@ class DirectGroupSubscribeBrowserComponent extends Manager
         }
 
         return $toolbar->as_html();
-    }
-
-    /**
-     * Renders the action bar
-     *
-     * @return string The html
-     * @todo add toolbar items
-     */
-    public function render_action_bar()
-    {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
-        $buttonToolbar = $this->buttonToolbarRenderer->getButtonToolBar();
-        $commonActions = new ButtonGroup();
-        $commonActions->addButton(
-            new Button(
-                Translation::get('CreateGroup'), Theme::getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER))
-            )
-        );
-
-        $buttonToolbar->addButtonGroup($commonActions);
-
-        return $this->buttonToolbarRenderer->render();
     }
 }

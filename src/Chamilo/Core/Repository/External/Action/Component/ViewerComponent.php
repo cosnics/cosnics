@@ -62,8 +62,8 @@ class ViewerComponent extends Manager implements DelegateComponent
             
             $toolbar = new Toolbar();
             $toolbar_item = new ToolbarItem(
-                Translation::get('Back', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Prev'), 
+                Translation::get('Back', null, Utilities::COMMON_LIBRARIES),
+                new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('backward'),
                 'javascript:history.back();');
             $toolbar->add_item($toolbar_item);
             

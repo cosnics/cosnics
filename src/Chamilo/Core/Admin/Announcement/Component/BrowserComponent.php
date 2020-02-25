@@ -81,7 +81,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         {
             $tabs->add_tab(
                 new DynamicVisualTab(
-                    self::TYPE_ALL, $translator->trans('AllPublications'), new FontAwesomeGlyph('globe'),
+                    self::TYPE_ALL, $translator->trans('AllPublications'), new FontAwesomeGlyph('globe', array('fa-lg'), null, 'fas'),
                     $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_ALL)), $type == self::TYPE_ALL
                 )
             );
@@ -89,14 +89,14 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
         $tabs->add_tab(
             new DynamicVisualTab(
-                self::TYPE_FROM_ME, $translator->trans('PublishedForMe'), new FontAwesomeGlyph('share-square-o'),
+                self::TYPE_FROM_ME, $translator->trans('PublishedForMe'), new FontAwesomeGlyph('share-square', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FOR_ME)), $type == self::TYPE_FOR_ME
             )
         );
 
         $tabs->add_tab(
             new DynamicVisualTab(
-                self::TYPE_FROM_ME, $translator->trans('MyPublications'), new FontAwesomeGlyph('user'),
+                self::TYPE_FROM_ME, $translator->trans('MyPublications'), new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FROM_ME)), $type == self::TYPE_FROM_ME
             )
         );

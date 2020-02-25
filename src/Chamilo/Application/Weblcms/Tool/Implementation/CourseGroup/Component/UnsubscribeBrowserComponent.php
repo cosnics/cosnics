@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -47,14 +48,18 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
         /** @var CourseGroup $course_group */
         $course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $course_group_id);
-        if (! $course_group)
+        if (!$course_group)
+        {
             throw new ObjectNotExistException(Translation::get('CourseGroup'), $course_group_id);
+        }
 
         $this->course_group = $course_group;
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 $this->get_url(),
-                Translation::get('UnsubscribeBrowserComponent', array('GROUPNAME' => $course_group->get_name()))));
+                Translation::get('UnsubscribeBrowserComponent', array('GROUPNAME' => $course_group->get_name()))
+            )
+        );
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
@@ -67,7 +72,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
         if ($users)
         {
-            if (! is_array($users))
+            if (!is_array($users))
             {
                 $users = array($users);
             }
@@ -83,11 +88,11 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
             $message = Translation::get(count($users) > 1 ? 'UsersUnsubscribed' : 'UserUnsubscribed');
             $this->redirect(
-                $message,
-                false,
-                array(
+                $message, false, array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE,
-                    self::PARAM_COURSE_GROUP => $course_group_id));
+                    self::PARAM_COURSE_GROUP => $course_group_id
+                )
+            );
         }
 
         $table = new SubscribedUserTable($this);
@@ -108,20 +113,20 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $html[] = '<div class="clearfix"></div>';
 
         $html[] = '<b>' . Translation::get('NumberOfMembers') . ':</b> ' . $course_group->count_members();
-        $html[] = '<br /><b>' . Translation::get('MaximumMembers') . ':</b> ' .
-             $course_group->get_max_number_of_members();
-        $html[] = '<br /><b>' . Translation::get('SelfRegistrationAllowed') . ':</b> ' . ($course_group->is_self_registration_allowed() ? Translation::get(
-            'ConfirmYes',
-            null,
-            Utilities::COMMON_LIBRARIES) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
-        $html[] = '<br /><b>' . Translation::get('SelfUnRegistrationAllowed') . ':</b> ' . ($course_group->is_self_unregistration_allowed() ? Translation::get(
-            'ConfirmYes',
-            null,
-            Utilities::COMMON_LIBRARIES) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
-        $html[] = '<br /><b>' . Translation::get('RandomlySubscribed') . ':</b> ' . ($course_group->is_random_registration_done() ? Translation::get(
-            'ConfirmYes',
-            null,
-            Utilities::COMMON_LIBRARIES) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+        $html[] =
+            '<br /><b>' . Translation::get('MaximumMembers') . ':</b> ' . $course_group->get_max_number_of_members();
+        $html[] = '<br /><b>' . Translation::get('SelfRegistrationAllowed') . ':</b> ' .
+            ($course_group->is_self_registration_allowed() ? Translation::get(
+                'ConfirmYes', null, Utilities::COMMON_LIBRARIES
+            ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+        $html[] = '<br /><b>' . Translation::get('SelfUnRegistrationAllowed') . ':</b> ' .
+            ($course_group->is_self_unregistration_allowed() ? Translation::get(
+                'ConfirmYes', null, Utilities::COMMON_LIBRARIES
+            ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+        $html[] = '<br /><b>' . Translation::get('RandomlySubscribed') . ':</b> ' .
+            ($course_group->is_random_registration_done() ? Translation::get(
+                'ConfirmYes', null, Utilities::COMMON_LIBRARIES
+            ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -133,7 +138,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
         $html[] = Theme::getInstance()->getCommonImage('Place/Users') . ' ' .
-             Translation::get('Users', null, \Chamilo\Core\User\Manager::context());
+            Translation::get('Users', null, \Chamilo\Core\User\Manager::context());
         $html[] = '</h3>';
         $html[] = '</div>';
 
@@ -149,10 +154,15 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         return implode(PHP_EOL, $html);
     }
 
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $breadcrumbtrail->add_help('weblcms_course_group_unsubscribe_browser');
+    }
+
     public function getButtonToolbarRenderer()
     {
         $course_group = $this->course_group;
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
@@ -162,19 +172,19 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_url($parameters),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $this->get_url($parameters), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $user = $this->get_parent()->get_user();
 
             $parameters = array();
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
 
-            if (! $this->get_parent()->is_teacher())
+            if (!$this->get_parent()->is_teacher())
             {
-                if ($course_group->is_self_registration_allowed() && ! $course_group->is_member($user))
+                if ($course_group->is_self_registration_allowed() && !$course_group->is_member($user))
                 {
                     $parameters = array();
                     $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
@@ -183,10 +193,10 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
                     $commonActions->addButton(
                         new Button(
-                            Translation::get('SubscribeToGroup'),
-                            Theme::getInstance()->getCommonImagePath('Action/Subscribe'),
-                            $subscribe_url,
-                            ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                            Translation::get('SubscribeToGroup'), new FontAwesomeGlyph('plus-circle'), $subscribe_url,
+                            ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
                 }
 
                 if ($course_group->is_self_unregistration_allowed() && $course_group->is_member($user))
@@ -198,10 +208,10 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
                     $commonActions->addButton(
                         new Button(
-                            Translation::get('UnSubscribeFromGroup'),
-                            Theme::getInstance()->getCommonImagePath('Action/Unsubscribe'),
-                            $unsubscribe_url,
-                            ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                            Translation::get('UnSubscribeFromGroup'), new FontAwesomeGlyph('minus-square'),
+                            $unsubscribe_url, ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
                 }
             }
             else
@@ -213,65 +223,66 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('SubscribeUsers'),
-                        Theme::getInstance()->getCommonImagePath('Action/Subscribe'),
-                        $subscribe_url,
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                        Translation::get('SubscribeUsers'), new FontAwesomeGlyph('plus-circle'), $subscribe_url,
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
 
                 // export the list to a spreadsheet
                 $parameters_export_subscriptions_overview = array();
-                $parameters_export_subscriptions_overview[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW;
+                $parameters_export_subscriptions_overview[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
+                    self::ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW;
                 $parameters_export_subscriptions_overview[self::PARAM_COURSE_GROUP] = $course_group->get_id();
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Export', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Backup'),
-                        $this->get_url($parameters_export_subscriptions_overview),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                        Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('upload'),
+                        $this->get_url($parameters_export_subscriptions_overview), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
 
-//            if ($course_group->get_document_category_id())
-//            {
-//                $type_name = 'document';
-//                $params = array();
-//                $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-//                $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_group->get_course_code();
-//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $type_name;
-//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager::ACTION_BROWSE;
-//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY] = $course_group->get_document_category_id();
-//                $url = $this->get_url($params);
-//
-//                $namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($type_name);
-//                $toolActions->addButton(
-//                    new Button(
-//                        Translation::get('TypeName', null, $namespace),
-//                        Theme::getInstance()->getImagePath($namespace, 'Logo/16'),
-//                        $url,
-//                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
-//            }
-//
-//            if ($course_group->get_forum_category_id())
-//            {
-//                $type_name = 'forum';
-//                $params = array();
-//                $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-//                $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_group->get_course_code();
-//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $type_name;
-//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager::ACTION_BROWSE;
-//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY] = $course_group->get_forum_category_id();
-//                $url = $this->get_url($params);
-//
-//                $namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($type_name);
-//                $toolActions->addButton(
-//                    new Button(
-//                        Translation::get('TypeName', null, $namespace),
-//                        Theme::getInstance()->getImagePath($namespace, 'Logo/16'),
-//                        $url,
-//                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
-//            }
-//TODO ADD LINKS
+            //            if ($course_group->get_document_category_id())
+            //            {
+            //                $type_name = 'document';
+            //                $params = array();
+            //                $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+            //                $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
+            //                $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_group->get_course_code();
+            //                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $type_name;
+            //                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager::ACTION_BROWSE;
+            //                $params[\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY] = $course_group->get_document_category_id();
+            //                $url = $this->get_url($params);
+            //
+            //                $namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($type_name);
+            //                $toolActions->addButton(
+            //                    new Button(
+            //                        Translation::get('TypeName', null, $namespace),
+            //                        Theme::getInstance()->getImagePath($namespace, 'Logo/16'),
+            //                        $url,
+            //                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+            //            }
+            //
+            //            if ($course_group->get_forum_category_id())
+            //            {
+            //                $type_name = 'forum';
+            //                $params = array();
+            //                $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+            //                $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
+            //                $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_group->get_course_code();
+            //                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $type_name;
+            //                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager::ACTION_BROWSE;
+            //                $params[\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY] = $course_group->get_forum_category_id();
+            //                $url = $this->get_url($params);
+            //
+            //                $namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($type_name);
+            //                $toolActions->addButton(
+            //                    new Button(
+            //                        Translation::get('TypeName', null, $namespace),
+            //                        Theme::getInstance()->getImagePath($namespace, 'Logo/16'),
+            //                        $url,
+            //                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+            //            }
+            //TODO ADD LINKS
             $buttonToolbar->addButtonGroup($commonActions);
             $buttonToolbar->addButtonGroup($toolActions);
 
@@ -281,6 +292,11 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         return $this->buttonToolbarRenderer;
     }
 
+    public function getCurrentCourseGroup()
+    {
+        return $this->course_group;
+    }
+
     public function get_condition()
     {
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
@@ -288,14 +304,15 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
-                '*' . $query . '*');
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), '*' . $query . '*'
+            );
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-                '*' . $query . '*');
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), '*' . $query . '*'
+            );
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-                '*' . $query . '*');
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), '*' . $query . '*'
+            );
+
             return new OrCondition($conditions);
         }
     }
@@ -303,16 +320,6 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
     public function get_course_group()
     {
         return $this->course_group;
-    }
-
-    public function getCurrentCourseGroup()
-    {
-        return $this->course_group;
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('weblcms_course_group_unsubscribe_browser');
     }
 
     public function get_table_condition($table_class_name)

@@ -8,7 +8,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -45,12 +44,37 @@ class GroupBrowserComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * Renders the action bar
+     *
+     * @return string The html
+     * @todo add toolbar items
+     */
+    public function render_action_bar()
+    {
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+
+        $buttonToolbar = $this->buttonToolbarRenderer->getButtonToolBar();
+        $commonActions = new ButtonGroup();
+        $commonActions->addButton(
+            new Button(
+                Translation::get('CreateGroup'), new FontAwesomeGlyph('plus'),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_GROUP))
+            )
+        );
+
+        $buttonToolbar->addButtonGroup($commonActions);
+
+        return $this->buttonToolbarRenderer->render();
+    }
+
     private function render_groups(array $groups)
     {
         // TODO date locale doesn't work
         $html = array();
 
-        $image = Theme::getInstance()->getCommonImagePath('Treemenu/Group');
+        $glyph = new FontAwesomeGlyph('users');
+        $level = 0;
 
         // loop through all the attempts and render them
         foreach ($groups as $g)
@@ -83,7 +107,7 @@ class GroupBrowserComponent extends Manager
             $level = $level == 1 ? 2 : 1;
 
             $html[] = \Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager::render_list_item(
-                $title, $description, '$info', $actions, $level, false, $image
+                $title, $description, '$info', $actions, $level, false, $glyph
             );
         }
 
@@ -113,29 +137,5 @@ class GroupBrowserComponent extends Manager
         );
 
         return $toolbar->as_html();
-    }
-
-    /**
-     * Renders the action bar
-     *
-     * @return string The html
-     * @todo add toolbar items
-     */
-    public function render_action_bar()
-    {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
-        $buttonToolbar = $this->buttonToolbarRenderer->getButtonToolBar();
-        $commonActions = new ButtonGroup();
-        $commonActions->addButton(
-            new Button(
-                Translation::get('CreateGroup'), new FontAwesomeGlyph('plus'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_GROUP))
-            )
-        );
-
-        $buttonToolbar->addButtonGroup($commonActions);
-
-        return $this->buttonToolbarRenderer->render();
     }
 }

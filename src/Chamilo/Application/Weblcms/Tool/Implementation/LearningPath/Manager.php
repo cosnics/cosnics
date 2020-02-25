@@ -90,7 +90,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('ExportRawResults'), new FontAwesomeGlyph('export'), $this->get_url(
+                        Translation::get('ExportRawResults'), new FontAwesomeGlyph('upload'), $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
@@ -144,7 +144,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
                 $dropdownButton->prependSubButton(
                     new SubButton(
-                        Translation::get('ExportRawResults'), new FontAwesomeGlyph('export'), $this->get_url(
+                        Translation::get('ExportRawResults'), new FontAwesomeGlyph('upload'), $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]

@@ -10,8 +10,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -75,45 +75,44 @@ class ViewerComponent extends Manager implements NoContextComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Edit', array(), Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Edit'), $this->get_url(
-                        array(
-                            self::PARAM_ACTION => self::ACTION_EDIT,
-                            self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()
-                        )
-                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        Translation::get('Edit', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                        $this->get_url(
+                            array(
+                                self::PARAM_ACTION => self::ACTION_EDIT,
+                                self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()
+                            )
+                        ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Delete', array(), Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Delete'), $this->get_url(
-                        array(
-                            self::PARAM_ACTION => self::ACTION_DELETE,
-                            self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()
-                        )
-                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        Translation::get('Delete', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        $this->get_url(
+                            array(
+                                self::PARAM_ACTION => self::ACTION_DELETE,
+                                self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()
+                            )
+                        ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
 
                 if ($publication->is_hidden())
                 {
-                    $visibility_img = 'Action/Invisible';
+                    $glyph = new FontAwesomeGlyph('eye', array('text-muted'));
                 }
                 elseif ($publication->is_forever())
                 {
-                    $visibility_img = 'Action/Visible';
+                    $glyph = new FontAwesomeGlyph('eye');
                 }
                 else
                 {
-                    $visibility_img = 'Action/Period';
+                    $glyph = new FontAwesomeGlyph('clock-o');
                 }
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Hide', array(), Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath($visibility_img), $this->get_url(
+                        Translation::get('Hide', array(), Utilities::COMMON_LIBRARIES), $glyph, $this->get_url(
                         array(
                             self::PARAM_ACTION => self::ACTION_HIDE,
                             self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()

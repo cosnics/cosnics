@@ -165,8 +165,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
     {
         $html = array();
 
-        $html[] = '<div class="attachments" style="margin-top: 1em; background-image:url(' .
-            Theme::getInstance()->getCommonImagePath('Place/Selected') . ')">';
+        $html[] = '<div class="attachments">';
 
         if (count($users) > 1)
         {

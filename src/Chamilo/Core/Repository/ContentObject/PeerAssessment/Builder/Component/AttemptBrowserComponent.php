@@ -8,7 +8,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 class AttemptBrowserComponent extends Manager
@@ -47,12 +46,31 @@ class AttemptBrowserComponent extends Manager
         }
     }
 
+    public function render_action_bar()
+    {
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+
+        $buttonToolbar = $this->buttonToolbarRenderer->getButtonToolBar();
+        $commonActions = new ButtonGroup();
+        $commonActions->addButton(
+            new Button(
+                Translation::get('CreateAttempt'), new FontAwesomeGlyph('plus'),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_ATTEMPT))
+            )
+        );
+
+        $buttonToolbar->addButtonGroup($commonActions);
+
+        return $this->buttonToolbarRenderer->render();
+    }
+
     private function render_attempts(array $attempts)
     {
         // TODO date locale doesn't work
         $html = array();
 
-        $image = Theme::getInstance()->getCommonImagePath('Action/Period');
+        $glyph = new FontAwesomeGlyph('clock-o');
+        $level = 0;
 
         // loop through all the attempts and render them
         foreach ($attempts as $a)
@@ -73,7 +91,7 @@ class AttemptBrowserComponent extends Manager
             $hidden = $a->get_hidden();
 
             $html[] = \Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager::render_list_item(
-                $title, $description, $info, $actions, $level, $hidden, $image
+                $title, $description, $info, $actions, $level, $hidden, $glyph
             );
         }
 
@@ -114,23 +132,5 @@ class AttemptBrowserComponent extends Manager
         );
 
         return $toolbar->as_html();
-    }
-
-    public function render_action_bar()
-    {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
-        $buttonToolbar = $this->buttonToolbarRenderer->getButtonToolBar();
-        $commonActions = new ButtonGroup();
-        $commonActions->addButton(
-            new Button(
-                Translation::get('CreateAttempt'), new FontAwesomeGlyph('plus'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_ATTEMPT))
-            )
-        );
-
-        $buttonToolbar->addButtonGroup($commonActions);
-
-        return $this->buttonToolbarRenderer->render();
     }
 }

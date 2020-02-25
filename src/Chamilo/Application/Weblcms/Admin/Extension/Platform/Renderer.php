@@ -8,9 +8,9 @@ use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -183,7 +183,6 @@ class Renderer extends CourseListRenderer
                 $text_style = '';
                 $html[] = '<div style="float:left;">';
 
-                $icon = Theme::getInstance()->getCommonImagePath('Action/Home');
                 $url = $this->get_course_url($course);
 
                 $course_access = $course_settings_controller->get_course_setting(
@@ -194,19 +193,17 @@ class Renderer extends CourseListRenderer
 
                 if ($course_closed)
                 {
-                    $icon = Theme::getInstance()->getCommonImagePath('Action/Lock');
-
-                    $locked = '<img style="float: left; margin-left: -30px; padding-top: 1px;"
-                                src="' . Theme::getInstance()->getCommonImagePath('Action/Lock') . '" />';
+                    $glyph = new FontAwesomeGlyph('lock');
+                    $html[] = $glyph->render();
                 }
 
                 if ($course_visible)
                 {
-                    $icon = Theme::getInstance()->getImagePath(\Chamilo\Core\User\Manager::context(), 'Logo/16');
+                    $glyph = new FontAwesomeGlyph('user');
                 }
                 else
                 {
-                    $icon = Theme::getInstance()->getImagePath(\Chamilo\Core\User\Manager::context(), 'Logo/16Na');
+                    $glyph = new FontAwesomeGlyph('user', array('text-muted'));
                 }
 
                 if (!$course_visible)
@@ -214,8 +211,8 @@ class Renderer extends CourseListRenderer
                     $text_style .= $this->get_invisible_text_style();
                 }
 
-                $html[] = $locked . '<li style="list-style: none; margin-bottom: 5px;
-                        list-style-image: url(' . $icon . '); margin-left: 15px;' . $text_style . '">';
+                $html[] = '<li style="list-style: none; margin-bottom: 5px; margin-left: 15px;' . $text_style . '">';
+                $html[] = $glyph->render();
                 $html[] = '<a style="top: -2px; position: relative; ' . $text_style . '" href="' . $url . '">' .
                     $course->get_title();
                 $html[] = '</a>';

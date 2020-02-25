@@ -140,7 +140,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
             {
                 $toolbar->add_item(
                     new ToolBarItem(
-                        Translation::get('LoginAsUser'), new FontAwesomeGlyph('sign-in'),
+                        Translation::get('LoginAsUser'), new FontAwesomeGlyph('mask'),
                         $this->get_component()->get_change_user_url($user), ToolbarItem::DISPLAY_ICON
                     )
                 );

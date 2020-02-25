@@ -4,18 +4,19 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Compone
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Component\CourseSections\CourseSectionsTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -33,9 +34,9 @@ class ViewerComponent extends Manager implements TableSupport
 
     public function run()
     {
-        if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
+        if (!$this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
+            throw new NotAllowedException();
         }
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
@@ -52,9 +53,17 @@ class ViewerComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+    }
+
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
@@ -62,21 +71,36 @@ class ViewerComponent extends Manager implements TableSupport
             $commonActions->addButton(
                 new Button(
                     Translation::get('Create', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Publish'),
+                    new FontAwesomeGlyph('share-square-o'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_COURSE_SECTION)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_url(),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
             $buttonToolbar->addButtonGroup($commonActions);
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    public function get_condition()
+    {
+        return new EqualityCondition(
+            new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($this->get_course_id())
+        );
+    }
+
+    public function get_table_condition($table_class_name)
+    {
+        return $this->get_condition();
     }
 
     public function get_table_html()
@@ -89,25 +113,5 @@ class ViewerComponent extends Manager implements TableSupport
         $html[] = '</div>';
 
         return implode($html, "\n");
-    }
-
-    public function get_condition()
-    {
-        return new EqualityCondition(
-            new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_course_id()));
-    }
-
-    public function get_table_condition($table_class_name)
-    {
-        return $this->get_condition();
-    }
-
-    /**
-     *
-     * @param BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
     }
 }

@@ -287,7 +287,7 @@ class CourseListComponent extends Manager implements DelegateComponent
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('CourseSubscribe'),
-                    new FontAwesomeGlyph('sign-in'),
+                    new FontAwesomeGlyph('plus-circle'),
                     $this->get_url(
                         array(
                             Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER,
@@ -296,7 +296,7 @@ class CourseListComponent extends Manager implements DelegateComponent
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('CourseUnsubscribe'),
-                    new FontAwesomeGlyph('sign-out'),
+                    new FontAwesomeGlyph('minus-square'),
                     $this->get_url(
                         array(
                             Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER,

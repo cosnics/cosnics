@@ -5,11 +5,13 @@ use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\PeerAssessmentGraph;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Datamanager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -68,17 +70,16 @@ class UserResultsViewerComponent extends Manager
         }
 
         // only edit right or target user is allowed
-        if (! $this->is_allowed(self::EDIT_RIGHT) && $this->get_user()->get_id() != $this->user_id)
+        if (!$this->is_allowed(self::EDIT_RIGHT) && $this->get_user()->get_id() != $this->user_id)
         {
             $this->redirect(
-                Translation::get('Notallowed'),
-                true,
-                array(self::PARAM_ACTION => self::ACTION_BROWSE_ATTEMPTS));
+                Translation::get('Notallowed'), true, array(self::PARAM_ACTION => self::ACTION_BROWSE_ATTEMPTS)
+            );
         }
 
         $render_html = $this->render();
 
-        if (! $render_html)
+        if (!$render_html)
         {
             $params = array(self::PARAM_ACTION => self::ACTION_OVERVIEW_RESULTS);
             $this->redirect(Translation::get('NoScores'), true, $params);
@@ -86,7 +87,7 @@ class UserResultsViewerComponent extends Manager
 
         if ($this->user_id != $this->get_user()->get_id())
         {
-            $subject_user = \Chamilo\Core\User\Storage\Datamanager::retrieve_by_id(User::class_name(), $this->user_id);
+            $subject_user = Datamanager::retrieve_by_id(User::class_name(), $this->user_id);
         }
         else
         {
@@ -110,36 +111,6 @@ class UserResultsViewerComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function render_action_bar()
-    {
-        $settings = $this->get_settings($this->get_publication_id());
-
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
-        if ($settings->get_enable_user_results_export())
-        {
-            if (! $this->is_allowed(self::EDIT_RIGHT) && $this->get_user()->get_id() != Request::get(self::PARAM_USER))
-                return;
-
-            $buttonToolbar = $this->buttonToolbarRenderer->getButtonToolBar();
-            $commonActions = new ButtonGroup();
-            $commonActions->addButton(
-                new Button(
-                    Translation::get('Export', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Export/Ods'),
-                    $this->get_url(
-                        array(
-                            self::PARAM_ACTION => self::ACTION_EXPORT_USER_RESULT,
-                            self::PARAM_EXPORT_TYPE => self::EXPORT_TYPE_EXCEL,
-                            self::PARAM_USER => Request::get(self::PARAM_USER),
-                            self::PARAM_ATTEMPT => Request::get(self::PARAM_ATTEMPT)))));
-
-            $buttonToolbar->addButtonGroup($commonActions);
-        }
-
-        return $this->buttonToolbarRenderer->render();
-    }
-
     private function render()
     {
         // TODO check for scores/feedback/both
@@ -158,19 +129,58 @@ class UserResultsViewerComponent extends Manager
         {
             // render the feedback tab
             $tabs->add_tab(
-                new DynamicContentTab('feedback', Translation::get('Feedback'), null, $this->render_feedback()));
+                new DynamicContentTab('feedback', Translation::get('Feedback'), null, $this->render_feedback())
+            );
         }
+
         return $tabs->render();
     }
 
-    private function render_scores()
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $indicators = $this->get_indicators();
+        parent::add_additional_breadcrumbs($breadcrumbtrail);
 
-        $this->processor->retrieve_scores($this, $this->user_id, $this->attempt_id);
-        // $scores = $this->processor->get_scores();
+        $breadcrumbtrail->add(
+            new Breadcrumb(
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_OVERVIEW_RESULTS)),
+                Translation::get('ResultsOverview')
+            )
+        );
+    }
 
-        return $this->processor->render_table($indicators, $this->users);
+    public function render_action_bar()
+    {
+        $settings = $this->get_settings($this->get_publication_id());
+
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+
+        if ($settings->get_enable_user_results_export())
+        {
+            if (!$this->is_allowed(self::EDIT_RIGHT) && $this->get_user()->get_id() != Request::get(self::PARAM_USER))
+            {
+                return;
+            }
+
+            $buttonToolbar = $this->buttonToolbarRenderer->getButtonToolBar();
+            $commonActions = new ButtonGroup();
+            $commonActions->addButton(
+                new Button(
+                    Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('upload'),
+                    $this->get_url(
+                        array(
+                            self::PARAM_ACTION => self::ACTION_EXPORT_USER_RESULT,
+                            self::PARAM_EXPORT_TYPE => self::EXPORT_TYPE_EXCEL,
+                            self::PARAM_USER => Request::get(self::PARAM_USER),
+                            self::PARAM_ATTEMPT => Request::get(self::PARAM_ATTEMPT)
+                        )
+                    )
+                )
+            );
+
+            $buttonToolbar->addButtonGroup($commonActions);
+        }
+
+        return $this->buttonToolbarRenderer->render();
     }
 
     private function render_feedback()
@@ -186,7 +196,9 @@ class UserResultsViewerComponent extends Manager
         $html[] = '<thead>';
         $html[] = '<tr>';
         if ($settings->get_anonymous_feedback() == false)
+        {
             $html[] = '<th>' . Translation::get('User') . '</th>';
+        }
         $html[] = '<th>' . Translation::get('Feedback') . '</th>';
         $html[] = '</tr>';
         $html[] = '</thead>';
@@ -200,7 +212,9 @@ class UserResultsViewerComponent extends Manager
 
             $html[] = '<tr class="row_' . $class . '">';
             if ($settings->get_anonymous_feedback() == false)
+            {
                 $html[] = '<td>' . $u->get_firstname() . ' ' . $u->get_lastname() . '</td>';
+            }
             $html[] = '<td>' . $feedback[$u->get_id()] . '</td>';
             $html[] = '</tr>';
         }
@@ -226,7 +240,8 @@ class UserResultsViewerComponent extends Manager
 
         $graph = new PeerAssessmentGraph(
             Translation::get('Result') . ' ' . $attempt->get_title() . ' ' . $user->get_firstname() . ' ' .
-                 $user->get_lastname());
+            $user->get_lastname()
+        );
 
         $graph->set_offset($this->processor->get_graph_offset());
         $graph->set_range($this->processor->get_graph_range());
@@ -236,6 +251,7 @@ class UserResultsViewerComponent extends Manager
         if (count($indicators) < 3)
         {
             $this->display_error_message(Translation::get('NotEnoughIndicators'));
+
             return;
         }
 
@@ -255,13 +271,14 @@ class UserResultsViewerComponent extends Manager
         return $graph->render();
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    private function render_scores()
     {
-        parent::add_additional_breadcrumbs($breadcrumbtrail);
+        $indicators = $this->get_indicators();
 
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_OVERVIEW_RESULTS)),
-                Translation::get('ResultsOverview')));
+        $this->processor->retrieve_scores($this, $this->user_id, $this->attempt_id);
+
+        // $scores = $this->processor->get_scores();
+
+        return $this->processor->render_table($indicators, $this->users);
     }
 }

@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -41,7 +42,7 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
         $this->checkAuthorization(Manager::context(), 'ManageUsers');
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -58,19 +59,30 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
-    public function get_user_html()
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $parameters = $this->get_parameters(true);
-        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $breadcrumbtrail->add_help('user_approval_browser');
+    }
 
-        $table = new UserApprovalTable($this);
+    public function getButtonToolbarRenderer()
+    {
+        if (!isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar($this->get_url());
+            $commonActions = new ButtonGroup();
 
-        $html = array();
-        $html[] = '<div style="float: right; width: 100%;">';
-        $html[] = $table->as_html();
-        $html[] = '</div>';
+            $commonActions->addButton(
+                new Button(
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
-        return implode($html, "\n");
+            $buttonToolbar->addButtonGroup($commonActions);
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->buttonToolbarRenderer;
     }
 
     public function get_table_condition($object_table_class_name)
@@ -80,41 +92,32 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-                '*' . $query . '*');
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), '*' . $query . '*'
+            );
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-                '*' . $query . '*');
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), '*' . $query . '*'
+            );
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
-                '*' . $query . '*');
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), '*' . $query . '*'
+            );
+
             return new OrCondition($or_conditions);
         }
     }
 
-    public function getButtonToolbarRenderer()
+    public function get_user_html()
     {
-        if (! isset($this->buttonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar($this->get_url());
-            $commonActions = new ButtonGroup();
+        $parameters = $this->get_parameters(true);
+        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
+            $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
-            $commonActions->addButton(
-                new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_url(),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+        $table = new UserApprovalTable($this);
 
-            $buttonToolbar->addButtonGroup($commonActions);
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
+        $html = array();
+        $html[] = '<div style="float: right; width: 100%;">';
+        $html[] = $table->as_html();
+        $html[] = '</div>';
 
-        return $this->buttonToolbarRenderer;
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('user_approval_browser');
+        return implode($html, "\n");
     }
 }

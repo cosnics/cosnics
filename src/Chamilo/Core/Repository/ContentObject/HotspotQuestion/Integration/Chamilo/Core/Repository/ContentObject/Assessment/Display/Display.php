@@ -3,8 +3,9 @@ namespace Chamilo\Core\Repository\ContentObject\HotspotQuestion\Integration\Cham
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -19,16 +20,7 @@ class Display extends QuestionDisplay
     // '#e7ad7b', '#bd0084', '#9d8384', '#42212a', '#005b84', '#e0eeef', '#00ad9c', '#ffe62a', '#f71932', '#ff9429',
     // '#f6d7c5', '#7a2893');
     private $colours = array(
-        '#ff0000',
-        '#f2ef00',
-        '#00ff00',
-        '#00ffff',
-        '#0000ff',
-        '#ff00ff',
-        '#0080ff',
-        '#ff0080',
-        '#00ff80',
-        '#ff8000',
+        '#ff0000', '#f2ef00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#0080ff', '#ff0080', '#00ff80', '#ff8000',
         '#8000ff'
     );
 
@@ -52,18 +44,16 @@ class Display extends QuestionDisplay
         $question_id = $clo_question->get_id();
 
         $formvalidator->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
-                'Plugin/jquery.draw.js'
-            )
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+            'Plugin/jquery.draw.js'
+        )
         );
         $formvalidator->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
-                'HotspotQuestionDisplay.js'
-            )
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+            'HotspotQuestionDisplay.js'
+        )
         );
 
         $image_html = array();
@@ -71,21 +61,17 @@ class Display extends QuestionDisplay
         $dimensions = getimagesize($image_object->get_full_path());
 
         $scaledDimensions = Utilities::scaleDimensions(
-            600,
-            450,
-            array('width' => $dimensions[0], 'height' => $dimensions[1])
+            600, 450, array('width' => $dimensions[0], 'height' => $dimensions[1])
         );
 
         $image_html[] = '<div class="description_hotspot">';
-        $image_html[] = '<div id="hotspot_container_' . $question_id .
-            '" class="hotspot_container"><div id="hotspot_image_' . $question_id .
-            '" class="hotspot_image" style="width: ' . $scaledDimensions['thumbnailWidth'] . 'px; height: ' .
-            $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' . $scaledDimensions['thumbnailWidth'] .
-            'px ' .
-            $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' .
-            \Chamilo\Core\Repository\Manager::get_document_downloader_url(
-                $image_object->get_id(),
-                $image_object->calculate_security_code()
+        $image_html[] =
+            '<div id="hotspot_container_' . $question_id . '" class="hotspot_container"><div id="hotspot_image_' .
+            $question_id . '" class="hotspot_image" style="width: ' . $scaledDimensions['thumbnailWidth'] .
+            'px; height: ' . $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' .
+            $scaledDimensions['thumbnailWidth'] . 'px ' . $scaledDimensions['thumbnailHeight'] .
+            'px;background-image: url(' . Manager::get_document_downloader_url(
+                $image_object->get_id(), $image_object->calculate_security_code()
             ) . ')"></div></div>';
         $image_html[] = '<div class="clear"></div>';
         $image_html[] = '<div id="hotspot_marking_' . $question_id . '" class="hotspot_marking">';
@@ -119,26 +105,21 @@ class Display extends QuestionDisplay
 
             $group = array();
             $group[] = $formvalidator->createElement(
-                'static',
-                null,
-                null,
+                'static', null, null,
                 '<div class="colour_box" id="colour_' . $answer_name . '" style="background-color: ' .
-                $this->colours[$i] .
-                ';"></div>'
+                $this->colours[$i] . ';"></div>'
             );
 
             $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_formvalidator()->get_assessment_viewer(),
-                $answer->get_answer()
+                $this->get_formvalidator()->get_assessment_viewer(), $answer->get_answer()
             );
 
             $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());
+
+            $glyph = new FontAwesomeGlyph('undo');
             $group[] = $formvalidator->createElement(
-                'static',
-                null,
-                null,
-                '<img id="reset_' . $answer_name . '" class="reset_option" type="image" src="' .
-                Theme::getInstance()->getCommonImagePath('Action/Reset') . '" />'
+                'static', null, null,
+                '<span id="reset_' . $answer_name . '" class="reset_option">' . $glyph->render() . '</span>'
             );
             $group[] = $formvalidator->createElement('hidden', $answer_name, '', 'class="hotspot_coordinates"');
 

@@ -10,8 +10,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -46,7 +46,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
@@ -55,13 +55,15 @@ class ViewerComponent extends Manager implements DelegateComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('CreateItem', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Create'),
+                        Translation::get('CreateItem', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                                self::PARAM_TYPE => BlogItem::class_name())),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                                self::PARAM_TYPE => BlogItem::class_name()
+                            )
+                        ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
 
             $buttonToolbar->addButtonGroup($commonActions);

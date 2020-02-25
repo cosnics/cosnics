@@ -15,7 +15,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Table\TableCellRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
@@ -26,6 +25,91 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  */
 class TreeNodeAttemptTableCellRenderer extends TableCellRenderer implements TableCellRendererActionsColumnSupport
 {
+    /**
+     * @return TreeNode
+     */
+    protected function getCurrentTreeNode()
+    {
+        return $this->get_component()->getCurrentTreeNode();
+    }
+
+    /**
+     * @return User
+     */
+    protected function getReportingUser()
+    {
+        return $this->get_component()->getReportingUser();
+    }
+
+    /**
+     * @return TrackingService
+     */
+    protected function getTrackingService()
+    {
+        return $this->get_component()->getTrackingService();
+    }
+
+    /**
+     * @return User
+     */
+    protected function getUser()
+    {
+        return $this->get_component()->getUser();
+    }
+
+    /**
+     * Returns the actions toolbar
+     *
+     * @param TreeNodeAttempt $treeNodeAttempt
+     *
+     * @return String
+     */
+    public function get_actions($treeNodeAttempt)
+    {
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
+
+        if ($this->getCurrentTreeNode()->getContentObject() instanceof Assessment)
+        {
+            $assessmentResultViewerUrl = $this->get_component()->get_url(
+                array(
+                    Manager::PARAM_ACTION => Manager::ACTION_VIEW_ASSESSMENT_RESULT,
+                    Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentTreeNode()->getId(),
+                    Manager::PARAM_ITEM_ATTEMPT_ID => $treeNodeAttempt->getId()
+                )
+            );
+
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('ViewAssessmentResult'), new FontAwesomeGlyph('pie-chart'),
+                    $assessmentResultViewerUrl, ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+
+        if ($this->get_component()->is_allowed_to_edit_attempt_data() &&
+            $this->getTrackingService()->canDeleteLearningPathAttemptData(
+                $this->getUser(), $this->getReportingUser()
+            ))
+        {
+            $delete_url = $this->get_component()->get_url(
+                array(
+                    Manager::PARAM_ACTION => Manager::ACTION_DELETE_TREE_NODE_ATTEMPT,
+                    Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentTreeNode()->getId(),
+                    Manager::PARAM_ITEM_ATTEMPT_ID => $treeNodeAttempt->getId()
+                )
+            );
+
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('DeleteAttempt'), new FontAwesomeGlyph('times'), $delete_url,
+                    ToolbarItem::DISPLAY_ICON, true
+                )
+            );
+        }
+
+        return $toolbar->render();
+    }
+
     /**
      * Renders a single cell
      *
@@ -71,96 +155,5 @@ class TreeNodeAttemptTableCellRenderer extends TableCellRenderer implements Tabl
     public function render_id_cell($treeNode)
     {
         return $treeNode->getId();
-    }
-
-    /**
-     * Returns the actions toolbar
-     *
-     * @param TreeNodeAttempt $treeNodeAttempt
-     *
-     * @return String
-     */
-    public function get_actions($treeNodeAttempt)
-    {
-        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
-
-        if ($this->getCurrentTreeNode()->getContentObject() instanceof Assessment)
-        {
-            $assessmentResultViewerUrl = $this->get_component()->get_url(
-                array(
-                    Manager::PARAM_ACTION => Manager::ACTION_VIEW_ASSESSMENT_RESULT,
-                    Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentTreeNode()->getId(),
-                    Manager::PARAM_ITEM_ATTEMPT_ID => $treeNodeAttempt->getId()
-                )
-            );
-
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('ViewAssessmentResult'),
-                    Theme::getInstance()->getCommonImagePath('Action/Reporting'),
-                    $assessmentResultViewerUrl,
-                    ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-
-        if ($this->get_component()->is_allowed_to_edit_attempt_data() &&
-            $this->getTrackingService()->canDeleteLearningPathAttemptData(
-                $this->getUser(), $this->getReportingUser()
-            )
-        )
-        {
-            $delete_url = $this->get_component()->get_url(
-                array(
-                    Manager::PARAM_ACTION => Manager::ACTION_DELETE_TREE_NODE_ATTEMPT,
-                    Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentTreeNode()->getId(),
-                    Manager::PARAM_ITEM_ATTEMPT_ID => $treeNodeAttempt->getId()
-                )
-            );
-
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('DeleteAttempt'),
-                    new FontAwesomeGlyph('times'),
-                    $delete_url,
-                    ToolbarItem::DISPLAY_ICON,
-                    true
-                )
-            );
-        }
-
-        return $toolbar->render();
-    }
-
-    /**
-     * @return TreeNode
-     */
-    protected function getCurrentTreeNode()
-    {
-        return $this->get_component()->getCurrentTreeNode();
-    }
-
-    /**
-     * @return User
-     */
-    protected function getReportingUser()
-    {
-        return $this->get_component()->getReportingUser();
-    }
-
-    /**
-     * @return User
-     */
-    protected function getUser()
-    {
-        return $this->get_component()->getUser();
-    }
-
-    /**
-     * @return TrackingService
-     */
-    protected function getTrackingService()
-    {
-        return $this->get_component()->getTrackingService();
     }
 }

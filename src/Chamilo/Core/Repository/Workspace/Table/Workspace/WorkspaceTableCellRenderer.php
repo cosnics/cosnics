@@ -128,7 +128,7 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Edit'),
+                    new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('pencil'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
@@ -143,7 +143,7 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('CreateRightsComponent'),
-                    Theme::getInstance()->getCommonImagePath('Action/Share'),
+                    new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('lock'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_RIGHTS,
@@ -159,7 +159,7 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('RightsComponent'),
-                    Theme::getInstance()->getCommonImagePath('Action/Rights'),
+                    new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('lock'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_RIGHTS,

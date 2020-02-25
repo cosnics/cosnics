@@ -10,8 +10,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -50,57 +50,13 @@ class ViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * Returns the component as html string
-     *
-     * @return string
-     */
-    public function to_html()
-    {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-
-        $object = $this->get_parent()->get_root_content_object($this);
-        $trail = BreadcrumbTrail::getInstance();
-
-        if (! is_array($object))
-        {
-            $trail->add(new Breadcrumb($this->get_url(), $object->get_title()));
-        }
-
-        $html = array();
-
-        $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = GlossaryRendererFactory::launch($this->get_view(), $this, $object, $query);
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * Returns the view type
-     *
-     * @return string
-     */
-    public function get_view()
-    {
-        $view = Request::get(self::PARAM_VIEW);
-
-        if (! $view)
-        {
-            $view = GlossaryRendererFactory::TYPE_TABLE;
-        }
-
-        return $view;
-    }
-
-    /**
      * Builds and returns the actionbar
      *
      * @return ButtonToolBarRenderer
      */
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
@@ -109,27 +65,30 @@ class ViewerComponent extends Manager implements DelegateComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('CreateItem'),
-                        Theme::getInstance()->getCommonImagePath('Action/Create'),
-                        $this->get_url(
-                            array(
-                                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
-                                self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM)),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                        Translation::get('CreateItem'), new FontAwesomeGlyph('plus'), $this->get_url(
+                        array(
+                            self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
+                            self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM
+                        )
+                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('TableView', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    Translation::get('TableView', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('table'),
                     $this->get_url(array(self::PARAM_VIEW => GlossaryRendererFactory::TYPE_TABLE)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ListView', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    Translation::get('ListView', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('list'),
                     $this->get_url(array(self::PARAM_VIEW => GlossaryRendererFactory::TYPE_LIST)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $buttonToolbar->addItem($commonActions);
 
@@ -150,13 +109,20 @@ class ViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * Checks whether or not the content object can be edited
+     * Returns the view type
      *
-     * @return boolean
+     * @return string
      */
-    public function is_allowed_to_edit_content_object()
+    public function get_view()
     {
-        return $this->get_parent()->is_allowed_to_edit_content_object();
+        $view = Request::get(self::PARAM_VIEW);
+
+        if (!$view)
+        {
+            $view = GlossaryRendererFactory::TYPE_TABLE;
+        }
+
+        return $view;
     }
 
     /**
@@ -167,5 +133,42 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function is_allowed_to_delete_child()
     {
         return $this->get_parent()->is_allowed_to_delete_child();
+    }
+
+    /**
+     * Checks whether or not the content object can be edited
+     *
+     * @return boolean
+     */
+    public function is_allowed_to_edit_content_object()
+    {
+        return $this->get_parent()->is_allowed_to_edit_content_object();
+    }
+
+    /**
+     * Returns the component as html string
+     *
+     * @return string
+     */
+    public function to_html()
+    {
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+
+        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+
+        $object = $this->get_parent()->get_root_content_object($this);
+        $trail = BreadcrumbTrail::getInstance();
+
+        if (!is_array($object))
+        {
+            $trail->add(new Breadcrumb($this->get_url(), $object->get_title()));
+        }
+
+        $html = array();
+
+        $html[] = $this->buttonToolbarRenderer->render();
+        $html[] = GlossaryRendererFactory::launch($this->get_view(), $this, $object, $query);
+
+        return implode(PHP_EOL, $html);
     }
 }

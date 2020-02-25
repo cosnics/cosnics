@@ -16,7 +16,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Table\TableCellRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
@@ -27,6 +26,111 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  */
 class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements TableCellRendererActionsColumnSupport
 {
+    /**
+     * @return AutomaticNumberingService
+     */
+    protected function getAutomaticNumberingService()
+    {
+        return $this->get_component()->getAutomaticNumberingService();
+    }
+
+    /**
+     * @return LearningPath
+     */
+    protected function getLearningPath()
+    {
+        return $this->get_component()->get_root_content_object();
+    }
+
+    /**
+     * Returns the reporting URL for a given node
+     *
+     * @param TreeNode $treeNode
+     *
+     * @return string
+     */
+    protected function getReportingUrl(TreeNode $treeNode)
+    {
+        return $this->get_component()->get_url(
+            array(
+                Manager::PARAM_ACTION => Manager::ACTION_REPORTING, Manager::PARAM_CHILD_ID => $treeNode->getId()
+            )
+        );
+    }
+
+    /**
+     * @return User
+     */
+    protected function getReportingUser()
+    {
+        return $this->get_component()->getReportingUser();
+    }
+
+    /**
+     * @return TrackingService
+     */
+    protected function getTrackingService()
+    {
+        return $this->get_component()->getTrackingService();
+    }
+
+    /**
+     * @return User
+     */
+    protected function getUser()
+    {
+        return $this->get_component()->getUser();
+    }
+
+    /**
+     * Returns the actions toolbar
+     *
+     * @param TreeNode $record
+     *
+     * @return String
+     */
+    public function get_actions($record)
+    {
+        $learningPath = $this->getLearningPath();
+        $reportingUser = $this->getReportingUser();
+        $trackingService = $this->getTrackingService();
+
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
+
+        $toolbar->add_item(
+            new ToolbarItem(
+                Translation::get('Reporting'), new FontAwesomeGlyph('bar-chart'), $this->getReportingUrl($record),
+                ToolbarItem::DISPLAY_ICON
+            )
+        );
+
+        if ($trackingService->hasTreeNodeAttempts(
+            $learningPath, $reportingUser, $record
+        ))
+        {
+            if ($this->get_component()->is_allowed_to_edit_attempt_data() &&
+                $trackingService->canDeleteLearningPathAttemptData($this->getUser(), $reportingUser))
+            {
+                $delete_url = $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPTS_FOR_TREE_NODE,
+                        Manager::PARAM_CHILD_ID => $record->getId(),
+                        DeleteAttemptsForTreeNodeComponent::PARAM_SOURCE => Manager::ACTION_REPORTING
+                    )
+                );
+
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation::get('DeleteAttempt'), new FontAwesomeGlyph('times'), $delete_url,
+                        ToolbarItem::DISPLAY_ICON, true
+                    )
+                );
+            }
+        }
+
+        return $toolbar->render();
+    }
+
     /**
      * Renders a single cell
      *
@@ -52,14 +156,13 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
                 return $content_object->get_icon_image();
             case 'title':
                 return '<a href="' . $this->getReportingUrl($record) . '">' .
-                    $automaticNumberingService->getAutomaticNumberedTitleForTreeNode($record) .
-                    '</a>';
+                    $automaticNumberingService->getAutomaticNumberedTitleForTreeNode($record) . '</a>';
             case 'status':
                 return $trackingService->isTreeNodeCompleted(
                     $learningPath, $user, $record
                 ) ? $translator->getTranslation('Completed') : $translator->getTranslation('Incomplete');
             case 'score':
-                if(!$record->supportsScore())
+                if (!$record->supportsScore())
                 {
                     return null;
                 }
@@ -92,118 +195,5 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
     public function render_id_cell($treeNode)
     {
         return $treeNode->getId();
-    }
-
-    /**
-     * Returns the actions toolbar
-     *
-     * @param TreeNode $record
-     *
-     * @return String
-     */
-    public function get_actions($record)
-    {
-        $learningPath = $this->getLearningPath();
-        $reportingUser = $this->getReportingUser();
-        $trackingService = $this->getTrackingService();
-
-        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
-
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation::get('Reporting'),
-                Theme::getInstance()->getCommonImagePath('Action/Statistics'),
-                $this->getReportingUrl($record),
-                ToolbarItem::DISPLAY_ICON
-            )
-        );
-
-        if ($trackingService->hasTreeNodeAttempts(
-            $learningPath, $reportingUser, $record
-        )
-        )
-        {
-            if ($this->get_component()->is_allowed_to_edit_attempt_data() &&
-                $trackingService->canDeleteLearningPathAttemptData($this->getUser(), $reportingUser)
-            )
-            {
-                $delete_url = $this->get_component()->get_url(
-                    array(
-                        Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPTS_FOR_TREE_NODE,
-                        Manager::PARAM_CHILD_ID => $record->getId(),
-                        DeleteAttemptsForTreeNodeComponent::PARAM_SOURCE => Manager::ACTION_REPORTING
-                    )
-                );
-
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation::get('DeleteAttempt'),
-                        new FontAwesomeGlyph('times'),
-                        $delete_url,
-                        ToolbarItem::DISPLAY_ICON,
-                        true
-                    )
-                );
-            }
-        }
-
-        return $toolbar->render();
-    }
-
-    /**
-     * Returns the reporting URL for a given node
-     *
-     * @param TreeNode $treeNode
-     *
-     * @return string
-     */
-    protected function getReportingUrl(TreeNode $treeNode)
-    {
-        return $this->get_component()->get_url(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_REPORTING,
-                Manager::PARAM_CHILD_ID => $treeNode->getId()
-            )
-        );
-    }
-
-    /**
-     * @return LearningPath
-     */
-    protected function getLearningPath()
-    {
-        return $this->get_component()->get_root_content_object();
-    }
-
-    /**
-     * @return User
-     */
-    protected function getReportingUser()
-    {
-        return $this->get_component()->getReportingUser();
-    }
-
-    /**
-     * @return User
-     */
-    protected function getUser()
-    {
-        return $this->get_component()->getUser();
-    }
-
-    /**
-     * @return TrackingService
-     */
-    protected function getTrackingService()
-    {
-        return $this->get_component()->getTrackingService();
-    }
-
-    /**
-     * @return AutomaticNumberingService
-     */
-    protected function getAutomaticNumberingService()
-    {
-        return $this->get_component()->getAutomaticNumberingService();
     }
 }
