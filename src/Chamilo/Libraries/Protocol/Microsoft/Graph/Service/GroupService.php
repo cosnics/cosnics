@@ -177,7 +177,11 @@ class GroupService
             if ($this->isOwnerOfGroup($groupId, $user))
             {
                 $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
-                $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
+                try {
+                    $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
+                } catch (\Exception $exception) {
+                    //TODO: check if subscribe member bug is fixed. It seems so because GRAPH api is returning already subscribed errors
+                }
             }
             else
             {
