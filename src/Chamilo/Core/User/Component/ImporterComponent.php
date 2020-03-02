@@ -68,6 +68,11 @@ class ImporterComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $breadcrumbtrail->add_help('user_importer');
+    }
+
     /**
      *
      * @return HashingUtilities | object
@@ -86,10 +91,5 @@ class ImporterComponent extends Manager
         $factory = new MailerFactory();
 
         return $factory->getActiveMailer();
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('user_importer');
     }
 }

@@ -2,12 +2,11 @@
 namespace Chamilo\Core\Repository\Table\Complex;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -25,28 +24,26 @@ class ComplexTableColumnModel extends DataClassTableColumnModel implements Table
     /*
      * (non-PHPdoc) @see \libraries\format\TableColumnModel::initialize_columns()
      */
-    public function initialize_columns()
-    {
-        $this->addBasicColumns();
-        $this->add_column(new StaticTableColumn(Translation::get(self::SUBITEMS)));
-    }
 
     /**
      * Adds the basic colummns to the table
      */
     protected function addBasicColumns()
     {
+        $glyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
+
+        $this->add_column($glyph->render());
         $this->add_column(
-            new StaticTableColumn(
-                Theme::getInstance()->getCommonImage(
-                    'Action/Category',
-                    'png',
-                    Translation::get('Type'),
-                    null,
-                    ToolbarItem::DISPLAY_ICON)));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE, false)
+        );
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE, false));
-        $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION, false));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION, false)
+        );
+    }
+
+    public function initialize_columns()
+    {
+        $this->addBasicColumns();
+        $this->add_column(new StaticTableColumn(Translation::get(self::SUBITEMS)));
     }
 }

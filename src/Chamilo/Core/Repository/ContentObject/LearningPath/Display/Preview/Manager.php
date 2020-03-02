@@ -8,8 +8,10 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Service\T
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\TrackingRepository;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
+use Chamilo\Core\Repository\Display\Preview;
 use Chamilo\Core\Repository\Display\PreviewResetSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -21,7 +23,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implements PreviewResetSupport
+abstract class Manager extends Preview implements PreviewResetSupport
 {
 
     /**
@@ -35,135 +37,33 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
     protected $trackingRepository;
 
     /**
+     * Builds the TrackingService
      *
-     * @see \core\repository\display\Preview::get_root_content_object()
+     * @return TrackingService
      */
-    function get_root_content_object()
+    public function buildTrackingService()
     {
-        if ($this->is_embedded())
+        if (!isset($this->trackingService))
         {
-            $embedded_content_object_id = $this->get_embedded_content_object_id();
-            $this->set_parameter(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID, $embedded_content_object_id);
-            $this->set_parameter(
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID,
-                Request::get(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID)
-            );
-
-            return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
-                $embedded_content_object_id
-            );
+            $trackingServiceBuilder = new TrackingServiceBuilder();
+            $this->trackingRepository = $trackingServiceBuilder->getTrackingRepository();
+            $this->trackingService = $trackingServiceBuilder->buildTrackingService(new TrackingParameters());
         }
-        else
-        {
-            $this->set_parameter(
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID,
-                Request::get(
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID
-                )
-            );
-            $this->set_parameter(
-                \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-                Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID)
-            );
 
-            return parent::get_root_content_object();
-        }
+        return $this->trackingService;
     }
 
     /**
+     * Returns the TreeNode for the current step
      *
-     * @see \libraries\architecture\application\Application::render_header()
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
      */
-    public function render_header()
+    public function getCurrentTreeNode()
     {
-        if ($this->is_embedded())
-        {
-            $page = Page::getInstance();
-            $page->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        $tree = $this->getTree();
 
-            return $page->getHeader()->toHtml();
-        }
-        else
-        {
-            return parent::render_header();
-        }
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    function is_embedded()
-    {
-        $embedded_content_object_id = $this->get_embedded_content_object_id();
-
-        return isset($embedded_content_object_id);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    function get_embedded_content_object_id()
-    {
-        return Embedder::get_embedded_content_object_id();
-    }
-
-    /**
-     * Preview mode, so always return true.
-     *
-     * @param $right
-     *
-     * @return boolean
-     */
-    function is_allowed($right)
-    {
-        return true;
-    }
-
-    /**
-     * Functionality is publication dependent, so not available in preview mode.
-     */
-    function get_publication()
-    {
-        $this->not_available(Translation::get('ImpossibleInPreviewMode'));
-    }
-
-    // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
-    public function is_allowed_to_edit_content_object()
-    {
-        return true;
-    }
-
-    public function is_allowed_to_view_content_object()
-    {
-        return true;
-    }
-
-    function is_allowed_to_add_child()
-    {
-        return true;
-    }
-
-    function is_allowed_to_delete_child()
-    {
-        return true;
-    }
-
-    function is_allowed_to_delete_feedback()
-    {
-        return true;
-    }
-
-    function is_allowed_to_edit_feedback()
-    {
-        return true;
-    }
-
-    public function is_allowed_to_set_content_object_rights()
-    {
-        return true;
+        return $tree->getTreeNodeById($this->getCurrentTreeNodeDataId());
     }
 
     /**
@@ -185,9 +85,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
      */
     protected function getLearningPathService()
     {
-        return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_service'
-        );
+        return $this->getService(LearningPathService::class);
     }
 
     /**
@@ -201,15 +99,132 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
     }
 
     /**
-     * Returns the TreeNode for the current step
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode
+     * @return int
      */
-    public function getCurrentTreeNode()
+    function get_embedded_content_object_id()
     {
-        $tree = $this->getTree();
+        return Embedder::get_embedded_content_object_id();
+    }
 
-        return $tree->getTreeNodeById($this->getCurrentTreeNodeDataId());
+    // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
+
+    /**
+     * Functionality is publication dependent, so not available in preview mode.
+     */
+    function get_publication()
+    {
+        $this->not_available(Translation::get('ImpossibleInPreviewMode'));
+    }
+
+    function get_root_content_object()
+    {
+        if ($this->is_embedded())
+        {
+            $embedded_content_object_id = $this->get_embedded_content_object_id();
+            $this->set_parameter(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID, $embedded_content_object_id);
+            $this->set_parameter(
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID,
+                Request::get(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID)
+            );
+
+            return DataManager::retrieve_by_id(
+                ContentObject::class_name(), $embedded_content_object_id
+            );
+        }
+        else
+        {
+            $this->set_parameter(
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID,
+                Request::get(
+                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID
+                )
+            );
+            $this->set_parameter(
+                \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
+                Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID)
+            );
+
+            return parent::get_root_content_object();
+        }
+    }
+
+    /**
+     * Preview mode, so always return true.
+     *
+     * @param $right
+     *
+     * @return boolean
+     */
+    function is_allowed($right)
+    {
+        return true;
+    }
+
+    function is_allowed_to_add_child()
+    {
+        return true;
+    }
+
+    function is_allowed_to_delete_child()
+    {
+        return true;
+    }
+
+    function is_allowed_to_delete_feedback()
+    {
+        return true;
+    }
+
+    public function is_allowed_to_edit_content_object()
+    {
+        return true;
+    }
+
+    function is_allowed_to_edit_feedback()
+    {
+        return true;
+    }
+
+    public function is_allowed_to_set_content_object_rights()
+    {
+        return true;
+    }
+
+    public function is_allowed_to_view_content_object()
+    {
+        return true;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    function is_embedded()
+    {
+        $embedded_content_object_id = $this->get_embedded_content_object_id();
+
+        return isset($embedded_content_object_id);
+    }
+
+    /**
+     * @param string $pageTitle
+     *
+     * @return string
+     */
+    public function render_header($pageTitle = '')
+    {
+        if ($this->is_embedded())
+        {
+            $page = Page::getInstance();
+            $page->setViewMode(Page::VIEW_MODE_HEADERLESS);
+
+            return $page->getHeader()->render();
+        }
+        else
+        {
+            return parent::render_header($pageTitle);
+        }
     }
 
     /**
@@ -221,22 +236,5 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
         $this->trackingRepository->resetStorage();
 
         return true;
-    }
-
-    /**
-     * Builds the TrackingService
-     *
-     * @return TrackingService
-     */
-    public function buildTrackingService()
-    {
-        if (!isset($this->trackingService))
-        {
-            $trackingServiceBuilder = new TrackingServiceBuilder();
-            $this->trackingRepository = $trackingServiceBuilder->getTrackingRepository();
-            $this->trackingService = $trackingServiceBuilder->buildTrackingService(new TrackingParameters());
-        }
-
-        return $this->trackingService;
     }
 }

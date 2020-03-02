@@ -3,15 +3,16 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeBaseActionGenerator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -41,7 +42,7 @@ class GetTreeComponent extends Manager
                 );
             }
 
-            if(!$this->getRightsService()->canCopyContentObject($this->getUser(), $learningPath))
+            if (!$this->getRightsService()->canCopyContentObject($this->getUser(), $learningPath))
             {
                 throw new NotAllowedException();
             }
@@ -50,7 +51,7 @@ class GetTreeComponent extends Manager
 
             return new JsonResponse($this->convertTreeToArray($tree));
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return $this->handleException($ex);
         }
@@ -64,23 +65,20 @@ class GetTreeComponent extends Manager
     protected function convertTreeToArray(Tree $tree)
     {
         $treeJSONMapper = new TreeJSONMapper(
-            $tree, $this->getUser(),
-            null,
-            $this->getAutomaticNumberingService(),
-            new NodeBaseActionGenerator(Translation::getInstance(), $this->get_parameters()),
-            '',
-            $tree->getRoot(), true, false
+            $tree, $this->getUser(), null, $this->getAutomaticNumberingService(),
+            new NodeBaseActionGenerator(Translation::getInstance(), $this->get_parameters()), '', $tree->getRoot(),
+            true, false
         );
 
         return $treeJSONMapper->getNodes();
     }
 
     /**
-     * @return array
+     * @return AutomaticNumberingService | object
      */
-    public function getRequiredPostParameters()
+    public function getAutomaticNumberingService()
     {
-        return array(self::PARAM_LEARNING_PATH_ID);
+        return $this->getService(AutomaticNumberingService::class);
     }
 
     /**
@@ -90,18 +88,14 @@ class GetTreeComponent extends Manager
      */
     public function getLearningPathService()
     {
-        return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_service'
-        );
+        return $this->getService(LearningPathService::class);
     }
 
     /**
-     * @return AutomaticNumberingService | object
+     * @return array
      */
-    public function getAutomaticNumberingService()
+    public function getRequiredPostParameters()
     {
-        return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.automatic_numbering_service'
-        );
+        return array(self::PARAM_LEARNING_PATH_ID);
     }
 }

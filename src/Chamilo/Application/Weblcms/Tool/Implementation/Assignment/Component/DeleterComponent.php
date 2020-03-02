@@ -4,9 +4,12 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\AssignmentPublicationService;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -38,9 +41,8 @@ class DeleterComponent extends Manager
         foreach ($publication_ids as $pid)
         {
             /** @var ContentObjectPublication $publication */
-            $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(),
-                $pid
+            $publication = DataManager::retrieve_by_id(
+                ContentObjectPublication::class_name(), $pid
             );
 
             if (!empty($publication) && $this->is_allowed(WeblcmsRights::DELETE_RIGHT, $publication))
@@ -49,7 +51,7 @@ class DeleterComponent extends Manager
                 {
                     $this->getAssignmentPublicationService()->deletePublication($publication);
                 }
-                catch (\Exception $ex)
+                catch (Exception $ex)
                 {
                     $failures ++;
                 }
@@ -76,8 +78,7 @@ class DeleterComponent extends Manager
         }
 
         $this->redirect(
-            $message,
-            $failures > 0,
+            $message, $failures > 0,
             array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => null, 'tool_action' => null)
         );
     }
@@ -87,8 +88,6 @@ class DeleterComponent extends Manager
      */
     protected function getAssignmentPublicationService()
     {
-        return $this->getService(
-            'chamilo.application.weblcms.tool.implementation.assignment.service.assignment_publication_service'
-        );
+        return $this->getService(AssignmentPublicationService::class);
     }
 }

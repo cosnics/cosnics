@@ -10,20 +10,42 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class DoublesTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
+    public function get_actions($content_object)
+    {
+        if ($this->get_table()->is_detail())
+        {
+            return null;
+        }
+
+        $toolbar = new Toolbar();
+        $toolbar->add_item(
+            new ToolbarItem(
+                Translation::get('ViewItem'), new FontAwesomeGlyph('folder'),
+                $this->get_component()->get_url(array(Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id())),
+                ToolbarItem::DISPLAY_ICON
+            )
+        );
+
+        return $toolbar->as_html();
+    }
+
     public function render_cell($column, $content_object)
     {
+        $glyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
+        $renderedglyph = $glyph->render();
+
         switch ($column->get_name())
         {
             case 'Duplicates' :
@@ -51,9 +73,7 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return '<a href="' .
                     htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
                     '" title="' . $title . '">' . $title_short . '</a>';
-            case Theme::getInstance()->getCommonImage(
-                'Action/Category', 'png', Translation::get('Type'), null, ToolbarItem::DISPLAY_ICON
-            ) :
+            case $renderedglyph :
                 return $content_object->get_icon_image(Theme::ICON_MINI);
 
             case ContentObject::PROPERTY_DESCRIPTION :
@@ -63,24 +83,5 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
         }
 
         return parent::render_cell($column, $content_object);
-    }
-
-    public function get_actions($content_object)
-    {
-        if ($this->get_table()->is_detail())
-        {
-            return null;
-        }
-
-        $toolbar = new Toolbar();
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation::get('ViewItem'), new FontAwesomeGlyph('folder'),
-                $this->get_component()->get_url(array(Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id())),
-                ToolbarItem::DISPLAY_ICON
-            )
-        );
-
-        return $toolbar->as_html();
     }
 }

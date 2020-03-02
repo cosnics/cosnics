@@ -12,8 +12,8 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -25,66 +25,35 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
 {
 
     // Inherited
-    public function render_cell($column, $cloi)
+    protected function check_move_allowed($cloi)
     {
-        $content_object = $cloi->get_ref_object();
+        $moveup_allowed = true;
+        $movedown_allowed = true;
 
-        switch ($column->get_name())
+        $count = DataManager::count_complex_content_object_items(
+            ComplexContentObjectItem::class_name(), $this->get_component()->get_table_condition(__CLASS__)
+        );
+        if ($count == 1)
         {
-            case ContentObject::PROPERTY_TYPE :
-                $type = $content_object->get_type();
-                $icon = $content_object->get_icon_path();
-                $url = '<img src="' . $icon . '" alt="' . htmlentities(
-                        Translation::get('TypeName', null, ContentObject::get_content_object_type_namespace($type))
-                    ) . '"/>';
-
-                return $url;
-            case Theme::getInstance()->getCommonImage(
-                'Action/Category', 'png', Translation::get('Type'), null, ToolbarItem::DISPLAY_ICON
-            ) :
-                return $content_object->get_icon_image(Theme::ICON_MINI);
-
-            case ContentObject::PROPERTY_TITLE :
-                $title = htmlspecialchars($content_object->get_title());
-                $title_short = $title;
-                $title_short = StringUtilities::getInstance()->truncate($title_short, 53, false);
-
-                if ($content_object instanceof ComplexContentObjectSupport)
+            $moveup_allowed = false;
+            $movedown_allowed = false;
+        }
+        else
+        {
+            if ($cloi->get_display_order() == 1)
+            {
+                $moveup_allowed = false;
+            }
+            else
+            {
+                if ($cloi->get_display_order() == $count)
                 {
-                    $title_short = '<a href="' . $this->get_component()->get_url(
-                            array(
-                                \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $cloi->get_id(
-                                )
-                            )
-                        ) . '">' . $title_short . '</a>';
+                    $movedown_allowed = false;
                 }
-                else
-                {
-                    $title_short = '<a href="' . $this->getTitleLink($cloi) . '">' . $title_short . '</a>';
-                }
-
-                return $title_short;
-            case ContentObject::PROPERTY_DESCRIPTION :
-                $description = $content_object->get_description();
-
-                return StringUtilities::getInstance()->truncate($description, 75);
-            case Translation::get(ComplexTableColumnModel::SUBITEMS) :
-                if ($cloi->is_complex())
-                {
-                    $condition = new EqualityCondition(
-                        ComplexContentObjectItem::PROPERTY_PARENT, $cloi->get_ref(),
-                        ComplexContentObjectItem::get_table_name()
-                    );
-
-                    return DataManager::count_complex_content_object_items(
-                        ComplexContentObjectItem::class_name(), $condition
-                    );
-                }
-
-                return 0;
+            }
         }
 
-        return parent::render_cell($column, $cloi);
+        return array('moveup' => $moveup_allowed, 'movedown' => $movedown_allowed);
     }
 
     /**
@@ -183,34 +152,65 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         return $toolbar->as_html();
     }
 
-    protected function check_move_allowed($cloi)
+    public function render_cell($column, $cloi)
     {
-        $moveup_allowed = true;
-        $movedown_allowed = true;
+        $content_object = $cloi->get_ref_object();
+        $glyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
+        $renderedglyph = $glyph->render();
 
-        $count = DataManager::count_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), $this->get_component()->get_table_condition(__CLASS__)
-        );
-        if ($count == 1)
+        switch ($column->get_name())
         {
-            $moveup_allowed = false;
-            $movedown_allowed = false;
-        }
-        else
-        {
-            if ($cloi->get_display_order() == 1)
-            {
-                $moveup_allowed = false;
-            }
-            else
-            {
-                if ($cloi->get_display_order() == $count)
+            case ContentObject::PROPERTY_TYPE :
+                $type = $content_object->get_type();
+                $icon = $content_object->get_icon_path();
+                $url = '<img src="' . $icon . '" alt="' . htmlentities(
+                        Translation::get('TypeName', null, ContentObject::get_content_object_type_namespace($type))
+                    ) . '"/>';
+
+                return $url;
+            case $renderedglyph :
+                return $content_object->get_icon_image(Theme::ICON_MINI);
+
+            case ContentObject::PROPERTY_TITLE :
+                $title = htmlspecialchars($content_object->get_title());
+                $title_short = $title;
+                $title_short = StringUtilities::getInstance()->truncate($title_short, 53, false);
+
+                if ($content_object instanceof ComplexContentObjectSupport)
                 {
-                    $movedown_allowed = false;
+                    $title_short = '<a href="' . $this->get_component()->get_url(
+                            array(
+                                \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $cloi->get_id(
+                                )
+                            )
+                        ) . '">' . $title_short . '</a>';
                 }
-            }
+                else
+                {
+                    $title_short = '<a href="' . $this->getTitleLink($cloi) . '">' . $title_short . '</a>';
+                }
+
+                return $title_short;
+            case ContentObject::PROPERTY_DESCRIPTION :
+                $description = $content_object->get_description();
+
+                return StringUtilities::getInstance()->truncate($description, 75);
+            case Translation::get(ComplexTableColumnModel::SUBITEMS) :
+                if ($cloi->is_complex())
+                {
+                    $condition = new EqualityCondition(
+                        ComplexContentObjectItem::PROPERTY_PARENT, $cloi->get_ref(),
+                        ComplexContentObjectItem::get_table_name()
+                    );
+
+                    return DataManager::count_complex_content_object_items(
+                        ComplexContentObjectItem::class_name(), $condition
+                    );
+                }
+
+                return 0;
         }
 
-        return array('moveup' => $moveup_allowed, 'movedown' => $movedown_allowed);
+        return parent::render_cell($column, $cloi);
     }
 }

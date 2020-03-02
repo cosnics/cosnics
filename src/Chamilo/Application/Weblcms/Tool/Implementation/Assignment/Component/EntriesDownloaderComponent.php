@@ -52,8 +52,6 @@ class EntriesDownloaderComponent extends Manager
      */
     protected function getEntriesDownloaderFactory()
     {
-        return $this->getService(
-            'chamilo.application.weblcms.tool.implementation.assignment.service.entries_downloader.entries_downloader_factory'
-        );
+        return $this->getService(EntriesDownloaderFactory::class);
     }
 }
