@@ -29,9 +29,8 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('times'), $remove_url,
-                        ToolbarItem::DISPLAY_ICON
+                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        $remove_url, ToolbarItem::DISPLAY_ICON
                     )
                 );
             }
@@ -40,8 +39,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('DeleteNotAvailable', null, Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('times', array('text-muted')),
-                        null, ToolbarItem::DISPLAY_ICON
+                        new FontAwesomeGlyph('times', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
             }
@@ -55,9 +53,8 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Revert', null, Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('undo'), $revert_url,
-                        ToolbarItem::DISPLAY_ICON
+                        Translation::get('Revert', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('undo'),
+                        $revert_url, ToolbarItem::DISPLAY_ICON
                     )
                 );
             }
@@ -66,8 +63,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('RevertNotAvailable', null, Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('undo', array('text-muted')),
-                        null, ToolbarItem::DISPLAY_ICON
+                        new FontAwesomeGlyph('undo', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
             }
@@ -90,11 +86,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
             case Translation::get(VersionTableColumnModel::USER, null, Manager::context()) :
                 return $content_object->get_owner_fullname();
             case ContentObject::PROPERTY_TYPE :
-                return $content_object->get_icon_image(Theme::ICON_MINI);
-
-            case Theme::getInstance()->getCommonImage(
-                'Action/Category', 'png', Translation::get('Type'), null, ToolbarItem::DISPLAY_ICON
-            ) :
+            case VersionTableColumnModel::PROPERTY_TYPE :
                 return $content_object->get_icon_image(Theme::ICON_MINI);
             case ContentObject::PROPERTY_DESCRIPTION :
                 return Utilities::htmlentities(

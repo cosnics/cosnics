@@ -12,7 +12,6 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -154,8 +153,10 @@ class ViewComponent extends Manager
         // Description
         $html[] = '<div class="panel panel-default">';
 
+        $glyph = new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas');
+
         $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">' . Theme::getInstance()->getCommonImage('Place/Group') . ' ' .
+        $html[] = '<h3 class="panel-title">' . $glyph->render() . ' ' .
             Translation::get('Description', null, Utilities::COMMON_LIBRARIES) . '</h3>';
         $html[] = '</div>';
 
@@ -168,9 +169,10 @@ class ViewComponent extends Manager
         // Courses
         $html[] = '<div class="panel panel-default">';
 
+        $glyph = new FontAwesomeGlyph('chalkboard', array('fa-lg'), null, 'fas');
+
         $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">' . Theme::getInstance()->getCommonImage('Place/Publications') . ' ' .
-            Translation::get('Courses') . '</h3>';
+        $html[] = '<h3 class="panel-title">' . $glyph->render() . ' ' . Translation::get('Courses') . '</h3>';
         $html[] = '</div>';
 
         $html[] = '<div class="panel-body">';

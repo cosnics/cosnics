@@ -7,6 +7,8 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
@@ -39,6 +41,15 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 {
 
     /**
+     * The default number of objects per page
+     */
+    const DEFAULT_PER_PAGE = 20;
+
+    const PARAM_PAGE_NUMBER = 'page_nr';
+
+    const PARAM_PER_PAGE = 'per_page';
+
+    /**
      *
      * @var integer
      */
@@ -69,13 +80,6 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     private $pagerRenderer;
 
     /**
-     * The default number of objects per page
-     */
-    const DEFAULT_PER_PAGE = 20;
-    const PARAM_PER_PAGE = 'per_page';
-    const PARAM_PAGE_NUMBER = 'page_nr';
-
-    /**
      * Returns the HTML output of this renderer.
      *
      * @return string The HTML output
@@ -104,34 +108,6 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     }
 
     /**
-     * Renders a single publication.
-     *
-     * @param $publication ContentObjectPublication The publication.
-     * @param $first boolean True if the publication is the first in the list it is a part of.
-     * @param $last boolean True if the publication is the last in the list it is a part of.
-     *
-     * @return string The rendered HTML.
-     */
-    public function render_publication($publication, $first = false, $last = false, $position = 0)
-    {
-        $lastVisitDate = $this->get_tool_browser()->get_last_visit_date();
-
-        $html = array();
-
-        $html[] = '<div class="' . $this->determinePanelClasses() . '">';
-        $html[] = '<div class="panel-body">';
-
-        $html[] = $this->renderPublicationHeader($publication);
-        $html[] = $this->renderPublicationBody($publication);
-        $html[] = $this->renderPublicationFooter($publication);
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
      *
      * @return string
      */
@@ -153,21 +129,365 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
     /**
      *
+     * @return integer
+     */
+    public function getCurrentPageNumber()
+    {
+        if (is_null($this->currentPageNumber))
+        {
+            $this->currentPageNumber = $this->get_tool_browser()->getRequest()->query->get(self::PARAM_PAGE_NUMBER, 1);
+        }
+
+        return $this->currentPageNumber;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function getListName()
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true);
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getNumberOfItems()
+    {
+        if (is_null($this->numberOfItems))
+        {
+            $this->numberOfItems = $this->get_publication_count();
+        }
+
+        return $this->numberOfItems;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getNumberOfItemsPerPage()
+    {
+        if (is_null($this->numberOfItemsPerPage))
+        {
+            $this->numberOfItemsPerPage = $this->get_tool_browser()->getRequest()->query->get(
+                self::PARAM_PER_PAGE, self::DEFAULT_PER_PAGE
+            );
+        }
+
+        return $this->numberOfItemsPerPage;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Table\Pager
+     */
+    public function getPager()
+    {
+        if (is_null($this->pager))
+        {
+            $this->pager = new Pager(
+                $this->getNumberOfItemsPerPage(), 1, $this->getNumberOfItems(), $this->getCurrentPageNumber()
+            );
+        }
+
+        return $this->pager;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Table\PagerRenderer
+     */
+    public function getPagerRenderer()
+    {
+        if (is_null($this->pagerRenderer))
+        {
+            $this->pagerRenderer = new PagerRenderer($this->getPager());
+        }
+
+        return $this->pagerRenderer;
+    }
+
+    /**
+     *
      * @param string[] $publication
      *
      * @return string
      */
-    public function renderPublicationBody($publication)
+    public function getTitleUrl($publication)
+    {
+        $titleParameters = array(
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+        );
+
+        if ($this->get_content_object_from_publication($publication) instanceof ComplexContentObjectSupport)
+        {
+            $titleParameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
+                \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
+        }
+        else
+        {
+            $titleParameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
+                \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
+        }
+
+        return $this->get_url($titleParameters);
+    }
+
+    public function get_page_publications()
+    {
+        $pager = $this->getPager();
+
+        return $this->get_publications($pager->getCurrentRangeOffset(), $this->getNumberOfItemsPerPage());
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function hasActions()
+    {
+        $hasActions = $this->get_actions() instanceof TableFormActions && $this->get_actions()->has_form_actions();
+        $hasPublications = $this->getNumberOfItems() > 0;
+        $hasRights = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
+
+        return $hasActions && $hasPublications && $hasRights;
+    }
+
+    /**
+     *
+     * @param string[] $publication
+     *
+     * @return boolean
+     */
+    public function hasPublicationBeenModified($publication)
+    {
+        $publicationCreationDate = $publication[ContentObjectPublication::PROPERTY_PUBLICATION_DATE];
+        $publicationModificationDate = $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE];
+
+        $contentObject = DataManager::retrieve_by_id(
+            ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+        );
+
+        $publicationModified = $publicationModificationDate > $publicationCreationDate;
+        $contentObjectModified = $contentObject->get_modification_date() > $publicationCreationDate;
+        $contentModified = ($publicationModified || $contentObjectModified);
+
+        if ($contentModified)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Returns whether or not the publication is visible
+     *
+     * @param $publication
+     *
+     * @return bool
+     */
+    protected function isPublicationVisible($publication)
+    {
+        if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
+        {
+            return false;
+        }
+
+        $fromDate = $publication[ContentObjectPublication::PROPERTY_FROM_DATE];
+        $toDate = $publication[ContentObjectPublication::PROPERTY_TO_DATE];
+
+        if ($fromDate == 0 && $toDate == 0)
+        {
+            return true;
+        }
+
+        return $fromDate <= time() && $toDate >= time();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderActions()
+    {
+        $formActions = $this->get_actions()->get_form_actions();
+        $firstAction = array_shift($formActions);
+
+        $buttonToolBar = new ButtonToolBar();
+
+        $buttonToolBar->addItem(
+            new Button(
+                Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('square-o'), '#',
+                Button::DISPLAY_ICON_AND_LABEL, false, 'btn-sm select-all'
+            )
+        );
+
+        $buttonToolBar->addItem(
+            new Button(
+                Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES),
+                new FontAwesomeGlyph('check-square-o'), '#', Button::DISPLAY_ICON_AND_LABEL, false, 'btn-sm select-none'
+            )
+        );
+
+        $actionButtonGroup = new ButtonGroup();
+
+        $button = new SplitDropdownButton(
+            $firstAction->get_title(), null, $firstAction->get_action(), Button::DISPLAY_LABEL,
+            $firstAction->getConfirmation(), 'btn-sm btn-table-action'
+        );
+        $button->setDropdownClasses('btn-table-action');
+
+        foreach ($formActions as $formAction)
+        {
+            $button->addSubButton(
+                new SubButton(
+                    $formAction->get_title(), null, $formAction->get_action(), Button::DISPLAY_LABEL,
+                    $formAction->getConfirmation()
+                )
+            );
+        }
+
+        $actionButtonGroup->addButton($button);
+
+        $buttonToolBar->addButtonGroup($actionButtonGroup);
+
+        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        $html = array();
+
+        $html[] = $buttonToolBarRenderer->render();
+        $html[] = '<input type="hidden" name="' . $this->getListName() . '_namespace" value="' .
+            $this->get_actions()->get_namespace() . '"/>';
+        $html[] = '<input type="hidden" name="table_name" value="' . $this->getListName() . '"/>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderFooter()
     {
         $html = array();
 
-        $html[] = '<div class="row panel-publication-body">';
-        $html[] = '<div class="col-xs-12">';
-        $html[] = $this->render_description($publication);
         $html[] = '</div>';
         $html[] = '</div>';
 
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
+
+        if ($this->hasActions())
+        {
+            $html[] = $this->renderActions();
+        }
+
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-pagination">';
+        $html[] = $this->renderNavigation();
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        if ($this->hasActions())
+        {
+            $html[] = '<input type="submit" name="Submit" value="Submit" class="hidden" />';
+            $html[] = '</form>';
+            $html[] = ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'list.view.selector.js'
+            );
+        }
+
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderHeader()
+    {
+        $html = array();
+
+        if ($this->hasActions())
+        {
+            $tableFormActions = $this->get_actions()->get_form_actions();
+            $firstFormAction = array_shift($tableFormActions);
+
+            $html[] = '<form class="form-list-view" method="post" action="' . $firstFormAction->get_action() .
+                '" name="form_' . $this->getListName() . '">';
+        }
+
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
+
+        if ($this->hasActions())
+        {
+            $html[] = $this->renderActions();
+        }
+
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-search">';
+        $html[] = $this->renderItemsPerPageSelector();
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-12">';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderItemsPerPageSelector()
+    {
+        $sourceDataCount = $this->getNumberOfItems();
+
+        // if ($sourceDataCount <= $this->getNumberOfItemsPerPage())
+        // {
+        // return '';
+        // }
+
+        $queryParameters = $this->get_tool_browser()->get_parameters();
+        $queryParameters[self::PARAM_PAGE_NUMBER] = $this->getCurrentPageNumber();
+
+        $translationVariables = array();
+        $translationVariables[Application::PARAM_CONTEXT] = Manager::package();
+        $translationVariables[PagerRenderer::PAGE_SELECTOR_TRANSLATION_TITLE] = 'ShowNumberOfPublicationsPerPage';
+        $translationVariables[PagerRenderer::PAGE_SELECTOR_TRANSLATION_ROW] = 'NumberOfPublicationsPerPage';
+
+        return $this->getPagerRenderer()->renderItemsPerPageSelector(
+            $queryParameters, self::PARAM_PER_PAGE, $translationVariables
+        );
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderNavigation()
+    {
+        $pager = $this->getPager();
+        $pagerRenderer = $this->getPagerRenderer();
+
+        $queryParameters = $this->get_tool_browser()->get_parameters();
+        $queryParameters[self::PARAM_PAGE_NUMBER] = $this->getCurrentPageNumber();
+
+        return $pagerRenderer->renderPaginationWithPageLimit($queryParameters, self::PARAM_PAGE_NUMBER);
     }
 
     /**
@@ -245,7 +565,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             }
         }
 
-        $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService::getInstance();
+        $repositoryRightsService = RightsService::getInstance();
         $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
         $canEditContentObject = $repositoryRightsService->canEditContentObject($this->get_user(), $content_object);
@@ -366,42 +686,6 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
             // New functionality in old code
 
-            // if ($publication[ContentObjectPublication :: PROPERTY_FROM_DATE] == 0 &&
-            // $publication[ContentObjectPublication :: PROPERTY_TO_DATE] == 0)
-            // {
-            // $variable = 'PeriodForever';
-            // $visibility_image = 'Action/Period';
-            // }
-            // else
-            // {
-            // if (time() < $publication[ContentObjectPublication :: PROPERTY_FROM_DATE])
-            // {
-            // $variable = 'PeriodBefore';
-            // $visibility_image = 'Action/PeriodBefore';
-            // }
-            // elseif (time() > $publication[ContentObjectPublication :: PROPERTY_TO_DATE])
-            // {
-            // $variable = 'PeriodAfter';
-            // $visibility_image = 'Action/PeriodAfter';
-            // }
-            // else
-            // {
-            // $variable = 'PeriodCurrent';
-            // $visibility_image = 'Action/Period';
-            // }
-            // }
-            //
-            // $dropdownButton->addSubButton(
-            // new SubButton(
-            // Translation :: get($variable, null, Utilities :: COMMON_LIBRARIES),
-            // Theme :: getInstance()->getCommonImagePath($visibility_image),
-            // $this->get_url(
-            // array(
-            // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager ::
-            // ACTION_UPDATE_PUBLICATION,
-            // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
-            // SubButton :: DISPLAY_LABEL));
-
             if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
             {
                 $visibilityTranslation = Translation::get('MakeVisible', null, Manager::context());
@@ -484,116 +768,17 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      *
      * @param string[] $publication
      *
-     * @return boolean
-     */
-    public function hasPublicationBeenModified($publication)
-    {
-        $publicationCreationDate = $publication[ContentObjectPublication::PROPERTY_PUBLICATION_DATE];
-        $publicationModificationDate = $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE];
-
-        $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
-        );
-
-        $publicationModified = $publicationModificationDate > $publicationCreationDate;
-        $contentObjectModified = $contentObject->get_modification_date() > $publicationCreationDate;
-        $contentModified = ($publicationModified || $contentObjectModified);
-
-        if ($contentModified)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Returns whether or not the publication is visible
-     *
-     * @param $publication
-     *
-     * @return bool
-     */
-    protected function isPublicationVisible($publication)
-    {
-        if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
-        {
-            return false;
-        }
-
-        $fromDate = $publication[ContentObjectPublication::PROPERTY_FROM_DATE];
-        $toDate = $publication[ContentObjectPublication::PROPERTY_TO_DATE];
-
-        if ($fromDate == 0 && $toDate == 0)
-        {
-            return true;
-        }
-
-        return $fromDate <= time() && $toDate >= time();
-    }
-
-    /**
-     *
-     * @param string[] $publication
-     *
      * @return string
      */
-    public function renderVisiblePublicationDate($publication)
+    public function renderPublicationBody($publication)
     {
-        $publicationCreationDate = $publication[ContentObjectPublication::PROPERTY_PUBLICATION_DATE];
-        $publicationModificationDate = $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE];
-
-        $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
-        );
-
-        $publicationModified = $publicationModificationDate > $publicationCreationDate;
-        $contentObjectModified = $contentObject->get_modification_date() > $publicationCreationDate;
-        $contentModified = ($publicationModified || $contentObjectModified);
-
-        if ($contentModified)
-        {
-            if ($contentObjectModified && $publicationModified)
-            {
-                if ($contentObject->get_modification_date() > $publicationModificationDate)
-                {
-                    $visibleDate = $this->format_date($contentObject->get_modification_date());
-                }
-                else
-                {
-                    $visibleDate = $this->format_date($publicationModificationDate);
-                }
-            }
-            elseif ($contentObjectModified)
-            {
-                $visibleDate = $this->format_date($contentObject->get_modification_date());
-            }
-            else
-            {
-                $visibleDate = $this->format_date($publicationModificationDate);
-            }
-        }
-        else
-        {
-            $visibleDate = $this->format_date($publicationCreationDate);
-        }
-
         $html = array();
 
-        if ($contentModified)
-        {
-            $html[] = '<span class="text-danger">';
-        }
-
-        $html[] = '<span class="glyphicon glyphicon-time"></span>';
-        $html[] = $visibleDate;
-
-        if ($contentModified)
-        {
-            $html[] = '</span>';
-        }
+        $html[] = '<div class="row panel-publication-body">';
+        $html[] = '<div class="col-xs-12">';
+        $html[] = $this->render_description($publication);
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -604,24 +789,28 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      *
      * @return string
      */
-    public function getTitleUrl($publication)
+    public function renderPublicationFooter($publication)
     {
-        $titleParameters = array(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-        );
+        $html = array();
 
-        if ($this->get_content_object_from_publication($publication) instanceof ComplexContentObjectSupport)
-        {
-            $titleParameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
-                \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
-        }
-        else
-        {
-            $titleParameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
-                \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
-        }
+        $html[] = '<div class="row panel-publication-footer">';
 
-        return $this->get_url($titleParameters);
+        $html[] = '<div class="col-xs-12 col-sm-3 panel-publication-footer-date">';
+        $html[] = $this->renderVisiblePublicationDate($publication);
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-xs-12 col-sm-6 panel-publication-footer-visibility">';
+        $html[] = $this->renderVisibilityData($publication);
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-xs-12 col-sm-3 panel-publication-footer-targets">';
+        $html[] = '<span class="glyphicon glyphicon-user"></span>';
+        $html[] = $this->render_publication_targets($publication);
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -729,36 +918,6 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
     /**
      *
-     * @param string[] $publication
-     *
-     * @return string
-     */
-    public function renderPublicationFooter($publication)
-    {
-        $html = array();
-
-        $html[] = '<div class="row panel-publication-footer">';
-
-        $html[] = '<div class="col-xs-12 col-sm-3 panel-publication-footer-date">';
-        $html[] = $this->renderVisiblePublicationDate($publication);
-        $html[] = '</div>';
-
-        $html[] = '<div class="col-xs-12 col-sm-6 panel-publication-footer-visibility">';
-        $html[] = $this->renderVisibilityData($publication);
-        $html[] = '</div>';
-
-        $html[] = '<div class="col-xs-12 col-sm-3 panel-publication-footer-targets">';
-        $html[] = '<span class="glyphicon glyphicon-user"></span>';
-        $html[] = $this->render_publication_targets($publication);
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
      * @param string $publication
      *
      * @return string
@@ -785,284 +944,93 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Table\Pager
-     */
-    public function getPager()
-    {
-        if (is_null($this->pager))
-        {
-            $this->pager = new Pager(
-                $this->getNumberOfItemsPerPage(), 1, $this->getNumberOfItems(), $this->getCurrentPageNumber()
-            );
-        }
-
-        return $this->pager;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Table\PagerRenderer
-     */
-    public function getPagerRenderer()
-    {
-        if (is_null($this->pagerRenderer))
-        {
-            $this->pagerRenderer = new PagerRenderer($this->getPager());
-        }
-
-        return $this->pagerRenderer;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getNumberOfItemsPerPage()
-    {
-        if (is_null($this->numberOfItemsPerPage))
-        {
-            $this->numberOfItemsPerPage = $this->get_tool_browser()->getRequest()->query->get(
-                self::PARAM_PER_PAGE, self::DEFAULT_PER_PAGE
-            );
-        }
-
-        return $this->numberOfItemsPerPage;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getNumberOfItems()
-    {
-        if (is_null($this->numberOfItems))
-        {
-            $this->numberOfItems = $this->get_publication_count();
-        }
-
-        return $this->numberOfItems;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getCurrentPageNumber()
-    {
-        if (is_null($this->currentPageNumber))
-        {
-            $this->currentPageNumber = $this->get_tool_browser()->getRequest()->query->get(self::PARAM_PAGE_NUMBER, 1);
-        }
-
-        return $this->currentPageNumber;
-    }
-
-    /**
+     * @param string[] $publication
      *
      * @return string
      */
-    public function renderNavigation()
+    public function renderVisiblePublicationDate($publication)
     {
-        $pager = $this->getPager();
-        $pagerRenderer = $this->getPagerRenderer();
+        $publicationCreationDate = $publication[ContentObjectPublication::PROPERTY_PUBLICATION_DATE];
+        $publicationModificationDate = $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE];
 
-        $queryParameters = $this->get_tool_browser()->get_parameters();
-        $queryParameters[self::PARAM_PAGE_NUMBER] = $this->getCurrentPageNumber();
+        $contentObject = DataManager::retrieve_by_id(
+            ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+        );
 
-        return $pagerRenderer->renderPaginationWithPageLimit($queryParameters, self::PARAM_PAGE_NUMBER);
-    }
+        $publicationModified = $publicationModificationDate > $publicationCreationDate;
+        $contentObjectModified = $contentObject->get_modification_date() > $publicationCreationDate;
+        $contentModified = ($publicationModified || $contentObjectModified);
 
-    public function get_page_publications()
-    {
-        $pager = $this->getPager();
+        if ($contentModified)
+        {
+            if ($contentObjectModified && $publicationModified)
+            {
+                if ($contentObject->get_modification_date() > $publicationModificationDate)
+                {
+                    $visibleDate = $this->format_date($contentObject->get_modification_date());
+                }
+                else
+                {
+                    $visibleDate = $this->format_date($publicationModificationDate);
+                }
+            }
+            elseif ($contentObjectModified)
+            {
+                $visibleDate = $this->format_date($contentObject->get_modification_date());
+            }
+            else
+            {
+                $visibleDate = $this->format_date($publicationModificationDate);
+            }
+        }
+        else
+        {
+            $visibleDate = $this->format_date($publicationCreationDate);
+        }
 
-        return $this->get_publications($pager->getCurrentRangeOffset(), $this->getNumberOfItemsPerPage());
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderHeader()
-    {
         $html = array();
 
-        if ($this->hasActions())
+        if ($contentModified)
         {
-            $tableFormActions = $this->get_actions()->get_form_actions();
-            $firstFormAction = array_shift($tableFormActions);
-
-            $html[] = '<form class="form-list-view" method="post" action="' . $firstFormAction->get_action() .
-                '" name="form_' . $this->getListName() . '">';
+            $html[] = '<span class="text-danger">';
         }
 
-        $html[] = '<div class="row">';
+        $html[] = '<span class="glyphicon glyphicon-time"></span>';
+        $html[] = $visibleDate;
 
-        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
-
-        if ($this->hasActions())
+        if ($contentModified)
         {
-            $html[] = $this->renderActions();
-        }
-
-        $html[] = '</div>';
-
-        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-search">';
-        $html[] = $this->renderItemsPerPageSelector();
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12">';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderFooter()
-    {
-        $html = array();
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="row">';
-
-        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
-
-        if ($this->hasActions())
-        {
-            $html[] = $this->renderActions();
-        }
-
-        $html[] = '</div>';
-
-        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-pagination">';
-        $html[] = $this->renderNavigation();
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        if ($this->hasActions())
-        {
-            $html[] = '<input type="submit" name="Submit" value="Submit" class="hidden" />';
-            $html[] = '</form>';
-            $html[] = ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'list.view.selector.js'
-            );
+            $html[] = '</span>';
         }
 
         return implode(PHP_EOL, $html);
     }
 
     /**
+     * Renders a single publication.
      *
-     * @return string
-     */
-    public function renderItemsPerPageSelector()
-    {
-        $sourceDataCount = $this->getNumberOfItems();
-
-        // if ($sourceDataCount <= $this->getNumberOfItemsPerPage())
-        // {
-        // return '';
-        // }
-
-        $queryParameters = $this->get_tool_browser()->get_parameters();
-        $queryParameters[self::PARAM_PAGE_NUMBER] = $this->getCurrentPageNumber();
-
-        $translationVariables = array();
-        $translationVariables[Application::PARAM_CONTEXT] = Manager::package();
-        $translationVariables[PagerRenderer::PAGE_SELECTOR_TRANSLATION_TITLE] = 'ShowNumberOfPublicationsPerPage';
-        $translationVariables[PagerRenderer::PAGE_SELECTOR_TRANSLATION_ROW] = 'NumberOfPublicationsPerPage';
-
-        return $this->getPagerRenderer()->renderItemsPerPageSelector(
-            $queryParameters, self::PARAM_PER_PAGE, $translationVariables
-        );
-    }
-
-    /**
+     * @param $publication ContentObjectPublication The publication.
+     * @param $first boolean True if the publication is the first in the list it is a part of.
+     * @param $last boolean True if the publication is the last in the list it is a part of.
      *
-     * @return boolean
+     * @return string The rendered HTML.
      */
-    protected function hasActions()
+    public function render_publication($publication, $first = false, $last = false, $position = 0)
     {
-        $hasActions = $this->get_actions() instanceof TableFormActions && $this->get_actions()->has_form_actions();
-        $hasPublications = $this->getNumberOfItems() > 0;
-        $hasRights = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
-
-        return $hasActions && $hasPublications && $hasRights;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderActions()
-    {
-        $formActions = $this->get_actions()->get_form_actions();
-        $firstAction = array_shift($formActions);
-
-        $buttonToolBar = new ButtonToolBar();
-
-        $buttonToolBar->addItem(
-            new Button(
-                Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('square-o'), '#',
-                Button::DISPLAY_ICON_AND_LABEL, false, 'btn-sm select-all'
-            )
-        );
-
-        $buttonToolBar->addItem(
-            new Button(
-                Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('check-square-o'), '#', Button::DISPLAY_ICON_AND_LABEL, false, 'btn-sm select-none'
-            )
-        );
-
-        $actionButtonGroup = new ButtonGroup();
-
-        $button = new SplitDropdownButton(
-            $firstAction->get_title(), null, $firstAction->get_action(), Button::DISPLAY_LABEL,
-            $firstAction->getConfirmation(), 'btn-sm btn-table-action'
-        );
-        $button->setDropdownClasses('btn-table-action');
-
-        foreach ($formActions as $formAction)
-        {
-            $button->addSubButton(
-                new SubButton(
-                    $formAction->get_title(), null, $formAction->get_action(), Button::DISPLAY_LABEL,
-                    $formAction->getConfirmation()
-                )
-            );
-        }
-
-        $actionButtonGroup->addButton($button);
-
-        $buttonToolBar->addButtonGroup($actionButtonGroup);
-
-        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+        $lastVisitDate = $this->get_tool_browser()->get_last_visit_date();
 
         $html = array();
 
-        $html[] = $buttonToolBarRenderer->render();
-        $html[] = '<input type="hidden" name="' . $this->getListName() . '_namespace" value="' .
-            $this->get_actions()->get_namespace() . '"/>';
-        $html[] = '<input type="hidden" name="table_name" value="' . $this->getListName() . '"/>';
+        $html[] = '<div class="' . $this->determinePanelClasses() . '">';
+        $html[] = '<div class="panel-body">';
+
+        $html[] = $this->renderPublicationHeader($publication);
+        $html[] = $this->renderPublicationBody($publication);
+        $html[] = $this->renderPublicationFooter($publication);
+
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function getListName()
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true);
     }
 }

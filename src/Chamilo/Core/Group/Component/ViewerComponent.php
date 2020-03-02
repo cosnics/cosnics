@@ -18,9 +18,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -28,6 +26,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -80,9 +79,10 @@ class ViewerComponent extends Manager implements TableSupport
             // Details
             $html[] = '<div class="panel panel-default">';
 
+            $glyph = new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas');
+
             $html[] = '<div class="panel-heading">';
-            $html[] = '<h3 class="panel-title">' . Theme::getInstance()->getCommonImage('Place/Group') . ' ' .
-                Translation::get('Details') . '</h3>';
+            $html[] = '<h3 class="panel-title">' . $glyph->render() . ' ' . Translation::get('Details') . '</h3>';
             $html[] = '</div>';
 
             $html[] = '<div class="panel-body">';
@@ -96,8 +96,10 @@ class ViewerComponent extends Manager implements TableSupport
             // Users
             $html[] = '<div class="panel panel-default">';
 
+            $glyph = new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas');
+
             $html[] = '<div class="panel-heading">';
-            $html[] = '<h3 class="panel-title">' . Theme::getInstance()->getCommonImage('Place/Users') . ' ' .
+            $html[] = '<h3 class="panel-title">' . $glyph->render() . ' ' .
                 Translation::get('Users', null, \Chamilo\Core\User\Manager::context()) . '</h3>';
             $html[] = '</div>';
 

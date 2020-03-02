@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\PlatformgroupMenuRenderer;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -85,7 +86,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
      */
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
@@ -117,6 +118,148 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * Retrieves the currently selected group
+     *
+     * @return Group
+     */
+    protected function getCurrentGroup()
+    {
+        if (!isset($this->currentGroup))
+        {
+            $groupId = $this->getGroupId();
+            if (!$groupId)
+            {
+                return null;
+            }
+
+            $this->currentGroup = DataManager::retrieve_by_id(Group::class_name(), $groupId);
+        }
+
+        return $this->currentGroup;
+    }
+
+    /**
+     * Returns the id of the currently selected group, or the root group
+     *
+     * @return int
+     */
+    protected function getGroupId()
+    {
+        if (!$this->groupId)
+        {
+            $this->groupId = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
+
+            if (!$this->groupId)
+            {
+                $this->groupId = $this->getRootGroup()->get_id();
+            }
+        }
+
+        return $this->groupId;
+    }
+
+    /**
+     * Builds and returns the root toolbar renderer
+     *
+     * @return ButtonToolBarRenderer
+     */
+    protected function getRootButtonToolbarRenderer()
+    {
+        if (!isset($this->rootButtonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar();
+
+            $buttonToolbar->addItem(
+                new Button(
+                    Translation::getInstance()->getTranslation(
+                        'SubscribeGroupsSearcherComponent', null, Manager::context()
+                    ), new FontAwesomeGlyph('search'),
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS_SEARCHER)),
+                    Button::DISPLAY_ICON_AND_LABEL, false, 'pull-right'
+                )
+            );
+
+            $this->rootButtonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->rootButtonToolbarRenderer;
+    }
+
+    /**
+     * Retrieves the root group
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function getRootGroup()
+    {
+        if (!$this->rootGroup)
+        {
+            $group = DataManager::retrieve(
+                Group::class_name(), new DataClassRetrieveParameters(
+                    new EqualityCondition(
+                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                        new StaticConditionVariable(0)
+                    )
+                )
+            );
+            $this->rootGroup = $group;
+        }
+
+        return $this->rootGroup;
+    }
+
+    /**
+     * Builds and returns the tab toolbar renderer
+     *
+     * @return ButtonToolBarRenderer
+     */
+    protected function getTabButtonToolbarRenderer()
+    {
+        if (!isset($this->tabButtonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar($this->get_url());
+            $this->tabButtonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->tabButtonToolbarRenderer;
+    }
+
+    /**
+     * Helper function to get translations in the current context
+     *
+     * @param $variable
+     * @param array $parameters
+     *
+     * @return string
+     */
+    protected function getTranslation($variable, $parameters = array())
+    {
+        return $this->translator->getTranslation($variable, $parameters, Manager::context());
+    }
+
+    /**
+     * Returns additional parameters that need to be registered
+     *
+     * @return array
+     */
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_TAB, \Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
+    }
+
+    /**
+     * Renders the group menu
+     *
+     * @return string
+     */
+    protected function renderGroupMenu()
+    {
+        $tree = new PlatformgroupMenuRenderer($this, array($this->getRootGroup()->get_id()));
+
+        return $tree->render_as_tree();
+    }
+
     protected function renderInformationMessage()
     {
         $html = array();
@@ -135,16 +278,11 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
     }
 
     /**
-     * Renders the group menu
+     * Renders the tab content
      *
      * @return string
      */
-    protected function renderGroupMenu()
-    {
-        $tree = new PlatformgroupMenuRenderer($this, array($this->getRootGroup()->get_id()));
-
-        return $tree->render_as_tree();
-    }
+    abstract protected function renderTabContent();
 
     /**
      * Renders the tabs as HTML
@@ -159,157 +297,20 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
 
         $tabs->add_tab(
             new DynamicVisualTab(
-                'view_details',
-                $this->getCurrentGroup()->get_name(),
-                $theme->getCommonImagePath('Action/Details'),
+                'view_details', $this->getCurrentGroup()->get_name(), new FontAwesomeGlyph('info-circle'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS)),
-                get_class($this) == SubscribeGroupsDetailsComponent::class_name()));
+                get_class($this) == SubscribeGroupsDetailsComponent::class_name()
+            )
+        );
 
         $tabs->add_tab(
             new DynamicVisualTab(
-                'view_subgroups',
-                $this->getTranslation('BrowseChildren'),
-                $theme->getCommonImagePath('Action/Browser'),
+                'view_subgroups', $this->getTranslation('BrowseChildren'), new FontAwesomeGlyph('folder'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_SUBGROUP_BROWSER)),
-                get_class($this) == SubscribeGroupsBrowseSubgroupsComponent::class_name()));
+                get_class($this) == SubscribeGroupsBrowseSubgroupsComponent::class_name()
+            )
+        );
 
         return $tabs->render();
     }
-
-    /**
-     * Helper function to get translations in the current context
-     *
-     * @param $variable
-     * @param array $parameters
-     *
-     * @return string
-     */
-    protected function getTranslation($variable, $parameters = array())
-    {
-        return $this->translator->getTranslation($variable, $parameters, Manager::context());
-    }
-
-    /**
-     * Builds and returns the tab toolbar renderer
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getTabButtonToolbarRenderer()
-    {
-        if (! isset($this->tabButtonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar($this->get_url());
-            $this->tabButtonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
-
-        return $this->tabButtonToolbarRenderer;
-    }
-
-    /**
-     * Builds and returns the root toolbar renderer
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getRootButtonToolbarRenderer()
-    {
-        if (! isset($this->rootButtonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar();
-
-            $buttonToolbar->addItem(
-                new Button(
-                    Translation::getInstance()->getTranslation(
-                        'SubscribeGroupsSearcherComponent',
-                        null,
-                        Manager::context()),
-                    new FontAwesomeGlyph('search'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS_SEARCHER)),
-                    Button::DISPLAY_ICON_AND_LABEL,
-                    false,
-                    'pull-right'));
-
-            $this->rootButtonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
-
-        return $this->rootButtonToolbarRenderer;
-    }
-
-    /**
-     * Retrieves the currently selected group
-     *
-     * @return Group
-     */
-    protected function getCurrentGroup()
-    {
-        if (! isset($this->currentGroup))
-        {
-            $groupId = $this->getGroupId();
-            if (! $groupId)
-            {
-                return null;
-            }
-
-            $this->currentGroup = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $groupId);
-        }
-
-        return $this->currentGroup;
-    }
-
-    /**
-     * Returns the id of the currently selected group, or the root group
-     *
-     * @return int
-     */
-    protected function getGroupId()
-    {
-        if (! $this->groupId)
-        {
-            $this->groupId = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
-
-            if (! $this->groupId)
-            {
-                $this->groupId = $this->getRootGroup()->get_id();
-            }
-        }
-
-        return $this->groupId;
-    }
-
-    /**
-     * Retrieves the root group
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    public function getRootGroup()
-    {
-        if (! $this->rootGroup)
-        {
-            $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
-                Group::class_name(),
-                new DataClassRetrieveParameters(
-                    new EqualityCondition(
-                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
-                        new StaticConditionVariable(0))));
-            $this->rootGroup = $group;
-        }
-
-        return $this->rootGroup;
-    }
-
-    /**
-     * Returns additional parameters that need to be registered
-     *
-     * @return array
-     */
-    public function get_additional_parameters()
-    {
-        return array(self::PARAM_TAB, \Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
-    }
-
-    /**
-     * Renders the tab content
-     *
-     * @return string
-     */
-    abstract protected function renderTabContent();
 }

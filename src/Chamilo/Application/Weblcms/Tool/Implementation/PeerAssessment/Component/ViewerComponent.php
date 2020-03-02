@@ -17,17 +17,9 @@ class ViewerComponent extends Manager
         if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $tool_actions[] = new ToolbarItem(
-                Translation::get('Test'), new FontAwesomeGlyph('upload'), '#',
-                ToolbarItem::DISPLAY_ICON_AND_LABEL
+                Translation::get('Test'), new FontAwesomeGlyph('upload'), '#', ToolbarItem::DISPLAY_ICON_AND_LABEL
             );
         }
-
-        /*
-         * if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT)) { $action_name = Translation ::
-         * get('ViewResultsSummary'); } else { $action_name = Translation :: get('ViewResults'); } $tool_actions[] = new
-         * ToolbarItem( $action_name, Theme :: getInstance()->getCommonImagePath('action_view_results'), '#',
-         * ToolbarItem :: DISPLAY_ICON_AND_LABEL );
-         */
 
         return $tool_actions;
     }

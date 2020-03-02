@@ -19,16 +19,16 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 /**
  *
@@ -96,26 +96,28 @@ class ExporterComponent extends Manager
                 {
                     if ($this->is_exportable[$export_type])
                     {
+                        $glyph = new FontAwesomeGlyph('upload');
+
                         if (count($content_object_ids))
                         {
                             $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
                                     self::PARAM_CONTENT_OBJECT_ID, $this->get_export_types_cache($export_type),
                                     $export_type
-                                ) . '">' . Theme::getInstance()->getCommonImage('Action/Export') . '</a>';
+                                ) . '">' . $glyph->render() . '</a>';
                         }
                         else
                         {
                             $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
                                     FilterData::FILTER_CATEGORY, $category_ids, $export_type
-                                ) . '">' . Theme::getInstance()->getCommonImage('Action/Export') . '</a>';
+                                ) . '">' . $glyph->render() . '</a>';
                         }
                     }
                     else
                     {
-                        $table_row[] = Theme::getInstance()->getCommonImage(
-                            'Action/ExportNa', 'png', Translation::get('ExportNotAvailable'), null,
-                            ToolbarItem::DISPLAY_ICON
-                        );
+                        $glyph =
+                            new FontAwesomeGlyph('upload', array('text-muted'), Translation::get('ExportNotAvailable'));
+
+                        $table_row[] = $glyph->render();
                     }
                 }
 
@@ -166,6 +168,11 @@ class ExporterComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $breadcrumbtrail->add_help('repository_exporter');
     }
 
     private function export_table($content_object_ids)
@@ -236,11 +243,6 @@ class ExporterComponent extends Manager
         }
 
         return $table_data;
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repository_exporter');
     }
 
     public function get_export_types_cache($type)

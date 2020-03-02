@@ -4,9 +4,7 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Ajax\Manager;
-use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\DTO\HtmlEditorContentObjectPlaceholder;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
@@ -68,28 +66,6 @@ class HtmlEditorFileUploadComponent extends Manager
     public function getRegistrationConsulter()
     {
         return $this->getService(RegistrationConsulter::class);
-    }
-
-    /**
-     *
-     * @param $fileContentObject
-     *
-     * @return string
-     */
-    protected function getThumbnailUrl($fileContentObject)
-    {
-        try
-        {
-            $display = ContentObjectRenditionImplementation::factory($fileContentObject, 'json', 'image', $this);
-
-            $rendition = $display->render();
-        }
-        catch (Exception $ex)
-        {
-            $rendition = array('url' => Theme::getInstance()->getCommonImagePath('NoThumbnail'));
-        }
-
-        return $rendition['url'];
     }
 
     /**

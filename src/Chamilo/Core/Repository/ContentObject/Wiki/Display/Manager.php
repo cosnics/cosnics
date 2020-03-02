@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWikiPage;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
@@ -38,23 +39,39 @@ require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser_conte
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
-    const PARAM_WIKI_ID = 'wiki_id';
-    const PARAM_WIKI_PAGE_ID = 'wiki_page_id';
-    const PARAM_WIKI_VERSION_ID = 'wiki_version_id';
-    const ACTION_BROWSE_WIKI = 'WikiBrowser';
-    const ACTION_VIEW_WIKI = 'Viewer';
-    const ACTION_VIEW_WIKI_PAGE = 'WikiItemViewer';
-    const ACTION_CREATE_PAGE = 'WikiPageCreator';
-    const ACTION_SET_AS_HOMEPAGE = 'WikiHomepageSetter';
-    const ACTION_DISCUSS = 'WikiDiscuss';
-    const ACTION_HISTORY = 'WikiHistory';
-    const ACTION_PAGE_STATISTICS = 'PageStatistics';
-    const ACTION_STATISTICS = 'Statistics';
-    const ACTION_COMPARE = 'Comparer';
     const ACTION_ACCESS_DETAILS = 'AccessDetails';
-    const ACTION_VERSION_REVERT = 'VersionReverter';
+
+    const ACTION_BROWSE_WIKI = 'WikiBrowser';
+
+    const ACTION_COMPARE = 'Comparer';
+
+    const ACTION_CREATE_PAGE = 'WikiPageCreator';
+
+    const ACTION_DISCUSS = 'WikiDiscuss';
+
+    const ACTION_HISTORY = 'WikiHistory';
+
+    const ACTION_PAGE_STATISTICS = 'PageStatistics';
+
+    const ACTION_SET_AS_HOMEPAGE = 'WikiHomepageSetter';
+
+    const ACTION_STATISTICS = 'Statistics';
+
     const ACTION_VERSION_DELETE = 'VersionDeleter';
+
+    const ACTION_VERSION_REVERT = 'VersionReverter';
+
+    const ACTION_VIEW_WIKI = 'Viewer';
+
+    const ACTION_VIEW_WIKI_PAGE = 'WikiItemViewer';
+
     const DEFAULT_ACTION = self::ACTION_VIEW_WIKI;
+
+    const PARAM_WIKI_ID = 'wiki_id';
+
+    const PARAM_WIKI_PAGE_ID = 'wiki_page_id';
+
+    const PARAM_WIKI_VERSION_ID = 'wiki_version_id';
 
     private $search_form;
 
@@ -69,32 +86,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         parent::__construct($applicationConfiguration);
 
         $this->search_form = new ActionBarSearchForm($this->get_url());
-    }
-
-    public static function is_wiki_locked($wiki_id)
-    {
-        $wiki = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class_name(), $wiki_id);
-
-        return $wiki->get_locked() == 1;
-    }
-
-    public static function get_wiki_homepage($wiki_id)
-    {
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
-            ), new StaticConditionVariable($wiki_id)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ComplexWikiPage::class_name(), ComplexWikiPage::PROPERTY_IS_HOMEPAGE),
-            new StaticConditionVariable(1)
-        );
-        $parameters = new DataClassRetrievesParameters(new AndCondition($conditions), 1, 0);
-        $complex_wiki_homepage = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexWikiPage::class_name(), $parameters
-        );
-
-        return $complex_wiki_homepage->next_result();
     }
 
     public function get_breadcrumbtrail()
@@ -128,7 +119,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 break;
             case self::ACTION_PAGE_STATISTICS :
                 $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
-                $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $complex_wiki_page = DataManager::retrieve_by_id(
                     ComplexContentObjectItem::class_name(), $complex_wiki_page_id
                 );
                 $wiki_page = $complex_wiki_page->get_ref_object();
@@ -244,11 +235,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     private function get_content_object_from_complex_id($complex_id)
     {
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $complex_content_object_item = DataManager::retrieve_by_id(
             ComplexContentObjectItem::class_name(), $complex_id
         );
 
-        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        return DataManager::retrieve_by_id(
             ContentObject::class_name(), $complex_content_object_item->get_ref()
         );
     }
@@ -256,6 +247,54 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     public function get_publication()
     {
         return $this->get_parent()->get_publication();
+    }
+
+    public function get_search_form()
+    {
+        return $this->search_form;
+    }
+
+    public static function get_wiki_homepage($wiki_id)
+    {
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+            ), new StaticConditionVariable($wiki_id)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ComplexWikiPage::class_name(), ComplexWikiPage::PROPERTY_IS_HOMEPAGE),
+            new StaticConditionVariable(1)
+        );
+        $parameters = new DataClassRetrievesParameters(new AndCondition($conditions), 1, 0);
+        $complex_wiki_homepage = DataManager::retrieve_complex_content_object_items(
+            ComplexWikiPage::class_name(), $parameters
+        );
+
+        return $complex_wiki_homepage->next_result();
+    }
+
+    public static function is_wiki_locked($wiki_id)
+    {
+        $wiki = DataManager::retrieve_by_id(ContentObject::class_name(), $wiki_id);
+
+        return $wiki->get_locked() == 1;
+    }
+
+    public function render_footer()
+    {
+        $glyph = new FontAwesomeGlyph('chevron-up', array(), Translation::get('BackToTop'), 'fas');
+        $html = array();
+
+        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="wiki-pane-top"><a href=#top>' . $glyph->render() . '</a></div>';
+        $html[] = '<div class="clear"></div>';
+        $html[] = '</div>';
+        $html[] = '<div class="clear"></div>';
+        $html[] = '</div>';
+
+        $html[] = parent::render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 
     public function render_header(ComplexWikiPage $complex_wiki_page = null)
@@ -475,28 +514,5 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $html[] = '<div class="wiki-pane-content">';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function render_footer()
-    {
-        $html = array();
-
-        $html[] = '<div class="clear"></div>';
-        $html[] = '<div class="wiki-pane-top"><a href=#top>' . Theme::getInstance()->getCommonImage(
-                'Action/AjaxAdd', 'png', Translation::get('BackToTop')
-            ) . '</a></div>';
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-
-        $html[] = parent::render_footer();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function get_search_form()
-    {
-        return $this->search_form;
     }
 }

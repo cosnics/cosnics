@@ -98,8 +98,8 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation::get('UnsubscribeNotAvailable'), new FontAwesomeGlyph(
-                                'minus-square', array('text-muted')
-                            ), null, ToolbarItem::DISPLAY_ICON
+                            'minus-square', array('text-muted')
+                        ), null, ToolbarItem::DISPLAY_ICON
                         )
                     );
                 }
@@ -141,8 +141,8 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('UnsubscribeNotAvailable'), new FontAwesomeGlyph(
-                            'minus-square', array('text-muted')
-                        ), null, ToolbarItem::DISPLAY_ICON
+                        'minus-square', array('text-muted')
+                    ), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
             }
@@ -192,15 +192,6 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
                             )
                         );
                     }
-                    // else
-                    // {
-                    // $toolbar->add_item(
-                    // new ToolbarItem(
-                    // Translation :: get('ViewAsUserNotAvailableWhenCourseClosed'),
-                    // Theme :: getInstance()->getCommonImagePath('Action/LoginNa'),
-                    // null,
-                    // ToolbarItem :: DISPLAY_ICON));
-                    // }
                 }
             }
         }

@@ -173,32 +173,6 @@ class PanelToolListRenderer extends ToolListRenderer
             
             if ($parent->is_allowed(WeblcmsRights::EDIT_RIGHT) || $publication->is_visible_for_target_users())
             {
-                
-                // // Show visibility-icon
-                // if ($parent->is_allowed(WeblcmsRights :: EDIT_RIGHT))
-                // {
-                // $html[] = '<a href="' .
-                // $parent->get_url(
-                // array(
-                // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => $lcms_action,
-                // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
-                // '"><img src="' . Theme :: getInstance()->getCommonImagePath($visible_image) .
-                // '" style="vertical-align: middle;" alt=""/></a>';
-                // }
-                
-                // // Show delete-icon
-                // if ($parent->is_allowed(WeblcmsRights :: DELETE_RIGHT))
-                // {
-                // $html[] = '<a href="' .
-                // $parent->get_url(
-                // array(
-                // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION =>
-                // \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_DELETE_LINKS,
-                // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
-                // '"><img src="' . Theme :: getInstance()->getCommonImagePath('Action/Delete') .
-                // '" style="vertical-align: middle;" alt=""/></a>';
-                // }
-                
                 // Show tool-icon + name
                 
                 if ($publication->get_tool() ==

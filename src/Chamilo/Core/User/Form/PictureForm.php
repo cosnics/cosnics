@@ -5,9 +5,8 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -19,23 +18,22 @@ use Chamilo\Libraries\Utilities\Utilities;
 class PictureForm extends FormValidator
 {
 
-    private $parent;
-
+    /**
+     * @var \Chamilo\Core\User\Storage\DataClass\User
+     */
     private $user;
 
-    private $unencryptedpass;
-
-    private $adm;
-
     /**
-     * Creates a new AccountForm
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string $action
+     *
+     * @throws \Exception
      */
     public function __construct($user, $action)
     {
         parent::__construct('user_account', 'post', $action);
 
         $this->user = $user;
-        $this->adm = \Chamilo\Core\Admin\Storage\DataManager::getInstance();
 
         $this->build_form();
 
@@ -43,55 +41,47 @@ class PictureForm extends FormValidator
     }
 
     /**
-     * Creates a new basic form
+     * @throws \Exception
      */
     public function build_form()
     {
-        $profilePhotoUrl = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $this->user->get_id(),
-                'cache-id' => time()));
+        $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::getInstance());
+        $userPictureProvider = $userPictureProviderFactory->getActivePictureProvider();
 
         // Show user picture
         $this->addElement(
-            'static',
-            null,
-            Translation::get('CurrentImage'),
-            '<img class="my-account-photo" src="' . $profilePhotoUrl->getUrl() . '" alt="' . $this->user->get_fullname() .
-                 '" />');
+            'static', null, Translation::get('CurrentImage'), '<img class="my-account-photo" src="' .
+            $userPictureProvider->getUserPictureAsBase64String($this->user, $this->user) . '" alt="' .
+            $this->user->get_fullname() . '" />'
+        );
 
         // Picture
         $allowChangeUserPicture = Configuration::getInstance()->get_setting(
-            array(Manager::context(), 'allow_change_user_picture'));
+            array(Manager::context(), 'allow_change_user_picture')
+        );
         if ($allowChangeUserPicture == 1)
         {
             $this->addElement(
-                'file',
-                User::PROPERTY_PICTURE_URI,
-                ($this->user->has_picture() ? Translation::get('UpdateImage') : Translation::get('AddImage')));
+                'file', User::PROPERTY_PICTURE_URI,
+                ($this->user->has_picture() ? Translation::get('UpdateImage') : Translation::get('AddImage'))
+            );
             $this->addElement('static', null, null, Translation::get('AllowedProfileImageFormats'));
 
             $this->addElement('checkbox', 'remove_picture', Translation::get('DeleteImage'));
 
             $allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif', 'JPG', 'JPEG', 'PNG', 'GIF');
             $this->addRule(
-                User::PROPERTY_PICTURE_URI,
-                Translation::get('OnlyImagesAllowed'),
-                'filetype',
-                $allowed_picture_types);
+                User::PROPERTY_PICTURE_URI, Translation::get('OnlyImagesAllowed'), 'filetype', $allowed_picture_types
+            );
 
             $this->addElement('hidden', User::PROPERTY_ID);
 
             $buttons[] = $this->createElement(
-                'style_submit_button',
-                'submit',
-                Translation::get('Save', null, Utilities::COMMON_LIBRARIES));
+                'style_submit_button', 'submit', Translation::get('Save', null, Utilities::COMMON_LIBRARIES)
+            );
             $buttons[] = $this->createElement(
-                'style_reset_button',
-                'reset',
-                Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+                'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            );
 
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
@@ -106,13 +96,14 @@ class PictureForm extends FormValidator
         $values = $this->exportValues();
 
         $allowChangeUserPicture = Configuration::getInstance()->get_setting(
-            array(Manager::context(), 'allow_change_user_picture'));
+            array(Manager::context(), 'allow_change_user_picture')
+        );
         if ($allowChangeUserPicture == 1)
         {
 
             if (isset($_FILES['picture_uri']) && strlen($_FILES['picture_uri']['name']) > 0)
             {
-                if (! $_FILES['picture_uri']['error'])
+                if (!$_FILES['picture_uri']['error'])
                 {
                     $user->set_picture_file($_FILES['picture_uri']);
                 }
@@ -133,11 +124,11 @@ class PictureForm extends FormValidator
         if ($value)
         {
             Event::trigger(
-                'Update',
-                Manager::context(),
-                array(
+                'Update', Manager::context(), array(
                     ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
-                    ChangesTracker::PROPERTY_USER_ID => $user->get_id()));
+                    ChangesTracker::PROPERTY_USER_ID => $user->get_id()
+                )
+            );
         }
 
         return $value;

@@ -4,12 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo
 
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
@@ -46,13 +47,11 @@ class ProgressDetailsBlock extends ReportingBlock
         $showScore = $treeNode->supportsScore();
 
         $rows = array(
-            Translation::get('LastStartTime'),
-            Translation::get('Status'),
-            Translation::get('Time'),
+            Translation::get('LastStartTime'), Translation::get('Status'), Translation::get('Time'),
             Translation::get('Action')
         );
 
-        if($showScore)
+        if ($showScore)
         {
             array_splice($rows, 2, 0, Translation::get('Score'));
         }
@@ -70,28 +69,23 @@ class ProgressDetailsBlock extends ReportingBlock
             $category = $counter;
             $reporting_data->add_category($category);
             $reporting_data->add_data_category_row(
-                $category,
-                Translation::get('LastStartTime'),
+                $category, Translation::get('LastStartTime'),
                 DatetimeUtilities::format_locale_date(null, $treeNodeAttempt->get_start_time())
             );
             $reporting_data->add_data_category_row(
-                $category,
-                Translation::get('Status'),
+                $category, Translation::get('Status'),
                 Translation::get($treeNodeAttempt->isCompleted() ? 'Completed' : 'Incomplete')
             );
 
-            if($showScore)
+            if ($showScore)
             {
                 $reporting_data->add_data_category_row(
-                    $category,
-                    Translation::get('Score'),
-                    $treeNodeAttempt->get_score() . '%'
+                    $category, Translation::get('Score'), $treeNodeAttempt->get_score() . '%'
                 );
             }
 
             $reporting_data->add_data_category_row(
-                $category,
-                Translation::get('Time'),
+                $category, Translation::get('Time'),
                 DatetimeUtilities::format_seconds_to_hours($treeNodeAttempt->get_total_time())
             );
 
@@ -99,22 +93,14 @@ class ProgressDetailsBlock extends ReportingBlock
             {
                 $delete_url = $this->get_parent()->get_parent()->get_url(
                     array(
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_DELETE_ATTEMPT,
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID =>
-                            $treeNode->getId(),
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ITEM_ATTEMPT_ID =>
-                            $treeNodeAttempt->getId()
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPT,
+                        Manager::PARAM_CHILD_ID => $treeNode->getId(),
+                        Manager::PARAM_ITEM_ATTEMPT_ID => $treeNodeAttempt->getId()
                     )
                 );
 
-                $action = Theme::getInstance()->getCommonImage(
-                    'Action/Delete',
-                    'png',
-                    Translation::get('DeleteAttempt'),
-                    $delete_url,
-                    ToolbarItem::DISPLAY_ICON
-                );
+                $glyph = new FontAwesomeGlyph('times', array(), Translation::get('DeleteAttempt'));
+                $action = '<a href="' . $delete_url . '">' . $glyph->render() . '</a>';
 
                 $reporting_data->add_data_category_row($category, Translation::get('Action'), $action);
             }
@@ -126,17 +112,14 @@ class ProgressDetailsBlock extends ReportingBlock
         $reporting_data->add_category($category);
         $reporting_data->add_data_category_row($category, Translation::get('LastStartTime'), '');
         $reporting_data->add_data_category_row(
-            $category,
-            Translation::get('Status'),
+            $category, Translation::get('Status'),
             '<span style="font-weight: bold;">' . Translation::get('TotalTime') . '</span>'
         );
         $reporting_data->add_data_category_row($category, Translation::get('Score'), '');
 
         $reporting_data->add_data_category_row(
-            $category,
-            Translation::get('Time'),
-            '<span style="font-weight: bold;">' .
-            DatetimeUtilities::format_seconds_to_hours(
+            $category, Translation::get('Time'),
+            '<span style="font-weight: bold;">' . DatetimeUtilities::format_seconds_to_hours(
                 $trackingService->getTotalTimeSpentInTreeNode(
                     $learningPath, $user, $treeNode
                 )
@@ -148,19 +131,19 @@ class ProgressDetailsBlock extends ReportingBlock
 
     /**
      *
+     * @see \core\reporting\ReportingBlock::get_views()
+     */
+    public function get_views()
+    {
+        return array(Html::VIEW_TABLE);
+    }
+
+    /**
+     *
      * @see \core\reporting\ReportingBlock::retrieve_data()
      */
     public function retrieve_data()
     {
         return $this->count_data();
-    }
-
-    /**
-     *
-     * @see \core\reporting\ReportingBlock::get_views()
-     */
-    public function get_views()
-    {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 }

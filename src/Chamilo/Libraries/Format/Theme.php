@@ -340,6 +340,14 @@ class Theme
     }
 
     /**
+     * @return string
+     */
+    public function getFavouriteIcon()
+    {
+        return $this->getImagePath('Chamilo\Configuration', 'Favicon', 'ico');
+    }
+
+    /**
      *
      * @param string $namespace
      * @param boolean $web

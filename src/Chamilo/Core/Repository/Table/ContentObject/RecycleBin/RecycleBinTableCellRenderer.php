@@ -11,10 +11,10 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -30,6 +30,28 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
 {
 
     private $parent_title_cache = array();
+
+    public function get_actions($content_object)
+    {
+        $toolbar = new Toolbar();
+
+        $toolbar->add_item(
+            new ToolbarItem(
+                Translation::get('Restore', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('undo'),
+                $this->get_component()->get_content_object_restoring_url($content_object), ToolbarItem::DISPLAY_ICON
+            )
+        );
+
+        $toolbar->add_item(
+            new ToolbarItem(
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                $this->get_component()->get_content_object_deletion_url($content_object), ToolbarItem::DISPLAY_ICON,
+                true
+            )
+        );
+
+        return $toolbar->as_html();
+    }
 
     public function render_cell($column, $content_object)
     {
@@ -73,9 +95,7 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
 
                 return $this->parent_title_cache[$pid];
 
-            case Theme::getInstance()->getCommonImage(
-                'Action/Category', 'png', Translation::get('Type'), null, ToolbarItem::DISPLAY_ICON
-            ) :
+            case RecycleBinTableColumnModel::PROPERTY_TYPE :
                 return $content_object->get_icon_image(Theme::ICON_MINI);
 
             case ContentObject::PROPERTY_DESCRIPTION :
@@ -85,27 +105,5 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
         }
 
         return parent::render_cell($column, $content_object);
-    }
-
-    public function get_actions($content_object)
-    {
-        $toolbar = new Toolbar();
-
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation::get('Restore', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('undo'),
-                $this->get_component()->get_content_object_restoring_url($content_object), ToolbarItem::DISPLAY_ICON
-            )
-        );
-
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
-                $this->get_component()->get_content_object_deletion_url($content_object), ToolbarItem::DISPLAY_ICON,
-                true
-            )
-        );
-
-        return $toolbar->as_html();
     }
 }

@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Subscribed\SubscribedUserTable;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -18,12 +17,11 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -102,9 +100,11 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
         $html[] = '<div class="panel panel-default">';
 
+        $glyph = new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas');
+
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
-        $html[] = Theme::getInstance()->getCommonImage('Place/Group') . ' ' . $course_group->get_name();
+        $html[] = $glyph->render() . ' ' . $course_group->get_name();
         $html[] = '</h3>';
         $html[] = '</div>';
 
@@ -135,10 +135,11 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
         $html[] = '<div class="panel panel-default">';
 
+        $glyph = new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas');
+
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
-        $html[] = Theme::getInstance()->getCommonImage('Place/Users') . ' ' .
-            Translation::get('Users', null, \Chamilo\Core\User\Manager::context());
+        $html[] = $glyph->render() . ' ' . Translation::get('Users', null, \Chamilo\Core\User\Manager::context());
         $html[] = '</h3>';
         $html[] = '</div>';
 

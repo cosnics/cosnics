@@ -1,20 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Rendition\Html\Type;
 
-use Chamilo\Libraries\Format\Theme;
-
+/**
+ * @package Chamilo\Core\Repository\Common\Rendition\Html\Type
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class HtmlThumbnailContentObjectRendition extends HtmlPreviewContentObjectRendition
 {
-
-    public function get_class()
-    {
-        return 'no_thumbnail';
-    }
-
-    public function get_image()
-    {
-        return Theme::getInstance()->getCommonImage('NoThumbnail');
-    }
 
     public function get_text()
     {

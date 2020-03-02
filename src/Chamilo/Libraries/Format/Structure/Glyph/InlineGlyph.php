@@ -46,18 +46,31 @@ abstract class InlineGlyph
      *
      * @return string
      */
-    public function getType()
+    public function render()
     {
-        return $this->type;
+        $title = $this->getTitle() ? ' title="' . htmlentities($this->getTitle()) . '"' : '';
+
+        return '<span class="' . implode(' ', $this->getClassNames()) . '"' . $title . '></span>';
     }
 
     /**
      *
-     * @param string $type
+     * @return string[]
      */
-    public function setType($type)
+    public function getBaseClassNames()
     {
-        $this->type = $type;
+        $baseClassNames[] = 'inline-glyph';
+
+        return $baseClassNames;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getClassNames()
+    {
+        return array_merge($this->getBaseClassNames(), $this->getExtraClasses());
     }
 
     /**
@@ -100,29 +113,17 @@ abstract class InlineGlyph
      *
      * @return string
      */
-    public function render()
+    public function getType()
     {
-        $title = $this->getTitle() ? ' title="' . htmlentities($this->getTitle()) . '"' : '';
-        return '<span class="' . implode(' ', $this->getClassNames()) . '"' . $title . '></span>';
+        return $this->type;
     }
 
     /**
      *
-     * @return string[]
+     * @param string $type
      */
-    public function getBaseClassNames()
+    public function setType($type)
     {
-        $baseClassNames[] = 'inline-glyph';
-
-        return $baseClassNames;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function getClassNames()
-    {
-        return array_merge($this->getBaseClassNames(), $this->getExtraClasses());
+        $this->type = $type;
     }
 }

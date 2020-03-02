@@ -15,7 +15,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -151,7 +150,11 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
 
                 if ($numberOfNodes >= count($currentTreeNode->getDescendantNodes()) + 1)
                 {
-                    return Theme::getInstance()->getCommonImage('Status/OkMini');
+                    $glyph = new FontAwesomeGlyph(
+                        'check-circle', array('text-success'), null, 'fas'
+                    );
+
+                    return $glyph->render();
                 }
 
                 return null;
@@ -159,7 +162,11 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
                 $numberOfNodes = $record['nodes_completed'];
                 if ($numberOfNodes > 0)
                 {
-                    return Theme::getInstance()->getCommonImage('Status/OkMini');
+                    $glyph = new FontAwesomeGlyph(
+                        'check-circle', array('text-success'), null, 'fas'
+                    );
+
+                    return $glyph->render();
                 }
 
                 return null;

@@ -282,15 +282,6 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
                             )
                         );
                     }
-                    // else
-                    // {
-                    // $toolbar->add_item(
-                    // new ToolbarItem(
-                    // Translation :: get('ViewAsUserNotAvailableWhenCourseClosed'),
-                    // Theme :: getInstance()->getCommonImagePath('Action/LoginNa'),
-                    // null,
-                    // ToolbarItem :: DISPLAY_ICON));
-                    // }
                 }
             }
         }

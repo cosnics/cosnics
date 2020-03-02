@@ -15,26 +15,6 @@ use Chamilo\Libraries\Utilities\Utilities;
 class ObjectTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
-    public function render_cell($column, $content_object)
-    {
-        switch ($column->get_name())
-        {
-            case Theme::getInstance()->getCommonImage(
-                'Action/Category', 'png', Translation::get('Type'), null, ToolbarItem::DISPLAY_ICON
-            ) :
-                return $content_object->get_icon_image(Theme::ICON_MINI);
-
-            case ContentObject::PROPERTY_TITLE :
-                return StringUtilities::getInstance()->truncate($content_object->get_title(), 50);
-            case ContentObject::PROPERTY_DESCRIPTION :
-                return Utilities::htmlentities(
-                    StringUtilities::getInstance()->truncate($content_object->get_description(), 50)
-                );
-        }
-
-        return parent::render_cell($column, $content_object);
-    }
-
     public function get_actions($content_object)
     {
         $toolbar = new Toolbar();
@@ -47,5 +27,23 @@ class ObjectTableCellRenderer extends DataClassTableCellRenderer implements Tabl
         );
 
         return $toolbar->as_html();
+    }
+
+    public function render_cell($column, $content_object)
+    {
+        switch ($column->get_name())
+        {
+            case ObjectTableColumnModel::PROPERTY_TYPE :
+                return $content_object->get_icon_image(Theme::ICON_MINI);
+
+            case ContentObject::PROPERTY_TITLE :
+                return StringUtilities::getInstance()->truncate($content_object->get_title(), 50);
+            case ContentObject::PROPERTY_DESCRIPTION :
+                return Utilities::htmlentities(
+                    StringUtilities::getInstance()->truncate($content_object->get_description(), 50)
+                );
+        }
+
+        return parent::render_cell($column, $content_object);
     }
 }

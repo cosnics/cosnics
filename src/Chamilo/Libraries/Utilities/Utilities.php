@@ -382,22 +382,6 @@ class Utilities
 
     /**
      *
-     * @param string $mimetype
-     *
-     * @return string The image html
-     */
-    public static function mimetype_to_image($mimetype)
-    {
-        $mimetype_image = str_replace('/', '_', $mimetype);
-        $mimetype_image = (string) StringUtilities::getInstance()->createString($mimetype_image)->upperCamelize();
-
-        return Theme::getInstance()->getCommonImage(
-            'Mimetype/' . $mimetype_image, 'png', $mimetype, '', ToolbarItem::DISPLAY_ICON
-        );
-    }
-
-    /**
-     *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $objects The content objects to order.
      */
     public static function order_content_objects_by_id_desc($objects)

@@ -51,78 +51,6 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
     }
 
     /**
-     * Renders a given cell.
-     *
-     * @param $column type
-     * @param mixed[] $user_with_subscription_status_and_type
-     *
-     * @return string
-     */
-    public function render_cell($column, $user_with_subscription_status_and_type)
-    {
-        // Add special features here
-        switch ($column->get_name())
-        {
-            // Exceptions that need post-processing go here ...
-            case AllSubscribedUserBrowserTableColumnModel::SUBSCRIPTION_TYPE :
-                $type =
-                    $user_with_subscription_status_and_type[AllSubscribedUserBrowserTableColumnModel::SUBSCRIPTION_TYPE];
-                switch ($type)
-                {
-                    case 1 :
-                        return Translation::get('SubscribedDireclty');
-                    case 2 :
-                        return Translation::get('SubscribedGroup');
-                    default :
-                        return ($type % 2 == 0) ? Translation::get('SubscribedGroup') : Translation::get(
-                            'SubscribedDirecltyAndGroup'
-                        );
-                }
-            case AllSubscribedUserBrowserTableColumnModel::SUBSCRIPTION_STATUS :
-                switch ($user_with_subscription_status_and_type[AllSubscribedUserBrowserTableColumnModel::SUBSCRIPTION_STATUS])
-                {
-                    case CourseEntityRelation::STATUS_TEACHER :
-                        return Translation::get('CourseAdmin');
-                    case CourseEntityRelation::STATUS_STUDENT :
-                        return Translation::get('Student');
-                    default :
-                        return Translation::get('Unknown');
-                }
-            case User::PROPERTY_PLATFORMADMIN :
-                if ($user_with_subscription_status_and_type[User::PROPERTY_PLATFORM_ADMIN] == '1')
-                {
-                    return Translation::get('PlatformAdministrator');
-                }
-                else
-                {
-                    return '';
-                }
-            case User::PROPERTY_EMAIL :
-                $email = $user_with_subscription_status_and_type[User::PROPERTY_EMAIL];
-
-                $activeOnlineEmailEditor = Configuration::getInstance()->get_setting(
-                    array('Chamilo\Core\Admin', 'active_online_email_editor')
-                );
-
-                if ($activeOnlineEmailEditor)
-                {
-                    $parameters = array();
-                    $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_EMAIL;
-                    $parameters[Manager::PARAM_OBJECTS] = $user_with_subscription_status_and_type[User::PROPERTY_ID];
-                    $email_url = $this->get_component()->get_url($parameters);
-                }
-                else
-                {
-                    $email_url = 'mailto:' . $email;
-                }
-
-                return '<a href="' . $email_url . '">' . $email . '</a>';
-        }
-
-        return parent::render_cell($column, $user_with_subscription_status_and_type);
-    }
-
-    /**
      * Gets the action links to display
      *
      * @param mixed[] $user_with_subscription_status
@@ -282,19 +210,82 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
                         )
                     );
                 }
-                // else
-                // {
-                // $toolbar->add_item(
-                // new ToolbarItem(
-                // Translation :: get('ViewAsUserNotAvailableWhenCourseClosed'),
-                // Theme :: getInstance()->getCommonImagePath('Action/LoginNa'),
-                // null,
-                // ToolbarItem :: DISPLAY_ICON));
-                // }
             }
         }
 
         // return
         return $toolbar->as_html();
+    }
+
+    /**
+     * Renders a given cell.
+     *
+     * @param $column type
+     * @param mixed[] $user_with_subscription_status_and_type
+     *
+     * @return string
+     */
+    public function render_cell($column, $user_with_subscription_status_and_type)
+    {
+        // Add special features here
+        switch ($column->get_name())
+        {
+            // Exceptions that need post-processing go here ...
+            case AllSubscribedUserBrowserTableColumnModel::SUBSCRIPTION_TYPE :
+                $type =
+                    $user_with_subscription_status_and_type[AllSubscribedUserBrowserTableColumnModel::SUBSCRIPTION_TYPE];
+                switch ($type)
+                {
+                    case 1 :
+                        return Translation::get('SubscribedDireclty');
+                    case 2 :
+                        return Translation::get('SubscribedGroup');
+                    default :
+                        return ($type % 2 == 0) ? Translation::get('SubscribedGroup') : Translation::get(
+                            'SubscribedDirecltyAndGroup'
+                        );
+                }
+            case AllSubscribedUserBrowserTableColumnModel::SUBSCRIPTION_STATUS :
+                switch ($user_with_subscription_status_and_type[AllSubscribedUserBrowserTableColumnModel::SUBSCRIPTION_STATUS])
+                {
+                    case CourseEntityRelation::STATUS_TEACHER :
+                        return Translation::get('CourseAdmin');
+                    case CourseEntityRelation::STATUS_STUDENT :
+                        return Translation::get('Student');
+                    default :
+                        return Translation::get('Unknown');
+                }
+            case User::PROPERTY_PLATFORMADMIN :
+                if ($user_with_subscription_status_and_type[User::PROPERTY_PLATFORM_ADMIN] == '1')
+                {
+                    return Translation::get('PlatformAdministrator');
+                }
+                else
+                {
+                    return '';
+                }
+            case User::PROPERTY_EMAIL :
+                $email = $user_with_subscription_status_and_type[User::PROPERTY_EMAIL];
+
+                $activeOnlineEmailEditor = Configuration::getInstance()->get_setting(
+                    array('Chamilo\Core\Admin', 'active_online_email_editor')
+                );
+
+                if ($activeOnlineEmailEditor)
+                {
+                    $parameters = array();
+                    $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_EMAIL;
+                    $parameters[Manager::PARAM_OBJECTS] = $user_with_subscription_status_and_type[User::PROPERTY_ID];
+                    $email_url = $this->get_component()->get_url($parameters);
+                }
+                else
+                {
+                    $email_url = 'mailto:' . $email;
+                }
+
+                return '<a href="' . $email_url . '">' . $email . '</a>';
+        }
+
+        return parent::render_cell($column, $user_with_subscription_status_and_type);
     }
 }

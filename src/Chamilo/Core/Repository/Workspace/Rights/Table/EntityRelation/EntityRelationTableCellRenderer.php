@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -29,46 +29,6 @@ class EntityRelationTableCellRenderer extends DataClassTableCellRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer::render_cell()
-     */
-    public function render_cell($column, $entityRelation)
-    {
-        switch ($column->get_name())
-        {
-            case EntityRelationTableColumnModel::COLUMN_ENTITY :
-                if ($entityRelation->get_entity_type() == UserEntity::ENTITY_TYPE)
-                {
-                    return \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-                        User::class_name(), $entityRelation->get_entity_id()
-                    )->get_fullname();
-                }
-                else
-                {
-                    return \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-                        Group::class_name(), $entityRelation->get_entity_id()
-                    )->get_name();
-                }
-            case RightsService::RIGHT_VIEW :
-                return $this->getRightsIcon(RightsService::RIGHT_VIEW, $entityRelation);
-            case RightsService::RIGHT_ADD :
-                return $this->getRightsIcon(RightsService::RIGHT_ADD, $entityRelation);
-            case RightsService::RIGHT_EDIT :
-                return $this->getRightsIcon(RightsService::RIGHT_EDIT, $entityRelation);
-            case RightsService::RIGHT_DELETE :
-                return $this->getRightsIcon(RightsService::RIGHT_DELETE, $entityRelation);
-            case RightsService::RIGHT_USE :
-                return $this->getRightsIcon(RightsService::RIGHT_USE, $entityRelation);
-            case RightsService::RIGHT_COPY :
-                return $this->getRightsIcon(RightsService::RIGHT_COPY, $entityRelation);
-            case RightsService::RIGHT_MANAGE :
-                return $this->getRightsIcon(RightsService::RIGHT_MANAGE, $entityRelation);
-        }
-
-        return parent::render_cell($column, $entityRelation);
-    }
-
-    /**
-     *
      * @param integer $right
      * @param WorkspaceEntityRelation $entityRelation
      *
@@ -76,9 +36,10 @@ class EntityRelationTableCellRenderer extends DataClassTableCellRenderer
      */
     private function getRightsIcon($right, WorkspaceEntityRelation $entityRelation)
     {
-        $state = $entityRelation->get_rights() & $right ? 'True' : 'False';
+        $state = $entityRelation->get_rights() & $right ? 'text-success' : 'text-danger';
+        $glyph = new FontAwesomeGlyph('circle', array($state));
 
-        return Theme::getInstance()->getCommonImage('Action/Setting' . $state);
+        return $glyph->render();
     }
 
     /**
@@ -114,5 +75,45 @@ class EntityRelationTableCellRenderer extends DataClassTableCellRenderer
         );
 
         return $toolbar->as_html();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer::render_cell()
+     */
+    public function render_cell($column, $entityRelation)
+    {
+        switch ($column->get_name())
+        {
+            case EntityRelationTableColumnModel::COLUMN_ENTITY :
+                if ($entityRelation->get_entity_type() == UserEntity::ENTITY_TYPE)
+                {
+                    return DataManager::retrieve_by_id(
+                        User::class_name(), $entityRelation->get_entity_id()
+                    )->get_fullname();
+                }
+                else
+                {
+                    return DataManager::retrieve_by_id(
+                        Group::class_name(), $entityRelation->get_entity_id()
+                    )->get_name();
+                }
+            case RightsService::RIGHT_VIEW :
+                return $this->getRightsIcon(RightsService::RIGHT_VIEW, $entityRelation);
+            case RightsService::RIGHT_ADD :
+                return $this->getRightsIcon(RightsService::RIGHT_ADD, $entityRelation);
+            case RightsService::RIGHT_EDIT :
+                return $this->getRightsIcon(RightsService::RIGHT_EDIT, $entityRelation);
+            case RightsService::RIGHT_DELETE :
+                return $this->getRightsIcon(RightsService::RIGHT_DELETE, $entityRelation);
+            case RightsService::RIGHT_USE :
+                return $this->getRightsIcon(RightsService::RIGHT_USE, $entityRelation);
+            case RightsService::RIGHT_COPY :
+                return $this->getRightsIcon(RightsService::RIGHT_COPY, $entityRelation);
+            case RightsService::RIGHT_MANAGE :
+                return $this->getRightsIcon(RightsService::RIGHT_MANAGE, $entityRelation);
+        }
+
+        return parent::render_cell($column, $entityRelation);
     }
 }

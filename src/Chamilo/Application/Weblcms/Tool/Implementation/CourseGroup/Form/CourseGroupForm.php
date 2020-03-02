@@ -141,31 +141,6 @@ class CourseGroupForm extends FormValidator
 
         $_SESSION['mc_number_of_options'] = $qty_titles;
         $this->build_creation_form();
-
-        // for ($counter=0; $){
-        //
-        // }
-        // created titles in the loop
-        // for ($option_number = 0; $option_number < $qty_titles;
-        // $option_number++)
-        // {
-        // $group = array();
-        // $group[] = $this->add_name_field($option_number);
-        // // if ($number_of_options - count($_SESSION['mc_skip_options']) > 1)
-        // // {
-        // $group[] = $this->createElement('image', 'remove[' . $option_number .
-        // ']', Theme :: getInstance()->getCommonImagePath('action_list_remove'),
-        // array('style="border: 0px;"'));
-        // // }
-        // //numbering of the titels
-        // if ($numbering < $qty_titles)
-        // {
-        // $numbering++;
-        // }
-        //
-        // $this->addGroup($group, CourseGroup::PROPERTY_NAME . $option_number,
-        // Translation :: get('Title') . $numbering, '', false);
-        // }
     }
 
     /**

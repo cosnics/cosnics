@@ -2,8 +2,10 @@
 
 namespace Chamilo\Core\Repository\Publication\Form;
 
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -13,7 +15,6 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
@@ -72,7 +73,7 @@ class PublicationTargetForm extends FormValidator
         parent::__construct('page_locations', 'post', $action);
 
         $this->contentObjectIdentifiers = $this->getApplication()->getRequest()->get(
-            \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID
+            Manager::PARAM_CONTENT_OBJECT_ID
         );
 
         if (empty($this->contentObjectIdentifiers))
@@ -91,7 +92,7 @@ class PublicationTargetForm extends FormValidator
         // Check whether the selected objects exist and perform the necessary rights checks
         foreach ($this->contentObjectIdentifiers as $id)
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $content_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), $id
             );
 
@@ -152,14 +153,12 @@ class PublicationTargetForm extends FormValidator
             $table_data[] = array($content_object->get_icon_image(Theme::ICON_MINI), $content_object->get_title());
         }
 
-        $type_image = Theme::getInstance()->getCommonImage(
-            'Action/Category', 'png', Translation::get('Type'), null, ToolbarItem::DISPLAY_ICON
-        );
+        $glyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
 
         $header = array();
-        $header[] = new StaticTableColumn('category', $type_image, 'cell-stat-x2');
+        $header[] = new StaticTableColumn('category', $glyph->render(), 'cell-stat-x2');
         $header[] = new StaticTableColumn(
-            Translation::get('Title', null, \Chamilo\Core\Repository\Manager::context())
+            Translation::get('Title', null, Manager::context())
         );
 
         $table = new SortableTableFromArray(

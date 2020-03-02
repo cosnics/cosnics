@@ -157,7 +157,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
                     LinkTable::TYPE_PUBLICATIONS, $translator->trans('Publications', array(), self::package()),
-                    new FontAwesomeGlyph('share-square-o', array('fa-lg'), null, 'fas'), $browser->render()
+                    new FontAwesomeGlyph('share-square', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
         }
@@ -218,8 +218,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
                     LinkTable::TYPE_ATTACHED_TO, $translator->trans('AttachedTo', array(), self::package()),
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/AttachedTo'),
-                    $browser->render()
+                    new FontAwesomeGlyph('bookmark', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
         }
@@ -343,7 +342,8 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $stateActions->addButton(
                         new Button(
                             $translator->trans('Unlink', array(), Utilities::COMMON_LIBRARIES),
-                            new FontAwesomeGlyph('unlink', array(), null, 'fas'), $unlink_url, Button::DISPLAY_ICON_AND_LABEL, true
+                            new FontAwesomeGlyph('unlink', array(), null, 'fas'), $unlink_url,
+                            Button::DISPLAY_ICON_AND_LABEL, true
                         )
                     );
                 }
@@ -585,11 +585,10 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Repository.js'
             );
 
-            $this->getDynamicTabsRenderer()->add_tab(
+            $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
                     'versions', $this->getTranslator()->trans('Versions', array(), self::package()),
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Versions'),
-                    implode(PHP_EOL, $versionTabContent)
+                    new FontAwesomeGlyph('undo', array('fa-lg'), null, 'fas'), implode(PHP_EOL, $versionTabContent)
                 )
             );
         }

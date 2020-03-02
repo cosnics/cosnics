@@ -261,7 +261,7 @@ abstract class Manager extends Application
      */
     public function get_allowed_content_object_types()
     {
-        $types = \Chamilo\Core\Repository\Storage\DataManager::get_registered_types(true);
+        $types = DataManager::get_registered_types(true);
 
         foreach ($types as $index => $type)
         {
@@ -362,7 +362,7 @@ abstract class Manager extends Application
      */
     public function get_content_object_deletion_url($content_object, $type = null)
     {
-        if (!\Chamilo\Core\Repository\Storage\DataManager::content_object_deletion_allowed($content_object, $type))
+        if (!DataManager::content_object_deletion_allowed($content_object, $type))
         {
             return null;
         }
@@ -492,7 +492,7 @@ abstract class Manager extends Application
      */
     public function get_content_object_revert_url($content_object)
     {
-        if (!\Chamilo\Core\Repository\Storage\DataManager::content_object_revert_allowed($content_object))
+        if (!DataManager::content_object_revert_allowed($content_object))
         {
             return null;
         }
@@ -594,7 +594,7 @@ abstract class Manager extends Application
     {
         if (!$securityCode)
         {
-            $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $contentObject = DataManager::retrieve_by_id(
                 ContentObject::class_name(), $documentId
             );
 
@@ -630,8 +630,8 @@ abstract class Manager extends Application
         $tabs->add_tab(
             new DynamicContentTab(
                 self::TAB_CATEGORY, $translator->getTranslation('ViewCategoriesTab', null, Manager::context()),
-                new FontAwesomeGlyph('folder'), $this->get_category_menu()->render_as_tree(),
-                DynamicContentTab::DISPLAY_ICON
+                new FontAwesomeGlyph('folder', array('fa-lg'), null, 'fas'),
+                $this->get_category_menu()->render_as_tree(), DynamicContentTab::DISPLAY_ICON
             )
         );
 
@@ -648,7 +648,8 @@ abstract class Manager extends Application
         $tabs->add_tab(
             new DynamicContentTab(
                 self::TAB_SEARCH, $translator->getTranslation('SearchTab', null, Manager::context()),
-                new FontAwesomeGlyph('search'), $filter_form->render(), DynamicContentTab::DISPLAY_ICON
+                new FontAwesomeGlyph('search', array('fa-lg'), null, 'fas'), $filter_form->render(),
+                DynamicContentTab::DISPLAY_ICON
             )
         );
 
@@ -676,7 +677,8 @@ abstract class Manager extends Application
         $tabs->add_tab(
             new DynamicContentTab(
                 self::TAB_OBJECT_TYPE, $translator->getTranslation('TypeTab', null, Manager::context()),
-                new FontAwesomeGlyph('filter'), $object_type->render_as_tree(), DynamicContentTab::DISPLAY_ICON
+                new FontAwesomeGlyph('filter', array('fa-lg'), null, 'fas'), $object_type->render_as_tree(),
+                DynamicContentTab::DISPLAY_ICON
             )
         );
 
@@ -692,7 +694,8 @@ abstract class Manager extends Application
         $tabs->add_tab(
             new DynamicContentTab(
                 self::TAB_USERVIEW, $translator->getTranslation('UserViewTab', null, Manager::context()),
-                new FontAwesomeGlyph('object-group'), $user_view->render_as_tree(), DynamicContentTab::DISPLAY_ICON
+                new FontAwesomeGlyph('object-group', array('fa-lg'), null, 'far'), $user_view->render_as_tree(),
+                DynamicContentTab::DISPLAY_ICON
             )
         );
 
@@ -731,7 +734,7 @@ abstract class Manager extends Application
 
     public static function get_preview_content_object_url($content_object)
     {
-        return \Chamilo\Core\Repository\Preview\Manager::get_content_object_default_action_link($content_object);
+        return Preview\Manager::get_content_object_default_action_link($content_object);
     }
 
     public function get_publish_content_object_url($content_object)
@@ -739,7 +742,7 @@ abstract class Manager extends Application
         return $this->get_url(
             array(
                 self::PARAM_ACTION => self::ACTION_PUBLICATION,
-                \Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Publication\Manager::ACTION_PUBLISH,
+                Publication\Manager::PARAM_ACTION => Publication\Manager::ACTION_PUBLISH,
                 self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id()
             )
         );

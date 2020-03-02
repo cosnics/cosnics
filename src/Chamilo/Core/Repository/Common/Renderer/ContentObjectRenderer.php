@@ -190,12 +190,6 @@ abstract class ContentObjectRenderer implements TableSupport
             );
         }
 
-        // $actions[] = new ToolbarItem(
-        // Translation :: get('ContentObjectAlternativeLinker'),
-        // Theme :: getInstance()->getCommonImagePath('Action/ContentObjectAlternativeLinker'),
-        // $this->get_repository_browser()->get_content_object_alternative_linker($content_object),
-        // ToolbarItem :: DISPLAY_ICON);
-
         $preview_url = $this->get_repository_browser()->get_preview_content_object_url($content_object);
         $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
 

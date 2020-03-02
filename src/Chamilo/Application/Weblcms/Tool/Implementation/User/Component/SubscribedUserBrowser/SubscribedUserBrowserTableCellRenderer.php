@@ -57,8 +57,7 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Details'),
-                new FontAwesomeGlyph('info-circle'), $details_url,
+                Translation::get('Details'), new FontAwesomeGlyph('info-circle'), $details_url,
                 ToolbarItem::DISPLAY_ICON
             )
         );
@@ -90,9 +89,8 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
 
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('Unsubscribe'),
-                            new FontAwesomeGlyph('minus-square'),
-                            $unsubscribe_url, ToolbarItem::DISPLAY_ICON
+                            Translation::get('Unsubscribe'), new FontAwesomeGlyph('minus-square'), $unsubscribe_url,
+                            ToolbarItem::DISPLAY_ICON
                         )
                     );
                 }
@@ -100,8 +98,7 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('UnsubscribeNotAvailable'),
-                            new FontAwesomeGlyph(
+                            Translation::get('UnsubscribeNotAvailable'), new FontAwesomeGlyph(
                                 'minus-square', array('text-muted')
                             ), null, ToolbarItem::DISPLAY_ICON
                         )
@@ -144,8 +141,7 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('UnsubscribeNotAvailable'),
-                        new FontAwesomeGlyph(
+                        Translation::get('UnsubscribeNotAvailable'), new FontAwesomeGlyph(
                             'minus-square', array('text-muted')
                         ), null, ToolbarItem::DISPLAY_ICON
                     )
@@ -161,8 +157,7 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Report'),
-                    new FontAwesomeGlyph('pie-chart'), $reporting_url,
+                    Translation::get('Report'), new FontAwesomeGlyph('pie-chart'), $reporting_url,
                     ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -192,21 +187,11 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
 
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('ViewAsUser'),
-                            new FontAwesomeGlyph('mask'), $view_as_url,
+                            Translation::get('ViewAsUser'), new FontAwesomeGlyph('mask'), $view_as_url,
                             ToolbarItem::DISPLAY_ICON
                         )
                     );
                 }
-                // else
-                // {
-                // $toolbar->add_item(
-                // new ToolbarItem(
-                // Translation :: get('ViewAsUserNotAvailableWhenCourseClosed'),
-                // Theme :: getInstance()->getCommonImagePath('Action/LoginNa'),
-                // null,
-                // ToolbarItem :: DISPLAY_ICON));
-                // }
             }
         }
 

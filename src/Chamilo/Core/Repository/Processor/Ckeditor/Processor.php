@@ -5,8 +5,9 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Theme;
+use Exception;
 
 class Processor extends HtmlEditorProcessor
 {
@@ -30,9 +31,9 @@ class Processor extends HtmlEditorProcessor
              *
              * @var ContentObject $object
              */
-            $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
-                $selected_object);
+            $object = DataManager::retrieve_by_id(
+                ContentObject::class_name(), $selected_object
+            );
 
             $display = ContentObjectRenditionImplementation::factory($object, 'json', 'image', $this);
 
@@ -43,7 +44,9 @@ class Processor extends HtmlEditorProcessor
                     $type = 'image';
                 }
                 else
+                {
                     $type = 'file';
+                }
             }
             else
             {
@@ -52,16 +55,16 @@ class Processor extends HtmlEditorProcessor
 
             $rendition = $display->render();
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
-            $rendition = array('url' => Theme::getInstance()->getCommonImagePath('NoThumbnail'));
+            $rendition = array('url' => null);
         }
 
         $html = array();
         $html[] = '<script type="text/javascript">';
         $html[] = 'window.opener.CKEDITOR.tools.callFunction(' . $this->get_parameter('CKEditorFuncNum') . ', "' .
-             $rendition['url'] . '"' . ', ' . $object->getId() . ', "' . $object->calculate_security_code() . '"' . ', "' .
-             $type . '"' . ');';
+            $rendition['url'] . '"' . ', ' . $object->getId() . ', "' . $object->calculate_security_code() . '"' .
+            ', "' . $type . '"' . ');';
         // . '\');';
         $html[] = 'window.close();';
 

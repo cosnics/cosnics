@@ -19,7 +19,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -74,8 +73,8 @@ abstract class TabComponent extends Manager
         $html[] = $this->render_header();
 
         $intro_text_allowed = CourseSettingsController::getInstance()->get_course_setting(
-            $this->get_course(),
-            CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT);
+            $this->get_course(), CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT
+        );
 
         if ($intro_text_allowed)
         {
@@ -102,68 +101,11 @@ abstract class TabComponent extends Manager
     }
 
     /**
-     * Returns the HTML for the menu
      *
-     * @return string
+     * @param BreadcrumbTrail $breadcrumbtrail
      */
-    protected function renderMenu()
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $group_menu = new CourseGroupMenu($this->get_course(), $this->get_group_id());
-
-        return $group_menu->render_as_tree();
-    }
-
-    /**
-     * Renders the tabs as HTML
-     *
-     * @return string
-     */
-    protected function renderTabs()
-    {
-        $translator = Translation::getInstance();
-        $theme = Theme::getInstance();
-
-        $tabs = new DynamicVisualTabsRenderer('course_groups', $this->renderTabContent());
-
-        if (! $this->isCurrentGroupRoot())
-        {
-            $tabs->add_tab(
-                new DynamicVisualTab(
-                    'view_details',
-                    $this->getCurrentGroupName(),
-                    $theme->getCommonImagePath('Action/Details'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS)),
-                    get_class($this) == DetailsComponent::class_name()));
-        }
-
-        $tabs->add_tab(
-            new DynamicVisualTab(
-                'view_details',
-                $translator->getTranslation('BrowseChildren', null, Manager::context()),
-                $theme->getCommonImagePath('Action/Browser'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
-                get_class($this) == BrowserComponent::class_name()));
-
-        if (! $this->isCurrentGroupRoot() && $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
-        {
-            $tabs->add_tab(
-                new DynamicVisualTab(
-                    'view_details',
-                    $translator->getTranslation('EditGroup', null, Manager::context()),
-                    $theme->getCommonImagePath('Action/Edit'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_EDIT_COURSE_GROUP)),
-                    get_class($this) == EditorComponent::class_name()));
-
-            $tabs->add_tab(
-                new DynamicVisualTab(
-                    'view_details',
-                    $translator->getTranslation('ManageSubscriptions', null, Manager::context()),
-                    $theme->getCommonImagePath('Action/Subscribe'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_MANAGE_SUBSCRIPTIONS)),
-                    get_class($this) == ManageSubscriptionsComponent::class_name()));
-        }
-
-        return $tabs->render();
     }
 
     /**
@@ -175,41 +117,43 @@ abstract class TabComponent extends Manager
      */
     protected function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
 
-            $param_add_course_group[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_ADD_COURSE_GROUP;
+            $param_add_course_group[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
+                self::ACTION_ADD_COURSE_GROUP;
             $param_add_course_group[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $this->get_group_id();
 
-            $param_subscriptions_overview[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_SUBSCRIPTIONS_OVERVIEW;
-            $param_subscriptions_overview[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $this->get_group_id();
+            $param_subscriptions_overview[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
+                self::ACTION_SUBSCRIPTIONS_OVERVIEW;
+            $param_subscriptions_overview[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] =
+                $this->get_group_id();
 
             if ($this->is_allowed(WeblcmsRights::ADD_RIGHT))
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Create'),
-                        new FontAwesomeGlyph('plus'),
-                        $this->get_url($param_add_course_group),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                        Translation::get('Create'), new FontAwesomeGlyph('plus'),
+                        $this->get_url($param_add_course_group), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
 
-            if (! $this->introduction_text && $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+            if (!$this->introduction_text && $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
             {
                 $label = Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES);
                 $glyph = new FontAwesomeGlyph('info-circle');
                 $allowedContentObjectTypes = array(Introduction::class_name());
 
                 $parameters = $this->get_parameters();
-                $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_PUBLISH_INTRODUCTION;
+                $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
+                    \Chamilo\Application\Weblcms\Tool\Manager::ACTION_PUBLISH_INTRODUCTION;
 
                 $actionSelector = new ActionSelector(
-                    $this,
-                    $this->getUser()->getId(),
-                    $allowedContentObjectTypes,
-                    $parameters);
+                    $this, $this->getUser()->getId(), $allowedContentObjectTypes, $parameters
+                );
 
                 $commonActions->addButton($actionSelector->getActionButton($label, $glyph));
             }
@@ -218,12 +162,11 @@ abstract class TabComponent extends Manager
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('ViewSubscriptions'),
-                        new FontAwesomeGlyph('th-list'),
-                        $this->get_url(
-                            $param_subscriptions_overview,
-                            array(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP)),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                        Translation::get('ViewSubscriptions'), new FontAwesomeGlyph('th-list'), $this->get_url(
+                        $param_subscriptions_overview, array(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP)
+                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
 
             $buttonToolbar->addButtonGroup($commonActions);
@@ -234,14 +177,38 @@ abstract class TabComponent extends Manager
         return $this->buttonToolbarRenderer;
     }
 
+    /**
+     * Returns the current course group
+     *
+     * @return CourseGroup
+     */
+    public function getCurrentCourseGroup()
+    {
+        if (!$this->currentCourseGroup)
+        {
+            $id = $this->get_group_id();
+            if (!$id || $id == $this->rootCourseGroup->getId())
+            {
+                $this->currentCourseGroup = $this->rootCourseGroup;
+            }
+            else
+            {
+                $this->currentCourseGroup = DataManager::retrieve_by_id(CourseGroup::class_name(), $id);
+            }
+        }
+
+        return $this->currentCourseGroup;
+    }
+
     protected function getCurrentGroupName()
     {
         $currentCourseGroup = $this->getCurrentCourseGroup();
 
         if ($currentCourseGroup->get_max_number_of_members() > 0)
         {
-            $maxMembersString = ' (' . $currentCourseGroup->count_members() . '/' .
-                 $currentCourseGroup->get_max_number_of_members() . ')';
+            $maxMembersString =
+                ' (' . $currentCourseGroup->count_members() . '/' . $currentCourseGroup->get_max_number_of_members() .
+                ')';
         }
         else
         {
@@ -262,43 +229,25 @@ abstract class TabComponent extends Manager
     }
 
     /**
-     * Returns the current course group
-     *
-     * @return CourseGroup
-     */
-    public function getCurrentCourseGroup()
-    {
-        if (! $this->currentCourseGroup)
-        {
-            $id = $this->get_group_id();
-            if (! $id || $id == $this->rootCourseGroup->getId())
-            {
-                $this->currentCourseGroup = $this->rootCourseGroup;
-            }
-            else
-            {
-                $this->currentCourseGroup = DataManager::retrieve_by_id(CourseGroup::class_name(), $id);
-            }
-        }
-
-        return $this->currentCourseGroup;
-    }
-
-    /**
      * Checks wheter or not the current group is the root course group
      */
     protected function isCurrentGroupRoot()
     {
         $currentCourseGroup = $this->getCurrentCourseGroup();
+
         return $currentCourseGroup->getId() == $this->rootCourseGroup->getId();
     }
 
     /**
+     * Returns the HTML for the menu
      *
-     * @param BreadcrumbTrail $breadcrumbtrail
+     * @return string
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    protected function renderMenu()
     {
+        $group_menu = new CourseGroupMenu($this->get_course(), $this->get_group_id());
+
+        return $group_menu->render_as_tree();
     }
 
     /**
@@ -307,4 +256,58 @@ abstract class TabComponent extends Manager
      * @return string
      */
     abstract protected function renderTabContent();
+
+    /**
+     * Renders the tabs as HTML
+     *
+     * @return string
+     */
+    protected function renderTabs()
+    {
+        $translator = Translation::getInstance();
+
+        $tabs = new DynamicVisualTabsRenderer('course_groups', $this->renderTabContent());
+
+        if (!$this->isCurrentGroupRoot())
+        {
+            $tabs->add_tab(
+                new DynamicVisualTab(
+                    'view_details', $this->getCurrentGroupName(), new FontAwesomeGlyph('info-circle'),
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS)),
+                    get_class($this) == DetailsComponent::class_name()
+                )
+            );
+        }
+
+        $tabs->add_tab(
+            new DynamicVisualTab(
+                'view_details', $translator->getTranslation('BrowseChildren', null, Manager::context()),
+                new FontAwesomeGlyph('folder'), $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
+                get_class($this) == BrowserComponent::class_name()
+            )
+        );
+
+        if (!$this->isCurrentGroupRoot() && $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            $tabs->add_tab(
+                new DynamicVisualTab(
+                    'view_details', $translator->getTranslation('EditGroup', null, Manager::context()),
+                    new FontAwesomeGlyph('pencil'),
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_EDIT_COURSE_GROUP)),
+                    get_class($this) == EditorComponent::class_name()
+                )
+            );
+
+            $tabs->add_tab(
+                new DynamicVisualTab(
+                    'view_details', $translator->getTranslation('ManageSubscriptions', null, Manager::context()),
+                    new FontAwesomeGlyph('plus-circle'),
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_MANAGE_SUBSCRIPTIONS)),
+                    get_class($this) == ManageSubscriptionsComponent::class_name()
+                )
+            );
+        }
+
+        return $tabs->render();
+    }
 }

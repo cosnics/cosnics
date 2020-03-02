@@ -2,37 +2,32 @@
 namespace Chamilo\Core\Repository\Common\Rendition\Html\Type;
 
 use Chamilo\Core\Repository\Common\Rendition\Html\HtmlContentObjectRendition;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
+/**
+ * @package Chamilo\Core\Repository\Common\Rendition\Html\Type
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class HtmlPreviewContentObjectRendition extends HtmlContentObjectRendition
 {
-
-    public function get_class()
+    public function render()
     {
-        return 'no_preview';
-    }
+        $glyph = new FontAwesomeGlyph('image', array('fa-5x'), null, 'fas');
+        $html = array();
 
-    public function get_image()
-    {
-        return Theme::getInstance()->getCommonImage('Preview');
+        $html[] = '<div class="no-preview">';
+        $html[] = $glyph->render();
+        $html[] = '<br />';
+        $html[] = $this->get_text();
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     public function get_text()
     {
         return '<h1>' . Translation::get('NoPreviewAvailable') . '</h1>';
-    }
-
-    public function render()
-    {
-        $html = array();
-        
-        $html[] = '<div class="no-preview">';
-        $html[] = '<span class="glyphicon glyphicon-picture"></span>';
-        $html[] = '<br />';
-        $html[] = $this->get_text();
-        $html[] = '</div>';
-        
-        return implode(PHP_EOL, $html);
     }
 }

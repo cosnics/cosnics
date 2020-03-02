@@ -43,9 +43,6 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
     public function render_cell($column, $content_object)
     {
-        $glyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
-        $renderedglyph = $glyph->render();
-
         switch ($column->get_name())
         {
             case 'Duplicates' :
@@ -73,7 +70,7 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return '<a href="' .
                     htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
                     '" title="' . $title . '">' . $title_short . '</a>';
-            case $renderedglyph :
+            case DoublesTableColumnModel::PROPERTY_TYPE :
                 return $content_object->get_icon_image(Theme::ICON_MINI);
 
             case ContentObject::PROPERTY_DESCRIPTION :

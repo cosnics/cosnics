@@ -1,12 +1,14 @@
 <?php
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
@@ -46,20 +48,11 @@ class WidgetItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
-     */
-    public function renderTitle(Item $item)
-    {
-        return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
-    }
-
-    /**
      * @param \Chamilo\Core\User\Integration\Chamilo\Core\Menu\Storage\DataClass\WidgetItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
+     * @throws \Exception
      */
     public function render(Item $item, User $user)
     {
@@ -70,6 +63,10 @@ class WidgetItemRenderer extends ItemRenderer
         {
             return '';
         }
+
+        $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::getInstance());
+        $userPictureProvider = $userPictureProviderFactory->getActivePictureProvider();
+        $userPicture = $userPictureProvider->getUserPictureAsBase64String($user, $user);
 
         $html = array();
 
@@ -91,7 +88,7 @@ class WidgetItemRenderer extends ItemRenderer
 
             $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account' .
                 ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '
-                " src="' . $profilePhotoUrl->getUrl() . '" title="' . $title . '" alt="' . $title . '" />';
+                " src="' . $userPicture . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
         if ($item->showTitle())
@@ -102,14 +99,6 @@ class WidgetItemRenderer extends ItemRenderer
 
         $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
-
-        $profilePhotoUrl = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                Manager::PARAM_USER_USER_ID => $user->getId()
-            )
-        );
 
         $profileHtml = array();
 
@@ -123,7 +112,7 @@ class WidgetItemRenderer extends ItemRenderer
         $editProfilePicture = $translator->trans('EditProfilePictureOverlay', [], 'Chamilo\Core\User');
 
         $profileHtml[] = '<div class="chamilo-menu-item-account-photo-base">';
-        $profileHtml[] = '<img src="' . htmlspecialchars($profilePhotoUrl->getUrl()) . '" />';
+        $profileHtml[] = '<img src="' . $userPicture . '" />';
 
         if ($this->getConfigurationConsulter()->getSetting(
             array(Manager::context(), 'allow_change_user_picture')
@@ -256,5 +245,15 @@ class WidgetItemRenderer extends ItemRenderer
     public function isItemVisibleForUser(User $user)
     {
         return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ManageAccount');
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
     }
 }

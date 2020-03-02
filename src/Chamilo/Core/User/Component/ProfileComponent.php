@@ -3,17 +3,18 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Form\Storage\DataClass\Instance;
+use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -26,95 +27,108 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
 {
 
     /**
-     *
+     * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTab[]
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public function getAvailableTabs()
+    {
+        $tabs = array();
+
+        $tabs[] = new DynamicVisualTab(
+            self::ACTION_VIEW_ACCOUNT, htmlentities(Translation::get(self::ACTION_VIEW_ACCOUNT . 'Title')),
+            new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'),
+            $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT)),
+            (self::ACTION_VIEW_ACCOUNT == $this->get_action() ? true : false)
+        );
+
+        if (Configuration::get(Manager::context(), 'allow_change_user_picture'))
+        {
+            $tabs[] = new DynamicVisualTab(
+                self::ACTION_CHANGE_PICTURE, htmlentities(Translation::get(self::ACTION_CHANGE_PICTURE . 'Title')),
+                new FontAwesomeGlyph('image', array('fa-lg'), null, 'fas'),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CHANGE_PICTURE)),
+                (self::ACTION_CHANGE_PICTURE == $this->get_action() ? true : false)
+            );
+        }
+
+        $tabs[] = new DynamicVisualTab(
+            self::ACTION_USER_SETTINGS, htmlentities(Translation::get(self::ACTION_USER_SETTINGS . 'Title')),
+            new FontAwesomeGlyph('cog', array('fa-lg'), null, 'fas'),
+            $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SETTINGS)),
+            (self::ACTION_USER_SETTINGS == $this->get_action() ? true : false)
+        );
+
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_APPLICATION),
+            new StaticConditionVariable(self::context())
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_NAME),
+            new StaticConditionVariable('account_fields')
+        );
+        $condition = new AndCondition($conditions);
+
+        $extra_form = DataManager::retrieve(
+            Instance::class_name(), new DataClassRetrieveParameters($condition)
+        );
+
+        if ($extra_form instanceof Instance && count($extra_form->get_elements()) > 0)
+        {
+            $tabs[] = new DynamicVisualTab(
+                self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION,
+                htmlentities(Translation::get(self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION . 'Title')),
+                new FontAwesomeGlyph('lightbulb', array('fa-lg'), null, 'fas'),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION)),
+                (self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION == $this->get_action() ? true : false)
+            );
+        }
+
+        return $tabs;
+    }
+
+    /**
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function renderPage()
     {
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::render_header()
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function render_header()
     {
-        $actions = $this->getAvailableActions();
-        
+        $availableTabs = $this->getAvailableTabs();
+
         $html = array();
-        
+
         $html[] = parent::render_header();
-        
-        if (count($actions) > 1)
+
+        if (count($availableTabs) > 1)
         {
             $tabs = new DynamicVisualTabsRenderer('account', $this->getContent());
-            foreach ($actions as $action)
+
+            foreach ($availableTabs as $availableTab)
             {
-                $selected = ($action == $this->get_action() ? true : false);
-                
-                $label = htmlentities(Translation::get($action . 'Title'));
-                $link = $this->get_url(array(self::PARAM_ACTION => $action));
-                
-                $tabs->add_tab(
-                    new DynamicVisualTab(
-                        $action, 
-                        $label, 
-                        Theme::getInstance()->getImagePath('Chamilo\Core\User', 'Place/' . $action), 
-                        $link, 
-                        $selected));
+                $tabs->add_tab($availableTab);
             }
+
             $html[] = $tabs->render();
         }
         else
         {
             $html[] = $this->getContent();
         }
-        
-        return implode(PHP_EOL, $html);
-    }
 
-    /**
-     *
-     * @return string[]
-     */
-    public function getAvailableActions()
-    {
-        $actions = array();
-        
-        $actions[] = self::ACTION_VIEW_ACCOUNT;
-        
-        if (Configuration::get(\Chamilo\Core\User\Manager::context(), 'allow_change_user_picture'))
-        {
-            $actions[] = self::ACTION_CHANGE_PICTURE;
-        }
-        
-        $actions[] = self::ACTION_USER_SETTINGS;
-        
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_APPLICATION), 
-            new StaticConditionVariable(self::context()));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_NAME), 
-            new StaticConditionVariable('account_fields'));
-        $condition = new AndCondition($conditions);
-        
-        $extra_form = \Chamilo\Configuration\Form\Storage\DataManager::retrieve(
-            Instance::class_name(), 
-            new DataClassRetrieveParameters($condition));
-        
-        if ($extra_form instanceof \Chamilo\Configuration\Form\Storage\DataClass\Instance &&
-             count($extra_form->get_elements()) > 0)
-        {
-            $actions[] = self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION;
-        }
-        
-        return $actions;
+        return implode(PHP_EOL, $html);
     }
 }
