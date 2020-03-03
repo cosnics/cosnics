@@ -685,7 +685,7 @@ ul.nav-wizard .active ~ li:after {
 	border-left: 16px solid #ededed;
 }
 
-ul.nav-wizard .active ~ li a, ul.nav-wizard .active ~ li a:active, ul.nav-wizard .active 
+ul.nav-wizard .active ~ li a, ul.nav-wizard .active ~ li a:active, ul.nav-wizard .active
 	 ~ li a:visited, ul.nav-wizard .active ~ li a:focus {
 	color: #999999;
 	background: #ededed;
@@ -716,7 +716,7 @@ ul.nav-wizard.nav-wizard-backnav .active ~ li:after {
 	border-left: 16px solid #ededed;
 }
 
-ul.nav-wizard.nav-wizard-backnav .active ~ li a, ul.nav-wizard.nav-wizard-backnav .active 
+ul.nav-wizard.nav-wizard-backnav .active ~ li a, ul.nav-wizard.nav-wizard-backnav .active
 	 ~ li a:active, ul.nav-wizard.nav-wizard-backnav .active ~ li a:visited,
 	ul.nav-wizard.nav-wizard-backnav .active ~ li a:focus {
 	color: #999999;

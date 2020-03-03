@@ -586,8 +586,10 @@ abstract class Manager extends Application implements NoContextComponent
                     $glyph = new FontAwesomeGlyph('folder', array('fa-lg'), null, 'fas');
                     break;
                 case self::ACTION_UPLOAD_EXTERNAL_REPOSITORY:
-                case self::ACTION_EXPORT_EXTERNAL_REPOSITORY:
                     $glyph = new FontAwesomeGlyph('upload', array('fa-lg'), null, 'fas');
+                    break;
+                case self::ACTION_EXPORT_EXTERNAL_REPOSITORY:
+                    $glyph = new FontAwesomeGlyph('download', array('fa-lg'), null, 'fas');
                     break;
                 case self::ACTION_CONFIGURE_EXTERNAL_REPOSITORY:
                     $glyph = new FontAwesomeGlyph('cog', array('fa-lg'), null, 'fas');

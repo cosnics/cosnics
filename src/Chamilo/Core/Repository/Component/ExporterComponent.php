@@ -96,7 +96,7 @@ class ExporterComponent extends Manager
                 {
                     if ($this->is_exportable[$export_type])
                     {
-                        $glyph = new FontAwesomeGlyph('upload');
+                        $glyph = new FontAwesomeGlyph('download');
 
                         if (count($content_object_ids))
                         {
@@ -115,7 +115,7 @@ class ExporterComponent extends Manager
                     else
                     {
                         $glyph =
-                            new FontAwesomeGlyph('upload', array('text-muted'), Translation::get('ExportNotAvailable'));
+                            new FontAwesomeGlyph('download', array('text-muted'), Translation::get('ExportNotAvailable'));
 
                         $table_row[] = $glyph->render();
                     }

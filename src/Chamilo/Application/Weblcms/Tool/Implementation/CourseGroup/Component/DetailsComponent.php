@@ -72,7 +72,7 @@ class DetailsComponent extends TabComponent implements TableSupport
             $managementButtonGroup->addButton(
                 new Button(
                     $translator->getTranslation('Export', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('upload'),
+                    new FontAwesomeGlyph('download'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )

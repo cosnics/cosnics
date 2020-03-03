@@ -610,7 +610,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         {
             $dropdownButton = new DropdownButton(
                 $this->getTranslator()->trans('Export', array(), Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('upload')
+                new FontAwesomeGlyph('download')
             );
 
             foreach ($types as $type)
@@ -630,7 +630,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $exportType = array_pop($types);
 
             return new Button(
-                $this->getExportTypeLabel($exportType), new FontAwesomeGlyph('upload'),
+                $this->getExportTypeLabel($exportType), new FontAwesomeGlyph('download'),
                 $this->get_content_object_exporting_url($contentObject, $exportType)
             );
         }

@@ -165,7 +165,7 @@ class UserResultsViewerComponent extends Manager
             $commonActions = new ButtonGroup();
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('upload'),
+                    Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('download'),
                     $this->get_url(
                         array(
                             self::PARAM_ACTION => self::ACTION_EXPORT_USER_RESULT,

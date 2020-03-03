@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Tabs;
 
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Tabs
@@ -58,20 +60,76 @@ class DynamicAction
 
     /**
      *
+     * @param boolean $is_first
+     *
      * @return string
      */
-    public function get_title()
+    public function render($is_first = false)
     {
-        return $this->title;
+        $html = array();
+
+        if ($this->needs_confirmation())
+        {
+            $onclick = 'onclick = "return confirm(\'' . $this->get_confirm() . '\')"';
+        }
+        else
+        {
+            $onclick = '';
+        }
+
+        $html[] = '<div class="list-group-item vertical-action">';
+
+        $html[] = '<div class="pull-left icon">';
+        $html[] = '<a href="' . $this->get_url() . '" ' . $onclick . '>';
+
+        if ($this->get_image() instanceof InlineGlyph)
+        {
+            $html[] = $this->get_image()->render();
+        }
+        else
+        {
+            $html[] = '<img src="' . $this->get_image() . '" alt="' . $this->get_title() . '" title="' .
+                htmlentities($this->get_title()) . '"/>';
+        }
+
+        $html[] = '</a>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="pull-left">';
+
+        $title = $this->get_title();
+
+        if (isset($title))
+        {
+            $html[] = '<h5 class="list-group-item-heading"><a href="' . $this->get_url() . '" ' . $onclick . '>' .
+                $this->get_title() . '</a></h5>';
+        }
+
+        $html[] = '<p class="list-group-item-text">' . $this->get_description() . '</p>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="clearfix"></div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
      *
-     * @param string $title
+     * @return boolean
      */
-    public function set_title($title)
+    public function get_confirm()
     {
-        $this->title = $title;
+        return $this->confirm;
+    }
+
+    /**
+     *
+     * @param boolean $confirm
+     */
+    public function set_confirm($confirm)
+    {
+        $this->confirm = $confirm;
     }
 
     /**
@@ -114,6 +172,24 @@ class DynamicAction
      *
      * @return string
      */
+    public function get_title()
+    {
+        return $this->title;
+    }
+
+    /**
+     *
+     * @param string $title
+     */
+    public function set_title($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function get_url()
     {
         return $this->url;
@@ -132,71 +208,10 @@ class DynamicAction
      *
      * @return boolean
      */
-    public function get_confirm()
-    {
-        return $this->confirm;
-    }
-
-    /**
-     *
-     * @param boolean $confirm
-     */
-    public function set_confirm($confirm)
-    {
-        $this->confirm = $confirm;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
     public function needs_confirmation()
     {
         $confirmation = $this->get_confirm();
+
         return $confirmation ? true : false;
-    }
-
-    /**
-     *
-     * @param boolean $is_first
-     * @return string
-     */
-    public function render($is_first = false)
-    {
-        $html = array();
-
-        if ($this->needs_confirmation())
-        {
-            $onclick = 'onclick = "return confirm(\'' . $this->get_confirm() . '\')"';
-        }
-        else
-        {
-            $onclick = '';
-        }
-
-        $html[] = '<div class="list-group-item vertical-action">';
-
-        $html[] = '<div class="pull-left icon">';
-        $html[] = '<a href="' . $this->get_url() . '" ' . $onclick . '><img src="' . $this->get_image() . '" alt="' .
-             $this->get_title() . '" title="' . htmlentities($this->get_title()) . '"/></a>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="pull-left">';
-
-        $title = $this->get_title();
-
-        if (isset($title))
-        {
-            $html[] = '<h5 class="list-group-item-heading"><a href="' . $this->get_url() . '" ' . $onclick . '>' .
-                 $this->get_title() . '</a></h5>';
-        }
-
-        $html[] = '<p class="list-group-item-text">' . $this->get_description() . '</p>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="clearfix"></div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
     }
 }

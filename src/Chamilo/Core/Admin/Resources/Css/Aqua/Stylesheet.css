@@ -76,31 +76,6 @@ div.action img {
 	margin: 8px 15px 8px 15px;
 }
 
-/*
- * Various
- */
-div.admin_search_form {
-	padding: 10px 0px 0px 0px;
-	margin: 0px;
-	height: 48px;
-}
-
-div.admin_search_form div.row {
-	clear: none;
-	float: left;
-	padding: 0px;
-}
-
-div.admin_search_form div.row div.formw {
-	float: none;
-	width: auto;
-}
-
-div.admin_search_form div.row div.formw button {
-	margin-top: -2px;
-	margin-left: 10px;
-}
-
 .tab {
 	border: 1px solid #ebebeb;
 	background-color: #fafcfc;

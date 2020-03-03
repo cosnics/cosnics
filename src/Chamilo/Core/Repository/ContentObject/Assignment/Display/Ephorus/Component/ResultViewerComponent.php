@@ -81,7 +81,7 @@ class ResultViewerComponent extends Manager
                 new Button(
                     Translation::get(
                         'ExportReport', array(), self::EPHORUS_TRANSLATION_CONTEXT
-                    ), new FontAwesomeGlyph('upload'),
+                    ), new FontAwesomeGlyph('download'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT_RESULT)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, false
                 )

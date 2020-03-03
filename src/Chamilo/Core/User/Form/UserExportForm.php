@@ -49,7 +49,7 @@ class UserExportForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit', Translation::get('Export', null, Utilities::COMMON_LIBRARIES), null, null,
-            new FontAwesomeGlyph('upload')
+            new FontAwesomeGlyph('download')
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

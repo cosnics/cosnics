@@ -139,7 +139,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
                 $toolActions->addButton(
                     new Button(
-                        Translation::get('ExportUserList'), new FontAwesomeGlyph('upload'),
+                        Translation::get('ExportUserList'), new FontAwesomeGlyph('download'),
                         $this->get_url($param_export_subscriptions_overview), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );

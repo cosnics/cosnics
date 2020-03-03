@@ -175,7 +175,7 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($canCopyContentObject)
         {
             $actions[] = new ToolbarItem(
-                Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('upload'),
+                Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('download'),
                 $this->get_repository_browser()->get_content_object_exporting_url($content_object),
                 ToolbarItem::DISPLAY_ICON
             );

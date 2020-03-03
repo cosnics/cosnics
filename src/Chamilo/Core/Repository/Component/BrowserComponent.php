@@ -170,7 +170,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $buttonToolbar->addItem(
                 new Button(
-                    Translation::get('ExportCategory'), new FontAwesomeGlyph('upload'), $this->get_url(
+                    Translation::get('ExportCategory'), new FontAwesomeGlyph('download'), $this->get_url(
                     array(
                         Application::PARAM_ACTION => self::ACTION_EXPORT_CONTENT_OBJECTS,
                         FilterData::FILTER_CATEGORY => FilterData::getInstance($this->getWorkspace())

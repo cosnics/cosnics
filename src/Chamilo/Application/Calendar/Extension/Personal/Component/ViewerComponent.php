@@ -98,7 +98,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
             $toolActions->addButton(
                 new Button(
-                    Translation::get('ExportIcal'), new FontAwesomeGlyph('upload'), $ical_url
+                    Translation::get('ExportIcal'), new FontAwesomeGlyph('download'), $ical_url
                 )
             );
 

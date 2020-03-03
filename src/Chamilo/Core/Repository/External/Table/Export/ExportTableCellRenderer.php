@@ -22,7 +22,7 @@ class ExportTableCellRenderer extends DataClassTableCellRenderer implements Tabl
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('upload'),
+                Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('download'),
                 $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_EXPORT_EXTERNAL_REPOSITORY,

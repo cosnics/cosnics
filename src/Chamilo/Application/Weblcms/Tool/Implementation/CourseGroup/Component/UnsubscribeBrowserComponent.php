@@ -236,7 +236,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                 $parameters_export_subscriptions_overview[self::PARAM_COURSE_GROUP] = $course_group->get_id();
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('upload'),
+                        Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('download'),
                         $this->get_url($parameters_export_subscriptions_overview), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );

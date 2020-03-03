@@ -70,7 +70,7 @@ class ResultViewerComponent extends Manager
                     Translation::get(
                         'ExportReport', array(),
                         ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
-                    ), new FontAwesomeGlyph('upload'),
+                    ), new FontAwesomeGlyph('download'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT_RESULT)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, false
                 )
