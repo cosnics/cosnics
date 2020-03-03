@@ -70,22 +70,15 @@ class WidgetItemRenderer extends ItemRenderer
 
         $html = array();
 
+        $selected = $this->isSelected($item);
         $title = $this->renderTitle($item);
 
-        $html[] = '<li class="dropdown chamilo-account-menu-item">';
-        $html[] = '<a href="' . $this->getAccountUrl() .
-            '" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+        $html[] = '<li class="' . implode(' ', $this->getClasses($selected)) . '">';
+        $html[] =
+            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
         if ($item->showIcon())
         {
-            $profilePhotoUrl = new Redirect(
-                array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
-                    Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                    Manager::PARAM_USER_USER_ID => $user->getId()
-                )
-            );
-
             $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account' .
                 ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '
                 " src="' . $userPicture . '" title="' . $title . '" alt="' . $title . '" />';
@@ -100,70 +93,53 @@ class WidgetItemRenderer extends ItemRenderer
         $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
 
-        $profileHtml = array();
+        $html[] = '<ul class="dropdown-menu">';
 
-        $profileHtml[] = '<ul class="dropdown-menu">';
-        $profileHtml[] = '<li>';
-        // $profileHtml[] = '<a href="#">';
+        // Header
+        $html[] = '<li><a><div class="chamilo-menu-item-label">' . $user->get_fullname() . '</div></a></li>';
 
-        $profileHtml[] = '<div class="chamilo-menu-item-account">';
-        $profileHtml[] = '<div class="chamilo-menu-item-account-photo">';
+        // Divider
+        $html[] = '<li role="separator" class="divider"></li>';
 
-        $editProfilePicture = $translator->trans('EditProfilePictureOverlay', [], 'Chamilo\Core\User');
-
-        $profileHtml[] = '<div class="chamilo-menu-item-account-photo-base">';
-        $profileHtml[] = '<img src="' . $userPicture . '" />';
-
+        // Change user profile picture
         if ($this->getConfigurationConsulter()->getSetting(
             array(Manager::context(), 'allow_change_user_picture')
         ))
         {
-            $profileHtml[] = '<div class="chamilo-menu-item-account-photo-edit">';
-            $profileHtml[] = '<a href="' . $this->getPictureUrl() . '">';
-            $profileHtml[] = $editProfilePicture;
-            $profileHtml[] = '</a>';
-            $profileHtml[] = '</div>';
+            $html[] = '<li>';
+            $html[] = '<a href="' . $this->getPictureUrl() . '">';
+            $html[] = '<div class="chamilo-menu-item-label">' .
+                $translator->trans('EditProfilePicture', [], 'Chamilo\Core\User') . '</div>';
+            $html[] = '</a>';
+            $html[] = '</li>';
         }
 
-        $profileHtml[] = '</div>';
+        // Account
+        $html[] = '<li>';
+        $html[] = '<a href="' . $this->getAccountUrl() . '">';
+        $html[] = '<div class="chamilo-menu-item-label">' . $translator->trans('MyAccount', [], 'Chamilo\Core\User') .
+            '</div>';
+        $html[] = '</a>';
+        $html[] = '</li>';
 
-        $profileHtml[] = '</div>';
-        $profileHtml[] = '<div class="chamilo-menu-item-account-data">';
-        $profileHtml[] = '<span class="chamilo-menu-item-account-data-name">' . $user->get_fullname() . '</span>';
-        $profileHtml[] = '<span class="chamilo-menu-item-account-data-email">' . $user->get_email() . '</span>';
-        $profileHtml[] = '<span class="chamilo-menu-item-account-data-my-account">';
+        // Settings
+        $html[] = '<li>';
+        $html[] = '<a href="' . $this->getSettingsUrl() . '">';
+        $html[] = '<div class="chamilo-menu-item-label">' . $translator->trans('Settings', [], 'Chamilo\Core\User') .
+            '</div>';
+        $html[] = '</a>';
+        $html[] = '</li>';
 
-        $profileHtml[] = '<a href="' . $this->getAccountUrl() . '">';
-        $profileHtml[] = $translator->trans('MyAccount', [], 'Chamilo\Core\User');
-        $profileHtml[] = '</a>';
+        // Divider
+        $html[] = '<li role="separator" class="divider"></li>';
 
-        $profileHtml[] = ' - ';
-
-        $profileHtml[] = '<a href="' . $this->getSettingsUrl() . '">';
-        $profileHtml[] = $translator->trans('Settings', [], 'Chamilo\Core\User');
-        $profileHtml[] = '</a>';
-
-        $profileHtml[] = '</span>';
-        $profileHtml[] = '</div>';
-        $profileHtml[] = '<div class="clear"></div>';
-
-        $imagePath = $themeUtilities->getImagePath('Chamilo\Core\User\Integration\Chamilo\Core\Menu', 'LogoutItem');
-
-        $profileHtml[] = '<div class="chamilo-menu-item-account-logout">';
-        $profileHtml[] = '<a href="' . $this->getLogoutUrl() . '">';
-        $profileHtml[] = '<img src="' . $imagePath . '" />';
-        $profileHtml[] = $translator->trans('Logout', [], 'Chamilo\Core\User');
-        $profileHtml[] = '</a>';
-        $profileHtml[] = '</div>';
-
-        $profileHtml[] = '</div>';
-
-        $profileHtml[] = '<div class="clear"></div>';
-
-        $profileHtml[] = '</li>';
-        $profileHtml[] = '</ul>';
-
-        $html[] = implode(PHP_EOL, $profileHtml);
+        // Logout
+        $html[] = '<li>';
+        $html[] = '<a href="' . $this->getLogoutUrl() . '">';
+        $html[] =
+            '<div class="chamilo-menu-item-label">' . $translator->trans('Logout', [], 'Chamilo\Core\User') . '</div>';
+        $html[] = '</a>';
+        $html[] = '</li>';
 
         $html[] = '</li>';
 

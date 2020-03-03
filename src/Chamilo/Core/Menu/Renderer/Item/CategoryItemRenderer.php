@@ -1,11 +1,10 @@
 <?php
 namespace Chamilo\Core\Menu\Renderer\Item;
 
-use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
+use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Service\RightsCacheService;
-use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -50,19 +49,6 @@ class CategoryItemRenderer extends ItemRenderer
 
         $this->rightsCacheService = $rightsCacheService;
         $this->itemRendererFactory = $itemRendererFactory;
-    }
-
-    /**
-     * @param boolean $isSelected
-     * @param string[] $existingClasses
-     *
-     * @return string[]
-     */
-    protected function getClasses($isSelected = false, $existingClasses = [])
-    {
-        $existingClasses[] = 'dropdown';
-
-        return parent::getClasses($isSelected, $existingClasses);
     }
 
     /**
@@ -122,6 +108,19 @@ class CategoryItemRenderer extends ItemRenderer
     }
 
     /**
+     * @param boolean $isSelected
+     * @param string[] $existingClasses
+     *
+     * @return string[]
+     */
+    protected function getClasses($isSelected = false, $existingClasses = [])
+    {
+        $existingClasses[] = 'dropdown';
+
+        return parent::getClasses($isSelected, $existingClasses);
+    }
+
+    /**
      * @return \Chamilo\Core\Menu\Factory\ItemRendererFactory
      */
     public function getItemRendererFactory(): ItemRendererFactory
@@ -143,14 +142,6 @@ class CategoryItemRenderer extends ItemRenderer
     public function getRightsCacheService(): RightsCacheService
     {
         return $this->rightsCacheService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\RightsCacheService $rightsCacheService
-     */
-    public function setRightsService(RightsCacheService $rightsCacheService): void
-    {
-        $this->rightsCacheService = $rightsCacheService;
     }
 
     /**
@@ -197,6 +188,8 @@ class CategoryItemRenderer extends ItemRenderer
             {
                 if (!$childItem->isHidden())
                 {
+                    $childItem->set_display(Item::DISPLAY_TEXT);
+
                     $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($childItem);
                     $html[] = $itemRenderer->render($childItem, $user);
                 }
@@ -206,6 +199,14 @@ class CategoryItemRenderer extends ItemRenderer
         $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Service\RightsCacheService $rightsCacheService
+     */
+    public function setRightsService(RightsCacheService $rightsCacheService): void
+    {
+        $this->rightsCacheService = $rightsCacheService;
     }
 
 }

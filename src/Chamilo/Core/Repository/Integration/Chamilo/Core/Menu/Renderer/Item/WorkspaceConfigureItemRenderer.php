@@ -19,16 +19,6 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
 {
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
-     */
-    public function renderTitle(Item $item)
-    {
-        return $this->getTranslator()->trans('ConfigureWorkspaces', [], 'Chamilo\Core\Repository\Workspace');
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
@@ -37,18 +27,10 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
     {
         $selected = $this->isSelected($item);
 
-        if ($selected)
-        {
-            $class = 'class="chamilo-menu-item-current" ';
-        }
-        else
-        {
-            $class = '';
-        }
-
         $urlRenderer = new Redirect(array(Application::PARAM_CONTEXT => Manager::context()));
 
-        $html[] = '<a ' . $class . 'href="' . $urlRenderer->getUrl() . '">';
+        $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
+        $html[] = '<a href="' . $urlRenderer->getUrl() . '">';
 
         $title = $this->renderTitle($item);
 
@@ -72,6 +54,7 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
 
         $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
+        $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
     }
@@ -81,5 +64,15 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
         $currentContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
 
         return $currentContext == Manager::package();
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $this->getTranslator()->trans('ConfigureWorkspaces', [], 'Chamilo\Core\Repository\Workspace');
     }
 }
