@@ -3,6 +3,7 @@ namespace Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
@@ -30,10 +31,9 @@ class LanguageItemRenderer extends ItemRenderer
 
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_QUICK_LANG,
-                \Chamilo\Core\User\Manager::PARAM_CHOICE => $item->getLanguage(),
-                \Chamilo\Core\User\Manager::PARAM_REFER => $item->getCurrentUrl()
+                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_ACTION => Manager::ACTION_QUICK_LANG, Manager::PARAM_CHOICE => $item->getIsocode(),
+                Manager::PARAM_REFER => $item->getCurrentUrl()
             )
         );
 
@@ -41,7 +41,7 @@ class LanguageItemRenderer extends ItemRenderer
 
         $html[] = '<li>';
         $html[] = '<a href="' . $redirect->getUrl() . '">';
-        $html[] = '<div class="chamilo-menu-item-label">';
+        $html[] = '<div>';
         $html[] = $this->renderTitle($item);
         $html[] = '</div>';
         $html[] = '</a>';

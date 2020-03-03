@@ -47,6 +47,7 @@ class LinkItemRenderer extends ItemRenderer
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function render(Item $item, User $user)
     {
@@ -72,16 +73,13 @@ class LinkItemRenderer extends ItemRenderer
             }
             else
             {
-                $html[] = '<img class="chamilo-menu-item-icon' .
-                    ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '
-                        " src="' . $imagePath . '" alt="' . $title . '" />';
+                $html[] = '<img src="' . $imagePath . '" alt="' . $title . '" />';
             }
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
+            $html[] = '<div>' . $title . '</div>';
         }
 
         $html[] = '<div class="clearfix"></div>';

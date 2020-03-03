@@ -79,15 +79,14 @@ class WidgetItemRenderer extends ItemRenderer
 
         if ($item->showIcon())
         {
-            $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account' .
-                ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '
-                " src="' . $userPicture . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] =
+                '<img class="profile-picture img-circle img-thumbnail" src="' . $userPicture . '" title="' . $title .
+                '" alt="' . $title . '" />';
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
+            $html[] = '<div>' . $title . '</div>';
         }
 
         $html[] = '<div class="clearfix"></div>';
@@ -96,7 +95,7 @@ class WidgetItemRenderer extends ItemRenderer
         $html[] = '<ul class="dropdown-menu">';
 
         // Header
-        $html[] = '<li><a><div class="chamilo-menu-item-label">' . $user->get_fullname() . '</div></a></li>';
+        $html[] = '<li><a><div >' . $user->get_fullname() . '</div></a></li>';
 
         // Divider
         $html[] = '<li role="separator" class="divider"></li>';
@@ -108,8 +107,7 @@ class WidgetItemRenderer extends ItemRenderer
         {
             $html[] = '<li>';
             $html[] = '<a href="' . $this->getPictureUrl() . '">';
-            $html[] = '<div class="chamilo-menu-item-label">' .
-                $translator->trans('EditProfilePicture', [], 'Chamilo\Core\User') . '</div>';
+            $html[] = '<div>' . $translator->trans('EditProfilePicture', [], 'Chamilo\Core\User') . '</div>';
             $html[] = '</a>';
             $html[] = '</li>';
         }
@@ -117,16 +115,14 @@ class WidgetItemRenderer extends ItemRenderer
         // Account
         $html[] = '<li>';
         $html[] = '<a href="' . $this->getAccountUrl() . '">';
-        $html[] = '<div class="chamilo-menu-item-label">' . $translator->trans('MyAccount', [], 'Chamilo\Core\User') .
-            '</div>';
+        $html[] = '<div>' . $translator->trans('MyAccount', [], 'Chamilo\Core\User') . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 
         // Settings
         $html[] = '<li>';
         $html[] = '<a href="' . $this->getSettingsUrl() . '">';
-        $html[] = '<div class="chamilo-menu-item-label">' . $translator->trans('Settings', [], 'Chamilo\Core\User') .
-            '</div>';
+        $html[] = '<div>' . $translator->trans('Settings', [], 'Chamilo\Core\User') . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 
@@ -136,8 +132,7 @@ class WidgetItemRenderer extends ItemRenderer
         // Logout
         $html[] = '<li>';
         $html[] = '<a href="' . $this->getLogoutUrl() . '">';
-        $html[] =
-            '<div class="chamilo-menu-item-label">' . $translator->trans('Logout', [], 'Chamilo\Core\User') . '</div>';
+        $html[] = '<div>' . $translator->trans('Logout', [], 'Chamilo\Core\User') . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 

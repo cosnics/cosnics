@@ -143,7 +143,7 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('CreateRightsComponent'),
-                    new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('lock'),
+                    new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('user'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_RIGHTS,

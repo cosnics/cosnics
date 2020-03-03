@@ -18,6 +18,7 @@ class LinkApplicationItemRenderer extends ItemRenderer
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function render(Item $item, User $user)
     {
@@ -25,9 +26,7 @@ class LinkApplicationItemRenderer extends ItemRenderer
 
         $html[] = '<li>';
         $html[] = '<a href="' . $item->getUrl() . '" target="' . $item->getTargetString() . '">';
-
-        $html[] = '<div class="chamilo-menu-item-label">' . $this->renderTitle($item) . '</div>';
-
+        $html[] = '<div>' . $this->renderTitle($item) . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 

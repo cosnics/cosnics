@@ -13,6 +13,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 class LanguageItem extends Item
 {
     const PROPERTY_LANGUAGE = 'language';
+    const PROPERTY_ISOCODE = 'isocode';
 
     /**
      * @var string
@@ -72,6 +73,22 @@ class LanguageItem extends Item
     public function setLanguage($language)
     {
         return $this->set_additional_property(self::PROPERTY_LANGUAGE, $language);
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsocode()
+    {
+        return $this->get_additional_property(self::PROPERTY_ISOCODE);
+    }
+
+    /**
+     * @param string $isocode
+     */
+    public function setIsocode($isocode)
+    {
+        return $this->set_additional_property(self::PROPERTY_ISOCODE, $isocode);
     }
 
     /**

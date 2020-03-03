@@ -287,7 +287,7 @@ class MenuRenderer
     {
         $html = array();
 
-        $class = 'navbar navbar-chamilo navbar-default';
+        $class = 'navbar navbar-chamilo navbar-inverse';
 
         if ($numberOfItems == 0)
         {

@@ -47,6 +47,7 @@ abstract class MenuItemRenderer extends ItemRenderer
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function render(Item $item, User $user)
     {
@@ -55,7 +56,7 @@ abstract class MenuItemRenderer extends ItemRenderer
         $selected = $this->isSelected($item);
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
-        $html[] = '<a' . ($selected ? ' class="chamilo-menu-item-current"' : '') . ' href="' . $this->getUrl() . '">';
+        $html[] = '<a href="' . $this->getUrl() . '">';
 
         $title = $this->renderTitle($item);
 
@@ -66,15 +67,12 @@ abstract class MenuItemRenderer extends ItemRenderer
             $itemType = ClassnameUtilities::getInstance()->getClassnameFromNamespace($item->getType());
             $imagePath = Theme::getInstance()->getImagePath($itemNamespace, $itemType . ($selected ? 'Selected' : ''));
 
-            $html[] = '<img class="chamilo-menu-item-icon' .
-                ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '
-                " src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = '<img src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
+            $html[] = '<div>' . $title . '</div>';
         }
 
         $html[] = '<div class="clearfix"></div>';

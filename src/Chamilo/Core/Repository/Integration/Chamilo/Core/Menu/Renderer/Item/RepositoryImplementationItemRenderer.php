@@ -19,16 +19,6 @@ class RepositoryImplementationItemRenderer extends ItemRenderer
 {
     /**
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationItem $item
-     *
-     * @return string
-     */
-    public function renderTitle(Item $item)
-    {
-        return $item->get_name();
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
@@ -36,15 +26,6 @@ class RepositoryImplementationItemRenderer extends ItemRenderer
     public function render(Item $item, User $user)
     {
         $selected = $this->isSelected($item);
-
-        if ($selected)
-        {
-            $class = 'class="chamilo-menu-item-current" ';
-        }
-        else
-        {
-            $class = '';
-        }
 
         $redirect = new Redirect(
             array(
@@ -56,22 +37,19 @@ class RepositoryImplementationItemRenderer extends ItemRenderer
         $html = array();
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
-        $html[] = '<a ' . $class . 'href="' . $redirect->getUrl() . '">';
+        $html[] = '<a href="' . $redirect->getUrl() . '">';
         $title = $this->renderTitle($item);
 
         if ($item->showIcon())
         {
             $imagePath = $this->getThemeUtilities()->getImagePath($item->get_implementation(), 'Menu');
 
-            $html[] = '<img class="chamilo-menu-item-icon' .
-                ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '
-                " src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = '<img src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
+            $html[] = '<div>' . $title . '</div>';
         }
 
         $html[] = '<div class="clearfix"></div>';
@@ -93,5 +71,15 @@ class RepositoryImplementationItemRenderer extends ItemRenderer
         $currentInstance = $request->query->get(Manager::PARAM_EXTERNAL_REPOSITORY);
 
         return ($currentContext == $item->get_implementation() && $currentInstance == $item->get_instance_id());
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationItem $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $item->get_name();
     }
 }

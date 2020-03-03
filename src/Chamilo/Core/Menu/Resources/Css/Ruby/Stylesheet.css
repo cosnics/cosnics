@@ -1,33 +1,25 @@
 @import url('../Aqua/Stylesheet.css');
 
-.navbar.navbar-chamilo {
+.navbar-inverse.navbar-chamilo {
     background-color: rgb(60, 60, 59);
 }
 
-.navbar.navbar-chamilo .container-fluid {
+.navbar-inverse.navbar-chamilo .navbar-nav > .active > a,
+.navbar-inverse.navbar-chamilo .navbar-nav > .active > a:hover,
+.navbar-inverse.navbar-chamilo .navbar-nav > .active > a:focus {
+    background-color: black;
+}
+
+.navbar-inverse.navbar-chamilo .navbar-brand > img {
+    padding-top: 25px;
+    padding-left: 25px;
+}
+
+.navbar-inverse.navbar-chamilo .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
     background-color: rgb(60, 60, 59);
 }
 
-.navbar-chamilo ul.navbar-nav li a:hover {
-    color: #ebebeb;
-}
-
-.navbar-chamilo ul.navbar-nav li.active > a, .navbar-chamilo ul.navbar-nav li.active.dropdown.open > a,
-.navbar-chamilo ul.navbar-nav li.active > a:hover {
-    color: rgb(60, 60, 59) !important;
-}
-
-.navbar-chamilo .navbar-nav .dropdown-menu li, .navbar-chamilo .navbar-nav .dropdown-menu li a,
-.navbar-chamilo .navbar-nav .dropdown-menu li a:hover {
-    background: rgb(60, 60, 59);
-}
-
-.navbar-chamilo .navbar-nav .dropdown-menu li a:hover, .navbar-chamilo .navbar-nav li.dropdown.open .dropdown-menu li a:hover {
-    color: #ebebeb;
-}
-
-.navbar-chamilo ul.navbar-nav li.dropdown.open > a {
-    background: #ebebeb;
-    border-top: 1px solid #ebebeb;
-    border-bottom: 1px solid #ebebeb;
+.navbar-inverse.navbar-chamilo .img-thumbnail {
+    background-color: rgb(60, 60, 59);
+    border-width: 2px;
 }

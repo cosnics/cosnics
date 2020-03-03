@@ -1,11 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item;
 
-use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
+use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
+use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationItem;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -77,15 +78,12 @@ class RepositoryImplementationCategoryItemRenderer extends ItemRenderer
                 $integrationNamespace, 'RepositoryImplementationCategory' . ($selected ? 'Selected' : '')
             );
 
-            $html[] = '<img class="chamilo-menu-item-icon' .
-                ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' . $imagePath .
-                '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = '<img src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
+            $html[] = '<div>' . $title . '</div>';
         }
 
         $html[] = '<div class="clearfix"></div>';
@@ -102,7 +100,7 @@ class RepositoryImplementationCategoryItemRenderer extends ItemRenderer
      */
     protected function findInstances()
     {
-        return \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             Instance::class, new DataClassRetrievesParameters()
         );
     }

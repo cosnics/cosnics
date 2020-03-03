@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item;
 
-use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
+use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceCategoryItem;
@@ -55,16 +55,6 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
-     */
-    public function renderTitle(Item $item)
-    {
-        return $this->getTranslator()->trans('Workspaces', [], 'Chamilo\Core\Repository');
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
@@ -94,15 +84,12 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
                 $integrationNamespace, 'WorkspaceCategory' . ($selected ? 'Selected' : '')
             );
 
-            $html[] = '<img class="chamilo-menu-item-icon' .
-                ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '
-                " src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = '<img src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
+            $html[] = '<div>' . $title . '</div>';
         }
 
         $html[] = '<div class="clearfix"></div>';
@@ -170,6 +157,16 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
         $currentWorkspace = $request->query->get(RepositoryManager::PARAM_WORKSPACE_ID);
 
         return isset($currentWorkspace);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $this->getTranslator()->trans('Workspaces', [], 'Chamilo\Core\Repository');
     }
 
     /**

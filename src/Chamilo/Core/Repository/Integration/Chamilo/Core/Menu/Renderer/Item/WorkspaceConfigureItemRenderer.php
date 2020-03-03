@@ -41,15 +41,12 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
                 'ConfigureWorkspaces' . ($selected ? 'Selected' : '')
             );
 
-            $html[] = '<img class="chamilo-menu-item-icon' .
-                ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '
-                " src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = '<img src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '"><em>' . $title . '</em></div>';
+            $html[] = '<div><em>' . $title . '</em></div>';
         }
 
         $html[] = '<div class="clearfix"></div>';

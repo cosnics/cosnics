@@ -82,16 +82,13 @@ class CategoryItemRenderer extends ItemRenderer
                     'Chamilo\Core\Menu', 'Menu/Folder' . ($selected ? 'Selected' : '')
                 );
 
-                $html[] = '<img class="chamilo-menu-item-icon' .
-                    ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' . $imagePath .
-                    '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+                $html[] = '<img src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
             }
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
+            $html[] = '<div>' . $title . '</div>';
         }
 
         $html[] = '<div class="clearfix"></div>';

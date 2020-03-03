@@ -2,14 +2,13 @@
 namespace Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Configuration\Service\LanguageConsulter;
-use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
+use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\LanguageItem;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\ChamiloRequest;
@@ -55,16 +54,6 @@ class LanguageCategoryItemRenderer extends ItemRenderer
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
-     */
-    public function renderTitle(Item $item)
-    {
-        return strtoupper($this->getTranslator()->getLocale());
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
@@ -86,11 +75,9 @@ class LanguageCategoryItemRenderer extends ItemRenderer
         $imagePath = $this->getThemeUtilities()->getImagePath('Chamilo\Core\Menu', 'Language');
         $title = $this->getItemCacheService()->getItemTitleForCurrentLanguage($item);
 
-        $html[] =
-            '<img class="chamilo-menu-item-icon' . ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') .
-            '" src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+        $html[] = '<img src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
 
-        $html[] = '<div class="chamilo-menu-item-label-with-image">';
+        $html[] = '<div>';
         $html[] = $this->renderTitle($item);
         $html[] = '<span class="caret"></span>';
         $html[] = '</div>';
@@ -164,12 +151,13 @@ class LanguageCategoryItemRenderer extends ItemRenderer
             $redirect = new Redirect();
             $currentUrl = $redirect->getCurrentUrl();
 
-            $html[] = '<ul class="dropdown-menu language-selector">';
+            $html[] = '<ul class="dropdown-menu">';
 
             foreach ($languages as $isocode => $language)
             {
                 $languageItem = new LanguageItem();
-                $languageItem->setLanguage($isocode);
+                $languageItem->setIsocode($isocode);
+                $languageItem->setLanguage($language);
                 $languageItem->setCurrentUrl($currentUrl);
                 $languageItem->setParentId($item->getId());
 
@@ -184,5 +172,15 @@ class LanguageCategoryItemRenderer extends ItemRenderer
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return strtoupper($this->getTranslator()->getLocale());
     }
 }

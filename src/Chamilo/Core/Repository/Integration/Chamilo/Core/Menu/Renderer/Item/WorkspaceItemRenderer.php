@@ -17,16 +17,6 @@ class WorkspaceItemRenderer extends ItemRenderer
 {
     /**
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
-     *
-     * @return string
-     */
-    public function renderTitle(Item $item)
-    {
-        return $item->getName();
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
@@ -53,22 +43,19 @@ class WorkspaceItemRenderer extends ItemRenderer
         $html = array();
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
-        $html[] = '<a ' . $class . 'href="' . $redirect->getUrl() . '">';
+        $html[] = '<a href="' . $redirect->getUrl() . '">';
         $title = $this->renderTitle($item);
 
         if ($item->showIcon())
         {
             $imagePath = $this->getThemeUtilities()->getImagePath(Manager::package(), 'Logo/48');
 
-            $html[] = '<img class="chamilo-menu-item-icon' .
-                ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '
-                " src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = '<img src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
+            $html[] = '<div>' . $title . '</div>';
         }
 
         $html[] = '<div class="clearfix"></div>';
@@ -91,5 +78,15 @@ class WorkspaceItemRenderer extends ItemRenderer
         $currentWorkspace = $request->query->get(Manager::PARAM_WORKSPACE_ID);
 
         return $currentContext == Manager::package() && $currentWorkspace == $item->getWorkspaceId();
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $item->getName();
     }
 }

@@ -46,21 +46,6 @@ class ApplicationItemRenderer extends ItemRenderer
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
-     *
-     * @return string
-     */
-    public function renderTitle(Item $item)
-    {
-        if ($item->getUseTranslation())
-        {
-            return $this->getTranslator()->trans('TypeName', [], $item->getApplication());
-        }
-
-        return parent::renderTitle($item);
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
@@ -97,16 +82,13 @@ class ApplicationItemRenderer extends ItemRenderer
                     $integrationNamespace, 'Menu' . ($isSelected ? 'Selected' : '')
                 );
 
-                $html[] = '<img class="chamilo-menu-item-icon' .
-                    ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' . $imagePath .
-                    '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+                $html[] = '<img src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
             }
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div class="chamilo-menu-item-label' .
-                ($item->showIcon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
+            $html[] = '<div>' . $title . '</div>';
         }
 
         $html[] = '<div class="clearfix"></div>';
@@ -204,5 +186,20 @@ class ApplicationItemRenderer extends ItemRenderer
         }
 
         return true;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        if ($item->getUseTranslation())
+        {
+            return $this->getTranslator()->trans('TypeName', [], $item->getApplication());
+        }
+
+        return parent::renderTitle($item);
     }
 }

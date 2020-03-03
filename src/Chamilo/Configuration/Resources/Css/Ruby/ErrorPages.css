@@ -1,9 +1,9 @@
 @import url('../Aqua/ErrorPages.css');
 
 body {
-	background: url('../../Images/Ruby/Background/ErrorPage.jpg');
+    background: url('../../Images/Ruby/Background/ErrorPage.jpg');
 }
 
 .logo {
-	background: url('../../Images/Ruby/LogoIcon.png');
+    background: url('../../Images/Ruby/LogoHeader.png');
 }
