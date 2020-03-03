@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use function sprintf;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity
@@ -60,6 +60,8 @@ class RubricData
      * @var Choice[] | ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Choice", mappedBy="rubricData")
+     *
+     * @Exclude
      */
     protected $choices;
 
@@ -82,6 +84,8 @@ class RubricData
      * @var TreeNode[] | ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="TreeNode", mappedBy="rubricData")
+     *
+     * @Exclude
      */
     protected $treeNodes;
 

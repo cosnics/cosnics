@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
@@ -67,6 +68,8 @@ class Choice
      *
      * @ORM\ManyToOne(targetEntity="CriteriumNode")
      * @ORM\JoinColumn(name="criterium_id", referencedColumnName="id")
+     *
+     * @Exclude
      */
     protected $criterium;
 

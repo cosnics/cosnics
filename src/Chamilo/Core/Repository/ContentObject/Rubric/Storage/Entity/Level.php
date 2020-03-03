@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass
@@ -67,6 +68,8 @@ class Level
      *
      * @ORM\ManyToOne(targetEntity="RubricData")
      * @ORM\JoinColumn(name="rubric_data_id", referencedColumnName="id")
+     *
+     * @Exclude
      */
     protected $rubricData;
 
@@ -74,6 +77,8 @@ class Level
      * @var Choice[] | ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Choice", mappedBy="criterium")
+     *
+     * @Exclude
      */
     protected $choices;
 
