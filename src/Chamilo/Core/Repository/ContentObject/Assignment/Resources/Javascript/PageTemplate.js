@@ -1,7 +1,7 @@
 (function ($) {
 
     function activatePageTemplateWhenPageSelected() {
-        var pageId = $('.type_page').attr('id');
+        var pageId = $('.inactive_elements .type_page').attr('id');
         console.log(pageId);
 
         var activeTypes = $('input[name="active_hidden_allowed_types"]').val();
