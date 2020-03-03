@@ -39,12 +39,7 @@ form div.form-row div.formw {
 }
 
 form div.formw input[type=text], form div.form-row div.formw input[type=password],
-	form div.form-row div.formw select, form div.formw textarea { /*
-	background-image: url(../../Images/Aqua/Buttons/Link.png);
-	background-repeat: no-repeat;
-	background-position: 2px center;
-	padding-left: 20px;
-	*/
+	form div.form-row div.formw select, form div.formw textarea {
 	background-color: #f5f5f5;
 	border: 1px solid #dedede;
 	background-repeat: no-repeat;
@@ -104,12 +99,7 @@ form div.dynamic_search_action {
 }
 
 form div.dynamic_search_action input[type=text], form div.dynamic_search_action div.form-row div.formw input[type=password],
-	form div.dynamic_search_action div.form-row div.formw select { /*
-	background-image: url(../../Images/Aqua/Buttons/Link.png);
-	background-repeat: no-repeat;
-	background-position: 2px center;
-	padding-left: 20px;
-	*/
+	form div.dynamic_search_action div.form-row div.formw select {
 	background-color: #f5f5f5;
 	border: 1px solid #dedede;
 	padding: 6px;
