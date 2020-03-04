@@ -8,8 +8,11 @@ use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\LanguageItem;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
@@ -66,28 +69,45 @@ class LanguageCategoryItemRenderer extends ItemRenderer
             return '';
         }
 
-        $html = array();
+        $languages = $this->getLanguageConsulter()->getOtherLanguages($this->getTranslator()->getLocale());
 
-        $html[] = '<li class="dropdown">';
-        $html[] =
-            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+        if (count($languages) > 1)
+        {
+            return $this->renderDropdown($item, $user);
+        }
+        else
+        {
+            foreach ($languages as $isocode => $language)
+            {
+                $redirect = new Redirect(
+                    array(
+                        Application::PARAM_CONTEXT => Manager::context(),
+                        Application::PARAM_ACTION => Manager::ACTION_QUICK_LANG, Manager::PARAM_CHOICE => $isocode,
+                        Manager::PARAM_REFER => $this->getRequest()->getUri()
+                    )
+                );
 
-        $imagePath = $this->getThemeUtilities()->getImagePath('Chamilo\Core\Menu', 'Language');
-        $title = $this->getItemCacheService()->getItemTitleForCurrentLanguage($item);
+                $html = array();
 
-        $html[] = '<img src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+                $html[] = '<li>';
+                $html[] = '<a href="' . $redirect->getUrl() . '">';
 
-        $html[] = '<div>';
-        $html[] = $this->renderTitle($item);
-        $html[] = '<span class="caret"></span>';
-        $html[] = '</div>';
-        $html[] = '</a>';
+                if ($item->showIcon())
+                {
+                    $html[] = $this->getRenderedGlyph(!$item->showTitle());
+                }
 
-        $html[] = $this->renderLanguageItems($item, $user);
+                if ($item->showTitle())
+                {
+                    $html[] = '<div>' . $language . '</div>';
+                }
 
-        $html[] = '</li>';
+                $html[] = '</a>';
+                $html[] = '</li>';
 
-        return implode(PHP_EOL, $html);
+                return implode(PHP_EOL, $html);
+            }
+        }
     }
 
     /**
@@ -123,6 +143,31 @@ class LanguageCategoryItemRenderer extends ItemRenderer
     }
 
     /**
+     * @param boolean $showCaret
+     *
+     * @return string
+     */
+    public function getRenderedGlyph(bool $showCaret = false)
+    {
+        $glyph = new FontAwesomeGlyph('language', array('fa-2x', 'fa-fw'), null, 'fas');
+
+        $html = array();
+
+        $html[] = '<div>';
+
+        $html[] = $glyph->render();
+
+        if ($showCaret)
+        {
+            $html[] = '&nbsp;<span class="caret"></span>';
+        }
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return boolean
@@ -139,7 +184,43 @@ class LanguageCategoryItemRenderer extends ItemRenderer
      * @return string
      * @throws \Exception
      */
-    public function renderLanguageItems(Item $item, User $user)
+    public function renderDropdown(Item $item, User $user): string
+    {
+        $html = array();
+
+        $html[] = '<li class="dropdown">';
+        $html[] =
+            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+
+        $title = $this->renderTitle($item);
+
+        if ($item->showIcon())
+        {
+            $html[] = $this->getRenderedGlyph(!$item->showTitle());
+        }
+
+        if ($item->showTitle())
+        {
+            $html[] = '<div>' . $title . '&nbsp;<span class="caret"></span></div>';
+        }
+
+        $html[] = '</a>';
+
+        $html[] = $this->renderDropdownItems($item, $user);
+
+        $html[] = '</li>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function renderDropdownItems(Item $item, User $user)
     {
         $html = array();
 

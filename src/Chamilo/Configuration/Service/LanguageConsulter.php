@@ -12,7 +12,20 @@ class LanguageConsulter extends DataConsulter
 
     /**
      *
-     * @return string[][]
+     * @param string $isocode
+     *
+     * @return string
+     */
+    public function getLanguageNameFromIsocode($isocode)
+    {
+        $languages = $this->getLanguages();
+
+        return $languages[$isocode];
+    }
+
+    /**
+     *
+     * @return string[]
      */
     public function getLanguages()
     {
@@ -20,13 +33,22 @@ class LanguageConsulter extends DataConsulter
     }
 
     /**
+     * @param string $isocodeToExclude
      *
-     * @param string $isocode
-     * @return string
+     * @return string[]
      */
-    public function getLanguageNameFromIsocode($isocode)
+    public function getOtherLanguages(string $isocodeToExclude)
     {
-        $languages = $this->getLanguages();
-        return $languages[$isocode];
+        $languages = array();
+
+        foreach ($this->getLanguages() as $isocode => $language)
+        {
+            if ($isocode !== $isocodeToExclude)
+            {
+                $languages[$isocode] = $language;
+            }
+        }
+
+        return $languages;
     }
 }

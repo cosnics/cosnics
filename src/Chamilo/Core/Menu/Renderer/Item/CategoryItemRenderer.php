@@ -72,6 +72,8 @@ class CategoryItemRenderer extends ItemRenderer
 
         if ($item->showIcon())
         {
+            $html[] = '<div>';
+
             if (!empty($item->getIconClass()))
             {
                 $html[] = $this->renderCssIcon($item);
@@ -84,11 +86,18 @@ class CategoryItemRenderer extends ItemRenderer
 
                 $html[] = '<img src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
             }
+
+            if (!$item->showTitle())
+            {
+                $html[] = '&nbsp;<span class="caret"></span>';
+            }
+
+            $html[] = '</div>';
         }
 
         if ($item->showTitle())
         {
-            $html[] = '<div>' . $title . '</div>';
+            $html[] = '<div>' . $title . '&nbsp;<span class="caret"></span></div>';
         }
 
         $html[] = '<div class="clearfix"></div>';
