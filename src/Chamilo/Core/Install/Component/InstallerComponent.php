@@ -6,6 +6,7 @@ use Chamilo\Core\Install\Manager;
 use Chamilo\Core\Install\Observer\InstallerObserver;
 use Chamilo\Core\Install\StepResult;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Cache\CacheManagement\CacheManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -57,6 +58,16 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
             });
 
         $response->send();
+
+        $this->getCacheManager()->clear();
+    }
+
+    /**
+     * @return CacheManager
+     */
+    protected function getCacheManager()
+    {
+        return $this->getService('chamilo.libraries.cache.cache_management.cache_manager');
     }
 
     /**
