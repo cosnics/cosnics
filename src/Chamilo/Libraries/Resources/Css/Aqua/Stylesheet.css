@@ -1,5 +1,14 @@
 @import url('../../Javascript/Plugin/Uploadify/uploadify.css');
 
+.fas-ci-0793ee69022bce29ee5c942d0f33bb10 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-0793ee69022bce29ee5c942d0f33bb10:before {
+    content: "\f187";
+}
+
 figcaption {
     padding-top: 8px !important;
 }

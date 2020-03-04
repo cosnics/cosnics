@@ -1,3 +1,12 @@
+.fas-ci-8efbbbc70ec4807095b7680d711d2285 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-8efbbbc70ec4807095b7680d711d2285:before {
+    content: "\f133";
+}
+
 .event-container-source-0 {
     background-color: #b31736;
 }

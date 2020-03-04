@@ -1,3 +1,11 @@
+.fas-ci-78d6137a996771da06029f4f3b1f8d19 {
+	font-family: 'Font Awesome 5 Brands';
+}
+
+.fas-ci-78d6137a996771da06029f4f3b1f8d19:before {
+	content: "\f3aa";
+}
+
 ul.tree-menu li div a.google_docs {
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }

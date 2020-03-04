@@ -1,6 +1,7 @@
-/*****************************************************
- *  ADMIN STYLES                                     *
- *****************************************************/
+.fas-ci-7d118dd1505b54e4eb2a2ea356d9e911:before {
+	content: "\e721";
+}
+
 /* Platform admin overview */
 div.admin {
 	float: left;

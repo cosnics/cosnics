@@ -28,3 +28,12 @@
 @import url('Bootstrap.css');
 
 @import url('Fancytree.css');
+
+.fas-ci-bf2d035331946fe1ed050233d705e2e3 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-bf2d035331946fe1ed050233d705e2e3:before {
+    content: "\f013";
+}

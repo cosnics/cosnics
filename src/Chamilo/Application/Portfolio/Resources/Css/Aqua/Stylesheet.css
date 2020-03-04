@@ -1,6 +1,12 @@
-/*****************************************************
- *  PORTFOLIO STYLES
- *****************************************************/
+.fas-ci-01705b8ae2cf2bcd4c4e8e900bc78b40 {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+}
+
+.fas-ci-01705b8ae2cf2bcd4c4e8e900bc78b40:before {
+	content: "\f56b";
+}
+
 .portfolio-container {
 	width: 100%;
 	margin: 0 auto;

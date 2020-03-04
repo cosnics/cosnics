@@ -1,59 +1,57 @@
-img.chamilo-menu-my-account-photo {
-	border: 1px solid black;
-	max-width: 200px;
-	max-height: 200px;
+.fas-ci-21e55ab5e82a7e34c08932f3a38e672c:before {
+    content: "\e708";
 }
 
 .anonymous-page {
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	position: absolute;
-	background-image: url("../../../../../Configuration/Resources/Images/Aqua/Background/ErrorPage.jpg");
-	background-repeat: no-repeat;
-	background-size: cover;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    background-image: url("../../../../../Configuration/Resources/Images/Aqua/Background/ErrorPage.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .anonymous-container {
-	max-width: 500px;
-	background-color: rgba(255, 255, 255, 0.8);
+    max-width: 500px;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 .anonymous-container .header {
-	margin-top: 0;
-	margin-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 10px;
 }
 
 .anonymous-container .anonymous-welcome-message {
-	color: #666666;
-	font-size: 14px;
+    color: #666666;
+    font-size: 14px;
 }
 
 .anonymous-container .anonymous-captcha-form {
-	margin-top: 20px;
-	text-align: center;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .anonymous-container .anonymous-view-button {
-	width: 100%;
-	height: 40px;
+    width: 100%;
+    height: 40px;
 }
 
 .anonymous-container .g-recaptcha {
-	display: inline-block;
-	margin-bottom: 20px;
+    display: inline-block;
+    margin-bottom: 20px;
 }
 
 .anonymous-container .anonymous-error-message {
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
 @media screen and (min-width: 520px) {
-	.anonymous-container {
-		width: 500px;
-	}
+    .anonymous-container {
+        width: 500px;
+    }
 }

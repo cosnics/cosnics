@@ -1,3 +1,7 @@
+.fas-ci-8afe10232875753b8643255ce33e979f:before {
+	content: "\e718";
+}
+
 .jquery-treeview-gray li {
 	background-image: url(../images/common/treemenu/treeview-gray-line.gif);
 }

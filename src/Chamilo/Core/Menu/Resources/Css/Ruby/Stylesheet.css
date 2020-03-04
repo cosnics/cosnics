@@ -11,8 +11,8 @@
 }
 
 .navbar-inverse.navbar-chamilo .navbar-brand > img {
-    padding-top: 25px;
-    padding-left: 25px;
+    padding-top: 15px;
+    padding-left: 15px;
 }
 
 .navbar-inverse.navbar-chamilo .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {

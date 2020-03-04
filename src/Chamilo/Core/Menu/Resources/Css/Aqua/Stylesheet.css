@@ -1,10 +1,14 @@
+.fas-ci-950a386854466dd0d205a99737f163cd:before {
+    content: "\e724";
+}
+
 .navbar.navbar-chamilo {
     border-radius: 0px;
     margin-bottom: 0px;
 }
 
 .navbar-chamilo .profile-picture {
-    height: 70px;
+    height: 49px;
 }
 
 .navbar-nav > li > a {
