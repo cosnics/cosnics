@@ -1,5 +1,10 @@
+.fas-ci-950a386854466dd0d205a99737f163cd {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
 .fas-ci-950a386854466dd0d205a99737f163cd:before {
-    content: "\e724";
+    content: "\f14e";
 }
 
 .navbar.navbar-chamilo {

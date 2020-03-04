@@ -1,5 +1,10 @@
+.fas-ci-313f2034649ec54036b13d5b3b3455ac {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+}
+
 .fas-ci-313f2034649ec54036b13d5b3b3455ac:before {
-	content: "\e726";
+	content: "\f05a";
 }
 
 div.formw div.bootstrap-tagsinput input, div.row div.formw div.bootstrap-tagsinput input:hover,

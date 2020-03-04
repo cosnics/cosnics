@@ -11,8 +11,16 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 abstract class DynamicTab
 {
     const DISPLAY_ICON = 1;
-    const DISPLAY_TITLE = 2;
+
     const DISPLAY_ICON_AND_TITLE = 3;
+
+    const DISPLAY_TITLE = 2;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $display;
 
     /**
      *
@@ -34,12 +42,6 @@ abstract class DynamicTab
 
     /**
      *
-     * @var integer
-     */
-    protected $display;
-
-    /**
-     *
      * @param string $id
      * @param string $name
      * @param string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $image
@@ -50,6 +52,62 @@ abstract class DynamicTab
         $this->id = $id;
         $this->name = $name;
         $this->image = $image;
+        $this->display = $display;
+    }
+
+    /**
+     *
+     * @param boolean $isOnlyTab
+     *
+     * @return string
+     */
+    abstract public function body($isOnlyTab);
+
+    /**
+     *
+     * @return string
+     */
+    public function body_footer()
+    {
+        $html = array();
+
+        $html[] = '<div class="clearfix"></div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function body_header()
+    {
+        $html = array();
+
+        $html[] = '<div role="tabpanel" class="tab-pane" id="' . $this->get_id() . '">';
+        $html[] = '<div class="list-group-item">';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getDisplay()
+    {
+        return $this->display;
+    }
+
+    /**
+     *
+     * @param integer $display
+     */
+    public function setDisplay($display)
+    {
         $this->display = $display;
     }
 
@@ -75,6 +133,30 @@ abstract class DynamicTab
      *
      * @return string
      */
+    public function get_image()
+    {
+        return $this->image;
+    }
+
+    /**
+     *
+     * @param string $image
+     */
+    public function set_image($image)
+    {
+        $this->image = $image;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    abstract public function get_link();
+
+    /**
+     *
+     * @return string
+     */
     public function get_name()
     {
         return $this->name;
@@ -93,48 +175,6 @@ abstract class DynamicTab
      *
      * @return string
      */
-    public function get_image()
-    {
-        return $this->image;
-    }
-
-    /**
-     *
-     * @param string $image
-     */
-    public function set_image($image)
-    {
-        $this->image = $image;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getDisplay()
-    {
-        return $this->display;
-    }
-
-    /**
-     *
-     * @param integer $display
-     */
-    public function setDisplay($display)
-    {
-        $this->display = $display;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    abstract public function get_link();
-
-    /**
-     *
-     * @return string
-     */
     public function header()
     {
         $html = array();
@@ -143,20 +183,15 @@ abstract class DynamicTab
 
         if ($this->get_image() && $this->isIconVisible())
         {
-            if (! $this->get_image() instanceof InlineGlyph)
+            if (!$this->get_image() instanceof InlineGlyph)
             {
                 $html[] = '<img src="' . $this->get_image() . '" border="0" style="vertical-align: middle; " alt="' .
-                     strip_tags($this->get_name()) . '" title="' . htmlentities(strip_tags($this->get_name())) . '"/>';
+                    strip_tags($this->get_name()) . '" title="' . htmlentities(strip_tags($this->get_name())) . '"/>';
             }
             else
             {
                 $html[] = $this->get_image()->render();
             }
-        }
-
-        if ($this->get_image() && $this->get_name() && $this->isIconVisible() && $this->isTextVisible())
-        {
-            $html[] = '&nbsp;&nbsp;';
         }
 
         if ($this->get_name() && $this->isTextVisible())
@@ -166,36 +201,6 @@ abstract class DynamicTab
 
         $html[] = '</span>';
         $html[] = '</a></li>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function body_header()
-    {
-        $html = array();
-
-        $html[] = '<div role="tabpanel" class="tab-pane" id="' . $this->get_id() . '">';
-        $html[] = '<div class="list-group-item">';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function body_footer()
-    {
-        $html = array();
-
-        $html[] = '<div class="clearfix"></div>';
-
-        $html[] = '</div>';
-        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -219,11 +224,4 @@ abstract class DynamicTab
     {
         return $this->getDisplay() == self::DISPLAY_ICON_AND_TITLE || $this->getDisplay() == self::DISPLAY_TITLE;
     }
-
-    /**
-     *
-     * @param boolean $isOnlyTab
-     * @return string
-     */
-    abstract public function body($isOnlyTab);
 }

@@ -1,5 +1,10 @@
+.fas-ci-4073badc846707326ee1f78dda267fde {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+}
+
 .fas-ci-4073badc846707326ee1f78dda267fde:before {
-	content: "\e72a";
+	content: "\f144";
 }
 
 .installation-step {

@@ -1,5 +1,10 @@
+.fas-ci-775204ca25550a400c109b8bf8042270 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
 .fas-ci-775204ca25550a400c109b8bf8042270:before {
-    content: "\e719";
+    content: "\f200";
 }
 
 .reporting_block {

@@ -1,5 +1,10 @@
+.fas-ci-21e55ab5e82a7e34c08932f3a38e672c {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
 .fas-ci-21e55ab5e82a7e34c08932f3a38e672c:before {
-    content: "\e708";
+    content: "\f007";
 }
 
 .anonymous-page {

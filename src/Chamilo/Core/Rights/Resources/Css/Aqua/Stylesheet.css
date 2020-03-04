@@ -1,5 +1,10 @@
+.fas-ci-8afe10232875753b8643255ce33e979f {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+}
+
 .fas-ci-8afe10232875753b8643255ce33e979f:before {
-	content: "\e718";
+	content: "\f084";
 }
 
 .jquery-treeview-gray li {

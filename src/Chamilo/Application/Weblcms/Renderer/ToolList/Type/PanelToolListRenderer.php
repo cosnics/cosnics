@@ -199,9 +199,6 @@ class PanelToolListRenderer extends ToolListRenderer
                 }
                 
                 $html[] = '<a href="' . $url . '"' . $target . $link_class . '>';
-                // $html[] = '<img src="' . Theme :: getInstance()->getImagePath(
-                // \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($publication->get_tool()),
-                // 'Logo/' . $tool_image) . '" class="tool-link-image" />';
                 $html[] = $title;
                 $html[] = '</a>';
             }

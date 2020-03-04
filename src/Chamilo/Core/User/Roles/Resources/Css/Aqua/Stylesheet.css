@@ -1,3 +1,8 @@
+.fas-ci-50057aecb9660a59ed962773f92ce04c {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
 .fas-ci-50057aecb9660a59ed962773f92ce04c:before {
-    content: "\e708";
+    content: "\f505";
 }

@@ -98,28 +98,6 @@ class DetailsComponent extends TabComponent implements TableSupport
                 $translator->getTranslation('NavigateTo', array(), Manager::context())
             );
 
-            //            if ($courseGroup->get_document_category_id())
-            //            {
-            //                $type_name = 'Document';
-            //
-            //                $params = array();
-            //                $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-            //                $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-            //                $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $courseGroup->get_course_code();
-            //                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $type_name;
-            //                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager::ACTION_BROWSE;
-            //                $params[\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY] = $courseGroup->get_document_category_id();
-            //                $url = $this->get_url($params);
-            //
-            //                $namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($type_name);
-            //                $navigateToOptions->addSubButton(
-            //                    new SubButton(
-            //                        $translator->getTranslation('DocumentCategory', null, Manager::context()),
-            //                        Theme::getInstance()->getImagePath($namespace, 'Logo/16'),
-            //                        $url,
-            //                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
-            //            }
-
             if ($navigateToOptions->hasButtons())
             {
                 $buttonToolbar->addItem($navigateToOptions);

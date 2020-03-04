@@ -1,10 +1,1 @@
-.fas-ci-52622085359b3092aeb1fcf78daa31d4:before {
-	content: "\e70e";
-}
-
-.assignment-success-check {
-	display: block;
-	font-size: 80px;
-	margin: 0 auto 20px;
-	width: 80px;
-}
+@import url('../Aqua/Stylesheet.css');
