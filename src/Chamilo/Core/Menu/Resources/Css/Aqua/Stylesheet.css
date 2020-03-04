@@ -11,6 +11,10 @@
     height: 49px;
 }
 
+.navbar-inverse.navbar-chamilo .navbar-brand > img {
+    max-height: 65px;
+}
+
 .navbar-nav > li > a {
     text-align: center;
 }

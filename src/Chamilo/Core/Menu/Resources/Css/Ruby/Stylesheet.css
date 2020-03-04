@@ -10,11 +10,6 @@
     background-color: black;
 }
 
-.navbar-inverse.navbar-chamilo .navbar-brand > img {
-    padding-top: 15px;
-    padding-left: 15px;
-}
-
 .navbar-inverse.navbar-chamilo .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
     background-color: rgb(60, 60, 59);
 }
