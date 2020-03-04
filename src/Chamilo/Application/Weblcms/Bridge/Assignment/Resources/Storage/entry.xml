@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="assignment_feedback">
+<object name="tracking_weblcms_assignment_entry">
     <properties>
         <property
             name="id"
@@ -8,17 +8,27 @@
             notnull="1"
             autoincrement="true" />
         <property
-            name="entry_id"
+            name="content_object_publication_id"
             type="integer"
             unsigned="1"
             notnull="1" />
         <property
-            name="creation_date"
+            name="content_object_id"
             type="integer"
             unsigned="1"
             notnull="1" />
         <property
-            name="modification_date"
+            name="entity_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="submitted"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="entity_type"
             type="integer"
             unsigned="1"
             notnull="1" />
@@ -28,21 +38,23 @@
             unsigned="1"
             notnull="1" />
         <property
-            name="comment"
-            type="text" />
-        <property
-            name="feedback_content_object_id"
-            type="integer"
-            unsigned="1"
+            name="ip_address"
+            type="text"
+            length="15"
+            fixed="true"
             notnull="1" />
     </properties>
     <index name="id">
         <indexproperty name="id" />
     </index>
-    <index name="entry_id">
-        <indexproperty name="entry_id" />
+    <index name="content_object_publication_id">
+        <indexproperty name="content_object_publication_id" />
     </index>
-    <index name="user_id">
-        <indexproperty name="user_id" />
+    <index name="entity_id">
+        <indexproperty name="entity_id" />
+    </index>
+    <index name="entity">
+        <indexproperty name="entity_id" />
+        <indexproperty name="entity_type" />
     </index>
 </object>
