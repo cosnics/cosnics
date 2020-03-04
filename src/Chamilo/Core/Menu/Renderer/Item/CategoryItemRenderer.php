@@ -8,6 +8,7 @@ use Chamilo\Core\Menu\Service\RightsCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
@@ -74,18 +75,33 @@ class CategoryItemRenderer extends ItemRenderer
         {
             $html[] = '<div>';
 
-            if (!empty($item->getIconClass()))
+            if ($selected)
             {
-                $html[] = $this->renderCssIcon($item);
+                $glyph = new FontAwesomeGlyph(
+                    'folder-open', array('fa-2x', 'fa-fw'), $title, 'fas'
+                );
             }
             else
             {
-                $imagePath = $this->getThemeUtilities()->getImagePath(
-                    'Chamilo\Core\Menu', 'Menu/Folder' . ($selected ? 'Selected' : '')
+                $glyph = new FontAwesomeGlyph(
+                    'folder', array('fa-2x', 'fa-fw'), $title, 'fas'
                 );
-
-                $html[] = '<img src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
             }
+
+            $html[] = $glyph->render();
+
+//            if (!empty($item->getIconClass()))
+//            {
+//                $html[] = $this->renderCssIcon($item);
+//            }
+//            else
+//            {
+//                $imagePath = $this->getThemeUtilities()->getImagePath(
+//                    'Chamilo\Core\Menu', 'Menu/Folder' . ($selected ? 'Selected' : '')
+//                );
+//
+//                $html[] = '<img src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+//            }
 
             if (!$item->showTitle())
             {

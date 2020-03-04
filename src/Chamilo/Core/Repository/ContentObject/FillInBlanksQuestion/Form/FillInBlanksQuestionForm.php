@@ -42,7 +42,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
             new DynamicFormTab(
                 self::TAB_BLANKS,
                 Translation::get(self::TAB_BLANKS),
-                new FontAwesomeGlyph('edit', array('ident-sm')),
+                new FontAwesomeGlyph('edit', array('fa-sm')),
                 'buildBlanksForm'));
 
         $this->addInstructionsTab();

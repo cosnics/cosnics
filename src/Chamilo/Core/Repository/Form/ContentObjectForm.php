@@ -195,7 +195,7 @@ abstract class ContentObjectForm extends FormValidator
             $this->getTabsGenerator()->add_tab(
                 new DynamicFormTab(
                     'view-instructions', Translation::get('ViewInstructions'),
-                    new FontAwesomeGlyph('question-circle', array('ident-sm')), 'buildInstructionsForm'
+                    new FontAwesomeGlyph('question-circle', array('fa-sm')), 'buildInstructionsForm'
                 )
             );
         }
@@ -224,7 +224,7 @@ abstract class ContentObjectForm extends FormValidator
                 $this->getTabsGenerator()->add_tab(
                     new DynamicFormTab(
                         'schema-' . $schemaInstance->get_id(), $schema->get_name(),
-                        new FontAwesomeGlyph('info-circle', array('ident-sm')), 'build_metadata_form',
+                        new FontAwesomeGlyph('info-circle', array('fa-sm')), 'build_metadata_form',
                         array($schemaInstance)
                     )
                 );
@@ -233,7 +233,7 @@ abstract class ContentObjectForm extends FormValidator
             $this->getTabsGenerator()->add_tab(
                 new DynamicFormTab(
                     'add-schema', Translation::get('AddMetadataSchema'),
-                    new FontAwesomeGlyph('plus', array('ident-sm')), 'build_metadata_choice_form'
+                    new FontAwesomeGlyph('plus', array('fa-sm')), 'build_metadata_choice_form'
                 )
             );
         }

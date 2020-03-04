@@ -10,6 +10,7 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterfa
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
@@ -82,7 +83,9 @@ class ApplicationItemRenderer extends ItemRenderer
                     $integrationNamespace, 'Menu' . ($isSelected ? 'Selected' : '')
                 );
 
-                $html[] = '<img src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+                $glyph = new NamespaceIdentGlyph($item->getApplication(), false, false, false, array('fa-2x'), $title);
+
+                $html[] = $glyph->render();
             }
         }
 

@@ -418,7 +418,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
             new DynamicFormTab(
                 'add-hint',
                 Translation::get('AddHint'),
-                new FontAwesomeGlyph('magic', array('ident-sm')),
+                new FontAwesomeGlyph('magic', array('fa-sm')),
                 'buildHintForm'));
     }
 

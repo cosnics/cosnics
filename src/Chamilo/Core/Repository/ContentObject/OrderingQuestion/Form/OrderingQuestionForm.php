@@ -22,7 +22,7 @@ class OrderingQuestionForm extends ContentObjectForm
     {
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
-                'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', array('ident-sm')),
+                'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', array('fa-sm')),
                 'buildHintForm'
             )
         );

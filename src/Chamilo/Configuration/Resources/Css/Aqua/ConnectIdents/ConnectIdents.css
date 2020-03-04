@@ -1,255 +1,213 @@
 @font-face {
-	font-family: 'ConnectIdents';
-	src: url('ConnectIdents.ttf') format('truetype'),
-		url('ConnectIdents.woff') format('woff'), url('ConnectIdents.eot')
-		format('eot'), url('ConnectIdents.svg?#ConnectIdents') format('svg');
-	font-weight: normal;
-	font-style: normal;
+    font-family: 'ConnectIdents';
+    font-style: normal;
+    font-weight: 400;
+    font-display: auto;
+    src: url('ConnectIdents.ttf') format('truetype'),
+    url('ConnectIdents.woff') format('woff'), url('ConnectIdents.eot') format('eot'), url('ConnectIdents.svg?#ConnectIdents') format('svg');
 }
 
-.ident {
-	position: relative;
-	top: 1px;
-	display: inline-block;
-	font-family: 'ConnectIdents';
-	font-style: normal;
-	font-weight: normal;
-	line-height: 1;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	color: #666666;
-	vertical-align: middle;
+.fas-ci {
+    font-family: 'ConnectIdents';
+    font-weight: 400;
 }
 
-.ident-announcement:before {
-	content: "\e700";
+.fas-ci-announcement:before {
+    content: "\e700";
 }
 
-.ident-blog:before {
-	content: "\e701";
+.fas-ci-blog:before {
+    content: "\e701";
 }
 
-.ident-course-description:before {
-	content: "\e702";
+.fas-ci-course-description:before {
+    content: "\e702";
 }
 
-.ident-course-group:before {
-	content: "\e703";
+.fas-ci-course-group:before {
+    content: "\e703";
 }
 
-.ident-document:before {
-	content: "\e704";
+.fas-ci-document:before {
+    content: "\e704";
 }
 
-.ident-ephorus:before {
-	content: "\e705";
+.fas-ci-ephorus:before {
+    content: "\e705";
 }
 
-.ident-forum:before {
-	content: "\e706";
+.fas-ci-forum:before {
+    content: "\e706";
 }
 
-.ident-chat:before {
-	content: "\e707";
+.fas-ci-chat:before {
+    content: "\e707";
 }
 
-.ident-user:before {
-	content: "\e708";
+.fas-ci-user:before {
+    content: "\e708";
 }
 
-.ident-calendar:before {
-	content: "\e709";
+.fas-ci-calendar:before {
+    content: "\e709";
 }
 
-.ident-link:before {
-	content: "\e70a";
+.fas-ci-link:before {
+    content: "\e70a";
 }
 
-.ident-location:before {
-	content: "\e70b";
+.fas-ci-location:before {
+    content: "\e70b";
 }
 
-.ident-note:before {
-	content: "\e70c";
+.fas-ci-note:before {
+    content: "\e70c";
 }
 
-.ident-assessment:before {
-	content: "\e70d";
+.fas-ci-assessment:before {
+    content: "\e70d";
 }
 
-.ident-assignment:before {
-	content: "\e70e";
+.fas-ci-assignment:before {
+    content: "\e70e";
 }
 
-.ident-streaming-video:before {
-	content: "\e70f";
+.fas-ci-streaming-video:before {
+    content: "\e70f";
 }
 
-.ident-wiki:before {
-	content: "\e710";
+.fas-ci-wiki:before {
+    content: "\e710";
 }
 
-.ident-glossary:before {
-	content: "\e711";
+.fas-ci-glossary:before {
+    content: "\e711";
 }
 
-.ident-peer-assessment:before {
-	content: "\e712";
+.fas-ci-peer-assessment:before {
+    content: "\e712";
 }
 
-.ident-search:before {
-	content: "\e713";
+.fas-ci-search:before {
+    content: "\e713";
 }
 
-.ident-course-copier:before {
-	content: "\e714";
+.fas-ci-course-copier:before {
+    content: "\e714";
 }
 
-.ident-course-truncater:before {
-	content: "\e715";
+.fas-ci-course-truncater:before {
+    content: "\e715";
 }
 
-.ident-course-deleter:before {
-	content: "\e716";
+.fas-ci-course-deleter:before {
+    content: "\e716";
 }
 
-.ident-course-settings:before {
-	content: "\e717";
+.fas-ci-course-settings:before {
+    content: "\e717";
 }
 
-.ident-rights:before {
-	content: "\e718";
+.fas-ci-rights:before {
+    content: "\e718";
 }
 
-.ident-reporting:before {
-	content: "\e719";
+.fas-ci-reporting:before {
+    content: "\e719";
 }
 
-.ident-course-sections:before {
-	content: "\e71a";
+.fas-ci-course-sections:before {
+    content: "\e71a";
 }
 
-.ident-learning-path:before {
-	content: "\e71b";
+.fas-ci-learning-path:before {
+    content: "\e71b";
 }
 
-.ident-weblcms:before {
-	content: "\e71c";
+.fas-ci-weblcms:before {
+    content: "\e71c";
 }
 
-.ident-portfolio:before {
-	content: "\e71d";
+.fas-ci-portfolio:before {
+    content: "\e71d";
 }
 
-.ident-home:before {
-	content: "\e71e";
+.fas-ci-home:before {
+    content: "\e71e";
 }
 
-.ident-repository:before {
-	content: "\e71f";
+.fas-ci-repository:before {
+    content: "\e71f";
 }
 
-.ident-workspaces:before {
-	content: "\e720";
+.fas-ci-workspaces:before {
+    content: "\e720";
 }
 
-.ident-admin:before {
-	content: "\e721";
+.fas-ci-admin:before {
+    content: "\e721";
 }
 
-.ident-group:before {
-	content: "\e722";
+.fas-ci-group:before {
+    content: "\e722";
 }
 
-.ident-help:before {
-	content: "\e723";
+.fas-ci-help:before {
+    content: "\e723";
 }
 
-.ident-menu:before {
-	content: "\e724";
+.fas-ci-menu:before {
+    content: "\e724";
 }
 
-.ident-lynx:before {
-	content: "\e725";
+.fas-ci-lynx:before {
+    content: "\e725";
 }
 
-.ident-metadata:before {
-	content: "\e726";
+.fas-ci-metadata:before {
+    content: "\e726";
 }
 
-.ident-cas-storage:before {
-	content: "\e727";
+.fas-ci-cas-storage:before {
+    content: "\e727";
 }
 
-.ident-cache:before {
-	content: "\e728";
+.fas-ci-cache:before {
+    content: "\e728";
 }
 
-.ident-tracking:before {
-	content: "\e729";
+.fas-ci-tracking:before {
+    content: "\e729";
 }
 
-.ident-install:before {
-	content: "\e72a";
+.fas-ci-install:before {
+    content: "\e72a";
 }
 
-.ident-xs {
-	font-size: 16px;
-	vertical-align: middle;
+.fas-ci-disabled:before {
+    opacity: 0.3;
 }
 
-.ident-sm {
-	font-size: 20px;
-	vertical-align: middle;
+.fas-ci.fas-ci-new {
+    position: relative;
 }
 
-.ident-md {
-	font-size: 28px;
-	vertical-align: middle;
+.fas-ci-new:before {
+    opacity: 0.5;
 }
 
-.ident-lg {
-	font-size: 40px;
-	vertical-align: middle;
+.fas-ci-new:after {
+    display: inline-block;
+    background-color: #f57900;
+    position: absolute;
+    content: "";
+    right: 0px;
+    bottom: 0px;
+    width: 40%;
+    height: 40%;
+    border-radius: 100%;
 }
 
-.ident-disabled:before {
-	opacity: 0.3;
-}
-
-.ident-new:before {
-	opacity: 0.5;
-}
-
-.ident-new:after {
-	display: inline-block;
-	background-color: #f57900;
-	position: absolute;
-	content: "";
-	right: 0px;
-	bottom: 0px;
-}
-
-.ident-xs.ident-new:after {
-	width: 6px;
-	height: 6px;
-	border-radius: 3px;
-}
-
-.ident-sm.ident-new:after {
-	width: 8px;
-	height: 8px;
-	border-radius: 4px;
-}
-
-.ident-md.ident-new:after {
-	width: 12px;
-	height: 12px;
-	border-radius: 6px;
-}
-
-.ident-lg.ident-new:after {
-	width: 16px;
-	height: 16px;
-	border-radius: 8px;
+.fas-ci-va {
+    vertical-align: middle;
 }

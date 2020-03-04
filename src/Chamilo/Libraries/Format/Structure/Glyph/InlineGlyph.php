@@ -70,7 +70,14 @@ abstract class InlineGlyph
      */
     public function getClassNames()
     {
-        return array_merge($this->getBaseClassNames(), $this->getExtraClasses());
+        $classes = $this->getBaseClassNames();
+
+        foreach ($this->getExtraClasses() as $extraClass)
+        {
+            $classes[] = $extraClass;
+        }
+
+        return $classes;
     }
 
     /**
