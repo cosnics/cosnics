@@ -309,7 +309,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                     $publication->get_tool()
                 );
 
-                $identGlyph = new NamespaceIdentGlyph($toolNamespace, true, false, $isDisabled, array('fa-2x'));
+                $identGlyph = new NamespaceIdentGlyph($toolNamespace, true, false, $isDisabled, array('fa-2x', 'fa-fw'));
 
                 $html[] = $identGlyph->render();
                 $html[] = '&nbsp;';
@@ -415,7 +415,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 $html[] = '<span style="width: 27px; display: inline-block;" class="no-visibility-icon"></span>';
             }
 
-            $identGlyph = new NamespaceIdentGlyph($tool_namespace, true, $isNew, $isDisabled, array('fa-2x'));
+            $identGlyph = new NamespaceIdentGlyph($tool_namespace, true, $isNew, $isDisabled, array('fa-2x', 'fa-fw'));
             $html[] = $identGlyph->render();
 
             $html[] = '&nbsp;';
