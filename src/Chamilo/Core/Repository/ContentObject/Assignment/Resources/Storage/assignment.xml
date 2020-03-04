@@ -39,6 +39,15 @@
                 name="allowed_types"
                 type="text"
                 notnull="1"/>
+        <property
+                name="page_template"
+                type="text"/>
+        <property
+                name="last_entry_as_template"
+                type="integer"
+                length="3"
+                notnull="1"
+                default="0" />
     </properties>
     <index
             name="id"
