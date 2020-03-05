@@ -1,13 +1,16 @@
 <?php
 namespace Chamilo\Core\Admin\Menu;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 class PackageTypeLinksMenu extends HtmlMenu
 {
@@ -19,12 +22,15 @@ class PackageTypeLinksMenu extends HtmlMenu
     public function __construct($current_type, $format)
     {
         $this->format = $format;
-        
+
         parent::__construct(
             array(
                 $this->get_items(
-                    \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list())));
-        
+                    PlatformPackageBundles::getInstance()->get_package_list()
+                )
+            )
+        );
+
         $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_url($current_type));
     }
@@ -32,13 +38,15 @@ class PackageTypeLinksMenu extends HtmlMenu
     private function get_items(PackageList $package_list)
     {
         $item = array();
-        $item['class'] = 'category';
+        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
+        $item['class'] = $glyph->getClassNamesString();
         $item['title'] = $package_list->get_type_name();
         $item['url'] = $this->get_url($package_list->get_type());
         $item[OptionsMenuRenderer::KEY_ID] = $package_list->get_type();
-        
+
         $sub_items = array();
-        
+
         foreach ($package_list->get_children() as $child)
         {
             $children = $this->get_items($child);
@@ -47,42 +55,42 @@ class PackageTypeLinksMenu extends HtmlMenu
                 $sub_items[] = $children;
             }
         }
-        
+
         if (count($sub_items) > 0)
         {
             $item['sub'] = $sub_items;
         }
-        
+
         $has_links = false;
         $packages = $package_list->get_packages();
         foreach ($packages as $package)
         {
-            $registration = \Chamilo\Configuration\Configuration::registration($package->get_context());
-            
-            if (! empty($registration) && $registration[Registration::PROPERTY_STATUS])
+            $registration = Configuration::registration($package->get_context());
+
+            if (!empty($registration) && $registration[Registration::PROPERTY_STATUS])
             {
                 $manager_class = $package->get_context() . '\Integration\Chamilo\Core\Admin\Manager';
-                
+
                 if (class_exists($manager_class) && is_subclass_of(
-                    $manager_class, 
-                    '\Chamilo\Core\Admin\ActionsSupportInterface'))
+                        $manager_class, '\Chamilo\Core\Admin\ActionsSupportInterface'
+                    ))
                 {
                     $has_links = true;
                     break;
                 }
             }
         }
-        
+
         if ($has_links || (count($sub_items) > 0))
         {
-            if (! $has_links)
+            if (!$has_links)
             {
                 unset($item['url']);
             }
-            
+
             return $item;
         }
-        
+
         return false;
     }
 
@@ -95,6 +103,7 @@ class PackageTypeLinksMenu extends HtmlMenu
     {
         $renderer = new TreeMenuRenderer(ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true));
         $this->render($renderer, 'sitemap');
+
         return $renderer->toHTML();
     }
 }

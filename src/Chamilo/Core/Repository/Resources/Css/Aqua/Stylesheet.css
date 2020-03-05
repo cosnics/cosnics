@@ -11,6 +11,62 @@
     content: "\f0a0";
 }
 
+/*
+ * Category Type: Chamilo\Core\Repository\ContentObject\Category
+ */
+.fas-ci-16e12166426537ee0ba35c2d107830c1,
+.fas-ci-f137619b1cf9c5596143dca2ea3a74b9,
+.fas-ci-4d4cf8cea026eac57bfdf14e0e8fcb0c,
+.fas-ci-ff8dd06af20c5a5fe0bef2f6c5121066,
+.fas-ci-c2b6b1afedf80daeae5f1764f69dbaae,
+.fas-ci-f070e5a65cc0463e94f042dcaa37d76f
+{
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+/*
+ * Category Type: Chamilo\Core\Repository\ContentObject\Category\News
+ */
+.fas-ci-16e12166426537ee0ba35c2d107830c1:before {
+    content: "\f1ea";
+}
+
+/*
+ * Category Type: Chamilo\Core\Repository\ContentObject\Category\Assessment
+ */
+.fas-ci-f137619b1cf9c5596143dca2ea3a74b9:before {
+    content: "\f46c";
+}
+
+/*
+ * Category Type: Chamilo\Core\Repository\ContentObject\Category\Collaboration
+ */
+.fas-ci-4d4cf8cea026eac57bfdf14e0e8fcb0c:before {
+    content: "\f4c4";
+}
+
+/*
+ * Category Type: Chamilo\Core\Repository\ContentObject\Category\General
+ */
+.fas-ci-ff8dd06af20c5a5fe0bef2f6c5121066:before {
+    content: "\f15b";
+}
+
+/*
+ * Category Type: Chamilo\Core\Repository\ContentObject\Category\Agenda
+ */
+.fas-ci-c2b6b1afedf80daeae5f1764f69dbaae:before {
+    content: "\f133";
+}
+
+/*
+ * Category Type: Chamilo\Core\Repository\ContentObject\Category\PeerAssessment
+ */
+.fas-ci-f070e5a65cc0463e94f042dcaa37d76f:before {
+    content: "\f630";
+}
+
 tr.recycled td {
     color: #cccccc;
 }

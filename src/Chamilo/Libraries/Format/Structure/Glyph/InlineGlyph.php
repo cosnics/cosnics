@@ -50,7 +50,7 @@ abstract class InlineGlyph
     {
         $title = $this->getTitle() ? ' title="' . htmlentities($this->getTitle()) . '"' : '';
 
-        return '<span class="' . implode(' ', $this->getClassNames()) . '"' . $title . '></span>';
+        return '<span class="' . $this->getClassNamesString() . '"' . $title . '></span>';
     }
 
     /**
@@ -78,6 +78,15 @@ abstract class InlineGlyph
         }
 
         return $classes;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getClassNamesString()
+    {
+        return implode(' ', $this->getClassNames());
     }
 
     /**

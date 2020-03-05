@@ -192,7 +192,7 @@
     opacity: 0.3;
 }
 
-.fas-ci.fas-ci-new {
+.fas-ci.fas-ci-new, .fa.fas-ci-new, .fas.fas-ci-new, .far.fas-ci-new, .fab.fas-ci-new {
     position: relative;
 }
 

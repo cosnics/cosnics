@@ -58,9 +58,9 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
         $this->collapsed = $collapsed;
 
         $entryTemplates = array();
-        $entryTemplates[self::HTML_MENU_ENTRY_INACTIVE] = '<div class="{children}"><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
-        $entryTemplates[self::HTML_MENU_ENTRY_ACTIVE] = '<!--A--><div><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
-        $entryTemplates[self::HTML_MENU_ENTRY_ACTIVEPATH] = '<!--P--><div><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
+        $entryTemplates[self::HTML_MENU_ENTRY_INACTIVE] = '<div class="{children}"><a href="{url}" onclick="{onclick}" id="{id}" style="{style}" title="{safe_title}"><span class="{class}"></span> {title}</a></div>';
+        $entryTemplates[self::HTML_MENU_ENTRY_ACTIVE] = '<!--A--><div><a href="{url}" onclick="{onclick}" id="{id}" style="{style}" title="{safe_title}"><span class="{class}"></span> {title}</a></div>';
+        $entryTemplates[self::HTML_MENU_ENTRY_ACTIVEPATH] = '<!--P--><div><a href="{url}" onclick="{onclick}" id="{id}" style="{style}" title="{safe_title}"><span class="{class}"></span> {title}</a></div>';
         $this->setEntryTemplate($entryTemplates);
         $this->setItemTemplate('<li>', '</li>' . "\n");
     }

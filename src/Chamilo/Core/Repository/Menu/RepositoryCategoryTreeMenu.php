@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -24,8 +25,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class RepositoryCategoryTreeMenu extends GenericTree
 {
-    const ROOT_NODE_CLASS = 'category';
     const CATEGORY_CLASS = 'category';
+
+    const ROOT_NODE_CLASS = 'category';
 
     /**
      *
@@ -69,6 +71,67 @@ class RepositoryCategoryTreeMenu extends GenericTree
         }
     }
 
+    public function get_breadcrumbs()
+    {
+        return null;
+    }
+
+    public function get_current_node_id()
+    {
+        return FilterData::getInstance($this->workspaceImplementation)->get_filter_property(
+            FilterData::FILTER_CATEGORY
+        );
+    }
+
+    public function get_node($node_id)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID),
+            new StaticConditionVariable($node_id)
+        );
+        $child = DataManager::retrieve_categories($condition)->next_result();
+
+        return $child;
+    }
+
+    public function get_node_children($parent_node_id)
+    {
+        return DataManager::retrieve_categories(
+            $this->get_retrieve_condition($parent_node_id), null, null, new OrderBy(
+                new PropertyConditionVariable(
+                    RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_DISPLAY_ORDER
+                )
+            )
+        );
+    }
+
+    public function get_node_class($node)
+    {
+        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
+        return $glyph->getClassNamesString();
+    }
+
+    public function get_node_id($node)
+    {
+        return $node->get_id();
+    }
+
+    public function get_node_parent($node)
+    {
+        return $node->get_parent();
+    }
+
+    public function get_node_safe_title($node)
+    {
+        return $this->get_node_title($node);
+    }
+
+    public function get_node_title($node)
+    {
+        return $node->get_name();
+    }
+
     /**
      * Returns the url of a node
      *
@@ -86,103 +149,10 @@ class RepositoryCategoryTreeMenu extends GenericTree
         return $this->parent->get_url($url_param) . '&' . FilterData::FILTER_CATEGORY . '=' . $node_id;
     }
 
-    public function get_current_node_id()
-    {
-        return FilterData::getInstance($this->workspaceImplementation)->get_filter_property(FilterData::FILTER_CATEGORY);
-    }
-
-    public function get_node($node_id)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID),
-            new StaticConditionVariable($node_id));
-        $child = DataManager::retrieve_categories($condition)->next_result();
-        return $child;
-    }
-
-    public function get_node_children($parent_node_id)
-    {
-        return DataManager::retrieve_categories(
-            $this->get_retrieve_condition($parent_node_id),
-            null,
-            null,
-            new OrderBy(
-                new PropertyConditionVariable(
-                    RepositoryCategory::class_name(),
-                    RepositoryCategory::PROPERTY_DISPLAY_ORDER)));
-    }
-
-    public function node_has_children($parent_node_id)
-    {
-        return (DataManager::count(
-            RepositoryCategory::class_name(),
-            new DataClassCountParameters($this->get_retrieve_condition($parent_node_id))) > 0);
-    }
-
-    public function get_search_url()
-    {
-        $redirect = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::package(),
-                \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_CATEGORY_MENU_FEED));
-        return $redirect->getUrl();
-    }
-
-    public function get_url_format()
-    {
-        return $this->get_node_url('%d');
-    }
-
-    public function get_root_node_class()
-    {
-        return self::ROOT_NODE_CLASS;
-    }
-
-    public function get_node_class($node)
-    {
-        return self::CATEGORY_CLASS;
-    }
-
-    public function get_root_node_title()
-    {
-        return $this->workspaceImplementation->getTitle();
-    }
-
-    public function get_node_title($node)
-    {
-        return $node->get_name();
-    }
-
-    public function get_node_safe_title($node)
-    {
-        return $this->get_node_title($node);
-    }
-
-    public function get_node_id($node)
-    {
-        return $node->get_id();
-    }
-
-    public function get_node_parent($node)
-    {
-        return $node->get_parent();
-    }
-
-    public function get_breadcrumbs()
-    {
-        return null;
-    }
-
     public function get_parent()
     {
         return $this->parent;
     }
-
-    /**
-     * **************************************************************************************************************
-     * Helper functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the retrieve condition
@@ -197,14 +167,60 @@ class RepositoryCategoryTreeMenu extends GenericTree
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
-            new StaticConditionVariable($parent_node_id));
+            new StaticConditionVariable($parent_node_id)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
-            new StaticConditionVariable($this->workspaceImplementation->getId()));
+            new StaticConditionVariable($this->workspaceImplementation->getId())
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE),
-            new StaticConditionVariable($this->workspaceImplementation->getWorkspaceType()));
+            new StaticConditionVariable($this->workspaceImplementation->getWorkspaceType())
+        );
 
         return new AndCondition($conditions);
+    }
+
+    public function get_root_node_class()
+    {
+        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
+        return $glyph->getClassNamesString();
+    }
+
+    public function get_root_node_title()
+    {
+        return $this->workspaceImplementation->getTitle();
+    }
+
+    public function get_search_url()
+    {
+        $redirect = new Redirect(
+            array(
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::package(),
+                \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_CATEGORY_MENU_FEED
+            )
+        );
+
+        return $redirect->getUrl();
+    }
+
+    public function get_url_format()
+    {
+        return $this->get_node_url('%d');
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Helper functionality *
+     * **************************************************************************************************************
+     */
+
+    public function node_has_children($parent_node_id)
+    {
+        return (DataManager::count(
+                RepositoryCategory::class_name(),
+                new DataClassCountParameters($this->get_retrieve_condition($parent_node_id))
+            ) > 0);
     }
 }

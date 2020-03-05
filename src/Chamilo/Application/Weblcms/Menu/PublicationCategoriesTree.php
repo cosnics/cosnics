@@ -8,15 +8,16 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -30,11 +31,15 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
  */
 class PublicationCategoriesTree extends GenericTree
 {
-    const TREE_NAME = __CLASS__;
-    const ROOT_NODE_CLASS = 'category';
     const CATEGORY_CLASS = 'category';
-    const NEW_CATEGORY_CLASS = 'new_category';
+
     const INVISIBLE_CATEGORY_CLASS = 'invisible_category';
+
+    const NEW_CATEGORY_CLASS = 'new_category';
+
+    const ROOT_NODE_CLASS = 'category';
+
+    const TREE_NAME = __CLASS__;
 
     private $browser;
 
@@ -53,18 +58,6 @@ class PublicationCategoriesTree extends GenericTree
         parent::__construct();
     }
 
-    /**
-     * Returns the url of a node
-     *
-     * @param $node_id int
-     * @return string
-     */
-    public function get_node_url($node_id)
-    {
-        $url_param[Manager::PARAM_CATEGORY] = $node_id;
-        return $this->browser->get_url($url_param);
-    }
-
     public function get_current_node_id()
     {
         return intval(Request::get(Manager::PARAM_CATEGORY));
@@ -79,82 +72,117 @@ class PublicationCategoriesTree extends GenericTree
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_PARENT),
-            new StaticConditionVariable($parent_node_id));
+                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_PARENT
+            ), new StaticConditionVariable($parent_node_id)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_COURSE),
-            new StaticConditionVariable($this->browser->get_parent()->get_course_id()));
+                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_COURSE
+            ), new StaticConditionVariable($this->browser->get_parent()->get_course_id())
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_TOOL),
-            new StaticConditionVariable($this->browser->get_parent()->get_tool_id()));
-        if (! $this->is_invisible_allowed())
+                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_TOOL
+            ), new StaticConditionVariable($this->browser->get_parent()->get_tool_id())
+        );
+        if (!$this->is_invisible_allowed())
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class_name(),
-                    ContentObjectPublicationCategory::PROPERTY_VISIBLE),
-                new StaticConditionVariable(true));
+                    ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_VISIBLE
+                ), new StaticConditionVariable(true)
+            );
         }
         $condition = new AndCondition($conditions);
 
         $children = DataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(),
-            new DataClassRetrievesParameters(
-                $condition,
-                null,
-                null,
-                new OrderBy(
+            ContentObjectPublicationCategory::class_name(), new DataClassRetrievesParameters(
+                $condition, null, null, new OrderBy(
                     new PropertyConditionVariable(
                         ContentObjectPublicationCategory::class_name(),
-                        ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER))));
+                        ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
+                    )
+                )
+            )
+        );
 
         return $children;
     }
 
-    public function node_has_children($node_id)
+    public function get_node_class($node)
     {
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_PARENT),
-            new StaticConditionVariable($node_id));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_COURSE),
-            new StaticConditionVariable($this->browser->get_parent()->get_course_id()));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_TOOL),
-            new StaticConditionVariable($this->browser->get_parent()->get_tool_id()));
-        if (! $this->is_invisible_allowed())
+        if ($this->get_node($node->get_id())->get_visibility())
         {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class_name(),
-                    ContentObjectPublicationCategory::PROPERTY_VISIBLE),
-                new StaticConditionVariable(true));
+            if ($this->browser->tool_category_has_new_publications($node->get_id()))
+            {
+                $glyph = new FontAwesomeGlyph('folder', array('fas-ci-new'), null, 'fas');
+
+                return $glyph->getClassNamesString();
+            }
+            else
+            {
+                $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
+                return $glyph->getClassNamesString();
+            }
         }
+        else
+        {
+            $glyph = new FontAwesomeGlyph('folder', array('text-muted'), null, 'fas');
 
-        $condition = new AndCondition($conditions);
+            return $glyph->getClassNamesString();
+        }
+    }
 
-        return DataManager::count(
-            ContentObjectPublicationCategory::class_name(),
-            new DataClassCountParameters($condition)) > 0;
+    public function get_node_id($node)
+    {
+        return $node->get_id();
+    }
+
+    public function get_node_parent($node)
+    {
+        return $node->get_parent();
+    }
+
+    public function get_node_safe_title($node)
+    {
+        return $this->get_node_title($node);
+    }
+
+    public function get_node_title($node)
+    {
+        return $node->get_name();
     }
 
     /**
-     * Returns true if the current user is allowed to view invisible categories.
+     * Returns the url of a node
+     *
+     * @param $node_id int
+     *
+     * @return string
      */
-    public function is_invisible_allowed()
+    public function get_node_url($node_id)
     {
-        return $this->browser->is_allowed('view_invisible_category_right');
+        $url_param[Manager::PARAM_CATEGORY] = $node_id;
+
+        return $this->browser->get_url($url_param);
+    }
+
+    public function get_root_node_class()
+    {
+        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
+        return $glyph->getClassNamesString();
+    }
+
+    public function get_root_node_title()
+    {
+        $parent = $this->browser->get_parent();
+        $course_title = $parent->get_course()->get_title();
+        $context = ClassnameUtilities::getInstance()->getNamespaceFromObject($parent);
+        $root_title = Translation::get('TypeName', null, $context) . ' ' . $course_title;
+
+        return $root_title;
     }
 
     public function get_search_url()
@@ -162,7 +190,9 @@ class PublicationCategoriesTree extends GenericTree
         $searchUrl = new Redirect(
             array(
                 Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::package(),
-                \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_XML_GROUP_MENU_FEED));
+                \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_XML_GROUP_MENU_FEED
+            )
+        );
 
         return $searchUrl->getUrl();
     }
@@ -175,12 +205,12 @@ class PublicationCategoriesTree extends GenericTree
         $url_format = '?application=weblcms&course=' . $course_id . '&go=course_viewer&tool=' . $tool;
 
         $tool_action = Request::get(Manager::PARAM_TOOL_ACTION);
-        if (! is_null($tool_action))
+        if (!is_null($tool_action))
         {
             $url_format .= '&tool_action=' . $tool_action;
         }
         $browser_type = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE);
-        if (! is_null($browser_type))
+        if (!is_null($browser_type))
         {
             $url_format .= '&browser=' . $browser_type;
         }
@@ -190,56 +220,44 @@ class PublicationCategoriesTree extends GenericTree
         return $url_format;
     }
 
-    public function get_root_node_class()
+    /**
+     * Returns true if the current user is allowed to view invisible categories.
+     */
+    public function is_invisible_allowed()
     {
-        return self::ROOT_NODE_CLASS;
+        return $this->browser->is_allowed('view_invisible_category_right');
     }
 
-    public function get_node_class($node)
+    public function node_has_children($node_id)
     {
-        if ($this->get_node($node->get_id())->get_visibility())
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_PARENT
+            ), new StaticConditionVariable($node_id)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_COURSE
+            ), new StaticConditionVariable($this->browser->get_parent()->get_course_id())
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_TOOL
+            ), new StaticConditionVariable($this->browser->get_parent()->get_tool_id())
+        );
+        if (!$this->is_invisible_allowed())
         {
-            if ($this->browser->tool_category_has_new_publications($node->get_id()))
-            {
-                return self::NEW_CATEGORY_CLASS;
-            }
-            else
-            {
-                return self::CATEGORY_CLASS;
-            }
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_VISIBLE
+                ), new StaticConditionVariable(true)
+            );
         }
-        else
-        {
-            return self::INVISIBLE_CATEGORY_CLASS;
-        }
-    }
 
-    public function get_root_node_title()
-    {
-        $parent = $this->browser->get_parent();
-        $course_title = $parent->get_course()->get_title();
-        $context = ClassnameUtilities::getInstance()->getNamespaceFromObject($parent);
-        $root_title = Translation::get('TypeName', null, $context) . ' ' . $course_title;
-        return $root_title;
-    }
+        $condition = new AndCondition($conditions);
 
-    public function get_node_title($node)
-    {
-        return $node->get_name();
-    }
-
-    public function get_node_safe_title($node)
-    {
-        return $this->get_node_title($node);
-    }
-
-    public function get_node_id($node)
-    {
-        return $node->get_id();
-    }
-
-    public function get_node_parent($node)
-    {
-        return $node->get_parent();
+        return DataManager::count(
+                ContentObjectPublicationCategory::class_name(), new DataClassCountParameters($condition)
+            ) > 0;
     }
 }
