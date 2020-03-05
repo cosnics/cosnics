@@ -93,7 +93,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             new Breadcrumb(
                 null, $translator->trans(
                 'ViewContentObject', array(
-                'CONTENT_OBJECT' => $contentObject->get_title(), 'ICON' => Theme::getInstance()->getImage(
+                '{CONTENT_OBJECT}' => $contentObject->get_title(), 'ICON' => Theme::getInstance()->getImage(
                     'Logo/16', 'png', $translator->trans('TypeName', array(), $contentObject->package()), null,
                     ToolbarItem::DISPLAY_ICON, false, $contentObject->package()
                 )
