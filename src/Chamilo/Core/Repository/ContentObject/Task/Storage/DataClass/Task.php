@@ -364,25 +364,6 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
         }
     }
 
-    public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
-    {
-        return static::icon_image(
-            ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2), 
-            $size, 
-            $this->is_current() && $is_available, 
-            $this->has_frequency());
-    }
-
-    public static function icon_image($context, $size = Theme :: ICON_SMALL, $is_current = true, $has_frequency = false)
-    {
-        if ($has_frequency)
-        {
-            $size = $size . 'Repeat';
-        }
-        
-        return parent::icon_image($context, $size, $is_current);
-    }
-
     public function get_type_string()
     {
         if ($this->has_frequency())

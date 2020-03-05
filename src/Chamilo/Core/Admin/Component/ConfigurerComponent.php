@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -89,7 +90,7 @@ class ConfigurerComponent extends Manager
                     $tabs->add_tab(
                         new DynamicVisualTab(
                             $package, Translation::get('TypeName', null, $package),
-                            new NamespaceIdentGlyph($package, true, false, false, array('fa-lg')),
+                            new NamespaceIdentGlyph($package, true, false, false, Theme::ICON_SMALL),
                             $this->get_url(array(self::PARAM_TAB => $this->get_tab(), self::PARAM_CONTEXT => $package)),
                             $this->get_context() == $package
                         )

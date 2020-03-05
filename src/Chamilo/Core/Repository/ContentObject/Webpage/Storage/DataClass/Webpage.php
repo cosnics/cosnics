@@ -178,32 +178,6 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         return $icon_name;
     }
 
-    public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
-    {
-        return '<img src="' . $this->get_icon_path($size) . '" alt="' . $this->get_extension() . '" title="' .
-            htmlentities($this->get_extension()) . '"/>';
-    }
-
-    public function get_icon_path($size = Theme :: ICON_SMALL)
-    {
-        $extension = (string) StringUtilities::getInstance()->createString($this->get_extension())->upperCamelize();
-
-        $path = Theme::getInstance()->getFileExtension($extension, $size, false);
-        if (file_exists($path))
-        {
-            $size = $size . ($this->is_current() ? '' : 'Na');
-
-            return Theme::getInstance()->getFileExtension($extension, $size);
-        }
-        else
-        {
-            return Theme::getInstance()->getImagePath(
-                ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2),
-                'Logo/' . $size . ($this->is_current() ? '' : 'Na')
-            );
-        }
-    }
-
     /**
      * @return string
      */

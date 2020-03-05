@@ -16,6 +16,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -309,7 +310,9 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                     $publication->get_tool()
                 );
 
-                $identGlyph = new NamespaceIdentGlyph($toolNamespace, true, false, $isDisabled, array('fa-2x', 'fa-fw'));
+                $identGlyph = new NamespaceIdentGlyph(
+                    $toolNamespace, true, false, $isDisabled, Theme::ICON_MEDIUM, array('fa-fw')
+                );
 
                 $html[] = $identGlyph->render();
                 $html[] = '&nbsp;';
@@ -415,7 +418,8 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 $html[] = '<span style="width: 27px; display: inline-block;" class="no-visibility-icon"></span>';
             }
 
-            $identGlyph = new NamespaceIdentGlyph($tool_namespace, true, $isNew, $isDisabled, array('fa-2x', 'fa-fw'));
+            $identGlyph =
+                new NamespaceIdentGlyph($tool_namespace, true, $isNew, $isDisabled, Theme::ICON_MEDIUM, array('fa-fw'));
             $html[] = $identGlyph->render();
 
             $html[] = '&nbsp;';

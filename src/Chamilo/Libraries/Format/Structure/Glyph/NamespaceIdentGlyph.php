@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure\Glyph;
 
+use Chamilo\Libraries\Format\Theme;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Structure\Glyph
@@ -15,15 +17,16 @@ class NamespaceIdentGlyph extends IdentGlyph
      * @param boolean $isAligned
      * @param boolean $isNew
      * @param boolean $isDisabled
+     * @param integer $size
      * @param string[] $extraClasses
      * @param string $title
      * @param string $style
      */
     public function __construct(
-        $namespace, $isAligned = false, $isNew = false, $isDisabled = false, $extraClasses = array(), $title = null,
-        $style = 'fas-ci'
+        $namespace, $isAligned = false, $isNew = false, $isDisabled = false, $size = Theme::ICON_SMALL,
+        $extraClasses = array(), $title = null, $style = 'fas-ci'
     )
     {
-        parent::__construct(md5($namespace), $isAligned, $isNew, $isDisabled, $extraClasses, $title, $style);
+        parent::__construct(md5($namespace), $isAligned, $isNew, $isDisabled, $size, $extraClasses, $title, $style);
     }
 }

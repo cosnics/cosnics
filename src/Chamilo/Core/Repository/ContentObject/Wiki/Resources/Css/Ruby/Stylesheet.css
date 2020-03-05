@@ -1,87 +1,78 @@
-@import
-url
-(
-'../../Aqua/Stylesheet.css'
-);
+@import url('../Aqua/Stylesheet.css');
+
 .wiki-pane {
-	width: 90%;
-	border-left: 1px solid #EFEFEF;
-	float: right;
-	margin-left: -1px;
+    width: 90%;
+    border-left: 1px solid #EFEFEF;
+    float: right;
+    margin-left: -1px;
 }
 
 .wiki-pane-actions li a {
-	display: block;
-	padding: 0.5em 1em;
-	background-color: #eaf4fd;
-	color: #2e6e9e;
-	text-decoration: none;
-	border: 0px solid #eaf4fd;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius-topright: 5px;
-	-webkit-border-top-left-radius: 5px;
-	-webkit-border-top-right-radius: 5px;
-	background:
-		url("../../../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Images/UiBgGlass5Dfeffc1X400.png")
-		repeat-x scroll 50% 50% #DFEFFC;
+    display: block;
+    padding: 0.5em 1em;
+    background-color: #eaf4fd;
+    color: #2e6e9e;
+    text-decoration: none;
+    border: 0px solid #eaf4fd;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    background: url("../../../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Images/UiBgGlass5Dfeffc1X400.png") repeat-x scroll 50% 50% #DFEFFC;
 }
 
 .wiki-pane-actions li a:hover {
-	color: #1d5987;
-	background-color: #ddecf7;
-	background:
-		url("../../../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Images/UiBgGlass75D0E5F51X400.png")
-		repeat-x scroll 50% 50% #DFEFFC;
+    color: #1d5987;
+    background-color: #ddecf7;
+    background: url("../../../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Images/UiBgGlass75D0E5F51X400.png") repeat-x scroll 50% 50% #DFEFFC;
 }
 
 .wiki-pane-actions li a.current {
-	background: white;
-	border: 1px solid #EFEFEF;
-	border-bottom-color: white;
-	color: #e17009;
+    background: white;
+    border: 1px solid #EFEFEF;
+    border-bottom-color: white;
+    color: #e17009;
 }
 
 .wiki-pane-content {
-	clear: both;
-	display: block;
-	margin: 0;
-	padding: 1.5em;
-	border-top: 1px solid #EFEFEF;
-	line-height: 1.5em;
+    clear: both;
+    display: block;
+    margin: 0;
+    padding: 1.5em;
+    border-top: 1px solid #EFEFEF;
+    line-height: 1.5em;
 }
 
 .wiki-menu {
-	width: 10%;
-	float: left;
-	padding-top: 88px;
-	background-position: 50% 20px;
-	background-image: url(../../Images/Ruby/Logo/48.png);
-	background-repeat: no-repeat;
+    width: 10%;
+    float: left;
+    padding-top: 88px;
+    background-position: 50% 20px;
+    background-image: url(../../Images/Ruby/Logo/48.png);
+    background-repeat: no-repeat;
 }
 
 .wiki-menu-section {
-	padding-top: 0.5em;
-	margin-top: 0.1em;
-	border-top: 1px solid #EFEFEF;
-	overflow: hidden;
+    padding-top: 0.5em;
+    margin-top: 0.1em;
+    border-top: 1px solid #EFEFEF;
+    overflow: hidden;
 }
 
 .wiki-pane-content-version {
-	border-width: 1px;
-	border-style: dotted;
-	background-repeat: no-repeat;
-	background-position: 10px 50%;
-	padding: 10px 36px 10px 36px;
-	text-align: justify;
-	background-image:
-		url('../../../../../../Configuration/Resources/Images/Ruby/Status/WarningMini.png');
-	border: 1px solid #ffd89b;
-	background-color: #fff8aa;
-	color: #996900;
-	margin-bottom: 1.5em;
+    border-width: 1px;
+    border-style: dotted;
+    background-repeat: no-repeat;
+    background-position: 10px 50%;
+    padding: 10px 36px 10px 36px;
+    text-align: justify;
+    background-image: url('../../../../../../Configuration/Resources/Images/Ruby/Status/WarningMini.png');
+    border: 1px solid #ffd89b;
+    background-color: #fff8aa;
+    color: #996900;
+    margin-bottom: 1.5em;
 }
 
-ul.tree-menu li div a.wiki, ul.tree-menu li div a.type_wiki, ul.tree-menu li div a.type_wiki_default
-	{
-	background-image: url(../../Images/Ruby/Logo/16.png);
+ul.tree-menu li div a.wiki, ul.tree-menu li div a.type_wiki, ul.tree-menu li div a.type_wiki_default {
+    background-image: url(../../Images/Ruby/Logo/16.png);
 }

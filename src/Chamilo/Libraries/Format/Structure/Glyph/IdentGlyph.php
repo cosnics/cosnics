@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure\Glyph;
 
+use Chamilo\Libraries\Format\Theme;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Structure\Glyph
@@ -15,13 +17,14 @@ class IdentGlyph extends FontAwesomeGlyph
      * @param boolean $isAligned
      * @param boolean $isNew
      * @param boolean $isDisabled
+     * @param integer $size
      * @param string[] $extraClasses
      * @param string $title
      * @param string $style
      */
     public function __construct(
-        $type, $isAligned = false, $isNew = false, $isDisabled = false, $extraClasses = array(), $title = null,
-        $style = 'fas-ci'
+        $type, $isAligned = false, $isNew = false, $isDisabled = false, $size = Theme::ICON_SMALL,
+        $extraClasses = array(), $title = null, $style = 'fas-ci'
     )
     {
         $classes = array();
@@ -39,6 +42,19 @@ class IdentGlyph extends FontAwesomeGlyph
         if ($isDisabled)
         {
             $classes[] = 'fas-ci-disabled';
+        }
+
+        switch ($size)
+        {
+            case Theme::ICON_SMALL;
+                $classes[] = 'fa-lg';
+                break;
+            case Theme::ICON_MEDIUM;
+                $classes[] = 'fa-2x';
+                break;
+            case Theme::ICON_BIG;
+                $classes[] = 'fa-3x';
+                break;
         }
 
         foreach ($extraClasses as $extraClass)

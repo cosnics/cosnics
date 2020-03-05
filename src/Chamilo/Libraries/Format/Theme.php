@@ -239,7 +239,7 @@ class Theme
      * @param boolean $web
      * @return string
      */
-    public function getFileExtension($type, $size = self :: ICON_MINI, $web = true)
+    public function getFileExtension($type, $size = self::ICON_MINI, $web = true)
     {
         $directory_separator = ($web ? '/' : DIRECTORY_SEPARATOR);
         return $this->getPathBuilder()->getResourcesPath('Chamilo\Configuration', $web) . 'File' . $directory_separator .
@@ -280,7 +280,7 @@ class Theme
      * @return string
      */
     public function getImage($image, $extension = 'png', $label = null, $href = null,
-        $display = ToolbarItem :: DISPLAY_ICON_AND_LABEL, $confirmation = false, $context = null)
+        $display = ToolbarItem::DISPLAY_ICON_AND_LABEL, $confirmation = false, $context = null)
     {
         if (! $context)
         {
@@ -309,7 +309,7 @@ class Theme
      * @return string
      */
     public function getCommonImage($image, $extension = 'png', $label = null, $href = null,
-        $display = ToolbarItem :: DISPLAY_ICON_AND_LABEL, $confirmation = false)
+        $display = ToolbarItem::DISPLAY_ICON_AND_LABEL, $confirmation = false)
     {
         return $this->getImage($image, $extension, $label, $href, $display, $confirmation, 'Chamilo\Configuration');
     }

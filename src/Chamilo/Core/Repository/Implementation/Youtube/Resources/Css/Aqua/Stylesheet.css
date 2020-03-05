@@ -1,15 +1,26 @@
+/* Type: Chamilo\Core\Repository\Implementation\YouTube */
 .fas-ci-00ef4f4a0a8b967b7efd8cf5256e14ac {
-	font-family: 'Font Awesome 5 Brands';
+    font-family: 'Font Awesome 5 Brands';
 }
 
-.fas-ci-00ef4f4a0a8b967b7efd8cf5256e14ac:before {
-	content: "\f167";
+.fas-ci-00ef4f4a0a8b967b7efd8cf5256e14ac:before:before {
+    content: "\f167";
+}
+
+/* Content Type: Chamilo\Core\Repository\Implementation\Youtube\Type\Video */
+.fas-ci-d23dafc43e2bea5708c3b6e09b1cec27 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-d23dafc43e2bea5708c3b6e09b1cec27:before {
+	content: "\f03d";
 }
 
 ul.tree-menu li div a.youtube {
-	background-image: url(../../Images/Aqua/Logo/16.png);
+    background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
 ul.tree-menu li div a.type_youtube {
-	background-image: url(../../Images/Aqua/Logo/16.png);
+    background-image: url(../../Images/Aqua/Logo/16.png);
 }

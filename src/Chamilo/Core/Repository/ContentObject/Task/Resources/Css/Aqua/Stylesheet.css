@@ -1,10 +1,16 @@
-.fas-ci-0dfa699c0accba4069d1766a6df72333 {
+.fas-ci-0dfa699c0accba4069d1766a6df72333, .fas-ci-880723ba6a7f41210e808e6e0da34c54 {
 	font-family: 'Font Awesome 5 Free';
 	font-weight: 900;
 }
 
+/* Regular */
 .fas-ci-0dfa699c0accba4069d1766a6df72333:before {
-	content: "\f133";
+	content: "\f274";
+}
+
+/* Repeat */
+.fas-ci-880723ba6a7f41210e808e6e0da34c54:before {
+	content: "\f274";
 }
 
 ul.tree-menu li div a.task, ul.tree-menu li div a.type_task, ul.tree-menu li div a.type_task_default

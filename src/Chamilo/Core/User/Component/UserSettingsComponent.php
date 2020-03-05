@@ -12,6 +12,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -108,8 +109,8 @@ class UserSettingsComponent extends ProfileComponent
                 $is_current_tab = ($this->context === $setting_context);
                 $tab = new DynamicVisualTab(
                     $setting_context, Translation::get('TypeName', null, $setting_context),
-                    new NamespaceIdentGlyph($setting_context, true, false, false, array('fa-lg')), $package_url,
-                    $is_current_tab
+                    new NamespaceIdentGlyph($setting_context, true, false, false, Theme::ICON_SMALL, array()),
+                    $package_url, $is_current_tab
                 );
                 $tabs->add_tab($tab);
             }

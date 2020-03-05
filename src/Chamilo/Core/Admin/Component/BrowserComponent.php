@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicAction;
 use Chamilo\Libraries\Format\Tabs\DynamicActionsTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Theme;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -97,7 +98,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $actions_tab = new DynamicActionsTab(
                     ClassnameUtilities::getInstance()->getNamespaceId($package->get_context()),
                     $this->getTranslator()->trans('TypeName', array(), $package->get_context()),
-                    new NamespaceIdentGlyph($package->get_context(), true, false, false, array('fa-lg'))
+                    new NamespaceIdentGlyph($package->get_context(), true, false, false, Theme::ICON_SMALL)
                 );
 
                 if ($links->get_search())

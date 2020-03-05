@@ -83,7 +83,9 @@ class ApplicationItemRenderer extends ItemRenderer
                     $integrationNamespace, 'Menu' . ($isSelected ? 'Selected' : '')
                 );
 
-                $glyph = new NamespaceIdentGlyph($item->getApplication(), false, false, false, array('fa-2x'), $title);
+                $glyph = new NamespaceIdentGlyph(
+                    $item->getApplication(), false, false, false, Theme::ICON_MEDIUM, array(), $title
+                );
 
                 $html[] = $glyph->render();
             }

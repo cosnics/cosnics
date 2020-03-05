@@ -15,10 +15,9 @@ ul.tree-menu li div a.youtube.type_completed, ul.tree-menu li div a.type_youtube
 }
 
 .fas-ci-04ab46f6a8ddd1c5f93d4bf13b823da3 {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
+    font-family: 'Font Awesome 5 Brands';
 }
 
 .fas-ci-04ab46f6a8ddd1c5f93d4bf13b823da3:before {
-    content: "\f133";
+    content: "\f167";
 }

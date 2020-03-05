@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
@@ -12,6 +14,7 @@ use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -21,7 +24,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
@@ -42,6 +45,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\UUID;
+use Exception;
 
 /**
  *
@@ -789,6 +793,32 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
+     * @return string
+     */
+    public function getDefaultGlyphNamespace()
+    {
+        return self::package();
+    }
+
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function getGlyphNamespace()
+    {
+        $templateRegistration = $this->get_template_registration();
+
+        if ($templateRegistration instanceof TemplateRegistration && !$templateRegistration->get_default())
+        {
+            return $templateRegistration->get_content_object_type() . '\Template\\' . $templateRegistration->get_name();
+        }
+        else
+        {
+            return $this->getDefaultGlyphNamespace();
+        }
+    }
+
+    /**
      * @return \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface
      */
     public function getPublicationAggregator()
@@ -857,7 +887,7 @@ class ContentObject extends CompositeDataClass
 
         if (!$contentObjectRelation)
         {
-            throw new \Exception('ContentObject not found in given workspace');
+            throw new Exception('ContentObject not found in given workspace');
         }
 
         return $this->getVirtualPathByCategoryId($contentObjectRelation->getCategoryId(), $workspace->getTitle());
@@ -1149,37 +1179,39 @@ class ContentObject extends CompositeDataClass
         return $html_editors;
     }
 
-    public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
+    /**
+     * @param int $size
+     * @param bool $isAvailable
+     * @param string[] $extraClasses
+     *
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function get_icon_image($size = Theme::ICON_SMALL, $isAvailable = true, $extraClasses = array())
     {
-        $template_registration = $this->get_template_registration();
+        $templateRegistration = $this->get_template_registration();
 
-        if ($template_registration instanceof TemplateRegistration)
+        if ($templateRegistration instanceof TemplateRegistration && !$templateRegistration->get_default())
         {
-            $size = 'Template/' . $template_registration->get_name() . '/' . $size;
-            $type_string = 'TypeName' .
-                (string) StringUtilities::getInstance()->createString($template_registration->get_name())
-                    ->upperCamelize();
+            $glyphTitle = 'TypeName' . $templateRegistration->get_name();
         }
         else
         {
-            $type_string = null;
+            $glyphTitle = null;
         }
 
-        return static::icon_image(
-            ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2), $size,
-            $this->is_current() && $is_available, $type_string
-        );
+        return self::icon_image($this->getGlyphNamespace(), $size, $isAvailable, $glyphTitle, $extraClasses);
     }
 
     /**
      * Gets the name of the icon corresponding to this object.
      */
-    public function get_icon_name($size = Theme :: ICON_SMALL)
+    public function get_icon_name($size = Theme::ICON_SMALL)
     {
         return $size;
     }
 
-    public function get_icon_path($size = Theme :: ICON_SMALL)
+    public function get_icon_path($size = Theme::ICON_SMALL)
     {
         return static::icon_path(
             ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2), $size, $this->is_current()
@@ -1315,7 +1347,7 @@ class ContentObject extends CompositeDataClass
             return $owner->get_fullname();
         }
 
-        return Translation::getInstance()->getTranslation('UserUnknown', null, \Chamilo\Core\User\Manager::context());
+        return Translation::getInstance()->getTranslation('UserUnknown', null, Manager::context());
     }
 
     // create a version
@@ -1344,7 +1376,7 @@ class ContentObject extends CompositeDataClass
             $directory_name_split = explode('Chamilo\Core\Repository\ContentObject\\', $directory);
             $namespace = self::get_content_object_type_namespace($directory_name_split[1]);
 
-            if (\Chamilo\Configuration\Package\Storage\DataClass\Package::exists($namespace))
+            if (Package::exists($namespace))
             {
                 $types[] = $namespace;
             }
@@ -1589,14 +1621,25 @@ class ContentObject extends CompositeDataClass
         return ($this->get_current() != 1);
     }
 
-    public static function icon_image($context, $size = Theme :: ICON_SMALL, $is_current = true, $type_string = null)
+    /**
+     * @param string $glyphNamespace
+     * @param integer $size
+     * @param boolean $isAvailable
+     * @param string $title
+     * @param string[] $extraClasses
+     *
+     * @return string
+     */
+    public static function icon_image(
+        $glyphNamespace, $size = Theme::ICON_SMALL, $isAvailable = true, $title = null, $extraClasses = array()
+    )
     {
-        return '<img src="' . static::icon_path($context, $size, $is_current) . '" alt="' . static::type_string(
-                $context, $type_string
-            ) . '" title="' . htmlentities(static::type_string($context, $type_string)) . '"/>';
+        $glyph = new NamespaceIdentGlyph($glyphNamespace, true, false, !$isAvailable, $size, $extraClasses, $title);
+
+        return $glyph->render();
     }
 
-    public static function icon_path($context, $size = Theme :: ICON_SMALL, $is_current = true)
+    public static function icon_path($context, $size = Theme::ICON_SMALL, $is_current = true)
     {
         return Theme::getInstance()->getImagePath($context, 'Logo/' . $size . ($is_current ? '' : 'Na'));
     }
@@ -1701,7 +1744,7 @@ class ContentObject extends CompositeDataClass
         );
 
         // Type should be registered to be available
-        if (!\Chamilo\Configuration\Configuration::getInstance()->isRegisteredAndActive($namespace))
+        if (!Configuration::getInstance()->isRegisteredAndActive($namespace))
         {
             return false;
         }
