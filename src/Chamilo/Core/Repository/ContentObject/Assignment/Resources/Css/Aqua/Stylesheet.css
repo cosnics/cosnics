@@ -1,3 +1,12 @@
+.fas-ci-67ea563760676b94fd3630b42acfc4d8 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-67ea563760676b94fd3630b42acfc4d8:before {
+    content: "\f133";
+}
+
 .assignment {
     border: 2px solid #B5CAE7;
     margin: 5px 5px 5px 5px;

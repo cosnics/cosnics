@@ -13,3 +13,12 @@ ul.tree-menu li div a.youtube.type_completed, ul.tree-menu li div a.type_youtube
 .treeview .list-group .list-group-item .icon.node-icon.type_youtube_default.type_completed {
     background-image: url(../../Images/Aqua/Logo/16Completed.png);
 }
+
+.fas-ci-04ab46f6a8ddd1c5f93d4bf13b823da3 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-04ab46f6a8ddd1c5f93d4bf13b823da3:before {
+    content: "\f133";
+}

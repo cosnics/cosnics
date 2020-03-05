@@ -953,7 +953,7 @@ abstract class Application
                 $redirect = new Redirect();
                 $currentUrl = $redirect->getCurrentUrl();
 
-                $logger = new FileLogger(Path::getInstance()->getLogPath() . '/application_parameters.log', true);
+                $logger = new FileLogger(Path::getInstance()->getLogPath() . '/cosnics.error.parameters.log', true);
                 $logger->log_message($currentUrl);
 
                 $redirect = new Redirect($query);

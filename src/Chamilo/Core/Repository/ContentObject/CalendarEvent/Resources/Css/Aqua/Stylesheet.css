@@ -1,3 +1,12 @@
+.fas-ci-938dfac2397506029c73e615dd74e244 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-938dfac2397506029c73e615dd74e244:before {
+    content: "\f133";
+}
+
 ul.tree-menu li div a.calendar_event, ul.tree-menu li div a.type_calendar_event,
 .fancytree-custom-icon.type_calendar_event,
 .fancytree-custom-icon.type_calendar_event_default,

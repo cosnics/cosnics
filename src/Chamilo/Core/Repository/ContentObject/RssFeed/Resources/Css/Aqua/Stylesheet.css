@@ -1,3 +1,12 @@
+.fas-ci-4ff56fc922b429abb1331c937788ed4b {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-4ff56fc922b429abb1331c937788ed4b:before {
+    content: "\f133";
+}
+
 ul.tree-menu li div a.rss_feed.type_completed, ul.tree-menu li div a.type_rss_feed.type_completed, ul.tree-menu li div a.type_rss_feed_default.type_completed,
 .fancytree-custom-icon.type_rss_feed.type_completed,
 .fancytree-custom-icon.type_rss_feed_default.type_completed,

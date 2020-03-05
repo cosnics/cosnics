@@ -1,3 +1,12 @@
+.fas-ci-56e4688ec168eff0dd7829b4a6a8f947 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-56e4688ec168eff0dd7829b4a6a8f947:before {
+    content: "\f133";
+}
+
 ul.tree-menu li div a.fill_in_blanks_question, ul.tree-menu li div a.type_fill_in_blanks_question,
 .fancytree-custom-icon.type_fill_in_blanks_question,
 .fancytree-custom-icon.type_fill_in_blanks_question_default,

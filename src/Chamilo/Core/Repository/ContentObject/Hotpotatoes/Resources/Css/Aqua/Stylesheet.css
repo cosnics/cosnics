@@ -1,3 +1,12 @@
+.fas-ci-ceae13a41c64a94c2debf5911896f370 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-ceae13a41c64a94c2debf5911896f370:before {
+    content: "\f133";
+}
+
 ul.tree-menu li div a.hotpotatoes, ul.tree-menu li div a.type_hotpotatoes,
 .treeview .list-group .list-group-item .icon.node-icon.type_hotpotatoes,
 .treeview .list-group .list-group-item .icon.node-icon.type_hotpotatoes_default,

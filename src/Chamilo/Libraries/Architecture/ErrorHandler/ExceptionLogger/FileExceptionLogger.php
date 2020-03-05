@@ -56,7 +56,7 @@ class FileExceptionLogger implements ExceptionLoggerInterface
             return;
         }
 
-        $logFile = $this->logPath . DIRECTORY_SEPARATOR . 'FatalErrors.log';
+        $logFile = $this->logPath . DIRECTORY_SEPARATOR . 'cosnics.error.fatal.log';
         $fileHandler = fopen($logFile, 'a');
 
         $type = $this->determineExceptionLevelString($exceptionLevel);

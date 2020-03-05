@@ -1,3 +1,12 @@
+.fas-ci-4cae3b19c3ff8e41a6a30bda472ded7c {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-4cae3b19c3ff8e41a6a30bda472ded7c:before {
+    content: "\f133";
+}
+
 ul.tree-menu li div a.indicator, ul.tree-menu li div a.type_indicator,
 .treeview .list-group .list-group-item .icon.node-icon.type_indicator,
 .treeview .list-group .list-group-item .icon.node-icon.type_indicator_default,

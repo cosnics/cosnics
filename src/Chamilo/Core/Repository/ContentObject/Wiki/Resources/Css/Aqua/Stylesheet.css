@@ -1,3 +1,12 @@
+.fas-ci-a98948ffbff2194013b1998ac9988b72 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-a98948ffbff2194013b1998ac9988b72:before {
+    content: "\f133";
+}
+
 .wiki-pane {
     width: 90%;
     border-left: 1px solid #e5edf9;

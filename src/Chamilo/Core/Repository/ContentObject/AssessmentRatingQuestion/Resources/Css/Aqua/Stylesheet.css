@@ -1,3 +1,12 @@
+.fas-ci-aa52cc8b01079ffafb92a107360a9c5a {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+}
+
+.fas-ci-aa52cc8b01079ffafb92a107360a9c5a:before {
+	content: "\f133";
+}
+
 ul.tree-menu li div a.assessment_rating_question, ul.tree-menu li div a.type_assessment_rating_question,
 	.treeview .list-group .list-group-item .icon.node-icon.type_assessment_rating_question,
 	.treeview .list-group .list-group-item .icon.node-icon.type_assessment_rating_question_default,

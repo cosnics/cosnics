@@ -1,3 +1,12 @@
+.fas-ci-0dfa699c0accba4069d1766a6df72333 {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+}
+
+.fas-ci-0dfa699c0accba4069d1766a6df72333:before {
+	content: "\f133";
+}
+
 ul.tree-menu li div a.task, ul.tree-menu li div a.type_task, ul.tree-menu li div a.type_task_default
 	{
 	background-image: url(../../Images/Ruby/Logo/16.png);

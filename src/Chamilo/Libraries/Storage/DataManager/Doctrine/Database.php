@@ -112,7 +112,7 @@ class Database
     {
         if (! self::$error_log)
         {
-            $logfile = Path::getInstance()->getLogPath() . '/doctrine_errors.log';
+            $logfile = Path::getInstance()->getLogPath() . '/cosnics.error.doctrine.log';
             self::$error_log = new FileLogger($logfile, true);
         }
 

@@ -1,3 +1,12 @@
+.fas-ci-d9dc120def52626e3ac6c45631e223c0 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.fas-ci-d9dc120def52626e3ac6c45631e223c0:before {
+    content: "\f133";
+}
+
 ul.tree-menu li div a.webpage, ul.tree-menu li div a.type_webpage, ul.tree-menu li div a.type_webpage_default,
 .fancytree-custom-icon.type_webpage,
 .fancytree-custom-icon.type_webpage_default,
