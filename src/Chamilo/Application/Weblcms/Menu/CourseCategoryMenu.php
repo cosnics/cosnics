@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -77,7 +78,9 @@ class CourseCategoryMenu extends HtmlMenu
         $home = array();
         $home['title'] = Translation::get('AllCourses');
         $home['url'] = $this->get_home_url(0);
-        $home['class'] = 'home';
+
+        $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+        $home['class'] = $glyph->getClassNamesString();
         $home_item[] = $home;
         $menu = array_merge($home_item, $menu);
         return $menu;
@@ -112,7 +115,10 @@ class CourseCategoryMenu extends HtmlMenu
             {
                 $menu_item['sub'] = $sub_menu_items;
             }
-            $menu_item['class'] = 'type_category';
+
+            $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+            $menu_item['class'] = $glyph->getClassNamesString();
+
             $menu_item['node_id'] = $category->get_id();
             $sub_tree[$category->get_id()] = $menu_item;
         }

@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\CollapsedTreeMenuRenderer;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -169,7 +170,9 @@ class CourseCategoryCatalogMenu extends HtmlMenu
             {
                 $menu_item['sub'] = $sub_menu_items;
             }
-            $menu_item['class'] = 'type_category';
+
+            $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+            $menu_item['class'] = $glyph->getClassNamesString();
             $menu_item['node_id'] = $category->get_id();
             $sub_tree[$category->get_id()] = $menu_item;
         }

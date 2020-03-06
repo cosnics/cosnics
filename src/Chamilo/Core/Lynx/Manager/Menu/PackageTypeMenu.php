@@ -2,12 +2,14 @@
 namespace Chamilo\Core\Lynx\Manager\Menu;
 
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 class PackageTypeMenu extends HtmlMenu
 {
@@ -23,7 +25,7 @@ class PackageTypeMenu extends HtmlMenu
         parent::__construct(
             array(
                 $this->get_items(
-                    \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list())));
+                    PlatformPackageBundles::getInstance()->get_package_list())));
         
         $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_url($current_type));
@@ -32,7 +34,10 @@ class PackageTypeMenu extends HtmlMenu
     private function get_items(PackageList $package_list)
     {
         $item = array();
-        $item['class'] = 'category';
+
+        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
+        $item['class'] = $glyph->getClassNamesString();
         $item['title'] = $package_list->get_type_name();
         $item['url'] = $this->get_url($package_list->get_type());
         $item[OptionsMenuRenderer::KEY_ID] = $package_list->get_type();

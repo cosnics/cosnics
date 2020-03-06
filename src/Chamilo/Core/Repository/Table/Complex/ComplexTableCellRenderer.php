@@ -161,14 +161,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         switch ($column->get_name())
         {
             case ContentObject::PROPERTY_TYPE :
-                $type = $content_object->get_type();
-                $icon = $content_object->get_icon_path();
-                $url = '<img src="' . $icon . '" alt="' . htmlentities(
-                        Translation::get('TypeName', null, ContentObject::get_content_object_type_namespace($type))
-                    ) . '"/>';
-
-                return $url;
-            case $renderedglyph :
+            case ComplexTableColumnModel::PROPERTY_TYPE :
                 return $content_object->get_icon_image(Theme::ICON_MINI);
 
             case ContentObject::PROPERTY_TITLE :

@@ -8,17 +8,18 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
-use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -63,8 +64,7 @@ class GroupMenu extends HtmlMenu
      */
     public function __construct(
         $current_category, $url_format = '?application=group&go=browser&group_id=%s', $include_root = true,
-        $show_complete_tree = false,
-        $hide_current_category = false
+        $show_complete_tree = false, $hide_current_category = false
     )
     {
         $this->include_root = $include_root;
@@ -78,11 +78,8 @@ class GroupMenu extends HtmlMenu
                 new StaticConditionVariable(0)
             );
             $group = DataManager::retrieves(
-                Group::class_name(),
-                new DataClassRetrievesParameters(
-                    $condition,
-                    1,
-                    null,
+                Group::class_name(), new DataClassRetrievesParameters(
+                    $condition, 1, null,
                     new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME))
                 )
             )->next_result();
@@ -91,8 +88,7 @@ class GroupMenu extends HtmlMenu
         else
         {
             $this->current_category = DataManager::retrieve(
-                Group::class_name(),
-                new DataClassRetrieveParameters(
+                Group::class_name(), new DataClassRetrieveParameters(
                     new EqualityCondition(
                         new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
                         new StaticConditionVariable($current_category)
@@ -115,6 +111,30 @@ class GroupMenu extends HtmlMenu
         $this->forceCurrentUrl($this->get_url($this->current_category->get_id()));
     }
 
+    /**
+     * Get the breadcrumbs which lead to the current category.
+     *
+     * @return array The breadcrumbs.
+     */
+    public function get_breadcrumbs()
+    {
+        $this->render($this->array_renderer, 'urhere');
+        $breadcrumbs = $this->array_renderer->toArray();
+        foreach ($breadcrumbs as $crumb)
+        {
+            $crumb['name'] = $crumb['title'];
+            unset($crumb['title']);
+        }
+
+        return $breadcrumbs;
+    }
+
+    private function get_home_url($category = null)
+    {
+        // TODO: Put another class in charge of the htmlentities() invocation
+        return htmlentities(str_replace('&group_id=%s', '', $this->urlFmt));
+    }
+
     public function get_menu()
     {
         $include_root = $this->include_root;
@@ -124,11 +144,8 @@ class GroupMenu extends HtmlMenu
             new StaticConditionVariable(0)
         );
         $group = DataManager::retrieves(
-            Group::class_name(),
-            new DataClassRetrievesParameters(
-                $condition,
-                1,
-                null,
+            Group::class_name(), new DataClassRetrievesParameters(
+                $condition, 1, null,
                 new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME))
             )
         )->next_result();
@@ -151,7 +168,8 @@ class GroupMenu extends HtmlMenu
                 $menu_item['sub'] = $sub_menu_items;
             }
 
-            $menu_item['class'] = 'home';
+            $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+            $menu_item['class'] = $glyph->getClassNamesString();
             $menu_item[OptionsMenuRenderer::KEY_ID] = $group->get_id();
             $menu[$group->get_id()] = $menu_item;
 
@@ -179,11 +197,8 @@ class GroupMenu extends HtmlMenu
             new StaticConditionVariable($parent_id)
         );
         $groups = DataManager::retrieves(
-            Group::class_name(),
-            new DataClassRetrievesParameters(
-                $condition,
-                null,
-                null,
+            Group::class_name(), new DataClassRetrievesParameters(
+                $condition, null, null,
                 new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME))
             )
         );
@@ -199,8 +214,7 @@ class GroupMenu extends HtmlMenu
                 $menu_item['url'] = $this->get_url($group->get_id());
 
                 if ($group->is_parent_of($current_category) || $group->get_id() == $current_category->get_id() ||
-                    $show_complete_tree
-                )
+                    $show_complete_tree)
                 {
                     if ($group->has_children())
                     {
@@ -215,13 +229,20 @@ class GroupMenu extends HtmlMenu
                     }
                 }
 
-                $menu_item['class'] = 'category';
+                $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
+                $menu_item['class'] = $glyph->getClassNamesString();
                 $menu_item[OptionsMenuRenderer::KEY_ID] = $group->get_id();
                 $menu[$group->get_id()] = $menu_item;
             }
         }
 
         return $menu;
+    }
+
+    public static function get_tree_name()
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);
     }
 
     /**
@@ -235,30 +256,6 @@ class GroupMenu extends HtmlMenu
     {
         // TODO: Put another class in charge of the htmlentities() invocation
         return htmlentities(sprintf($this->urlFmt, $group));
-    }
-
-    private function get_home_url($category = null)
-    {
-        // TODO: Put another class in charge of the htmlentities() invocation
-        return htmlentities(str_replace('&group_id=%s', '', $this->urlFmt));
-    }
-
-    /**
-     * Get the breadcrumbs which lead to the current category.
-     *
-     * @return array The breadcrumbs.
-     */
-    public function get_breadcrumbs()
-    {
-        $this->render($this->array_renderer, 'urhere');
-        $breadcrumbs = $this->array_renderer->toArray();
-        foreach ($breadcrumbs as $crumb)
-        {
-            $crumb['name'] = $crumb['title'];
-            unset($crumb['title']);
-        }
-
-        return $breadcrumbs;
     }
 
     /**
@@ -276,10 +273,5 @@ class GroupMenu extends HtmlMenu
         $this->render($renderer, 'sitemap');
 
         return $renderer->toHTML();
-    }
-
-    public static function get_tree_name()
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);
     }
 }

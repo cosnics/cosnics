@@ -6,6 +6,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -174,12 +175,16 @@ class PlatformgroupMenuRenderer extends GenericTree
 
     public function get_root_node_class()
     {
-        return self::ROOT_NODE_CLASS;
+        $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+
+        return $glyph->getClassNamesString();
     }
 
     public function get_node_class($node)
     {
-        return self::NODE_CLASS;
+        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
+        return $glyph->getClassNamesString();
     }
 
     public function get_root_node_title()

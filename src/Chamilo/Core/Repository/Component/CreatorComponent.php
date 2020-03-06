@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
@@ -10,6 +11,7 @@ use Chamilo\Core\Repository\Selector\Renderer\BasicTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -27,6 +29,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package repository.lib.repository_manager.component
  */
+
 /**
  * Repository manager component which gives the user the possibility to create a new content object in his repository.
  * When no type is passed to this component, the user will see a dropdown list in which a content object type can be
@@ -46,7 +49,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
      */
     public function run()
     {
-        if (! RightsService::getInstance()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
+        if (!RightsService::getInstance()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
         {
             throw new NotAllowedException();
         }
@@ -68,76 +71,66 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
-                    Translation::get(
-                        'CreateContentType',
-                        array(
-                            'OBJECTTYPE' => strtolower(
-                                Translation::get(
-                                    $template->translate('TypeName'),
-                                    null,
-                                    $template_registration->get_content_object_type())),
-                            'ICON' => Theme::getInstance()->getImage(
-                                $content_object_type_image,
-                                'png',
-                                Translation::get(
-                                    $template->translate('TypeName'),
-                                    null,
-                                    $template_registration->get_content_object_type()),
-                                null,
-                                ToolbarItem::DISPLAY_ICON,
-                                false,
-                                $template_registration->get_content_object_type())))));
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)), Translation::get(
+                    'CreateContentType', array(
+                        'OBJECTTYPE' => strtolower(
+                            Translation::get(
+                                $template->translate('TypeName'), null,
+                                $template_registration->get_content_object_type()
+                            )
+                        ), 'ICON' => Theme::getInstance()->getImage(
+                            $content_object_type_image, 'png', Translation::get(
+                            $template->translate('TypeName'), null, $template_registration->get_content_object_type()
+                        ), null, ToolbarItem::DISPLAY_ICON, false, $template_registration->get_content_object_type()
+                        )
+                    )
+                )
+                )
+            );
 
             $object->set_owner_id($this->get_user_id());
 
             $category = FilterData::getInstance($this->getWorkspace())->get_filter_property(
-                FilterData::FILTER_CATEGORY);
+                FilterData::FILTER_CATEGORY
+            );
             $object->set_parent_id($category);
 
             $object->set_template_registration_id($this->template_id);
 
             $content_object_form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_CREATE,
-                $this->getWorkspace(),
-                $object,
-                'create_content_object',
-                'post',
-                $this->get_url(array(TypeSelector::PARAM_SELECTION => $this->template_id)),
-                null);
+                ContentObjectForm::TYPE_CREATE, $this->getWorkspace(), $object, 'create_content_object', 'post',
+                $this->get_url(array(TypeSelector::PARAM_SELECTION => $this->template_id)), null
+            );
 
             if ($content_object_form->validate())
             {
                 $values = $content_object_form->exportValues();
                 $object = $content_object_form->create_content_object();
 
-                if (! $object)
+                if (!$object)
                 {
                     $this->redirect(
                         Translation::get(
-                            'ObjectNotCreated',
-                            array('OBJECT' => Translation::get('ContentObject')),
-                            Utilities::COMMON_LIBRARIES),
-                        true,
-                        array(self::PARAM_ACTION => self::ACTION_CREATE_CONTENT_OBJECTS, 'type' => $this->type));
+                            'ObjectNotCreated', array('OBJECT' => Translation::get('ContentObject')),
+                            Utilities::COMMON_LIBRARIES
+                        ), true, array(self::PARAM_ACTION => self::ACTION_CREATE_CONTENT_OBJECTS, 'type' => $this->type)
+                    );
                 }
                 else
                 {
                     Event::trigger(
-                        'Activity',
-                        Manager::context(),
-                        array(
+                        'Activity', Manager::context(), array(
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_CREATED,
-                            Activity::PROPERTY_USER_ID => $this->get_user_id(),
-                            Activity::PROPERTY_DATE => time(),
+                            Activity::PROPERTY_USER_ID => $this->get_user_id(), Activity::PROPERTY_DATE => time(),
                             Activity::PROPERTY_CONTENT_OBJECT_ID => $object->get_id(),
-                            Activity::PROPERTY_CONTENT => $object->get_title()));
+                            Activity::PROPERTY_CONTENT => $object->get_title()
+                        )
+                    );
 
                     $instanceService = new InstanceService();
                     $selectedTab = $instanceService->updateInstances(
-                        $this->get_user(),
-                        $object,
-                        (array) $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA]);
+                        $this->get_user(), $object, (array) $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA]
+                    );
 
                     if ($selectedTab)
                     {
@@ -145,7 +138,8 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                         $parameters[Application::PARAM_ACTION] = self::ACTION_EDIT_CONTENT_OBJECTS;
                         $parameters[self::PARAM_CONTENT_OBJECT_ID] = $object->get_id();
                         $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = array(
-                            self::TABS_CONTENT_OBJECT => $selectedTab);
+                            self::TABS_CONTENT_OBJECT => $selectedTab
+                        );
 
                         $this->simple_redirect($parameters);
                     }
@@ -168,11 +162,10 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 
                 $this->redirect(
                     Translation::get(
-                        'ObjectCreated',
-                        array('OBJECT' => Translation::get('TypeName', null, $typeContext)),
-                        Utilities::COMMON_LIBRARIES),
-                    false,
-                    $parameters);
+                        'ObjectCreated', array('OBJECT' => Translation::get('TypeName', null, $typeContext)),
+                        Utilities::COMMON_LIBRARIES
+                    ), false, $parameters
+                );
             }
             else
             {
@@ -197,9 +190,14 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
         }
     }
 
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $breadcrumbtrail->add_help('repository_creator');
+    }
+
     public function get_allowed_content_object_types()
     {
-        $types = \Chamilo\Core\Repository\Storage\DataManager::get_registered_types(true);
+        $types = DataManager::get_registered_types(true);
 
         foreach ($types as $index => $type)
         {
@@ -207,17 +205,12 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
             $namespace = $classnameUtilities->getNamespaceFromClassname($type);
 
             $context = $classnameUtilities->getNamespaceParent($namespace, 2);
-            if (! \Chamilo\Configuration\Configuration::getInstance()->isRegisteredAndActive($context))
+            if (!Configuration::getInstance()->isRegisteredAndActive($context))
             {
                 unset($types[$index]);
             }
         }
 
         return $types;
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repository_creator');
     }
 }

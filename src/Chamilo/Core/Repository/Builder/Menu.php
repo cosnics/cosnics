@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Builder;
 
+use Chamilo\Core\Repository\Component\BuilderComponent;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
@@ -13,6 +15,7 @@ use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -23,6 +26,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @package repository.lib.complex_builder
  */
+
 /**
  * This class provides a navigation menu to allow a user to browse through his categories of objects.
  *
@@ -65,8 +69,10 @@ class Menu extends HtmlMenu
      *        string "?category=%s".
      * @param $extra_items array An array of extra tree items, added to the root.
      */
-    public function __construct($root, $cloi,
-        $url_format = '?application=repository&go=build_complex&builder_action=browse', $view_entire_structure = false, $show_url = true)
+    public function __construct(
+        $root, $cloi, $url_format = '?application=repository&go=build_complex&builder_action=browse',
+        $view_entire_structure = false, $show_url = true
+    )
     {
         $url_format .= '&cloi=__CLOI__';
         $this->view_entire_structure = $view_entire_structure;
@@ -75,7 +81,9 @@ class Menu extends HtmlMenu
         foreach ($extra as $item)
         {
             if (Request::get($item))
+            {
                 $url_format .= '&' . $item . '=' . Request::get($item);
+            }
         }
 
         $this->show_url = $show_url;
@@ -89,6 +97,44 @@ class Menu extends HtmlMenu
         $this->forceCurrentUrl($this->get_cloi_url($cloi));
     }
 
+    /**
+     * Get the breadcrumbs which lead to the current category.
+     *
+     * @return array The breadcrumbs.
+     */
+    public function get_breadcrumbs()
+    {
+        $this->render($this->array_renderer, 'urhere');
+        $breadcrumbs = $this->array_renderer->toArray();
+        array_shift($breadcrumbs);
+        $trail = BreadcrumbTrail::getInstance();
+        foreach ($breadcrumbs as $crumb)
+        {
+            $trail->add(new Breadcrumb($crumb['url'], $crumb['title']));
+        }
+
+        return $trail;
+    }
+
+    private function get_build_complex_url($object)
+    {
+        return Path::getInstance()->getBasePath(true) . 'index.php?' . Application::PARAM_CONTEXT . '=' .
+            \Chamilo\Core\Repository\Manager::context() . '&' . Application::PARAM_ACTION . '=' .
+            \Chamilo\Core\Repository\Manager::ACTION_BUILD_COMPLEX_CONTENT_OBJECT . '&' .
+            \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID . '=' . $object->get_id() . '&' .
+            BuilderComponent::PARAM_POPUP . '=1';
+    }
+
+    private function get_cloi_url($cloi = null)
+    {
+        if ($cloi == null || $cloi->get_ref() == $this->root)
+        {
+            return str_replace('&cloi=__CLOI__', '', $this->urlFmt);
+        }
+
+        return str_replace('__CLOI__', $cloi->get_id(), $this->urlFmt);
+    }
+
     public function get_menu($root)
     {
         $menu = array();
@@ -97,7 +143,9 @@ class Menu extends HtmlMenu
         $menu_item['title'] = $lo->get_title();
 
         if ($this->show_url)
+        {
             $menu_item['url'] = $this->get_cloi_url();
+        }
 
         $sub_menu_items = $this->get_menu_items($root->get_id());
         if (count($sub_menu_items) > 0)
@@ -105,12 +153,12 @@ class Menu extends HtmlMenu
             $menu_item['sub'] = $sub_menu_items;
         }
 
-        $menu_item['class'] = 'type_' .
-             ClassnameUtilities::getInstance()->getClassNameFromNamespace($lo->get_type(), true);
+        $ident = new NamespaceIdentGlyph($lo->package());
+        $menu_item['class'] = $ident->getClassNamesString();
 
-        // $menu_item['class'] = 'type_category';
         $menu_item[OptionsMenuRenderer::KEY_ID] = 0;
         $menu[0] = $menu_item;
+
         return $menu;
     }
 
@@ -118,6 +166,7 @@ class Menu extends HtmlMenu
      * Returns the menu items.
      *
      * @param $extra_items array An array of extra tree items, added to the root.
+     *
      * @return array An array with all menu items. The structure of this array is the structure needed by
      *         PEAR::HTML_Menu, on which this class is based.
      */
@@ -125,27 +174,26 @@ class Menu extends HtmlMenu
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
-                ComplexContentObjectItem::PROPERTY_PARENT),
-            new StaticConditionVariable($parent_id),
-            ComplexContentObjectItem::get_table_name());
+                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+            ), new StaticConditionVariable($parent_id), ComplexContentObjectItem::get_table_name()
+        );
         $parameters = new DataClassRetrievesParameters($condition);
-        $clois = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
-            $parameters);
+        $clois = DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(), $parameters
+        );
 
         while ($cloi = $clois->next_result())
         {
-            $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
-                $cloi->get_ref());
+            $lo = DataManager::retrieve_by_id(
+                ContentObject::class_name(), $cloi->get_ref()
+            );
             $url = null;
 
-            if (in_array($lo->get_type(), \Chamilo\Core\Repository\Storage\DataManager::get_active_helper_types()))
+            if (in_array($lo->get_type(), DataManager::get_active_helper_types()))
             {
-                $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
-                    $lo->get_reference());
+                $lo = DataManager::retrieve_by_id(
+                    ContentObject::class_name(), $lo->get_reference()
+                );
                 $url = $this->get_build_complex_url($lo);
             }
 
@@ -172,8 +220,8 @@ class Menu extends HtmlMenu
                     $menu_item['sub'] = $sub_menu_items;
                 }
 
-                $menu_item['class'] = 'type_' .
-                     ClassnameUtilities::getInstance()->getClassNameFromNamespace($lo->get_type(), true);
+                $ident = new NamespaceIdentGlyph($lo->package());
+                $menu_item['class'] = $ident->getClassNamesString();
 
                 $menu_item[OptionsMenuRenderer::KEY_ID] = $cloi->get_id();
                 $menu[$cloi->get_id()] = $menu_item;
@@ -183,41 +231,9 @@ class Menu extends HtmlMenu
         return $menu;
     }
 
-    private function get_cloi_url($cloi = null)
+    public static function get_tree_name()
     {
-        if ($cloi == null || $cloi->get_ref() == $this->root)
-        {
-            return str_replace('&cloi=__CLOI__', '', $this->urlFmt);
-        }
-
-        return str_replace('__CLOI__', $cloi->get_id(), $this->urlFmt);
-    }
-
-    private function get_build_complex_url($object)
-    {
-        return Path::getInstance()->getBasePath(true) . 'index.php?' . Application::PARAM_CONTEXT . '=' .
-             \Chamilo\Core\Repository\Manager::context() . '&' . Application::PARAM_ACTION . '=' .
-             \Chamilo\Core\Repository\Manager::ACTION_BUILD_COMPLEX_CONTENT_OBJECT . '&' .
-             \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID . '=' . $object->get_id() . '&' .
-             \Chamilo\Core\Repository\Component\BuilderComponent::PARAM_POPUP . '=1';
-    }
-
-    /**
-     * Get the breadcrumbs which lead to the current category.
-     *
-     * @return array The breadcrumbs.
-     */
-    public function get_breadcrumbs()
-    {
-        $this->render($this->array_renderer, 'urhere');
-        $breadcrumbs = $this->array_renderer->toArray();
-        array_shift($breadcrumbs);
-        $trail = BreadcrumbTrail::getInstance();
-        foreach ($breadcrumbs as $crumb)
-        {
-            $trail->add(new Breadcrumb($crumb['url'], $crumb['title']));
-        }
-        return $trail;
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);
     }
 
     /**
@@ -229,11 +245,7 @@ class Menu extends HtmlMenu
     {
         $renderer = new TreeMenuRenderer($this->get_tree_name());
         $this->render($renderer, 'sitemap');
-        return $renderer->toHTML();
-    }
 
-    public static function get_tree_name()
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);
+        return $renderer->toHTML();
     }
 }

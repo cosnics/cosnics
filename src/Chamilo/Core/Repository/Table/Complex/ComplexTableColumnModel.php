@@ -19,6 +19,8 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class ComplexTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
+    const PROPERTY_TYPE = 'type';
+
     const SUBITEMS = 'subitems';
 
     /*
@@ -30,9 +32,9 @@ class ComplexTableColumnModel extends DataClassTableColumnModel implements Table
      */
     protected function addBasicColumns()
     {
-        $glyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
+        $typeGlyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
 
-        $this->add_column($glyph->render());
+        $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
         $this->add_column(
             new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE, false)
         );

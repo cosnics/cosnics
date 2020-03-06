@@ -260,20 +260,6 @@ class BrowserComponent extends Manager implements TableSupport
 
         $extra = array();
 
-        // if ($this->get_query())
-        // {
-        // $search_url = '#';
-        // $search = array();
-        // $search['title'] = Translation:: get('SearchResults', null, Utilities :: COMMON_LIBRARIES);
-        // $search['url'] = $search_url;
-        // $search['class'] = 'search_results';
-        // $extra[] = $search;
-        // }
-        // else
-        // {
-        // $search_url = null;
-        // }
-
         $menu = new RepositoryCategoryMenu(
             $this, $this->get_user_id(), $this->getWorkspace(), $this->getCategoryId(), $url, $extra, $this->get_types()
         );

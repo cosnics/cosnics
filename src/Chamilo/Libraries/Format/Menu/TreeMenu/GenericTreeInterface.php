@@ -11,13 +11,6 @@ interface GenericTreeInterface
 
     /**
      *
-     * @param integer $nodeId
-     * @return string
-     */
-    public function get_node_url($nodeId);
-
-    /**
-     *
      * @return integer
      */
     public function get_current_node_id();
@@ -25,23 +18,78 @@ interface GenericTreeInterface
     /**
      *
      * @param unknown $nodeId
+     *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function get_node($nodeId);
 
     /**
      *
-     * @param unknown $nodeId
-     * @return boolean
+     * @param integer $nodeId
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function node_has_children($nodeId);
+    public function get_node_children($nodeId);
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
+     *
+     * @return string
+     */
+    public function get_node_class($node);
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
+     *
+     * @return string
+     */
+    public function get_node_id($node);
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function get_node_parent($node);
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
+     *
+     * @return string
+     */
+    public function get_node_safe_title($node);
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
+     *
+     * @return string
+     */
+    public function get_node_title($node);
 
     /**
      *
      * @param integer $nodeId
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     *
+     * @return string
      */
-    public function get_node_children($nodeId);
+    public function get_node_url($nodeId);
+
+    /**
+     *
+     * @return string
+     */
+    public function get_root_node_class();
+
+    /**
+     *
+     * @return string
+     */
+    public function get_root_node_title();
 
     /**
      *
@@ -57,48 +105,9 @@ interface GenericTreeInterface
 
     /**
      *
-     * @return string
-     */
-    public function get_root_node_class();
-
-    /**
+     * @param unknown $nodeId
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
-     * @return string
+     * @return boolean
      */
-    public function get_node_class($node);
-
-    /**
-     *
-     * @return string
-     */
-    public function get_root_node_title();
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
-     * @return string
-     */
-    public function get_node_title($node);
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
-     * @return string
-     */
-    public function get_node_safe_title($node);
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
-     * @return string
-     */
-    public function get_node_id($node);
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    public function get_node_parent($node);
+    public function node_has_children($nodeId);
 }

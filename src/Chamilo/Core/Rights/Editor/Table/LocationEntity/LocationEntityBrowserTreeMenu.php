@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Rights\Editor\Table\LocationEntity;
 
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -113,12 +114,16 @@ class LocationEntityBrowserTreeMenu extends GenericTree
 
     public function get_root_node_class()
     {
-        return self::ROOT_NODE_CLASS;
+        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
+        return $glyph->getClassNamesString();
     }
 
     public function get_node_class($node)
     {
-        return self::NODE_CLASS;
+        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
+        return $glyph->getClassNamesString();
     }
 
     public function get_root_node_title()

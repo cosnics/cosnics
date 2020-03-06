@@ -1,13 +1,17 @@
 <?php
 namespace Chamilo\Core\Repository\Selector\Option;
 
+use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Selector\TypeSelectorOption;
+use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * An option in a TypeSelector
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ContentObjectTypeSelectorOption implements TypeSelectorOption
@@ -37,6 +41,30 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
         $this->template_registration_id = $template_registration_id;
     }
 
+    public function get_image_path($imageSize = Theme::ICON_BIG)
+    {
+        $templateRegistration = $this->get_template_registration();
+
+        if ($templateRegistration instanceof TemplateRegistration && !$templateRegistration->get_default())
+        {
+            $glyphTitle = 'TypeName' . $templateRegistration->get_name();
+            $glyphNamespace =
+                $templateRegistration->get_content_object_type() . '\Template\\' . $templateRegistration->get_name();
+        }
+        else
+        {
+            $glyphTitle = null;
+            $glyphNamespace = $templateRegistration->get_content_object_type();
+        }
+
+        return new NamespaceIdentGlyph($glyphNamespace, true, false, false, $imageSize, array('fa-fw'), $glyphTitle);
+    }
+
+    public function get_label()
+    {
+        return $this->get_name();
+    }
+
     /**
      *
      * @return string
@@ -56,6 +84,30 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
     }
 
     /**
+     * Get the TemplateRegistration for the option
+     *
+     * @return use core\repository\common\template\TemplateRegistration
+     * @throws \Exception
+     */
+    public function get_template_registration()
+    {
+        if ($this->get_template_registration_id())
+        {
+            return Configuration::registration_by_id(
+                (int) $this->get_template_registration_id()
+            );
+        }
+        else
+        {
+            throw new Exception(Translation::get('NoTemplateRegistrationSelected'));
+        }
+    }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\TypeSelectorOption::get_image_path()
+     */
+
+    /**
      *
      * @return int
      */
@@ -64,6 +116,10 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
         return $this->template_registration_id;
     }
 
+    /*
+     * (non-PHPdoc) @see \core\repository\TypeSelectorOption::get_label()
+     */
+
     /**
      *
      * @param number $template_registration_id
@@ -71,45 +127,5 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
     public function set_template_registration_id($template_registration_id)
     {
         $this->template_registration_id = $template_registration_id;
-    }
-
-    /**
-     * Get the TemplateRegistration for the option
-     * 
-     * @return use core\repository\common\template\TemplateRegistration
-     * @throws \Exception
-     */
-    public function get_template_registration()
-    {
-        if ($this->get_template_registration_id())
-        {
-            return \Chamilo\Core\Repository\Configuration::registration_by_id(
-                (int) $this->get_template_registration_id());
-        }
-        else
-        {
-            throw new \Exception(Translation::get('NoTemplateRegistrationSelected'));
-        }
-    }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\TypeSelectorOption::get_image_path()
-     */
-    public function get_image_path($imageSize = Theme :: ICON_BIG)
-    {
-        $namespace = $this->get_template_registration()->get_content_object_type();
-        
-        return Theme::getInstance()->getImagePath(
-            $namespace, 
-            'Logo/' . ($this->get_template_registration_id() ? 'Template/' .
-                 $this->get_template_registration()->get_name() . '/' : '') . $imageSize);
-    }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\TypeSelectorOption::get_label()
-     */
-    public function get_label()
-    {
-        return $this->get_name();
     }
 }

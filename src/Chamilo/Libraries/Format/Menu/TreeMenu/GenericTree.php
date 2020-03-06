@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
  *
  * @package common.libraries
  */
+
 /**
  * This class provides a navigation menu to allow a user to browse through categories of courses.
  *
@@ -72,8 +73,10 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
          * If a node is selected then the tree will be built from the selected item to the root items Otherwise the root
          * nodes will be displayed.
          */
-        if (! $this->current_node_id || $this->current_node_id == $this->get_root_node_id() || ! $this->create_tree_recursive(
-            $this->current_node_id))
+        if (!$this->current_node_id || $this->current_node_id == $this->get_root_node_id() ||
+            !$this->create_tree_recursive(
+                $this->current_node_id
+            ))
         {
             $this->create_tree_root_nodes();
         }
@@ -103,47 +106,6 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
     }
 
     /**
-     * Creates the root nodes of the tree (not the fake root) If there are no root nodes given then the tree menu will
-     * retrieve all the nodes with parent id 0
-     */
-    public function create_tree_root_nodes()
-    {
-        $root_ids = $this->root_ids;
-
-        if (empty($root_ids))
-        {
-            $this->tree = $this->retrieve_child_tree_items($this->get_root_node_id());
-        }
-        else
-        {
-            foreach ($root_ids as $root_id)
-            {
-                $node = $this->get_node($root_id);
-                $this->tree[$root_id] = $this->create_tree_item_for_node($node);
-            }
-        }
-    }
-
-    /**
-     * Retrieves the child items for a given node
-     *
-     * @param integer $parent_node_id
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
-     */
-    public function retrieve_child_tree_items($parent_node_id)
-    {
-        $child_nodes = $this->get_node_children($parent_node_id);
-        $sub_tree = array();
-
-        while ($child_node = $child_nodes->next_result())
-        {
-            $id = $this->get_node_id($child_node);
-            $sub_tree[$id] = $this->create_tree_item_for_node($child_node);
-        }
-        return $sub_tree;
-    }
-
-    /**
      * Builds a fake tree root (for which there is no record in the database)
      *
      * @return string[]
@@ -162,28 +124,53 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
 
         $tree_item['class'] = $this->get_root_node_class();
         $tree_item['id'] = $this->get_root_node_id();
+
         return $tree_item;
     }
 
     /**
+     * Creates a tree menu item for a given node.
      *
-     * @return integer
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
+     *
+     * @return string[]
      */
-    public function get_root_node_id()
+    public function create_tree_item_for_node($node)
     {
-        return 0;
+        $id = $this->get_node_id($node);
+
+        if ($id == $this->active_tree_node['id'])
+        {
+            return $this->active_tree_node;
+        }
+
+        $tree_item = array();
+        $tree_item['title'] = $this->get_node_title($node);
+        $tree_item['safe_title'] = $this->get_node_safe_title($node);
+        $tree_item['url'] = $this->get_node_url($id);
+
+        if ($this->node_has_children($id))
+        {
+            $tree_item['children'] = 'expand';
+        }
+
+        $tree_item['class'] = $this->get_node_class($node);
+        $tree_item[OptionsMenuRenderer::KEY_ID] = $id;
+
+        return $tree_item;
     }
 
     /**
      * Creates the tree recursively starting from the bottom of the tree (with a given treenode)
      *
      * @param integer $nodeId
+     *
      * @return string[]
      */
     public function create_tree_recursive($nodeId)
     {
         $node = $this->get_node($nodeId);
-        if (! $node)
+        if (!$node)
         {
             return false;
         }
@@ -216,33 +203,44 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
     }
 
     /**
-     * Creates a tree menu item for a given node.
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
-     * @return string[]
+     * Creates the root nodes of the tree (not the fake root) If there are no root nodes given then the tree menu will
+     * retrieve all the nodes with parent id 0
      */
-    public function create_tree_item_for_node($node)
+    public function create_tree_root_nodes()
     {
-        $id = $this->get_node_id($node);
+        $root_ids = $this->root_ids;
 
-        if ($id == $this->active_tree_node['id'])
+        if (empty($root_ids))
         {
-            return $this->active_tree_node;
+            $this->tree = $this->retrieve_child_tree_items($this->get_root_node_id());
         }
-
-        $tree_item = array();
-        $tree_item['title'] = $this->get_node_title($node);
-        $tree_item['safe_title'] = $this->get_node_safe_title($node);
-        $tree_item['url'] = $this->get_node_url($id);
-
-        if ($this->node_has_children($id))
+        else
         {
-            $tree_item['children'] = 'expand';
+            foreach ($root_ids as $root_id)
+            {
+                $node = $this->get_node($root_id);
+                $this->tree[$root_id] = $this->create_tree_item_for_node($node);
+            }
         }
+    }
 
-        $tree_item['class'] = $this->get_node_class($node);
-        $tree_item[OptionsMenuRenderer::KEY_ID] = $id;
-        return $tree_item;
+    /**
+     *
+     * @return integer
+     */
+    public function get_root_node_id()
+    {
+        return 0;
+    }
+
+    /**
+     * Returns the name of the tree
+     *
+     * @return string
+     */
+    public static function get_tree_name()
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_called_class(), true);
     }
 
     /**
@@ -254,16 +252,28 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
     {
         $renderer = new TreeMenuRenderer($this->get_tree_name(), $this->get_search_url(), $this->get_url_format());
         $this->render($renderer, 'sitemap');
+
         return $renderer->toHTML();
     }
 
     /**
-     * Returns the name of the tree
+     * Retrieves the child items for a given node
      *
-     * @return string
+     * @param integer $parent_node_id
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
-    public static function get_tree_name()
+    public function retrieve_child_tree_items($parent_node_id)
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_called_class(), true);
+        $child_nodes = $this->get_node_children($parent_node_id);
+        $sub_tree = array();
+
+        while ($child_node = $child_nodes->next_result())
+        {
+            $id = $this->get_node_id($child_node);
+            $sub_tree[$id] = $this->create_tree_item_for_node($child_node);
+        }
+
+        return $sub_tree;
     }
 }

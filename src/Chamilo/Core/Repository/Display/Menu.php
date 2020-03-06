@@ -5,6 +5,8 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Menu\BootstrapTreeMenu;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
@@ -134,8 +136,10 @@ abstract class Menu extends BootstrapTreeMenu
      */
     protected function getItemIcon(ComplexContentObjectPathNode $node)
     {
+        $glyph = new NamespaceIdentGlyph($node->get_content_object()->package());
+        return $glyph->getClassNamesString();
         $objectType = (string) StringUtilities::getInstance()->createString(
-            ClassnameUtilities::getInstance()->getPackageNameFromNamespace($node->get_content_object()->package()))->underscored();
+            ClassnameUtilities::getInstance()->getPackageNameFromNamespace())->underscored();
         
         return 'type_' . $objectType;
     }

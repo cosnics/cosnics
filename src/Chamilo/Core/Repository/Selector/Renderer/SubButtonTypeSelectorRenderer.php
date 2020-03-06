@@ -2,11 +2,11 @@
 
 namespace Chamilo\Core\Repository\Selector\Renderer;
 
-use Chamilo\Core\Repository\Selector\TypeSelectorRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Core\Repository\Selector\TypeSelector;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Core\Repository\Selector\TypeSelectorRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Theme;
 
 /**
@@ -41,24 +41,6 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
 
     /**
      *
-     * @return string[]
-     */
-    public function getParameters()
-    {
-        return $this->parameters;
-    }
-
-    /**
-     *
-     * @param string[] $parameters
-     */
-    public function setParameters($parameters)
-    {
-        $this->parameters = $parameters;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
     public function render()
@@ -71,8 +53,7 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
         {
             // If multiple categories add category header?
             $subButtons[] = new SubButton(
-                $option->get_label(),
-                $option->get_image_path(Theme::ICON_MINI),
+                $option->get_label(), $option->get_image_path(Theme::ICON_MINI),
                 $this->getContentObjectTypeUrl($option->get_template_registration_id())
             );
         }
@@ -94,5 +75,23 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
         $url = new Redirect($objectTypeParameters);
 
         return $url->getUrl();
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
+     *
+     * @param string[] $parameters
+     */
+    public function setParameters($parameters)
+    {
+        $this->parameters = $parameters;
     }
 }

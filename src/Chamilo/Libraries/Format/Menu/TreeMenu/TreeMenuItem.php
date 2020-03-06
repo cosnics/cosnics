@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Menu\TreeMenu;
 
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Menu\TreeMenu
@@ -52,86 +54,33 @@ class TreeMenuItem
      * @param string $class
      * @param boolean $collapsed
      */
-    public function __construct($title = null, $url = null, $id = null, $class = 'category', $collapsed = false)
+    public function __construct($title = null, $url = null, $id = null, $class = null, $collapsed = false)
     {
         $this->set_title($title);
         $this->set_url($url);
         $this->set_id($id);
-        $this->set_class($class);
+
+        if (is_null($class))
+        {
+            $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+            $this->set_class($glyph->getClassNamesString());
+        }
+        else
+        {
+            $this->set_class($class);
+        }
+
         $this->set_children(array());
         $this->set_collapsed($collapsed);
     }
 
     /**
      *
-     * @param string $title
+     * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem $tree_menu_child
      */
-    public function set_title($title)
+    public function add_child($tree_menu_child)
     {
-        $this->title = $title;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_title()
-    {
-        return $this->title;
-    }
-
-    /**
-     *
-     * @param string $url
-     */
-    public function set_url($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_url()
-    {
-        return $this->url;
-    }
-
-    /**
-     *
-     * @param string $id
-     */
-    public function set_id($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_id()
-    {
-        return $this->id;
-    }
-
-    /**
-     *
-     * @param string $class
-     */
-    public function set_class($class)
-    {
-        $this->class = $class;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_class()
-    {
-        return $this->class;
+        $this->children[] = $tree_menu_child;
     }
 
     /**
@@ -154,6 +103,24 @@ class TreeMenuItem
 
     /**
      *
+     * @return string
+     */
+    public function get_class()
+    {
+        return $this->class;
+    }
+
+    /**
+     *
+     * @param string $class
+     */
+    public function set_class($class)
+    {
+        $this->class = $class;
+    }
+
+    /**
+     *
      * @return boolean
      */
     public function get_collapsed()
@@ -172,6 +139,60 @@ class TreeMenuItem
 
     /**
      *
+     * @return string
+     */
+    public function get_id()
+    {
+        return $this->id;
+    }
+
+    /**
+     *
+     * @param string $id
+     */
+    public function set_id($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_title()
+    {
+        return $this->title;
+    }
+
+    /**
+     *
+     * @param string $title
+     */
+    public function set_title($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_url()
+    {
+        return $this->url;
+    }
+
+    /**
+     *
+     * @param string $url
+     */
+    public function set_url($url)
+    {
+        $this->url = $url;
+    }
+
+    /**
+     *
      * @return boolean
      */
     public function has_children()
@@ -180,16 +201,8 @@ class TreeMenuItem
         {
             return true;
         }
-        return false;
-    }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem $tree_menu_child
-     */
-    public function add_child($tree_menu_child)
-    {
-        $this->children[] = $tree_menu_child;
+        return false;
     }
 
     /**

@@ -39,7 +39,10 @@ class BrowserComponent extends Manager implements DelegateComponent
             $search['title'] = Translation::get('SearchResults');
 
             $search['url'] = $search_url;
-            $search['class'] = 'search_results';
+
+            $glyph = new FontAwesomeGlyph('search', array(), null, 'fas');
+            $search['class'] = $glyph->getClassNamesString();
+
             $extra[] = $search;
         }
         else

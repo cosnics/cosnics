@@ -6,11 +6,12 @@ use Chamilo\Core\Repository\External\Renderer\Renderer;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 {
@@ -82,7 +83,10 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             $my_videos['url'] = $this->get_url(
                 array(self::PARAM_FEED_TYPE => self::FEED_TYPE_MYVIDEOS),
                 array(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY, self::PARAM_FEED_IDENTIFIER));
-            $my_videos['class'] = 'user';
+
+            $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+            $my_videos['class'] = $glyph->getClassNamesString();
+
             $menu_items[] = $my_videos;
         }
 
@@ -91,7 +95,10 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $browser['url'] = $this->get_url(
             array(self::PARAM_FEED_TYPE => self::FEED_TYPE_GENERAL),
             array(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY, self::PARAM_FEED_IDENTIFIER));
-        $browser['class'] = 'home';
+
+        $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+        $browser['class'] = $glyph->getClassNamesString();
+
         $menu_items[] = $browser;
 
         $feeds = $this->get_external_repository_manager_connector()->get_video_feeds();
