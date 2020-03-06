@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricResult;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
-use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricDataRepository;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricResultRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Utilities\UUID;
@@ -24,31 +24,33 @@ use Chamilo\Libraries\Utilities\UUID;
 class RubricResultService
 {
     /**
-     * @var RubricDataRepository
+     * @var RubricResultRepository
      */
-    protected $rubricDataRepository;
+    protected $rubricResultRepository;
 
     /**
      * RubricResultService constructor.
      *
-     * @param RubricDataRepository $rubricDataRepository
+     * @param RubricResultRepository $rubricResultRepository
      */
-    public function __construct(RubricDataRepository $rubricDataRepository)
+    public function __construct(RubricResultRepository $rubricResultRepository)
     {
-        $this->rubricDataRepository = $rubricDataRepository;
+        $this->rubricResultRepository = $rubricResultRepository;
     }
 
     /**
      * @param User $user
+     * @param User $targetUser
      * @param RubricData $rubricData
      * @param ContextIdentifier $contextIdentifier
      * @param CriteriumResultJSONModel[] $criteriumResultJSONModels
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \Exception
+     * @throws \Doctrine\ORM\ORMException
      */
     public function storeRubricResults(
-        User $user, RubricData $rubricData, ContextIdentifier $contextIdentifier, array $criteriumResultJSONModels
+        User $user, User $targetUser, RubricData $rubricData, ContextIdentifier $contextIdentifier,
+        array $criteriumResultJSONModels
     )
     {
         $uniqueAttemptId = UUID::v4();
@@ -59,26 +61,37 @@ class RubricResultService
             $treeNode = $rubricData->getTreeNodeById($criteriumResultJSONModel->getCriteriumTreeNodeId());
             $choice = $rubricData->getChoiceById($criteriumResultJSONModel->getChoiceId());
 
-            $calculatedScore = $choice->getLevel()->getScore();
-            if ($treeNode instanceof CriteriumNode)
+            if ($treeNode !== $choice->getCriterium())
             {
-                $calculatedScore *= ($treeNode->getWeight() / 100);
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'The given choice %s does not belong to the given criterium %s', $choice->getId(),
+                        $treeNode->getId()
+                    )
+                );
             }
 
+            $calculatedScore = $choice->calculateScore();
+
             $this->createRubricResult(
-                $user, $rubricData, $contextIdentifier, $uniqueAttemptId, $treeNode, $calculatedScore, $choice
+                $user, $targetUser, $rubricData, $contextIdentifier, $uniqueAttemptId, $treeNode, $calculatedScore,
+                $criteriumResultJSONModel->getComment(), $choice
             );
 
             $criteriumScores[$treeNode->getId()] = $calculatedScore;
         }
 
         $this->calculateAndStoreContainerScore(
-            $user, $rubricData, $contextIdentifier, $rubricData->getRootNode(), $uniqueAttemptId, $criteriumScores
+            $user, $targetUser, $rubricData, $contextIdentifier, $rubricData->getRootNode(), $uniqueAttemptId,
+            $criteriumScores
         );
+
+        $this->rubricResultRepository->flush();
     }
 
     /**
      * @param User $user
+     * @param User $targetUser
      * @param RubricData $rubricData
      * @param ContextIdentifier $contextIdentifier
      * @param TreeNode $treeNode
@@ -89,7 +102,7 @@ class RubricResultService
      * @throws \Exception
      */
     protected function calculateAndStoreContainerScore(
-        User $user, RubricData $rubricData, ContextIdentifier $contextIdentifier, TreeNode $treeNode,
+        User $user, User $targetUser, RubricData $rubricData, ContextIdentifier $contextIdentifier, TreeNode $treeNode,
         string $uniqueAttemptId, array $criteriumScores
     )
     {
@@ -107,22 +120,26 @@ class RubricResultService
         foreach ($treeNode->getChildren() as $child)
         {
             $totalScore += $this->calculateAndStoreContainerScore(
-                $user, $rubricData, $contextIdentifier, $child, $uniqueAttemptId, $criteriumScores
+                $user, $targetUser, $rubricData, $contextIdentifier, $child, $uniqueAttemptId, $criteriumScores
             );
         }
 
-        $this->createRubricResult($user, $rubricData, $contextIdentifier, $uniqueAttemptId, $treeNode, $totalScore);
+        $this->createRubricResult(
+            $user, $targetUser, $rubricData, $contextIdentifier, $uniqueAttemptId, $treeNode, $totalScore
+        );
 
         return $totalScore;
     }
 
     /**
      * @param User $user
+     * @param User $targetUser
      * @param RubricData $rubricData
      * @param ContextIdentifier $contextIdentifier
      * @param string $uniqueAttemptId
      * @param TreeNode $treeNode
-     * @param int $score
+     * @param float $score
+     * @param string|null $comment
      * @param Choice|null $choice
      *
      * @return RubricResult
@@ -130,8 +147,8 @@ class RubricResultService
      * @throws \Exception
      */
     protected function createRubricResult(
-        User $user, RubricData $rubricData, ContextIdentifier $contextIdentifier, string $uniqueAttemptId,
-        TreeNode $treeNode, int $score, Choice $choice = null
+        User $user, User $targetUser, RubricData $rubricData, ContextIdentifier $contextIdentifier,
+        string $uniqueAttemptId, TreeNode $treeNode, float $score, string $comment = null, Choice $choice = null
     )
     {
         $rubricResult = new RubricResult();
@@ -143,7 +160,11 @@ class RubricResultService
             ->setTreeNode($treeNode)
             ->setSelectedChoice($choice)
             ->setScore($score)
+            ->setTargetUserId($targetUser->getId())
+            ->setComment($comment)
             ->setAttemptTime(new \DateTime());
+
+        $this->rubricResultRepository->saveRubricResult($rubricResult, false);
 
         return $rubricResult;
     }

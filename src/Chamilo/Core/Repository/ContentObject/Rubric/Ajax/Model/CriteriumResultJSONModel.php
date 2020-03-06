@@ -20,15 +20,22 @@ class CriteriumResultJSONModel
     protected $choiceId;
 
     /**
+     * @var string
+     */
+    protected $comment;
+
+    /**
      * CriteriumResultJSONModel constructor.
      *
      * @param int $criteriumTreeNodeId
      * @param int $choiceId
+     * @param string|null $comment
      */
-    public function __construct(int $criteriumTreeNodeId, int $choiceId)
+    public function __construct(int $criteriumTreeNodeId, int $choiceId, string $comment = null)
     {
         $this->criteriumTreeNodeId = $criteriumTreeNodeId;
         $this->choiceId = $choiceId;
+        $this->comment = $comment;
     }
 
     /**
@@ -45,5 +52,13 @@ class CriteriumResultJSONModel
     public function getChoiceId(): ?int
     {
         return $this->choiceId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComment(): ?string
+    {
+        return $this->comment;
     }
 }

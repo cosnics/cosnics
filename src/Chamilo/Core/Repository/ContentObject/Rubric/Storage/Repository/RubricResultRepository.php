@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricResult;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\CommonEntityRepository;
 
 /**
@@ -14,4 +15,14 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\CommonEntityRepository;
 class RubricResultRepository extends CommonEntityRepository
 {
 
+    /**
+     * @param RubricResult $rubricResult
+     * @param bool $flush
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function saveRubricResult(RubricResult $rubricResult, bool $flush = true)
+    {
+        return $this->saveEntity($rubricResult, $flush);
+    }
 }

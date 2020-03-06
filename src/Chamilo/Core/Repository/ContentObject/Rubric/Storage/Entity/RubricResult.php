@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      indexes={
  *          @ORM\Index(name="rrr_context", columns={"context_class", "context_id"}),
  *          @ORM\Index(name="rrr_attempt", columns={"attempt_id"}),
- *          @ORM\Index(name="rrr_user", columns={"user_id"})
+ *          @ORM\Index(name="rrr_target_user", columns={"target_user_id"})
  *      }
  * )
  */
@@ -63,6 +63,20 @@ class RubricResult
      * @ORM\Column(name="user_id", type="integer")
      */
     protected $userId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="target_user_id", type="integer")
+     */
+    protected $targetUserId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="context_class", type="string")
+     */
+    protected $comment;
 
     /**
      * @var \DateTime
@@ -215,7 +229,7 @@ class RubricResult
      *
      * @return RubricResult
      */
-    public function setSelectedChoice(Choice $selectedChoice): RubricResult
+    public function setSelectedChoice(Choice $selectedChoice = null): RubricResult
     {
         $this->selectedChoice = $selectedChoice;
 
@@ -299,6 +313,46 @@ class RubricResult
     public function setUserId(int $userId): RubricResult
     {
         $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTargetUserId(): ?int
+    {
+        return $this->targetUserId;
+    }
+
+    /**
+     * @param int $targetUserId
+     *
+     * @return RubricResult
+     */
+    public function setTargetUserId(int $targetUserId): RubricResult
+    {
+        $this->targetUserId = $targetUserId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @param string $comment
+     *
+     * @return RubricResult
+     */
+    public function setComment(string $comment = null): RubricResult
+    {
+        $this->comment = $comment;
 
         return $this;
     }

@@ -298,4 +298,20 @@ class Choice
 
         return $this;
     }
+
+    /**
+     * @return float
+     */
+    public function calculateScore(): float
+    {
+        if($this->hasFixedScore())
+        {
+            return $this->fixedScore;
+        }
+
+        $levelScore = $this->getLevel()->getScore();
+        $levelScore *= ($this->getCriterium()->getWeight() / 100);
+
+        return $levelScore;
+    }
 }

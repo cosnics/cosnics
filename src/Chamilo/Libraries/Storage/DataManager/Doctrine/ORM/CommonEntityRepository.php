@@ -49,7 +49,7 @@ abstract class CommonEntityRepository extends EntityRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    protected function flush()
+    public function flush()
     {
         $this->getEntityManager()->flush();
     }
