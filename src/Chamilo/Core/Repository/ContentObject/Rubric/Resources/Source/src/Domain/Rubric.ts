@@ -3,6 +3,7 @@ import Level, {LevelId, LevelJsonObject} from "./Level";
 import Choice, {ChoiceJsonObject} from "./Choice";
 import Criterium, {CriteriumId} from "./Criterium";
 import TreeNode from "./TreeNode";
+import Category from "./Category";
 
 export interface RubricJsonObject {
     id: string,
@@ -207,6 +208,17 @@ export default class Rubric extends TreeNode {
         this.getCriteriaRecursive(treeNode, criteria);
 
         return criteria;
+    }
+
+    public getAllCategories(treeNode: TreeNode = this) {
+        const categories: Category[] = [];
+        this.children.filter(child => (child instanceof Category)).forEach(
+            category => categories.push(category as Category)
+        );
+        this.children.filter(child => (child instanceof Cluster)).forEach(
+            cluster => categories.push(...(cluster as Cluster).categories)
+        );
+        return categories;
     }
 
     protected getCriteriaRecursive(treeNode: TreeNode, criteria: Criterium[]) {
