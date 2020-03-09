@@ -24,11 +24,9 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
 {
 
     /**
-     * Returns the actions toolbar
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $object
      *
-     * @param DataClass $object
-     *
-     * @return String
+     * @return string
      */
     public function get_actions($object)
     {
@@ -50,13 +48,11 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             if (!$object->get_optional_property(Request::PROPERTY_VISIBLE_IN_INDEX))
             {
                 $glyph = new FontAwesomeGlyph('eye', array('text-muted'));
-                $icon = 'Action/Invisible';
                 $translation = Translation::get('AddDocumentToIndex');
             }
             else
             {
                 $glyph = new FontAwesomeGlyph('eye');
-                $icon = 'Action/Visible';
                 $translation = Translation::get('RemoveDocumentFromIndex');
             }
 
@@ -76,10 +72,8 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
     }
 
     /**
-     * Renders the cell for a given column and row (object)
-     *
-     * @param NewObjectTableColumn $column
-     * @param DataClass $object
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array[] $object
      *
      * @return string
      */

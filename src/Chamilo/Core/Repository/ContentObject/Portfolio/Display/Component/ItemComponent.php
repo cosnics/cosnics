@@ -11,7 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -100,12 +100,12 @@ abstract class ItemComponent extends Manager implements DelegateComponent
             if ($virtual_user instanceof User)
             {
                 $revert_url = $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER));
-                $image_url = Theme::getInstance()->getImagePath(Manager::package(), 'Action/' . self::ACTION_USER);
+                $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
 
                 $html[] = '<div class="alert alert-warning">';
                 $html[] = Translation::get(
                     'ViewingPortfolioAsUser',
-                    array('USER' => $virtual_user->get_fullname(), 'URL' => $revert_url, 'IMAGE' => $image_url)
+                    array('USER' => $virtual_user->get_fullname(), 'URL' => $revert_url, 'GLYPH' => $glyph->render())
                 );
                 $html[] = '</div>';
             }

@@ -265,8 +265,7 @@ class BrowserComponent extends Manager implements TableSupport
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('UpgradeQuota'),
-                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Upgrade'),
+                        Translation::get('UpgradeQuota'), new FontAwesomeGlyph('angle-double-up', array(), null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPGRADE))
                     )
                 );
@@ -277,7 +276,7 @@ class BrowserComponent extends Manager implements TableSupport
                 $commonActions->addButton(
                     new Button(
                         Translation::get('RequestUpgrade'),
-                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Request'),
+                        new FontAwesomeGlyph('question-circle', array(), null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))
                     )
                 );
@@ -290,7 +289,7 @@ class BrowserComponent extends Manager implements TableSupport
                     $toolActions->addButton(
                         new Button(
                             Translation::get('ConfigureManagementRights'),
-                            Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Rights'),
+                            new FontAwesomeGlyph('lock', array(), null, 'fas'),
                             $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS))
                         )
                     );
@@ -299,7 +298,7 @@ class BrowserComponent extends Manager implements TableSupport
                 $toolActions->addButton(
                     new Button(
                         Translation::get('ResetTotal'),
-                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Reset'),
+                        new FontAwesomeGlyph('undo', array(), null, 'fas'),
                         $this->get_url(array(self::PARAM_RESET_CACHE => 1))
                     )
                 );

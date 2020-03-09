@@ -15,9 +15,9 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Cell renderer for an all subscribed course user browser table.
@@ -41,9 +41,9 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
      */
 
     /**
-     * Constructor
+     * @param $table
      *
-     * @param Table $table
+     * @throws \Exception
      */
     public function __construct($table)
     {
@@ -52,74 +52,46 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
     }
 
     /**
-     * Renders a given cell.
+     * Adds additional actions to the user table
      *
-     * @param $column type
-     * @param mixed[] $user_with_subscription_status_and_type
+     * @param Toolbar $toolbar
+     * @param int $currentUserId
      *
-     * @return string
+     * @throws \Exception
      */
-    public function render_cell($column, $user_with_subscription_status_and_type)
+    protected function addAdditionalActions(Toolbar $toolbar, $currentUserId)
     {
-        // Add special features here
-        switch ($column->get_name())
+        $configuration = Configuration::getInstance();
+        $integrationPackages = $configuration->getIntegrationRegistrations(Manager::context());
+
+        foreach ($integrationPackages as $integrationPackage)
         {
-            // Exceptions that need post-processing go here ...
-            case AllSubscribedUserTableColumnModel::SUBSCRIPTION_TYPE :
-                $type = $user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel::SUBSCRIPTION_TYPE];
-                switch ($type)
-                {
-                    case 1 :
-                        return Translation::get('SubscribedDireclty');
-                    case 2 :
-                        return Translation::get('SubscribedGroup');
-                    default :
-                        return ($type % 2 == 0) ? Translation::get('SubscribedGroup') : Translation::get(
-                            'SubscribedDirecltyAndGroup'
-                        );
-                }
-            case AllSubscribedUserTableColumnModel::SUBSCRIPTION_STATUS :
-                switch ($user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel::SUBSCRIPTION_STATUS])
-                {
-                    case CourseEntityRelation::STATUS_TEACHER :
-                        return Translation::get('CourseAdmin');
-                    case CourseEntityRelation::STATUS_STUDENT :
-                        return Translation::get('Student');
-                    default :
-                        return Translation::get('Unknown');
-                }
-            case User::PROPERTY_PLATFORMADMIN :
-                if ($user_with_subscription_status_and_type[User::PROPERTY_PLATFORM_ADMIN] == '1')
-                {
-                    return Translation::get('PlatformAdministrator');
-                }
-                else
-                {
-                    return '';
-                }
-            case User::PROPERTY_EMAIL :
-                $email = $user_with_subscription_status_and_type[User::PROPERTY_EMAIL];
+            $class = $integrationPackage['context'] . '\UserListActionsExtender';
 
-                $activeOnlineEmailEditor = Configuration::getInstance()->get_setting(
-                    array('Chamilo\Core\Admin', 'active_online_email_editor')
+            if (!class_exists($class))
+            {
+                throw new Exception(
+                    sprintf(
+                        'The given package %s does not have a UserListActionsExtender class',
+                        $integrationPackage['context']
+                    )
                 );
+            }
 
-                if ($activeOnlineEmailEditor)
-                {
-                    $parameters = array();
-                    $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_EMAIL;
-                    $parameters[Manager::PARAM_OBJECTS] = $user_with_subscription_status_and_type[User::PROPERTY_ID];
-                    $email_url = $this->get_component()->get_url($parameters);
-                }
-                else
-                {
-                    $email_url = 'mailto:' . $email;
-                }
+            $userListActionsExtender = new $class();
 
-                return '<a href="' . $email_url . '">' . $email . '</a>';
+            if (!$userListActionsExtender instanceof UserListActionsExtenderInterface)
+            {
+                throw new Exception(
+                    sprintf(
+                        'The given package %s does not have a valid UserListActionsExtender class ' .
+                        'that extends from UserListActionsExtenderInterface', $integrationPackage['context']
+                    )
+                );
+            }
+
+            $userListActionsExtender->getActions($toolbar, $this, $currentUserId);
         }
-
-        return parent::render_cell($column, $user_with_subscription_status_and_type);
     }
 
     /**
@@ -205,9 +177,9 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('MakeStudent'), Theme::getInstance()->getImagePath(
-                                $weblcms_manager_namespace, 'Action/SubscribeStudent'
-                            ), $status_change_url, ToolbarItem::DISPLAY_ICON
+                                Translation::get('MakeStudent'),
+                                new FontAwesomeGlyph('user-graduate', array(), null, 'fas'), $status_change_url,
+                                ToolbarItem::DISPLAY_ICON
                             )
                         );
                         break;
@@ -218,9 +190,8 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('MakeTeacher'), Theme::getInstance()->getImagePath(
-                                $weblcms_manager_namespace, 'Action/SubscribeTeacher'
-                            ), $status_change_url, ToolbarItem::DISPLAY_ICON
+                                Translation::get('MakeTeacher'), new FontAwesomeGlyph('user-tie', array(), null, 'fas'),
+                                $status_change_url, ToolbarItem::DISPLAY_ICON
                             )
                         );
                         break;
@@ -293,45 +264,71 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
     }
 
     /**
-     * Adds additional actions to the user table
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
+     * @param string[] $user_with_subscription_status_and_type
      *
-     * @param Toolbar $toolbar
-     * @param int $currentUserId
-     *
-     * @throws \Exception
+     * @return string
      */
-    protected function addAdditionalActions(Toolbar $toolbar, $currentUserId)
+    public function render_cell($column, $user_with_subscription_status_and_type)
     {
-        $configuration = Configuration::getInstance();
-        $integrationPackages = $configuration->getIntegrationRegistrations(Manager::context());
-
-        foreach ($integrationPackages as $integrationPackage)
+        // Add special features here
+        switch ($column->get_name())
         {
-            $class = $integrationPackage['context'] . '\UserListActionsExtender';
+            // Exceptions that need post-processing go here ...
+            case AllSubscribedUserTableColumnModel::SUBSCRIPTION_TYPE :
+                $type = $user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel::SUBSCRIPTION_TYPE];
+                switch ($type)
+                {
+                    case 1 :
+                        return Translation::get('SubscribedDireclty');
+                    case 2 :
+                        return Translation::get('SubscribedGroup');
+                    default :
+                        return ($type % 2 == 0) ? Translation::get('SubscribedGroup') : Translation::get(
+                            'SubscribedDirecltyAndGroup'
+                        );
+                }
+            case AllSubscribedUserTableColumnModel::SUBSCRIPTION_STATUS :
+                switch ($user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel::SUBSCRIPTION_STATUS])
+                {
+                    case CourseEntityRelation::STATUS_TEACHER :
+                        return Translation::get('CourseAdmin');
+                    case CourseEntityRelation::STATUS_STUDENT :
+                        return Translation::get('Student');
+                    default :
+                        return Translation::get('Unknown');
+                }
+            case User::PROPERTY_PLATFORMADMIN :
+                if ($user_with_subscription_status_and_type[User::PROPERTY_PLATFORMADMIN] == '1')
+                {
+                    return Translation::get('PlatformAdministrator');
+                }
+                else
+                {
+                    return '';
+                }
+            case User::PROPERTY_EMAIL :
+                $email = $user_with_subscription_status_and_type[User::PROPERTY_EMAIL];
 
-            if (!class_exists($class))
-            {
-                throw new \Exception(
-                    sprintf(
-                        'The given package %s does not have a UserListActionsExtender class',
-                        $integrationPackage['context']
-                    )
+                $activeOnlineEmailEditor = Configuration::getInstance()->get_setting(
+                    array('Chamilo\Core\Admin', 'active_online_email_editor')
                 );
-            }
 
-            $userListActionsExtender = new $class();
+                if ($activeOnlineEmailEditor)
+                {
+                    $parameters = array();
+                    $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_EMAIL;
+                    $parameters[Manager::PARAM_OBJECTS] = $user_with_subscription_status_and_type[User::PROPERTY_ID];
+                    $email_url = $this->get_component()->get_url($parameters);
+                }
+                else
+                {
+                    $email_url = 'mailto:' . $email;
+                }
 
-            if (!$userListActionsExtender instanceof UserListActionsExtenderInterface)
-            {
-                throw new \Exception(
-                    sprintf(
-                        'The given package %s does not have a valid UserListActionsExtender class ' .
-                        'that extends from UserListActionsExtenderInterface', $integrationPackage['context']
-                    )
-                );
-            }
-
-            $userListActionsExtender->getActions($toolbar, $this, $currentUserId);
+                return '<a href="' . $email_url . '">' . $email . '</a>';
         }
+
+        return parent::render_cell($column, $user_with_subscription_status_and_type);
     }
 }

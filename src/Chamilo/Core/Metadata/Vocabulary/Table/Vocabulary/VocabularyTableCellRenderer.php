@@ -7,7 +7,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -70,21 +69,31 @@ class VocabularyTableCellRenderer extends DataClassTableCellRenderer implements 
         switch ($column->get_name())
         {
             case VocabularyTableColumnModel::COLUMN_DEFAULT :
-                $image = 'Action/Default';
-                $image .= $result->isDefault() ? '' : 'Na';
+                $translationVariable = $result->isDefault() ? 'Default' : 'DefaultNa';
 
-                $translationVariable = 'Default';
-                $translationVariable .= $result->isDefault() ? '' : 'Na';
+                $extraClasses = $result->isDefault() ? array() : array('text-muted');
 
-                return Theme::getInstance()->getImage(
-                    $image, 'png', Translation::get($translationVariable, null, $this->get_component()->package()),
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_DEFAULT,
-                            Manager::PARAM_VOCABULARY_ID => $result->get_id()
-                        )
-                    ), ToolbarItem::DISPLAY_ICON, false, $this->get_component()->package()
+                $glyph = new FontAwesomeGlyph(
+                    'check-circle', $extraClasses,
+                    Translation::get($translationVariable, null, $this->get_component()->package()), 'fas'
                 );
+
+                $link = $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_DEFAULT,
+                        Manager::PARAM_VOCABULARY_ID => $result->get_id()
+                    )
+                );
+
+                if ($result->isDefault())
+                {
+                    return $glyph->render();
+                }
+                else
+                {
+                    return '<a href="' . $link . '">' . $glyph->render() . '</a>';
+                }
+
                 break;
         }
 

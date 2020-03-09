@@ -14,7 +14,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -34,15 +33,9 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
     private $unknown_status_cache;
 
     /**
-     * **************************************************************************************************************
-     * Inherited Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Constructor
+     * @param $table
      *
-     * @param Table $table
+     * @throws \Exception
      */
     public function __construct($table)
     {
@@ -134,9 +127,9 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('MakeStudent'), Theme::getInstance()->getImagePath(
-                                $weblcms_manager_namespace, 'Action/SubscribeStudent'
-                            ), $status_change_url, ToolbarItem::DISPLAY_ICON
+                                Translation::get('MakeStudent'),
+                                new FontAwesomeGlyph('user-graduate', array(), null, 'fas'), $status_change_url,
+                                ToolbarItem::DISPLAY_ICON
                             )
                         );
                         break;
@@ -147,9 +140,8 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('MakeTeacher'), Theme::getInstance()->getImagePath(
-                                $weblcms_manager_namespace, 'Action/SubscribeTeacher'
-                            ), $status_change_url, ToolbarItem::DISPLAY_ICON
+                                Translation::get('MakeTeacher'), new FontAwesomeGlyph('user-tie', array(), null, 'fas'),
+                                $status_change_url, ToolbarItem::DISPLAY_ICON
                             )
                         );
                         break;
@@ -218,10 +210,8 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
     }
 
     /**
-     * Renders a given cell.
-     *
-     * @param $column type
-     * @param mixed[] $user_with_subscription_status_and_type
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
+     * @param string[] $user_with_subscription_status_and_type
      *
      * @return string
      */
@@ -256,7 +246,7 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
                         return Translation::get('Unknown');
                 }
             case User::PROPERTY_PLATFORMADMIN :
-                if ($user_with_subscription_status_and_type[User::PROPERTY_PLATFORM_ADMIN] == '1')
+                if ($user_with_subscription_status_and_type[User::PROPERTY_PLATFORMADMIN] == '1')
                 {
                     return Translation::get('PlatformAdministrator');
                 }

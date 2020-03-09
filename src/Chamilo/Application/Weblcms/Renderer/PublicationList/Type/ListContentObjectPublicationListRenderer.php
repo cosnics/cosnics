@@ -26,7 +26,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -594,13 +593,12 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $dropdownButton->addSubButton(
                 new SubButton(
                     Translation::get('EditPublicationDetails', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getImagePath('Chamilo\Application\Weblcms', 'Action/EditPublication'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
-                        )
-                    ), SubButton::DISPLAY_LABEL
+                    new FontAwesomeGlyph('edit', array(), null, 'fas'), $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                    )
+                ), SubButton::DISPLAY_LABEL
                 )
             );
 

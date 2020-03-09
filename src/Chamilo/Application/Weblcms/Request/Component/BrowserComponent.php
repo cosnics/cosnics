@@ -15,7 +15,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -182,7 +181,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 $commonActions->addButton(
                     new Button(
                         Translation::get('RequestCourse'),
-                        Theme::getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/Request'),
+                        new FontAwesomeGlyph('question-circle', array(), null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))
                     )
                 );
@@ -193,7 +192,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 $toolActions->addButton(
                     new Button(
                         Translation::get('ConfigureManagementRights'),
-                        Theme::getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/Rights'),
+                        new FontAwesomeGlyph('lock', array(), null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS))
                     )
                 );

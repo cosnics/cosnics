@@ -8,7 +8,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -19,58 +18,6 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ElementTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
-
-    /**
-     * Renders a single cell
-     *
-     * @param TableColumn $column
-     * @param mixed $result
-     *
-     * @return string
-     */
-    public function render_cell($column, $result)
-    {
-        switch ($column->get_name())
-        {
-            case ElementTableColumnModel::COLUMN_PREFIX :
-                return $result->get_namespace();
-                break;
-            case ElementTableColumnModel::COLUMN_VALUE_VOCABULARY_PREDEFINED :
-                $image = 'Action/Value/Predefined';
-                $image .= $result->isVocabularyPredefined() ? '' : 'Na';
-                $link = $result->isVocabularyPredefined() ? $this->get_component()->get_url(
-                    array(
-                        Manager::PARAM_ACTION => Manager::ACTION_VOCABULARY,
-                        \Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Manager::ACTION_BROWSE,
-                        Manager::PARAM_ELEMENT_ID => $result->get_id()
-                    )
-                ) : null;
-
-                return Theme::getInstance()->getImage(
-                    $image, 'png', Translation::get('PredefinedValues', null, $this->get_component()->package()), $link,
-                    ToolbarItem::DISPLAY_ICON, false, $this->get_component()->package()
-                );
-                break;
-            case ElementTableColumnModel::COLUMN_VALUE_VOCABULARY_USER :
-                $image = 'Action/Value/User';
-                $image .= $result->isVocabularyUserDefined() ? '' : 'Na';
-                $link = $result->isVocabularyUserDefined() ? $this->get_component()->get_url(
-                    array(
-                        Manager::PARAM_ACTION => Manager::ACTION_VOCABULARY,
-                        \Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Manager::ACTION_USER,
-                        Manager::PARAM_ELEMENT_ID => $result->get_id()
-                    )
-                ) : null;
-
-                return Theme::getInstance()->getImage(
-                    $image, 'png', Translation::get('UserValues', null, $this->get_component()->package()), $link,
-                    ToolbarItem::DISPLAY_ICON, false, $this->get_component()->package()
-                );
-                break;
-        }
-
-        return parent::render_cell($column, $result);
-    }
 
     /**
      * Returns the actions toolbar
@@ -179,5 +126,71 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
         }
 
         return $toolbar->as_html();
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $result
+     *
+     * @return string
+     */
+    public function render_cell($column, $result)
+    {
+        switch ($column->get_name())
+        {
+            case ElementTableColumnModel::COLUMN_PREFIX :
+                return $result->get_namespace();
+                break;
+            case ElementTableColumnModel::COLUMN_VALUE_VOCABULARY_PREDEFINED :
+                $link = $result->isVocabularyPredefined() ? $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_VOCABULARY,
+                        \Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Manager::ACTION_BROWSE,
+                        Manager::PARAM_ELEMENT_ID => $result->get_id()
+                    )
+                ) : null;
+
+                $extraClasses = $result->isVocabularyPredefined() ? array() : array('text-muted');
+                $glyph = new FontAwesomeGlyph(
+                    'globe', $extraClasses,
+                    Translation::get('PredefinedValues', null, $this->get_component()->package()), 'fas'
+                );
+
+                if ($link)
+                {
+                    return '<a href="' . $link . '">' . $glyph->render() . '</a>';
+                }
+                else
+                {
+                    return $glyph->render();
+                }
+                break;
+            case ElementTableColumnModel::COLUMN_VALUE_VOCABULARY_USER :
+                $link = $result->isVocabularyUserDefined() ? $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_VOCABULARY,
+                        \Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Manager::ACTION_USER,
+                        Manager::PARAM_ELEMENT_ID => $result->get_id()
+                    )
+                ) : null;
+
+                $extraClasses = $result->isVocabularyUserDefined() ? array() : array('text-muted');
+                $glyph = new FontAwesomeGlyph(
+                    'users', $extraClasses, Translation::get('UserValues', null, $this->get_component()->package()),
+                    'fas'
+                );
+
+                if ($link)
+                {
+                    return '<a href="' . $link . '">' . $glyph->render() . '</a>';
+                }
+                else
+                {
+                    return $glyph->render();
+                }
+                break;
+        }
+
+        return parent::render_cell($column, $result);
     }
 }

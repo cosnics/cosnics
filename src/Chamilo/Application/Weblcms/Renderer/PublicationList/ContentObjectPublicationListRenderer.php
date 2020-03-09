@@ -317,7 +317,6 @@ abstract class ContentObjectPublicationListRenderer
     {
         if (!$last)
         {
-            $down_img = 'Action/Down';
             $down_url = $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_DOWN,
@@ -837,7 +836,7 @@ abstract class ContentObjectPublicationListRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('EditPublicationDetails', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getImagePath('Chamilo\Application\Weblcms', 'Action/EditPublication'),
+                    new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('edit', array(), null, 'fas'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
@@ -947,7 +946,6 @@ abstract class ContentObjectPublicationListRenderer
                 {
                     $variable = 'PeriodAfter';
                     $glyph = new FontAwesomeGlyph('history', array('fa-flip-horizontal'), null, 'fas');
-                    $visibility_image = 'Action/PeriodAfter';
                 }
                 else
                 {

@@ -35,7 +35,7 @@ class SchemaTableCellRenderer extends DataClassTableCellRenderer implements Tabl
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Elements'), new FontAwesomeGlyph('item'), $this->get_component()->get_url(
+                Translation::get('Elements'), new FontAwesomeGlyph('file'), $this->get_component()->get_url(
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_ELEMENT, Manager::PARAM_SCHEMA_ID => $schema->get_id()
                 )

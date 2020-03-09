@@ -183,14 +183,14 @@ div.quota_statistics .data_table td.header {
     padding-bottom: 10px;
 }
 
-#search-parameters .panel-title .search-parameter span.glyphicon.glyphicon-remove,
-#search-parameters .search-parameter.list-group-item span.glyphicon.glyphicon-remove {
+#search-parameters .panel-title .search-parameter span.fa.fa-times,
+#search-parameters .search-parameter.list-group-item span.fa.fa-times {
     opacity: 0.25;
     font-size: 13px;
     cursor: pointer;
 }
 
-#search-parameters .panel-title .search-parameter span.glyphicon.glyphicon-remove {
+#search-parameters .panel-title .search-parameter span.fa.fa-times {
     opacity: 0.5;
 }
 

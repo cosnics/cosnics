@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -29,8 +28,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Grant'),
-                        Theme::getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/Grant'),
+                        Translation::get('Grant'), new FontAwesomeGlyph('play', array('text-success'), null, 'fas'),
                         $this->get_component()->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_GRANT,
@@ -45,8 +43,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Deny'),
-                        Theme::getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/Deny'),
+                        Translation::get('Deny'), new FontAwesomeGlyph('stop', array('text-danger'), null, 'fas'),
                         $this->get_component()->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_DENY,
@@ -63,8 +60,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_DELETE,

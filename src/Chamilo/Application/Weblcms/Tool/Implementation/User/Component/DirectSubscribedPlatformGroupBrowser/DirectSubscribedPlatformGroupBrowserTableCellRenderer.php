@@ -113,7 +113,7 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation::get('MakeStudent'),
-                            Theme::getInstance()->getImagePath($weblcms_manager_namespace, 'Action/SubscribeStudent'),
+                            new FontAwesomeGlyph('user-graduate', array(), null, 'fas'),
                             $status_change_url, ToolbarItem::DISPLAY_ICON
                         )
                     );
@@ -127,7 +127,7 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation::get('MakeTeacher'),
-                            Theme::getInstance()->getImagePath($weblcms_manager_namespace, 'Action/SubscribeTeacher'),
+                            new FontAwesomeGlyph('user-tie', array(), null, 'fas'),
                             $status_change_url, ToolbarItem::DISPLAY_ICON
                         )
                     );

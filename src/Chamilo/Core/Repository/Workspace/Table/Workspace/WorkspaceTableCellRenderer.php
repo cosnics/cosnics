@@ -15,7 +15,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -32,43 +31,6 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer::render_cell()
-     */
-    public function render_cell($column, $workspace)
-    {
-        switch ($column->get_name())
-        {
-            case Workspace::PROPERTY_CREATOR_ID:
-                if ($workspace->getCreator() instanceof User)
-                {
-                    return $workspace->getCreator()->get_fullname();
-                }
-
-                return Translation::getInstance()->getTranslation('Unknown', null, Utilities::COMMON_LIBRARIES);
-            case Workspace::PROPERTY_CREATION_DATE:
-                return DatetimeUtilities::format_locale_date(
-                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
-                    $workspace->getCreationDate()
-                );
-            case Workspace::PROPERTY_NAME:
-                return '<a href="' . $this->getWorkspaceUrl($workspace) . '">' .
-                parent::render_cell($column, $workspace) . '</a>';
-        }
-
-        return parent::render_cell($column, $workspace);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport::get_actions()
-     */
-    public function get_actions($workspace)
-    {
-        return $this->getToolbar($workspace)->as_html();
-    }
-
-    /**
-     *
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
      *
      * @return \Chamilo\Libraries\Format\Structure\Toolbar
@@ -79,8 +41,7 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
 
         $favouriteService = new FavouriteService(new FavouriteRepository());
         $favourite = $favouriteService->getWorkspaceUserFavouriteByUserAndWorkspaceIdentifier(
-            $this->get_component()->get_user(),
-            $workspace->getId()
+            $this->get_component()->get_user(), $workspace->getId()
         );
 
         if ($favourite instanceof WorkspaceUserFavourite)
@@ -88,19 +49,14 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('RemoveFavourite', null, Manager::context()),
-                    Theme::getInstance()->getImagePath(
-                        \Chamilo\Core\Repository\Workspace\Favourite\Manager::context(),
-                        'Action/Delete'
-                    ),
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_FAVOURITE,
-                            \Chamilo\Core\Repository\Workspace\Favourite\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager::ACTION_DELETE,
-                            Manager::PARAM_WORKSPACE_ID => $workspace->get_id(),
-                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
+                    new FontAwesomeGlyph('times', array(), null, 'fas'), $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_FAVOURITE,
+                        \Chamilo\Core\Repository\Workspace\Favourite\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager::ACTION_DELETE,
+                        Manager::PARAM_WORKSPACE_ID => $workspace->get_id(),
+                        Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
+                    )
+                ), ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -109,16 +65,14 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Favourite', null, Manager::context()),
-                    Theme::getInstance()->getImagePath(Manager::context(), 'Action/Favourite'),
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_FAVOURITE,
-                            \Chamilo\Core\Repository\Workspace\Favourite\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager::ACTION_CREATE,
-                            Manager::PARAM_WORKSPACE_ID => $workspace->get_id(),
-                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
+                    new FontAwesomeGlyph('star', array(), null, 'fas'), $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_FAVOURITE,
+                        \Chamilo\Core\Repository\Workspace\Favourite\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager::ACTION_CREATE,
+                        Manager::PARAM_WORKSPACE_ID => $workspace->get_id(),
+                        Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
+                    )
+                ), ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -127,23 +81,20 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                    new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('pencil'),
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
                             Manager::PARAM_WORKSPACE_ID => $workspace->get_id(),
                             Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
                         )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
+                    ), ToolbarItem::DISPLAY_ICON
                 )
             );
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('CreateRightsComponent'),
-                    new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('user'),
+                    Translation::get('CreateRightsComponent'), new FontAwesomeGlyph('user'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_RIGHTS,
@@ -151,40 +102,33 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
                             Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action(),
                             \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_CREATE
                         )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
+                    ), ToolbarItem::DISPLAY_ICON
                 )
             );
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('RightsComponent'),
-                    new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('lock'),
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_RIGHTS,
-                            Manager::PARAM_WORKSPACE_ID => $workspace->get_id(),
-                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action(),
-                            \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_BROWSE
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
+                    Translation::get('RightsComponent'), new FontAwesomeGlyph('lock'), $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_RIGHTS,
+                        Manager::PARAM_WORKSPACE_ID => $workspace->get_id(),
+                        Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action(),
+                        \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_BROWSE
+                    )
+                ), ToolbarItem::DISPLAY_ICON
                 )
             );
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_DELETE,
                             Manager::PARAM_WORKSPACE_ID => $workspace->get_id(),
                             Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
                         )
-                    ),
-                    ToolbarItem::DISPLAY_ICON,
-                    true
+                    ), ToolbarItem::DISPLAY_ICON, true
                 )
             );
         }
@@ -208,5 +152,42 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
         );
 
         return $redirect->getUrl();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport::get_actions()
+     */
+    public function get_actions($workspace)
+    {
+        return $this->getToolbar($workspace)->as_html();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer::render_cell()
+     */
+    public function render_cell($column, $workspace)
+    {
+        switch ($column->get_name())
+        {
+            case Workspace::PROPERTY_CREATOR_ID:
+                if ($workspace->getCreator() instanceof User)
+                {
+                    return $workspace->getCreator()->get_fullname();
+                }
+
+                return Translation::getInstance()->getTranslation('Unknown', null, Utilities::COMMON_LIBRARIES);
+            case Workspace::PROPERTY_CREATION_DATE:
+                return DatetimeUtilities::format_locale_date(
+                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+                    $workspace->getCreationDate()
+                );
+            case Workspace::PROPERTY_NAME:
+                return '<a href="' . $this->getWorkspaceUrl($workspace) . '">' .
+                    parent::render_cell($column, $workspace) . '</a>';
+        }
+
+        return parent::render_cell($column, $workspace);
     }
 }

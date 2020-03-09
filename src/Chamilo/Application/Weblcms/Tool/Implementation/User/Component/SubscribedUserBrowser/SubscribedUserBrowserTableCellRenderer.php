@@ -116,9 +116,7 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('MakeStudent'), Theme::getInstance()->getImagePath(
-                                $weblcms_manager_namespace, 'Action/SubscribeStudent'
-                            ), $status_change_url, ToolbarItem::DISPLAY_ICON
+                                Translation::get('MakeStudent'), new FontAwesomeGlyph('user-graduate', array(), null, 'fas'), $status_change_url, ToolbarItem::DISPLAY_ICON
                             )
                         );
                         break;
@@ -129,9 +127,7 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('MakeTeacher'), Theme::getInstance()->getImagePath(
-                                $weblcms_manager_namespace, 'Action/SubscribeTeacher'
-                            ), $status_change_url, ToolbarItem::DISPLAY_ICON
+                                Translation::get('MakeTeacher'), new FontAwesomeGlyph('user-tie', array(), null, 'fas'), $status_change_url, ToolbarItem::DISPLAY_ICON
                             )
                         );
                         break;

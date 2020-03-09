@@ -77,25 +77,6 @@ div#search_parameters div.parameter#parameter_general_all {
 	color: #D4D4D4;
 }
 
-.clear_parameter {
-	float: right;
-	width: 9px;
-	height: 9px;
-	z-index: 3200;
-	position: absolute;
-	top: 50%;
-	right: 9px;
-	margin-top: -4px;
-	cursor: pointer;
-	background: url(../../Images/Ruby/Action/ClearParameter.png) no-repeat;
-}
-
-div#search_parameters div.parameter#parameter_general_all .clear_parameter
-	{
-	background: url(../../Images/Ruby/Action/ClearAllParameter.png)
-		no-repeat;
-}
-
 div#search_parameters h4 {
 	margin-top: 0px;
 	margin-bottom: 2px;

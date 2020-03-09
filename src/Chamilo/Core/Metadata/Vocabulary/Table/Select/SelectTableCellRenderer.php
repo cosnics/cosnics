@@ -63,14 +63,19 @@ class SelectTableCellRenderer extends DataClassTableCellRenderer implements Tabl
 
                 if ($result->get_user_id() == 0)
                 {
-                    $image = 'Action/Value/Predefined';
+                    $image = 'globe';
                     $translationVariable = 'Predefined';
                 }
                 else
                 {
-                    $image = 'Action/Value/User';
+                    $image = 'users';
                     $translationVariable = 'UserDefined';
                 }
+
+                $glyph = new FontAwesomeGlyph(
+                    $image, array(), Translation::get($translationVariable, null, $this->get_component()->package()),
+                    'fas'
+                );
 
                 return Theme::getInstance()->getImage(
                     $image, 'png', Translation::get($translationVariable, null, $this->get_component()->package()),

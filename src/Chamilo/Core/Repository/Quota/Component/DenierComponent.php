@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
@@ -124,7 +125,7 @@ class DenierComponent extends Manager
                 $commonActions->addButton(
                     new Button(
                         Translation::get('UpgradeQuota'),
-                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Upgrade'),
+                        new FontAwesomeGlyph('angle-double-up', array(), null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPGRADE))
                     )
                 );
@@ -135,7 +136,7 @@ class DenierComponent extends Manager
                 $commonActions->addButton(
                     new Button(
                         Translation::get('RequestUpgrade'),
-                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Request'),
+                        new FontAwesomeGlyph('question-circle', array(), null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))
                     )
                 );
@@ -144,7 +145,7 @@ class DenierComponent extends Manager
             $toolActions->addButton(
                 new Button(
                     Translation::get('BackToOverview'),
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Browser'),
+                    new FontAwesomeGlyph('folder', array(), null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE))
                 )
             );

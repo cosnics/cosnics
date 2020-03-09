@@ -110,17 +110,6 @@ class AttemptBrowserComponent extends Manager
             )
         );
 
-        if ($attempt->get_hidden())
-        {
-            $label = Translation::get('Invisible');
-            $image = 'Action/VisibleNa';
-        }
-        else
-        {
-            $label = Translation::get('Visible');
-            $image = 'Action/Visible';
-        }
-
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('Delete'), new FontAwesomeGlyph('times'), $this->get_url(

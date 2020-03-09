@@ -212,16 +212,17 @@ class ImporterComponent extends Manager
         }
     }
 
-    /**
-     * Reads a line from a csv file an converts it to an array
-     *
-     * @param resource $file_handle
-     *
-     * @return string[]
-     */
-    private function read_csv($file_handle)
+    public function is_repository_based($packages)
     {
-        return fgetcsv($file_handle, 0, ';', '"');
+        foreach ($packages as $package)
+        {
+            if (strpos($package, '-') !== false)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function parse_file()
@@ -333,39 +334,21 @@ class ImporterComponent extends Manager
 
         $headers = array();
         $headers[] = new SortableStaticTableColumn(Translation::get('Package'));
-        $headers[] = new SortableStaticTableColumn(
-            Theme::getInstance()->getImage(
-                'Action/Language', 'png', Translation::get('Language'), null, ToolbarItem::DISPLAY_ICON, false,
-                __NAMESPACE__
-            )
-        );
-        $headers[] = new SortableStaticTableColumn(
-            Theme::getInstance()->getImage(
-                'Action/Local', 'png', Translation::get('LocalVariableCount'), null, ToolbarItem::DISPLAY_ICON, false,
-                __NAMESPACE__
-            )
-        );
 
-        $headers[] = new SortableStaticTableColumn(
-            Theme::getInstance()->getImage(
-                'Action/Import', 'png', Translation::get('ImportVariableCount'), null, ToolbarItem::DISPLAY_ICON, false,
-                __NAMESPACE__
-            )
-        );
+        $glyph = new FontAwesomeGlyph('language', array(), Translation::get('Language'), 'fas');
+        $headers[] = new SortableStaticTableColumn('language', $glyph->render());
 
-        $headers[] = new SortableStaticTableColumn(
-            Theme::getInstance()->getImage(
-                'Action/Extra', 'png', Translation::get('LocalExtraCount'), null, ToolbarItem::DISPLAY_ICON, false,
-                __NAMESPACE__
-            )
-        );
+        $glyph = new FontAwesomeGlyph('home', array(), Translation::get('LocalVariableCount'), 'fas');
+        $headers[] = new SortableStaticTableColumn('local', $glyph->render());
 
-        $headers[] = new SortableStaticTableColumn(
-            Theme::getInstance()->getImage(
-                'Action/Empty', 'png', Translation::get('LocalNonEmptyCount'), null, ToolbarItem::DISPLAY_ICON, false,
-                __NAMESPACE__
-            )
-        );
+        $glyph = new FontAwesomeGlyph('upload', array(), Translation::get('ImportVariableCount'), 'fas');
+        $headers[] = new SortableStaticTableColumn('upload', $glyph->render());
+
+        $glyph = new FontAwesomeGlyph('exclamation-circle', array(), Translation::get('LocalExtraCount'), 'fas');
+        $headers[] = new SortableStaticTableColumn('extra', $glyph->render());
+
+        $glyph = new FontAwesomeGlyph('circle', array(), Translation::get('LocalNonEmptyCount'), 'far');
+        $headers[] = new SortableStaticTableColumn('empty', $glyph->render());
 
         $table = new SortableTableFromArray(
             $data, $headers, $this->get_parameters(), 0, 20, SORT_ASC, 'language_import_' . time()
@@ -374,16 +357,15 @@ class ImporterComponent extends Manager
         return $table->toHtml();
     }
 
-    public function is_repository_based($packages)
+    /**
+     * Reads a line from a csv file an converts it to an array
+     *
+     * @param resource $file_handle
+     *
+     * @return string[]
+     */
+    private function read_csv($file_handle)
     {
-        foreach ($packages as $package)
-        {
-            if (strpos($package, '-') !== false)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return fgetcsv($file_handle, 0, ';', '"');
     }
 }

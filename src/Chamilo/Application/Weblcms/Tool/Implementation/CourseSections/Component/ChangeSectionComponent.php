@@ -5,10 +5,11 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Translation\Translation;
 use HTML_Table;
 
 /**
@@ -25,7 +26,7 @@ class ChangeSectionComponent extends Manager
     {
         if (!$this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
+            throw new NotAllowedException();
         }
 
         $target = $_POST['target'];
@@ -89,7 +90,6 @@ class ChangeSectionComponent extends Manager
             {
                 $lcms_action = 'make_invisible';
                 $glyph = new FontAwesomeGlyph('eye');
-                $visible_image = 'Action/Visible';
                 $new = '';
                 if ($parent->tool_has_new_publications($tool->name))
                 {

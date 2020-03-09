@@ -45,6 +45,119 @@ class Basic extends Html
         return implode(PHP_EOL, $html);
     }
 
+    public function determine_current_block_view($current_block_id)
+    {
+        $current_block = $this->get_template()->get_block($current_block_id);
+        $selected_view = $this->get_context()->get_current_view();
+        $available_views = $current_block->get_views();
+
+        if ($selected_view[$current_block_id])
+        {
+            if (in_array($selected_view[$current_block_id], $available_views))
+            {
+                return $selected_view[$current_block_id];
+            }
+            else
+            {
+                return $available_views[0];
+            }
+        }
+        else
+        {
+            return $available_views[0];
+        }
+    }
+
+    /**
+     * Returns the correct namespace for a given block
+     *
+     * @param $block
+     *
+     * @return string
+     */
+    protected function getBlockNamespace($block)
+    {
+        $classNameUtilities = ClassnameUtilities::getInstance();
+        $namespace = $classNameUtilities->getNamespaceParent($block->context(), 1);
+
+        while (strrpos($namespace, 'Reporting') !== false &&
+            (strlen($namespace) - strrpos($namespace, 'Reporting')) != 9)
+        {
+            $namespace = $classNameUtilities->getNamespaceParent($namespace, 1);
+        }
+
+        return $namespace;
+    }
+
+    public function getButtonToolbarRenderer()
+    {
+        if (!isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar();
+            $commonActions = new ButtonGroup();
+            $toolActions = new ButtonGroup();
+
+            $parameters = $this->get_context()->get_parameters();
+            $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW;
+
+            if (!$this->get_template() instanceof NoBlockTabsAllowed)
+            {
+                if ($this->show_all())
+                {
+                    $parameters[Manager::PARAM_SHOW_ALL] = null;
+
+                    $toolActions->addButton(
+                        new Button(
+                            Translation::get('ShowOne'), new FontAwesomeGlyph('clone', array(), null, 'fas'),
+                            $this->get_context()->get_url($parameters)
+                        )
+                    );
+                }
+                elseif ($this->get_template()->count_blocks() > 1)
+                {
+                    $parameters[Manager::PARAM_SHOW_ALL] = 1;
+
+                    $toolActions->addButton(
+                        new Button(
+                            Translation::get('ShowAll'), new FontAwesomeGlyph('desktop', array(), null, 'fas'),
+                            $this->get_context()->get_url($parameters)
+                        )
+                    );
+                }
+            }
+
+            $parameters = $this->get_context()->get_parameters();
+            $parameters[Manager::PARAM_ACTION] = Manager::ACTION_SAVE;
+            $parameters[Manager::PARAM_SHOW_ALL] = 1;
+            $parameters[Manager::PARAM_FORMAT] = TemplateRendition::FORMAT_XLSX;
+
+            $commonActions->addButton(
+                new Button(
+                    Translation::get('ExportToExcel'), new FontAwesomeGlyph('file-excel', array(), null, 'fas'),
+                    $this->get_context()->get_url($parameters)
+                )
+            );
+
+            $parameters = $this->get_context()->get_parameters();
+            $parameters[Manager::PARAM_ACTION] = Manager::ACTION_SAVE;
+            $parameters[Manager::PARAM_SHOW_ALL] = 1;
+            $parameters[Manager::PARAM_FORMAT] = TemplateRendition::FORMAT_PDF;
+            $commonActions->addButton(
+                new Button(
+                    Translation::get('ExportToPdf'), new FontAwesomeGlyph('file-pdf', array(), null, 'fas'),
+                    $this->get_context()->get_url($parameters)
+                )
+            );
+
+            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($toolActions);
+
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->buttonToolbarRenderer;
+    }
+
     public function render_block()
     {
         if ($this->show_all())
@@ -122,120 +235,5 @@ class Basic extends Html
                 return $rendered_block;
             }
         }
-    }
-
-    /**
-     * Returns the correct namespace for a given block
-     *
-     * @param $block
-     *
-     * @return string
-     */
-    protected function getBlockNamespace($block)
-    {
-        $classNameUtilities = ClassnameUtilities::getInstance();
-        $namespace = $classNameUtilities->getNamespaceParent($block->context(), 1);
-
-        while (strrpos($namespace, 'Reporting') !== false &&
-            (strlen($namespace) - strrpos($namespace, 'Reporting')) != 9)
-        {
-            $namespace = $classNameUtilities->getNamespaceParent($namespace, 1);
-        }
-
-        return $namespace;
-    }
-
-    public function determine_current_block_view($current_block_id)
-    {
-        $current_block = $this->get_template()->get_block($current_block_id);
-        $selected_view = $this->get_context()->get_current_view();
-        $available_views = $current_block->get_views();
-
-        if ($selected_view[$current_block_id])
-        {
-            if (in_array($selected_view[$current_block_id], $available_views))
-            {
-                return $selected_view[$current_block_id];
-            }
-            else
-            {
-                return $available_views[0];
-            }
-        }
-        else
-        {
-            return $available_views[0];
-        }
-    }
-
-    public function getButtonToolbarRenderer()
-    {
-        if (!isset($this->buttonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar();
-            $commonActions = new ButtonGroup();
-            $toolActions = new ButtonGroup();
-
-            $parameters = $this->get_context()->get_parameters();
-            $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW;
-
-            if (!$this->get_template() instanceof NoBlockTabsAllowed)
-            {
-                if ($this->show_all())
-                {
-                    $parameters[Manager::PARAM_SHOW_ALL] = null;
-
-                    $toolActions->addButton(
-                        new Button(
-                            Translation::get('ShowOne'),
-                            Theme::getInstance()->getImagePath('Chamilo\Core\Reporting\Viewer', 'Action/ShowBlock'),
-                            $this->get_context()->get_url($parameters)
-                        )
-                    );
-                }
-                elseif ($this->get_template()->count_blocks() > 1)
-                {
-                    $parameters[Manager::PARAM_SHOW_ALL] = 1;
-
-                    $toolActions->addButton(
-                        new Button(
-                            Translation::get('ShowAll'),
-                            Theme::getInstance()->getImagePath('Chamilo\Core\Reporting\Viewer', 'Action/ShowAll'),
-                            $this->get_context()->get_url($parameters)
-                        )
-                    );
-                }
-            }
-
-            $parameters = $this->get_context()->get_parameters();
-            $parameters[Manager::PARAM_ACTION] = Manager::ACTION_SAVE;
-            $parameters[Manager::PARAM_SHOW_ALL] = 1;
-            $parameters[Manager::PARAM_FORMAT] = TemplateRendition::FORMAT_XLSX;
-
-            $commonActions->addButton(
-                new Button(
-                    Translation::get('ExportToExcel'), new FontAwesomeGlyph('file-excel', array(), null, 'fas'),
-                    $this->get_context()->get_url($parameters)
-                )
-            );
-
-            $parameters = $this->get_context()->get_parameters();
-            $parameters[Manager::PARAM_ACTION] = Manager::ACTION_SAVE;
-            $parameters[Manager::PARAM_SHOW_ALL] = 1;
-            $parameters[Manager::PARAM_FORMAT] = TemplateRendition::FORMAT_PDF;
-            $commonActions->addButton(
-                new Button(
-                    Translation::get('ExportToPdf'), new FontAwesomeGlyph('file-pdf', array(), null, 'fas'),
-                    $this->get_context()->get_url($parameters)
-                )
-            );
-
-            $buttonToolbar->addButtonGroup($commonActions);
-            $buttonToolbar->addButtonGroup($toolActions);
-
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
-
-        return $this->buttonToolbarRenderer;
     }
 }
