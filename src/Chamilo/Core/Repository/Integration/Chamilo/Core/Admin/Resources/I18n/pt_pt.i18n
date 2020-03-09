@@ -1,8 +1,0 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = repository\integration\core\home
-; Language = pt_pt
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-TypeName = "Home"
-ManageExternalInstances = "Gérer les dépôts externes"
-ManageExternalInstancesDescription = "Gérer les connexions aux sources externes comme YouTube, Google Docs, MediaMosa, etc"

@@ -1,9 +1,0 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = application\weblcms\tool\course_deleter
-; Language = pt_pt
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-TypeName = "Delete Course"
-DeleteWarningMessage = "Are you sure you want to delete this course?"
-DeleteReDoMessage = "!!!!! Attention the course can't be restored !!!!!!"
-CourseDeleteFailed = "Course was not deleted"

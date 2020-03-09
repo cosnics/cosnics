@@ -1,6 +1,0 @@
-TypeName = "Completar espacios en blanco"
-QuestionText = "Pregunta"
-Question = "#"
-Answer = "Solución"
-Feedback = "Comentarios"
-GapNumber = "Solución ({NUMBER})"
