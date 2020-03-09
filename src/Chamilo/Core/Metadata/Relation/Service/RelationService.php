@@ -19,13 +19,19 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class RelationService
 {
 
+    /**
+     * @param $relationName
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
     public function getRelationByName($relationName)
     {
         $condition = new ComparisonCondition(
-            new PropertyConditionVariable(Relation::class_name(), Relation::PROPERTY_NAME), 
-            ComparisonCondition::EQUAL, 
-            new StaticConditionVariable($relationName));
-        
+            new PropertyConditionVariable(Relation::class_name(), Relation::PROPERTY_NAME), ComparisonCondition::EQUAL,
+            new StaticConditionVariable($relationName)
+        );
+
         return DataManager::retrieve(Relation::class_name(), new DataClassRetrieveParameters($condition));
     }
 }

@@ -12,9 +12,9 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -53,68 +53,6 @@ class SettingsForm extends FormValidator
 
         $this->buildForm();
         $this->setDefaults();
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application)
-    {
-        $this->application = $application;
-    }
-
-    protected function buildForm()
-    {
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab('database', Translation::get('DatabaseComponentTitle'), null, 'addDatabaseSettings')
-        );
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab('general', Translation::get('SettingsComponentTitle'), null, 'addGeneralSettings')
-        );
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab('package', Translation::get('PackageComponentTitle'), null, 'addPackageSettings')
-        );
-
-        $this->getTabsGenerator()->render();
-
-        $buttons = array();
-
-        $buttons[] = $this->createElement(
-            'static', null, null,
-            '<a href="' . $this->getApplication()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_LICENSE)) .
-            '" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>' .
-            Translation::get('Previous', null, Utilities::COMMON_LIBRARIES) . '</a>'
-        );
-
-        $buttons[] = $this->createElement(
-            'style_button', 'next', Translation::get('Next', null, Utilities::COMMON_LIBRARIES),
-            array('class' => 'btn-primary'), null, new FontAwesomeGlyph('chevron-right')
-        );
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer
-     */
-    public function getTabsGenerator()
-    {
-        if (!isset($this->tabsGenerator))
-        {
-            $this->tabsGenerator = new DynamicFormTabsRenderer('settings', $this);
-        }
-
-        return $this->tabsGenerator;
     }
 
     public function addDatabaseSettings()
@@ -220,14 +158,6 @@ class SettingsForm extends FormValidator
         $this->addElement('category');
     }
 
-    protected function get_database_drivers()
-    {
-        $drivers = array();
-        $drivers['mysqli'] = 'MySQL >= 4.1.3';
-
-        return $drivers;
-    }
-
     protected function addPackageSelectionToggle()
     {
         $html = array();
@@ -273,124 +203,34 @@ class SettingsForm extends FormValidator
         $this->addElement('html', implode(PHP_EOL, $html));
     }
 
-    protected function hasSelectablePackages($packages)
+    protected function buildForm()
     {
-        if (count($packages) <= 1)
-        {
-            return false;
-        }
-        else
-        {
-            $numberOfCorePackages = 0;
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab('database', Translation::get('DatabaseComponentTitle'), null, 'addDatabaseSettings')
+        );
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab('general', Translation::get('SettingsComponentTitle'), null, 'addGeneralSettings')
+        );
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab('package', Translation::get('PackageComponentTitle'), null, 'addPackageSettings')
+        );
 
-            foreach ($packages as $package)
-            {
-                if ($package->getCoreInstall())
-                {
-                    $numberOfCorePackages ++;
-                }
-            }
+        $this->getTabsGenerator()->render();
 
-            if ($numberOfCorePackages == count($packages))
-            {
-                return false;
-            }
-        }
+        $buttons = array();
 
-        return true;
-    }
+        $buttons[] = $this->createElement(
+            'static', null, null,
+            '<a href="' . $this->getApplication()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_LICENSE)) .
+            '" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>' .
+            Translation::get('Previous', null, Utilities::COMMON_LIBRARIES) . '</a>'
+        );
 
-    /**
-     *
-     * @param \Chamilo\Configuration\Package\PackageList $packageList
-     */
-    public function renderPackages(PackageList $packageList)
-    {
-        $html = array();
-
-        $renderer = $this->defaultRenderer();
-        $packages = $this->determinePackages($packageList);
-
-        if (count($packages) > 0)
-        {
-            $firstPackage = current($packages);
-            $packageType = Translation::get('TypeCategory', null, $firstPackage->get_context());
-
-            $html = array();
-
-            $html[] = '<div class="package-list">';
-
-            $html[] = '<div class="row package-list-header">';
-            $html[] = '<div class="col-xs-12">';
-            $html[] = '<h4>';
-            $html[] = $packageType;
-
-            if ($this->hasSelectablePackages($packages))
-            {
-                $html[] = $this->addPackageSelectionToggle();
-            }
-
-            $html[] = '</h4>';
-            $html[] = '</div>';
-            $html[] = '</div>';
-
-            $html[] = '<div class="package-list-items row">';
-
-            $this->addElement('html', implode(PHP_EOL, $html));
-
-            foreach ($packages as $package)
-            {
-                $title = Translation::get('TypeName', null, $package->get_context());
-                $packageClasses = $this->getPackageClasses($package);
-
-                if ($package->getCoreInstall())
-                {
-                    $iconSource = Theme::getInstance()->getImagePath($package->get_context(), 'Logo/22Na');
-                    $disabled = ' disabled="disabled"';
-                }
-                else
-                {
-                    $iconSource = Theme::getInstance()->getImagePath($package->get_context(), 'Logo/22');
-                    $disabled = '';
-                }
-
-                $html = array();
-                $html[] = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">';
-                $html[] = '<a class="' . $packageClasses . '"' . $disabled . '><img src="' . $iconSource . '"> ';
-                $this->addElement('html', implode(PHP_EOL, $html));
-
-                $checkbox_name =
-                    'install_' . ClassnameUtilities::getInstance()->getNamespaceId($package->get_context());
-                $this->addElement('checkbox', 'install[' . $package->get_context() . ']');
-                $renderer->setElementTemplate('{element}', 'install[' . $package->get_context() . ']');
-
-                $html = array();
-                $html[] = $title;
-                $html[] = '</a>';
-                $html[] = '</div>';
-                $this->addElement('html', implode(PHP_EOL, $html));
-
-                $extra = $package->get_extra();
-
-                if ($package->getCoreInstall() || $package->getDefaultInstall())
-                {
-                    $defaults['install'][$package->get_context()] = 1;
-                }
-            }
-
-            $this->setDefaults($defaults);
-
-            $html = array();
-            $html[] = '<div class="clear"></div>';
-            $html[] = '</div>';
-            $html[] = '</div>';
-            $this->addElement('html', implode(PHP_EOL, $html));
-        }
-
-        foreach ($packageList->get_children() as $child)
-        {
-            $this->renderPackages($child);
-        }
+        $buttons[] = $this->createElement(
+            'style_button', 'next', Translation::get('Next', null, Utilities::COMMON_LIBRARIES),
+            array('class' => 'btn-primary'), null, new FontAwesomeGlyph('chevron-right')
+        );
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     /**
@@ -416,12 +256,22 @@ class SettingsForm extends FormValidator
         return $packages;
     }
 
-    public function orderPackages($packageLeft, $packageRight)
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     */
+    public function getApplication()
     {
-        $packageNameLeft = Translation::get('TypeName', null, $packageLeft->get_context());
-        $packageNameRight = Translation::get('TypeName', null, $packageRight->get_context());
+        return $this->application;
+    }
 
-        return strcmp($packageNameLeft, $packageNameRight);
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     */
+    public function setApplication($application)
+    {
+        $this->application = $application;
     }
 
     /**
@@ -492,6 +342,156 @@ class SettingsForm extends FormValidator
         }
 
         return $this->sessionSettings;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer
+     */
+    public function getTabsGenerator()
+    {
+        if (!isset($this->tabsGenerator))
+        {
+            $this->tabsGenerator = new DynamicFormTabsRenderer('settings', $this);
+        }
+
+        return $this->tabsGenerator;
+    }
+
+    protected function get_database_drivers()
+    {
+        $drivers = array();
+        $drivers['mysqli'] = 'MySQL >= 4.1.3';
+
+        return $drivers;
+    }
+
+    protected function hasSelectablePackages($packages)
+    {
+        if (count($packages) <= 1)
+        {
+            return false;
+        }
+        else
+        {
+            $numberOfCorePackages = 0;
+
+            foreach ($packages as $package)
+            {
+                if ($package->getCoreInstall())
+                {
+                    $numberOfCorePackages ++;
+                }
+            }
+
+            if ($numberOfCorePackages == count($packages))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function orderPackages($packageLeft, $packageRight)
+    {
+        $packageNameLeft = Translation::get('TypeName', null, $packageLeft->get_context());
+        $packageNameRight = Translation::get('TypeName', null, $packageRight->get_context());
+
+        return strcmp($packageNameLeft, $packageNameRight);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Configuration\Package\PackageList $packageList
+     */
+    public function renderPackages(PackageList $packageList)
+    {
+        $html = array();
+
+        $renderer = $this->defaultRenderer();
+        $packages = $this->determinePackages($packageList);
+
+        if (count($packages) > 0)
+        {
+            $firstPackage = current($packages);
+            $packageType = Translation::get('TypeCategory', null, $firstPackage->get_context());
+
+            $html = array();
+
+            $html[] = '<div class="package-list">';
+
+            $html[] = '<div class="row package-list-header">';
+            $html[] = '<div class="col-xs-12">';
+            $html[] = '<h4>';
+            $html[] = $packageType;
+
+            if ($this->hasSelectablePackages($packages))
+            {
+                $html[] = $this->addPackageSelectionToggle();
+            }
+
+            $html[] = '</h4>';
+            $html[] = '</div>';
+            $html[] = '</div>';
+
+            $html[] = '<div class="package-list-items row">';
+
+            $this->addElement('html', implode(PHP_EOL, $html));
+
+            foreach ($packages as $package)
+            {
+                $title = Translation::get('TypeName', null, $package->get_context());
+                $packageClasses = $this->getPackageClasses($package);
+
+                if ($package->getCoreInstall())
+                {
+                    $glyph = new NamespaceIdentGlyph($package->get_context(), true, false, true);
+                    $disabled = ' disabled="disabled"';
+                }
+                else
+                {
+                    $glyph = new NamespaceIdentGlyph($package->get_context(), true);
+                    $disabled = '';
+                }
+
+                $html = array();
+                $html[] = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">';
+                $html[] = '<a class="' . $packageClasses . '"' . $disabled . '>' . $glyph->render() . ' ';
+                $this->addElement('html', implode(PHP_EOL, $html));
+
+                $checkbox_name =
+                    'install_' . ClassnameUtilities::getInstance()->getNamespaceId($package->get_context());
+                $this->addElement('checkbox', 'install[' . $package->get_context() . ']');
+                $renderer->setElementTemplate('{element}', 'install[' . $package->get_context() . ']');
+
+                $html = array();
+                $html[] = $title;
+                $html[] = '</a>';
+                $html[] = '</div>';
+                $this->addElement('html', implode(PHP_EOL, $html));
+
+                $extra = $package->get_extra();
+
+                if ($package->getCoreInstall() || $package->getDefaultInstall())
+                {
+                    $defaults['install'][$package->get_context()] = 1;
+                }
+            }
+
+            $this->setDefaults($defaults);
+
+            $html = array();
+            $html[] = '<div class="clear"></div>';
+            $html[] = '</div>';
+            $html[] = '</div>';
+            $this->addElement('html', implode(PHP_EOL, $html));
+        }
+
+        foreach ($packageList->get_children() as $child)
+        {
+            $this->renderPackages($child);
+        }
     }
 
     public function setDefaults($defaults = array())

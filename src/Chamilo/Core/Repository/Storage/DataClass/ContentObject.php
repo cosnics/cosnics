@@ -801,6 +801,30 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
+     * @param integer $size
+     * @param boolean $isAvailable
+     * @param string[] $extraClasses
+     *
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function getGlyph($size = Theme::ICON_SMALL, $isAvailable = true, $extraClasses = array())
+    {
+        $templateRegistration = $this->get_template_registration();
+
+        if ($templateRegistration instanceof TemplateRegistration && !$templateRegistration->get_default())
+        {
+            $glyphTitle = 'TypeName' . $templateRegistration->get_name();
+        }
+        else
+        {
+            $glyphTitle = null;
+        }
+
+        return self::glyph($this->getGlyphNamespace(), $size, $isAvailable, $glyphTitle, $extraClasses);
+    }
+
+    /**
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
@@ -1189,18 +1213,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_icon_image($size = Theme::ICON_SMALL, $isAvailable = true, $extraClasses = array())
     {
-        $templateRegistration = $this->get_template_registration();
-
-        if ($templateRegistration instanceof TemplateRegistration && !$templateRegistration->get_default())
-        {
-            $glyphTitle = 'TypeName' . $templateRegistration->get_name();
-        }
-        else
-        {
-            $glyphTitle = null;
-        }
-
-        return self::icon_image($this->getGlyphNamespace(), $size, $isAvailable, $glyphTitle, $extraClasses);
+        return $this->getGlyph($size, $isAvailable, $extraClasses)->render();
     }
 
     /**
@@ -1544,6 +1557,22 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
+     * @param string $glyphNamespace
+     * @param integer $size
+     * @param boolean $isAvailable
+     * @param string $title
+     * @param string[] $extraClasses
+     *
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph
+     */
+    public static function glyph(
+        $glyphNamespace, $size = Theme::ICON_SMALL, $isAvailable = true, $title = null, $extraClasses = array()
+    )
+    {
+        return new NamespaceIdentGlyph($glyphNamespace, true, false, !$isAvailable, $size, $extraClasses, $title);
+    }
+
+    /**
      * Checks if the given ID is the ID of one of this object's ancestors.
      *
      * @param $ancestor_id int
@@ -1634,9 +1663,7 @@ class ContentObject extends CompositeDataClass
         $glyphNamespace, $size = Theme::ICON_SMALL, $isAvailable = true, $title = null, $extraClasses = array()
     )
     {
-        $glyph = new NamespaceIdentGlyph($glyphNamespace, true, false, !$isAvailable, $size, $extraClasses, $title);
-
-        return $glyph->render();
+        return self::glyph($glyphNamespace, $size, $isAvailable, $title, $extraClasses)->render();
     }
 
     public static function icon_path($context, $size = Theme::ICON_SMALL, $is_current = true)

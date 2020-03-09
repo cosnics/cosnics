@@ -2,27 +2,26 @@
 
 @import url(../../../Publication/Resources/Css/Aqua/Stylesheet.css);
 
-.fas-ci-c6e4cf181180b6a731a2bc3cdfc5765f {
-    font-family: 'Font Awesome 5 Free';
-	font-weight: 900;
-}
-
-.fas-ci-c6e4cf181180b6a731a2bc3cdfc5765f:before {
-    content: "\f0a0";
-}
-
-/*
- * Category Type: Chamilo\Core\Repository\ContentObject\Category
- */
+.fas-ci-c6e4cf181180b6a731a2bc3cdfc5765f,
 .fas-ci-16e12166426537ee0ba35c2d107830c1,
 .fas-ci-f137619b1cf9c5596143dca2ea3a74b9,
 .fas-ci-4d4cf8cea026eac57bfdf14e0e8fcb0c,
 .fas-ci-ff8dd06af20c5a5fe0bef2f6c5121066,
 .fas-ci-c2b6b1afedf80daeae5f1764f69dbaae,
-.fas-ci-f070e5a65cc0463e94f042dcaa37d76f
-{
+.fas-ci-f070e5a65cc0463e94f042dcaa37d76f,
+.fas-ci-086f7e8bdc5ee9c0a5b1cb5b53dded87,
+.fas-ci-d8e575873ba86569ce6dfd4f23324fc3,
+.fas-ci-60edd92a853974f2bba84e50c2aba9d8,
+.fas-ci-e181bea9b3835867726b5d1379fc8a78,
+.fas-ci-56ef83b6283d63193e3191f8210e5984,
+.fas-ci-6f37206c2cc79e7af7ccdcbb3d818ba8,
+.fas-ci-0900638a6ab01cb7cabe743e699c7c94 {
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
+}
+
+.fas-ci-c6e4cf181180b6a731a2bc3cdfc5765f:before {
+    content: "\f0a0";
 }
 
 /*
@@ -67,6 +66,76 @@
     content: "\f630";
 }
 
+
+/*
+ * Import Type: Chamilo\Core\Repository\Import\Cpo
+ */
+.fas-ci-086f7e8bdc5ee9c0a5b1cb5b53dded87:before {
+    content: "\f187";
+}
+
+/*
+ * Import Type: Chamilo\Core\Repository\Import\Ical
+ */
+.fas-ci-d8e575873ba86569ce6dfd4f23324fc3:before {
+    content: "\f133";
+}
+
+/*
+ * Import Type: Chamilo\Core\Repository\Import\File
+ */
+.fas-ci-60edd92a853974f2bba84e50c2aba9d8:before {
+    content: "\f15b";
+}
+
+/*
+ * Import Type: Chamilo\Core\Repository\Import\Zip
+ */
+.fas-ci-e181bea9b3835867726b5d1379fc8a78:before {
+    content: "\f1c6";
+}
+
+/*
+ * Import Type: Chamilo\Core\Repository\Import\Hotpotatoes
+ */
+.fas-ci-56ef83b6283d63193e3191f8210e5984:before {
+    content: "\f7e4";
+}
+
+/*
+ * Import Type: Chamilo\Core\Repository\Import\Webpage
+ */
+.fas-ci-6f37206c2cc79e7af7ccdcbb3d818ba8:before {
+    content: "\f570";
+}
+
+
+/*
+ * Import Type: Chamilo\Core\Repository\Import\Rar
+ */
+.fas-ci-0900638a6ab01cb7cabe743e699c7c94:before {
+    content: "\f1c6";
+}
+
+.fas-ci-3fb13b6c869f4b3e3857f5e43be8512b,
+.fas-ci-5412d58b200bda2def589acf1d29d8ba {
+    font-family: 'Font Awesome 5 Brands';
+}
+
+/*
+ * Import Type: Chamilo\Core\Repository\Import\Vimeo
+ */
+.fas-ci-3fb13b6c869f4b3e3857f5e43be8512b:before {
+    content: "\f27d";
+}
+
+/*
+ * Import Type: Chamilo\Core\Repository\Import\Youtube
+ */
+.fas-ci-5412d58b200bda2def589acf1d29d8ba:before {
+    content: "\f167";
+}
+
 tr.recycled td {
     color: #cccccc;
 }
@@ -77,50 +146,6 @@ tr.recycled td a {
 
 tr.recycled td a:hover {
     color: #ff7777;
-}
-
-ul.tree-menu li div a.category_agenda {
-    background-image: url(../../Images/Aqua/Category/Agenda.png);
-}
-
-ul.tree-menu li div a.category_assessment {
-    background-image: url(../../Images/Aqua/Category/Assessment.png);
-}
-
-ul.tree-menu li div a.category_collaboration {
-    background-image: url(../../Images/Aqua/Category/Collaboration.png);
-}
-
-ul.tree-menu li div a.category_general {
-    background-image: url(../../Images/Aqua/Category/General.png);
-}
-
-ul.tree-menu li div a.category_handbook {
-    background-image: url(../../Images/Aqua/Category/Handbook.png);
-}
-
-ul.tree-menu li div a.category_media {
-    background-image: url(../../Images/Aqua/Category/Media.png);
-}
-
-ul.tree-menu li div a.category_news {
-    background-image: url(../../Images/Aqua/Category/News.png);
-}
-
-ul.tree-menu li div a.category_peer_assessment {
-    background-image: url(../../Images/Aqua/Category/PeerAssessment.png);
-}
-
-ul.tree-menu li div a.category_reference {
-    background-image: url(../../Images/Aqua/Category/Reference.png);
-}
-
-ul.tree-menu li div a.category_survey {
-    background-image: url(../../Images/Aqua/Category/Survey.png);
-}
-
-ul.tree-menu li div a.category_video_conferencing {
-    background-image: url(../../Images/Aqua/Category/VideoConferencing.png);
 }
 
 div#advanced_filter_tabs div.admin_tab {

@@ -652,7 +652,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
         if ($translation == $translationVariable)
         {
-            $translation = $translator->trans($translationVariable, array(), Utilities::COMMON_LIBRARIES);
+            $translation = $translator->trans($translationVariable, array(), 'Chamilo\Core\Repository');
         }
 
         return $translation;

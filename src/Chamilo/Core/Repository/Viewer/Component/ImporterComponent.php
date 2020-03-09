@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportImplementation;
 use Chamilo\Core\Repository\Common\Import\ImportFormParameters;
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
+use Chamilo\Core\Repository\Common\Import\ImportTypeSelector;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
@@ -190,19 +191,23 @@ class ImporterComponent extends Manager implements DelegateComponent
 
             $html[] = $this->render_header();
 
-            foreach ($this->get_import_types() as $type => $name)
-            {
+            $importTypeSelector = new ImportTypeSelector($this->get_parameters(), $this->get_types());
 
-                $html[] = '<a href="' . $this->get_url(array(self::PARAM_IMPORT_TYPE => $type)) . '">';
-                $html[] =
-                    '<div class="create_block" style="background-image: url(' . Theme::getInstance()->getImagePath(
-                        \Chamilo\Core\Repository\Manager::context(),
-                        'Import/' . StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString()
-                    ) . ');">';
-                $html[] = $name;
-                $html[] = '</div>';
-                $html[] = '</a>';
-            }
+            $html[] = $importTypeSelector->renderTypeSelector();
+
+//            foreach ($this->get_import_types() as $type => $name)
+//            {
+//
+//                $html[] = '<a href="' . $this->get_url(array(self::PARAM_IMPORT_TYPE => $type)) . '">';
+//                $html[] =
+//                    '<div class="create_block" style="background-image: url(' . Theme::getInstance()->getImagePath(
+//                        \Chamilo\Core\Repository\Manager::context(),
+//                        'Import/' . StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString()
+//                    ) . ');">';
+//                $html[] = $name;
+//                $html[] = '</div>';
+//                $html[] = '</a>';
+//            }
 
             $html[] = $this->render_footer();
 

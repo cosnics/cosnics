@@ -121,6 +121,8 @@ abstract class ContentObjectForm extends FormValidator
      */
     private $extra;
 
+    private $additional_elements;
+
     /**
      *
      * @var DynamicFormTabsRenderer
@@ -128,13 +130,15 @@ abstract class ContentObjectForm extends FormValidator
     private $tabsGenerator;
 
     /**
-     * Constructor.
-     *
-     * @param $form_type int The form type; either ContentObjectForm :: TYPE_CREATE or ContentObjectForm :: TYPE_EDIT.
-     * @param $content_object ContentObject The object to create or update.
-     * @param $form_name string The name to use in the form tag.
-     * @param $method string The method to use ('post' or 'get').
-     * @param $action string The URL to which the form should be submitted.
+     * @param integer $form_type
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
+     * @param string $form_name
+     * @param string $method
+     * @param string $action
+     * @param array $extra
+     * @param array $additional_elements
+     * @param boolean $allow_new_version
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
@@ -170,17 +174,17 @@ abstract class ContentObjectForm extends FormValidator
         $this->setDefaults();
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
     public function addDefaultTab()
     {
         $typeName = $this->get_content_object()->get_template_registration()->get_template()->translate('TypeName');
-        $typeLogo = Theme::getInstance()->getImagePath(
-            $this->get_content_object()->package(), 'Logo/' .
-            ($this->get_content_object()->get_template_registration_id() ?
-                'Template/' . $this->get_content_object()->get_template_registration()->get_name() . '/' : '') . '22'
-        );
 
         $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab(self::TAB_CONTENT_OBJECT, $typeName, $typeLogo, 'build_general_form')
+            new DynamicFormTab(
+                self::TAB_CONTENT_OBJECT, $typeName, $this->get_content_object()->getGlyph(), 'build_general_form'
+            )
         );
     }
 
@@ -195,7 +199,7 @@ abstract class ContentObjectForm extends FormValidator
             $this->getTabsGenerator()->add_tab(
                 new DynamicFormTab(
                     'view-instructions', Translation::get('ViewInstructions'),
-                    new FontAwesomeGlyph('question-circle', array('fa-sm')), 'buildInstructionsForm'
+                    new FontAwesomeGlyph('question-circle', array('fa-lg'), null, 'fas'), 'buildInstructionsForm'
                 )
             );
         }
@@ -224,7 +228,7 @@ abstract class ContentObjectForm extends FormValidator
                 $this->getTabsGenerator()->add_tab(
                     new DynamicFormTab(
                         'schema-' . $schemaInstance->get_id(), $schema->get_name(),
-                        new FontAwesomeGlyph('info-circle', array('fa-sm')), 'build_metadata_form',
+                        new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas'), 'build_metadata_form',
                         array($schemaInstance)
                     )
                 );
@@ -233,7 +237,7 @@ abstract class ContentObjectForm extends FormValidator
             $this->getTabsGenerator()->add_tab(
                 new DynamicFormTab(
                     'add-schema', Translation::get('AddMetadataSchema'),
-                    new FontAwesomeGlyph('plus', array('fa-sm')), 'build_metadata_choice_form'
+                    new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'), 'build_metadata_choice_form'
                 )
             );
         }
@@ -931,9 +935,9 @@ EOT;
     }
 
     /**
-     *
-     * @return use core\repository\common\template\Template
-     * @throws NoTemplateException
+     * @return \Chamilo\Core\Repository\Common\Template\Template
+     * @throws \Chamilo\Core\Repository\Exception\NoTemplateException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     protected function get_content_object_template()
     {
@@ -950,8 +954,9 @@ EOT;
     }
 
     /**
-     *
-     * @return use core\repository\common\template\TemplateConfiguration
+     * @return \Chamilo\Core\Repository\Common\Template\TemplateConfiguration
+     * @throws \Chamilo\Core\Repository\Exception\NoTemplateException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     protected function get_content_object_template_configuration()
     {
@@ -1026,11 +1031,9 @@ EOT;
     }
 
     /**
-     * Sets default values.
-     * Traditionally, you will want to extend this method so it sets default for your learning
-     * object type's additional properties.
+     * @param array $defaults
      *
-     * @param $defaults array Default values for this form's parameters.
+     * @throws \Exception
      */
     public function setDefaults($defaults = array())
     {
@@ -1080,6 +1083,11 @@ EOT;
         parent::setDefaults($defaults);
     }
 
+    /**
+     * @param $defaults
+     *
+     * @throws \Exception
+     */
     public function setParentDefaults($defaults)
     {
         parent::setDefaults($defaults);
@@ -1132,6 +1140,11 @@ EOT;
         }
     }
 
+    /**
+     * @param $defaults
+     *
+     * @throws \Exception
+     */
     public function set_values($defaults)
     {
         parent::setDefaults($defaults);

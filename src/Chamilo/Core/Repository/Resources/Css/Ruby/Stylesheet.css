@@ -14,7 +14,7 @@ div.story_image {
 	-moz-border-radius-topleft: 5px;
 	-webkit-border-top-left-radius: 5px;
 	/*background-image: url(../images/image_story.png);*/
-	background-repeat: norepeat;
+	background-repeat: no-repeat;
 	position: relative;
 	margin-bottom: 10px;
 }
@@ -41,50 +41,6 @@ div.story_text span.title {
 
 div.content_object.comic_book {
 	padding-left: 10px;
-}
-
-ul.tree-menu li div a.category_agenda {
-	background-image: url(../../Images/Ruby/Category/Agenda.png);
-}
-
-ul.tree-menu li div a.category_assessment {
-	background-image: url(../../Images/Ruby/Category/Assessment.png);
-}
-
-ul.tree-menu li div a.category_collaboration {
-	background-image: url(../../Images/Ruby/Category/Collaboration.png);
-}
-
-ul.tree-menu li div a.category_general {
-	background-image: url(../../Images/Ruby/Category/General.png);
-}
-
-ul.tree-menu li div a.category_handbook {
-	background-image: url(../../Images/Ruby/Category/Handbook.png);
-}
-
-ul.tree-menu li div a.category_media {
-	background-image: url(../../Images/Ruby/Category/Media.png);
-}
-
-ul.tree-menu li div a.category_news {
-	background-image: url(../../Images/Ruby/Category/News.png);
-}
-
-ul.tree-menu li div a.category_peer_assessment {
-	background-image: url(../../Images/Ruby/Category/PeerAssessment.png);
-}
-
-ul.tree-menu li div a.category_reference {
-	background-image: url(../../Images/Ruby/Category/Reference.png);
-}
-
-ul.tree-menu li div a.category_survey {
-	background-image: url(../../Images/Ruby/Category/Survey.png);
-}
-
-ul.tree-menu li div a.category_video_conferencing {
-	background-image: url(../../Images/Ruby/Category/VideoConferencing.png);
 }
 
 div#repository_menu, div#search_parameters, div.information-box {

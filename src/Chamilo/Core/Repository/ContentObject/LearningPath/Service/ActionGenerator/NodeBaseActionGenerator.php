@@ -420,12 +420,12 @@ class NodeBaseActionGenerator extends NodeActionGenerator
 
         $actionGroup = new ActionGroup('import');
 
-        foreach ($this->importTypes as $importType => $importName)
+        foreach ($this->importTypes as $importType => $importPropertes)
         {
             $creatorParameters[ContentObjectImportService::PARAM_IMPORT_TYPE] = $importType;
 
             $actionGroup->addAction(
-                new Action('import_' . $importType, $importName, $this->getUrlForNode($creatorParameters), ''));
+                new Action('import_' . $importType, $importPropertes['label'], $this->getUrlForNode($creatorParameters), ''));
         }
 
         return $actionGroup;

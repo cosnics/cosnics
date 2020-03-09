@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Install;
 
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Theme;
 
 /**
  *
@@ -27,29 +27,6 @@ class SettingsOverview
     public function __construct($settingsValues)
     {
         $this->settingsValues = $settingsValues;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function getSettingsValues()
-    {
-        return $this->settingsValues;
-    }
-
-    /**
-     *
-     * @param string[] $settingsValues
-     */
-    public function setSettingsValues($settingsValues)
-    {
-        $this->settingsValues = $settingsValues;
-    }
-
-    public function getSettingValue($setting)
-    {
-        return $this->settingsValues[$setting];
     }
 
     /**
@@ -78,6 +55,24 @@ class SettingsOverview
      *
      * @return string
      */
+    protected function getAdministratorContent()
+    {
+        $html = array();
+
+        $html[] = $this->renderSetting(Translation::get('AdminEmail'), $this->getSettingValue('admin_email'));
+        $html[] = $this->renderSetting(Translation::get('AdminLastName'), $this->getSettingValue('admin_surname'));
+        $html[] = $this->renderSetting(Translation::get('AdminFirstName'), $this->getSettingValue('admin_firstname'));
+        $html[] = $this->renderSetting(Translation::get('AdminPhone'), $this->getSettingValue('admin_phone'));
+        $html[] = $this->renderSetting(Translation::get('AdminLogin'), $this->getSettingValue('admin_username'));
+        $html[] = $this->renderSetting(Translation::get('AdminPass'), $this->getSettingValue('admin_password'));
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
     protected function getDatabaseContent()
     {
         $html = array();
@@ -88,15 +83,14 @@ class SettingsOverview
         $html[] = $this->renderSetting(Translation::get('DatabaseLogin'), $this->getSettingValue('database_username'));
 
         $html[] = $this->renderSetting(
-            Translation::get('DatabasePassword'),
-            $this->getSettingValue('database_password'));
+            Translation::get('DatabasePassword'), $this->getSettingValue('database_password')
+        );
 
         $html[] = $this->renderSetting(
-            Translation::get('DatabaseExists'),
-            $this->getSettingValue('database_exists') ? Translation::get(
-                'ConfirmYes',
-                null,
-                Utilities::COMMON_LIBRARIES) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('DatabaseExists'), $this->getSettingValue('database_exists') ? Translation::get(
+            'ConfirmYes', null, Utilities::COMMON_LIBRARIES
+        ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES)
+        );
 
         return implode(PHP_EOL, $html);
     }
@@ -118,24 +112,6 @@ class SettingsOverview
      *
      * @return string
      */
-    protected function getAdministratorContent()
-    {
-        $html = array();
-
-        $html[] = $this->renderSetting(Translation::get('AdminEmail'), $this->getSettingValue('admin_email'));
-        $html[] = $this->renderSetting(Translation::get('AdminLastName'), $this->getSettingValue('admin_surname'));
-        $html[] = $this->renderSetting(Translation::get('AdminFirstName'), $this->getSettingValue('admin_firstname'));
-        $html[] = $this->renderSetting(Translation::get('AdminPhone'), $this->getSettingValue('admin_phone'));
-        $html[] = $this->renderSetting(Translation::get('AdminLogin'), $this->getSettingValue('admin_username'));
-        $html[] = $this->renderSetting(Translation::get('AdminPass'), $this->getSettingValue('admin_password'));
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
     protected function getPlatformContent()
     {
         $html = array();
@@ -143,41 +119,18 @@ class SettingsOverview
         $html[] = $this->renderSetting(Translation::get('CampusName'), $this->getSettingValue('site_name'));
 
         $html[] = $this->renderSetting(
-            Translation::get('InstituteShortName'),
-            $this->getSettingValue('organization_name'));
+            Translation::get('InstituteShortName'), $this->getSettingValue('organization_name')
+        );
 
         $html[] = $this->renderSetting(Translation::get('InstituteURL'), $this->getSettingValue('organization_url'));
 
         $html[] = $this->renderSetting(
-            Translation::get('AllowSelfReg'),
-            Translation::get(($this->getSettingValue('self_reg') == 1 ? 'Yes' : 'No')));
+            Translation::get('AllowSelfReg'), Translation::get(($this->getSettingValue('self_reg') == 1 ? 'Yes' : 'No'))
+        );
 
         $html[] = $this->renderSetting(
-            Translation::get('HashingAlgorithm'),
-            $this->getSettingValue('hashing_algorithm'));
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function getStorageContent()
-    {
-        $html = array();
-
-        $html[] = $this->renderSetting(Translation::get('ArchivePath'), $this->getSettingValue('archive_path'));
-        $html[] = $this->renderSetting(Translation::get('CachePath'), $this->getSettingValue('cache_path'));
-        $html[] = $this->renderSetting(Translation::get('GarbagePath'), $this->getSettingValue('garbage_path'));
-        $html[] = $this->renderSetting(Translation::get('HotpotatoesPath'), $this->getSettingValue('hotpotatoes_path'));
-        $html[] = $this->renderSetting(Translation::get('LogsPath'), $this->getSettingValue('logs_path'));
-        $html[] = $this->renderSetting(Translation::get('RepositoryPath'), $this->getSettingValue('repository_path'));
-        $html[] = $this->renderSetting(Translation::get('ScormPath'), $this->getSettingValue('scorm_path'));
-        $html[] = $this->renderSetting(Translation::get('TempPath'), $this->getSettingValue('temp_path'));
-        $html[] = $this->renderSetting(
-            Translation::get('UserpicturesPath'),
-            $this->getSettingValue('userpictures_path'));
+            Translation::get('HashingAlgorithm'), $this->getSettingValue('hashing_algorithm')
+        );
 
         return implode(PHP_EOL, $html);
     }
@@ -210,10 +163,10 @@ class SettingsOverview
 
             foreach ($selectedPackages as $package)
             {
-                $iconSource = Theme::getInstance()->getImagePath($package, 'Logo/22');
+                $glyph = new NamespaceIdentGlyph($package, true);
 
                 $html[] = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">';
-                $html[] = '<a class="btn btn-default"><img src="' . $iconSource . '"> ';
+                $html[] = '<a class="btn btn-default">' . $glyph->render() . ' ';
 
                 $html[] = Translation::get('TypeName', null, $package);
                 $html[] = '</a>';
@@ -228,10 +181,57 @@ class SettingsOverview
         return implode(PHP_EOL, $html);
     }
 
+    public function getSettingValue($setting)
+    {
+        return $this->settingsValues[$setting];
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getSettingsValues()
+    {
+        return $this->settingsValues;
+    }
+
+    /**
+     *
+     * @param string[] $settingsValues
+     */
+    public function setSettingsValues($settingsValues)
+    {
+        $this->settingsValues = $settingsValues;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function getStorageContent()
+    {
+        $html = array();
+
+        $html[] = $this->renderSetting(Translation::get('ArchivePath'), $this->getSettingValue('archive_path'));
+        $html[] = $this->renderSetting(Translation::get('CachePath'), $this->getSettingValue('cache_path'));
+        $html[] = $this->renderSetting(Translation::get('GarbagePath'), $this->getSettingValue('garbage_path'));
+        $html[] = $this->renderSetting(Translation::get('HotpotatoesPath'), $this->getSettingValue('hotpotatoes_path'));
+        $html[] = $this->renderSetting(Translation::get('LogsPath'), $this->getSettingValue('logs_path'));
+        $html[] = $this->renderSetting(Translation::get('RepositoryPath'), $this->getSettingValue('repository_path'));
+        $html[] = $this->renderSetting(Translation::get('ScormPath'), $this->getSettingValue('scorm_path'));
+        $html[] = $this->renderSetting(Translation::get('TempPath'), $this->getSettingValue('temp_path'));
+        $html[] = $this->renderSetting(
+            Translation::get('UserpicturesPath'), $this->getSettingValue('userpictures_path')
+        );
+
+        return implode(PHP_EOL, $html);
+    }
+
     /**
      *
      * @param string $label
      * @param string $content
+     *
      * @return string
      */
     protected function renderSection($label, $content)
@@ -256,6 +256,7 @@ class SettingsOverview
      *
      * @param string $label
      * @param string $value
+     *
      * @return string
      */
     protected function renderSetting($label, $value)
