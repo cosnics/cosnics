@@ -25,8 +25,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  * @package Chamilo\Application\Portfolio\Component
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements PortfolioDisplaySupport, DelegateComponent,
-    PortfolioComplexRights, PortfolioBookmarkSupport
+class HomeComponent extends Manager
+    implements PortfolioDisplaySupport, DelegateComponent, PortfolioComplexRights, PortfolioBookmarkSupport
 {
 
     /**
@@ -45,51 +45,17 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
         return $this->getApplicationFactory()->getApplication(
             Portfolio::package() . '\Display',
-            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this))->run();
+            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
+        )->run();
     }
 
     /**
      *
-     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::clear_virtual_user_id()
      */
-    public function getPublication()
+    public function clear_virtual_user_id()
     {
-        if (! isset($this->publication))
-        {
-            $this->publication = $this->getPublicationService()->findPublicationForUserIdentifier(
-                $this->getCurrentUserId());
-
-            if (! $this->publication instanceof Publication)
-            {
-                $this->publication = $this->getPublicationService()->createRootPortfolioAndPublicationForUser(
-                    $this->getCurrentUser());
-            }
-        }
-
-        return $this->publication;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_root_content_object()
-     */
-    public function get_root_content_object()
-    {
-        return $this->getPublication()->get_content_object();
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrieve_portfolio_feedbacks()
-     */
-    public function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count, $offset)
-    {
-        return $this->getFeedbackService()->findFeedbackForPublicationNodeUserIdentifierCountAndOffset(
-            $this->getPublication(),
-            $node,
-            $this->getUser(),
-            $count,
-            $offset);
+        return $this->getRightsService()->clearVirtualUser();
     }
 
     /**
@@ -99,149 +65,60 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
     public function count_portfolio_feedbacks(ComplexContentObjectPathNode $node)
     {
         return $this->getFeedbackService()->countFeedbackForPublicationNodeAndUser(
-            $this->getPublication(),
-            $node,
-            $this->getUser());
+            $this->getPublication(), $node, $this->getUser()
+        );
     }
 
     /**
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrieve_portfolio_feedback()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::count_portfolio_possible_view_users()
      */
-    public function retrieve_portfolio_feedback($feedbackIdentifier)
+    public function count_portfolio_possible_view_users($condition)
     {
-        return $this->getFeedbackService()->findFeedbackByIdentfier($feedbackIdentifier);
+        return $this->getUserService()->countUsers($condition);
     }
 
     /**
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_feedback()
+     * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
-    public function get_portfolio_feedback()
+    public function getPublication()
     {
-        return $this->getFeedbackService()->getFeedbackInstanceForPublication($this->getPublication());
+        if (!isset($this->publication))
+        {
+            $this->publication = $this->getPublicationService()->findPublicationForUserIdentifier(
+                $this->getCurrentUserId()
+            );
+
+            if (!$this->publication instanceof Publication)
+            {
+                $this->publication = $this->getPublicationService()->createRootPortfolioAndPublicationForUser(
+                    $this->getCurrentUser()
+                );
+            }
+        }
+
+        return $this->publication;
     }
 
     /**
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_tree_menu_url()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_available_rights()
      */
-    public function get_portfolio_tree_menu_url()
+    public function get_available_rights()
     {
-        $redirect = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => Manager::context(),
-                Application::PARAM_ACTION => Manager::ACTION_HOME,
-                Manager::PARAM_USER_ID => $this->getCurrentUserId(),
-                PortfolioDisplayManager::PARAM_ACTION => PortfolioDisplayManager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                PortfolioDisplayManager::PARAM_STEP => Menu::NODE_PLACEHOLDER));
-
-        return $redirect->getUrl();
+        return $this->getRightsService()->getAvailableRights();
     }
 
     /**
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_update_feedback()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_entities()
      */
-    public function is_allowed_to_update_feedback($feedback)
-    {
-        return $this->getRightsService()->isFeedbackOwner($feedback, $this->getUser());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_delete_feedback()
-     */
-    public function is_allowed_to_delete_feedback($feedback)
-    {
-        return $this->getRightsService()->isFeedbackOwner($feedback, $this->getUser());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_create_feedback()
-     */
-    public function is_allowed_to_create_feedback(ComplexContentObjectPathNode $node = null)
-    {
-        return $this->getRightsService()->isAllowedToCreateFeedback($this->getPublication(), $this->getUser(), $node);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_view_feedback()
-     */
-    public function is_allowed_to_view_feedback(ComplexContentObjectPathNode $node = null)
-    {
-        return $this->getRightsService()->isAllowedToViewFeedback($this->getPublication(), $this->getUser(), $node);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_edit_content_object()
-     */
-    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node = null)
-    {
-        return $this->getRightsService()->isAllowedToEditContentObject($this->getPublication(), $this->getUser(), $node);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_view_content_object()
-     */
-    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node = null)
-    {
-        return $this->getRightsService()->isAllowedToViewContentObjectForNode(
-            $this->getPublication(),
-            $this->getUser(),
-            $node);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport::get_portfolio_bookmark()
-     */
-    public function get_portfolio_bookmark($current_step)
-    {
-        $portfolioOwner = $this->get_root_content_object()->get_owner();
-
-        $content_object = new Bookmark();
-        $content_object->set_title(
-            $this->getTranslator()->trans(
-                'BookmarkTitle',
-                ['NAME' => $portfolioOwner->get_fullname()],
-                Manager::context()));
-        $content_object->set_description(
-            $this->getTranslator()->trans(
-                'BookmarkDescription',
-                ['NAME' => $portfolioOwner->get_fullname()],
-                Manager::context()));
-        $content_object->set_application(__NAMESPACE__);
-        $content_object->set_url(
-            $this->get_url(
-                array(
-                    \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                    \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_STEP => $current_step)));
-        $content_object->set_owner_id($this->get_user_id());
-
-        return $content_object;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_additional_actions()
-     */
-    public function get_portfolio_additional_actions()
+    public function get_entities()
     {
         return array(
-            new Button(
-                $this->getTranslator()->trans('BrowserComponent', [], Manager::context()),
-                new FontAwesomeGlyph('search'),
-                $this->get_url(
-                    array(self::PARAM_ACTION => self::ACTION_BROWSE),
-                    array(
-                        self::PARAM_USER_ID,
-                        \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_ACTION,
-                        \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_STEP))));
+            UserEntity::ENTITY_TYPE => new UserEntity(), PlatformGroupEntity::ENTITY_TYPE => new PlatformGroupEntity()
+        );
     }
 
     /**
@@ -262,92 +139,89 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_available_rights()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_additional_actions()
      */
-    public function get_available_rights()
-    {
-        return $this->getRightsService()->getAvailableRights();
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_entities()
-     */
-    public function get_entities()
+    public function get_portfolio_additional_actions()
     {
         return array(
-            UserEntity::ENTITY_TYPE => new UserEntity(),
-            PlatformGroupEntity::ENTITY_TYPE => new PlatformGroupEntity());
+            new Button(
+                $this->getTranslator()->trans('BrowserComponent', [], Manager::context()),
+                new FontAwesomeGlyph('search'), $this->get_url(
+                array(self::PARAM_ACTION => self::ACTION_BROWSE), array(
+                    self::PARAM_USER_ID, PortfolioDisplayManager::PARAM_ACTION, PortfolioDisplayManager::PARAM_STEP
+                )
+            )
+            )
+        );
     }
 
     /**
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_selected_entities()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport::get_portfolio_bookmark()
      */
-    public function get_selected_entities(ComplexContentObjectPathNode $node)
+    public function get_portfolio_bookmark($current_step)
     {
-        return $this->getRightsService()->findRightsLocationEntityRightsForPublicationNodeAndAvailableRights(
-            $this->getPublication(),
-            $node);
+        $portfolioOwner = $this->get_root_content_object()->get_owner();
+
+        $content_object = new Bookmark();
+        $content_object->set_title(
+            $this->getTranslator()->trans(
+                'BookmarkTitle', ['NAME' => $portfolioOwner->get_fullname()], Manager::context()
+            )
+        );
+        $content_object->set_description(
+            $this->getTranslator()->trans(
+                'BookmarkDescription', ['NAME' => $portfolioOwner->get_fullname()], Manager::context()
+            )
+        );
+        $content_object->set_application(__NAMESPACE__);
+        $content_object->set_url(
+            $this->get_url(
+                array(
+                    PortfolioDisplayManager::PARAM_ACTION => PortfolioDisplayManager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                    PortfolioDisplayManager::PARAM_STEP => $current_step
+                )
+            )
+        );
+        $content_object->set_owner_id($this->get_user_id());
+
+        return $content_object;
     }
 
     /**
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::invert_location_entity_right()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_feedback()
      */
-    public function invert_location_entity_right($rightId, $entityId, $entityType, $locationId)
+    public function get_portfolio_feedback()
     {
-        return $this->getRightsService()->invertLocationEntityRight(
-            $rightId,
-            $entityId,
-            $entityType,
-            $locationId,
-            $this->getPublication()->getId());
+        return $this->getFeedbackService()->getFeedbackInstanceForPublication($this->getPublication());
     }
 
     /**
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::is_allowed_to_set_content_object_rights()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_notification()
      */
-    public function is_allowed_to_set_content_object_rights()
+    public function get_portfolio_notification()
     {
-        return $this->getRightsService()->isAllowedToSetContentObjectRights($this->getUser(), $this->getPublication());
+        return $this->getNotificationService()->getNotificationInstanceForPublication($this->getPublication());
     }
 
     /**
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::retrieve_portfolio_possible_view_users()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_tree_menu_url()
      */
-    public function retrieve_portfolio_possible_view_users($condition, $count, $offset, $orderProperty)
+    public function get_portfolio_tree_menu_url()
     {
-        return $this->getUserService()->findUsers($condition, $offset, $count, $orderProperty);
-    }
+        $redirect = new Redirect(
+            array(
+                Application::PARAM_CONTEXT => Manager::context(), Application::PARAM_ACTION => Manager::ACTION_HOME,
+                Manager::PARAM_USER_ID => $this->getCurrentUserId(),
+                PortfolioDisplayManager::PARAM_ACTION => PortfolioDisplayManager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                PortfolioDisplayManager::PARAM_STEP => Menu::NODE_PLACEHOLDER
+            )
+        );
 
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::count_portfolio_possible_view_users()
-     */
-    public function count_portfolio_possible_view_users($condition)
-    {
-        return $this->getUserService()->countUsers($condition);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::set_portfolio_virtual_user_id()
-     */
-    public function set_portfolio_virtual_user_id($virtualUserIdentifier)
-    {
-        return $this->getRightsService()->setVirtualUser($virtualUserIdentifier);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::clear_virtual_user_id()
-     */
-    public function clear_virtual_user_id()
-    {
-        return $this->getRightsService()->clearVirtualUser();
+        return $redirect->getUrl();
     }
 
     /**
@@ -361,6 +235,104 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_root_content_object()
+     */
+    public function get_root_content_object()
+    {
+        return $this->getPublication()->get_content_object();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_selected_entities()
+     */
+    public function get_selected_entities(ComplexContentObjectPathNode $node)
+    {
+        return $this->getRightsService()->findRightsLocationEntityRightsForPublicationNodeAndAvailableRights(
+            $this->getPublication(), $node
+        );
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::invert_location_entity_right()
+     */
+    public function invert_location_entity_right($rightId, $entityId, $entityType, $locationId)
+    {
+        return $this->getRightsService()->invertLocationEntityRight(
+            $rightId, $entityId, $entityType, $locationId, $this->getPublication()->getId()
+        );
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_create_feedback()
+     */
+    public function is_allowed_to_create_feedback(ComplexContentObjectPathNode $node = null)
+    {
+        return $this->getRightsService()->isAllowedToCreateFeedback($this->getPublication(), $this->getUser(), $node);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_delete_feedback()
+     */
+    public function is_allowed_to_delete_feedback($feedback)
+    {
+        return $this->getRightsService()->isFeedbackOwner($feedback, $this->getUser());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_edit_content_object()
+     */
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node = null)
+    {
+        return $this->getRightsService()->isAllowedToEditContentObject(
+            $this->getPublication(), $this->getUser(), $node
+        );
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::is_allowed_to_set_content_object_rights()
+     */
+    public function is_allowed_to_set_content_object_rights()
+    {
+        return $this->getRightsService()->isAllowedToSetContentObjectRights($this->getUser(), $this->getPublication());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_update_feedback()
+     */
+    public function is_allowed_to_update_feedback($feedback)
+    {
+        return $this->getRightsService()->isFeedbackOwner($feedback, $this->getUser());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_view_content_object()
+     */
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node = null)
+    {
+        return $this->getRightsService()->isAllowedToViewContentObjectForNode(
+            $this->getPublication(), $this->getUser(), $node
+        );
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_view_feedback()
+     */
+    public function is_allowed_to_view_feedback(ComplexContentObjectPathNode $node = null)
+    {
+        return $this->getRightsService()->isAllowedToViewFeedback($this->getPublication(), $this->getUser(), $node);
+    }
+
+    /**
+     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_own_portfolio()
      */
     public function is_own_portfolio()
@@ -370,35 +342,65 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /**
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrieve_portfolio_notification()
-     */
-    public function retrieve_portfolio_notification(
-        \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node)
-    {
-        return $this->getNotificationService()->findPortfolioNotificationForPublicationUserAndNode(
-            $this->getPublication(),
-            $this->getUser(),
-            $node);
-    }
-
-    /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrievePortfolioNotifications()
      */
     public function retrievePortfolioNotifications(
-        \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node)
+        ComplexContentObjectPathNode $node
+    )
     {
         return $this->getNotificationService()->findPortfolioNotificationsForPublicationAndNode(
-            $this->getPublication(),
-            $node);
+            $this->getPublication(), $node
+        );
     }
 
     /**
      *
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_notification()
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrieve_portfolio_feedback()
      */
-    public function get_portfolio_notification()
+    public function retrieve_portfolio_feedback($feedbackIdentifier)
     {
-        return $this->getNotificationService()->getNotificationInstanceForPublication($this->getPublication());
+        return $this->getFeedbackService()->findFeedbackByIdentfier($feedbackIdentifier);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrieve_portfolio_feedbacks()
+     */
+    public function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count, $offset)
+    {
+        return $this->getFeedbackService()->findFeedbackForPublicationNodeUserIdentifierCountAndOffset(
+            $this->getPublication(), $node, $this->getUser(), $count, $offset
+        );
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrieve_portfolio_notification()
+     */
+    public function retrieve_portfolio_notification(
+        ComplexContentObjectPathNode $node
+    )
+    {
+        return $this->getNotificationService()->findPortfolioNotificationForPublicationUserAndNode(
+            $this->getPublication(), $this->getUser(), $node
+        );
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::retrieve_portfolio_possible_view_users()
+     */
+    public function retrieve_portfolio_possible_view_users($condition, $count, $offset, $orderProperty)
+    {
+        return $this->getUserService()->findUsers($condition, $offset, $count, $orderProperty);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::set_portfolio_virtual_user_id()
+     */
+    public function set_portfolio_virtual_user_id($virtualUserIdentifier)
+    {
+        return $this->getRightsService()->setVirtualUser($virtualUserIdentifier);
     }
 }

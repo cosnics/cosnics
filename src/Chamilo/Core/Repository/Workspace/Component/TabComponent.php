@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Core\Repository\Workspace\Manager;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -31,98 +31,91 @@ abstract class TabComponent extends Manager
             new DynamicVisualTab(
                 self::ACTION_BROWSE_PERSONAL,
                 Translation::get(self::ACTION_BROWSE_PERSONAL . 'Component', null, 'Chamilo\Core\Repository\Workspace'),
-                Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_BROWSE_PERSONAL),
+                new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_PERSONAL)),
-                $this->get_action() == self::ACTION_BROWSE_PERSONAL,
-                false,
-                DynamicVisualTab::POSITION_LEFT,
-                DynamicVisualTab::DISPLAY_BOTH));
+                $this->get_action() == self::ACTION_BROWSE_PERSONAL, false, DynamicVisualTab::POSITION_LEFT,
+                DynamicVisualTab::DISPLAY_BOTH
+            )
+        );
 
         $this->tabsRenderer->add_tab(
             new DynamicVisualTab(
-                self::ACTION_BROWSE_SHARED,
-                Translation::get(self::ACTION_BROWSE_SHARED . 'Component'),
-                Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_BROWSE_SHARED),
+                self::ACTION_BROWSE_SHARED, Translation::get(self::ACTION_BROWSE_SHARED . 'Component'),
+                new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_SHARED)),
-                $this->get_action() == self::ACTION_BROWSE_SHARED,
-                false,
-                DynamicVisualTab::POSITION_LEFT,
-                DynamicVisualTab::DISPLAY_BOTH));
+                $this->get_action() == self::ACTION_BROWSE_SHARED, false, DynamicVisualTab::POSITION_LEFT,
+                DynamicVisualTab::DISPLAY_BOTH
+            )
+        );
 
         $this->tabsRenderer->add_tab(
             new DynamicVisualTab(
-                self::ACTION_FAVOURITE,
-                Translation::get(self::ACTION_FAVOURITE . 'Component'),
-                Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_FAVOURITE),
+                self::ACTION_FAVOURITE, Translation::get(self::ACTION_FAVOURITE . 'Component'),
+                new FontAwesomeGlyph('star', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_FAVOURITE)),
-                $this->get_action() == self::ACTION_FAVOURITE,
-                false,
-                DynamicVisualTab::POSITION_LEFT,
-                DynamicVisualTab::DISPLAY_BOTH));
+                $this->get_action() == self::ACTION_FAVOURITE, false, DynamicVisualTab::POSITION_LEFT,
+                DynamicVisualTab::DISPLAY_BOTH
+            )
+        );
 
-        if ($this->get_user()->is_platform_admin())
+        if ($this->getUser()->is_platform_admin())
         {
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
-                    self::ACTION_BROWSE,
-                    Translation::get(self::ACTION_BROWSE . 'Component'),
-                    Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_BROWSE),
+                    self::ACTION_BROWSE, Translation::get(self::ACTION_BROWSE . 'Component'),
+                    new FontAwesomeGlyph('folder', array('fa-lg'), null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
-                    $this->get_action() == self::ACTION_BROWSE,
-                    false,
-                    DynamicVisualTab::POSITION_LEFT,
-                    DynamicVisualTab::DISPLAY_BOTH));
+                    $this->get_action() == self::ACTION_BROWSE, false, DynamicVisualTab::POSITION_LEFT,
+                    DynamicVisualTab::DISPLAY_BOTH
+                )
+            );
         }
 
         $this->tabsRenderer->add_tab(
             new DynamicVisualTab(
-                self::ACTION_CREATE,
-                Translation::get(self::ACTION_CREATE . 'Component'),
-                Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_CREATE),
+                self::ACTION_CREATE, Translation::get(self::ACTION_CREATE . 'Component'),
+                new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
-                $this->get_action() == self::ACTION_CREATE,
-                false,
-                DynamicVisualTab::POSITION_LEFT,
-                DynamicVisualTab::DISPLAY_BOTH));
+                $this->get_action() == self::ACTION_CREATE, false, DynamicVisualTab::POSITION_LEFT,
+                DynamicVisualTab::DISPLAY_BOTH
+            )
+        );
 
         if ($this->get_action() == self::ACTION_UPDATE)
         {
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
-                    self::ACTION_UPDATE,
-                    Translation::get(self::ACTION_UPDATE . 'Component'),
-                    Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_UPDATE),
+                    self::ACTION_UPDATE, Translation::get(self::ACTION_UPDATE . 'Component'),
+                    new FontAwesomeGlyph('pencil', array('fa-lg'), null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPDATE)),
-                    $this->get_action() == self::ACTION_UPDATE,
-                    false,
-                    DynamicVisualTab::POSITION_RIGHT,
-                    DynamicVisualTab::DISPLAY_BOTH));
+                    $this->get_action() == self::ACTION_UPDATE, false, DynamicVisualTab::POSITION_RIGHT,
+                    DynamicVisualTab::DISPLAY_BOTH
+                )
+            );
         }
 
         if ($this->get_action() == self::ACTION_RIGHTS)
         {
             if ($this->getRequest()->get(\Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION) ==
-                 \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_CREATE)
+                \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_CREATE)
             {
-                $icon = Theme::getInstance()->getImagePath(Manager::package(), 'Tab/RightsCreate');
+                $icon = new FontAwesomeGlyph('key', array('fa-lg'), null, 'fas');
                 $translation = Translation::get('CreateRightsComponent');
             }
             else
             {
-                $icon = Theme::getInstance()->getImagePath(Manager::package(), 'Tab/Rights');
+                $icon = new FontAwesomeGlyph('lock', array('fa-lg'), null, 'fas');
                 $translation = Translation::get('RightsComponent');
             }
 
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
-                    self::ACTION_RIGHTS,
-                    $translation,
-                    $icon,
+                    self::ACTION_RIGHTS, $translation, $icon,
                     $this->get_url(array(self::ACTION_RIGHTS => self::ACTION_RIGHTS)),
-                    $this->get_action() == self::ACTION_RIGHTS,
-                    false,
-                    DynamicVisualTab::POSITION_RIGHT,
-                    DynamicVisualTab::DISPLAY_BOTH));
+                    $this->get_action() == self::ACTION_RIGHTS, false, DynamicVisualTab::POSITION_RIGHT,
+                    DynamicVisualTab::DISPLAY_BOTH
+                )
+            );
         }
 
         return $this->build();
@@ -131,17 +124,13 @@ abstract class TabComponent extends Manager
     abstract function build();
 
     /**
+     * Get the TabsRenderer
      *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::render_header()
+     * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer
      */
-    public function render_header()
+    public function getTabsRenderer()
     {
-        $html = array();
-
-        $html[] = parent::render_header();
-        $html[] = $this->getTabsRenderer()->renderHeader();
-
-        return implode(PHP_EOL, $html);
+        return $this->tabsRenderer;
     }
 
     /**
@@ -159,12 +148,16 @@ abstract class TabComponent extends Manager
     }
 
     /**
-     * Get the TabsRenderer
      *
-     * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer
+     * @see \Chamilo\Libraries\Architecture\Application\Application::render_header()
      */
-    public function getTabsRenderer()
+    public function render_header()
     {
-        return $this->tabsRenderer;
+        $html = array();
+
+        $html[] = parent::render_header();
+        $html[] = $this->getTabsRenderer()->renderHeader();
+
+        return implode(PHP_EOL, $html);
     }
 }

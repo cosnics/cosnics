@@ -13,12 +13,12 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -26,6 +26,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
@@ -75,8 +76,7 @@ class BrowserComponent extends Manager implements TableSupport
             $tabs->add_tab(
                 new DynamicContentTab(
                     'personal', Translation::get('Personal'),
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/Personal'),
-                    $this->getUserQuota()
+                    new FontAwesomeGlyph('comments', array('fa-lg'), null, 'fas'), $this->getUserQuota()
                 )
             );
 
@@ -89,8 +89,7 @@ class BrowserComponent extends Manager implements TableSupport
                     $tabs->add_tab(
                         new DynamicContentTab(
                             'personal_request', Translation::get('YourRequests'),
-                            Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/PersonalRequest'),
-                            $table->as_html()
+                            new FontAwesomeGlyph('inbox', array('fa-lg'), null, 'fas'), $table->as_html()
                         )
                     );
                 }
@@ -134,7 +133,7 @@ class BrowserComponent extends Manager implements TableSupport
                     $tabs->add_tab(
                         new DynamicContentTab(
                             'platform', Translation::get('Platform'),
-                            Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/Platform'),
+                            new FontAwesomeGlyph('tools', array('fa-lg'), null, 'fas'),
                             implode(PHP_EOL, $platform_quota)
                         )
                     );
@@ -252,6 +251,67 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getButtonToolbarRenderer()
+    {
+        if (!isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar();
+            $commonActions = new ButtonGroup();
+            $toolActions = new ButtonGroup();
+
+            if ($this->calculator->upgradeAllowed())
+            {
+                $commonActions->addButton(
+                    new Button(
+                        Translation::get('UpgradeQuota'),
+                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Upgrade'),
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPGRADE))
+                    )
+                );
+            }
+
+            if ($this->calculator->requestAllowed())
+            {
+                $commonActions->addButton(
+                    new Button(
+                        Translation::get('RequestUpgrade'),
+                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Request'),
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))
+                    )
+                );
+            }
+
+            if ($this->get_user()->is_platform_admin())
+            {
+                if ($this->calculator->isEnabled())
+                {
+                    $toolActions->addButton(
+                        new Button(
+                            Translation::get('ConfigureManagementRights'),
+                            Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Rights'),
+                            $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS))
+                        )
+                    );
+                }
+
+                $toolActions->addButton(
+                    new Button(
+                        Translation::get('ResetTotal'),
+                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Reset'),
+                        $this->get_url(array(self::PARAM_RESET_CACHE => 1))
+                    )
+                );
+            }
+
+            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($toolActions);
+
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->buttonToolbarRenderer;
     }
 
     public function getUserQuota()
@@ -417,67 +477,6 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         return new AndCondition($conditions);
-    }
-
-    public function getButtonToolbarRenderer()
-    {
-        if (!isset($this->buttonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar();
-            $commonActions = new ButtonGroup();
-            $toolActions = new ButtonGroup();
-
-            if ($this->calculator->upgradeAllowed())
-            {
-                $commonActions->addButton(
-                    new Button(
-                        Translation::get('UpgradeQuota'),
-                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Upgrade'),
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPGRADE))
-                    )
-                );
-            }
-
-            if ($this->calculator->requestAllowed())
-            {
-                $commonActions->addButton(
-                    new Button(
-                        Translation::get('RequestUpgrade'),
-                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Request'),
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))
-                    )
-                );
-            }
-
-            if ($this->get_user()->is_platform_admin())
-            {
-                if ($this->calculator->isEnabled())
-                {
-                    $toolActions->addButton(
-                        new Button(
-                            Translation::get('ConfigureManagementRights'),
-                            Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Rights'),
-                            $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS))
-                        )
-                    );
-                }
-
-                $toolActions->addButton(
-                    new Button(
-                        Translation::get('ResetTotal'),
-                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Reset'),
-                        $this->get_url(array(self::PARAM_RESET_CACHE => 1))
-                    )
-                );
-            }
-
-            $buttonToolbar->addButtonGroup($commonActions);
-            $buttonToolbar->addButtonGroup($toolActions);
-
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
-
-        return $this->buttonToolbarRenderer;
     }
 
     public function get_table_type()

@@ -199,7 +199,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
             $toolbar->add_item(
                 new ToolbarItem(
                     $this->getTranslator()->trans('ShowPortfolio', array('USER' => $user->get_fullname())),
-                    new FontAwesomeGlyph('folder'), $this->get_component()->get_url(
+                    new FontAwesomeGlyph('desktop'), $this->get_component()->get_url(
                     array(Manager::PARAM_ACTION => Manager::ACTION_HOME, Manager::PARAM_USER_ID => $user->getId())
                 ), ToolbarItem::DISPLAY_ICON
                 )
@@ -252,7 +252,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
             $toolbar->add_item(
                 new ToolbarItem(
                     $this->getTranslator()->trans('ShowPortfolioNotAllowed', array('USER' => $user->get_fullname())),
-                    new FontAwesomeGlyph('folder', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                    new FontAwesomeGlyph('desktop', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
         }

@@ -13,6 +13,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -167,13 +168,17 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
 
         $html[] = '<div class="attachments">';
 
+        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
         if (count($users) > 1)
         {
-            $html[] = '<div class="attachments_title">' . htmlentities(Translation::get('SelectedUsers')) . '</div>';
+            $html[] = '<div class="attachments_title">' . $glyph->render() . ' ' .
+                htmlentities(Translation::get('SelectedUsers')) . '</div>';
         }
         else
         {
-            $html[] = '<div class="attachments_title">' . htmlentities(Translation::get('SelectedUser')) . '</div>';
+            $html[] = '<div class="attachments_title">' . $glyph->render() . ' ' .
+                htmlentities(Translation::get('SelectedUser')) . '</div>';
         }
 
         $html[] = '<ul class="attachments_list">';

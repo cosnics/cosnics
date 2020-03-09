@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -39,6 +40,27 @@ class ForumPostRendition
     {
         $this->application = $application;
         $this->forumPost = $forumPost;
+    }
+
+    public function render()
+    {
+        $renderer = new ContentObjectResourceRenderer($this, $this->getForumPost()->get_content());
+        $renderedForumPost = $renderer->run();
+
+        $renderedForumPost = preg_replace(
+            '/\[quote=("|&quot;)(.*)("|&quot;)\]/',
+            "<div class=\"quotetitle\">$2 " . Translation::get('Wrote') . ":</div><div class=\"quotecontent\">",
+            $renderedForumPost
+        );
+        $renderedForumPost = str_replace('[/quote]', '</div>', $renderedForumPost);
+
+        $html[] = '<div style="overflow: auto;">';
+        $html[] = $renderedForumPost;
+        $html[] = '<div class="clearfix"></div>';
+        $html[] = $this->get_attachments();
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -77,40 +99,24 @@ class ForumPostRendition
         $this->forumPost = $forumPost;
     }
 
-    public function render()
-    {
-        $renderer = new ContentObjectResourceRenderer($this, $this->getForumPost()->get_content());
-        $renderedForumPost = $renderer->run();
-        
-        $renderedForumPost = preg_replace(
-            '/\[quote=("|&quot;)(.*)("|&quot;)\]/', 
-            "<div class=\"quotetitle\">$2 " . Translation::get('Wrote') . ":</div><div class=\"quotecontent\">", 
-            $renderedForumPost);
-        $renderedForumPost = str_replace('[/quote]', '</div>', $renderedForumPost);
-        
-        $html[] = '<div style="overflow: auto;">';
-        $html[] = $renderedForumPost;
-        $html[] = '<div class="clearfix"></div>';
-        $html[] = $this->get_attachments();
-        $html[] = '</div>';
-        
-        return implode(PHP_EOL, $html);
-    }
-
     public function get_attachments()
     {
         $forumPost = $this->getForumPost();
         $html = array();
-        
+
         $attachments = $forumPost->get_attached_content_objects();
-        
+
         if (count($attachments))
         {
             $html[] = '<div class="attachments" style="margin-top: 1em;">';
-            $html[] = '<div class="attachments_title">' . htmlentities(Translation::get('Attachments')) . '</div>';
+
+            $glyph = new FontAwesomeGlyph('paperclip', array(), null, 'fas');
+
+            $html[] = '<div class="attachments_title">' . $glyph->render() . ' ' .
+                htmlentities(Translation::get('Attachments')) . '</div>';
             Utilities::order_content_objects_by_title($attachments);
             $html[] = '<ul class="attachments_list">';
-            
+
             foreach ($attachments as $attachment)
             {
                 $params = array();
@@ -118,24 +124,24 @@ class ForumPostRendition
                 $params[Manager::PARAM_FORUM_TOPIC_ID] = $forumPost->get_forum_topic_id();
                 $params[Manager::PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
                 $params[Manager::PARAM_ATTACHMENT_ID] = $attachment->get_id();
-                
+
                 $url = $this->getApplication()->get_url($params);
                 $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
-                
+
                 $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' . Theme::getInstance()->getImagePath(
-                    $attachment->package(), 
-                    'Logo/' . Theme::ICON_MINI) . '" alt="' . htmlentities(
-                    Translation::get(
-                        'TypeName', 
-                        null, 
-                        ClassnameUtilities::getInstance()->getNamespaceFromClassname($attachment->get_type()))) . '"/> ' .
-                     $attachment->get_title() . '</a></li>';
+                        $attachment->package(), 'Logo/' . Theme::ICON_MINI
+                    ) . '" alt="' . htmlentities(
+                        Translation::get(
+                            'TypeName', null,
+                            ClassnameUtilities::getInstance()->getNamespaceFromClassname($attachment->get_type())
+                        )
+                    ) . '"/> ' . $attachment->get_title() . '</a></li>';
             }
-            
+
             $html[] = '</ul>';
             $html[] = '</div>';
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 }

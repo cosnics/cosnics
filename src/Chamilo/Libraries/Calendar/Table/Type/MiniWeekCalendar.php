@@ -4,9 +4,9 @@ namespace Chamilo\Libraries\Calendar\Table\Type;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 use HTML_Table;
 
 /**
@@ -46,49 +46,72 @@ class MiniWeekCalendar extends Calendar
     }
 
     /**
-     * Gets the number of hours for one table cell.
+     * Adds a navigation bar to the calendar
      *
-     * @return integer
+     * @param string $urlFormat The *TIME* in this string will be replaced by a timestamp
      */
-    public function getHourStep()
+    public function addCalendarNavigation($urlFormat)
     {
-        return $this->hourStep;
+        $weekNumber = date('W', $this->getDisplayTime());
+        $prev = strtotime('-1 Week', $this->getDisplayTime());
+        $next = strtotime('+1 Week', $this->getDisplayTime());
+        $navigation = new HTML_Table('class="calendar_navigation"');
+        $navigation->updateCellAttributes(0, 0, 'class="navigation-previous" style="text-align: left;"');
+        $navigation->updateCellAttributes(0, 1, 'class="navigation-title" style="text-align: center;"');
+        $navigation->updateCellAttributes(0, 2, 'class="navigation-next" style="text-align: right;"');
+
+        $glyph = new FontAwesomeGlyph('backward');
+        $navigation->setCellContents(
+            0, 0,
+            '<a href="' . str_replace(Calendar::TIME_PLACEHOLDER, $prev, $urlFormat) . '">' . $glyph->render() . '</a> '
+        );
+
+        $navigation->setCellContents(
+            0, 1,
+            htmlentities(Translation::get('Week', null, Utilities::COMMON_LIBRARIES)) . ' ' . $weekNumber . ' : ' .
+            date('l d M Y', $this->getStartTime()) . ' - ' .
+            date('l d M Y', strtotime('+6 Days', $this->getStartTime()))
+        );
+
+        $glyph = new FontAwesomeGlyph('forward');
+        $navigation->setCellContents(
+            0, 2, ' <a href="' . str_replace(Calendar::TIME_PLACEHOLDER, $next, $urlFormat) . '">' . $glyph->render() .
+            '</a> '
+        );
+
+        $this->navigationHtml = $navigation->toHtml();
     }
 
     /**
-     * Gets the first date which will be displayed by this calendar.
-     * This is always a monday.
-     *
-     * @return integer
+     * Adds the events to the calendar
      */
-    public function getStartTime()
+    private function addEvents()
     {
-        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+        $events = $this->getEventsToShow();
 
-        if ($setting == 'sunday')
+        foreach ($events as $time => $items)
         {
-            return strtotime('Next Sunday', strtotime('-1 Week', $this->getDisplayTime()));
+            $column = date('H', $time) / $this->getHourStep() + 1;
+            $row = date('w', $time);
+
+            if ($row == 0)
+            {
+                $row = 7;
+            }
+
+            foreach ($items as $index => $item)
+            {
+                try
+                {
+                    $cellContent = $this->getCellContents($row, $column);
+                    $cellContent .= $item;
+                    $this->setCellContents($row, $column, $cellContent);
+                }
+                catch (Exception $exception)
+                {
+                }
+            }
         }
-
-        return strtotime('Next Monday', strtotime('-1 Week', $this->getDisplayTime()));
-    }
-
-    /**
-     * Gets the end date which will be displayed by this calendar.
-     * This is always a sunday.
-     *
-     * @return integer
-     */
-    public function getEndTime()
-    {
-        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
-
-        if ($setting == 'sunday')
-        {
-            return strtotime('Next Saterday', strtotime('-1 Week', $this->getDisplayTime()));
-        }
-
-        return strtotime('Next Sunday', $this->getStartTime());
     }
 
     /**
@@ -145,72 +168,49 @@ class MiniWeekCalendar extends Calendar
     }
 
     /**
-     * Adds the events to the calendar
+     * Gets the end date which will be displayed by this calendar.
+     * This is always a sunday.
+     *
+     * @return integer
      */
-    private function addEvents()
+    public function getEndTime()
     {
-        $events = $this->getEventsToShow();
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 
-        foreach ($events as $time => $items)
+        if ($setting == 'sunday')
         {
-            $column = date('H', $time) / $this->getHourStep() + 1;
-            $row = date('w', $time);
-
-            if ($row == 0)
-            {
-                $row = 7;
-            }
-
-            foreach ($items as $index => $item)
-            {
-                try
-                {
-                    $cellContent = $this->getCellContents($row, $column);
-                    $cellContent .= $item;
-                    $this->setCellContents($row, $column, $cellContent);
-                }
-                catch (\Exception $exception)
-                {
-                }
-            }
+            return strtotime('Next Saterday', strtotime('-1 Week', $this->getDisplayTime()));
         }
+
+        return strtotime('Next Sunday', $this->getStartTime());
     }
 
     /**
-     * Adds a navigation bar to the calendar
+     * Gets the number of hours for one table cell.
      *
-     * @param string $urlFormat The *TIME* in this string will be replaced by a timestamp
+     * @return integer
      */
-    public function addCalendarNavigation($urlFormat)
+    public function getHourStep()
     {
-        $weekNumber = date('W', $this->getDisplayTime());
-        $prev = strtotime('-1 Week', $this->getDisplayTime());
-        $next = strtotime('+1 Week', $this->getDisplayTime());
-        $navigation = new HTML_Table('class="calendar_navigation"');
-        $navigation->updateCellAttributes(0, 0, 'class="navigation-previous" style="text-align: left;"');
-        $navigation->updateCellAttributes(0, 1, 'class="navigation-title" style="text-align: center;"');
-        $navigation->updateCellAttributes(0, 2, 'class="navigation-next" style="text-align: right;"');
+        return $this->hourStep;
+    }
 
-        $glyph = new FontAwesomeGlyph('backward');
-        $navigation->setCellContents(
-            0, 0,
-            '<a href="' . str_replace(Calendar::TIME_PLACEHOLDER, $prev, $urlFormat) . '">' . $glyph->render() . '</a> '
-        );
+    /**
+     * Gets the first date which will be displayed by this calendar.
+     * This is always a monday.
+     *
+     * @return integer
+     */
+    public function getStartTime()
+    {
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 
-        $navigation->setCellContents(
-            0, 1,
-            htmlentities(Translation::get('Week', null, Utilities::COMMON_LIBRARIES)) . ' ' . $weekNumber . ' : ' .
-            date('l d M Y', $this->getStartTime()) . ' - ' .
-            date('l d M Y', strtotime('+6 Days', $this->getStartTime()))
-        );
+        if ($setting == 'sunday')
+        {
+            return strtotime('Next Sunday', strtotime('-1 Week', $this->getDisplayTime()));
+        }
 
-        $glyph = new FontAwesomeGlyph('forward');
-        $navigation->setCellContents(
-            0, 2, ' <a href="' . str_replace(Calendar::TIME_PLACEHOLDER, $next, $urlFormat) . '">' . $glyph->render() .
-            '</a> '
-        );
-
-        $this->navigationHtml = $navigation->toHtml();
+        return strtotime('Next Monday', strtotime('-1 Week', $this->getDisplayTime()));
     }
 
     /**

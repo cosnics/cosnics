@@ -4,10 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\Blog\Display\Component\Viewer\Bl
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\Component\Viewer\BlogLayout;
 use Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -22,7 +25,7 @@ class PersonalBlogLayout extends BlogLayout
     public function display_blog_item(ComplexBlogItem $complex_blog_item)
     {
         $blog_item = $complex_blog_item->get_ref_object();
-        $owner = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+        $owner = DataManager::retrieve_by_id(
             User::class_name(), (int) $blog_item->get_owner_id()
         );
 
@@ -33,7 +36,7 @@ class PersonalBlogLayout extends BlogLayout
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
                     Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                    \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $owner->get_id()
+                    Manager::PARAM_USER_USER_ID => $owner->get_id()
                 )
             );
             $picture = $profilePhotoUrl->getUrl();
@@ -41,7 +44,7 @@ class PersonalBlogLayout extends BlogLayout
         else
         {
             $name = Translation::get('AuthorUnknown');
-            $picture = Theme::getInstance()->getImagePath(\Chamilo\Core\User\Manager::context(), 'Unknown');
+            $picture = Theme::getInstance()->getImagePath(Manager::context(), 'Unknown');
         }
 
         $html = array();
@@ -84,7 +87,10 @@ class PersonalBlogLayout extends BlogLayout
         if (count($attachments))
         {
             $html[] = '<div class="attachments">';
-            $html[] = '<div class="attachments_title">' . htmlentities(
+
+            $glyph = new FontAwesomeGlyph('paperclip', array(), null, 'fas');
+
+            $html[] = '<div class="attachments_title">' . $glyph->render() . ' ' . htmlentities(
                     Translation::get('Attachements', null, Utilities::COMMON_LIBRARIES)
                 ) . '</div>';
             Utilities::order_content_objects_by_title($attachments);
