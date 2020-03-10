@@ -7,11 +7,12 @@
     {{ getCss('cosnics-rubric.css', appContext) }}
 
     <div id="builder">
-        <score-rubric-tree-builder class="w-100" v-if="!viewFullRubric"></score-rubric-tree-builder>
-        <score-rubric-builder class="w-100" v-if="viewFullRubric"></score-rubric-builder>
-        <button class="btn btn-default pull-left full-rubric-btn" @click="viewFullRubric=!viewFullRubric">Bekijk
-            Volledige Rubric
-        </button>
+{#        <score-rubric-tree-builder class="w-100" v-if="!viewFullRubric"></score-rubric-tree-builder>#}
+{#        <score-rubric-builder class="w-100" v-if="viewFullRubric"></score-rubric-builder>#}
+        <score-rubric-view></score-rubric-view>
+{#        <button class="btn btn-default pull-left full-rubric-btn" @click="viewFullRubric=!viewFullRubric">Bekijk#}
+{#            Volledige Rubric#}
+{#        </button>#}
     </div>
 
     <script>

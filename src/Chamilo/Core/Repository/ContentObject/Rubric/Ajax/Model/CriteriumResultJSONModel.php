@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model;
 
+use JMS\Serializer\Annotation\Type;
+
 /**
  * Class RubricResultJSONModel
  *
@@ -11,16 +13,22 @@ class CriteriumResultJSONModel
 {
     /**
      * @var int
+     *
+     * @Type("integer")
      */
     protected $criteriumTreeNodeId;
 
     /**
      * @var int
+     *
+     * @Type("integer")
      */
     protected $choiceId;
 
     /**
      * @var string
+     *
+     * @Type("string")
      */
     protected $comment;
 

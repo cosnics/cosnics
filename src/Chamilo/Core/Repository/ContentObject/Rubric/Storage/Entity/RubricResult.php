@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author - Sven Vanpoucke - Hogeschool Gent
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricResultRepository")
  *
  * @ORM\Table(
  *      name="repository_rubric_result",
@@ -53,16 +53,16 @@ class RubricResult
      *
      * @var string
      *
-     * @ORM\Column(name="attempt_id", type="guid")
+     * @ORM\Column(name="result_id", type="guid")
      */
-    protected $attemptId;
+    protected $resultId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
-    protected $userId;
+    protected $evaluatorUserId;
 
     /**
      * @var int
@@ -74,21 +74,21 @@ class RubricResult
     /**
      * @var string
      *
-     * @ORM\Column(name="context_class", type="string")
+     * @ORM\Column(name="comment", type="string")
      */
     protected $comment;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="attempt_time", type="datetime")
+     * @ORM\Column(name="time", type="datetime")
      */
-    protected $attemptTime;
+    protected $time;
 
     /**
-     * @var double
+     * @var integer
      *
-     * @ORM\Column(name="score", type="decimal")
+     * @ORM\Column(name="score", type="integer")
      */
     protected $score;
 
@@ -139,19 +139,19 @@ class RubricResult
     /**
      * @return string
      */
-    public function getAttemptId(): ?string
+    public function getResultId(): ?string
     {
-        return $this->attemptId;
+        return $this->resultId;
     }
 
     /**
-     * @param string $attemptId
+     * @param string $resultId
      *
      * @return RubricResult
      */
-    public function setAttemptId(string $attemptId): RubricResult
+    public function setResultId(string $resultId): RubricResult
     {
-        $this->attemptId = $attemptId;
+        $this->resultId = $resultId;
 
         return $this;
     }
@@ -201,7 +201,7 @@ class RubricResult
      */
     public function getScore(): ?float
     {
-        return $this->score;
+        return $this->score / 100;
     }
 
     /**
@@ -211,7 +211,7 @@ class RubricResult
      */
     public function setScore(float $score): RubricResult
     {
-        $this->score = $score;
+        $this->score = (int) (round($score, 2) * 100);
 
         return $this;
     }
@@ -300,19 +300,19 @@ class RubricResult
     /**
      * @return int
      */
-    public function getUserId(): ?int
+    public function getEvaluatorUserId(): ?int
     {
-        return $this->userId;
+        return $this->evaluatorUserId;
     }
 
     /**
-     * @param int $userId
+     * @param int $evaluatorUserId
      *
      * @return RubricResult
      */
-    public function setUserId(int $userId): RubricResult
+    public function setEvaluatorUserId(int $evaluatorUserId): RubricResult
     {
-        $this->userId = $userId;
+        $this->evaluatorUserId = $evaluatorUserId;
 
         return $this;
     }
@@ -360,19 +360,19 @@ class RubricResult
     /**
      * @return \DateTime
      */
-    public function getAttemptTime(): ?\DateTime
+    public function getTime(): ?\DateTime
     {
-        return $this->attemptTime;
+        return $this->time;
     }
 
     /**
-     * @param \DateTime $attemptTime
+     * @param \DateTime $time
      *
      * @return RubricResult
      */
-    public function setAttemptTime(\DateTime $attemptTime): RubricResult
+    public function setTime(\DateTime $time): RubricResult
     {
-        $this->attemptTime = $attemptTime;
+        $this->time = $time;
 
         return $this;
     }

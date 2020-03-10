@@ -146,7 +146,7 @@ class Level
      *
      * @return Level
      */
-    public function setDescription(string $description): Level
+    public function setDescription(string $description = null): Level
     {
         $this->description = $description;
 

@@ -33,20 +33,27 @@ class RubricService
     protected $rubricTreeBuilder;
 
     /**
+     * @var RubricResultService
+     */
+    protected $rubricResultService;
+
+    /**
      * RubricService constructor.
      *
      * @param RubricDataRepository $rubricDataRepository
      * @param RubricValidator $rubricValidator
      * @param RubricTreeBuilder $rubricTreeBuilder
+     * @param RubricResultService $rubricResultService
      */
     public function __construct(
         RubricDataRepository $rubricDataRepository, RubricValidator $rubricValidator,
-        RubricTreeBuilder $rubricTreeBuilder
+        RubricTreeBuilder $rubricTreeBuilder, RubricResultService $rubricResultService
     )
     {
         $this->rubricDataRepository = $rubricDataRepository;
         $this->rubricValidator = $rubricValidator;
         $this->rubricTreeBuilder = $rubricTreeBuilder;
+        $this->rubricResultService = $rubricResultService;
     }
 
     /**
@@ -73,6 +80,7 @@ class RubricService
      */
     public function saveRubric(RubricData $rubricData)
     {
+        // TODO: when score => not allowed
         $rubricData->setLastUpdated(new \DateTime());
         $this->rubricValidator->validateRubric($rubricData);
 

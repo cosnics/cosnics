@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
+use JMS\Serializer\Annotation\Type;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Ajax
@@ -14,26 +15,36 @@ class LevelJSONModel
 {
     /**
      * @var int
+     *
+     * @Type("integer")
      */
     protected $id;
 
     /**
      * @var string
+     *
+     * @Type("string")
      */
     protected $title;
 
     /**
      * @var string
+     *
+     * @Type("string")
      */
     protected $description;
 
     /**
      * @var int
+     *
+     * @Type("integer")
      */
     protected $score;
 
     /**
      * @var bool
+     *
+     * @Type("bool")
      */
     protected $isDefault;
 

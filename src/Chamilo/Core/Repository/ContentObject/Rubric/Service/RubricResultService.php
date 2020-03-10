@@ -154,15 +154,15 @@ class RubricResultService
         $rubricResult = new RubricResult();
 
         $rubricResult->setRubricData($rubricData)
-            ->setUserId($user->getId())
+            ->setEvaluatorUserId($user->getId())
             ->setContextIdentifier($contextIdentifier)
-            ->setAttemptId($uniqueAttemptId)
+            ->setResultId($uniqueAttemptId)
             ->setTreeNode($treeNode)
             ->setSelectedChoice($choice)
             ->setScore($score)
             ->setTargetUserId($targetUser->getId())
             ->setComment($comment)
-            ->setAttemptTime(new \DateTime());
+            ->setTime(new \DateTime());
 
         $this->rubricResultRepository->saveRubricResult($rubricResult, false);
 

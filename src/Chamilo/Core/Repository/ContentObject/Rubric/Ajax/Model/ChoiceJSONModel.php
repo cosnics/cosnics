@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Choice;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
+use JMS\Serializer\Annotation\Type;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Ajax
@@ -14,26 +15,36 @@ class ChoiceJSONModel
 {
     /**
      * @var int
+     *
+     * @Type("integer")
      */
     protected $id;
 
     /**
      * @var bool
+     *
+     * @Type("bool")
      */
     protected $selected;
 
     /**
      * @var string
+     *
+     * @Type("string")
      */
     protected $feedback;
 
     /**
      * @var bool
+     *
+     * @Type("bool")
      */
     protected $hasFixedScore;
 
     /**
      * @var int
+     *
+     * @Type("integer")
      */
     protected $fixedScore;
 

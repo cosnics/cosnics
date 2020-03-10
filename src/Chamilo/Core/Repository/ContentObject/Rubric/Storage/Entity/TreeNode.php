@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity
@@ -516,5 +518,14 @@ abstract class TreeNode
     {
         $this->setTitle($treeNodeJSONModel->getTitle());
         return $this;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("type")
+     */
+    public function getTypeString()
+    {
+        return TreeNodeJSONModel::getTypeStringForTreeNode($this);
     }
 }

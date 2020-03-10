@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
 use Hogent\Integration\Panopto\Domain\Exception\ValueNotInArrayException;
+use JMS\Serializer\Annotation\Type;
 use OutOfRangeException;
 
 /**
@@ -23,38 +24,50 @@ class TreeNodeJSONModel
     const TYPE_CLUSTER = 'Cluster';
     const TYPE_RUBRIC = 'Rubric';
 
+    const TYPES = [
+        self::TYPE_CRITERIUM => CriteriumNode::class, self::TYPE_RUBRIC => RubricNode::class,
+        self::TYPE_CATEGORY => CategoryNode::class, self::TYPE_CLUSTER => ClusterNode::class
+    ];
+
     /**
      * @var int
+     *
+     * @Type("integer")
      */
     protected $id;
 
     /**
      * @var string
+     *
+     * @Type("string")
      */
     protected $title;
 
     /**
      * @var int
+     *
+     * @Type("integer")
      */
     protected $parentId;
 
     /**
      * @var string
+     *
+     * @Type("string")
      */
     protected $type;
 
     /**
-     * @var array
-     */
-    protected $allowedTypes = [self::TYPE_RUBRIC, self::TYPE_CLUSTER, self::TYPE_CATEGORY, self::TYPE_CRITERIUM];
-
-    /**
      * @var string
+     *
+     * @Type("string")
      */
     protected $color;
 
     /**
      * @var int
+     *
+     * @Type("integer")
      */
     protected $weight = 100;
 
@@ -137,9 +150,10 @@ class TreeNodeJSONModel
      */
     public function validate()
     {
-        if (!in_array($this->type, $this->allowedTypes))
+        $allowedTypes = array_keys(self::TYPES);
+        if (!in_array($this->type, $allowedTypes))
         {
-            throw new ValueNotInArrayException('type', $this->type, $this->allowedTypes);
+            throw new ValueNotInArrayException('type', $this->type, $allowedTypes);
         }
 
         if (empty($this->title))
@@ -163,12 +177,18 @@ class TreeNodeJSONModel
     {
         $this->validate();
 
-        $types = [
-            self::TYPE_CRITERIUM => CriteriumNode::class, self::TYPE_RUBRIC => RubricNode::class,
-            self::TYPE_CATEGORY => CategoryNode::class, self::TYPE_CLUSTER => ClusterNode::class
-        ];
-
-        $class = $types[$this->getType()];
+        $class = self::TYPES[$this->getType()];
         return $class::fromJSONModel($this, $rubricData);
+    }
+
+    /**
+     * @param TreeNode $treeNode
+     *
+     * @return false|int|string
+     */
+    public static function getTypeStringForTreeNode(TreeNode $treeNode)
+    {
+        $class = get_class($treeNode);
+        return array_search($class, self::TYPES);
     }
 }
