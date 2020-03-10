@@ -1,15 +1,15 @@
 <template>
-	<div class="container">
+	<div class="container" @mouseover="onMouseOver">
 		<nav class="clusters">
-			<draggable :list="clustersFiltered2" group="clusters" tag="ul" swapThreshold="0.75" :animation="250" ghost-class="ghost" @start="e => startDragCluster(e, 'view1')" @end="endDragCluster" :class="{ clusterDragging: store.clusterDragging }" @change="onChange($event, 'view1')">
-				<li v-for="cluster in clustersFiltered2" :id="cluster.id" :key="cluster.id" :class="{selected: isSelected(cluster)}" @click="selectCluster(cluster)"><!-- @dragstart="rewriteDragImg(nth, $event)" -->
+			<draggable :list="clustersFiltered2" group="clusters" tag="ul" swapThreshold="0.75" :animation="250" ghost-class="ghost" @start="e => startDragCluster(e, 'view1')" @end="endDragCluster" :class="{ clusterDragging }" @change="onChange($event, 'view1')">
+				<li v-for="cluster in clustersFiltered2" :id="cluster.id" :key="cluster.id" :class="{selected: isSelected(cluster)}" @click="selectCluster(cluster)"><!--@dragstart="rewriteDragImg($event)">-->
 					<div>
 						<i v-if="cluster.title !== ''" class="fa fa-map-o" aria-hidden="true"/><i v-else class="fa fa-institution empty" aria-hidden="true"/>{{cluster.title}}
 					</div>
 				</li>
 			</draggable>
 			<div class="actions">
-				<div v-if="store.showClusterDialog">
+				<div v-if="clusterDialogShown">
 					<name-input class="cluster-new item-new" @ok="addNewCluster" @cancel="cancelNewCluster" placeholder="Titel voor nieuwe cluster" v-model="newCluster.title" />
 				</div>
 				<button v-else @click="showClusterDialog"><i class="fa fa-plus-circle" aria-hidden="true"/>Nieuw</button>
@@ -44,7 +44,7 @@
 						<draggable handle=".criterium" :list="category.criteria" group="criteria" tag="div" swapTreshold="0.75" :animation="250" ghost-class="ghost" @start="store.criteriumDragging = true" @end="store.criteriumDragging = false">
 							<div v-for="criterium in category.criteria" @click="selectCriterium(criterium)" class="criterium" :class="{selected: store.selectedCriterium === criterium}">{{ criterium.title }}</div>
 						</draggable>
-						<div v-if="!isAddingCriteriumFor(category)" class="criterium-add-new" :class="{criteriumDragging: store.criteriumDragging}">
+						<div v-if="!isAddingCriteriumFor(category)" class="criterium-add-new" :class="{ criteriumDragging }">
 							<button @click="() => addCriteriumForCategory(category)"><i class="fa fa-plus-circle" aria-hidden="true"/>Voeg een criterium toe</button>
 						</div>
 						<div v-else>
@@ -61,7 +61,7 @@
 				</div>
 		</div>
 		<nav class="clusters">
-			<draggable :list="clustersFiltered1" group="clusters" tag="ul" swapThreshold="0.75" :animation="250" ghost-class="ghost" @start="e => startDragCluster(e, 'view2')" @end="endDragCluster" :class="{ clusterDragging: store.clusterDragging }" @change="onChange($event, 'view2')">
+			<draggable :list="clustersFiltered1" group="clusters" tag="ul" swapThreshold="0.75" :animation="250" ghost-class="ghost" @start="e => startDragCluster(e, 'view2')" @end="endDragCluster" :class="{ clusterDragging }" @change="onChange($event, 'view2')">
 				<li v-for="cluster in clustersFiltered1" :id="cluster.id" :key="cluster.id"  :class="{selected: isSelected2nd(cluster)}" @click="selectCluster2nd(cluster)"><div><i v-if="cluster.title !== ''" class="fa fa-map-o" aria-hidden="true"/><i v-else class="fa fa-institution empty" aria-hidden="true"/>{{cluster.title}}</div></li>
 			</draggable>
 		</nav>
@@ -83,8 +83,8 @@
 						<a :style="{'background-color': category.color}" tabindex="0"></a>
 						<h2 class="handle-area-category">{{ category.title }}</h2>
 					</div>
-					<draggable handle=".criterium" :list="category.criteria" group="criteria" tag="div" swapTreshold="0.75" :animation="250" ghost-class="ghost" @start="store.criteriumDragging = true" @end="store.criteriumDragging = false">
-						<div v-for="criterium in category.criteria" @click="selectCriterium(criterium)" class="criterium" :class="{selected: store.selectedCriterium === criterium}">{{ criterium.title }}</div>
+					<draggable handle=".criterium" :list="category.criteria" group="criteria" tag="div" swapTreshold="0.75" :animation="250" ghost-class="ghost" @start="criteriumDragging = true" @end="criteriumDragging = false">
+						<div v-for="criterium in category.criteria" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}" :id="criterium.id" :key="criterium.id">{{ criterium.title }}</div>
 					</draggable>
 				</div>
 			</div>
@@ -111,47 +111,75 @@
 		components: { Swatches, NameInput, draggable }
 	})
 	export default class ScoreRubricView extends Vue {
+
+		private draggedClusterView1: Cluster|null = null;
+		private draggedClusterView2: Cluster|null = null;
+		private draggedCategoryView1: Category|null = null;
+		private draggedCategoryView2: Category|null = null;
+		private selectedCluster: Cluster|null = this.store.rubric.clusters.length && this.store.rubric.clusters[0] || null;
+		private selectedCluster2nd: Cluster|null = this.store.rubric.clusters.length && this.store.rubric.clusters[0] || null;
+		private selectedCategoryColorPicker: Category|null = null;
+    	private selectedCategoryNewCriterium: Category|null = null;
+		private selectedCriterium: Criterium|null = null;
+		private newCluster: Cluster|null = null;
+		private newCategory: Category|null = null;
+		private newCriterium: Criterium|null = null;
+		private initiatedDrag: string = '';
+		private clusterDragging: boolean = false;
+		private categoryDragging: boolean = false;
+		private criteriumDragging: boolean = false;
+		private clusterDialogShown: boolean = false;
+		private isAddingCategory: boolean = false;
+		private isAddingCriterium: boolean = false;
+		private overCategoryHandleArea: boolean = false;
+
+		onMouseOver(event: MouseEvent) {
+			const target = event.target! as any;
+			if (typeof target.className !== 'string') { return; }
+			this.overCategoryHandleArea = target.className.indexOf('handle-area-category') !== -1 || target.className.indexOf('vue-swatches') !== -1 ;
+		}
+
 		startDragCluster(el: HTMLElement, view: string) {
-			this.store.clusterDragging = true;
-			this.store.initiatedDrag = view;
+			this.clusterDragging = true;
+			this.initiatedDrag = view;
 			const cluster = this.store.rubric.clusters.find((c: Cluster) => c.id === (el as any).item.id);
 			if (view === 'view1') {
-				this.store.draggedClusterView1 = cluster;
-				this.store.draggedClusterView2 = null;
+				this.draggedClusterView1 = cluster;
+				this.draggedClusterView2 = null;
 			} else if (view === 'view2') {
-				this.store.draggedClusterView2 = cluster;
-				this.store.draggedClusterView1 = null;
+				this.draggedClusterView2 = cluster;
+				this.draggedClusterView1 = null;
 			}
 		}
 		endDragCluster() {
-			this.store.clusterDragging = false;
-			this.store.draggedClusterView1 = null;
-			this.store.draggedClusterView2 = null;
-			this.store.initiatedDrag = '';
+			this.clusterDragging = false;
+			this.draggedClusterView1 = null;
+			this.draggedClusterView2 = null;
+			this.initiatedDrag = '';
 		}
 		startDragCategory(el: HTMLElement, view: string) {
-			this.store.categoryDragging = true;
-			this.store.initiatedDrag = view;
+			this.categoryDragging = true;
+			this.initiatedDrag = view;
 			const categories = this.store.rubric.getAllCategories();
 			const category = categories.find((c: Category) => c.id === (el as any).item.id);
 			if (view === 'view1') {
-				this.store.draggedCategoryView1 = category;
-				this.store.draggedCategoryView2 = null;
+				this.draggedCategoryView1 = category;
+				this.draggedCategoryView2 = null;
 			} else if (view === 'view2') {
-				this.store.draggedCategoryView2 = category;
-				this.store.draggedCategoryView1 = null;
+				this.draggedCategoryView2 = category;
+				this.draggedCategoryView1 = null;
 			}
 		}
 		endDragCategory() {
-			this.store.categoryDragging = false;
-			this.store.draggedCategoryView1 = null;
-			this.store.draggedCategoryView2 = null;
-			this.store.initiatedDrag = '';
+			this.categoryDragging = false;
+			this.draggedCategoryView1 = null;
+			this.draggedCategoryView2 = null;
+			this.initiatedDrag = '';
 		}
 		get isCategoryDraggable() {
-			if (this.store.criteriumDragging) { return false; }
-			if (this.store.categoryDragging) { return true; }
-			return this.store.overCategoryHandleArea;
+			if (this.criteriumDragging) { return false; }
+			if (this.categoryDragging) { return true; }
+			return this.overCategoryHandleArea;
 		}
 		onChange(evt: any, view: string) {
 			if (evt.added && evt.added.element) {
@@ -191,25 +219,25 @@
 			return window.console;
 		}
 		addCategory() {
-			this.store.newCategory = new Category();
-			this.store.isAddingCategory = true;
+			this.newCategory = new Category();
+			this.isAddingCategory = true;
 		}
 
 		addNewCategory() {
-			this.selectedCluster.addChild(this.store.newCategory, this.selectedCluster.categories.length);
-			this.store.newCategory = null;
-			this.store.isAddingCategory = false;
+			this.selectedCluster!.addChild(this.newCategory!, this.selectedCluster!.categories.length);
+			this.newCategory = null;
+			this.isAddingCategory = false;
 		}
 
 		addNewCriterium(name: string) {
-			this.store.selectedCategoryNewCriterium.addCriterium(this.store.newCriterium);
-			this.store.newCriterium = null;
-			this.store.selectedCategoryNewCriterium = null;
-			this.store.isAddingCriterium = false;
-			this.store.isAddingCategory = false;
-		}
 		rewriteDragImg(nth: any, event: any) {
 			event.target.style.cursor = 'grabbing';
+			this.selectedCategoryNewCriterium!.addCriterium(this.newCriterium!);
+			this.newCriterium = null;
+			this.selectedCategoryNewCriterium = null;
+			this.isAddingCriterium = false;
+			this.isAddingCategory = false;
+		}
 			let el = event.target.cloneNode(true);
 			el.className="dragged-item";
 			el.style.width = event.target.style.width;
@@ -224,83 +252,59 @@
 			event.dataTransfer.setDragImage(el, 0,0);
 		}
 		cancelNewCriterium() {
-			this.store.newCriterium = null;
-			this.store.selectedCategoryNewCriterium = null;
-			this.store.isAddingCriterium = false;
+			this.newCriterium = null;
+			this.selectedCategoryNewCriterium = null;
+			this.isAddingCriterium = false;
 		}
 
 		cancelNewCategory() {
-			this.store.newCategory = null;
-			this.store.isAddingCategory = false;
+			this.newCategory = null;
+			this.isAddingCategory = false;
 		}
 
 		addCriteriumForCategory(category: Category) {
 			const criterium = new Criterium();
-			this.store.selectedCategoryNewCriterium = category;
-			this.store.newCriterium = criterium;
-			this.store.isAddingCriterium = true;
-		}
-
-		get newCategory() {
-			return this.store.newCategory;
-		}
-
-		get newCriterium() {
-			return this.store.newCriterium;
-		}
-
-		get newCluster() {
-			return this.store.newCluster;
+			this.selectedCategoryNewCriterium = category;
+			this.newCriterium = criterium;
+			this.isAddingCriterium = true;
 		}
 
 		addCriterium() {
-			this.store.isAddingCriterium = true;
+			this.isAddingCriterium = true;
 		}
 
 		addNewCluster() {
-			const cluster = this.store.newCluster;
-			this.store.newCluster = null;
+			const cluster = this.newCluster;
+			this.newCluster = null;
 			this.store.rubric.addChild(cluster, this.store.rubric.clusters.length);
-			this.store.showClusterDialog = false;
+			this.clusterDialogShown = false;
 			this.selectCluster(cluster);
 		}
 
 		cancelNewCluster() {
-			this.store.showClusterDialog = false;
-			this.store.newCluster = null;
+			this.clusterDialogShown = false;
+			this.newCluster = null;
 		}
 
 		showClusterDialog() {
-			this.store.showClusterDialog = true;
-			this.store.newCluster = new Cluster();
-		}
-
-		get isAddingCategory() {
-			return this.store.isAddingCategory;
-		}
-
-		get isAddingCriterium() {
-			return this.store.isAddingCriterium;
+			this.clusterDialogShown = true;
+			this.newCluster = new Cluster();
 		}
 
 		isAddingCriteriumFor(category: Category) {
-			return this.store.isAddingCriterium && this.store.selectedCategoryNewCriterium === category;
+			return this.isAddingCriterium && this.selectedCategoryNewCriterium === category;
 		}
 
-		selectCluster(cluster: Cluster) {
-			this.store.selectedCluster = cluster;
-//			this.store.selectedClusterCategories = cluster.categories.slice(0);
-//			console.log(cluster.categories);
+		selectCluster(cluster: Cluster|null) {
+			this.selectedCluster = cluster;
 		}
 
-		selectCluster2nd(cluster: Cluster) {
-			this.store.selectedCluster2nd = cluster;
-			//this.store.selectedCluster2ndCategories = cluster.categories.slice(0);
-			//console.log(cluster.categories);
+		selectCluster2nd(cluster: Cluster|null) {
+			this.selectedCluster2nd = cluster;
 		}
 
-		selectCriterium(criterium: Criterium) {
-			this.store.selectedCriterium = criterium;
+		selectCriterium(criterium: Criterium|null) {
+			this.selectedCriterium = criterium;
 		}
 
 		getCategoriesForCluster(cluster: Cluster) {
@@ -316,15 +320,11 @@
 		}
 
 		openColorPickerForCategory(category: Category|null) {
-			if (this.selectedCategoryColorPicker === category) {
-				this.store.selectedCategoryColorPicker = null;
-			} else {
-				this.store.selectedCategoryColorPicker = category;
-			}
+			this.selectedCategoryColorPicker = this.selectedCategoryColorPicker !== category ? category : null;
 		}
 
 		isColorPickerOpened(category: Category) {
-			if (this.store.selectedCategoryColorPicker === null) { return false; }
+			if (this.selectedCategoryColorPicker === null) { return false; }
 			return category === this.selectedCategoryColorPicker;
 		}
 
@@ -336,24 +336,12 @@
 			return cluster === this.selectedCluster2nd;
 		}
 
-		get selectedCategoryColorPicker() {
-			return this.store.selectedCategoryColorPicker;
-		}
-
-		get selectedCluster() {
-			return this.store.selectedCluster;
-		}
-
-		get selectedCluster2nd() {
-			return this.store.selectedCluster2nd;
-		}
-
 		get clustersFiltered1() {
-			return this.store.rubric.clusters.filter((c: Cluster) => c !== this.store.draggedClusterView1);
+			return this.store.rubric.clusters.filter((c: Cluster) => c !== this.draggedClusterView1);
 		}
 
 		get clustersFiltered2() {
-			return this.store.rubric.clusters.filter((c: Cluster) => c !== this.store.draggedClusterView2);
+			return this.store.rubric.clusters.filter((c: Cluster) => c !== this.draggedClusterView2);
 		}
 
 		checkMove(evt: any) {
@@ -363,7 +351,7 @@
 
 		get categoriesFiltered2() {
 			if (!this.selectedCluster) { return []; }
-			return this.selectedCluster.categories.filter((c: Category) => c !== this.store.draggedCategoryView2);/*.map((c:Category) => {
+			return this.selectedCluster.categories.filter((c: Category) => c !== this.draggedCategoryView2);/*.map((c:Category) => {
 				const newCat = Category.fromJSON(c.toJSON());
 				newCat.id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15); //GUID
 				newCat.actualCategory = c;
@@ -391,7 +379,7 @@
 
 		get categoriesFiltered1() {
 			if (!this.selectedCluster2nd) { return []; }
-			return this.selectedCluster2nd.categories.filter((c: Category) => c !== this.store.draggedCategoryView1);/*.map((c:Category) => {
+			return this.selectedCluster2nd.categories.filter((c: Category) => c !== this.draggedCategoryView1);/*.map((c:Category) => {
 				const newCat = Category.fromJSON(c.toJSON());
 				newCat.id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15); //GUID
 				newCat.actualCategory = c;
@@ -421,9 +409,9 @@
 			console.log("change");
 		}
 
-		@Watch('store.isAddingCategory')
+		@Watch('isAddingCategory')
 		onCategoryAddingChanged() {
-			console.log('isAddingCategory', this.store.isAddingCategory);
+			console.log('isAddingCategory', this.isAddingCategory);
 //			if (!this.store.isAddingCategory) {
 				this.$nextTick(()=> {
 					const clusterContent = this.$refs['cluster-content'] as HTMLElement;
