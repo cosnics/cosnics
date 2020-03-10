@@ -26,8 +26,8 @@ class DummyBlockRenditionImplementation extends AbstractBlockRenditionImplementa
 
     /**
      *
-     * @param \libraries\architecture\application\Application $context
-     * @param ReportingBlock $block
+     * @param \Chamilo\Libraries\Architecture\Application\Application $context
+     * @param \Chamilo\Core\Reporting\ReportingBlock $block
      * @param string $format
      * @param string $view
      */
@@ -48,20 +48,18 @@ class DummyBlockRenditionImplementation extends AbstractBlockRenditionImplementa
     }
 
     /**
-     *
-     * @see \core\reporting\AbstractBlockRenditionImplementation::get_view()
-     */
-    public function get_view()
-    {
-        return $this->view;
-    }
-
-    /**
-     *
-     * @see \core\reporting\AbstractBlockRenditionImplementation::get_format()
+     * @return string
      */
     public function get_format()
     {
         return $this->format;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_view()
+    {
+        return $this->view;
     }
 }

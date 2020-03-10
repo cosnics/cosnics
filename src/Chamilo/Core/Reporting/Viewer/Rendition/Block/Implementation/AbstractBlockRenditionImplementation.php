@@ -13,19 +13,19 @@ abstract class AbstractBlockRenditionImplementation
 
     /**
      *
-     * @var \libraries\architecture\application\Application
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     private $context;
 
     /**
      *
-     * @var \core\reporting\ReportingBlock
+     * @var \Chamilo\Core\Reporting\ReportingBlock
      */
     private $block;
 
     /**
      *
-     * @param \libraries\architecture\application\Application $context
+     * @param \Chamilo\Libraries\Architecture\Application\Application $context
      * @param ReportingBlock $block
      */
     public function __construct($context, ReportingBlock $block)
@@ -36,25 +36,7 @@ abstract class AbstractBlockRenditionImplementation
 
     /**
      *
-     * @return \libraries\architecture\application\Application
-     */
-    public function get_context()
-    {
-        return $this->context;
-    }
-
-    /**
-     *
-     * @param \libraries\architecture\application\Application $context
-     */
-    public function set_context($context)
-    {
-        $this->context = $context;
-    }
-
-    /**
-     *
-     * @return \core\reporting\ReportingBlock
+     * @return \Chamilo\Core\Reporting\ReportingBlock
      */
     public function get_block()
     {
@@ -63,7 +45,7 @@ abstract class AbstractBlockRenditionImplementation
 
     /**
      *
-     * @param ReportingBlock $block
+     * @param \Chamilo\Core\Reporting\ReportingBlock $block
      */
     public function set_block(ReportingBlock $block)
     {
@@ -72,13 +54,31 @@ abstract class AbstractBlockRenditionImplementation
 
     /**
      *
-     * @return string
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      */
-    abstract public function get_view();
+    public function get_context()
+    {
+        return $this->context;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $context
+     */
+    public function set_context($context)
+    {
+        $this->context = $context;
+    }
 
     /**
      *
      * @return string
      */
     abstract public function get_format();
+
+    /**
+     *
+     * @return string
+     */
+    abstract public function get_view();
 }
