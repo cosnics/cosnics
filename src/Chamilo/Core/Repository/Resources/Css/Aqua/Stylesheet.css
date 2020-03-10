@@ -15,13 +15,28 @@
 .fas-ci-e181bea9b3835867726b5d1379fc8a78,
 .fas-ci-56ef83b6283d63193e3191f8210e5984,
 .fas-ci-6f37206c2cc79e7af7ccdcbb3d818ba8,
-.fas-ci-0900638a6ab01cb7cabe743e699c7c94 {
+.fas-ci-0900638a6ab01cb7cabe743e699c7c94,
+.fas-ci-bc19824b7d7f02add6fc90d8194cfd07, .fas-ci-9ecfbe79198945c477313dd776ef0ce2 {
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
 }
 
 .fas-ci-c6e4cf181180b6a731a2bc3cdfc5765f:before {
     content: "\f0a0";
+}
+
+/*
+ * Package Type: Chamilo\Core\Repository\ContentObject
+ */
+.fas-ci-bc19824b7d7f02add6fc90d8194cfd07:before {
+    content: "\f15b";
+}
+
+/*
+ * Package Type: Chamilo\Core\Repository\Chamilo\Core\Repository\Implementation
+ */
+.fas-ci-9ecfbe79198945c477313dd776ef0ce2:before {
+    content: "\f360";
 }
 
 /*

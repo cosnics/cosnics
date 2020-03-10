@@ -25,7 +25,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -334,9 +333,9 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
             $tabs->add_tab(
                 new DynamicVisualTab(
-                    self::TAB_PLATFORM_GROUPS_USERS, $tab_name, Theme::getInstance()->getImagePath(
-                    \Chamilo\Core\User\Manager::context(), 'Logo/' . Theme::ICON_MINI
-                ), $link, $this->current_tab == self::TAB_PLATFORM_GROUPS_USERS
+                    self::TAB_PLATFORM_GROUPS_USERS, $tab_name,
+                    new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
+                    $this->current_tab == self::TAB_PLATFORM_GROUPS_USERS
                 )
             );
         }
@@ -364,8 +363,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         $tabs->add_tab(
             new DynamicVisualTab(
                 self::TAB_PLATFORM_GROUPS_SUBGROUPS, $tab_name,
-                Theme::getInstance()->getImagePath(\Chamilo\Core\Group\Manager::context(), 'Logo/' . Theme::ICON_MINI),
-                $link, $tab_selected
+                new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas'), $link, $tab_selected
             )
         );
 

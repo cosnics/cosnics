@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Configuration\Package\Finder;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Theme;
 
 /**
@@ -15,6 +17,11 @@ use Chamilo\Libraries\Format\Theme;
  */
 class PackageBundles extends BasicBundles
 {
+
+    /**
+     * @var \Chamilo\Configuration\Package\Service\PackageFactory
+     */
+    protected $packageFactory;
 
     /**
      *
@@ -35,126 +42,24 @@ class PackageBundles extends BasicBundles
     private $packageLists = array();
 
     /**
-     * @var \Chamilo\Configuration\Package\Service\PackageFactory
-     */
-    protected $packageFactory;
-
-    /**
      *
      * @param string $rootNamespace
      * @param int $mode
      * @param \Chamilo\Configuration\Package\Service\PackageFactory|null $packageFactory
      */
-    public function __construct($rootNamespace = PackageList::ROOT, $mode = PackageList::MODE_ALL, PackageFactory $packageFactory = null)
+    public function __construct(
+        $rootNamespace = PackageList::ROOT, $mode = PackageList::MODE_ALL, PackageFactory $packageFactory = null
+    )
     {
         $this->mode = $mode;
         $this->packageFactory = $packageFactory;
         parent::__construct($rootNamespace);
     }
 
-    protected function setup()
-    {
-        parent::setup();
-        $this->readPackageDefinitions();
-        $this->processPackageTypes();
-    }
-
-    private function readPackageDefinitions()
-    {
-        foreach ($this->getPackageNamespaces() as $packageNamespace)
-        {
-            $packageDefinition = $this->packageFactory->getPackage($packageNamespace);
-            $this->packageDefinitions[$packageNamespace] = $packageDefinition;
-        }
-    }
-
-    private function processPackageTypes()
-    {
-        foreach ($this->getPackageNamespaces() as $packageNamespace)
-        {
-
-            $packageNamespaceAncestors = $this->determinePackageNamespaceAncestors($packageNamespace);
-            $packageNamespaceParent = array_shift($packageNamespaceAncestors);
-
-            if (! isset($this->packageLists[$packageNamespaceParent]))
-            {
-                $this->setPackageList($packageNamespaceParent);
-            }
-
-            if ($this->isRelevantPackage($packageNamespace) &&
-                 ! $this->packageLists[$packageNamespaceParent]->has_package($packageNamespace))
-            {
-                $this->packageLists[$packageNamespaceParent]->add_package($this->packageDefinitions[$packageNamespace]);
-            }
-
-            $previousPackageList = $this->packageLists[$packageNamespaceParent];
-
-            foreach ($packageNamespaceAncestors as $packageNamespaceAncestor)
-            {
-                if (! isset($this->packageLists[$packageNamespaceAncestor]))
-                {
-                    $this->setPackageList($packageNamespaceAncestor);
-                }
-
-                if (! $this->packageLists[$packageNamespaceAncestor]->has_child($previousPackageList->get_type()))
-                {
-                    $this->packageLists[$packageNamespaceAncestor]->add_child($previousPackageList);
-                }
-
-                $previousPackageList = $this->packageLists[$packageNamespaceAncestor];
-            }
-        }
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    protected function isRelevantPackage($packageNamespace)
-    {
-        $isAll = $this->mode == PackageList::MODE_ALL;
-        $isInstalled = $this->mode == PackageList::MODE_INSTALLED &&
-             \Chamilo\Configuration\Configuration::is_registered($packageNamespace);
-        $isAvailable = $this->mode == PackageList::MODE_AVAILABLE &&
-             ! \Chamilo\Configuration\Configuration::is_registered($packageNamespace);
-
-        return $isAll || $isInstalled || $isAvailable;
-    }
-
     /**
      *
      * @param string $packageNamespace
-     */
-    public function setPackageList($packageNamespace)
-    {
-        if ($packageNamespace === PackageList::ROOT)
-        {
-            $typeName = 'Platform';
-            $packageImageNamespace = 'Chamilo\Configuration';
-        }
-        else
-        {
-            $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($packageNamespace);
-            $packageImageNamespace = $packageNamespace;
-        }
-
-        $iconPath = Theme::getInstance()->getImagePath($packageImageNamespace, 'Logo/16', 'png', false);
-
-        if (file_exists($iconPath))
-        {
-            $iconPath = Theme::getInstance()->getImagePath($packageImageNamespace, 'Logo/16');
-        }
-        else
-        {
-            $iconPath = null;
-        }
-
-        $this->packageLists[$packageNamespace] = new PackageList($packageNamespace, $typeName, $iconPath);
-    }
-
-    /**
      *
-     * @param string $packageNamespace
      * @return string[]
      */
     private function determinePackageNamespaceAncestors($packageNamespace)
@@ -175,6 +80,7 @@ class PackageBundles extends BasicBundles
     /**
      *
      * @param string $packageNamespace
+     *
      * @return string
      */
     private function determinePackageParentNamespace($packageNamespace)
@@ -186,6 +92,7 @@ class PackageBundles extends BasicBundles
         else
         {
             $packageParentNamespace = ClassnameUtilities::getInstance()->getNamespaceParent($packageNamespace);
+
             return $packageParentNamespace ? $packageParentNamespace : PackageList::ROOT;
         }
     }
@@ -193,5 +100,94 @@ class PackageBundles extends BasicBundles
     public function getPackageList()
     {
         return $this->packageLists[$this->getRootNamespace()];
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function isRelevantPackage($packageNamespace)
+    {
+        $isAll = $this->mode == PackageList::MODE_ALL;
+        $isInstalled = $this->mode == PackageList::MODE_INSTALLED && Configuration::is_registered($packageNamespace);
+        $isAvailable = $this->mode == PackageList::MODE_AVAILABLE && !Configuration::is_registered($packageNamespace);
+
+        return $isAll || $isInstalled || $isAvailable;
+    }
+
+    private function processPackageTypes()
+    {
+        foreach ($this->getPackageNamespaces() as $packageNamespace)
+        {
+
+            $packageNamespaceAncestors = $this->determinePackageNamespaceAncestors($packageNamespace);
+            $packageNamespaceParent = array_shift($packageNamespaceAncestors);
+
+            if (!isset($this->packageLists[$packageNamespaceParent]))
+            {
+                $this->setPackageList($packageNamespaceParent);
+            }
+
+            if ($this->isRelevantPackage($packageNamespace) &&
+                !$this->packageLists[$packageNamespaceParent]->has_package($packageNamespace))
+            {
+                $this->packageLists[$packageNamespaceParent]->add_package($this->packageDefinitions[$packageNamespace]);
+            }
+
+            $previousPackageList = $this->packageLists[$packageNamespaceParent];
+
+            foreach ($packageNamespaceAncestors as $packageNamespaceAncestor)
+            {
+                if (!isset($this->packageLists[$packageNamespaceAncestor]))
+                {
+                    $this->setPackageList($packageNamespaceAncestor);
+                }
+
+                if (!$this->packageLists[$packageNamespaceAncestor]->has_child($previousPackageList->get_type()))
+                {
+                    $this->packageLists[$packageNamespaceAncestor]->add_child($previousPackageList);
+                }
+
+                $previousPackageList = $this->packageLists[$packageNamespaceAncestor];
+            }
+        }
+    }
+
+    private function readPackageDefinitions()
+    {
+        foreach ($this->getPackageNamespaces() as $packageNamespace)
+        {
+            $packageDefinition = $this->packageFactory->getPackage($packageNamespace);
+            $this->packageDefinitions[$packageNamespace] = $packageDefinition;
+        }
+    }
+
+    /**
+     *
+     * @param string $packageNamespace
+     */
+    public function setPackageList($packageNamespace)
+    {
+        if ($packageNamespace === PackageList::ROOT)
+        {
+            $typeName = 'Platform';
+            $packageImageNamespace = 'Chamilo\Configuration';
+        }
+        else
+        {
+            $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($packageNamespace);
+            $packageImageNamespace = $packageNamespace;
+        }
+
+        $glyph = new NamespaceIdentGlyph($packageImageNamespace, false, false, false, Theme::ICON_MINI, array('fa-fw'));
+
+        $this->packageLists[$packageNamespace] = new PackageList($packageNamespace, $typeName, $glyph);
+    }
+
+    protected function setup()
+    {
+        parent::setup();
+        $this->readPackageDefinitions();
+        $this->processPackageTypes();
     }
 }

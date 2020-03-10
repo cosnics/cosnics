@@ -58,9 +58,12 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
         $this->collapsed = $collapsed;
 
         $entryTemplates = array();
-        $entryTemplates[self::HTML_MENU_ENTRY_INACTIVE] = '<div class="{children}"><a href="{url}" onclick="{onclick}" id="{id}" style="{style}" title="{safe_title}"><span class="{class}"></span> {title}</a></div>';
-        $entryTemplates[self::HTML_MENU_ENTRY_ACTIVE] = '<!--A--><div><a href="{url}" onclick="{onclick}" id="{id}" style="{style}" title="{safe_title}"><span class="{class}"></span> {title}</a></div>';
-        $entryTemplates[self::HTML_MENU_ENTRY_ACTIVEPATH] = '<!--P--><div><a href="{url}" onclick="{onclick}" id="{id}" style="{style}" title="{safe_title}"><span class="{class}"></span> {title}</a></div>';
+        $entryTemplates[self::HTML_MENU_ENTRY_INACTIVE] =
+            '<div class="{children}"><a href="{url}" onclick="{onclick}" id="{id}" style="{style}" title="{safe_title}"><span class="{class}"></span> {title}</a></div>';
+        $entryTemplates[self::HTML_MENU_ENTRY_ACTIVE] =
+            '<!--A--><div><a href="{url}" onclick="{onclick}" id="{id}" style="{style}" title="{safe_title}"><span class="{class}"></span> {title}</a></div>';
+        $entryTemplates[self::HTML_MENU_ENTRY_ACTIVEPATH] =
+            '<!--P--><div><a href="{url}" onclick="{onclick}" id="{id}" style="{style}" title="{safe_title}"><span class="{class}"></span> {title}</a></div>';
         $this->setEntryTemplate($entryTemplates);
         $this->setItemTemplate('<li>', '</li>' . "\n");
     }
@@ -76,8 +79,8 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
         if ($root)
         {
             $this->setLevelTemplate(
-                '<div id="' . $this->tree_name . '"><ul class="tree-menu">' . "\n",
-                '</ul></div>' . "\n");
+                '<div id="' . $this->tree_name . '"><ul class="tree-menu">' . "\n", '</ul></div>' . "\n"
+            );
         }
 
         parent::finishLevel($level);
@@ -97,13 +100,13 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
         // Add some extra keys, so they always get replaced in the template.
         foreach (array('children', 'class', 'onclick', 'id') as $key)
         {
-            if (! array_key_exists($key, $node))
+            if (!array_key_exists($key, $node))
             {
                 $node[$key] = '';
             }
         }
 
-        if (! $node['safe_title'])
+        if (!$node['safe_title'])
         {
             $node['safe_title'] = htmlentities(strip_tags($node['title']));
         }
@@ -128,7 +131,7 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
 
         $html[] = '<script type="text/javascript">';
         $html[] = '$("#' . $this->tree_name . '").tree_menu({search: "' . $this->search_url . '", item_url: "' .
-             $this->item_url . '", collapsed: "' . $this->collapsed . '" });';
+            $this->item_url . '", collapsed: "' . $this->collapsed . '" });';
         $html[] = '</script>';
 
         return implode(PHP_EOL, $html);

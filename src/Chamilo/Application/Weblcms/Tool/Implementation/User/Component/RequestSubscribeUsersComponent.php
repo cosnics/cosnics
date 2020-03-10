@@ -14,7 +14,6 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -182,13 +181,16 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         }
 
         $html[] = '<ul class="attachments_list">';
+
+        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
         foreach ($users as $user)
         {
-            $html[] = '<li><img src="' . Theme::getInstance()->getImagePath(
-                    '\Chamilo\Core\User', 'Logo/' . Theme::ICON_MINI
-                ) . '" alt="' . htmlentities(Translation::get('TypeName')) . '"/> ' . $user->get_fullname() . ' (' .
-                $user->get_official_code() . ')' . '</li>';
+            $html[] =
+                '<li>' . $glyph->render() . ' ' . $user->get_fullname() . ' (' . $user->get_official_code() . ')' .
+                '</li>';
         }
+
         $html[] = '</ul>';
         $html[] = '</div>';
 

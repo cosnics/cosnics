@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 class PackageTypeImportMenu extends HtmlMenu
 {
@@ -55,15 +54,7 @@ class PackageTypeImportMenu extends HtmlMenu
     {
         $item = array();
 
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
-
-        $item['class'] = $glyph->getClassNamesString();
-
-        if (!is_null($package_list->get_type_icon()))
-        {
-            $item['style'] = 'background-image: url(' . $package_list->get_type_icon() . ')';
-        }
-
+        $item['class'] = $package_list->get_type_icon()->getClassNamesString();
         $item['title'] = $package_list->get_type_name();
         $item['url'] = $this->get_url($package_list->get_type());
         $item[OptionsMenuRenderer::KEY_ID] = $package_list->get_type();

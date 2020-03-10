@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 class PackageTypeLinksMenu extends HtmlMenu
 {
@@ -38,9 +37,8 @@ class PackageTypeLinksMenu extends HtmlMenu
     private function get_items(PackageList $package_list)
     {
         $item = array();
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
 
-        $item['class'] = $glyph->getClassNamesString();
+        $item['class'] = $package_list->get_type_icon()->getClassNamesString();
         $item['title'] = $package_list->get_type_name();
         $item['url'] = $this->get_url($package_list->get_type());
         $item[OptionsMenuRenderer::KEY_ID] = $package_list->get_type();
@@ -50,6 +48,7 @@ class PackageTypeLinksMenu extends HtmlMenu
         foreach ($package_list->get_children() as $child)
         {
             $children = $this->get_items($child);
+
             if ($children)
             {
                 $sub_items[] = $children;
@@ -63,6 +62,7 @@ class PackageTypeLinksMenu extends HtmlMenu
 
         $has_links = false;
         $packages = $package_list->get_packages();
+
         foreach ($packages as $package)
         {
             $registration = Configuration::registration($package->get_context());
@@ -85,7 +85,7 @@ class PackageTypeLinksMenu extends HtmlMenu
         {
             if (!$has_links)
             {
-                unset($item['url']);
+                $item['url'] = '';
             }
 
             return $item;

@@ -17,6 +17,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -81,9 +82,10 @@ class ResultsViewerComponent extends Manager implements TableSupport
 
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
-        $html[] = '<img src="' .
-            Theme::getInstance()->getImagePath('Chamilo\Core\Repository\ContentObject\Assessment', 'Logo/16') .
-            '" /> ' . $assessment->get_title();
+
+        $glyph = new NamespaceIdentGlyph('Chamilo\Core\Repository\ContentObject\Assessment', false, false, false, Theme::ICON_MINI);
+
+        $html[] = $glyph->render() . ' ' . $assessment->get_title();
         $html[] = '</h3>';
         $html[] = '</div>';
 

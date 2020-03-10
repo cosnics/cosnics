@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Format\Tabs;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -35,7 +34,7 @@ class DynamicSearchAction extends DynamicAction
         $renderer->setElementTemplate('{element}');
 
         parent::__construct(
-            null, $search_form->toHtml(), Theme::getInstance()->getImagePath($namespace, 'Admin/Search'), null
+            null, $search_form->toHtml(), new FontAwesomeGlyph('search', array('fa-lg'), null, 'fas'), null
         );
     }
 }
