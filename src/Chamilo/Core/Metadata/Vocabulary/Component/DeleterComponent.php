@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * Controller to delete the schema
@@ -45,7 +46,7 @@ class DeleterComponent extends Manager
                 
                 if (! $vocabulary->delete())
                 {
-                    throw new \Exception(
+                    throw new Exception(
                         Translation::get(
                             'ObjectNotDeleted', 
                             array('OBJECT' => Translation::get('Vocabulary')), 
@@ -59,7 +60,7 @@ class DeleterComponent extends Manager
                 array('OBJECT' => Translation::get('Vocabulary')), 
                 Utilities::COMMON_LIBRARIES);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();
@@ -71,6 +72,6 @@ class DeleterComponent extends Manager
             array(
                 self::PARAM_ACTION => self::ACTION_BROWSE, 
                 \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID => $vocabulary->get_element_id(), 
-                \Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_USER_ID => $vocabulary->get_user_id()));
+                Manager::PARAM_USER_ID => $vocabulary->get_user_id()));
     }
 }

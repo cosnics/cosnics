@@ -8,6 +8,7 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Table\Group\GroupTable;
 use Chamilo\Core\Group\Table\GroupRelUser\GroupRelUserTable;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -101,7 +102,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self::TAB_SUBGROUPS,
                 Translation::get('Subgroups'),
-                Theme::getInstance()->getImagePath(\Chamilo\Core\Group\Manager::context(), 'Logo/' . Theme::ICON_MINI),
+                Theme::getInstance()->getImagePath(Manager::context(), 'Logo/' . Theme::ICON_MINI),
                 $table->as_html()));
 
         $table = new GroupRelUserTable($this);
@@ -242,8 +243,8 @@ class BrowserComponent extends Manager implements TableSupport
                 '*' . $query . '*');
             $condition = new OrCondition($or_conditions);
 
-            $users = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            $users = DataManager::retrieves(
+                User::class_name(),
                 new DataClassRetrievesParameters($condition));
             while ($user = $users->next_result())
             {

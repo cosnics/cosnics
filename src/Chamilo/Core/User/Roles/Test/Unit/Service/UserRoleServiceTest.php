@@ -9,6 +9,7 @@ use Chamilo\Core\User\Roles\Storage\DataClass\RoleRelation;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\UserRoleRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
+use Exception;
 
 /**
  * Tests the Chamilo\Core\User\Roles\Service\UserRoleService class
@@ -271,7 +272,7 @@ class UserRoleServiceTest extends ChamiloTestCase
 
         $this->roleServiceMock->expects($this->once())
             ->method('getRoleByName')
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $this->userRoleRepositoryMock->expects($this->never())
             ->method('delete');

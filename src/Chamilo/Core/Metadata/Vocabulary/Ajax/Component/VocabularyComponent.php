@@ -3,7 +3,9 @@ namespace Chamilo\Core\Metadata\Vocabulary\Ajax\Component;
 
 use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
+use Chamilo\Core\Metadata\Vocabulary\Ajax\Manager;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use stdClass;
 
 /**
  *
@@ -12,7 +14,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class VocabularyComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager
+class VocabularyComponent extends Manager
 {
     const PARAM_ELEMENT_ID = 'elementId';
     const PARAM_SCHEMA_ID = 'schemaId';
@@ -32,7 +34,7 @@ class VocabularyComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager
         
         while ($vocabularyItem = $vocabularyItems->next_result())
         {
-            $item = new \stdClass();
+            $item = new stdClass();
             $item->id = $vocabularyItem->get_id();
             $item->value = $vocabularyItem->get_value();
             

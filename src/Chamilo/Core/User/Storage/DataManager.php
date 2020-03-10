@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Storage;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -195,7 +196,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function get_current_user()
     {
-        return self::retrieve_by_id(User::class_name(), \Chamilo\Libraries\Platform\Session\Session::get_user_id());
+        return self::retrieve_by_id(User::class_name(), Session::get_user_id());
     }
 
     /**

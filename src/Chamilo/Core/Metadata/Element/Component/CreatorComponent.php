@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * Controller to create the schema
@@ -51,7 +52,7 @@ class CreatorComponent extends Manager
                     array('OBJECT' => Translation::get('Element')), 
                     Utilities::COMMON_LIBRARIES);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();

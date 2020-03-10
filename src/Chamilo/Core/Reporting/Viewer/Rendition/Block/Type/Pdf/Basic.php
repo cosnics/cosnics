@@ -3,6 +3,7 @@ namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Pdf;
 
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Pdf;
 use Chamilo\Libraries\File\Path;
+use Exception;
 
 /**
  *
@@ -157,7 +158,7 @@ class Basic extends Pdf
         
         if ($max_page_length <= 0)
         {
-            throw new \Exception('Invalid PDF export maximum page length');
+            throw new Exception('Invalid PDF export maximum page length');
         }
         
         $column_item_length = strlen($row_item);
@@ -176,7 +177,7 @@ class Basic extends Pdf
                 $current_page_string = substr($row_item, $start, $max_page_length);
                 if (! $current_page_string)
                 {
-                    throw new \Exception('Invalid page start index.');
+                    throw new Exception('Invalid page start index.');
                 }
                 
                 $next_page_string = substr($row_item, $start + $max_page_length, $max_page_length);

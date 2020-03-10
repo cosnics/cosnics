@@ -4,6 +4,7 @@ namespace Chamilo\Core\Metadata\Storage\DataClass;
 use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
 use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
 use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
+use Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -23,7 +24,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Relation extends DataClass implements EntityTranslationInterface
 {
-    use \Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
+    use EntityTranslationTrait;
     
     /**
      * **************************************************************************************************************

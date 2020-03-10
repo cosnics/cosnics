@@ -3,6 +3,7 @@ namespace Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration;
 
 use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Interfaces\LoaderInterface;
 use Chamilo\Libraries\File\Path;
+use Exception;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Yaml\Yaml;
 
@@ -53,7 +54,7 @@ class Loader implements LoaderInterface
         {
             $configurationFiles = $locator->locate('StructureLocations.yml', null, false);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $configurationFiles = array();
         }

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Admin\Table\WhoisOnline;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -30,8 +32,8 @@ class WhoisOnlineTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        return \Chamilo\Core\User\Storage\DataManager::retrieves(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+        return DataManager::retrieves(
+            User::class_name(),
             $parameters);
     }
 
@@ -42,8 +44,8 @@ class WhoisOnlineTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return \Chamilo\Core\User\Storage\DataManager::count(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+        return DataManager::count(
+            User::class_name(),
             new DataClassCountParameters($condition));
     }
 }

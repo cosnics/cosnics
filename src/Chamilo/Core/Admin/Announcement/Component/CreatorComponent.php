@@ -6,6 +6,8 @@ use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Publisher;
 use Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataClass\SystemAnnouncement;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Theme;
@@ -20,7 +22,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface
+class CreatorComponent extends Manager implements ViewerInterface
 {
 
     /**
@@ -120,7 +122,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                 )
             );
 
-            $contentObjects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
+            $contentObjects = DataManager::retrieve_active_content_objects(
                 ContentObject::class_name(), $parameters
             );
 

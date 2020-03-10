@@ -1,10 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Action;
 
+use Chamilo\Configuration\Package\Action\Deactivator;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
-abstract class ContentObjectDeactivator extends \Chamilo\Configuration\Package\Action\Deactivator
+abstract class ContentObjectDeactivator extends Deactivator
 {
 
     public function run()

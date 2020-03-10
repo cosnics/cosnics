@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Reporting;
 
+use Chamilo\Configuration\Configuration;
+
 /**
  * Class stores properties of a reporting data row.
  * Note that reporting data rows are actually columns in PDF, excel, ods, etc files.
@@ -38,33 +40,33 @@ class ReportingDataStyle
     {
         $this->headingCellStyle = new ReportingDataCellStyle();
         $this->headingCellStyle->setAlignment(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_alignment'));
+            Configuration::get('Chamilo\Core\Reporting', 'heading_cell_alignment'));
         $this->headingCellStyle->setTextColor(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_text_color'));
+            Configuration::get('Chamilo\Core\Reporting', 'heading_cell_text_color'));
         $this->headingCellStyle->setBackgroundColor(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_background_color'));
+            Configuration::get('Chamilo\Core\Reporting', 'heading_cell_background_color'));
         $this->headingCellStyle->setBorderColor(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_border_color'));
+            Configuration::get('Chamilo\Core\Reporting', 'heading_cell_border_color'));
         $this->headingCellStyle->setFont(
             [
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_font_family'),
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_font_style'),
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_font_size')]);
+                Configuration::get('Chamilo\Core\Reporting', 'heading_cell_font_family'),
+                Configuration::get('Chamilo\Core\Reporting', 'heading_cell_font_style'),
+                Configuration::get('Chamilo\Core\Reporting', 'heading_cell_font_size')]);
 
         $this->dataCellStyle = new ReportingDataCellStyle();
         $this->dataCellStyle->setAlignment(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_alignment'));
+            Configuration::get('Chamilo\Core\Reporting', 'heading_cell_alignment'));
         $this->dataCellStyle->setTextColor(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_text_color'));
+            Configuration::get('Chamilo\Core\Reporting', 'data_cell_text_color'));
         $this->dataCellStyle->setBackgroundColor(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_background_color'));
+            Configuration::get('Chamilo\Core\Reporting', 'data_cell_background_color'));
         $this->dataCellStyle->setBorderColor(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_border_color'));
+            Configuration::get('Chamilo\Core\Reporting', 'data_cell_border_color'));
         $this->dataCellStyle->setFont(
             [
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_font_family'),
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_font_style'),
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_font_size')]);
+                Configuration::get('Chamilo\Core\Reporting', 'data_cell_font_family'),
+                Configuration::get('Chamilo\Core\Reporting', 'data_cell_font_style'),
+                Configuration::get('Chamilo\Core\Reporting', 'data_cell_font_size')]);
 
         $this->relativeWidth = 0.0;
     }

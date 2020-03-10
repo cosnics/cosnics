@@ -23,18 +23,18 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
         if ($type == LinkTable::TYPE_PARENTS)
         {
-            $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), $data_class->get_parent()
             );
         }
         elseif ($type == LinkTable::TYPE_CHILDREN)
         {
-            $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), $data_class->get_ref()
             );
             if (in_array($object->get_type(), DataManager::get_active_helper_types()))
             {
-                $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $object = DataManager::retrieve_by_id(
                     ContentObject::class_name(), $object->get_reference()
                 );
             }
@@ -115,11 +115,11 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
     private function get_delete_link_url($type, $object_id, $link_id)
     {
         $parameters = array();
-        $parameters[\Chamilo\Core\Repository\Manager::PARAM_ACTION] =
-            \Chamilo\Core\Repository\Manager::ACTION_DELETE_LINK;
-        $parameters[\Chamilo\Core\Repository\Manager::PARAM_LINK_TYPE] = $type;
-        $parameters[\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID] = $object_id;
-        $parameters[\Chamilo\Core\Repository\Manager::PARAM_LINK_ID] = $link_id;
+        $parameters[Manager::PARAM_ACTION] =
+            Manager::ACTION_DELETE_LINK;
+        $parameters[Manager::PARAM_LINK_TYPE] = $type;
+        $parameters[Manager::PARAM_CONTENT_OBJECT_ID] = $object_id;
+        $parameters[Manager::PARAM_LINK_ID] = $link_id;
 
         return $this->get_component()->get_url($parameters);
     }

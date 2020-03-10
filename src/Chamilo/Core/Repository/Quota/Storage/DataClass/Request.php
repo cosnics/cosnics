@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Quota\Storage\DataClass;
 
 use Chamilo\Core\Repository\Quota\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
@@ -84,7 +85,7 @@ class Request extends DataClass
         if (! isset($this->user))
         {
             $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                User::class_name(),
                 (int) $this->get_user_id());
         }
         return $this->user;

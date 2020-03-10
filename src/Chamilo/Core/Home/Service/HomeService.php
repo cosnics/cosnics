@@ -10,8 +10,10 @@ use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Exception;
 
 /**
  *
@@ -183,7 +185,7 @@ class HomeService
         
         if (! $result)
         {
-            throw new \Exception(Translation::get('HomepageDefaultCreationFailed'));
+            throw new Exception(Translation::get('HomepageDefaultCreationFailed'));
         }
         
         return true;
@@ -238,7 +240,7 @@ class HomeService
         if (! isset($this->homeUserIdentifier))
         {
             $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
-            $generalMode = \Chamilo\Libraries\Platform\Session\Session::retrieve('Chamilo\Core\Home\General');
+            $generalMode = Session::retrieve('Chamilo\Core\Home\General');
             
             // Get user id
             if ($user instanceof User && $generalMode && $user->is_platform_admin())
@@ -283,7 +285,7 @@ class HomeService
      */
     public function isInGeneralMode()
     {
-        return (boolean) \Chamilo\Libraries\Platform\Session\Session::retrieve('Chamilo\Core\Home\General');
+        return (boolean) Session::retrieve('Chamilo\Core\Home\General');
     }
 
     /**

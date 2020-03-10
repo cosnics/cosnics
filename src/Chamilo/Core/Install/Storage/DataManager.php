@@ -4,6 +4,7 @@ namespace Chamilo\Core\Install\Storage;
 use Chamilo\Core\Install\Configuration;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
+use Exception;
 
 /**
  *
@@ -85,7 +86,7 @@ class DataManager
 
             return true;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             return false;
         }

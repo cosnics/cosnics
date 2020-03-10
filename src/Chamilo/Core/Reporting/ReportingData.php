@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Reporting;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Reporting\ReportingDataStyle;
 
 /**
@@ -305,7 +306,7 @@ class ReportingData
         }, $max_row_lengths);
         // Avoid zero widths by clipping relative widths to a minimum.
         $min_relative_width = floatval(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'min_relative_width'));
+            Configuration::get('Chamilo\Core\Reporting', 'min_relative_width'));
         $relative_widths = array_map(
             function ($item) use ($min_relative_width)
             {

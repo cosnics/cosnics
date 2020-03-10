@@ -2,8 +2,10 @@
 
 namespace Chamilo\Core\Queue\Storage\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 
 /**
  * @package Chamilo\Core\Queue\Storage\Entity
@@ -104,7 +106,7 @@ class Job
     /**
      * @return \DateTime
      */
-    public function getDate(): \DateTime
+    public function getDate(): DateTime
     {
         return $this->date;
     }
@@ -114,7 +116,7 @@ class Job
      *
      * @return \Chamilo\Core\Queue\Storage\Entity\Job
      */
-    public function setDate(\DateTime $date)
+    public function setDate(DateTime $date)
     {
         $this->date = $date;
 
@@ -177,12 +179,12 @@ class Job
     {
         if(empty($parameterName))
         {
-            throw new \InvalidArgumentException('The given parameter name can not be empty');
+            throw new InvalidArgumentException('The given parameter name can not be empty');
         }
 
         if (empty($value))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('The given parameter value for parameter %s can not be empty', $parameterName)
             );
         }

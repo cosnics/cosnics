@@ -6,6 +6,7 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationRoleServic
 use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationServiceInterface;
 use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Interfaces\LoaderInterface;
 use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Interfaces\SynchronizerInterface;
+use RuntimeException;
 
 /**
  * Synchronizes configuration files where default structure locations and roles are defined with the database
@@ -67,7 +68,7 @@ class Synchronizer implements SynchronizerInterface
 
         if(empty($configuration))
         {
-            throw new \RuntimeException('Could not load the structure location configuration files');
+            throw new RuntimeException('Could not load the structure location configuration files');
         }
 
         $this->structureLocationService->truncateStructureLocations();

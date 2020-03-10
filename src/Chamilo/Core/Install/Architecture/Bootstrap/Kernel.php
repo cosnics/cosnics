@@ -8,6 +8,8 @@ use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\Response;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Exception;
 
 /**
  *
@@ -61,7 +63,8 @@ class Kernel
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param integer $version
      */
-    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request,
+    public function __construct(
+        ChamiloRequest $request,
         ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger, $version)
     {
         $this->request = $request;
@@ -214,7 +217,7 @@ class Kernel
 
         if (! isset($context))
         {
-            throw new \Exception('Must call configureContext before buildApplication');
+            throw new Exception('Must call configureContext before buildApplication');
         }
 
         $this->setApplication(
@@ -241,7 +244,7 @@ class Kernel
 
         if (! isset($application))
         {
-            throw new \Exception('Must call buildApplication before runApplication');
+            throw new Exception('Must call buildApplication before runApplication');
         }
 
         $response = $application->run();

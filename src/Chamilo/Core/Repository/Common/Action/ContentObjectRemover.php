@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Action;
 
+use Chamilo\Configuration\Package\Action\Remover;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
@@ -9,7 +10,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  * 
  * @author Hans De Bisschop
  */
-abstract class ContentObjectRemover extends \Chamilo\Configuration\Package\Action\Remover
+abstract class ContentObjectRemover extends Remover
 {
 
     /**

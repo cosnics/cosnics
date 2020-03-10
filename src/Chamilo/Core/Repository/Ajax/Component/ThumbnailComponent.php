@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
@@ -20,7 +21,7 @@ class ThumbnailComponent extends \Chamilo\Core\Repository\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID, self::PARAM_WIDTH, self::PARAM_HEIGHT);
+        return array(Manager::PARAM_CONTENT_OBJECT_ID, self::PARAM_WIDTH, self::PARAM_HEIGHT);
     }
 
     /*
@@ -30,12 +31,12 @@ class ThumbnailComponent extends \Chamilo\Core\Repository\Ajax\Manager
     {
         $contentObject = DataManager::retrieve_by_id(
             ContentObject::class_name(), 
-            $this->getPostDataValue(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID));
+            $this->getPostDataValue(Manager::PARAM_CONTENT_OBJECT_ID));
         
         if ($contentObject instanceof File)
         {
             $thumbnail_folder_path = Path::getInstance()->getTemporaryPath(
-                \Chamilo\Core\Repository\Manager::context() . '\Thumbnail');
+                Manager::context() . '\Thumbnail');
             $thumbnail_file_path = $thumbnail_folder_path . md5($contentObject->get_full_path());
             
             if (! is_file($thumbnail_file_path))

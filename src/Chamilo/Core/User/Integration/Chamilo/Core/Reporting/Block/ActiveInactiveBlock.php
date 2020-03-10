@@ -3,6 +3,8 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Block;
 
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
@@ -12,8 +14,8 @@ class ActiveInactiveBlock extends Block
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $users = \Chamilo\Core\User\Storage\DataManager::retrieves(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+        $users = DataManager::retrieves(
+            User::class_name(),
             new DataClassRetrievesParameters());
         $active[Translation::get('Active')] = 0;
         $active[Translation::get('Inactive')] = 0;

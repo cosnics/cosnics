@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -115,7 +116,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
             )
         );
 
-        if ($user->get_id() != \Chamilo\Libraries\Platform\Session\Session::get_user_id())
+        if ($user->get_id() != Session::get_user_id())
         {
             if ($this->get_component()->get_user()->is_platform_admin())
             {

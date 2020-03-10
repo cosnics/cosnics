@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\User\Domain\UserImporter;
 
+use RuntimeException;
+
 /**
  * Describes the result of the importer action
  *
@@ -48,7 +50,7 @@ class ImporterResult
     {
         if(!$importDataResult->hasFailed())
         {
-            throw new \RuntimeException('The import result could not be added because the import did not fail');
+            throw new RuntimeException('The import result could not be added because the import did not fail');
         }
 
         $this->failedUserResults[] = $importDataResult;
@@ -61,7 +63,7 @@ class ImporterResult
     {
         if(!$importDataResult->isSuccessful())
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The import result could not be added because the import was not successful'
             );
         }
@@ -80,7 +82,7 @@ class ImporterResult
     {
         if (!$importDataResult->isCompleted())
         {
-            throw new \RuntimeException('The import result could not be added because the import is not yet completed');
+            throw new RuntimeException('The import result could not be added because the import is not yet completed');
         }
 
         if ($importDataResult->isSuccessful())

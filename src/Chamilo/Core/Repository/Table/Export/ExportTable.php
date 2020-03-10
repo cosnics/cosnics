@@ -56,7 +56,7 @@ class ExportTable extends SortableTableFromArray
         }
         
         $html[] = '<div class="table-responsive">';
-        $html[] = \HTML_Table::toHtml();
+        $html[] = HTML_Table::toHtml();
         $html[] = '</div>';
         
         return implode("\n", $html);

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Form;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Admin\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
@@ -56,7 +57,7 @@ class AccountForm extends FormValidator
         parent::__construct('user_account', 'post', $action);
 
         $this->user = $user;
-        $this->adm = \Chamilo\Core\Admin\Storage\DataManager::getInstance();
+        $this->adm = DataManager::getInstance();
         $this->authenticationValidator = $authenticationValidator;
 
         $this->form_type = $form_type;
@@ -78,7 +79,7 @@ class AccountForm extends FormValidator
             array(
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
                 Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $this->user->get_id()
+                Manager::PARAM_USER_USER_ID => $this->user->get_id()
             )
         );
 
@@ -293,7 +294,7 @@ class AccountForm extends FormValidator
             $this->addElement('category');
         }
 
-        if ($configurationConsulter->get_setting(array(\Chamilo\Core\User\Manager::context(), 'show_personal_token')))
+        if ($configurationConsulter->get_setting(array(Manager::context(), 'show_personal_token')))
         {
             $this->addElement('category', Translation::get('Other'));
             $this->addElement('static', User::PROPERTY_SECURITY_TOKEN, Translation::get('SecurityToken'));

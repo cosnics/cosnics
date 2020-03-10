@@ -5,6 +5,8 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Path;
@@ -16,6 +18,7 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -57,8 +60,8 @@ class MultiPasswordResetterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                $user = DataManager::retrieve_by_id(
+                    User::class_name(),
                     (int) $id);
 
                 $password = Text::generate_password();
@@ -82,7 +85,7 @@ class MultiPasswordResetterComponent extends Manager
                     {
                         $mailer->sendMail($mail);
                     }
-                    catch (\Exception $ex)
+                    catch (Exception $ex)
                     {
                     }
 

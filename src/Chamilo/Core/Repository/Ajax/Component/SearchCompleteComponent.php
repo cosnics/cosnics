@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Component;
 
+use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -22,7 +23,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SearchCompleteComponent extends \Chamilo\Core\Repository\Ajax\Manager
+class SearchCompleteComponent extends Manager
 {
 
     public function run()

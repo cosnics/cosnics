@@ -5,6 +5,7 @@ namespace Chamilo\Core\Install\Service;
 use Chamilo\Core\Install\Configuration;
 use Chamilo\Core\Install\Service\Interfaces\ConfigurationWriterInterface;
 use Chamilo\Libraries\File\Filesystem;
+use InvalidArgumentException;
 
 /**
  * Writes the installer configuration to a configuration file
@@ -27,7 +28,7 @@ class ConfigurationWriter implements ConfigurationWriterInterface
     {
         if (!file_exists($configurationTemplatePath) || !is_readable($configurationTemplatePath))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given configuration template path does not exist or is not readable for the system'
             );
         }
@@ -127,7 +128,7 @@ class ConfigurationWriter implements ConfigurationWriterInterface
 
         if (!is_writable(dirname($outputFile)))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The system is not allowed to write to the given directory for the output file'
             );
         }

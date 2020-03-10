@@ -3,6 +3,7 @@ namespace Chamilo\Core\User;
 
 use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
+use function Strftime;
 
 /**
  *
@@ -26,7 +27,7 @@ class SettingsConnector
     function get_date_terms_and_conditions_update()
     {
         $date_format = '%e-%m-%Y';
-        return array(\Strftime($date_format, Manager::get_date_terms_and_conditions_last_modified()));
+        return array(Strftime($date_format, Manager::get_date_terms_and_conditions_last_modified()));
     }
 
     /**

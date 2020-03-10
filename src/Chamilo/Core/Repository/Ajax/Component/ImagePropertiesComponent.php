@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -35,7 +36,7 @@ class ImagePropertiesComponent extends \Chamilo\Core\Repository\Ajax\Manager
             $properties[File::PROPERTY_FILESIZE] = $contentObject->get_filesize();
             
             $properties['fullPath'] = $full_path;
-            $properties['webPath'] = \Chamilo\Core\Repository\Manager::get_document_downloader_url(
+            $properties['webPath'] = Manager::get_document_downloader_url(
                 $contentObject->get_id(), 
                 $contentObject->calculate_security_code());
             $properties['type'] = $contentObject->get_extension();

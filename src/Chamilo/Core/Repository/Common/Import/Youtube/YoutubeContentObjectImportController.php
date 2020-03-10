@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\Common\Import\Youtube;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube;
 use Chamilo\Core\Repository\External\DataConnector;
+use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
+use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
@@ -50,18 +52,18 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_TYPE), 
+                        Instance::class_name(),
+                        Instance::PROPERTY_TYPE),
                     new StaticConditionVariable(self::REPOSITORY_TYPE));
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ENABLED), 
+                        Instance::class_name(),
+                        Instance::PROPERTY_ENABLED),
                     new StaticConditionVariable(1));
                 $condition = new AndCondition($conditions);
                 
                 $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                    Instance::class_name(),
                     new DataClassRetrievesParameters($condition));
                 
                 $external_repository = $external_repositories->next_result();
@@ -78,7 +80,7 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
                 {
                     $this->process_workspace($youtube);
                     
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData::quicksave(
+                    SynchronizationData::quicksave(
                         $youtube, 
                         $external_object, 
                         $external_repository->get_id());
@@ -104,18 +106,18 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_TYPE), 
+                Instance::class_name(),
+                Instance::PROPERTY_TYPE),
             new StaticConditionVariable(self::REPOSITORY_TYPE));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ENABLED), 
+                Instance::class_name(),
+                Instance::PROPERTY_ENABLED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
         
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+            Instance::class_name(),
             new DataClassRetrievesParameters($condition));
         $youtube_connector_available = $external_repositories->size() == 1;
         

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Metadata\Provider;
 use Chamilo\Core\Metadata\Service\EntityConditionService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
+use InvalidArgumentException;
 
 /**
  *
@@ -77,7 +78,7 @@ abstract class Manager extends Application
     {
         if (count($this->getEntities()) == 0)
         {
-            throw new \InvalidArgumentException(Translation::get('VerifyEntitiesProviderLinkSetup'));
+            throw new InvalidArgumentException(Translation::get('VerifyEntitiesProviderLinkSetup'));
         }
     }
 }

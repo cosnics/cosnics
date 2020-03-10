@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Table\ContentObject\Table;
 
+use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -38,7 +39,7 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
         }
         else
         {
-            $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id($template_id);
+            $template_registration = Configuration::registration_by_id($template_id);
             $this->type = $template_registration->get_content_object_type() . '\Storage\DataClass\\' . ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
                 $template_registration->get_content_object_type());
         }

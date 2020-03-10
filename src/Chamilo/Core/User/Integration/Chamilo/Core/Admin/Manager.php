@@ -115,7 +115,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         );
         $links[] = new DynamicAction(
             Translation::get('Import', null, Utilities::COMMON_LIBRARIES), Translation::get('ImportDescription'),
-            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'), $redirect->getUrl()
+            new FontAwesomeGlyph('user', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
         return $links;

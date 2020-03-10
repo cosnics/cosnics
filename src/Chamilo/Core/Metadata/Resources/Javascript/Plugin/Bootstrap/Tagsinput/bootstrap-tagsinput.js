@@ -404,7 +404,7 @@
                 if (self.$input.val().length > 0) {
                 var obj = {
                     _freeText : true
-                }
+                };
                 obj[options.itemText] = self.$input.val();
                 obj[options.itemValue] = "free_input_" + self.$input.val();
                 self.add(obj);
@@ -496,7 +496,7 @@
                 if (self.objectItems) {
                 var obj = {
                     _freeText : true
-                }
+                };
                 obj[options.itemText] = $input.val();
                 obj[options.itemValue] = "free_input_" + $input.val();
                 self.add(obj);

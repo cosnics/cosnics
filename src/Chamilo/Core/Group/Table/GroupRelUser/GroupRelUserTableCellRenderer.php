@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Group\Table\GroupRelUser;
 
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -19,8 +21,8 @@ class GroupRelUserTableCellRenderer extends DataClassTableCellRenderer implement
         {
             case GroupRelUser::PROPERTY_USER_ID :
                 $user_id = parent::render_cell($column, $groupreluser);
-                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(), $user_id
+                $user = DataManager::retrieve_by_id(
+                    User::class_name(), $user_id
                 );
 
                 return $user->get_fullname();

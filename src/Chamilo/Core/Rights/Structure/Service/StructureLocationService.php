@@ -4,6 +4,7 @@ namespace Chamilo\Core\Rights\Structure\Service;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationServiceInterface;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocationRepositoryInterface;
+use Exception;
 
 /**
  * Manages structure locations
@@ -47,7 +48,7 @@ class StructureLocationService implements StructureLocationServiceInterface
         
         if (! $this->structureLocationRepository->create($structureLocation))
         {
-            throw new \Exception(
+            throw new Exception(
                 'The structure location with context ' . $context . ' and action ' . $action . ' could not be created');
         }
         
@@ -65,7 +66,7 @@ class StructureLocationService implements StructureLocationServiceInterface
     {
         if (! $this->structureLocationRepository->delete($structureLocation))
         {
-            throw new \Exception(
+            throw new Exception(
                 'The structure location with context ' . $structureLocation->getContext() . ' and action ' .
                      $structureLocation->getAction() . ' could not be deleted');
         }
@@ -80,7 +81,7 @@ class StructureLocationService implements StructureLocationServiceInterface
     {
         if (! $this->structureLocationRepository->truncateStructureLocationsAndRoles())
         {
-            throw new \Exception('The structure locations and their roles could not be truncated');
+            throw new Exception('The structure locations and their roles could not be truncated');
         }
     }
 
@@ -102,7 +103,7 @@ class StructureLocationService implements StructureLocationServiceInterface
         
         if (! $structureLocation instanceof StructureLocation)
         {
-            throw new \Exception(
+            throw new Exception(
                 'Could not find a structure location with context ' . $context . ' and action ' . $action);
         }
         

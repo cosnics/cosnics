@@ -9,6 +9,7 @@ use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Sets the target entities for a block type
@@ -42,7 +43,7 @@ class SetBlockTypeTargetEntitiesComponent extends Manager
                 $message = 'BlockTypeTargetEntitiesSet';
                 $success = true;
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $message = 'BlockTypeTargetEntitiesNotSet';
                 $success = false;

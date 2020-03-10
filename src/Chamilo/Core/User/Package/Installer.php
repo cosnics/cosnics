@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Package;
 
+use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
@@ -49,7 +50,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
         foreach ($settings as $setting)
         {
-            $setting_object = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
+            $setting_object = DataManager::retrieve_setting_from_variable_name(
                 $setting[1],
                 $setting[0]);
             $setting_object->set_value($setting[2]);

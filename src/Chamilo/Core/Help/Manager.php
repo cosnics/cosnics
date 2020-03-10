@@ -106,7 +106,7 @@ abstract class Manager extends Application
         {
             if ($autocomplete_languages)
             {
-                $installed_languages = \Chamilo\Configuration\Configuration::getInstance()->getLanguages();
+                $installed_languages = Configuration::getInstance()->getLanguages();
 
                 foreach ($installed_languages as $iso_code => $installed_language)
                 {

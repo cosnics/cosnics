@@ -17,7 +17,7 @@ class ImpactViewTableDataProvider extends DataClassTableDataProvider
 
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
+        return DataManager::retrieve_active_content_objects(
             ContentObject::class_name(), 
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }

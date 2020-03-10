@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 class DefaultComponent extends Manager
 {
@@ -52,7 +53,7 @@ class DefaultComponent extends Manager
                 
                 if (! $vocabulary->update())
                 {
-                    throw new \Exception(
+                    throw new Exception(
                         Translation::get(
                             'ObjectNotUpdated', 
                             array('OBJECT' => Translation::get('VocabularyDefault')), 
@@ -66,7 +67,7 @@ class DefaultComponent extends Manager
                 array('OBJECT' => Translation::get('VocabularyDefault')), 
                 Utilities::COMMON_LIBRARIES);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();
@@ -78,6 +79,6 @@ class DefaultComponent extends Manager
             array(
                 self::PARAM_ACTION => self::ACTION_BROWSE, 
                 \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID => $vocabulary->get_element_id(), 
-                \Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_USER_ID => $vocabulary->get_user_id()));
+                Manager::PARAM_USER_ID => $vocabulary->get_user_id()));
     }
 }

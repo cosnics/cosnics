@@ -1,13 +1,15 @@
 <?php
 namespace Chamilo\Core\Install\Exception;
 
+use Exception;
+
 /**
  * Exception when the installation failes
  * 
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class InstallFailedException extends \Exception
+class InstallFailedException extends Exception
 {
 
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Component;
 
+use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\File\Redirect;
@@ -29,6 +30,6 @@ class TruncaterComponent extends Manager
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

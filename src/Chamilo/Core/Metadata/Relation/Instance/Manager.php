@@ -3,6 +3,7 @@ namespace Chamilo\Core\Metadata\Relation\Instance;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
+use InvalidArgumentException;
 
 /**
  *
@@ -106,7 +107,7 @@ abstract class Manager extends Application
         
         if ($sourceEntityCount == 0 && $targetEntityCount == 0 && $relationCount == 0)
         {
-            throw new \InvalidArgumentException(Translation::get('VerifyEntitiesRelationsSetup'));
+            throw new InvalidArgumentException(Translation::get('VerifyEntitiesRelationsSetup'));
         }
     }
 }

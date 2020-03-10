@@ -8,6 +8,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Service to manage the groups of Chamilo
@@ -182,14 +184,14 @@ class GroupService
     {
         if (empty($groupCode))
         {
-            throw new \InvalidArgumentException('The given groupcode can not be empty');
+            throw new InvalidArgumentException('The given groupcode can not be empty');
         }
 
         $group = $this->groupRepository->findGroupByCode($groupCode);
 
         if (!$group instanceof Group)
         {
-            throw new \RuntimeException('Could not find the group with groupcode ' . $groupCode);
+            throw new RuntimeException('Could not find the group with groupcode ' . $groupCode);
         }
 
         return $group;
@@ -206,7 +208,7 @@ class GroupService
 
         if (!$group instanceof Group)
         {
-            throw new \RuntimeException('Could not find the group with identifier ' . $groupIdentifier);
+            throw new RuntimeException('Could not find the group with identifier ' . $groupIdentifier);
         }
 
         return $group;
@@ -367,7 +369,7 @@ class GroupService
 
         if (!$oldParentGroup instanceof Group || !$newParentGroup instanceof Group)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'The old parent (%s) or the new parent (%s) of the group (%s) are not referencing a valid group so the group can not be moved',
                     $group->getParentId(), $parentGroupIdentifier, $group->getId()

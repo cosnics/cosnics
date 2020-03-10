@@ -3,6 +3,7 @@
 namespace Chamilo\Core\User\Service\UserImporter\ImportParser;
 
 use Chamilo\Libraries\Utilities\StringUtilities;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -44,7 +45,7 @@ class ImportParserFactory
             }
         }
 
-        throw new \RuntimeException(
+        throw new RuntimeException(
             'No import parser found for uploaded file ' . $uploadedFile->getClientOriginalName()
         );
     }

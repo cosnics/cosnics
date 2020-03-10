@@ -4,13 +4,14 @@ namespace Chamilo\Core\Repository\Quota\Rights\Form;
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
+use Chamilo\Libraries\Rights\Form\RightsForm;
 
 /**
  * @package Chamilo\Core\Repository\Quota\Rights\Form
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class RightsGroupForm extends \Chamilo\Libraries\Rights\Form\RightsForm
+class RightsGroupForm extends RightsForm
 {
     const PROPERTY_ACCESS = 'access';
     const PROPERTY_TARGET_GROUPS = 'target_groups';

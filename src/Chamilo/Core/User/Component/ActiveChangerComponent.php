@@ -4,6 +4,8 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -55,8 +57,8 @@ abstract class ActiveChangerComponent extends Manager
                     continue;
                 }
 
-                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                $user = DataManager::retrieve_by_id(
+                    User::class_name(),
                     (int) $id);
                 $user->set_active($active);
 

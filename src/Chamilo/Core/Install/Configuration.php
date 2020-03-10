@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Install;
 
+use Exception;
+
 class Configuration
 {
 
@@ -134,9 +136,9 @@ class Configuration
     public function load_config_file($file)
     {
         if (! (is_file($file)))
-            throw new \Exception("Install config file {$file} not found !");
+            throw new Exception("Install config file {$file} not found !");
         if (! (is_readable($file)))
-            throw new \Exception("Install config file {$file} not readable !");
+            throw new Exception("Install config file {$file} not readable !");
 
         global $values;
         unset($values);

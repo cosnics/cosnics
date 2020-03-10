@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Action;
 
+use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
@@ -15,18 +16,20 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\Properties\FileProperties;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
 
 /**
  * Extension of the generic installer for content objects
  *
  * @author Hans De Bisschop
  */
-abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Action\Installer
+abstract class ContentObjectInstaller extends Installer
 {
 
     public function get_data_manager()
@@ -75,7 +78,7 @@ abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Act
                 User::class_name(),
                 new DataClassRetrievesParameters($condition))->next_result();
 
-            \Chamilo\Libraries\Platform\Session\Session::register('_uid', $user->get_id());
+            Session::register('_uid', $user->get_id());
 
             $parameters = ImportParameters::factory(
                 ContentObjectImport::FORMAT_CPO,
@@ -85,7 +88,7 @@ abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Act
             $import = ContentObjectImportController::factory($parameters);
             $import->run();
 
-            \Chamilo\Libraries\Platform\Session\Session::unregister('_uid');
+            Session::unregister('_uid');
 
             if ($import->has_messages(ContentObjectImportController::TYPE_ERROR))
             {
@@ -114,7 +117,7 @@ abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Act
 
             return true;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             return true;
         }

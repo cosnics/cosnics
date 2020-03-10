@@ -5,6 +5,8 @@ namespace Chamilo\Core\Repository\Common\Import\File;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -41,8 +43,8 @@ class FileContentObjectImportForm extends ContentObjectImportForm
         $this->addElement('html', '<div style="padding-left: 25px; display: block;" id="document_upload">');
 
         $calculator = new Calculator(
-            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            DataManager::retrieve_by_id(
+                User::class_name(),
                 (int) $this->get_application()->get_user_id()
             )
         );

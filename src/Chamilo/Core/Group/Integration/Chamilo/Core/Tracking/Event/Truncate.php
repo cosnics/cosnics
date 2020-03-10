@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Event;
 
+use Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 
 /**
@@ -19,6 +20,6 @@ class Truncate extends Event
      */
     public function getTrackerClasses()
     {
-        return array(\Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::class_name());
+        return array(Change::class_name());
     }
 }

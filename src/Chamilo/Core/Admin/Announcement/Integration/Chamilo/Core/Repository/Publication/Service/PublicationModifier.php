@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service;
 
+use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Service\PublicationService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Publication\Domain\PublicationResult;
@@ -171,8 +172,8 @@ class PublicationModifier implements PublicationModifierInterface
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::package(),
                     Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_SYSTEM_ANNOUNCEMENTS,
-                    \Chamilo\Core\Admin\Announcement\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Announcement\Manager::ACTION_VIEW,
-                    \Chamilo\Core\Admin\Announcement\Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->getId()
+                    Manager::PARAM_ACTION => Manager::ACTION_VIEW,
+                    Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->getId()
                 )
             );
 

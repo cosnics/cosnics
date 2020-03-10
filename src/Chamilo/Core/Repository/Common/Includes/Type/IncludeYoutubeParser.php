@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Includes\ContentObjectIncludeParser;
 use Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Utilities\String\Text;
 
 /**
@@ -41,7 +42,7 @@ class IncludeYoutubeParser extends ContentObjectIncludeParser
 
                         if ($content_object_id)
                         {
-                            $included_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                            $included_object = DataManager::retrieve_by_id(
                                 ContentObject::class_name(),
                                 $content_object_id);
 

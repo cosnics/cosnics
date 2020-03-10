@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -50,7 +51,7 @@ class DeleterComponent extends Manager
                 
                 if (! $providerLink->delete())
                 {
-                    throw new \Exception(
+                    throw new Exception(
                         Translation::get(
                             'ObjectNotDeleted', 
                             array('OBJECT' => Translation::get('ProviderLink')), 
@@ -64,7 +65,7 @@ class DeleterComponent extends Manager
                 array('OBJECT' => Translation::get('ProviderLink')), 
                 Utilities::COMMON_LIBRARIES);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();

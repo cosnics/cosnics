@@ -1,10 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Action;
 
+use Chamilo\Configuration\Package\Action\Activator;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
-abstract class ContentObjectActivator extends \Chamilo\Configuration\Package\Action\Activator
+abstract class ContentObjectActivator extends Activator
 {
 
     public function run()

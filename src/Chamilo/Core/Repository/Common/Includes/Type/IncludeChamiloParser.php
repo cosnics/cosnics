@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Common\Includes\Type;
 
 use Chamilo\Core\Repository\Common\Includes\ContentObjectIncludeParser;
 use DOMDocument;
+use DOMNode;
 use DOMXPath;
 
 class IncludeChamiloParser extends ContentObjectIncludeParser
@@ -35,7 +36,7 @@ class IncludeChamiloParser extends ContentObjectIncludeParser
                 $dom_document = new DOMDocument();
                 $dom_document->loadHTML($value);
                 
-                if ($dom_document->firstChild instanceof \DOMNode)
+                if ($dom_document->firstChild instanceof DOMNode)
                 {
                     $dom_document->removeChild($dom_document->firstChild);
                     $dom_xpath = new DOMXPath($dom_document);

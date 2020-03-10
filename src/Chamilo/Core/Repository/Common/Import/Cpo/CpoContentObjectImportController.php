@@ -32,6 +32,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use DOMDocument;
 use DOMXPath;
+use InvalidArgumentException;
 
 class CpoContentObjectImportController extends ContentObjectImportController
 {
@@ -159,8 +160,8 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function set_external_instance_id_cache_id($old_external_instance_id, $new_external_instance_id)
     {
         $this->set_cache_id(
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ID, 
+            Instance::class_name(),
+            Instance::PROPERTY_ID,
             $old_external_instance_id, 
             $new_external_instance_id);
     }
@@ -210,8 +211,8 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function get_external_instance_id_cache_id($old_external_instance_id)
     {
         return $this->get_cache_id(
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ID, 
+            Instance::class_name(),
+            Instance::PROPERTY_ID,
             $old_external_instance_id);
     }
 
@@ -490,7 +491,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
                     $condition = new AndCondition($conditions);
                     
                     $external_instances = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                        Instance::class_name(),
                         new DataClassRetrievesParameters($condition));
                     while ($external_instance = $external_instances->next_result())
                     {
@@ -545,7 +546,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
             
             if ($this->get_external_instance_id_cache_id($external_id))
             {
-                $external_sync = new \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData();
+                $external_sync = new SynchronizationData();
                 $external_sync->set_content_object_id($content_object->get_id());
                 $external_sync->set_content_object_timestamp($content_object->get_modification_date());
                 $external_sync->set_external_id($this->get_external_instance_id_cache_id($external_id));
@@ -717,7 +718,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
         
         if ($registration[Registration::PROPERTY_TYPE] != 'Chamilo\Core\Repository\ContentObject')
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('The imported value (%s) is not of type Chamilo\Core\Repository\ContentObject', $xpath_value));
         }
         

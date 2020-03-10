@@ -2,11 +2,13 @@
 namespace Chamilo\Core\Metadata\Schema\Action;
 
 use Chamilo\Core\Metadata\Element\Service\ElementService;
+use Chamilo\Core\Metadata\Schema\Storage\DataManager;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Exception;
 
 class Installer
 {
@@ -73,10 +75,10 @@ class Installer
         
         try
         {
-            $schema = \Chamilo\Core\Metadata\Schema\Storage\DataManager::retrieveSchemaByNamespace(
+            $schema = DataManager::retrieveSchemaByNamespace(
                 $schemaDefinition[Schema::class_name()][Schema::PROPERTY_NAMESPACE]);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $schema = null;
         }

@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Core\Reporting;
 
+use Chamilo\Configuration\Configuration;
+use Exception;
+
 /**
  * Class stores style of a reporting template.
  *
@@ -72,25 +75,25 @@ class ReportingTemplateStyle
     function __construct()
     {
         $this->setPaperOrientation(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'paper_orientation'));
+            Configuration::get('Chamilo\Core\Reporting', 'paper_orientation'));
 
         $this->setHeaderTextColor(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'template_header_text_color'));
+            Configuration::get('Chamilo\Core\Reporting', 'template_header_text_color'));
         $this->setHeaderFont(
             [
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'template_header_font_family'),
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'template_header_font_style'),
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'template_header_font_size')]);
+                Configuration::get('Chamilo\Core\Reporting', 'template_header_font_family'),
+                Configuration::get('Chamilo\Core\Reporting', 'template_header_font_style'),
+                Configuration::get('Chamilo\Core\Reporting', 'template_header_font_size')]);
         $this->setHeaderLineColor(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'template_header_line_color'));
+            Configuration::get('Chamilo\Core\Reporting', 'template_header_line_color'));
 
         $this->setFooterTextColor(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'template_footer_text_color'));
+            Configuration::get('Chamilo\Core\Reporting', 'template_footer_text_color'));
         $this->setFooterFont(
             [
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'template_footer_font_family'),
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'template_footer_font_style'),
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'template_footer_font_size')]);
+                Configuration::get('Chamilo\Core\Reporting', 'template_footer_font_family'),
+                Configuration::get('Chamilo\Core\Reporting', 'template_footer_font_style'),
+                Configuration::get('Chamilo\Core\Reporting', 'template_footer_font_size')]);
     }
 
     // setter and getter functions
@@ -164,7 +167,7 @@ class ReportingTemplateStyle
     {
         if (count($font) != 3)
         {
-            throw new \Exception('Invalid font: "' . implode(', ', $font) . '".');
+            throw new Exception('Invalid font: "' . implode(', ', $font) . '".');
         }
 
         $result = array();
@@ -193,7 +196,7 @@ class ReportingTemplateStyle
 
         if (count($color_array) != 3)
         {
-            throw new \Exception('Invalid color: "' . implode(', ', $color_array) . '".');
+            throw new Exception('Invalid color: "' . implode(', ', $color_array) . '".');
         }
 
         return array_map('intval', $color_array);

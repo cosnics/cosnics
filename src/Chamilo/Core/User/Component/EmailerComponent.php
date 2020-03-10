@@ -2,6 +2,8 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -38,8 +40,8 @@ class EmailerComponent extends Manager
             {
                 if (! $this->get_user()->is_platform_admin())
                 {
-                    $users[] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                    $users[] = DataManager::retrieve_by_id(
+                        User::class_name(),
                         (int) $id);
                 }
             }

@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Core\Home\Component;
 
+use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  *
@@ -22,7 +24,7 @@ class PersonalComponent extends Manager
     {
         if ($this->get_user()->is_platform_admin())
         {
-            \Chamilo\Libraries\Platform\Session\Session::unregister('Chamilo\Core\Home\General');
+            Session::unregister('Chamilo\Core\Home\General');
         }
         
         $redirect = new Redirect();
@@ -36,6 +38,6 @@ class PersonalComponent extends Manager
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

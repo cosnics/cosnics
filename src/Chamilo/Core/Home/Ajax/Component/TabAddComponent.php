@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Ajax\Component;
 
+use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\Home\Storage\DataManager;
@@ -11,7 +12,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @author Hans De Bisschop
  */
-class TabAddComponent extends \Chamilo\Core\Home\Ajax\Manager
+class TabAddComponent extends Manager
 {
     const PROPERTY_HTML = 'html';
     const PROPERTY_TITLE = 'title';

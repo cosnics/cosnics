@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Exception;
 
 /**
  *
@@ -52,7 +53,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
                 {
                     $output = $this->get_table_html();
                 }
-                catch (\Exception $ex)
+                catch (Exception $ex)
                 {
                     if ($ex->getMessage() == 'Invalid page number')
                     {
@@ -120,7 +121,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
     private function get_user_html($user_id)
     {
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            User::class_name(),
             (int) $user_id);
 
         $html[] = '<br /><div style="float: left; width: 150px;">';

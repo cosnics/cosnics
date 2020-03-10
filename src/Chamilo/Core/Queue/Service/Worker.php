@@ -5,6 +5,7 @@ namespace Chamilo\Core\Queue\Service;
 use Chamilo\Core\Queue\Exceptions\JobNoLongerValidException;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Interop\Queue\PsrContext;
+use Throwable;
 
 /**
  * @package Chamilo\Core\Queue\Service
@@ -76,14 +77,14 @@ class Worker
                 $consumer->acknowledge($message);
                 $this->jobEntityManager->changeJobStatus($job, Job::STATUS_FAILED_NO_LONGER_VALID);
             }
-            catch (\Throwable $ex)
+            catch (Throwable $ex)
             {
                 $this->jobEntityManager->changeJobStatus($job, Job::STATUS_FAILED_RETRY);
                 throw $ex;
             }
 
         }
-        catch(\Throwable $ex)
+        catch(Throwable $ex)
         {
             $consumer->reject($message);
             throw $ex;

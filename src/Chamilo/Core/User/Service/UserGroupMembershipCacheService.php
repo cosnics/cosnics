@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Service;
 
+use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
@@ -24,7 +25,7 @@ class UserGroupMembershipCacheService extends DoctrinePhpFileCacheService implem
      */
     public function warmUpForIdentifier($identifier)
     {
-        $groupMemberships = \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
+        $groupMemberships = DataManager::retrieve_all_subscribed_groups_array(
             $identifier->get(self::PARAM_USER_IDENTIFIER), 
             $identifier->get(self::PARAM_TYPE));
         

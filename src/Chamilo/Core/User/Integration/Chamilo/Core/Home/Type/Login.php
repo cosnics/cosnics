@@ -2,6 +2,9 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
+use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Redirect;
@@ -10,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
-class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
+class Login extends BlockRenderer
 {
 
     public function isEditable()
@@ -37,7 +40,7 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
     {
         $html = array();
 
-        if (!$this->getUser() || ($this->getUser() instanceof \Chamilo\Core\User\Storage\DataClass\User &&
+        if (!$this->getUser() || ($this->getUser() instanceof User &&
                 $this->getUser()->is_anonymous_user()))
         {
             $request = $this->getRenderer()->getApplicationConfiguration()->getRequest();
@@ -53,7 +56,7 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
             $html[] = $this->displayLoginForm();
 
             if (!Configuration::getInstance()->get_setting(
-                array(\Chamilo\Core\User\Manager::context(), 'allow_registration')
+                array(Manager::context(), 'allow_registration')
             ))
             {
                 // add custom info here if you do not allow registration (if you use LDAP...)
@@ -68,18 +71,18 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
                     Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                    \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $user->get_id()
+                    Manager::PARAM_USER_USER_ID => $user->get_id()
                 )
             );
 
             $maximumHeight = Configuration::getInstance()->get_setting(
-                array(\Chamilo\Core\User\Manager::context(), 'restrict_picture_height')
+                array(Manager::context(), 'restrict_picture_height')
             ) ? 'max-height:100px' : null;
 
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
-                    Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_LOGOUT
+                    Application::PARAM_CONTEXT => Manager::context(),
+                    Application::PARAM_ACTION => Manager::ACTION_LOGOUT
                 )
             );
             $logoutLink = $redirect->getUrl();
@@ -121,19 +124,19 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
         );
 
         if (Configuration::getInstance()->get_setting(
-                array(\Chamilo\Core\User\Manager::context(), 'allow_registration')
+                array(Manager::context(), 'allow_registration')
             ) || Configuration::getInstance()->get_setting(
-                array(\Chamilo\Core\User\Manager::context(), 'allow_password_retrieval')
+                array(Manager::context(), 'allow_password_retrieval')
             ))
         {
             if (Configuration::getInstance()->get_setting(
-                array(\Chamilo\Core\User\Manager::context(), 'allow_registration')
+                array(Manager::context(), 'allow_registration')
             ))
             {
                 $redirect = new Redirect(
                     array(
-                        Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
-                        Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_REGISTER_USER
+                        Application::PARAM_CONTEXT => Manager::context(),
+                        Application::PARAM_ACTION => Manager::ACTION_REGISTER_USER
                     )
                 );
                 $link = $redirect->getUrl();
@@ -146,13 +149,13 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
                 );
             }
             if (Configuration::getInstance()->get_setting(
-                array(\Chamilo\Core\User\Manager::context(), 'allow_password_retrieval')
+                array(Manager::context(), 'allow_password_retrieval')
             ))
             {
                 $redirect = new Redirect(
                     array(
-                        Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
-                        Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_RESET_PASSWORD
+                        Application::PARAM_CONTEXT => Manager::context(),
+                        Application::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD
                     )
                 );
                 $link = $redirect->getUrl();

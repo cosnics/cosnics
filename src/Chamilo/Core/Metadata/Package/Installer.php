@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Metadata\Package;
 
 use Chamilo\Core\Metadata\Service\EntityTranslationService;
+use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
@@ -24,7 +25,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             return false;
         }
         
-        $relation = new \Chamilo\Core\Metadata\Storage\DataClass\Relation();
+        $relation = new Relation();
         $relation->set_name('isAvailableFor');
         
         if ($relation->create())

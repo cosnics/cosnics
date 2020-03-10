@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
 
 /**
  * @package Chamilo\Core\Rights
@@ -213,7 +214,7 @@ class RightsLocation extends NestedTreeNode
         }
         else
         {
-            throw new \Exception(Translation::get('InvalidDataRetrievedFromDatabase'));
+            throw new Exception(Translation::get('InvalidDataRetrievedFromDatabase'));
         }
     }
 

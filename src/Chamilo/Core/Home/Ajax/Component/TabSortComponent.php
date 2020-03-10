@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Ajax\Component;
 
+use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @author Hans De Bisschop @dependency repository.content_object.assessment_multiple_choice_question;
  */
-class TabSortComponent extends \Chamilo\Core\Home\Ajax\Manager
+class TabSortComponent extends Manager
 {
     const PARAM_ORDER = 'order';
 

@@ -12,6 +12,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * Controller to update the schema
@@ -66,7 +67,7 @@ class UpdaterComponent extends Manager
                     array('OBJECT' => Translation::get('Relation')), 
                     Utilities::COMMON_LIBRARIES);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();

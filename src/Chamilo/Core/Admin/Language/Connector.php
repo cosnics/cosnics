@@ -18,7 +18,7 @@ class SettingsConnector
 
     public static function get_languages()
     {
-        return \Chamilo\Configuration\Configuration::getInstance()->getLanguages();
+        return Configuration::getInstance()->getLanguages();
     }
 
     public static function get_themes()
@@ -46,7 +46,7 @@ class SettingsConnector
 
     public static function get_active_applications()
     {
-        $registrations = \Chamilo\Configuration\Configuration::registrations_by_type(Registration::TYPE_APPLICATION);
+        $registrations = Configuration::registrations_by_type(Registration::TYPE_APPLICATION);
 
         $options = array();
         $options['home'] = Translation::get('Homepage', array(), 'home');

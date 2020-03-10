@@ -1,7 +1,10 @@
 <?php
 namespace Chamilo\Core\Install\Test\Unit;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+use PHPUnit_Framework_TestCase;
+use function Chamilo\ArrayKeys;
+
+class ConfigurationTest extends PHPUnit_Framework_TestCase
 {
 
     private $config;
@@ -22,7 +25,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'database_password');
 
         $values = $this->config->as_values_array();
-        $all_keys = \Chamilo\ArrayKeys($values);
+        $all_keys = ArrayKeys($values);
 
         $this->assertEquals(array(), array_diff($db_slots, $all_keys));
     }
@@ -38,7 +41,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'admin_password');
 
         $values = $this->config->as_values_array();
-        $all_keys = \Chamilo\ArrayKeys($values);
+        $all_keys = ArrayKeys($values);
 
         $this->assertEquals(array(), array_diff($admin_slots, $all_keys));
     }
@@ -54,7 +57,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'hashing_algorithm');
 
         $values = $this->config->as_values_array();
-        $all_keys = \Chamilo\ArrayKeys($values);
+        $all_keys = ArrayKeys($values);
 
         $this->assertEquals(array(), array_diff($platform_slots, $all_keys));
     }

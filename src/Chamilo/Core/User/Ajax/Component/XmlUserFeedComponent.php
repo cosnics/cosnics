@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Ajax\Component;
 
+use Chamilo\Core\User\Ajax\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -21,7 +22,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class XmlUserFeedComponent extends \Chamilo\Core\User\Ajax\Manager
+class XmlUserFeedComponent extends Manager
 {
 
     public function run()

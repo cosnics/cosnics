@@ -4,6 +4,9 @@ namespace Chamilo\Core\Repository\Common\Import\Vimeo;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo;
 use Chamilo\Core\Repository\External\DataConnector;
+use Chamilo\Core\Repository\External\Manager;
+use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
+use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
@@ -50,19 +53,19 @@ class VimeoContentObjectImportController extends ContentObjectImportController
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_TYPE), 
+                        Instance::class_name(),
+                        Instance::PROPERTY_TYPE),
                     new StaticConditionVariable(
-                        \Chamilo\Core\Repository\External\Manager::get_namespace(self::FORMAT)));
+                        Manager::get_namespace(self::FORMAT)));
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ENABLED), 
+                        Instance::class_name(),
+                        Instance::PROPERTY_ENABLED),
                     new StaticConditionVariable(1));
                 $condition = new AndCondition($conditions);
                 
                 $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                    Instance::class_name(),
                     new DataClassRetrievesParameters($condition));
                 
                 $external_repository = $external_repositories->next_result();
@@ -79,7 +82,7 @@ class VimeoContentObjectImportController extends ContentObjectImportController
                 {
                     $this->process_workspace($vimeo);
                     
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData::quicksave(
+                    SynchronizationData::quicksave(
                         $vimeo, 
                         $external_object, 
                         $external_repository->get_id());
@@ -105,18 +108,18 @@ class VimeoContentObjectImportController extends ContentObjectImportController
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_TYPE), 
-            new StaticConditionVariable(\Chamilo\Core\Repository\External\Manager::get_namespace(self::FORMAT)));
+                Instance::class_name(),
+                Instance::PROPERTY_TYPE),
+            new StaticConditionVariable(Manager::get_namespace(self::FORMAT)));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ENABLED), 
+                Instance::class_name(),
+                Instance::PROPERTY_ENABLED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
         
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+            Instance::class_name(),
             new DataClassRetrievesParameters($condition));
         $vimeo_connector_available = $external_repositories->size() == 1;
         

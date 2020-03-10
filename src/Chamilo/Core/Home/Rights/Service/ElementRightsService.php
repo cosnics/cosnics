@@ -5,6 +5,7 @@ use Chamilo\Core\Home\Rights\Storage\DataClass\ElementTargetEntity;
 use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
+use RuntimeException;
 
 /**
  * Service to manage the rights for the given element types
@@ -47,7 +48,7 @@ class ElementRightsService
     {
         if (! $this->rightsRepository->clearTargetEntitiesForElement($element))
         {
-            throw new \RuntimeException('Failed to delete the target entities for element ' . $element->getId());
+            throw new RuntimeException('Failed to delete the target entities for element ' . $element->getId());
         }
         
         foreach ($targetEntities as $targetEntityType => $targetEntityIdentifiers)
@@ -61,7 +62,7 @@ class ElementRightsService
                 
                 if (! $elementTargetEntity->create())
                 {
-                    throw new \RuntimeException(
+                    throw new RuntimeException(
                         sprintf(
                             'Could not create a new element target entity for element %s, entity type %s and entity id %s', 
                             $element->getId(), 

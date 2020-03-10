@@ -3,6 +3,8 @@ namespace Chamilo\Core\Rights;
 
 use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Core\Rights\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
@@ -23,7 +25,7 @@ use Exception;
  */
 class RightsUtil
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
 
     // Types
     const TREE_TYPE_ROOT = 0;
@@ -117,7 +119,7 @@ class RightsUtil
         $user_id = $user_id ? $user_id : Session::get_user_id();
 
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(), (int) $user_id
+            User::class_name(), (int) $user_id
         );
 
         if ($user->is_platform_admin())

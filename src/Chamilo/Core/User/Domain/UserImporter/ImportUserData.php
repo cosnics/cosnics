@@ -5,6 +5,7 @@ namespace Chamilo\Core\User\Domain\UserImporter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use RuntimeException;
 
 /**
  * Describes the data to import a single user
@@ -529,7 +530,7 @@ class ImportUserData extends ImportData
         $user = $this->getUser();
         if (!$user instanceof User)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The current imported user data does not have an associated user object. ' .
                 'Please set the user object before calling this method'
             );

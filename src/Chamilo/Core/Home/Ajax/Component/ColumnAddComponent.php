@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Ajax\Component;
 
+use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\DataManager;
@@ -12,12 +13,13 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
 
 /**
  *
  * @author Hans De Bisschop
  */
-class ColumnAddComponent extends \Chamilo\Core\Home\Ajax\Manager
+class ColumnAddComponent extends Manager
 {
     const PARAM_TAB = 'tab';
     const PROPERTY_HTML = 'html';
@@ -62,7 +64,7 @@ class ColumnAddComponent extends \Chamilo\Core\Home\Ajax\Manager
             {
                 $newColumnWidth = $this->determineNewColumnWidth();
             }
-            catch (\Exception $exception)
+            catch (Exception $exception)
             {
                 $newColumnWidth = 1;
                 $newWidths = $this->recalculateColumnWidths();
@@ -199,7 +201,7 @@ class ColumnAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         }
         else
         {
-            throw new \Exception('ColumnsTooWide');
+            throw new Exception('ColumnsTooWide');
         }
     }
 

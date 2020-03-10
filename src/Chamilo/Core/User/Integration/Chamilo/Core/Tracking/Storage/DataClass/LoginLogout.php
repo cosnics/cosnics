@@ -1,11 +1,12 @@
 <?php
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
+use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
-class LoginLogout extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
+class LoginLogout extends SimpleTracker
 {
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_DATE = 'date';

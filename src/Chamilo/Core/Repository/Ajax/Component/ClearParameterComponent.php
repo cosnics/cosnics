@@ -1,14 +1,16 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Component;
 
+use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\ParameterFilterRenderer;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
-class ClearParameterComponent extends \Chamilo\Core\Repository\Ajax\Manager
+class ClearParameterComponent extends Manager
 {
     const PARAM_PARAMETER = 'parameter';
     const PARAM_URL = 'url';
@@ -58,7 +60,7 @@ class ClearParameterComponent extends \Chamilo\Core\Repository\Ajax\Manager
                 JsonAjaxResult::general_error(Translation::get('NoParameterConfiguredToClear'));
             }
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             JsonAjaxResult::error(500);
         }

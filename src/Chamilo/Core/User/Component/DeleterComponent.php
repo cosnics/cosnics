@@ -3,6 +3,8 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -43,11 +45,11 @@ class DeleterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                $user = DataManager::retrieve_by_id(
+                    User::class_name(),
                     (int) $id);
 
-                if (! \Chamilo\Core\User\Storage\DataManager::user_deletion_allowed($user))
+                if (! DataManager::user_deletion_allowed($user))
                 {
                     $failures ++;
                     continue;

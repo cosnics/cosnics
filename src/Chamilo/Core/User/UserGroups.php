@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -68,7 +69,7 @@ class UserGroups
         $html[] = '</div>';
         $html[] = '<div class="description">';
         $html[] = '<ul>';
-        $group_relations = \Chamilo\Core\Group\Storage\DataManager::retrieve_user_groups($this->user_id);
+        $group_relations = DataManager::retrieve_user_groups($this->user_id);
         if ($group_relations->size() > 0)
         {
             while ($group = $group_relations->next_result())

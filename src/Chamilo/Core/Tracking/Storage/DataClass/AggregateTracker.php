@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Tracking\Storage\DataClass;
 
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -30,7 +31,7 @@ abstract class AggregateTracker extends Tracker
             new StaticConditionVariable($this->get_name()));
         $condition = new AndCondition($conditions);
         
-        $tracker_items = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+        $tracker_items = DataManager::retrieves(
             $this->class_name(), 
             new DataClassRetrievesParameters($condition));
         

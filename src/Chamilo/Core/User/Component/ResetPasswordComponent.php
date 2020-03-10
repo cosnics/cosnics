@@ -5,6 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
@@ -18,9 +19,11 @@ use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -51,7 +54,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
-        $user_id = \Chamilo\Libraries\Platform\Session\Session::get_user_id();
+        $user_id = Session::get_user_id();
         $allow_password_retrieval = Configuration::getInstance()->get_setting(
             array(Manager::context(), 'allow_password_retrieval')
         );
@@ -75,8 +78,8 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         if (!is_null($request_key) && !is_null($request_user_id))
         {
 
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), (int) $request_user_id
+            $user = DataManager::retrieve_by_id(
+                User::class_name(), (int) $request_user_id
             );
             if ($this->get_user_key($user) == $request_key)
             {
@@ -111,7 +114,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
             if ($form->validate())
             {
                 $values = $form->exportValues();
-                $users = \Chamilo\Core\User\Storage\DataManager::retrieve_users_by_email($values[User::PROPERTY_EMAIL]);
+                $users = DataManager::retrieve_users_by_email($values[User::PROPERTY_EMAIL]);
                 if (count($users) == 0)
                 {
                     $html[] = Display::error_message('NoUserWithThisEmail');
@@ -231,7 +234,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
 
             return true;
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }
@@ -282,7 +285,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
 
             return true;
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }

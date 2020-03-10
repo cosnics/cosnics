@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Admin\Announcement\Component;
 
 use Chamilo\Core\Admin\Announcement\Manager;
+use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -88,6 +89,6 @@ class HiderComponent extends Manager
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

@@ -14,6 +14,8 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
+use ReCaptcha\ReCaptcha;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -45,7 +47,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
                 $this->addAnonymousRoleToUser($anonymousUser);
                 $this->setAuthenticationCookieAndRedirect($anonymousUser);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $errorMessage =
                     Translation::getInstance()->getTranslation('UseCaptchaToProceed', null, Manager::context());
@@ -106,12 +108,12 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             array('Chamilo\Core\Admin', 'recaptcha_secret_key')
         );
 
-        $recaptcha = new \ReCaptcha\ReCaptcha($recaptchaSecretKey);
+        $recaptcha = new ReCaptcha($recaptchaSecretKey);
         $response = $recaptcha->verify($captchaResponseValue, $this->getRequest()->server->get('REMOTE_ADDR'));
 
         if (!$response->isSuccess())
         {
-            throw new \Exception('Could not verify the captcha code: ' . implode(' / ', $response->getErrorCodes()));
+            throw new Exception('Could not verify the captcha code: ' . implode(' / ', $response->getErrorCodes()));
         }
     }
 
@@ -132,7 +134,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
 
         if (!$user->create())
         {
-            throw new \Exception('Could not create a new anonymous user');
+            throw new Exception('Could not create a new anonymous user');
         }
 
         return $user;

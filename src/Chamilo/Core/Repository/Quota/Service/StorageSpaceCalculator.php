@@ -4,9 +4,11 @@ namespace Chamilo\Core\Repository\Quota\Service;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\Repository\Service\ContentObjectService;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Redirect;
@@ -124,9 +126,9 @@ class StorageSpaceCalculator
         {
             $redirect = new Redirect(
                 array(
-                    \Chamilo\Libraries\Architecture\Application\Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Manager::context(
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Manager::context(
                     ), \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_QUOTA,
-                    FilterData::FILTER_CATEGORY => null, \Chamilo\Core\Repository\Quota\Manager::PARAM_ACTION => null
+                    FilterData::FILTER_CATEGORY => null, Manager::PARAM_ACTION => null
                 )
             );
             $url = $redirect->getUrl();

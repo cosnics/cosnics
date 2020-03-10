@@ -74,7 +74,7 @@ class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager impleme
             $properties[ContentObject::PROPERTY_ID] = $document->get_id();
             $properties[ContentObject::PROPERTY_TITLE] = $document->get_title();
             $properties['fullPath'] = $full_path;
-            $properties['webPath'] = \Chamilo\Core\Repository\Manager::get_document_downloader_url(
+            $properties['webPath'] = Manager::get_document_downloader_url(
                 $document->get_id(), 
                 $document->calculate_security_code());
             $properties[File::PROPERTY_FILENAME] = $document->get_filename();

@@ -7,6 +7,7 @@ use Chamilo\Core\User\Domain\UserImporter\ImportUserResult;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Hashing\HashingUtilities;
+use DateTime;
 
 /**
  * Tests the ImportUserData
@@ -322,7 +323,7 @@ class ImportUserDataTest extends ChamiloTestCase
 
         $this->importUserData->setPropertiesForUser($hashingUtilitiesMock);
 
-        $referenceDate = new \DateTime('2017-01-05 00:00:00');
+        $referenceDate = new DateTime('2017-01-05 00:00:00');
 
         $this->assertEquals($username, $user->get_username());
         $this->assertEquals(0, $user->get_platformadmin());

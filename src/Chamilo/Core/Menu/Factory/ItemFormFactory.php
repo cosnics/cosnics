@@ -6,6 +6,7 @@ use Chamilo\Configuration\Service\LanguageConsulter;
 use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Exception;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -114,7 +115,7 @@ class ItemFormFactory
 
         if (!class_exists($formClass))
         {
-            throw new \Exception(
+            throw new Exception(
                 $this->getTranslator()->trans('FormTypeDoesNotExist', ['TYPE' => $itemType], 'Chamilo\Core\Menu')
             );
         }

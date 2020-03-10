@@ -6,6 +6,7 @@ use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Service\UserService;
@@ -172,7 +173,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
 
     public function render_cell($column, $publication)
     {
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $content_object = DataManager::retrieve_by_id(
             ContentObject::class_name(), $publication[Publication::PROPERTY_CONTENT_OBJECT_ID]
         );
 

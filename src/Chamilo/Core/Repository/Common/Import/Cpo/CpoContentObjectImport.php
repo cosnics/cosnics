@@ -3,7 +3,12 @@ namespace Chamilo\Core\Repository\Common\Import\Cpo;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Utilities\UUID;
+use DOMDocument;
+use DOMNode;
+use DOMXPath;
+use Exception;
 
 class CpoContentObjectImport extends ContentObjectImport
 {
@@ -129,12 +134,12 @@ class CpoContentObjectImport extends ContentObjectImport
          */
         $value = mb_convert_encoding($value, 'html-entities', 'UTF-8');
 
-        $dom_document = new \DOMDocument();
+        $dom_document = new DOMDocument();
         $dom_document->loadHTML($value);
 
-        if ($dom_document->firstChild instanceof \DOMNode)
+        if ($dom_document->firstChild instanceof DOMNode)
         {
-            $dom_xpath = new \DOMXPath($dom_document);
+            $dom_xpath = new DOMXPath($dom_document);
 
             $body_nodes = $dom_xpath->query('body/*');
             $fragment = $dom_document->createDocumentFragment();
@@ -152,14 +157,14 @@ class CpoContentObjectImport extends ContentObjectImport
 
                 try
                 {
-                    $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    $contentObject = DataManager::retrieve_by_id(
                         ContentObject::class_name(), $new_source
                     );
 
                     $resource->setAttribute('source', $new_source);
                     $resource->setAttribute('security_code', $contentObject->calculate_security_code());
                 }
-                catch(\Exception $ex)
+                catch(Exception $ex)
                 {
 
                 }
@@ -176,14 +181,14 @@ class CpoContentObjectImport extends ContentObjectImport
 
                 try
                 {
-                    $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    $contentObject = DataManager::retrieve_by_id(
                         ContentObject::class_name(), $new_source
                     );
 
                     $placeholder->setAttribute('data-co-id', $new_source);
                     $placeholder->setAttribute('data-security-code', $contentObject->calculate_security_code());
                 }
-                catch(\Exception $ex)
+                catch(Exception $ex)
                 {
 
                 }

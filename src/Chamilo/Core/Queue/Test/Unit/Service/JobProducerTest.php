@@ -7,6 +7,7 @@ use Chamilo\Core\Queue\Service\JobProducer;
 use Chamilo\Core\Queue\Service\Producer\ProducerInterface;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
+use Exception;
 
 /**
  * Tests the JobProducer
@@ -86,7 +87,7 @@ class JobProducerTest extends ChamiloTestCase
         $this->producerMock->expects($this->once())
             ->method('produceMessage')
             ->with($job->getId(), 'notifications', 500)
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $this->jobEntityManagerMock->expects($this->once())
             ->method('changeJobStatus')
@@ -109,7 +110,7 @@ class JobProducerTest extends ChamiloTestCase
         $this->jobEntityManagerMock->expects($this->once())
             ->method('createJob')
             ->with($job)
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $this->jobProducer->produceJob($job, 'notifications', 500);
     }
@@ -132,12 +133,12 @@ class JobProducerTest extends ChamiloTestCase
         $this->producerMock->expects($this->once())
             ->method('produceMessage')
             ->with($job->getId(), 'notifications', 500)
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $this->jobEntityManagerMock->expects($this->once())
             ->method('changeJobStatus')
             ->with($job, Job::STATUS_FAILED_RETRY)
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $this->jobProducer->produceJob($job, 'notifications', 500);
     }

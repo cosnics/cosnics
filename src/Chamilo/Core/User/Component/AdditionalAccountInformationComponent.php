@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Configuration\Form\Executer;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -30,7 +31,7 @@ class AdditionalAccountInformationComponent extends ProfileComponent
      */
     public function getContent()
     {
-        $form_executer = new \Chamilo\Configuration\Form\Executer(
+        $form_executer = new Executer(
             $this, 
             'account_fields', 
             Translation::get('AdditionalUserInformation'));

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Ajax\Component;
 
+use Chamilo\Core\Group\Ajax\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -20,7 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class XmlGroupFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
+class XmlGroupFeedComponent extends Manager
 {
 
     public function run()

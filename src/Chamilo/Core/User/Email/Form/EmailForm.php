@@ -9,6 +9,7 @@ use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -80,7 +81,7 @@ class EmailForm extends FormValidator
         {
             $mailer->sendMail($mail);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
         }
 

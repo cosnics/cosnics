@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Quota\Form;
 
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
+use Chamilo\Core\User\UserDetails;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -29,7 +30,7 @@ class RequestForm extends FormValidator
     {
         if ($this->request->get_id())
         {
-            $user_details = new \Chamilo\Core\User\UserDetails($this->request->get_user());
+            $user_details = new UserDetails($this->request->get_user());
             $this->addElement('static', null, Translation::get('User'), $user_details->toHtml());
         }
 

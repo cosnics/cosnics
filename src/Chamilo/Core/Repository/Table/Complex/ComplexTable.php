@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Table\Complex;
 
+use Chamilo\Core\Repository\Builder\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
@@ -14,14 +15,14 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ComplexTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = \Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID;
 
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
         $action = array(
-            \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_COPY_COMPLEX_CONTENT_OBJECT_ITEM);
+            Manager::PARAM_ACTION => Manager::ACTION_COPY_COMPLEX_CONTENT_OBJECT_ITEM);
 
         $actions->add_form_action(
             new TableFormAction(
@@ -30,7 +31,7 @@ class ComplexTable extends DataClassTable implements TableFormActionsSupport
             true);
 
         $action = array(
-            \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM);
+            Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM);
 
         $actions->add_form_action(
             new TableFormAction(
@@ -39,7 +40,7 @@ class ComplexTable extends DataClassTable implements TableFormActionsSupport
             true);
 
         $action = array(
-            \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_CHANGE_PARENT);
+            Manager::PARAM_ACTION => Manager::ACTION_CHANGE_PARENT);
 
         $actions->add_form_action(
             new TableFormAction(

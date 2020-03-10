@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Picture;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Factory to instantiate the user picture provider
@@ -74,7 +75,7 @@ class UserPictureProviderFactory
         $pictureProvider = $this->configuration->get_setting(array('Chamilo\Core\User', 'user_picture_provider'));
         if (! class_exists($pictureProvider))
         {
-            throw new \Exception(Translation::getInstance()->getTranslation('InvalidUserPictureProvider'));
+            throw new Exception(Translation::getInstance()->getTranslation('InvalidUserPictureProvider'));
         }
         
         return new $pictureProvider();

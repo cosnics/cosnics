@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
@@ -96,7 +97,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             $viewButton[] = Translation::getInstance()->getTranslation(
                 'ViewImportedObject',
                 null,
-                \Chamilo\Core\Repository\Manager::context()
+                Manager::context()
             );
 
             $viewButton[] = '</span>';
@@ -107,7 +108,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             $uploadedMessage[] = Translation::getInstance()->getTranslation(
                 'FileImported',
                 array('CATEGORY' => $this->getCategoryTitle($categoryId)),
-                \Chamilo\Core\Repository\Manager::context()
+                Manager::context()
             );
             $uploadedMessage[] = '</div>';
 
@@ -146,7 +147,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             return Translation::getInstance()->getTranslation('MyRepository', null, Manager::context());
         }
 
-        $category = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $category = DataManager::retrieve_by_id(
             RepositoryCategory::class_name(),
             $categoryId
         );

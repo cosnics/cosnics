@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Chamilo\Libraries\File\Properties\FileProperties;
 
@@ -155,7 +156,7 @@ abstract class FormProcessor
             
             if (! $newCategory->create())
             {
-                throw new \Exception(Translation::get('CategoryCreationFailed'));
+                throw new Exception(Translation::get('CategoryCreationFailed'));
             }
             else
             {

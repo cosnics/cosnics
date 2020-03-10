@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Block;
 
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Provider;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -14,11 +15,11 @@ class ProviderBlock extends Block
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $tracker = new \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Provider();
+        $tracker = new Provider();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Provider::class_name(), 
-                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Provider::PROPERTY_TYPE), 
+                Provider::class_name(),
+                Provider::PROPERTY_TYPE),
             new StaticConditionVariable('provider'));
         $description[0] = Translation::get('Providers');
         

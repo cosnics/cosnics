@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Install;
 
+use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Package\Sequencer;
 use Chamilo\Core\Install\Exception\InstallFailedException;
@@ -218,7 +219,7 @@ class PlatformInstaller
 
             $result = true;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             $result = false;
         }
@@ -251,7 +252,7 @@ class PlatformInstaller
         {
 
             $values = $this->configuration->as_values_array();
-            $installer = \Chamilo\Configuration\Package\Action\Installer::factory($package, $values);
+            $installer = Installer::factory($package, $values);
 
             $success = $installer->run();
 
@@ -305,7 +306,7 @@ class PlatformInstaller
             {
                 if (! Filesystem::create_dir($directory))
                 {
-                    throw new \Exception(Translation::get('FoldersCreatedFailed'));
+                    throw new Exception(Translation::get('FoldersCreatedFailed'));
                 }
             }
         }
@@ -314,7 +315,7 @@ class PlatformInstaller
 
         if (! Filesystem::create_dir($publicFilesPath))
         {
-            throw new \Exception(Translation::get('FoldersCreatedFailed'));
+            throw new Exception(Translation::get('FoldersCreatedFailed'));
         }
 
         $html[] = $this->installerObserver->afterFilesystemPrepared(

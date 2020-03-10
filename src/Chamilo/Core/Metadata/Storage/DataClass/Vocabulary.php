@@ -4,6 +4,7 @@ namespace Chamilo\Core\Metadata\Storage\DataClass;
 use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
 use Chamilo\Core\Metadata\Storage\DataClass\ElementInstance;
 use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
+use Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
 use Chamilo\Core\Metadata\Vocabulary\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -24,7 +25,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Vocabulary extends DataClass implements EntityTranslationInterface
 {
-    use \Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
+    use EntityTranslationTrait;
 
     /**
      *

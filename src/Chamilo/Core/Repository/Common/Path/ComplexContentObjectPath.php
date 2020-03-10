@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupport;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -23,7 +24,7 @@ use Exception;
  */
 abstract class ComplexContentObjectPath
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
 
     /**
      *

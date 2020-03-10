@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Common\Path;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 
 /**
  *
@@ -669,7 +670,7 @@ abstract class ComplexContentObjectPathNode
      */
     public function forms_cycle_with($content_object_id)
     {
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $content_object = DataManager::retrieve_by_id(
             ContentObject::class_name(), 
             $content_object_id);
         

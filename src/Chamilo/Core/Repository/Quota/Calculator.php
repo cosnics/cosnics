@@ -7,7 +7,9 @@ use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Core\Repository\Quota\Service\CalculatorCacheService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -128,9 +130,9 @@ class Calculator
 
             $redirect = new Redirect(
                 array(
-                    \Chamilo\Libraries\Architecture\Application\Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Manager::context(
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Manager::context(
                     ), \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_QUOTA,
-                    FilterData::FILTER_CATEGORY => null, \Chamilo\Core\Repository\Quota\Manager::PARAM_ACTION => null
+                    FilterData::FILTER_CATEGORY => null, Manager::PARAM_ACTION => null
                 )
             );
             $url = $redirect->getUrl();
@@ -341,7 +343,7 @@ class Calculator
         $condition = new AndCondition($conditions);
 
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
-            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), new DataClassRetrieveParameters(
+            Group::class_name(), new DataClassRetrieveParameters(
                 $condition,
                 array(new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DISK_QUOTA)))
             )
@@ -370,7 +372,7 @@ class Calculator
         $condition = new AndCondition($conditions);
 
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
-            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), new DataClassRetrieveParameters(
+            Group::class_name(), new DataClassRetrieveParameters(
                 $condition, array(
                     new OrderBy(
                         new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DISK_QUOTA), SORT_ASC
@@ -560,7 +562,7 @@ class Calculator
     {
         if (is_null($this->usedAggregatedUserDiskQuota))
         {
-            $this->usedAggregatedUserDiskQuota = \Chamilo\Core\Repository\Storage\DataManager::get_used_disk_space();
+            $this->usedAggregatedUserDiskQuota = DataManager::get_used_disk_space();
         }
 
         return $this->usedAggregatedUserDiskQuota;
@@ -592,12 +594,12 @@ class Calculator
                 ), new NotCondition(
                     new InCondition(
                         new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
-                        \Chamilo\Core\Repository\Storage\DataManager::get_active_helper_types()
+                        DataManager::get_active_helper_types()
                     )
                 )
             );
 
-            $this->usedDatabaseQuota = \Chamilo\Core\Repository\Storage\DataManager::count_active_content_objects(
+            $this->usedDatabaseQuota = DataManager::count_active_content_objects(
                 ContentObject::class_name(), $condition
             );
         }
@@ -624,7 +626,7 @@ class Calculator
     {
         if (is_null($this->usedUserDiskQuota))
         {
-            $this->usedUserDiskQuota = \Chamilo\Core\Repository\Storage\DataManager::get_used_disk_space(
+            $this->usedUserDiskQuota = DataManager::get_used_disk_space(
                 $this->user->getId()
             );
         }

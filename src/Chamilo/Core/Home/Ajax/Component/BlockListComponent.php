@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Ajax\Component;
 
+use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Service\BlockTypeRightsService;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
@@ -15,7 +16,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
  * @author Hans De Bisschop
  *         @dependency repository.content_object.assessment_multiple_choice_question;
  */
-class BlockListComponent extends \Chamilo\Core\Home\Ajax\Manager
+class BlockListComponent extends Manager
 {
     const PROPERTY_BLOCKS = 'blocks';
 

@@ -5,9 +5,11 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -81,12 +83,12 @@ class EntityTranslationFormService
     {
         if (! $this->getFormValidator() instanceof FormValidator)
         {
-            throw new \Exception(Translation::get('NoFormValidatorSet'));
+            throw new Exception(Translation::get('NoFormValidatorSet'));
         }
         
         $this->getFormValidator()->addElement('category', Translation::get('Translations'));
         
-        $languages = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+        $languages = DataManager::retrieves(
             Language::class_name(), 
             new DataClassRetrievesParameters());
         $platformLanguage = Configuration::get('Chamilo\Core\Admin', 'platform_language');
@@ -112,7 +114,7 @@ class EntityTranslationFormService
     {
         if (! $this->getFormValidator() instanceof FormValidator)
         {
-            throw new \Exception(Translation::get('NoFormValidatorSet'));
+            throw new Exception(Translation::get('NoFormValidatorSet'));
         }
         
         $defaults = array();

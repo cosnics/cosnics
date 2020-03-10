@@ -10,6 +10,9 @@ use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Platform\Session\Session;
+use Exception;
+use RuntimeException;
 
 /**
  * Ajax request to set the element target entities for a specific element instance
@@ -37,7 +40,7 @@ class SetElementTargetEntitiesComponent extends Manager
     public function run()
     {
         $userId = DataManager::determine_user_id();
-        $generalMode = \Chamilo\Libraries\Platform\Session\Session::retrieve('Chamilo\Core\Home\General');
+        $generalMode = Session::retrieve('Chamilo\Core\Home\General');
         
         if ($userId === false || ! $generalMode || ! $this->getUser()->is_platform_admin() || $userId > 0)
         {
@@ -57,7 +60,7 @@ class SetElementTargetEntitiesComponent extends Manager
             
             if ($element->getType() != Block::class_name())
             {
-                throw new \RuntimeException('Only blocks are allowed at this time');
+                throw new RuntimeException('Only blocks are allowed at this time');
             }
             
             $blockRendererFactory = new BlockRendererFactory($this, $homeService, $element);
@@ -67,7 +70,7 @@ class SetElementTargetEntitiesComponent extends Manager
             $result->set_property(self::RESULT_PROPERTY_BLOCK, $blockRenderer->toHtml());
             $result->display();
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             JsonAjaxResult::bad_request($ex->getMessage());
         }

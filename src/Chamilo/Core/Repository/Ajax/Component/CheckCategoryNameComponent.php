@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Component;
 
+use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
@@ -8,7 +9,7 @@ use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Translation\Translation;
 
-class CheckCategoryNameComponent extends \Chamilo\Core\Repository\Ajax\Manager
+class CheckCategoryNameComponent extends Manager
 {
     const PARAM_NAME = 'name';
     const PARAM_PARENT_ID = 'parent_id';

@@ -10,6 +10,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * Controller to create the schema
@@ -64,7 +65,7 @@ class CreatorComponent extends Manager
                     array('OBJECT' => Translation::get('Schema')), 
                     Utilities::COMMON_LIBRARIES);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();

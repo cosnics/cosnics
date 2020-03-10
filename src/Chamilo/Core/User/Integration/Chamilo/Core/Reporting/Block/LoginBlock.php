@@ -2,7 +2,10 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Block;
 
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Tracking\Storage\DataClass\Tracker;
+use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -18,23 +21,23 @@ class LoginBlock extends Block
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout::class_name(), 
-                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout::PROPERTY_TYPE), 
+                LoginLogout::class_name(),
+                LoginLogout::PROPERTY_TYPE),
             new StaticConditionVariable('login'));
         $user_id = $this->get_user_id();
         if (isset($user_id))
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout::class_name(), 
-                    \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout::PROPERTY_USER_ID), 
+                    LoginLogout::class_name(),
+                    LoginLogout::PROPERTY_USER_ID),
                 new StaticConditionVariable($user_id));
         }
         $condition = new AndCondition($conditions);
         
         $count = Tracker::count_data(
-            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout::class_name(), 
-            \Chamilo\Core\User\Manager::context(), 
+            LoginLogout::class_name(),
+            Manager::context(),
             $condition);
         
         $reporting_data->set_categories(array(Translation::get('Logins')));
@@ -53,9 +56,9 @@ class LoginBlock extends Block
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_CSV, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_XLSX, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_XML);
+            Html::VIEW_TABLE,
+            Html::VIEW_CSV,
+            Html::VIEW_XLSX,
+            Html::VIEW_XML);
     }
 }

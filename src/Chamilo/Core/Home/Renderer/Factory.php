@@ -3,6 +3,7 @@ namespace Chamilo\Core\Home\Renderer;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -83,7 +84,7 @@ class Factory
         
         if (! class_exists($class))
         {
-            throw new \Exception(Translation::get('HomeRendererTypeDoesNotExist', array('type' => $this->getType())));
+            throw new Exception(Translation::get('HomeRendererTypeDoesNotExist', array('type' => $this->getType())));
         }
         
         return new $class($this->getApplication());

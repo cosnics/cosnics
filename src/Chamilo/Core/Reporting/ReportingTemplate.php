@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Reporting;
 
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -14,7 +15,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  */
 abstract class ReportingTemplate
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
     use DependencyInjectionContainerTrait;
 
     private $blocks = array();

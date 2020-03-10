@@ -1,4 +1,4 @@
-var API_1484_11 = new Object();
+var API_1484_11 = {};
 
 API_1484_11.Initialize = ChamiloInitialize;
 API_1484_11.Terminate = ChamiloTerminate;
@@ -8,7 +8,7 @@ API_1484_11.Commit = ChamiloCommit;
 API_1484_11.GetLastError = ChamiloGetLastError;
 API_1484_11.GetErrorString = ChamiloGetErrorString;
 API_1484_11.GetDiagnostic = ChamiloGetDiagnostic;
-API_1484_11.values = new Array();
+API_1484_11.values = [];
 
 function ChamiloInitialize()
 {

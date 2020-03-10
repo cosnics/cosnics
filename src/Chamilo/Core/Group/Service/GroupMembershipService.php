@@ -7,6 +7,7 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Group\Service
@@ -148,7 +149,7 @@ class GroupMembershipService
 
             if (!$this->getGroupMembershipRepository()->createGroupUserRelation($groupRelation))
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf('Could not subscribe the user %s to the group %s', $user->getId(), $group->getId())
                 );
             }
@@ -170,7 +171,7 @@ class GroupMembershipService
 
         if (!$groupRelation instanceof GroupRelUser)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not unsubscribe the user %s from the group %s because there is no active subscription',
                     $user->getId(), $group->getId()
@@ -180,7 +181,7 @@ class GroupMembershipService
 
         if (!$this->getGroupMembershipRepository()->deleteGroupUserRelation($groupRelation))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf('Could not unsubscribe the user %s to the group %s', $user->getId(), $group->getId())
             );
         }
@@ -215,7 +216,7 @@ class GroupMembershipService
         $success = $this->getGroupMembershipRepository()->emptyGroup($group);
         if (!$success)
         {
-            throw new \RuntimeException('Could not empty the group with id ' . $group->getId());
+            throw new RuntimeException('Could not empty the group with id ' . $group->getId());
         }
 
         $this->groupEventNotifier->afterEmptyGroup($group, $impactedUserIds);

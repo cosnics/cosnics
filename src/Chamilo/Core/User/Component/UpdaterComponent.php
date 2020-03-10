@@ -3,6 +3,8 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Form\UserForm;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -35,8 +37,8 @@ class UpdaterComponent extends Manager
 
         if ($id)
         {
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            $user = DataManager::retrieve_by_id(
+                User::class_name(),
                 (int) $id);
 
             $form = new UserForm(

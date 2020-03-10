@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Ajax\Component;
 
+use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @package home.ajax
  * @author Hans De Bisschop
  */
-class BlockMoveComponent extends \Chamilo\Core\Home\Ajax\Manager
+class BlockMoveComponent extends Manager
 {
     const PARAM_COLUMN = 'column';
     const PARAM_BLOCK = 'block';

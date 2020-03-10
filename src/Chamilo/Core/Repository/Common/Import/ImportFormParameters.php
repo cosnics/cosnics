@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Common\Import;
 
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
+use InvalidArgumentException;
 
 /**
  * Parameters for the import form
@@ -79,7 +80,7 @@ class ImportFormParameters
         
         if (! in_array($maximumFilesToUpload, array(self::IMPORT_MULTIPLE_FILES, self::IMPORT_SINGLE_FILE)))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given parameter "maximumFilesToUpload" must be either ImportParameters::IMPORT_MULTIPLE_FILES' .
                      ' (0) or ImportParameters::IMPORT_SINGLE_FILE (1)');
         }

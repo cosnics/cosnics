@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -36,7 +37,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                 $file = $this->get_parameters()->get_file();
                 $calculator = new Calculator(
                     \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                        User::class_name(),
                         (int) $this->get_parameters()->get_user()));
                 
                 if (! $calculator->canUpload($file->get_size()))
@@ -55,7 +56,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                 {
                     $calculator = new Calculator(
                         \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                            User::class_name(),
                             (int) $this->get_parameters()->get_user()));
                     
                     if ($calculator->canUpload($file->get_size()))

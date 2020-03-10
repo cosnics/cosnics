@@ -4,10 +4,12 @@ namespace Chamilo\Core\Metadata\Vocabulary\Form;
 use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
+use Chamilo\Core\Metadata\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * Form for the element
@@ -51,7 +53,7 @@ class VocabularyForm extends FormValidator
      */
     protected function buildForm()
     {
-        $element = \Chamilo\Core\Metadata\Storage\DataManager::retrieve_by_id(
+        $element = DataManager::retrieve_by_id(
             Element::class_name(), 
             $this->vocabulary->get_element_id());
         
@@ -76,7 +78,7 @@ class VocabularyForm extends FormValidator
             }
             else
             {
-                throw new \Exception(Translation::get('UnknownUser'));
+                throw new Exception(Translation::get('UnknownUser'));
             }
         }
         

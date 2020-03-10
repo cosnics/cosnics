@@ -63,7 +63,7 @@ class JobParameter
     /**
      * @return \Chamilo\Core\Queue\Storage\Entity\Job
      */
-    public function getJob(): \Chamilo\Core\Queue\Storage\Entity\Job
+    public function getJob(): Job
     {
         return $this->job;
     }
@@ -73,7 +73,7 @@ class JobParameter
      *
      * @return JobParameter
      */
-    public function setJob(\Chamilo\Core\Queue\Storage\Entity\Job $job): JobParameter
+    public function setJob(Job $job): JobParameter
     {
         $this->job = $job;
 

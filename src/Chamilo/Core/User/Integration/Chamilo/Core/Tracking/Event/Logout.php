@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Event;
 
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout;
 
 /**
  *
@@ -19,7 +20,7 @@ class Logout extends Event
      */
     public function getTrackerClasses()
     {
-        return array(\Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout::class_name());
+        return array(LoginLogout::class_name());
     }
 
     public function getType()

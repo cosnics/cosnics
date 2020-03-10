@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Queue\Service;
 
 use Chamilo\Core\Queue\Storage\Entity\Job;
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -41,7 +42,7 @@ class JobProcessorFactory
 
         if (!$jobProcessor instanceof JobProcessorInterface)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'The given job processor %s must implement the JobProcessorInterface',
                     $processorClass

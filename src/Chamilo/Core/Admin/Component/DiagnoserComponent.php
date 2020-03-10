@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Component;
 
+use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Support\Diagnoser;
@@ -45,6 +46,6 @@ class DiagnoserComponent extends Manager
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

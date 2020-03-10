@@ -3,6 +3,7 @@ namespace Chamilo\Core\Group\Table\Group;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -42,7 +43,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
                 }
 
                 return StringUtilities::getInstance()->truncate($description);
-            case Translation::get(GroupTableColumnModel::USERS, null, \Chamilo\Core\User\Manager::context()) :
+            case Translation::get(GroupTableColumnModel::USERS, null, Manager::context()) :
                 return $group->count_users();
             case Translation::get(GroupTableColumnModel::SUBGROUPS) :
                 return $group->count_subgroups(true, true);

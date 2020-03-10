@@ -5,6 +5,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Form\UserExportForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Export\Export;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -42,8 +43,8 @@ class ExporterComponent extends Manager
         {
             $export = $form->exportValues();
             $file_type = $export['file_type'];
-            $result = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            $result = DataManager::retrieves(
+                User::class_name(),
                 new DataClassRetrievesParameters());
             while ($user = $result->next_result())
             {

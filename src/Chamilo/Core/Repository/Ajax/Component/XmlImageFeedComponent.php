@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Component;
 
+use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
@@ -18,7 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
-class XmlImageFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
+class XmlImageFeedComponent extends Manager
 {
 
     function run()

@@ -119,7 +119,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         );
         $links[] = new DynamicAction(
             Translation::get('ImportCourses'), Translation::get('ImportCoursesDescription'),
-            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'), $redirect->getUrl()
+            new FontAwesomeGlyph('chalkboard', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
         $redirect = new Redirect(
@@ -130,7 +130,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         );
         $links[] = new DynamicAction(
             Translation::get('UserImport'), Translation::get('UserImportDescription'),
-            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'), $redirect->getUrl()
+            new FontAwesomeGlyph('users', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
         return $links;

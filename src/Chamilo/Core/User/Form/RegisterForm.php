@@ -5,16 +5,19 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Exception;
 
 /**
  *
@@ -201,7 +204,7 @@ class RegisterForm extends FormValidator
             $user->set_picture_file($_FILES[User::PROPERTY_PICTURE_URI]);
         }
 
-        if (\Chamilo\Core\User\Storage\DataManager::is_username_available(
+        if (DataManager::is_username_available(
             $values[User::PROPERTY_USERNAME], $values[User::PROPERTY_ID]
         ))
         {
@@ -252,7 +255,7 @@ class RegisterForm extends FormValidator
 
             if ($user->create())
             {
-                \Chamilo\Libraries\Platform\Session\Session::register('_uid', intval($user->get_id()));
+                Session::register('_uid', intval($user->get_id()));
                 Event::trigger(
                     'Register', Manager::context(),
                     array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id())
@@ -351,7 +354,7 @@ class RegisterForm extends FormValidator
         {
             $mailer->sendMail($mail);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
         }
     }

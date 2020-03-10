@@ -2,12 +2,13 @@
 namespace Chamilo\Core\Reporting;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class ReportingBlock
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
     use DependencyInjectionContainerTrait;
     
     // Constants

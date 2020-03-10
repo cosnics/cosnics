@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Common\Import;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Exception;
 
 abstract class ImportParameters
 {
@@ -108,7 +109,7 @@ abstract class ImportParameters
         
         if (! class_exists($class))
         {
-            throw new \Exception(Translation::get('UnknownImportParametersType', array('TYPE' => $type)));
+            throw new Exception(Translation::get('UnknownImportParametersType', array('TYPE' => $type)));
         }
         
         return new $class($type, $user, $workspace, $category, $file, $form_values);

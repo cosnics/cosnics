@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -40,7 +41,7 @@ class VocabularyService
     {
         if (! $element->usesVocabulary())
         {
-            throw new \Exception(Translation::get('ElementDoesNotUseVocabularies'));
+            throw new Exception(Translation::get('ElementDoesNotUseVocabularies'));
         }
         
         $values = array();
@@ -84,7 +85,7 @@ class VocabularyService
     {
         if ($element->usesVocabulary())
         {
-            throw new \Exception(Translation::get('ElementUsesVocabularies'));
+            throw new Exception(Translation::get('ElementUsesVocabularies'));
         }
         
         return $this->getProvidedValueForUserEntitySchemaInstanceElement($user, $entity, $schemaInstance, $element);
@@ -102,7 +103,7 @@ class VocabularyService
     {
         if (! $element->usesVocabulary())
         {
-            throw new \Exception(Translation::get('ElementDoesNotUseVocabularies'));
+            throw new Exception(Translation::get('ElementDoesNotUseVocabularies'));
         }
         
         $values = array();
@@ -127,7 +128,7 @@ class VocabularyService
                                 $user, 
                                 $providedPropertyValue);
                         }
-                        catch (\Exception $exception)
+                        catch (Exception $exception)
                         {
                             return $values;
                         }
@@ -157,7 +158,7 @@ class VocabularyService
     {
         if ($element->usesVocabulary())
         {
-            throw new \Exception(Translation::get('ElementUsesVocabularies'));
+            throw new Exception(Translation::get('ElementUsesVocabularies'));
         }
         
         try
@@ -184,7 +185,7 @@ class VocabularyService
     {
         if (! $element->usesVocabulary())
         {
-            throw new \Exception(Translation::get('ElementDoesNotUseVocabularies'));
+            throw new Exception(Translation::get('ElementDoesNotUseVocabularies'));
         }
         
         $conditions = array();
@@ -272,7 +273,7 @@ class VocabularyService
         }
         else
         {
-            throw new \Exception(Translation::get('AddingPredefinedVocabularyViaProvidersNotAllowed'));
+            throw new Exception(Translation::get('AddingPredefinedVocabularyViaProvidersNotAllowed'));
         }
         
         return $this->createVocabulary($vocabularyValues);
@@ -294,7 +295,7 @@ class VocabularyService
         
         if (! $vocabulary->create())
         {
-            throw new \Exception(
+            throw new Exception(
                 Translation::get('ObjectCreationFailed', array('OBJECT' => 'Vocabulary'), Utilities::COMMON_LIBRARIES));
         }
         

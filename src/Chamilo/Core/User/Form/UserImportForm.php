@@ -5,6 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\File\Path;
@@ -19,6 +20,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Exception;
 
 set_time_limit(0);
 ini_set("memory_limit", - 1);
@@ -197,7 +199,7 @@ class UserImportForm extends FormValidator
             }
             elseif ($action == 'U')
             {
-                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username(
+                $user = DataManager::retrieve_user_by_username(
                     $csvuser[User::PROPERTY_USERNAME]
                 );
 
@@ -270,7 +272,7 @@ class UserImportForm extends FormValidator
             }
             elseif ($action == 'D')
             {
-                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username(
+                $user = DataManager::retrieve_user_by_username(
                     $csvuser[User::PROPERTY_USERNAME]
                 );
 
@@ -349,9 +351,9 @@ class UserImportForm extends FormValidator
 
         // 1. Check if username exists
         if (($action == 'A' &&
-                !\Chamilo\Core\User\Storage\DataManager::is_username_available($csvuser[User::PROPERTY_USERNAME])) ||
+                !DataManager::is_username_available($csvuser[User::PROPERTY_USERNAME])) ||
             ($action != 'A' &&
-                \Chamilo\Core\User\Storage\DataManager::is_username_available($csvuser[User::PROPERTY_USERNAME])))
+                DataManager::is_username_available($csvuser[User::PROPERTY_USERNAME])))
         {
             $failures ++;
         }
@@ -545,7 +547,7 @@ class UserImportForm extends FormValidator
         {
             $mailer->sendMail($mail);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
         }
     }
@@ -558,7 +560,7 @@ class UserImportForm extends FormValidator
      */
     protected function determineRealAction($csvuser)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username($csvuser[User::PROPERTY_USERNAME]);
+        $user = DataManager::retrieve_user_by_username($csvuser[User::PROPERTY_USERNAME]);
 
         if ($user instanceof User)
         {

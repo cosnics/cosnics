@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Component to move metadata_element object
@@ -44,7 +45,7 @@ class MoverComponent extends Manager
             }
             else
             {
-                throw new \Exception(Translation::get('MoveDirectionNotSelected'));
+                throw new Exception(Translation::get('MoveDirectionNotSelected'));
             }
         }
         else

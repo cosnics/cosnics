@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use InvalidArgumentException;
 
 /**
  *
@@ -36,7 +37,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         
         if (! $schema)
         {
-            throw new \InvalidArgumentException('The given namespace ' . $namespace . ' is invalid');
+            throw new InvalidArgumentException('The given namespace ' . $namespace . ' is invalid');
         }
         
         return $schema;

@@ -8,7 +8,9 @@ use Chamilo\Core\Home\Service\ContentObjectPublicationService;
 use Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
+use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Translation\Translation;
 
 class Manager implements PublicationInterface
@@ -141,7 +143,7 @@ class Manager implements PublicationInterface
      */
     protected static function createPublicationAttributesFromPublication(ContentObjectPublication $publication)
     {
-        $attributes = new \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes();
+        $attributes = new Attributes();
 
         $attributes->setId($publication->getId());
         $attributes->set_publisher_id($publication->getContentObject()->get_owner_id());
@@ -218,7 +220,7 @@ class Manager implements PublicationInterface
      * Publication from the repository is not possible due to several home blocks being different
      */
     public static function publish_content_object(
-        \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object, LocationSupport $location,
+        ContentObject $content_object, LocationSupport $location,
         $options = array()
     )
     {

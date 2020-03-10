@@ -11,9 +11,11 @@ use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
+use ZipArchive;
 
 class ZipContentObjectImportController extends ContentObjectImportController
 {
@@ -40,7 +42,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
         $extracted_files_dir = $path = Path::getInstance()->getTemporaryPath() . uniqid();
         Filesystem::create_dir($path);
         
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $zip->open($file->get_path());
         
         for ($i = 0; $i < $zip->numFiles; $i ++)
@@ -135,7 +137,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
      */
     protected function open_zip($zip_file_path)
     {
-        $zip_archive = new \ZipArchive();
+        $zip_archive = new ZipArchive();
         $zip_archive->open($zip_file_path);
         
         return $zip_archive;
@@ -148,7 +150,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
      *
      * @return array
      */
-    protected function get_files_info(\ZipArchive $zip_archive)
+    protected function get_files_info(ZipArchive $zip_archive)
     {
         $files_info = array();
         
@@ -190,7 +192,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
         
         $calculator = new Calculator(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                User::class_name(),
                 (int) $this->get_parameters()->get_user()));
         
         if (! $calculator->canUpload($total_file_size))
@@ -235,7 +237,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
      *
      * @return int
      */
-    protected function handle_files(\ZipArchive $zip_archive, array $files_info)
+    protected function handle_files(ZipArchive $zip_archive, array $files_info)
     {
         $extracted_files_dir = Path::getInstance()->getTemporaryPath() . uniqid();
         Filesystem::create_dir($extracted_files_dir);

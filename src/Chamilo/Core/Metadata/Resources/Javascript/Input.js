@@ -4,7 +4,7 @@
         $.each(selectedVocabularyItems, function(index, value) {
             $('#' + currentElementIdentifier).tagsinput('add', value);
         });
-    }
+    };
 
     $(document).ready(function() {
 
@@ -38,7 +38,7 @@
                             url : ajaxUri,
                             data : parameters,
                             dataType : 'json'
-                        })
+                        });
 
                         return request.done(function(data, textStatus, jqXHR) {
                             return data;

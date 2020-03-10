@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Component;
 
+use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -9,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
-class XmlRepositoryCategoryMenuFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
+class XmlRepositoryCategoryMenuFeedComponent extends Manager
 {
 
     function run()

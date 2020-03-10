@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Block;
 
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Browser;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -14,11 +15,11 @@ class BrowserBlock extends Block
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $tracker = new \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Browser();
+        $tracker = new Browser();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Browser::class_name(), 
-                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Browser::PROPERTY_TYPE), 
+                Browser::class_name(),
+                Browser::PROPERTY_TYPE),
             new StaticConditionVariable('browser'));
         $description[0] = Translation::get('Browsers');
         $data = Block::array_from_tracker($tracker, $condition, $description);

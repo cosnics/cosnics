@@ -7,6 +7,7 @@ use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocationRole;
 use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocationRoleRepositoryInterface;
 use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
+use Exception;
 
 /**
  * Manages structure location roles
@@ -70,7 +71,7 @@ class StructureLocationRoleService implements StructureLocationRoleServiceInterf
         
         if (! $this->structureLocationRoleRepository->create($structureLocationRole))
         {
-            throw new \Exception(
+            throw new Exception(
                 'The structure location role for context ' . $structureLocation->getContext() . ', action ' .
                      $structureLocation->getAction() . ' and role ' . $roleName . ' could not be created');
         }
@@ -92,7 +93,7 @@ class StructureLocationRoleService implements StructureLocationRoleServiceInterf
         {
             $role = $this->roleService->getRoleByName($roleName);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return;
         }
@@ -108,7 +109,7 @@ class StructureLocationRoleService implements StructureLocationRoleServiceInterf
         
         if (! $this->structureLocationRoleRepository->delete($structureLocationRole))
         {
-            throw new \Exception(
+            throw new Exception(
                 'The structure location role for context ' . $structureLocation->getContext() . ', action ' .
                      $structureLocation->getAction() . ' and role ' . $roleName . ' could not be removed');
         }
@@ -144,7 +145,7 @@ class StructureLocationRoleService implements StructureLocationRoleServiceInterf
             
             return $this->getRolesForLocation($structureLocation);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return array();
         }

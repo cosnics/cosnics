@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Queue\Exceptions;
 
+use Exception;
+
 /**
  * Indicates that the job has become irrelevant and should not be scheduled for retry
  *
@@ -9,7 +11,7 @@ namespace Chamilo\Core\Queue\Exceptions;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class JobNoLongerValidException extends \Exception
+class JobNoLongerValidException extends Exception
 {
 
 }

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Metadata\Element\Form;
 
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
+use Chamilo\Core\Metadata\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -37,7 +38,7 @@ class ElementForm extends FormValidator
      */
     protected function build_form()
     {
-        $schema = \Chamilo\Core\Metadata\Storage\DataManager::retrieve_by_id(
+        $schema = DataManager::retrieve_by_id(
             Schema::class_name(), 
             $this->element->get_schema_id());
         $schemaName = $schema->get_namespace() . ' - ' . $schema->get_name();

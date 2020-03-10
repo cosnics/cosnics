@@ -60,7 +60,7 @@ class UserDetails
             array(
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(), 
                 Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE, 
-                \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $this->user->get_id()));
+                Manager::PARAM_USER_USER_ID => $this->user->get_id()));
         
         $html[] = '<img src="' . $profilePhotoUrl->getUrl() . '" alt="' . $this->user->get_fullname() .
              '" style="margin: 10px;max-height: 150px; border:1px solid black;float: right; display: inline;"/>';

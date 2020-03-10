@@ -16,6 +16,9 @@ use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeaderRenderer;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Core\Install\Format\Structure\Header;
 use Chamilo\Core\Install\Format\Structure\Footer;
+use DOMDocument;
+use DOMXPath;
+use Exception;
 
 /**
  *
@@ -161,9 +164,9 @@ abstract class Manager extends Application implements NoContextComponent
 
             if (file_exists($language_info_file))
             {
-                $dom_document = new \DOMDocument('1.0', 'UTF-8');
+                $dom_document = new DOMDocument('1.0', 'UTF-8');
                 $dom_document->load($language_info_file);
-                $dom_xpath = new \DOMXPath($dom_document);
+                $dom_xpath = new DOMXPath($dom_document);
 
                 $language_node = $dom_xpath->query('/packages/package')->item(0);
 
@@ -251,7 +254,7 @@ abstract class Manager extends Application implements NoContextComponent
 
             if ($installationBlocked)
             {
-                throw new \Exception(
+                throw new Exception(
                     Translation::getInstance()->getTranslation(
                         'InstallationBlockedByAdministrator', null, self::context()
                     )

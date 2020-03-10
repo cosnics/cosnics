@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Ajax\Component;
 
+use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Core\Home\Renderer\Type\Basic\BlockRendererFactory;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
@@ -16,7 +17,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @author Hans De Bisschop @dependency repository.content_object.assessment_multiple_choice_question;
  */
-class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
+class BlockAddComponent extends Manager
 {
     const PARAM_BLOCK = 'block';
     const PARAM_COLUMN = 'column';

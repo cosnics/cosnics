@@ -1,12 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Component;
 
+use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
-class CheckTitleComponent extends \Chamilo\Core\Repository\Ajax\Manager
+class CheckTitleComponent extends Manager
 {
     const PARAM_TITLE = 'title';
     const PARAM_PARENT_ID = 'parent_id';

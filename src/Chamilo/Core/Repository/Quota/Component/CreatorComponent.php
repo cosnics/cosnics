@@ -17,6 +17,7 @@ use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 class CreatorComponent extends Manager
 {
@@ -90,7 +91,7 @@ class CreatorComponent extends Manager
                     {
                         $mailer->sendMail($mail);
                     }
-                    catch (\Exception $ex)
+                    catch (Exception $ex)
                     {
                     }
                 }

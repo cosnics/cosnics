@@ -7,6 +7,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Hashing\HashingUtilities;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  *
@@ -124,13 +126,13 @@ class UserService
         {
             if (empty($parameterValue))
             {
-                throw new \InvalidArgumentException('The ' . $parameterName . ' can not be empty');
+                throw new InvalidArgumentException('The ' . $parameterName . ' can not be empty');
             }
         }
 
         if (!$this->isUsernameAvailable($username))
         {
-            throw new \RuntimeException('The given username is already taken');
+            throw new RuntimeException('The given username is already taken');
         }
 
         $user = new User();
@@ -146,7 +148,7 @@ class UserService
 
         if (!$this->createUser($user))
         {
-            throw new \RuntimeException('Could not create the user');
+            throw new RuntimeException('Could not create the user');
         }
 
         return $user;

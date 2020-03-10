@@ -6,6 +6,7 @@ use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\RoleRelation;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\UserRoleRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Exception;
 
 /**
  * Manages roles
@@ -124,7 +125,7 @@ class UserRoleService implements UserRoleServiceInterface
         
         if (! $this->userRoleRepository->create($userRoleRelation))
         {
-            throw new \Exception('User role not created for user ' . $user->get_fullname() . ' with role ' . $roleName);
+            throw new Exception('User role not created for user ' . $user->get_fullname() . ' with role ' . $roleName);
         }
     }
 
@@ -142,7 +143,7 @@ class UserRoleService implements UserRoleServiceInterface
         {
             $role = $this->roleService->getRoleByName($roleName);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return;
         }
@@ -156,7 +157,7 @@ class UserRoleService implements UserRoleServiceInterface
         
         if (!$this->userRoleRepository->delete($userRoleRelation))
         {
-            throw new \Exception('User role not deleted for user ' . $user->get_fullname() . ' with role ' . $roleName);
+            throw new Exception('User role not deleted for user ' . $user->get_fullname() . ' with role ' . $roleName);
         }
     }
 }

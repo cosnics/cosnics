@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Reporting\Viewer\Ajax\Component;
 
+use Chamilo\Core\Reporting\Viewer\Ajax\Manager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -12,7 +13,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class GraphComponent extends \Chamilo\Core\Reporting\Viewer\Ajax\Manager
+class GraphComponent extends Manager
 {
 
     public function run()

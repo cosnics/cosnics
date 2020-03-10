@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -208,6 +209,6 @@ class LogViewerComponent extends Manager
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

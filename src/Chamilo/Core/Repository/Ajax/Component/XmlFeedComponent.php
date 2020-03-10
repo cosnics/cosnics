@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Component;
 
+use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
@@ -25,7 +26,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class XmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
+class XmlFeedComponent extends Manager
 {
 
     function run()

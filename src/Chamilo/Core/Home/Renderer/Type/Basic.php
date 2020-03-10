@@ -21,6 +21,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -376,7 +377,7 @@ class Basic extends Renderer
     {
         if (! isset($this->generalMode))
         {
-            $this->generalMode = \Chamilo\Libraries\Platform\Session\Session::retrieve('Chamilo\Core\Home\General');
+            $this->generalMode = Session::retrieve('Chamilo\Core\Home\General');
         }
 
         return $this->generalMode;

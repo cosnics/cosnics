@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Core\Group\Ajax\Component;
 
+use Chamilo\Core\Group\Ajax\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -21,7 +23,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class XmlUserGroupFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
+class XmlUserGroupFeedComponent extends Manager
 {
 
     public function run()
@@ -174,8 +176,8 @@ class XmlUserGroupFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
             $user_condition = null;
         }
 
-        $user_result_set = \Chamilo\Core\User\Storage\DataManager::retrieves(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+        $user_result_set = DataManager::retrieves(
+            User::class_name(),
             new DataClassRetrievesParameters(
                 $user_condition,
                 null,

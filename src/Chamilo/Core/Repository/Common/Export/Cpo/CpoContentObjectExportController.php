@@ -5,6 +5,8 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
+use Chamilo\Core\Repository\Instance\Manager;
+use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
@@ -446,7 +448,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
         
         if ($content_object->has_versions())
         {
-            $content_object_versions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_content_object_versions(
+            $content_object_versions = DataManager::retrieve_content_object_versions(
                 $content_object);
             
             while ($content_object_version = $content_object_versions->next_result())
@@ -557,7 +559,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
                 ContentObjectAttachment::class_name(), 
                 ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID), 
             new StaticConditionVariable($content_object->get_id()));
-        $content_object_attachments = \Chamilo\Core\Repository\Storage\DataManager::retrieves(
+        $content_object_attachments = DataManager::retrieves(
             ContentObjectAttachment::class_name(), 
             new DataClassRetrievesParameters($condition));
         
@@ -601,7 +603,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
                 ContentObjectInclude::class_name(), 
                 ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID), 
             new StaticConditionVariable($content_object->get_id()));
-        $content_object_includes = \Chamilo\Core\Repository\Storage\DataManager::retrieves(
+        $content_object_includes = DataManager::retrieves(
             ContentObjectInclude::class_name(), 
             new DataClassRetrievesParameters($condition));
         
@@ -622,7 +624,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         /** @var \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance $external_instance */
         $external_instance = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+            Instance::class_name(),
             $external_instance_id);
         
         if (! $this->has_external_instance_node($external_instance_id))
@@ -637,7 +639,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             
             $settings_node = $external_instance_node->appendChild($this->dom_document->createElement('settings'));
             
-            $settings = \Chamilo\Core\Repository\Instance\Manager::get_instance_identifier(
+            $settings = Manager::get_instance_identifier(
                 $external_instance->get_implementation());
             
             foreach ($settings as $setting)

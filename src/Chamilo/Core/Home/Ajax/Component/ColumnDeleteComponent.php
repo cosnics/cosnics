@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Ajax\Component;
 
+use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -11,7 +12,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @package home.ajax
  * @author Hans De Bisschop
  */
-class ColumnDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
+class ColumnDeleteComponent extends Manager
 {
     const PARAM_COLUMN = 'column';
 

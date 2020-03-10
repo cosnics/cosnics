@@ -9,6 +9,7 @@ use Chamilo\Core\Queue\Service\JobProcessorInterface;
 use Chamilo\Core\Queue\Service\Worker;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
+use Exception;
 use Interop\Queue\PsrConsumer;
 use Interop\Queue\PsrContext;
 use Interop\Queue\PsrMessage;
@@ -175,7 +176,7 @@ class WorkerTest extends ChamiloTestCase
         $this->jobEntityManagerMock->expects($this->once())
             ->method('findJob')
             ->with(5)
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $psrConsumer->expects($this->once())
             ->method('reject')
@@ -242,7 +243,7 @@ class WorkerTest extends ChamiloTestCase
         $jobProcessorMock->expects($this->once())
             ->method('processJob')
             ->with($job)
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $this->jobEntityManagerMock->expects($this->at(2))
             ->method('changeJobStatus')

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Metadata\Service;
 
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -72,7 +73,7 @@ class EntityTranslationService
             ComparisonCondition::EQUAL, 
             new StaticConditionVariable($this->getEntity()->getDataClassIdentifier()));
         
-        $translations = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+        $translations = DataManager::retrieves(
             EntityTranslation::class_name(), 
             new DataClassRetrievesParameters(new AndCondition($conditions)));
         

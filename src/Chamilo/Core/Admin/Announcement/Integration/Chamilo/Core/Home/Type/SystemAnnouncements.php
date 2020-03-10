@@ -1,17 +1,20 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Service\PublicationService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
-class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implements ConfigurableInterface
+class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
 {
     const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
 
@@ -31,7 +34,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
 
         foreach ($publications as $publication)
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $content_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), (int) $publication[Publication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
@@ -95,9 +98,9 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
         $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Admin\Manager::package();
         $parameters[\Chamilo\Core\Admin\Manager::PARAM_ACTION] =
             \Chamilo\Core\Admin\Manager::ACTION_SYSTEM_ANNOUNCEMENTS;
-        $parameters[\Chamilo\Core\Admin\Announcement\Manager::PARAM_ACTION] =
-            \Chamilo\Core\Admin\Announcement\Manager::ACTION_VIEW;
-        $parameters[\Chamilo\Core\Admin\Announcement\Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID] =
+        $parameters[Manager::PARAM_ACTION] =
+            Manager::ACTION_VIEW;
+        $parameters[Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID] =
             $publication[Publication::PROPERTY_ID];
 
         $redirect = new Redirect($parameters);

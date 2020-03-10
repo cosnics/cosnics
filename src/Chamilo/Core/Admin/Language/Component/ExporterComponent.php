@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Admin\Language\Component;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Core\Admin\Language\Manager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -43,7 +44,7 @@ class ExporterComponent extends Manager
         
         $this->write_line($file_handle, $language_values);
         
-        $package_list = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_type_packages();
+        $package_list = PlatformPackageBundles::getInstance()->get_type_packages();
         
         foreach ($package_list as $packages)
         {

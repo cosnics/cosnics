@@ -8,6 +8,7 @@ use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use RuntimeException;
 
 /**
  * Service to manage the rights for the given block types
@@ -50,7 +51,7 @@ class BlockTypeRightsService
     {
         if (! $this->rightsRepository->clearTargetEntitiesForBlockType($blockType))
         {
-            throw new \RuntimeException('Failed to delete the target entities for block type ' . $blockType);
+            throw new RuntimeException('Failed to delete the target entities for block type ' . $blockType);
         }
         
         foreach ($targetEntities as $targetEntityType => $targetEntityIdentifiers)
@@ -64,7 +65,7 @@ class BlockTypeRightsService
                 
                 if (! $elementTargetEntity->create())
                 {
-                    throw new \RuntimeException(
+                    throw new RuntimeException(
                         sprintf(
                             'Could not create a new $blockType target entity for $blockType %s, ' .
                                  'entity type %s and entity id %s', 

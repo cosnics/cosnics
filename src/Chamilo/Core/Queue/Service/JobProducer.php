@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Queue\Service;
 
 use Chamilo\Core\Queue\Storage\Entity\Job;
+use Exception;
 
 /**
  * @package Chamilo\Core\Queue\Service
@@ -50,7 +51,7 @@ class JobProducer
             $this->producer->produceMessage($job->getId(), $queueName, $delay);
             $this->jobEntityManager->changeJobStatus($job, Job::STATUS_SENT_TO_QUEUE);
         }
-        catch(\Exception $ex)
+        catch(Exception $ex)
         {
             $this->jobEntityManager->changeJobStatus($job, Job::STATUS_FAILED_RETRY);
         }

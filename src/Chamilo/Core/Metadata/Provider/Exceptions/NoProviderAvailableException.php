@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Metadata\Provider\Exceptions;
 
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class NoProviderAvailableException extends \Exception
+class NoProviderAvailableException extends Exception
 {
 
     /**

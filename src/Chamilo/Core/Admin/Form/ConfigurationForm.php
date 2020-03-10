@@ -589,7 +589,7 @@ class ConfigurationForm extends FormValidator
                         new StaticConditionVariable(Session::get_user_id()));
                     $condition = new AndCondition($conditions);
                     $user_setting = \Chamilo\Core\User\Storage\DataManager::retrieve(
-                        \Chamilo\Core\User\Storage\DataClass\UserSetting::class_name(),
+                        UserSetting::class_name(),
                         new DataClassRetrieveParameters($condition));
 
                     if ($user_setting)

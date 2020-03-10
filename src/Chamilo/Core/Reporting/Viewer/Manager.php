@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Reporting\Viewer;
 
+use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Session\Request;
 
@@ -31,7 +32,7 @@ abstract class Manager extends Application
      *
      * @param \core\reporting\ReportingTemplate $template
      */
-    public function set_template(\Chamilo\Core\Reporting\ReportingTemplate $template)
+    public function set_template(ReportingTemplate $template)
     {
         $this->template = $template;
     }

@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\User\Storage\DataClass\Session;
 use Chamilo\Core\User\Storage\Repository\SessionRepository;
+use SessionHandlerInterface;
 
 /**
  *
@@ -10,7 +11,7 @@ use Chamilo\Core\User\Storage\Repository\SessionRepository;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class SessionHandler implements \SessionHandlerInterface
+class SessionHandler implements SessionHandlerInterface
 {
 
     /**

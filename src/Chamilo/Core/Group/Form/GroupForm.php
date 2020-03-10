@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Form;
 
+use Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Menu\GroupMenu;
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -143,9 +144,9 @@ class GroupForm extends FormValidator
         {
             Event::trigger(
                 'Update', Manager::context(), array(
-                    \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_REFERENCE_ID => $group->get_id(
+                    Change::PROPERTY_REFERENCE_ID => $group->get_id(
                     ),
-                    \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_USER_ID => $this->user->get_id(
+                    Change::PROPERTY_USER_ID => $this->user->get_id(
                     )
                 )
             );
@@ -178,9 +179,9 @@ class GroupForm extends FormValidator
         {
             Event::trigger(
                 'Create', Manager::context(), array(
-                    \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_REFERENCE_ID => $group->get_id(
+                    Change::PROPERTY_REFERENCE_ID => $group->get_id(
                     ),
-                    \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_USER_ID => $this->user->get_id(
+                    Change::PROPERTY_USER_ID => $this->user->get_id(
                     )
                 )
             );

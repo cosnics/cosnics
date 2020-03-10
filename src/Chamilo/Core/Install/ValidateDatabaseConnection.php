@@ -3,6 +3,7 @@ namespace Chamilo\Core\Install;
 
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
+use Exception;
 use HTML_QuickForm_Rule;
 
 /**
@@ -32,7 +33,7 @@ class ValidateDatabaseConnection extends HTML_QuickForm_Rule
             $connectionFactory->getConnection();
             return true;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             return false;
         }

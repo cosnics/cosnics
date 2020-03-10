@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Component;
 
+use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Translation\Translation;
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 
-class DeleteFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
+class DeleteFileComponent extends Manager
 {
     const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
 
@@ -51,7 +52,7 @@ class DeleteFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             
             if ($file instanceof File)
             {
-                if (\Chamilo\Core\Repository\Storage\DataManager::content_object_deletion_allowed($file, 'version'))
+                if (DataManager::content_object_deletion_allowed($file, 'version'))
                 {
                     if (! $file->delete(true))
                     {

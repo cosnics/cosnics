@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service;
 
+use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -43,17 +44,17 @@ class PublicationAttributesGenerator
         $attributes->setId($record[Publication::PROPERTY_ID]);
         $attributes->set_publisher_id($record[Publication::PROPERTY_PUBLISHER_ID]);
         $attributes->set_date($record[Publication::PROPERTY_PUBLICATION_DATE]);
-        $attributes->set_application(\Chamilo\Core\Admin\Announcement\Manager::context());
+        $attributes->set_application(Manager::context());
 
         $attributes->set_location(
-            $this->getTranslator()->trans('TypeName', [], \Chamilo\Core\Admin\Announcement\Manager::context())
+            $this->getTranslator()->trans('TypeName', [], Manager::context())
         );
 
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Announcement\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Core\Admin\Announcement\Manager::ACTION_VIEW,
-                \Chamilo\Core\Admin\Announcement\Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $record[Publication::PROPERTY_ID]
+                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_ACTION => Manager::ACTION_VIEW,
+                Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $record[Publication::PROPERTY_ID]
             )
         );
 

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group;
 
+use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Group\Form\GroupSearchForm;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
@@ -313,6 +314,6 @@ abstract class Manager extends Application
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

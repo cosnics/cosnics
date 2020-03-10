@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -55,8 +56,8 @@ class TruncaterComponent extends Manager
                         'Truncate',
                         Manager::context(),
                         array(
-                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_REFERENCE_ID => $group->get_id(),
-                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_USER_ID => $user->get_id()));
+                            Change::PROPERTY_REFERENCE_ID => $group->get_id(),
+                            Change::PROPERTY_USER_ID => $user->get_id()));
                 }
             }
 

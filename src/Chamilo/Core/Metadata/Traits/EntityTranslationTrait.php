@@ -3,6 +3,7 @@ namespace Chamilo\Core\Metadata\Traits;
 
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Service\EntityTranslationService;
+use Locale;
 
 /**
  *
@@ -44,7 +45,7 @@ trait EntityTranslationTrait
     public function getTranslationByIsocode($isocode)
     {
         $translations = $this->getTranslations();
-        $bestMatchIsoCode = \Locale::lookup(array_keys($translations), $isocode, true);
+        $bestMatchIsoCode = Locale::lookup(array_keys($translations), $isocode, true);
         
         if ($bestMatchIsoCode)
         {

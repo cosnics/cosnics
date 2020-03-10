@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Rights\Editor\Table\LocationEntity;
 
+use Chamilo\Core\Rights\Editor\Manager;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -42,9 +43,9 @@ abstract class LocationEntityTableCellRenderer extends DataClassTableCellRendere
         $right_id = $rights[$column->get_name()];
         $rights_url = $this->get_component()->get_url(
             array(
-                \Chamilo\Core\Rights\Editor\Manager::PARAM_ACTION => \Chamilo\Core\Rights\Editor\Manager::ACTION_SET_ENTITY_RIGHTS,
-                \Chamilo\Core\Rights\Editor\Manager::PARAM_ENTITY_ID => $entity_item->get_id(),
-                \Chamilo\Core\Rights\Editor\Manager::PARAM_RIGHT_ID => $right_id
+                Manager::PARAM_ACTION => Manager::ACTION_SET_ENTITY_RIGHTS,
+                Manager::PARAM_ENTITY_ID => $entity_item->get_id(),
+                Manager::PARAM_RIGHT_ID => $right_id
             )
         );
 

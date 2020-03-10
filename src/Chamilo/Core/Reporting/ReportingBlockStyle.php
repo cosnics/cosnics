@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Reporting;
 
+use Chamilo\Configuration\Configuration;
+
 /**
  * Class stores style of a reporting block.
  *
@@ -31,12 +33,12 @@ class ReportingBlockStyle
     function __construct()
     {
         $this->setTitleTextColor(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'block_title_text_color'));
+            Configuration::get('Chamilo\Core\Reporting', 'block_title_text_color'));
         $this->setTitleFont(
             [
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'block_title_font_family'),
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'block_title_font_style'),
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'block_title_font_size')]);
+                Configuration::get('Chamilo\Core\Reporting', 'block_title_font_family'),
+                Configuration::get('Chamilo\Core\Reporting', 'block_title_font_style'),
+                Configuration::get('Chamilo\Core\Reporting', 'block_title_font_size')]);
     }
 
     public function getTitleTextColor()

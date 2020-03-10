@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Core\Metadata\Vocabulary\Ajax\Component;
 
+use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
+use Chamilo\Core\Metadata\Vocabulary\Ajax\Manager;
 use Chamilo\Core\Metadata\Vocabulary\Table\Select\SelectTable;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Path;
@@ -19,6 +21,8 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
+use stdClass;
 
 /**
  *
@@ -27,7 +31,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager implements TableSupport
+class SelectComponent extends Manager implements TableSupport
 {
     const PARAM_ELEMENT_ID = 'elementId';
     const PARAM_SCHEMA_ID = 'schemaId';
@@ -62,7 +66,7 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
         
         if (! $this->getSelectedElement()->usesVocabulary())
         {
-            throw new \Exception(Translation::get('NoVocabularyAllowed'));
+            throw new Exception(Translation::get('NoVocabularyAllowed'));
         }
         
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
@@ -91,7 +95,7 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
             
             while ($vocabularyItem = $vocabularyItems->next_result())
             {
-                $item = new \stdClass();
+                $item = new stdClass();
                 $item->id = $vocabularyItem->get_id();
                 $item->value = $vocabularyItem->get_value();
                 
@@ -106,7 +110,7 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
             $html[] = 'var selectedVocabularyItems = ' . json_encode($vocabularyItemValues) . ';';
             $html[] = 'var elementIdentifier = ' . json_encode(
                 $this->getRequest()->query->get(
-                    \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::PARAM_ELEMENT_IDENTIFIER)) . ';';
+                    Manager::PARAM_ELEMENT_IDENTIFIER)) . ';';
             $html[] = '</script>';
             $html[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-typeahead.js');
             $html[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-tagsinput.js');
@@ -229,7 +233,7 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
         if (! isset($this->element))
         {
             $this->element = DataManager::retrieve_by_id(
-                \Chamilo\Core\Metadata\Storage\DataClass\Element::class_name(), 
+                Element::class_name(),
                 $this->getSelectedElementId());
         }
         
@@ -259,6 +263,6 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
     {
         return array(
             \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID, 
-            \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::PARAM_ELEMENT_IDENTIFIER);
+            Manager::PARAM_ELEMENT_IDENTIFIER);
     }
 }

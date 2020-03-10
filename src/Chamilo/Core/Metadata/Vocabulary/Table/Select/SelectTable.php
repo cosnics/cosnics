@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Metadata\Vocabulary\Table\Select;
 
+use Chamilo\Core\Metadata\Element\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
@@ -31,7 +32,7 @@ class SelectTable extends DataClassTable implements TableFormActionsSupport
                 new TableFormAction(
                     $this->get_component()->get_url(
                         array(
-                            \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID => $this->get_component()->getSelectedElementId())), 
+                            Manager::PARAM_ELEMENT_ID => $this->get_component()->getSelectedElementId())),
                     Translation::get('UseSelected')));
         }
         

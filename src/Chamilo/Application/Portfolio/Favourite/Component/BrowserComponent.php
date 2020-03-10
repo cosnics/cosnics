@@ -29,16 +29,6 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Renders the favourite users table
-     */
-    protected function renderTable()
-    {
-        $table = new FavouriteTable($this);
-
-        return $table->render();
-    }
-
-    /**
      * Returns the condition
      *
      * @param string $table_class_name
@@ -47,5 +37,15 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
+    }
+
+    /**
+     * Renders the favourite users table
+     */
+    protected function renderTable()
+    {
+        $table = new FavouriteTable($this);
+
+        return $table->render();
     }
 }

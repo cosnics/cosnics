@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Package;
 
+use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocation;
@@ -86,7 +87,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $settings[] = array('Chamilo\Core\Admin', 'administrator_email', $values['admin_email']);
         $settings[] = array('Chamilo\Core\Admin', 'administrator_telephone', $values['admin_phone']);
 
-        DataClassCache::truncate(\Chamilo\Configuration\Storage\DataClass\Setting::class_name());
+        DataClassCache::truncate(Setting::class_name());
 
         foreach ($settings as $setting)
         {

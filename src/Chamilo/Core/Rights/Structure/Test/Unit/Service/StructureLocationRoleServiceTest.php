@@ -11,6 +11,7 @@ use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocatio
 use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
+use Exception;
 
 /**
  * Tests the Chamilo\Core\Rights\Structure\Service\StructureLocationRoleService class
@@ -158,7 +159,7 @@ class StructureLocationRoleServiceTest extends ChamiloTestCase
     {
         $this->roleServiceMock->expects($this->once())
             ->method('getRoleByName')
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $this->structureLocationRoleService->removeRoleFromStructureLocation(new StructureLocation(), 'ROLE_TEST_USER');
     }
@@ -300,7 +301,7 @@ class StructureLocationRoleServiceTest extends ChamiloTestCase
         $this->structureLocationServiceMock->expects($this->once())
             ->method('getStructureLocationByContextAndAction')
             ->with($context, $action)
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $this->assertEquals(
             array(), $this->structureLocationRoleService->getRolesForLocationByContextAndAction($context, $action)

@@ -5,8 +5,10 @@ use Chamilo\Libraries\Connection;
 use Chamilo\Libraries\CoreApplication;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
+use Chamilo\MDB2;
+use PHPUnit_Framework_TestCase;
 
-class InstallerTest extends \PHPUnit_Framework_TestCase
+class InstallerTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -224,7 +226,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     private function assertIsNotMDB2Error($mdb2Result)
     {
-        if (\Chamilo\MDB2::isError($mdb2Result))
+        if (MDB2::isError($mdb2Result))
         {
             $this->fail("MDB2 shouldn't have returned an error : {$mdb2Result->getMessage()}");
         }

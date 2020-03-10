@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Rights\Editor\Ajax\Component;
 
+use Chamilo\Core\Rights\Editor\Ajax\Manager;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
  * @package rights.ajax
  * @deprecated Should not be needed anymore
  */
-class EntityRightLocationClassComponent extends \Chamilo\Core\Rights\Editor\Ajax\Manager
+class EntityRightLocationClassComponent extends Manager
 {
     const PARAM_LOCATIONS = 'locations';
     const PARAM_RIGHTS = 'rights';

@@ -88,7 +88,7 @@ class RepositoryMenu
                     new FontAwesomeGlyph('plus'),
                     $repositoryManager->get_url(
                         array(
-                            \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_CREATE_CONTENT_OBJECTS
+                            Manager::PARAM_ACTION => Manager::ACTION_CREATE_CONTENT_OBJECTS
                         ),
                         array(Manager::PARAM_IMPORT_TYPE)
                     ),
@@ -113,7 +113,7 @@ class RepositoryMenu
                         $repositoryManager->get_url(
                             array(
 
-                                \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_WORKSPACE,
+                                Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
                                 \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_PUBLISH,
                                 FilterData::FILTER_CATEGORY => FilterData::getInstance(
                                     $repositoryManager->getWorkspace()
@@ -139,7 +139,7 @@ class RepositoryMenu
                     new FontAwesomeGlyph('list'),
                     $repositoryManager->get_url(
                         array(
-                            \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_PUBLICATION
+                            Manager::PARAM_ACTION => Manager::ACTION_PUBLICATION
                         ),
                         array(\Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION, Manager::PARAM_IMPORT_TYPE)
                     )
@@ -155,8 +155,8 @@ class RepositoryMenu
                     new FontAwesomeGlyph('bar-chart'),
                     $repositoryManager->get_url(
                         array(
-                            \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_QUOTA,
-                            \Chamilo\Core\Repository\Manager::PARAM_CATEGORY_ID => null,
+                            Manager::PARAM_ACTION => Manager::ACTION_QUOTA,
+                            Manager::PARAM_CATEGORY_ID => null,
                             \Chamilo\Core\Repository\Quota\Manager::PARAM_ACTION => null,
                             DynamicTabsRenderer::PARAM_SELECTED_TAB => null
                         ),
@@ -171,7 +171,7 @@ class RepositoryMenu
                     new FontAwesomeGlyph('files-o'),
                     $repositoryManager->get_url(
                         array(
-                            \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_VIEW_DOUBLES
+                            Manager::PARAM_ACTION => Manager::ACTION_VIEW_DOUBLES
                         ),
                         array(Manager::PARAM_IMPORT_TYPE)
                     )

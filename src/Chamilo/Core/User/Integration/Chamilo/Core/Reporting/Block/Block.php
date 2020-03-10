@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Block;
 
 use Chamilo\Core\Reporting\ReportingBlock;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
@@ -10,7 +11,7 @@ abstract class Block extends ReportingBlock
 
     public function get_user_id()
     {
-        return $this->get_parent()->get_parameter(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID);
+        return $this->get_parent()->get_parameter(Manager::PARAM_USER_USER_ID);
     }
 
     public static function getDateArray($data, $format)

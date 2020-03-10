@@ -6,6 +6,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
@@ -19,6 +20,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -86,7 +88,7 @@ class UserForm extends FormValidator
             array(
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
                 Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $this->user->get_id()
+                Manager::PARAM_USER_USER_ID => $this->user->get_id()
             )
         );
 
@@ -375,7 +377,7 @@ class UserForm extends FormValidator
             $user->set_picture_file($_FILES[User::PROPERTY_PICTURE_URI]);
         }
 
-        if (\Chamilo\Core\User\Storage\DataManager::is_username_available(
+        if (DataManager::is_username_available(
             $values[User::PROPERTY_USERNAME], $values[User::PROPERTY_ID]
         ))
         {
@@ -548,7 +550,7 @@ class UserForm extends FormValidator
         {
             $mailer->sendMail($mail);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
         }
     }

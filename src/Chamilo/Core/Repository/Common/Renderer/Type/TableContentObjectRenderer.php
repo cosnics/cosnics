@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Common\Renderer\Type;
 
 use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
+use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Table\ContentObject\Table\RepositoryTable;
 
@@ -20,7 +21,7 @@ class TableContentObjectRenderer extends ContentObjectRenderer
         if ($this->get_repository_browser()->has_filter_type())
         {
             $filter_type = $this->get_repository_browser()->get_filter_type();
-            $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id($filter_type);
+            $template_registration = Configuration::registration_by_id($filter_type);
 
             $classname = $template_registration->get_content_object_type() . '\\' . $class;
             if (!class_exists($classname))

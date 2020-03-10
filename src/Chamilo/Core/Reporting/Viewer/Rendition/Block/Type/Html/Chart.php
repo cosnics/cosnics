@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 
+use Chamilo\Core\Reporting\Viewer\Ajax\Manager;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -117,9 +118,9 @@ abstract class Chart extends Html
     {
         $graphUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\Reporting\Viewer\Ajax\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Core\Reporting\Viewer\Ajax\Manager::ACTION_GRAPH,
-                \Chamilo\Core\Reporting\Viewer\Ajax\Manager::PARAM_GRAPHMD5 => $md5
+                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_ACTION => Manager::ACTION_GRAPH,
+                Manager::PARAM_GRAPHMD5 => $md5
             )
         );
 

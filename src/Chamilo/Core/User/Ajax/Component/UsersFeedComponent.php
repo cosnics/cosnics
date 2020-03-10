@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Ajax\Component;
 
+use Chamilo\Core\User\Ajax\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -24,7 +25,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
  * @author Sven Vanpoucke
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
+class UsersFeedComponent extends Manager
 {
     const PARAM_SEARCH_QUERY = 'query';
     const PARAM_OFFSET = 'offset';

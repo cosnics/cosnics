@@ -31,9 +31,11 @@ class FavouriteTable extends RecordTable implements TableFormActionsSupport
                 $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE,
-                        Manager::PARAM_SOURCE => Manager::SOURCE_FAVOURITES_BROWSER)),
-                Translation::getInstance()->getTranslation('DeleteSelected', null, Utilities::COMMON_LIBRARIES),
-                true));
+                        Manager::PARAM_SOURCE => Manager::SOURCE_FAVOURITES_BROWSER
+                    )
+                ), Translation::getInstance()->getTranslation('DeleteSelected', null, Utilities::COMMON_LIBRARIES), true
+            )
+        );
 
         return $actions;
     }

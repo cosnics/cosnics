@@ -3,6 +3,8 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Block;
 
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
 class NoOfUsersBlock extends Block
@@ -18,7 +20,7 @@ class NoOfUsersBlock extends Block
         $reporting_data->add_data_category_row(
             Translation::get('GetNumberOfUsers'),
             Translation::get('Count'),
-            \Chamilo\Core\User\Storage\DataManager::count(\Chamilo\Core\User\Storage\DataClass\User::class_name()));
+            DataManager::count(User::class_name()));
 
         return $reporting_data;
     }

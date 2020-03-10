@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Rights\Editor\Table\LocationEntity;
 
+use Chamilo\Core\Rights\Editor\Manager;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
@@ -60,7 +61,7 @@ class LocationEntityBrowserTreeMenu extends GenericTree
     public function get_node_url($node_id)
     {
         $parameters = array();
-        $parameters[\Chamilo\Core\Rights\Editor\Manager::PARAM_ENTITY_ID] = $node_id;
+        $parameters[Manager::PARAM_ENTITY_ID] = $node_id;
         
         return $this->get_parent()->get_url($parameters);
     }
@@ -104,10 +105,10 @@ class LocationEntityBrowserTreeMenu extends GenericTree
     public function get_url_format()
     {
         $parameters = array();
-        $parameters[\Chamilo\Core\Rights\Editor\Manager::PARAM_ENTITY_ID] = null;
+        $parameters[Manager::PARAM_ENTITY_ID] = null;
         
         $url_format = $this->get_parent()->get_url($parameters);
-        $url_format .= '&' . \Chamilo\Core\Rights\Editor\Manager::PARAM_ENTITY_ID . '=';
+        $url_format .= '&' . Manager::PARAM_ENTITY_ID . '=';
         
         return $url_format;
     }

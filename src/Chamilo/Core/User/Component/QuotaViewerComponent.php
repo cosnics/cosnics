@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Filesystem;
@@ -55,7 +56,7 @@ class QuotaViewerComponent extends Manager
         }
         else
         {
-            $this->selected_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            $this->selected_user = DataManager::retrieve_by_id(
                 User::class_name(), (int) $selected_user_id
             );
         }

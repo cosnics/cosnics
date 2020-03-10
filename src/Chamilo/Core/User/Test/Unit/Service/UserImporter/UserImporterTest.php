@@ -11,6 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Translation\Translator;
 
@@ -220,7 +221,7 @@ class UserImporterTest extends ChamiloTestCase
         $this->mockUserCreate();
         $this->mockCreateUserSettingForSettingAndUser();
 
-        $this->mailerMock->expects($this->once())->method('sendMail')->will($this->throwException(new \Exception()));
+        $this->mailerMock->expects($this->once())->method('sendMail')->will($this->throwException(new Exception()));
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile, true);
         $this->assertTrue(

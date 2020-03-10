@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Ajax\Component;
 
+use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Architecture\ContentObjectPublicationBlockInterface;
 use Chamilo\Core\Home\Renderer\Type\Basic\BlockRendererFactory;
@@ -21,7 +22,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
  * @package home.ajax
  * @author Hans De Bisschop
  */
-class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
+class BlockConfigComponent extends Manager
 {
     const PARAM_BLOCK = 'block';
     const PARAM_DATA = 'data';

@@ -1,14 +1,16 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Component;
 
+use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
  *
  * @package repository
  */
-class ContentObjectUpdateComponent extends \Chamilo\Core\Repository\Ajax\Manager
+class ContentObjectUpdateComponent extends Manager
 {
     const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
     const PARAM_MODIFICATION_DATE = 'modification_date';
@@ -28,7 +30,7 @@ class ContentObjectUpdateComponent extends \Chamilo\Core\Repository\Ajax\Manager
     public function run()
     {
         $content_object_id = $this->getPostDataValue(self::PARAM_CONTENT_OBJECT_ID);
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $content_object = DataManager::retrieve_by_id(
             ContentObject::class_name(), 
             $content_object_id);
         $modification_date = $this->getPostDataValue(self::PARAM_MODIFICATION_DATE);

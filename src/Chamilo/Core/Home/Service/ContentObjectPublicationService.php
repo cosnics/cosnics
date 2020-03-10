@@ -4,6 +4,7 @@ namespace Chamilo\Core\Home\Service;
 use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
 use Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Home\Storage\DataClass\Element;
+use RuntimeException;
 
 /**
  * Service to manage content object publications for this application
@@ -39,7 +40,7 @@ class ContentObjectPublicationService
     {
         if (! $this->contentObjectPublicationRepository->deleteContentObjectPublicationsForElement($element->getId()))
         {
-            throw new \RuntimeException('Could not clear the publications for element ' . $element->getId());
+            throw new RuntimeException('Could not clear the publications for element ' . $element->getId());
         }
         
         $this->publishContentObject($element, $contentObjectId);
@@ -64,7 +65,7 @@ class ContentObjectPublicationService
         
         if (! $contentObjectPublication->create())
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf('Could not publish the content object %s in element %s', $contentObjectId, $element->getId()));
         }
     }

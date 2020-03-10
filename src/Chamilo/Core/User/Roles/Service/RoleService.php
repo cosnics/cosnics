@@ -6,6 +6,7 @@ use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\RoleRepositoryInterface;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Exception;
 
 /**
  * Manages roles
@@ -47,7 +48,7 @@ class RoleService implements RoleServiceInterface
         
         if (! $this->roleRepository->create($role))
         {
-            throw new \Exception('The role with name ' . $roleName . ' could not be created');
+            throw new Exception('The role with name ' . $roleName . ' could not be created');
         }
         
         return $role;
@@ -65,7 +66,7 @@ class RoleService implements RoleServiceInterface
         if (! $this->roleRepository->delete($role))
         {
             $roleName = $role->getRole();
-            throw new \Exception('The role with name ' . $roleName . ' could not be deleted');
+            throw new Exception('The role with name ' . $roleName . ' could not be deleted');
         }
     }
 
@@ -83,7 +84,7 @@ class RoleService implements RoleServiceInterface
         $role = $this->roleRepository->findRoleByName($roleName);
         if (! $role instanceof Role)
         {
-            throw new \Exception('Role not found by given name ' . $roleName);
+            throw new Exception('Role not found by given name ' . $roleName);
         }
         
         return $role;
@@ -102,7 +103,7 @@ class RoleService implements RoleServiceInterface
         {
             return $this->getRoleByName($roleName);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $role = $this->createRoleByName($roleName);
             DataClassCache::truncate(Role::class_name());

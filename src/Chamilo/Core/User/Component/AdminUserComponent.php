@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  *
@@ -18,14 +19,14 @@ class AdminUserComponent extends Manager
      */
     public function run()
     {
-        $admin_user = \Chamilo\Libraries\Platform\Session\Session::retrieve('_as_admin');
+        $admin_user = Session::retrieve('_as_admin');
         
         if ($admin_user)
         {
-            $checkurl = \Chamilo\Libraries\Platform\Session\Session::retrieve('checkChamiloURL');
-            \Chamilo\Libraries\Platform\Session\Session::clear();
-            \Chamilo\Libraries\Platform\Session\Session::register('_uid', $admin_user);
-            \Chamilo\Libraries\Platform\Session\Session::register('checkChamiloURL', $checkurl);
+            $checkurl = Session::retrieve('checkChamiloURL');
+            Session::clear();
+            Session::register('_uid', $admin_user);
+            Session::register('checkChamiloURL', $checkurl);
             
             $redirect = new Redirect();
             $redirect->toUrl();

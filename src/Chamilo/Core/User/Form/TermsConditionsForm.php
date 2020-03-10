@@ -5,6 +5,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
+use function Strftime;
 
 class TermsConditionsForm extends FormValidator
 {
@@ -63,7 +64,7 @@ class TermsConditionsForm extends FormValidator
     {
         // show date last updated
         $date_format = '%e-%m-%Y %H:%M';
-        $date = \Strftime($date_format, Manager::get_date_terms_and_conditions_last_modified());
+        $date = Strftime($date_format, Manager::get_date_terms_and_conditions_last_modified());
         $this->addElement('html', Translation::get('TermsConditionsDate') . $date);
     }
 
@@ -73,7 +74,7 @@ class TermsConditionsForm extends FormValidator
         if ($this->user->get_terms_date() != null && $this->user->get_terms_date() > 0)
         {
             $date_format = '%e-%m-%Y %H:%M';
-            $date = \Strftime($date_format, $this->user->get_terms_date());
+            $date = Strftime($date_format, $this->user->get_terms_date());
             $this->addElement('html', Translation::get('TermsConditionsAcceptedDate') . $date);
         }
     }

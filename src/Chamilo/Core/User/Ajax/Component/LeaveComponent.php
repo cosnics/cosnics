@@ -6,6 +6,7 @@ use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  *
@@ -20,7 +21,7 @@ class LeaveComponent extends \Chamilo\Core\User\Ajax\Manager
     public function run()
     {
         $tracker = Request::post('tracker');
-        $user_id = \Chamilo\Libraries\Platform\Session\Session::get_user_id();
+        $user_id = Session::get_user_id();
         
         Event::trigger(
             'Leave', 

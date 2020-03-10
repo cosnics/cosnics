@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\DataManager;
@@ -63,9 +64,9 @@ class UnsubscriberComponent extends Manager
                         'UnsubscribeUser',
                         Manager::context(),
                         array(
-                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_REFERENCE_ID => $groupreluser->get_group_id(),
-                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_TARGET_USER_ID => $groupreluser->get_user_id(),
-                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_USER_ID => $user->get_id()));
+                            Change::PROPERTY_REFERENCE_ID => $groupreluser->get_group_id(),
+                            Change::PROPERTY_TARGET_USER_ID => $groupreluser->get_user_id(),
+                            Change::PROPERTY_USER_ID => $user->get_id()));
                 }
             }
 
