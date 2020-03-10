@@ -9,15 +9,17 @@ use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -31,13 +33,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function determine_user_id()
     {
-        $current_user_id = \Chamilo\Libraries\Platform\Session\Session::get_user_id();
+        $current_user_id = Session::get_user_id();
         $current_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            User::class_name(),
-            intval($current_user_id));
+            User::class_name(), intval($current_user_id)
+        );
 
         $user_home_allowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
-        $generalMode = \Chamilo\Libraries\Platform\Session\Session::retrieve('Chamilo\Core\Home\General');
+        $generalMode = Session::retrieve('Chamilo\Core\Home\General');
 
         if ($current_user instanceof User)
         {
@@ -49,7 +51,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             {
                 return $current_user->get_id();
             }
-            elseif (! $user_home_allowed && $current_user->is_platform_admin())
+            elseif (!$user_home_allowed && $current_user->is_platform_admin())
             {
                 return 0;
             }
@@ -74,23 +76,30 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $homeIntegrationManager = new $className();
                 $blockTypes = $homeIntegrationManager->getBlockTypes();
 
+                $parentNamespace = ClassnameUtilities::getInstance()->getNamespaceParent(
+                    $homeIntegration[Registration::PROPERTY_TYPE]
+                );
+                $packageId = $homeIntegration[Registration::PROPERTY_CONTEXT];
+
+                $packageGlyph = new NamespaceIdentGlyph(
+                    $parentNamespace, true, false, false, Theme::ICON_MINI, array('fa-fw')
+                );
+
+                $blocks[$packageId]['name'] = Translation::get('TypeName', null, $parentNamespace);
+                $blocks[$packageId]['image'] = $packageGlyph->render();
                 foreach ($blockTypes as $blockType)
                 {
-                    $parentNamespace = ClassnameUtilities::getInstance()->getNamespaceParent(
-                        $homeIntegration[Registration::PROPERTY_TYPE]);
                     $blockName = ClassnameUtilities::getInstance()->getClassnameFromNamespace($blockType);
 
-                    $packageId = $homeIntegration[Registration::PROPERTY_CONTEXT];
-                    $blockId = $blockType;
-
-                    $blocks[$packageId]['name'] = Translation::get('TypeName', null, $parentNamespace);
-
-                    $blocks[$packageId]['image'] = Theme::getInstance()->getImagePath($parentNamespace, 'Logo/16');
+                    $blockGlyph = new NamespaceIdentGlyph(
+                        $blockType, true, false, false, Theme::ICON_MINI, array('fa-fw')
+                    );
 
                     $blocks[$packageId]['components'][] = array(
-                        BlockRenderer::BLOCK_PROPERTY_ID => $blockId,
+                        BlockRenderer::BLOCK_PROPERTY_ID => $blockType,
                         BlockRenderer::BLOCK_PROPERTY_NAME => Translation::get($blockName, null, $packageId),
-                        BlockRenderer::BLOCK_PROPERTY_IMAGE => BlockRenderer::getImagePath($packageId, $blockName));
+                        BlockRenderer::BLOCK_PROPERTY_IMAGE => $blockGlyph->render()
+                    );
                 }
             }
         }
@@ -102,17 +111,19 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $columnCondition = new EqualityCondition(
             new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($tabElement->getId()));
+            new StaticConditionVariable($tabElement->getId())
+        );
 
         $columnIdentifiers = self::distinct(
-            Element::class_name(),
-            new DataClassDistinctParameters(
+            Element::class_name(), new DataClassDistinctParameters(
                 $columnCondition,
-                new DataClassProperties(array(new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)))));
+                new DataClassProperties(array(new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)))
+            )
+        );
 
         $condition = new InCondition(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_PARENT_ID),
-            $columnIdentifiers);
+            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_PARENT_ID), $columnIdentifiers
+        );
 
         return self::retrieves(Block::class_name(), new DataClassRetrievesParameters($condition));
     }
@@ -120,14 +131,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      *
      * @param integer $userIdentifier
+     *
      * @return boolean
      */
     public static function truncateHome($userIdentifier)
     {
         return self::deletes(
-            Element::class_name(),
-            new EqualityCondition(
+            Element::class_name(), new EqualityCondition(
                 new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_USER_ID),
-                new StaticConditionVariable($userIdentifier)));
+                new StaticConditionVariable($userIdentifier)
+            )
+        );
     }
 }

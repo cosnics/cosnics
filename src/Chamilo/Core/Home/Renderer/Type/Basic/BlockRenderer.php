@@ -108,43 +108,6 @@ class BlockRenderer
     }
 
     /**
-     * Returns the default image to be displayed for block's creation.
-     * Can be redefined in subclasses to change the
-     * default icon.
-     *
-     * @todo : not so good. would be better to make the whole "create block" a view.
-     * @param string $application
-     * @param string $type
-     * @param string $size
-     *
-     * @return string
-     */
-    public static function getImagePath($context, $type)
-    {
-        $class = $context . '\Type\\' . StringUtilities::getInstance()->createString($type)->upperCamelize();
-
-        if (method_exists($class, 'getDefaultImagePath'))
-        {
-            return $class::getDefaultImagePath();
-        }
-        else
-        {
-            $imagePath = Theme::getInstance()->getImagePath($context, 'Blocks/' . $type, 'png', false);
-
-            if (! file_exists($imagePath) || ! is_file($imagePath))
-            {
-                return Theme::getInstance()->getImagePath(
-                    ClassnameUtilities::getInstance()->getNamespaceParent($context, 4),
-                    'Logo/' . Theme::ICON_MEDIUM);
-            }
-            else
-            {
-                return Theme::getInstance()->getImagePath($context, 'Blocks/' . $type);
-            }
-        }
-    }
-
-    /**
      *
      * @return \Chamilo\Core\Home\Renderer\Renderer
      */

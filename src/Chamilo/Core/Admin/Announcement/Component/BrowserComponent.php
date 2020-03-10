@@ -16,7 +16,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -28,14 +27,21 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 class BrowserComponent extends Manager implements TableSupport, DelegateComponent
 {
-    const PARAM_FILTER = 'filter';
-    const PARAM_PUBLICATION_TYPE = 'publication_type';
-    const TYPE_ALL = 1;
-    const TYPE_FOR_ME = 2;
-    const TYPE_FROM_ME = 3;
-    const FILTER_TODAY = 'today';
-    const FILTER_THIS_WEEK = 'week';
     const FILTER_THIS_MONTH = 'month';
+
+    const FILTER_THIS_WEEK = 'week';
+
+    const FILTER_TODAY = 'today';
+
+    const PARAM_FILTER = 'filter';
+
+    const PARAM_PUBLICATION_TYPE = 'publication_type';
+
+    const TYPE_ALL = 1;
+
+    const TYPE_FOR_ME = 2;
+
+    const TYPE_FROM_ME = 3;
 
     /**
      * @var \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
@@ -60,54 +66,6 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @return string
-     * @throws \Exception
-     */
-    private function get_publications_html()
-    {
-        $translator = $this->getTranslator();
-        $parameters = $this->get_parameters();
-        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
-            $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-
-        $type = $this->get_type();
-
-        $tabs = new DynamicVisualTabsRenderer('browser');
-
-        if ($this->getUser()->is_platform_admin())
-        {
-            $tabs->add_tab(
-                new DynamicVisualTab(
-                    self::TYPE_ALL, $translator->trans('AllPublications'), new FontAwesomeGlyph('globe', array('fa-lg'), null, 'fas'),
-                    $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_ALL)), $type == self::TYPE_ALL
-                )
-            );
-        }
-
-        $tabs->add_tab(
-            new DynamicVisualTab(
-                self::TYPE_FROM_ME, $translator->trans('PublishedForMe'), new FontAwesomeGlyph('share-square', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FOR_ME)), $type == self::TYPE_FOR_ME
-            )
-        );
-
-        $tabs->add_tab(
-            new DynamicVisualTab(
-                self::TYPE_FROM_ME, $translator->trans('MyPublications'), new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FROM_ME)), $type == self::TYPE_FROM_ME
-            )
-        );
-
-        $table = new PublicationTable(
-            $this, $this->getPublicationService(), $this->getRightsService(), $this->getUserService(),
-            $this->getGroupService()
-        );
-        $tabs->set_content($table->render());
-
-        return $tabs->render();
     }
 
     /**
@@ -176,6 +134,78 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         return $this->buttonToolbarRenderer;
     }
 
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    private function get_publications_html()
+    {
+        $translator = $this->getTranslator();
+        $parameters = $this->get_parameters();
+        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
+            $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+
+        $type = $this->get_type();
+
+        $tabs = new DynamicVisualTabsRenderer('browser');
+
+        if ($this->getUser()->is_platform_admin())
+        {
+            $tabs->add_tab(
+                new DynamicVisualTab(
+                    self::TYPE_ALL, $translator->trans('AllPublications', array(), self::package()),
+                    new FontAwesomeGlyph('globe', array('fa-lg'), null, 'fas'),
+                    $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_ALL)), $type == self::TYPE_ALL
+                )
+            );
+        }
+
+        $tabs->add_tab(
+            new DynamicVisualTab(
+                self::TYPE_FROM_ME, $translator->trans('PublishedForMe', array(), self::package()),
+                new FontAwesomeGlyph('share-square', array('fa-lg'), null, 'fas'),
+                $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FOR_ME)), $type == self::TYPE_FOR_ME
+            )
+        );
+
+        $tabs->add_tab(
+            new DynamicVisualTab(
+                self::TYPE_FROM_ME, $translator->trans('MyPublications', array(), self::package()),
+                new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'),
+                $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FROM_ME)), $type == self::TYPE_FROM_ME
+            )
+        );
+
+        $table = new PublicationTable(
+            $this, $this->getPublicationService(), $this->getRightsService(), $this->getUserService(),
+            $this->getGroupService()
+        );
+        $tabs->set_content($table->render());
+
+        return $tabs->render();
+    }
+
+    public function get_search_condition()
+    {
+        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        if (isset($query) && $query != '')
+        {
+            $conditions[] = new PatternMatchCondition(
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
+                '*' . $query . '*'
+            );
+
+            $conditions[] = new PatternMatchCondition(
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                '*' . $query . '*'
+            );
+
+            return new OrCondition($conditions);
+        }
+
+        return null;
+    }
+
     public function get_table_condition($table_class_name)
     {
         $conditions = array();
@@ -230,27 +260,6 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         {
             return null;
         }
-    }
-
-    public function get_search_condition()
-    {
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        if (isset($query) && $query != '')
-        {
-            $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
-                '*' . $query . '*'
-            );
-
-            $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
-                '*' . $query . '*'
-            );
-
-            return new OrCondition($conditions);
-        }
-
-        return null;
     }
 
     public function get_type()

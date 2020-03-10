@@ -1,51 +1,129 @@
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type
+ */
+.fas-ci-e2608fb8e2c424fb76b776bd914fd29b,
+.fas-ci-ebaa95102c37c2d52fe90d5b1571dea5,
+.fas-ci-5b09c72129c016f18fb82ebe9a04ea02,
+.fas-ci-65fef410e12f2a200c044ffc85393740,
+.fas-ci-b0da474f22e413845287c7dbfdb77add,
+.fas-ci-6fc14ea42cdb3e51fd379d8b42b0a418,
+.fas-ci-ef27e2983874eca39f57e78ff07af742,
+.fas-ci-6321595e59e7069750790ccc882cb33f,
+.fas-ci-c895a8aabf14be379bf43f4b2cefeb0a {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\AssignmentNotifications
+ */
+.fas-ci-e2608fb8e2c424fb76b776bd914fd29b:before {
+    content: "\f658";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\AssignmentSubmissions
+ */
+.fas-ci-ebaa95102c37c2d52fe90d5b1571dea5:before {
+    content: "\f01c";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\CourseList
+ */
+.fas-ci-5b09c72129c016f18fb82ebe9a04ea02:before {
+    content: "\f51b";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\CourseMenu
+ */
+.fas-ci-65fef410e12f2a200c044ffc85393740:before {
+    content: "\f0ad";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\EndingAssignments
+ */
+.fas-ci-b0da474f22e413845287c7dbfdb77add:before {
+    content: "\f2f2";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\FilteredCourseList
+ */
+.fas-ci-6fc14ea42cdb3e51fd379d8b42b0a418:before {
+    content: "\f51c";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\NewAnnouncements
+ */
+.fas-ci-ef27e2983874eca39f57e78ff07af742:before {
+    content: "\f130";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\NewAssignments
+ */
+.fas-ci-6321595e59e7069750790ccc882cb33f:before {
+    content: "\f093";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\NewDocuments
+ */
+.fas-ci-c895a8aabf14be379bf43f4b2cefeb0a:before {
+    content: "\f07c";
+}
+
 .portal-block-course-list ul.list-group {
-	margin: 10px 0px;
+    margin: 10px 0px;
 }
 
 .portal-block-course-list ul.list-group li.list-group-item {
-	border: 0px solid white;
-	padding: 5px 15px;
+    border: 0px solid white;
+    padding: 5px 15px;
 }
 
 span.badge-date {
-	font-weight: normal;
-	opacity: 0.5;
-	background-color: #337ab7;
+    font-weight: normal;
+    opacity: 0.5;
+    background-color: #337ab7;
 }
 
-@media ( min-width : 768px) {
-	.portal-block-content.list-group.portal-block-new-list {
-		max-height: 500px;
-		overflow: auto;
-	}
+@media ( min-width: 768px) {
+    .portal-block-content.list-group.portal-block-new-list {
+        max-height: 500px;
+        overflow: auto;
+    }
 }
 
-.portal-block-content.list-group.portal-block-new-list .list-group-item .list-group-item-text
-	{
-	color: #337ab7;
-	font-size: 13px;
+.portal-block-content.list-group.portal-block-new-list .list-group-item .list-group-item-text {
+    color: #337ab7;
+    font-size: 13px;
 }
 
 .notifications-block {
-	max-height: 500px;
-	overflow-y: scroll;
+    max-height: 500px;
+    overflow-y: scroll;
 }
 
 .notifications-block .list-group-item {
-	border-left: none;
+    border-left: none;
 }
 
 .notifications-block .list-group-item:last-child {
-	border-bottom: none;
+    border-bottom: none;
 }
 
 .notifications-block-new-label {
-	background-color: red;
-	color: white !important;
-	border-radius: 20px;
-	padding: 5px 8px;
-	font-size: 10px;
-	margin-left: 5px;
-	margin-right: 5px;
-	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    background-color: red;
+    color: white !important;
+    border-radius: 20px;
+    padding: 5px 8px;
+    font-size: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 }

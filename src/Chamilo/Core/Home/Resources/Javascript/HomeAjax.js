@@ -90,10 +90,10 @@ $(function()
         {
             var availablePackage = $('<option></option>');
             availablePackage.attr('value', i);
-            
-            packageImage = $('<img />');
-            packageImage.prop('src', availableBlocks[i].image);
+
+            packageImage = $(availableBlocks[i].image);
             availablePackage.append(packageImage);
+            availablePackage.append('&nbsp;');
             
             availablePackage.append(availableBlocks[i].name);
             
@@ -114,7 +114,7 @@ $(function()
                 var blockName = availableBlocks[i].components[j].name;
                 
                 var column = $('<div />');
-                column.addClass('col-xs-12 col-sm-4 col-md-3 col-lg-2');
+                column.addClass('col-xs-12 col-sm-6 col-md-4 col-lg-3');
                 
                 var availableComponent = $('<a />');
                 column.append(availableComponent);
@@ -124,11 +124,9 @@ $(function()
                 availableComponent.attr('data-block', availableBlocks[i].components[j].id);
                 availableComponent.prop('title', availableBlocks[i].components[j].name);
                 
-                componentImage = $('<img />');
-                componentImage.css('width', '16px');
-                componentImage.css('height', '16px');
-                componentImage.prop('src', availableBlocks[i].components[j].image);
+                componentImage = $(availableBlocks[i].components[j].image);
                 availableComponent.append(componentImage);
+                availableComponent.append('&nbsp;');
                 
                 availableComponent.append(availableBlocks[i].components[j].name);
                 
