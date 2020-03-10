@@ -1,7 +1,6 @@
 <template>
     <div id="app">
         <div>
-
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <!--            <transition name="fade">
@@ -25,7 +24,7 @@
                 <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
             </div>
         </div>
-        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -47,9 +46,6 @@
         }
 
         async created() {
-            window.onmouseover= (e: MouseEvent) => {
-                this.store.overCategoryHandleArea =  ((e.target! as any).className.indexOf('handle-area-category') !== -1);
-            };
 
             await this.store.fetchData();
         }
