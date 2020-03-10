@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -172,10 +173,14 @@ class Basic extends Html
                 $title = $block->get_title();
 
                 $html[] = '<h2>';
-                $html[] = '<img style="vertical-align: middle;" src="' . Theme::getInstance()->getImagePath(
-                        $this->getBlockNamespace($block),
-                        ClassnameUtilities::getInstance()->getClassnameFromObject($block)
-                    ) . '"/> ';
+
+                $glyph = new NamespaceIdentGlyph(
+                    $this->getBlockNamespace($block) . '\Block\\' .
+                    ClassnameUtilities::getInstance()->getClassnameFromObject($block), false, false, false, null,
+                    array()
+                );
+
+                $html[] = $glyph->render();
                 $html[] = $title;
                 $html[] = '</h2>';
                 $html[] = BlockRenditionImplementation::launch(
@@ -218,12 +223,15 @@ class Basic extends Html
                         $trail->add(new Breadcrumb($this->get_context()->get_url($block_parameters), $title));
                     }
 
+                    $glyph = new NamespaceIdentGlyph(
+                        $this->getBlockNamespace($block) . '\Block\\' .
+                        ClassnameUtilities::getInstance()->getClassnameFromObject($block), true, false, false,
+                        Theme::ICON_SMALL, array()
+                    );
+
                     $tabs->add_tab(
                         new DynamicVisualTab(
-                            $key, $title, Theme::getInstance()->getImagePath(
-                            $this->getBlockNamespace($block),
-                            ClassnameUtilities::getInstance()->getClassnameFromObject($block)
-                        ), $this->get_context()->get_url($block_parameters), $is_current_block
+                            $key, $title, $glyph, $this->get_context()->get_url($block_parameters), $is_current_block
                         )
                     );
                 }
