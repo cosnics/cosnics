@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Instance\Component;
 
+use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Core\Repository\Instance\Form\InstanceForm;
 use Chamilo\Core\Repository\Instance\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
@@ -8,15 +9,16 @@ use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -28,7 +30,7 @@ class CreatorComponent extends Manager
         $trail = BreadcrumbTrail::getInstance();
         $trail->add_help('external_instance general');
 
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -46,10 +48,9 @@ class CreatorComponent extends Manager
                 $this->redirect(
                     Translation::get(
                         $success ? 'ObjectAdded' : 'ObjectNotAdded',
-                        array('OBJECT' => Translation::get('ExternalInstance')),
-                        Utilities::COMMON_LIBRARIES),
-                    ($success ? false : true),
-                    array(self::PARAM_ACTION => self::ACTION_BROWSE));
+                        array('OBJECT' => Translation::get('ExternalInstance')), Utilities::COMMON_LIBRARIES
+                    ), ($success ? false : true), array(self::PARAM_ACTION => self::ACTION_BROWSE)
+                );
             }
             else
             {
@@ -85,21 +86,25 @@ class CreatorComponent extends Manager
 
                 foreach ($instance_types['types'][$category] as $type => $registration)
                 {
+                    $glyph = new NamespaceIdentGlyph(
+                        $registration->get_context(), true, false, false, Theme::ICON_BIG, array()
+                    );
+
                     $types_html[] = '<a href="' . $this->get_url(
-                        array(self::PARAM_IMPLEMENTATION => $registration->get_context())) .
-                         '"><div class="create_block" style="background-image: url(' . Theme::getInstance()->getImagePath(
-                            $registration->get_context(),
-                            'Logo/48') . ');">';
+                            array(self::PARAM_IMPLEMENTATION => $registration->get_context())
+                        ) . '"><div class="create_block">';
+                    $types_html[] = $glyph->render(); 
                     $types_html[] = Translation::get('TypeName', null, $registration->get_context());
                     $types_html[] = '</div></a>';
                 }
 
                 $tabs->add_tab(
                     new DynamicContentTab(
-                        $category,
-                        $category_name,
+                        $category, $category_name,
                         Theme::getInstance()->getImagePath('Chamilo/Core/Repository/External', 'Category/' . $category),
-                        implode(PHP_EOL, $types_html)));
+                        implode(PHP_EOL, $types_html)
+                    )
+                );
             }
 
             $html = array();
@@ -125,8 +130,9 @@ class CreatorComponent extends Manager
 
         while ($active_manager = $active_managers->next_result())
         {
-            $package_info = \Chamilo\Configuration\Package\Storage\DataClass\Package::get(
-                $active_manager->get_context());
+            $package_info = Package::get(
+                $active_manager->get_context()
+            );
 
             $section = $package_info->get_category() ? $package_info->get_category() : 'various';
 
@@ -144,25 +150,27 @@ class CreatorComponent extends Manager
 
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_TYPE),
-                new StaticConditionVariable($active_manager->get_context()));
+                new StaticConditionVariable($active_manager->get_context())
+            );
             $parameters = new DataClassCountParameters($condition);
             $count = DataManager::count(Instance::class_name(), $parameters);
 
-            if (! $multiple && $count > 0)
+            if (!$multiple && $count > 0)
             {
                 continue;
             }
 
-            if (! in_array($section, array_keys($sections)))
+            if (!in_array($section, array_keys($sections)))
             {
                 $sections[$section] = Translation::get(
-                    (string) StringUtilities::getInstance()->createString($section)->upperCamelize(),
-                    null,
+                    (string) StringUtilities::getInstance()->createString($section)->upperCamelize(), null,
                     ClassnameUtilities::getInstance()->getNamespaceParent(
-                        ClassnameUtilities::getInstance()->getNamespaceParent($package_info->get_context())));
+                        ClassnameUtilities::getInstance()->getNamespaceParent($package_info->get_context())
+                    )
+                );
             }
 
-            if (! isset($types[$section]))
+            if (!isset($types[$section]))
             {
                 $types[$section] = array();
             }
@@ -172,6 +180,7 @@ class CreatorComponent extends Manager
         }
 
         asort($sections);
+
         return array('sections' => $sections, 'types' => $types);
     }
 }

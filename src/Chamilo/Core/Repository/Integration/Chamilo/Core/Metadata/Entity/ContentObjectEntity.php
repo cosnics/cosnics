@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Entity;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -29,46 +29,46 @@ class ContentObjectEntity extends DataClassEntity
 
     /**
      *
-     * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getType()
+     * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getDisplayName()
      */
-    public function getType()
+    public function getDisplayName()
     {
-        $dataClassName = $this->getDataClassName();
-        return Translation::get('TypeName', null, $dataClassName::package());
+        return $this->getDataClass()->get_title();
     }
 
-    /**
+    /**F
+     * @param integer $size
      *
-     * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getIcon()
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function getIcon($size = Theme::ICON_MINI)
     {
         $dataClass = $this->getDataClass();
         $dataClassName = $this->getDataClassName();
-        
+
         if ($dataClass instanceof ContentObject)
         {
             return $dataClass->get_icon_image($size);
         }
         else
         {
-            return Theme::getInstance()->getImage(
-                'Logo/' . $size, 
-                'png', 
-                $this->getType(), 
-                null, 
-                ToolbarItem::DISPLAY_ICON, 
-                false, 
-                $dataClassName::package());
+            $glyph = new NamespaceIdentGlyph(
+                $dataClassName::package(), true, false, false, $size, array()
+            );
+
+            return $glyph->render();
         }
     }
 
     /**
      *
-     * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getDisplayName()
+     * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getType()
      */
-    public function getDisplayName()
+    public function getType()
     {
-        return $this->getDataClass()->get_title();
+        $dataClassName = $this->getDataClassName();
+
+        return Translation::get('TypeName', null, $dataClassName::package());
     }
 }

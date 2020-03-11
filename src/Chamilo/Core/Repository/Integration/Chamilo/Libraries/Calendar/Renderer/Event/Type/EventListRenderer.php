@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -79,10 +80,11 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
                                 '">';
                         }
 
-                        $render[] =
-                            '<img src="' . Theme::getInstance()->getImagePath($attachment->context(), 'Logo/16') .
-                            '" alt="' . htmlentities(Translation::get('TypeName', null, $attachment->context())) .
-                            '"/>';
+                        $glyph = new NamespaceIdentGlyph(
+                            $attachment->context(), true, false, false, Theme::ICON_MINI, array('fa-fw')
+                        );
+
+                        $render[] = $glyph->render();
                         $render[] = ' ';
                         $render[] = $attachment->get_title();
 

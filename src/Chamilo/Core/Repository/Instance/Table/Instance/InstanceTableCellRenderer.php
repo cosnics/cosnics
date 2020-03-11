@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Instance\Table\Instance;
 use Chamilo\Core\Repository\Instance\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -19,29 +20,6 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class InstanceTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
-
-    /**
-     * Renders a single cell
-     *
-     * @param TableColumn $column
-     * @param mixed $result
-     *
-     * @return string
-     */
-    public function render_cell($column, $result)
-    {
-        switch ($column->get_name())
-        {
-            case Instance::PROPERTY_IMPLEMENTATION :
-                $name = htmlentities(Translation::get('ImplementationName', null, $result->get_implementation()));
-
-                return '<img src="' . Theme::getInstance()->getImagePath($result->get_implementation(), 'Logo/22') .
-                    '" alt="' . $name . '" title="' . $name . '"/>';
-                break;
-        }
-
-        return parent::render_cell($column, $result);
-    }
 
     /**
      * Returns the actions toolbar
@@ -116,5 +94,31 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
         );
 
         return $toolbar->as_html();
+    }
+
+    /**
+     * Renders a single cell
+     *
+     * @param TableColumn $column
+     * @param mixed $result
+     *
+     * @return string
+     */
+    public function render_cell($column, $result)
+    {
+        switch ($column->get_name())
+        {
+            case Instance::PROPERTY_IMPLEMENTATION :
+                $name = htmlentities(Translation::get('ImplementationName', null, $result->get_implementation()));
+
+                $glyph = new NamespaceIdentGlyph(
+                    $result->get_implementation(), true, false, false, Theme::ICON_SMALL, array(), $name
+                );
+
+                return $glyph->render();
+                break;
+        }
+
+        return parent::render_cell($column, $result);
     }
 }

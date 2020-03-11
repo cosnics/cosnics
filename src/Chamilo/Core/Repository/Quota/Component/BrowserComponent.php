@@ -18,7 +18,6 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -178,9 +177,7 @@ class BrowserComponent extends Manager implements TableSupport
                         $tabs->add_tab(
                             new DynamicContentTab(
                                 RequestTable::TYPE_PENDING, Translation::get('PendingRequests'),
-                                Theme::getInstance()->getImagePath(
-                                    'Chamilo\Core\Repository\Quota', 'Decision/22/' . Request::DECISION_PENDING
-                                ), $table->as_html()
+                                new FontAwesomeGlyph('hourglass-half', array('fa-lg'), null, 'fas'), $table->as_html()
                             )
                         );
                     }
@@ -205,9 +202,7 @@ class BrowserComponent extends Manager implements TableSupport
                         $tabs->add_tab(
                             new DynamicContentTab(
                                 RequestTable::TYPE_GRANTED, Translation::get('GrantedRequests'),
-                                Theme::getInstance()->getImagePath(
-                                    'Chamilo\Core\Repository\Quota', 'Decision/22/' . Request::DECISION_GRANTED
-                                ), $table->as_html()
+                                new FontAwesomeGlyph('check-square', array('fa-lg'), null, 'fas'), $table->as_html()
                             )
                         );
                     }
@@ -232,9 +227,7 @@ class BrowserComponent extends Manager implements TableSupport
                         $tabs->add_tab(
                             new DynamicContentTab(
                                 RequestTable::TYPE_DENIED, Translation::get('DeniedRequests'),
-                                Theme::getInstance()->getImagePath(
-                                    'Chamilo\Core\Repository\Quota', 'Decision/22/' . Request::DECISION_DENIED
-                                ), $table->as_html()
+                                new FontAwesomeGlyph('times-circle', array('fa-lg'), null, 'fas'), $table->as_html()
                             )
                         );
                     }
@@ -297,8 +290,7 @@ class BrowserComponent extends Manager implements TableSupport
 
                 $toolActions->addButton(
                     new Button(
-                        Translation::get('ResetTotal'),
-                        new FontAwesomeGlyph('undo', array(), null, 'fas'),
+                        Translation::get('ResetTotal'), new FontAwesomeGlyph('undo', array(), null, 'fas'),
                         $this->get_url(array(self::PARAM_RESET_CACHE => 1))
                     )
                 );

@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Manager as RepositoryManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -69,11 +70,12 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
         switch ($column->get_name())
         {
             case Instance::PROPERTY_IMPLEMENTATION :
-                return Theme::getInstance()->getImage(
-                    'Logo/' . Theme::ICON_MINI, 'png',
-                    Translation::get('TypeName', null, $external_instance->get_implementation()), null,
-                    ToolbarItem::DISPLAY_ICON, false, $external_instance->get_implementation()
+                $glyph = new NamespaceIdentGlyph(
+                    $external_instance->get_implementation(), true, false, false, Theme::ICON_MINI, array(),
+                    Translation::get('TypeName', null, $external_instance->get_implementation())
                 );
+
+                return $glyph->render();
             case Instance::PROPERTY_TITLE :
                 return StringUtilities::getInstance()->truncate($external_instance->get_title(), 50);
         }
