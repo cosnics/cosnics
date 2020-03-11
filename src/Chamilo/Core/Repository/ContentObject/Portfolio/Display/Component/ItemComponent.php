@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Infrastructure\Servi
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
-use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -110,9 +109,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
                 $html[] = '</div>';
             }
         }
-
-        $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::getInstance());
-        $userPictureProvider = $userPictureProviderFactory->getActivePictureProvider();
+        $userPictureProvider = $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
         $userPicture = $userPictureProvider->getUserPictureAsBase64String(
             $this->get_root_content_object()->get_owner(), $this->getUser()
         );

@@ -78,11 +78,6 @@ class ApplicationItemRenderer extends ItemRenderer
             }
             else
             {
-                $integrationNamespace = $item->getApplication() . '\Integration\Chamilo\Core\Menu';
-                $imagePath = $this->getThemeUtilities()->getImagePath(
-                    $integrationNamespace, 'Menu' . ($isSelected ? 'Selected' : '')
-                );
-
                 $glyph = new NamespaceIdentGlyph(
                     $item->getApplication(), false, false, false, Theme::ICON_MEDIUM, array(), $title
                 );

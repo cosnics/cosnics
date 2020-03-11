@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults autowire="true"
@@ -27,6 +27,17 @@
 
         <service id="Chamilo\Core\User\Factory\SessionHandlerFactory">
             <argument key="$configuredSessionHandler">%chamilo.configuration.session.session_handler%</argument>
+        </service>
+
+        <service id="Chamilo\Core\User\Picture\UserPictureProviderFactory"/>
+
+        <service id="Chamilo\Core\User\Picture\UserPictureProviderInterface"
+                 alias="Chamilo\Core\User\Picture\UserPictureProvider"/>
+
+        <service id="Chamilo\Core\User\Picture\UserPictureProvider"
+                 class="Chamilo\Core\User\Picture\UserPictureProviderInterface">
+            <factory service="Chamilo\Core\User\Picture\UserPictureProviderFactory"
+                     method="getActivePictureProvider"/>
         </service>
 
     </services>

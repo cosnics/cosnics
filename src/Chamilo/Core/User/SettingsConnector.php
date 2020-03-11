@@ -3,6 +3,7 @@ namespace Chamilo\Core\User;
 
 use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use function Strftime;
 
 /**
@@ -18,16 +19,13 @@ use function Strftime;
  */
 class SettingsConnector
 {
+    use DependencyInjectionContainerTrait;
 
-    public function get_fullname_formats()
+    /**
+     */
+    public function __construct()
     {
-        return User::get_fullname_format_options();
-    }
-
-    function get_date_terms_and_conditions_update()
-    {
-        $date_format = '%e-%m-%Y';
-        return array(Strftime($date_format, Manager::get_date_terms_and_conditions_last_modified()));
+        $this->initializeContainer();
     }
 
     /**
@@ -37,7 +35,18 @@ class SettingsConnector
      */
     public function getUserPictureProviders()
     {
-        $userPictureProviderFactory = new UserPictureProviderFactory();
-        return $userPictureProviderFactory->getAvailablePictureProviders();
+        return $this->getService(UserPictureProviderFactory::class)->getAvailablePictureProviders();
+    }
+
+    function get_date_terms_and_conditions_update()
+    {
+        $date_format = '%e-%m-%Y';
+
+        return array(Strftime($date_format, Manager::get_date_terms_and_conditions_last_modified()));
+    }
+
+    public function get_fullname_formats()
+    {
+        return User::get_fullname_format_options();
     }
 }

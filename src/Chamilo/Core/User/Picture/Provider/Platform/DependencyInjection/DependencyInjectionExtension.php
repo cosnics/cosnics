@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\User\DependencyInjection;
+namespace Chamilo\Core\User\Picture\Provider\Platform\DependencyInjection;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\PathBuilder;
@@ -28,16 +28,13 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function getAlias()
     {
-        return 'chamilo.core.user';
+        return 'chamilo.core.user.picture.provider.platform';
     }
 
     /**
-     * Loads a specific configuration.
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
-     * @param array $config An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
      * @throws \Exception
      */
     public function load(array $config, ContainerBuilder $container)
@@ -45,7 +42,10 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
 
         $loader = new XmlFileLoader(
-            $container, new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\User') . 'DependencyInjection')
+            $container, new FileLocator(
+                $pathBuilder->getConfigurationPath('Chamilo\Core\User\Picture\Provider\Platform') .
+                'DependencyInjection'
+            )
         );
 
         $loader->load('services.xml');

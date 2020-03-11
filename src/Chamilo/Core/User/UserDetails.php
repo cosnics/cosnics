@@ -1,15 +1,15 @@
 <?php
 namespace Chamilo\Core\User;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class UserDetails
 {
+    use DependencyInjectionContainerTrait;
 
     /**
      * The user
@@ -31,6 +31,8 @@ class UserDetails
     {
         $this->user = $user;
         $this->border = $border;
+
+        $this->initializeContainer();
     }
 
     /**
@@ -52,8 +54,7 @@ class UserDetails
         $html[] = '</h3>';
         $html[] = '</div>';
 
-        $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::getInstance());
-        $userPictureProvider = $userPictureProviderFactory->getActivePictureProvider();
+        $userPictureProvider = $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
         $userPicture = $userPictureProvider->getUserPictureAsBase64String($this->user, $this->user);
 
         $html[] = '<div class="panel-body">';

@@ -5,8 +5,8 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -17,6 +17,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class PictureForm extends FormValidator
 {
+    use DependencyInjectionContainerTrait;
 
     /**
      * @var \Chamilo\Core\User\Storage\DataClass\User
@@ -35,8 +36,8 @@ class PictureForm extends FormValidator
 
         $this->user = $user;
 
+        $this->initializeContainer();
         $this->build_form();
-
         $this->setDefaults();
     }
 
@@ -45,8 +46,7 @@ class PictureForm extends FormValidator
      */
     public function build_form()
     {
-        $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::getInstance());
-        $userPictureProvider = $userPictureProviderFactory->getActivePictureProvider();
+        $userPictureProvider = $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
 
         // Show user picture
         $this->addElement(

@@ -2,15 +2,11 @@
 namespace Chamilo\Core\User\Table\Approval;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -18,30 +14,6 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
-    use DependencyInjectionContainerTrait;
-
-    /**
-     * Constructor
-     *
-     * @param \Chamilo\Libraries\Format\Table\Table $table
-     *
-     * @throws \Exception
-     */
-    public function __construct($table)
-    {
-        parent::__construct($table);
-
-        $this->initializeContainer();
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
-    {
-        return $this->getService(HashingUtilities::class);
-    }
 
     /**
      * Gets the action links to display
@@ -54,7 +26,7 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
     {
         $toolbar = new Toolbar();
 
-        if ($this->get_user()->is_platform_admin())
+        if ($user->is_platform_admin())
         {
             $um = $this->get_table()->get_component();
             $toolbar->add_item(
@@ -71,50 +43,6 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
             );
         }
 
-        return $toolbar->as_html();
-    }
-
-    private function get_thumbnail_path($image_path)
-    {
-        $thumbnail_path =
-            Path::getInstance()->getTemporaryPath(null, true) . $this->getHashingUtilities()->hashString($image_path) .
-            basename($image_path);
-
-        if (!is_file($thumbnail_path))
-        {
-            $thumbnail_creator = ImageManipulation::factory($image_path);
-            $thumbnail_creator->create_thumbnail(20);
-            $thumbnail_creator->write_to_file($thumbnail_path);
-        }
-
-        return $thumbnail_path;
-    }
-
-    public function render_cell($column, $user)
-    {
-        switch ($column->get_name())
-        {
-            case User::PROPERTY_PICTURE_URI :
-                return $this->render_picture($user);
-        }
-
-        return parent::render_cell($column, $user);
-    }
-
-    private function render_picture($user)
-    {
-        if ($user->has_picture())
-        {
-            $picture = $user->get_full_picture_path();
-            $thumbnail_path = $this->get_thumbnail_path($picture);
-            $thumbnail_url = Path::getInstance()->getTemporaryPath(null, true) . basename($thumbnail_path);
-
-            return '<span style="display:none;">1</span><img src="' . $thumbnail_url . '" alt="' .
-                htmlentities($user->get_fullname()) . '" border="0"/>';
-        }
-        else
-        {
-            return '<span style="display:none;">0</span>';
-        }
+        return $toolbar->render();
     }
 }

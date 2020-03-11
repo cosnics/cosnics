@@ -1,14 +1,13 @@
 <?php
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Picture\UserPictureProviderFactory;
+use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
@@ -30,21 +29,29 @@ class WidgetItemRenderer extends ItemRenderer
     private $configurationConsulter;
 
     /**
+     * @var \Chamilo\Core\User\Picture\UserPictureProviderInterface
+     */
+    private $userPictureProvider;
+
+    /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Core\User\Picture\UserPictureProviderInterface $userPictureProvider ;
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
-        Theme $themeUtilities, ChamiloRequest $request, ConfigurationConsulter $configurationConsulter
+        Theme $themeUtilities, ChamiloRequest $request, ConfigurationConsulter $configurationConsulter,
+        UserPictureProviderInterface $userPictureProvider
     )
     {
         parent::__construct($authorizationChecker, $translator, $itemCacheService, $themeUtilities, $request);
 
         $this->configurationConsulter = $configurationConsulter;
+        $this->userPictureProvider = $userPictureProvider;
     }
 
     /**
@@ -64,9 +71,7 @@ class WidgetItemRenderer extends ItemRenderer
             return '';
         }
 
-        $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::getInstance());
-        $userPictureProvider = $userPictureProviderFactory->getActivePictureProvider();
-        $userPicture = $userPictureProvider->getUserPictureAsBase64String($user, $user);
+        $userPicture = $this->getUserPictureProvider()->getUserPictureAsBase64String($user, $user);
 
         $html = array();
 
@@ -191,6 +196,26 @@ class WidgetItemRenderer extends ItemRenderer
     public function getSettingsUrl()
     {
         return $this->getUserUrl(Manager::ACTION_USER_SETTINGS);
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Picture\UserPictureProviderInterface
+     */
+    public function getUserPictureProvider(): UserPictureProviderInterface
+    {
+        return $this->userPictureProvider;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Picture\UserPictureProviderInterface $userPictureProvider
+     *
+     * @return WidgetItemRenderer
+     */
+    public function setUserPictureProvider(UserPictureProviderInterface $userPictureProvider): WidgetItemRenderer
+    {
+        $this->userPictureProvider = $userPictureProvider;
+
+        return $this;
     }
 
     /**

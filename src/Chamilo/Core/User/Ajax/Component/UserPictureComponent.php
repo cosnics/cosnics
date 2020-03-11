@@ -1,14 +1,12 @@
 <?php
 namespace Chamilo\Core\User\Ajax\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -29,8 +27,7 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
     {
         $user = $this->getUserFromRequest();
 
-        $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::getInstance());
-        $userPictureProvider = $userPictureProviderFactory->getActivePictureProvider();
+        $userPictureProvider = $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
 
         return $userPictureProvider->downloadUserPicture($user, $this->getUser());
     }
@@ -42,9 +39,10 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
      */
     protected function getUserFromRequest()
     {
-        $userId = $this->getRequest()->get(Manager :: PARAM_USER_USER_ID);
+        $userId = $this->getRequest()->get(Manager::PARAM_USER_USER_ID);
 
-        if(empty($userId)) {
+        if (empty($userId))
+        {
             throw new NoObjectSelectedException(
                 Translation::getInstance()->getTranslation('User', null, Manager::context())
             );
@@ -52,10 +50,10 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
 
         $user = DataManager:: retrieve_by_id(User:: class_name(), $userId);
 
-        if(empty($user)) {
+        if (empty($user))
+        {
             throw new ObjectNotExistException(
-                Translation::getInstance()->getTranslation('User', null, Manager::context()),
-                $userId
+                Translation::getInstance()->getTranslation('User', null, Manager::context()), $userId
             );
         }
 

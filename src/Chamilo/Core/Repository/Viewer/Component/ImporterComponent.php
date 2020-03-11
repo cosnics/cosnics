@@ -15,23 +15,24 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Exception;
 
 class ImporterComponent extends Manager implements DelegateComponent
 {
@@ -77,7 +78,7 @@ class ImporterComponent extends Manager implements DelegateComponent
 
                     if (!$new_category->create())
                     {
-                        throw new \Exception(Translation::get('CategoryCreationFailed'));
+                        throw new Exception(Translation::get('CategoryCreationFailed'));
                     }
                     else
                     {
@@ -163,11 +164,11 @@ class ImporterComponent extends Manager implements DelegateComponent
                     new Breadcrumb(
                         $this->get_url(), Translation::get(
                         'ImportType', array(
-                            'TYPE' => Translation::get(
-                                'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize(),
-                                null, \Chamilo\Core\Repository\Manager::context()
-                            )
-                        ), \Chamilo\Core\Repository\Manager::context()
+                        'TYPE' => Translation::get(
+                            'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize(), null,
+                            \Chamilo\Core\Repository\Manager::context()
+                        )
+                    ), \Chamilo\Core\Repository\Manager::context()
                     )
                     )
                 );
@@ -187,28 +188,12 @@ class ImporterComponent extends Manager implements DelegateComponent
                 new Breadcrumb($this->get_url(), Translation::get('ChooseImportFormat'))
             );
 
+            $importTypeSelector = new ImportTypeSelector($this->get_parameters(), $this->get_types());
+
             $html = array();
 
             $html[] = $this->render_header();
-
-            $importTypeSelector = new ImportTypeSelector($this->get_parameters(), $this->get_types());
-
             $html[] = $importTypeSelector->renderTypeSelector();
-
-//            foreach ($this->get_import_types() as $type => $name)
-//            {
-//
-//                $html[] = '<a href="' . $this->get_url(array(self::PARAM_IMPORT_TYPE => $type)) . '">';
-//                $html[] =
-//                    '<div class="create_block" style="background-image: url(' . Theme::getInstance()->getImagePath(
-//                        \Chamilo\Core\Repository\Manager::context(),
-//                        'Import/' . StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString()
-//                    ) . ');">';
-//                $html[] = $name;
-//                $html[] = '</div>';
-//                $html[] = '</a>';
-//            }
-
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
@@ -238,6 +223,36 @@ class ImporterComponent extends Manager implements DelegateComponent
         );
     }
 
+    public function filter_content_object_ids($content_object_ids)
+    {
+        $conditions = array();
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), $content_object_ids
+        );
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE), $this->get_types()
+        );
+        $condition = new AndCondition($conditions);
+
+        $parameters = new DataClassDistinctParameters(
+            $condition, new DataClassProperties(
+                array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))
+            )
+        );
+
+        return DataManager::distinct(ContentObject::class_name(), $parameters);
+    }
+
+    public function getWorkspace()
+    {
+        if (!isset($this->currentWorkspace))
+        {
+            $this->currentWorkspace = new PersonalWorkspace($this->get_user());
+        }
+
+        return $this->currentWorkspace;
+    }
+
     public function get_import_types()
     {
         $import_types = array();
@@ -262,35 +277,5 @@ class ImporterComponent extends Manager implements DelegateComponent
         }
 
         return $import_types;
-    }
-
-    public function filter_content_object_ids($content_object_ids)
-    {
-        $conditions = array();
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), $content_object_ids
-        );
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE), $this->get_types()
-        );
-        $condition = new AndCondition($conditions);
-
-        $parameters = new DataClassDistinctParameters(
-            $condition, new DataClassProperties(
-                array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))
-            )
-        );
-
-        return \Chamilo\Core\Repository\Storage\DataManager::distinct(ContentObject::class_name(), $parameters);
-    }
-
-    public function getWorkspace()
-    {
-        if (!isset($this->currentWorkspace))
-        {
-            $this->currentWorkspace = new PersonalWorkspace($this->get_user());
-        }
-
-        return $this->currentWorkspace;
     }
 }

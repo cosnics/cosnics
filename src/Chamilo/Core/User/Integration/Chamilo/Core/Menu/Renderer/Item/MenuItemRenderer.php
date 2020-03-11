@@ -62,12 +62,7 @@ abstract class MenuItemRenderer extends ItemRenderer
 
         if ($item->showIcon())
         {
-            $itemNamespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname($item->getType());
-            $itemNamespace = ClassnameUtilities::getInstance()->getNamespaceParent($itemNamespace, 2);
-            $itemType = ClassnameUtilities::getInstance()->getClassnameFromNamespace($item->getType());
-            $imagePath = Theme::getInstance()->getImagePath($itemNamespace, $itemType . ($selected ? 'Selected' : ''));
-
-            $html[] = '<img src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = $this->getGlyph()->render();
         }
 
         if ($item->showTitle())
@@ -97,6 +92,11 @@ abstract class MenuItemRenderer extends ItemRenderer
     {
         $this->classnameUtilities = $classnameUtilities;
     }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
+     */
+    abstract public function getGlyph();
 
     /**
      * @return string

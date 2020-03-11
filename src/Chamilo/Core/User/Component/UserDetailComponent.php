@@ -18,7 +18,6 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -188,15 +187,10 @@ class UserDetailComponent extends Manager
         $table->setHeaderContents(0, 0, Translation::get('UserInformation'));
         $table->setCellAttributes(0, 0, array('colspan' => 3, 'style' => 'text-align: center;'));
 
-        $profilePhotoUrl = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                Manager::PARAM_USER_USER_ID => $user->get_id()
-            )
-        );
+        $userPictureProvider = $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
+        $userPicture = $userPictureProvider->getUserPictureAsBase64String($user, $this->getUser());
 
-        $table->setCellContents(1, 2, '<img src="' . $profilePhotoUrl->getUrl() . '" />');
+        $table->setCellContents(1, 2, '<img class="img-thumbnail" src="' . $userPicture . '" />');
         $table->setCellAttributes(1, 2, array('rowspan' => 4, 'style' => 'width: 120px; text-align: center;'));
 
         $attributes = array(

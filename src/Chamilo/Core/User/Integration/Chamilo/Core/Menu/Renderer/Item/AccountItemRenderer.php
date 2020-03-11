@@ -5,6 +5,7 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\ItemRenderer
@@ -14,13 +15,11 @@ use Chamilo\Libraries\File\Redirect;
 class AccountItemRenderer extends MenuItemRenderer
 {
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
      */
-    public function renderTitle(Item $item)
+    public function getGlyph()
     {
-        return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
+        return new FontAwesomeGlyph('user', array('fa-2x'), null, 'fas');
     }
 
     /**
@@ -49,5 +48,15 @@ class AccountItemRenderer extends MenuItemRenderer
         $currentAction = $this->getRequest()->query->get(Manager::PARAM_ACTION);
 
         return $currentContext == Manager::package() && $currentAction == Manager::ACTION_VIEW_ACCOUNT;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return string
+     */
+    public function renderTitle(Item $item)
+    {
+        return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
     }
 }
