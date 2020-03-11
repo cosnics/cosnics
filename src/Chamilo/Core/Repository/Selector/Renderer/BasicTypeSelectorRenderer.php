@@ -303,7 +303,8 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
         /**
          * Add empty list group items as a css bugfix for the column layout
          */
-        $restOptions = count($options) % 4;
+        $restOptions = (ceil(count($options) / 4) * 4) - count($options);
+
         for ($i = 0; $i < $restOptions; $i ++)
         {
             $html[] = '<li class="list-group-item"></li>';

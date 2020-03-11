@@ -17,6 +17,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
@@ -333,17 +334,20 @@ abstract class Manager extends Application implements NoContextComponent
                         case SynchronizationData::SYNC_STATUS_EXTERNAL :
                             if ($object->is_editable())
                             {
+                                $glyph = new NamespaceIdentGlyph(
+                                    $object::context(), true, false, false, Theme::ICON_MINI, array()
+                                );
+
                                 $toolbar_items[self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY] = new ToolbarItem(
                                     Translation::get(
                                         'UpdateExternalObject',
                                         array('TYPE' => $this->get_external_repository()->get_title())
-                                    ), Theme::getInstance()->getImagePath($object::context(), 'Logo/16'),
-                                    $this->get_url(
-                                        array(
-                                            self::PARAM_ACTION => self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY,
-                                            self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
-                                        )
-                                    ), ToolbarItem::DISPLAY_ICON
+                                    ), $glyph, $this->get_url(
+                                    array(
+                                        self::PARAM_ACTION => self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY,
+                                        self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
+                                    )
+                                ), ToolbarItem::DISPLAY_ICON
                                 );
                             }
                             break;
@@ -359,17 +363,20 @@ abstract class Manager extends Application implements NoContextComponent
                             );
                             if ($object->is_editable())
                             {
+
+                                $glyph = new NamespaceIdentGlyph(
+                                    $object::context(), true, false, false, Theme::ICON_MINI, array()
+                                );
                                 $toolbar_items[self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY] = new ToolbarItem(
                                     Translation::get(
                                         'UpdateExternalObject',
                                         array('TYPE' => $this->get_external_repository()->get_name())
-                                    ), Theme::getInstance()->getImagePath($object::context(), 'Logo/16'),
-                                    $this->get_url(
-                                        array(
-                                            self::PARAM_ACTION => self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY,
-                                            self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
-                                        )
-                                    ), ToolbarItem::DISPLAY_ICON
+                                    ), $glyph, $this->get_url(
+                                    array(
+                                        self::PARAM_ACTION => self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY,
+                                        self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
+                                    )
+                                ), ToolbarItem::DISPLAY_ICON
                                 );
                             }
                             break;

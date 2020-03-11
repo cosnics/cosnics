@@ -10,8 +10,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -77,40 +75,53 @@ class CreatorComponent extends Manager
                 return implode(PHP_EOL, $html);
             }
 
-            $renderer_name = ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
-            $tabs = new DynamicTabsRenderer($renderer_name);
-
             foreach ($instance_types['sections'] as $category => $category_name)
             {
                 $types_html = array();
 
+                $types_html[] = '<div class="content-object-options">';
+                $types_html[] = '<div id="' . $category . '" class="content-object-options-type">';
+                $types_html[] = '<h4>' . $category_name . '</h4>';
+                $types_html[] = '<ul class="list-group">';
+
                 foreach ($instance_types['types'][$category] as $type => $registration)
                 {
                     $glyph = new NamespaceIdentGlyph(
-                        $registration->get_context(), true, false, false, Theme::ICON_BIG, array()
+                        $registration->get_context(), true, false, false, Theme::ICON_MEDIUM, array()
                     );
 
+                    $title = Translation::get('TypeName', null, $registration->get_context());
+
+                    $types_html[] = '<li class="list-group-item">';
+
+                    $types_html[] = $glyph->render();
+                    $types_html[] = '&nbsp;&nbsp;';
                     $types_html[] = '<a href="' . $this->get_url(
                             array(self::PARAM_IMPLEMENTATION => $registration->get_context())
-                        ) . '"><div class="create_block">';
-                    $types_html[] = $glyph->render(); 
-                    $types_html[] = Translation::get('TypeName', null, $registration->get_context());
-                    $types_html[] = '</div></a>';
+                        ) . '" title="' . htmlentities($title) . '">';
+                    $types_html[] = $title;
+                    $types_html[] = '</a>';
+                    $types_html[] = '</li>';
                 }
 
-                $tabs->add_tab(
-                    new DynamicContentTab(
-                        $category, $category_name,
-                        Theme::getInstance()->getImagePath('Chamilo/Core/Repository/External', 'Category/' . $category),
-                        implode(PHP_EOL, $types_html)
-                    )
-                );
+                $restOptions = (ceil(count($instance_types['types'][$category]) / 4) * 4) -
+                    count($instance_types['types'][$category]);
+
+                for ($i = 0; $i < $restOptions; $i ++)
+                {
+                    $types_html[] = '<li class="list-group-item"></li>';
+                }
+
+                $types_html[] = '</ul>';
+                $types_html[] = '</div>';
+                $types_html[] = '</div>';
             }
 
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $tabs->render();
+            //$html[] = $tabs->render();
+            $html[] = implode(PHP_EOL, $types_html);
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
