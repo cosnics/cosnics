@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Choice;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
@@ -53,6 +54,39 @@ class RubricDataRepository extends CommonEntityRepository
         }
 
         $this->flush();
+    }
+
+    /**
+     * @param RubricData $rubricData
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    function deleteRubricData(RubricData $rubricData)
+    {
+        try
+        {
+            $rubricData->setRootNode(null);
+        }
+        catch (InvalidChildTypeException $e) {}
+
+        foreach($rubricData->getTreeNodes() as $treeNode)
+        {
+            $this->removeEntity($treeNode, false);
+        }
+
+        foreach($rubricData->getLevels() as $level)
+        {
+            $this->removeEntity($level, false);
+        }
+
+        foreach($rubricData->getChoices() as $choice)
+        {
+            $this->removeEntity($choice, false);
+        }
+
+        $this->flush();
+
+        $this->removeEntity($rubricData);
     }
 
     /**
@@ -127,4 +161,5 @@ class RubricDataRepository extends CommonEntityRepository
     {
         $this->removeEntity($choice);
     }
+
 }

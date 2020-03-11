@@ -19,7 +19,8 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
     use DependencyInjectionContainerTrait;
 
     /**
-     * Renders the export
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     * @throws \Doctrine\ORM\ORMException
      */
     public function render()
     {
@@ -65,6 +66,13 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
         $level = new Level($rubricData);
         $level->setId(1);
         $level->setTitle('Good');
+
+        $counter = 0;
+        foreach($rubricData->getChoices() as $choice)
+        {
+            $choice->setId($counter);
+            $counter++;
+        }
 
         $jsonFormat = $this->getSerializer()->serialize($rubricData, 'json');
 

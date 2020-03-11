@@ -144,7 +144,7 @@ class Choice
      *
      * @return Choice
      */
-    public function setFeedback(string $feedback): Choice
+    public function setFeedback(string $feedback = null): Choice
     {
         $this->feedback = $feedback;
 

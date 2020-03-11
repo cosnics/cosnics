@@ -195,12 +195,16 @@ class RubricData
      * @return RubricData
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
-    public function setRootNode(TreeNode $rootNode): RubricData
+    public function setRootNode(TreeNode $rootNode = null): RubricData
     {
         $this->rootNode = $rootNode;
-        $this->addTreeNode($rootNode);
 
-        $rootNode->setSort(1);
+        if($rootNode instanceof TreeNode)
+        {
+            $this->addTreeNode($rootNode);
+
+            $rootNode->setSort(1);
+        }
 
         return $this;
     }

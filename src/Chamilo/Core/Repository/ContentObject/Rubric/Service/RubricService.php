@@ -86,4 +86,16 @@ class RubricService
 
         $this->rubricDataRepository->saveRubricData($rubricData);
     }
+
+    /**
+     * @param int $rubricDataId
+     *
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function deleteRubricData(int $rubricDataId)
+    {
+        $rubricData = $this->getRubric($rubricDataId);
+        $this->rubricDataRepository->deleteRubricData($rubricData);
+    }
 }
