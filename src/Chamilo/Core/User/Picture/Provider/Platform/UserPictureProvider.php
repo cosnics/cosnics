@@ -2,8 +2,11 @@
 namespace Chamilo\Core\User\Picture\Provider\Platform;
 
 use Chamilo\Core\User\Picture\UserPictureProviderInterface;
+use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use DateTime;
@@ -14,7 +17,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UserPictureProvider implements UserPictureProviderInterface
+class UserPictureProvider implements UserPictureProviderInterface, UserPictureUpdateProviderInterface
 {
     /**
      * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
@@ -38,10 +41,24 @@ class UserPictureProvider implements UserPictureProviderInterface
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $targetUser
+     * @param \Chamilo\Core\User\Storage\DataClass\User $requestUser
+     */
+    public function deleteUserPicture(User $targetUser, User $requestUser)
+    {
+        if ($this->doesUserHavePicture($targetUser))
+        {
+            $path = $this->getUserPicturePath($targetUser);
+            Filesystem::remove($path);
+            $targetUser->set_picture_uri(null);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $targetUser
      *
      * @return boolean
      */
-    private function doesUserHavePicture(User $targetUser)
+    public function doesUserHavePicture(User $targetUser)
     {
         $uri = $targetUser->get_picture_uri();
 
@@ -152,10 +169,11 @@ class UserPictureProvider implements UserPictureProviderInterface
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param boolean $useFallback
      *
      * @return string
      */
-    private function getUserPicturePath(User $user)
+    private function getUserPicturePath(User $user, $useFallback = true)
     {
         if ($this->doesUserHavePicture($user))
         {
@@ -163,9 +181,38 @@ class UserPictureProvider implements UserPictureProviderInterface
         }
         else
         {
-            return $this->getThemeUtilities()->getImagePath(
-                'Chamilo\Core\User\Picture\Provider\Platform', 'Unknown', 'png', false
-            );
+            if ($useFallback)
+            {
+                return $this->getThemeUtilities()->getImagePath(
+                    'Chamilo\Core\User\Picture\Provider\Platform', 'Unknown', 'png', false
+                );
+            }
+            else
+            {
+                return false;
+            }
         }
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $targetUser
+     * @param \Chamilo\Core\User\Storage\DataClass\User $requestUser
+     * @param string[] $fileInformation
+     */
+    public function setUserPicture(User $targetUser, User $requestUser, array $fileInformation)
+    {
+        $this->deleteUserPicture($targetUser, $requestUser);
+
+        $path = $this->getConfigurablePathBuilder()->getProfilePicturePath();
+        Filesystem::create_dir($path);
+
+        $imageFile = Filesystem::create_unique_name($path, $targetUser->getId() . '-' . $fileInformation['name']);
+        move_uploaded_file($fileInformation['tmp_name'], $path . $imageFile);
+
+        $imageManipulation = ImageManipulation::factory($path . $imageFile);
+        $imageManipulation->scale(400, 400);
+        $imageManipulation->write_to_file();
+
+        $targetUser->set_picture_uri($imageFile);
     }
 }

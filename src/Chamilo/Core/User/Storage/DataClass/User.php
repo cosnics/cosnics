@@ -461,63 +461,6 @@ class User extends DataClass
     }
 
     /**
-     * Determines if this user has uploaded a picture
-     * 
-     * @return boolean
-     */
-    public function has_picture()
-    {
-        $uri = $this->get_picture_uri();
-        return ((strlen($uri) > 0) && (Path::getInstance()->isWebUri($uri) || file_exists(
-            Path::getInstance()->getProfilePicturePath() . $uri)));
-    }
-
-    public function get_full_picture_path()
-    {
-        if ($this->has_picture())
-        {
-            return Path::getInstance()->getProfilePicturePath() . $this->get_picture_uri();
-        }
-        else
-        {
-            return Theme::getInstance()->getImagePath(self::package(), 'Unknown', 'png', false);
-        }
-    }
-
-    /**
-     * Sets the picture file
-     * 
-     * @param array The information of the uploaded file (from the $_FILES- array)
-     * @todo Make image resizing configurable
-     */
-    public function set_picture_file($file_info)
-    {
-        $this->delete_picture();
-        $path = Path::getInstance()->getProfilePicturePath();
-        Filesystem::create_dir($path);
-        $img_file = Filesystem::create_unique_name($path, $this->get_id() . '-' . $file_info['name']);
-        move_uploaded_file($file_info['tmp_name'], $path . $img_file);
-        $image_manipulation = ImageManipulation::factory($path . $img_file);
-        // Scale image to fit in 400x400 box. Should be configurable somewhere
-        $image_manipulation->scale(400, 400);
-        $image_manipulation->write_to_file();
-        $this->set_picture_uri($img_file);
-    }
-
-    /**
-     * Removes the picture connected to this user
-     */
-    public function delete_picture()
-    {
-        if ($this->has_picture())
-        {
-            $path = Path::getInstance()->getProfilePicturePath() . $this->get_picture_uri();
-            Filesystem::remove($path);
-            $this->set_picture_uri(null);
-        }
-    }
-
-    /**
      * Sets the creator ID for this user.
      * 
      * @param $creator_id String the creator ID.

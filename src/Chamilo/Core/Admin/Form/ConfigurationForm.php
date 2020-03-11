@@ -236,7 +236,8 @@ class ConfigurationForm extends FormValidator
                         if ($options_type == 'dynamic')
                         {
                             $options_source = $setting['options']['source'];
-                            $options = call_user_func(array($connector_class, $options_source));
+                            $settingsConnector = new $connector_class();
+                            $options = $settingsConnector->$options_source();
                         }
                         else
                         {

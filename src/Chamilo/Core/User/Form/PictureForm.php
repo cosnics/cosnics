@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\User\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -46,7 +46,7 @@ class PictureForm extends FormValidator
      */
     public function build_form()
     {
-        $userPictureProvider = $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
+        $userPictureProvider = $this->getUserPictureProvider();
 
         // Show user picture
         $this->addElement(
@@ -56,14 +56,12 @@ class PictureForm extends FormValidator
         );
 
         // Picture
-        $allowChangeUserPicture = Configuration::getInstance()->get_setting(
-            array(Manager::context(), 'allow_change_user_picture')
-        );
-        if ($allowChangeUserPicture == 1)
+        if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
         {
             $this->addElement(
                 'file', User::PROPERTY_PICTURE_URI,
-                ($this->user->has_picture() ? Translation::get('UpdateImage') : Translation::get('AddImage'))
+                ($userPictureProvider->doesUserHavePicture($this->user) ? Translation::get('UpdateImage') :
+                    Translation::get('AddImage'))
             );
             $this->addElement('static', null, null, Translation::get('AllowedProfileImageFormats'));
 
@@ -88,6 +86,14 @@ class PictureForm extends FormValidator
     }
 
     /**
+     * @return \Chamilo\Core\User\Picture\UserPictureProviderInterface
+     */
+    public function getUserPictureProvider()
+    {
+        return $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
+    }
+
+    /**
      * Builds an update form
      */
     public function update()
@@ -95,17 +101,15 @@ class PictureForm extends FormValidator
         $user = $this->user;
         $values = $this->exportValues();
 
-        $allowChangeUserPicture = Configuration::getInstance()->get_setting(
-            array(Manager::context(), 'allow_change_user_picture')
-        );
-        if ($allowChangeUserPicture == 1)
-        {
+        $userPictureProvider = $this->getUserPictureProvider();
 
-            if (isset($_FILES['picture_uri']) && strlen($_FILES['picture_uri']['name']) > 0)
+        if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
+        {
+            if (isset($_FILES[User::PROPERTY_PICTURE_URI]) && strlen($_FILES[User::PROPERTY_PICTURE_URI]['name']) > 0)
             {
-                if (!$_FILES['picture_uri']['error'])
+                if (!$_FILES[User::PROPERTY_PICTURE_URI]['error'])
                 {
-                    $user->set_picture_file($_FILES['picture_uri']);
+                    $userPictureProvider->setUserPicture($user, $user, $_FILES[User::PROPERTY_PICTURE_URI]);
                 }
                 else
                 {
@@ -115,7 +119,7 @@ class PictureForm extends FormValidator
 
             if (isset($values['remove_picture']))
             {
-                $user->delete_picture();
+                $userPictureProvider->deleteUserPicture($user, $user);
             }
         }
 

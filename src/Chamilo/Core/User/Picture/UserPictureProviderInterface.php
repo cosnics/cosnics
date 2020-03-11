@@ -12,6 +12,13 @@ interface UserPictureProviderInterface
 {
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return boolean
+     */
+    public function doesUserHavePicture(User $user);
+
+    /**
      * Downloads the user picture
      *
      * @param User $targetUser

@@ -4,8 +4,10 @@ namespace Chamilo\Core\User\Form;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -16,7 +18,6 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Exception;
 
 /**
@@ -28,10 +29,13 @@ class RegisterForm extends FormValidator
     use DependencyInjectionContainerTrait;
 
     // Constants
-    const TYPE_CREATE = 1;
-    const TYPE_EDIT = 2;
-    const RESULT_SUCCESS = 'UserUpdated';
     const RESULT_ERROR = 'UserUpdateFailed';
+
+    const RESULT_SUCCESS = 'UserUpdated';
+
+    const TYPE_CREATE = 1;
+
+    const TYPE_EDIT = 2;
 
     private $parent;
 
@@ -53,15 +57,6 @@ class RegisterForm extends FormValidator
         $this->user = $user;
         $this->build_creation_form();
         $this->setDefaults();
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
-    {
-        return $this->getService(HashingUtilities::class);
     }
 
     /**
@@ -199,10 +194,6 @@ class RegisterForm extends FormValidator
         $values = $this->exportValues();
 
         $password = $values['pw']['pass'] == '1' ? Text::generate_password() : $values['pw'][User::PROPERTY_PASSWORD];
-        if ($_FILES[User::PROPERTY_PICTURE_URI] && file_exists($_FILES[User::PROPERTY_PICTURE_URI]['tmp_name']))
-        {
-            $user->set_picture_file($_FILES[User::PROPERTY_PICTURE_URI]);
-        }
 
         if (DataManager::is_username_available(
             $values[User::PROPERTY_USERNAME], $values[User::PROPERTY_ID]
@@ -261,6 +252,22 @@ class RegisterForm extends FormValidator
                     array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id())
                 );
 
+                $userPictureProvider = $this->getUserPictureProvider();
+
+                if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
+                {
+                    if ($_FILES[User::PROPERTY_PICTURE_URI] &&
+                        file_exists($_FILES[User::PROPERTY_PICTURE_URI]['tmp_name']))
+                    {
+                        $userPictureProvider->setUserPicture($user, $user, $_FILES[User::PROPERTY_PICTURE_URI]);
+
+                        if (!$user->update())
+                        {
+                            return false;
+                        }
+                    }
+                }
+
                 return true;
             }
             else
@@ -275,38 +282,20 @@ class RegisterForm extends FormValidator
     }
 
     /**
-     * Sets default values.
      *
-     * @param array $defaults Default values for this form's parameters.
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
      */
-    public function setDefaults($defaults = array())
+    public function getHashingUtilities()
     {
-        $user = $this->user;
-        if ($this->form_type == self::TYPE_EDIT)
-        {
-            $defaults['pw']['pass'] = 2;
-            $defaults[User::PROPERTY_DATABASE_QUOTA] = $user->get_database_quota();
-            $defaults[User::PROPERTY_DISK_QUOTA] = $user->get_disk_quota();
-        }
-        else
-        {
-            $defaults['pw']['pass'] = $user->get_password();
-            $defaults[User::PROPERTY_DATABASE_QUOTA] = '300';
-            $defaults[User::PROPERTY_DISK_QUOTA] = '209715200';
-        }
+        return $this->getService(HashingUtilities::class);
+    }
 
-        $defaults['admin'][User::PROPERTY_PLATFORMADMIN] = $user->get_platformadmin();
-        $defaults['mail']['send_mail'] = 1;
-        $defaults[User::PROPERTY_ID] = $user->get_id();
-        $defaults[User::PROPERTY_LASTNAME] = $user->get_lastname();
-        $defaults[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
-        $defaults[User::PROPERTY_EMAIL] = $user->get_email();
-        $defaults[User::PROPERTY_USERNAME] = $user->get_username();
-        $defaults[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
-        $defaults[User::PROPERTY_PICTURE_URI] = $user->get_picture_uri();
-        $defaults[User::PROPERTY_PHONE] = $user->get_phone();
-        $defaults['conditions'] = Manager::get_terms_and_conditions();
-        parent::setDefaults($defaults);
+    /**
+     * @return \Chamilo\Core\User\Picture\UserPictureProviderInterface
+     */
+    public function getUserPictureProvider()
+    {
+        return $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
     }
 
     /**
@@ -357,5 +346,40 @@ class RegisterForm extends FormValidator
         catch (Exception $ex)
         {
         }
+    }
+
+    /**
+     * Sets default values.
+     *
+     * @param array $defaults Default values for this form's parameters.
+     */
+    public function setDefaults($defaults = array())
+    {
+        $user = $this->user;
+        if ($this->form_type == self::TYPE_EDIT)
+        {
+            $defaults['pw']['pass'] = 2;
+            $defaults[User::PROPERTY_DATABASE_QUOTA] = $user->get_database_quota();
+            $defaults[User::PROPERTY_DISK_QUOTA] = $user->get_disk_quota();
+        }
+        else
+        {
+            $defaults['pw']['pass'] = $user->get_password();
+            $defaults[User::PROPERTY_DATABASE_QUOTA] = '300';
+            $defaults[User::PROPERTY_DISK_QUOTA] = '209715200';
+        }
+
+        $defaults['admin'][User::PROPERTY_PLATFORMADMIN] = $user->get_platformadmin();
+        $defaults['mail']['send_mail'] = 1;
+        $defaults[User::PROPERTY_ID] = $user->get_id();
+        $defaults[User::PROPERTY_LASTNAME] = $user->get_lastname();
+        $defaults[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
+        $defaults[User::PROPERTY_EMAIL] = $user->get_email();
+        $defaults[User::PROPERTY_USERNAME] = $user->get_username();
+        $defaults[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
+        $defaults[User::PROPERTY_PICTURE_URI] = $user->get_picture_uri();
+        $defaults[User::PROPERTY_PHONE] = $user->get_phone();
+        $defaults['conditions'] = Manager::get_terms_and_conditions();
+        parent::setDefaults($defaults);
     }
 }

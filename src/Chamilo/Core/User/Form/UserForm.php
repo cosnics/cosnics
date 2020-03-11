@@ -5,12 +5,11 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Hashing\HashingUtilities;
@@ -27,13 +26,18 @@ use Exception;
  * @package user.lib.forms
  */
 class UserForm extends FormValidator
+
 {
     use DependencyInjectionContainerTrait;
-    const TYPE_CREATE = 1;
-    const TYPE_EDIT = 2;
-    const RESULT_SUCCESS = 'UserUpdated';
-    const RESULT_ERROR = 'UserUpdateFailed';
     const PARAM_FOREVER = 'forever';
+
+    const RESULT_ERROR = 'UserUpdateFailed';
+
+    const RESULT_SUCCESS = 'UserUpdated';
+
+    const TYPE_CREATE = 1;
+
+    const TYPE_EDIT = 2;
 
     private $parent;
 
@@ -44,6 +48,8 @@ class UserForm extends FormValidator
     private $unencryptedpass;
 
     private $adminDM;
+
+    private $form_type;
 
     /**
      * Creates a new UserForm Used by the admin to create/update a user
@@ -71,31 +77,10 @@ class UserForm extends FormValidator
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
-    {
-        return $this->getService(HashingUtilities::class);
-    }
-
-    /**
      * Creates a basic form
      */
     public function build_basic_form()
     {
-        $profilePhotoUrl = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                Manager::PARAM_USER_USER_ID => $this->user->get_id()
-            )
-        );
-
-        $this->addElement(
-            'html', '<img src="' . $profilePhotoUrl->getUrl() . '" alt="' . $this->user->get_fullname() .
-            '" style="position:absolute; right: 10px; z-index:1; border:1px solid black; max-width: 150px;"/>'
-        );
         // Lastname
         $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array("size" => "50"));
         $this->addRule(
@@ -136,10 +121,12 @@ class UserForm extends FormValidator
 
         // pw
         $group = array();
+
         if ($this->form_type == self::TYPE_EDIT)
         {
             $group[] = &$this->createElement('radio', 'pass', null, Translation::get('KeepPassword') . '<br />', 2);
         }
+
         $group[] = &$this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
         $group[] = &$this->createElement('radio', 'pass', null, null, 0);
         $group[] = &$this->createElement('password', User::PROPERTY_PASSWORD, null, array('autocomplete' => 'off'));
@@ -175,6 +162,15 @@ class UserForm extends FormValidator
             );
         }
 
+        $userPictureProvider = $this->getUserPictureProvider();
+
+        // Show user picture
+        $this->addElement(
+            'static', null, Translation::get('CurrentImage'), '<img class="my-account-photo" src="' .
+            $userPictureProvider->getUserPictureAsBase64String($this->user, $this->user) . '" alt="' .
+            $this->user->get_fullname() . '" />'
+        );
+
         // Picture URI
         $this->addElement('file', User::PROPERTY_PICTURE_URI, Translation::get('AddPicture'));
         $allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif', 'JPG', 'JPEG', 'PNG', 'GIF');
@@ -182,6 +178,7 @@ class UserForm extends FormValidator
             User::PROPERTY_PICTURE_URI, Translation::get('OnlyImagesAllowed'), 'filetype', $allowed_picture_types
         );
         $this->addElement('static', null, null, Translation::get('AllowedProfileImageFormats'));
+
         // Phone Number
         $this->addElement('text', User::PROPERTY_PHONE, Translation::get('PhoneNumber'), array("size" => "50"));
 
@@ -234,6 +231,42 @@ class UserForm extends FormValidator
     }
 
     /**
+     * Creates a creating form
+     */
+    public function build_creation_form()
+    {
+        $this->build_basic_form();
+
+        $buttons[] = $this->createElement(
+            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+        );
+        $buttons[] = $this->createElement(
+            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
+    /**
+     * Creates an editing form
+     */
+    public function build_editing_form()
+    {
+        $this->build_basic_form();
+
+        $this->addElement('hidden', User::PROPERTY_ID);
+
+        $buttons[] = $this->createElement(
+            'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph('arrow-right')
+        );
+        $buttons[] = $this->createElement(
+            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
+    /**
      * Makes sure that users can't change their password to an unsafe value.
      * Password must contain at least 8 characters
      *
@@ -260,109 +293,6 @@ class UserForm extends FormValidator
     }
 
     /**
-     * Creates an editing form
-     */
-    public function build_editing_form()
-    {
-        $this->build_basic_form();
-
-        $this->addElement('hidden', User::PROPERTY_ID);
-
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
-            new FontAwesomeGlyph('arrow-right')
-        );
-        $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
-        );
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
-    /**
-     * Creates a creating form
-     */
-    public function build_creation_form()
-    {
-        $this->build_basic_form();
-
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
-        );
-        $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
-        );
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
-    /**
-     * Updates the user with the new data
-     */
-    public function update_user()
-    {
-        $user = $this->user;
-        $values = $this->exportValues();
-
-        if ($values['pw']['pass'] != '2')
-        {
-            $this->unencryptedpass =
-                $values['pw']['pass'] == '1' ? Text::generate_password() : $values['pw'][User::PROPERTY_PASSWORD];
-            $password = $this->getHashingUtilities()->hashString($this->unencryptedpass);
-            $user->set_password($password);
-        }
-
-        if ($_FILES[User::PROPERTY_PICTURE_URI] && file_exists($_FILES[User::PROPERTY_PICTURE_URI]['tmp_name']))
-        {
-            $user->set_picture_file($_FILES[User::PROPERTY_PICTURE_URI]);
-        }
-
-        $user->set_lastname($values[User::PROPERTY_LASTNAME]);
-        $user->set_firstname($values[User::PROPERTY_FIRSTNAME]);
-        $user->set_email($values[User::PROPERTY_EMAIL]);
-        $user->set_username($values[User::PROPERTY_USERNAME]);
-
-        if ($values['ExpirationDateforever'] != 0)
-        {
-            $user->set_expiration_date(0);
-            $user->set_activation_date(0);
-        }
-        else
-        {
-            $act_date = DatetimeUtilities::time_from_datepicker($values['ExpirationDatefrom_date']);
-            $exp_date = DatetimeUtilities::time_from_datepicker($values['ExpirationDateto_date']);
-            $user->set_activation_date($act_date);
-            $user->set_expiration_date($exp_date);
-        }
-
-        $user->set_official_code($values[User::PROPERTY_OFFICIAL_CODE]);
-        $user->set_phone($values[User::PROPERTY_PHONE]);
-        $user->set_status(intval($values[User::PROPERTY_STATUS]));
-        $user->set_database_quota(intval($values[User::PROPERTY_DATABASE_QUOTA]));
-        $user->set_disk_quota(intval($values[User::PROPERTY_DISK_QUOTA]));
-
-        $user->set_active(intval($values['active'][User::PROPERTY_ACTIVE]));
-        $user->set_platformadmin(intval($values['admin'][User::PROPERTY_PLATFORMADMIN]));
-        $send_mail = intval($values['mail']['send_mail']);
-        if ($send_mail)
-        {
-            $this->send_email($user);
-        }
-
-        $value = $user->update();
-
-        if ($value)
-        {
-            Event::trigger(
-                'Update', Manager::context(), array(
-                    ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
-                    ChangesTracker::PROPERTY_USER_ID => $this->form_user->get_id()
-                )
-            );
-        }
-
-        return $value;
-    }
-
-    /**
      * Creates the user, and stores it in the database
      */
     public function create_user()
@@ -371,11 +301,6 @@ class UserForm extends FormValidator
         $values = $this->exportValues();
 
         $password = $values['pw']['pass'] == '1' ? Text::generate_password() : $values['pw'][User::PROPERTY_PASSWORD];
-
-        if ($_FILES[User::PROPERTY_PICTURE_URI] && file_exists($_FILES[User::PROPERTY_PICTURE_URI]['tmp_name']))
-        {
-            $user->set_picture_file($_FILES[User::PROPERTY_PICTURE_URI]);
-        }
 
         if (DataManager::is_username_available(
             $values[User::PROPERTY_USERNAME], $values[User::PROPERTY_ID]
@@ -431,6 +356,21 @@ class UserForm extends FormValidator
                 $user->add_rights_template_link($rights_template_id);
             }
 
+            $userPictureProvider = $this->getUserPictureProvider();
+
+            if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
+            {
+                if ($_FILES[User::PROPERTY_PICTURE_URI] && file_exists($_FILES[User::PROPERTY_PICTURE_URI]['tmp_name']))
+                {
+                    $userPictureProvider->setUserPicture($user, $user, $_FILES[User::PROPERTY_PICTURE_URI]);
+
+                    if (!$user->update())
+                    {
+                        return false;
+                    }
+                }
+            }
+
             if ($value)
             {
                 Event::trigger(
@@ -444,6 +384,73 @@ class UserForm extends FormValidator
         else
         {
             return - 1; // Username not available
+        }
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     */
+    public function getHashingUtilities()
+    {
+        return $this->getService(HashingUtilities::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Picture\UserPictureProviderInterface
+     */
+    public function getUserPictureProvider()
+    {
+        return $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
+    }
+
+    /**
+     * Sends an email to the updated/new user
+     */
+    public function send_email($user)
+    {
+        $options = array();
+        $options['firstname'] = $user->get_firstname();
+        $options['lastname'] = $user->get_lastname();
+        $options['username'] = $user->get_username();
+        $options['password'] = $this->unencryptedpass;
+        $options['site_name'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
+        $options['site_url'] = Path::getInstance()->getBasePath(true);
+        $options['admin_firstname'] = Configuration::getInstance()->get_setting(
+            array('Chamilo\Core\Admin', 'administrator_firstname')
+        );
+        $options['admin_surname'] = Configuration::getInstance()->get_setting(
+            array('Chamilo\Core\Admin', 'administrator_surname')
+        );
+        $options['admin_telephone'] = Configuration::getInstance()->get_setting(
+            array('Chamilo\Core\Admin', 'administrator_telephone')
+        );
+        $options['admin_email'] = Configuration::getInstance()->get_setting(
+            array('Chamilo\Core\Admin', 'administrator_email')
+        );
+
+        $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
+
+        $body = Configuration::getInstance()->get_setting(array(Manager::context(), 'email_template'));
+        foreach ($options as $option => $value)
+        {
+            $body = str_replace('[' . $option . ']', $value, $body);
+        }
+
+        $mail = new Mail(
+            $subject, $body, $user->get_email(), true, array(), array(),
+            $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
+        );
+
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
+        $mailer = $mailerFactory->getActiveMailer();
+
+        try
+        {
+            $mailer->sendMail($mail);
+        }
+        catch (Exception $ex)
+        {
         }
     }
 
@@ -506,52 +513,75 @@ class UserForm extends FormValidator
     }
 
     /**
-     * Sends an email to the updated/new user
+     * Updates the user with the new data
      */
-    public function send_email($user)
+    public function update_user()
     {
-        $options = array();
-        $options['firstname'] = $user->get_firstname();
-        $options['lastname'] = $user->get_lastname();
-        $options['username'] = $user->get_username();
-        $options['password'] = $this->unencryptedpass;
-        $options['site_name'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
-        $options['site_url'] = Path::getInstance()->getBasePath(true);
-        $options['admin_firstname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_firstname')
-        );
-        $options['admin_surname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_surname')
-        );
-        $options['admin_telephone'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_telephone')
-        );
-        $options['admin_email'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_email')
-        );
+        $user = $this->user;
+        $values = $this->exportValues();
 
-        $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
-
-        $body = Configuration::getInstance()->get_setting(array(Manager::context(), 'email_template'));
-        foreach ($options as $option => $value)
+        if ($values['pw']['pass'] != '2')
         {
-            $body = str_replace('[' . $option . ']', $value, $body);
+            $this->unencryptedpass =
+                $values['pw']['pass'] == '1' ? Text::generate_password() : $values['pw'][User::PROPERTY_PASSWORD];
+            $password = $this->getHashingUtilities()->hashString($this->unencryptedpass);
+            $user->set_password($password);
         }
 
-        $mail = new Mail(
-            $subject, $body, $user->get_email(), true, array(), array(),
-            $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
-        );
+        $userPictureProvider = $this->getUserPictureProvider();
 
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
-        $mailer = $mailerFactory->getActiveMailer();
+        if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
+        {
+            if ($_FILES[User::PROPERTY_PICTURE_URI] && file_exists($_FILES[User::PROPERTY_PICTURE_URI]['tmp_name']))
+            {
+                $userPictureProvider->setUserPicture($user, $user, $_FILES[User::PROPERTY_PICTURE_URI]);
+            }
+        }
 
-        try
+        $user->set_lastname($values[User::PROPERTY_LASTNAME]);
+        $user->set_firstname($values[User::PROPERTY_FIRSTNAME]);
+        $user->set_email($values[User::PROPERTY_EMAIL]);
+        $user->set_username($values[User::PROPERTY_USERNAME]);
+
+        if ($values['ExpirationDateforever'] != 0)
         {
-            $mailer->sendMail($mail);
+            $user->set_expiration_date(0);
+            $user->set_activation_date(0);
         }
-        catch (Exception $ex)
+        else
         {
+            $act_date = DatetimeUtilities::time_from_datepicker($values['ExpirationDatefrom_date']);
+            $exp_date = DatetimeUtilities::time_from_datepicker($values['ExpirationDateto_date']);
+            $user->set_activation_date($act_date);
+            $user->set_expiration_date($exp_date);
         }
+
+        $user->set_official_code($values[User::PROPERTY_OFFICIAL_CODE]);
+        $user->set_phone($values[User::PROPERTY_PHONE]);
+        $user->set_status(intval($values[User::PROPERTY_STATUS]));
+        $user->set_database_quota(intval($values[User::PROPERTY_DATABASE_QUOTA]));
+        $user->set_disk_quota(intval($values[User::PROPERTY_DISK_QUOTA]));
+
+        $user->set_active(intval($values['active'][User::PROPERTY_ACTIVE]));
+        $user->set_platformadmin(intval($values['admin'][User::PROPERTY_PLATFORMADMIN]));
+        $send_mail = intval($values['mail']['send_mail']);
+        if ($send_mail)
+        {
+            $this->send_email($user);
+        }
+
+        $value = $user->update();
+
+        if ($value)
+        {
+            Event::trigger(
+                'Update', Manager::context(), array(
+                    ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
+                    ChangesTracker::PROPERTY_USER_ID => $this->form_user->get_id()
+                )
+            );
+        }
+
+        return $value;
     }
 }
