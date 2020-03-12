@@ -16,10 +16,10 @@ class ContentObjectEmbedder extends Embedder
     {
         $content_object_display = ContentObjectRenditionImplementation::launch(
             $this->treeNode->getContentObject(),
-            ContentObjectRendition::FORMAT_HTML, 
+            ContentObjectRendition::FORMAT_HTML,
             ContentObjectRendition::VIEW_FULL,
             $this->get_application());
-        
+
         return $content_object_display;
     }
 }

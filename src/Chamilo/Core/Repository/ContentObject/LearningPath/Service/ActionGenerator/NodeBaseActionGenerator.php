@@ -50,12 +50,45 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      * @param array $baseParameters
      * @param NodeActionGenerator[] $contentObjectTypeNodeActionGenerators
      */
-    public function __construct(Translation $translator, array $baseParameters = array(),
-        $contentObjectTypeNodeActionGenerators = array())
+    public function __construct(
+        Translation $translator, array $baseParameters = array(), $contentObjectTypeNodeActionGenerators = array()
+    )
     {
         parent::__construct($translator, $baseParameters);
 
         $this->contentObjectTypeNodeActionGenerators = $contentObjectTypeNodeActionGenerators;
+    }
+
+    /**
+     *
+     * @param array $actions
+     * @param TreeNode $treeNode
+     */
+    protected function addSelectFromActions(&$actions = array(), TreeNode $treeNode)
+    {
+        $repoViewerContext = 'Chamilo\Core\Repository\Viewer';
+
+        $baseParameters = [
+            Manager::PARAM_ACTION => Manager::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
+            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER
+        ];
+
+        $url = $this->getUrlForNode($baseParameters, $treeNode->getId());
+
+        $actions[] = new Action(
+            'browse_repository', $this->translator->getTranslation('SelectFromRepository', null, $repoViewerContext),
+            $url, ''
+        );
+
+        $workspaceParameters = $baseParameters;
+        $workspaceParameters[\Chamilo\Core\Repository\Viewer\Manager::PARAM_IN_WORKSPACES] = true;
+
+        $url = $this->getUrlForNode($workspaceParameters, $treeNode->getId());
+
+        $actions[] = new Action(
+            'browse_workspaces', $this->translator->getTranslation('SelectFromWorkspaces', null, $repoViewerContext),
+            $url, ''
+        );
     }
 
     /**
@@ -77,12 +110,12 @@ class NodeBaseActionGenerator extends NodeActionGenerator
 
             if (!$treeNode->isInDefaultTraversingOrder())
             {
-                if(!$treeNode->isRootNode())
+                if (!$treeNode->isRootNode())
                 {
                     $actions[] = $this->getBlockOrUnblockNodeAction($treeNode);
                 }
 
-                if($treeNode->getContentObject() instanceof Section || $treeNode->isRootNode())
+                if ($treeNode->getContentObject() instanceof Section || $treeNode->isRootNode())
                 {
                     $actions[] = $this->getToggleDefaultTraversingOrderAction($treeNode);
                 }
@@ -111,7 +144,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
 
         $nodeSpecificActions = $this->getNodeSpecificActions($treeNode, $canEditTreeNode);
 
-        if (is_array($nodeSpecificActions) && ! empty($nodeSpecificActions))
+        if (is_array($nodeSpecificActions) && !empty($nodeSpecificActions))
         {
             $actions = array_merge($actions, $nodeSpecificActions);
         }
@@ -120,37 +153,69 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     }
 
     /**
-     * Returns the action to view a given TreeNode
+     * Returns the action to block or unblock a given TreeNode
      *
      * @param TreeNode $treeNode
      *
      * @return Action
      */
-    protected function getViewNodeAction(TreeNode $treeNode)
+    protected function getBlockOrUnblockNodeAction(TreeNode $treeNode)
     {
-        $title = $this->translator->getTranslation('ReturnToLearningPath', null, Manager::context());
-        $url = $this->getUrlForNode(
-            array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT),
-            $treeNode->getId());
+        $translationVariable =
+            ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->isBlocked()) ? 'MarkAsOptional' :
+                'MarkAsRequired';
 
-        return new Action('view', $title, $url, 'fa-file');
+        $icon = ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->isBlocked()) ? 'unlock' : 'ban';
+
+        $title = $this->translator->getTranslation($translationVariable, null, Manager::context());
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_BLOCKED_STATUS), $treeNode->getId()
+        );
+
+        return new Action('block', $title, $url, 'fas fa-' . $icon . '  fa-fw');
     }
 
     /**
-     * Returns the action to update a given TreeNode
+     * Generates the several available create actions
      *
      * @param TreeNode $treeNode
      *
-     * @return Action
+     * @return ActionGroup
      */
-    protected function getUpdateNodeAction(TreeNode $treeNode)
+    protected function getCreatorActions(TreeNode $treeNode)
     {
-        $title = $this->translator->getTranslation('UpdaterComponent', null, Manager::context());
-        $url = $this->getUrlForNode(
-            array(Manager::PARAM_ACTION => Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM),
-            $treeNode->getId());
+        $baseParameters = [
+            Manager::PARAM_ACTION => Manager::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
+            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_CREATOR
+        ];
 
-        return new Action('edit', $title, $url, 'fa-pencil');
+        if (!isset($this->typeSelectorOptions))
+        {
+            /** @var LearningPath $learningPath */
+            $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
+            $typeSelectorFactory = new TypeSelectorFactory(
+                $learningPath->get_allowed_types(), Session::get_user_id(), TypeSelectorFactory::MODE_FLAT_LIST, false
+            );
+
+            $typeSelector = $typeSelectorFactory->getTypeSelector();
+
+            $this->typeSelectorOptions = $typeSelector->getAllTypeSelectorOptions();
+        }
+
+        $createAction = new ActionGroup('create');
+
+        foreach ($this->typeSelectorOptions as $option)
+        {
+            $id = $option->get_template_registration_id();
+            $baseParameters[TypeSelector::PARAM_SELECTION] = $id;
+            $url = $this->getUrlForNode($baseParameters, $treeNode->getId());
+
+            $createAction->addAction(
+                new Action('create_' . $id, $option->get_label(), $url, '')
+            );
+        }
+
+        return $createAction;
     }
 
     /**
@@ -164,45 +229,52 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     {
         $title = $this->translator->getTranslation('DeleterComponent', null, Manager::context());
         $url = $this->getUrlForNode(
-            array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM),
-            $treeNode->getId());
+            array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM), $treeNode->getId()
+        );
 
         return new Action(
-            'delete',
-            $title,
-            $url,
-            'fa-times',
-            $this->translator->getTranslation('Confirm', null, 'Chamilo\Libraries'));
+            'delete', $title, $url, 'fas fa-times fa-fw',
+            $this->translator->getTranslation('Confirm', null, 'Chamilo\Libraries')
+        );
     }
 
     /**
-     * Returns the action to move a given TreeNode
+     * Returns the import actions
      *
      * @param TreeNode $treeNode
      *
-     * @return Action
+     * @return ActionGroup
      */
-    protected function getMoveNodeAction(TreeNode $treeNode)
+    protected function getImportActions(TreeNode $treeNode)
     {
-        $title = $this->translator->getTranslation('Move', null, Manager::context());
-        $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_MOVE), $treeNode->getId());
+        $creatorParameters = $this->baseParameters;
+        $creatorParameters[Manager::PARAM_ACTION] = Manager::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
+        $creatorParameters[Manager::PARAM_CHILD_ID] = $treeNode->getId();
+        $creatorParameters[\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION] =
+            \Chamilo\Core\Repository\Viewer\Manager::ACTION_IMPORTER;
 
-        return new Action('move', $title, $url, 'fa-random');
-    }
+        if (!isset($this->importTypes))
+        {
+            /** @var LearningPath $learningPath */
+            $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
+            $importTypeSelector = new ImportTypeSelector($creatorParameters, $learningPath->get_allowed_types());
+            $this->importTypes = $importTypeSelector->getImportTypes();
+        }
 
-    /**
-     * Returns the action to view the activity of a given TreeNode
-     *
-     * @param TreeNode $treeNode
-     *
-     * @return Action
-     */
-    protected function getNodeActivityAction(TreeNode $treeNode)
-    {
-        $title = $this->translator->getTranslation('ActivityComponent', null, Manager::context());
-        $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_ACTIVITY), $treeNode->getId());
+        $actionGroup = new ActionGroup('import');
 
-        return new Action('activity', $title, $url, 'fa-mouse-pointer');
+        foreach ($this->importTypes as $importType => $importPropertes)
+        {
+            $creatorParameters[ContentObjectImportService::PARAM_IMPORT_TYPE] = $importType;
+
+            $actionGroup->addAction(
+                new Action(
+                    'import_' . $importType, $importPropertes['label'], $this->getUrlForNode($creatorParameters), ''
+                )
+            );
+        }
+
+        return $actionGroup;
     }
 
     /**
@@ -217,54 +289,22 @@ class NodeBaseActionGenerator extends NodeActionGenerator
         $title = $this->translator->getTranslation('ManagerComponent', null, Manager::context());
         $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_MANAGE), $treeNode->getId());
 
-        return new Action('manage', $title, $url, 'fa-bars');
+        return new Action('manage', $title, $url, 'fas fa-bars fa-fw');
     }
 
     /**
-     * Returns the action to block or unblock a given TreeNode
+     * Returns the action to move a given TreeNode
      *
      * @param TreeNode $treeNode
      *
      * @return Action
      */
-    protected function getBlockOrUnblockNodeAction(TreeNode $treeNode)
+    protected function getMoveNodeAction(TreeNode $treeNode)
     {
-        $translationVariable = ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->isBlocked()) ? 'MarkAsOptional' : 'MarkAsRequired';
+        $title = $this->translator->getTranslation('Move', null, Manager::context());
+        $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_MOVE), $treeNode->getId());
 
-        $icon = ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->isBlocked()) ? 'unlock' : 'ban';
-
-        $title = $this->translator->getTranslation($translationVariable, null, Manager::context());
-        $url = $this->getUrlForNode(
-            array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_BLOCKED_STATUS),
-            $treeNode->getId());
-
-        return new Action('block', $title, $url, 'fa-' . $icon);
-    }
-
-    /**
-     * Returns the action to toggle the default traversing order for a given TreeNode
-     *
-     * @param TreeNode $treeNode
-     *
-     * @return Action
-     */
-    protected function getToggleDefaultTraversingOrderAction(TreeNode $treeNode)
-    {
-        $translationVariable = ($treeNode->getTreeNodeData() &&
-            $treeNode->getTreeNodeData()->enforcesDefaultTraversingOrder()) ?
-            'DisableDefaultTraversingOrder' : 'EnableDefaultTraversingOrder';
-
-        $icon = ($treeNode->getTreeNodeData() &&
-            $treeNode->getTreeNodeData()->enforcesDefaultTraversingOrder()) ?
-            'sitemap' : 'sitemap';
-
-        $title = $this->translator->getTranslation($translationVariable, null, Manager::context());
-        $url = $this->getUrlForNode(
-            array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER),
-            $treeNode->getId()
-        );
-
-        return new Action('default_traversing_order', $title, $url, 'fa-' . $icon);
+        return new Action('move', $title, $url, 'fas fa-random fa-fw');
     }
 
     /**
@@ -279,7 +319,22 @@ class NodeBaseActionGenerator extends NodeActionGenerator
         $title = $this->translator->getTranslation('MyProgress', null, Manager::context());
         $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_REPORTING), $treeNode->getId());
 
-        return new Action('progress', $title, $url, 'fa-pie-chart');
+        return new Action('progress', $title, $url, 'fas fa-chart-pie fa-fw');
+    }
+
+    /**
+     * Returns the action to view the activity of a given TreeNode
+     *
+     * @param TreeNode $treeNode
+     *
+     * @return Action
+     */
+    protected function getNodeActivityAction(TreeNode $treeNode)
+    {
+        $title = $this->translator->getTranslation('ActivityComponent', null, Manager::context());
+        $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_ACTIVITY), $treeNode->getId());
+
+        return new Action('activity', $title, $url, 'fas fa-mouse-pointer fa-fw');
     }
 
     /**
@@ -293,10 +348,10 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     {
         $title = $this->translator->getTranslation('Reporting', null, Manager::context());
         $url = $this->getUrlForNode(
-            array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS),
-            $treeNode->getId());
+            array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS), $treeNode->getId()
+        );
 
-        return new Action('reporting', $title, $url, 'fa-bar-chart');
+        return new Action('reporting', $title, $url, 'fas fa-bar-chart fa-fw');
     }
 
     /**
@@ -313,121 +368,68 @@ class NodeBaseActionGenerator extends NodeActionGenerator
         if (array_key_exists($contentObjectType, $this->contentObjectTypeNodeActionGenerators))
         {
             return $this->contentObjectTypeNodeActionGenerators[$contentObjectType]->generateNodeActions(
-                $treeNode,
-                $canEditTreeNode);
+                $treeNode, $canEditTreeNode
+            );
         }
 
         return array();
     }
 
     /**
-     * Generates the several available create actions
+     * Returns the action to toggle the default traversing order for a given TreeNode
      *
      * @param TreeNode $treeNode
      *
-     * @return ActionGroup
+     * @return Action
      */
-    protected function getCreatorActions(TreeNode $treeNode)
+    protected function getToggleDefaultTraversingOrderAction(TreeNode $treeNode)
     {
-        $baseParameters = [
-            Manager::PARAM_ACTION => Manager::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_CREATOR];
+        $translationVariable =
+            ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->enforcesDefaultTraversingOrder()) ?
+                'DisableDefaultTraversingOrder' : 'EnableDefaultTraversingOrder';
 
-        if (! isset($this->typeSelectorOptions))
-        {
-            /** @var LearningPath $learningPath */
-            $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
-            $typeSelectorFactory = new TypeSelectorFactory(
-                $learningPath->get_allowed_types(),
-                Session::get_user_id(),
-                TypeSelectorFactory::MODE_FLAT_LIST,
-                false);
+        $icon = ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->enforcesDefaultTraversingOrder()) ?
+            'sitemap' : 'sitemap';
 
-            $typeSelector = $typeSelectorFactory->getTypeSelector();
+        $title = $this->translator->getTranslation($translationVariable, null, Manager::context());
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER), $treeNode->getId()
+        );
 
-            $this->typeSelectorOptions = $typeSelector->getAllTypeSelectorOptions();
-        }
-
-        $createAction = new ActionGroup('create');
-
-        foreach ($this->typeSelectorOptions as $option)
-        {
-            $id = $option->get_template_registration_id();
-            $baseParameters[TypeSelector::PARAM_SELECTION] = $id;
-            $url = $this->getUrlForNode($baseParameters, $treeNode->getId());
-
-            $createAction->addAction(
-                new Action('create_' . $id, $option->get_label(), $url, ''));
-        }
-
-        return $createAction;
+        return new Action('default_traversing_order', $title, $url, 'fas fa-' . $icon . '  fa-fw');
     }
 
     /**
+     * Returns the action to update a given TreeNode
      *
-     * @param array $actions
      * @param TreeNode $treeNode
+     *
+     * @return Action
      */
-    protected function addSelectFromActions(&$actions = array(), TreeNode $treeNode)
+    protected function getUpdateNodeAction(TreeNode $treeNode)
     {
-        $repoViewerContext = 'Chamilo\Core\Repository\Viewer';
+        $title = $this->translator->getTranslation('UpdaterComponent', null, Manager::context());
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM), $treeNode->getId()
+        );
 
-        $baseParameters = [
-            Manager::PARAM_ACTION => Manager::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER];
-
-        $url = $this->getUrlForNode($baseParameters, $treeNode->getId());
-
-        $actions[] = new Action(
-            'browse_repository',
-            $this->translator->getTranslation('SelectFromRepository', null, $repoViewerContext),
-            $url,
-            '');
-
-        $workspaceParameters = $baseParameters;
-        $workspaceParameters[\Chamilo\Core\Repository\Viewer\Manager::PARAM_IN_WORKSPACES] = true;
-
-        $url = $this->getUrlForNode($workspaceParameters, $treeNode->getId());
-
-        $actions[] = new Action(
-            'browse_workspaces',
-            $this->translator->getTranslation('SelectFromWorkspaces', null, $repoViewerContext),
-            $url,
-            '');
+        return new Action('edit', $title, $url, 'fas fa-pencil fa-fw');
     }
 
     /**
-     * Returns the import actions
+     * Returns the action to view a given TreeNode
      *
      * @param TreeNode $treeNode
      *
-     * @return ActionGroup
+     * @return Action
      */
-    protected function getImportActions(TreeNode $treeNode)
+    protected function getViewNodeAction(TreeNode $treeNode)
     {
-        $creatorParameters = $this->baseParameters;
-        $creatorParameters[Manager::PARAM_ACTION] = Manager::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
-        $creatorParameters[Manager::PARAM_CHILD_ID] = $treeNode->getId();
-        $creatorParameters[\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION] = \Chamilo\Core\Repository\Viewer\Manager::ACTION_IMPORTER;
+        $title = $this->translator->getTranslation('ReturnToLearningPath', null, Manager::context());
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT), $treeNode->getId()
+        );
 
-        if (! isset($this->importTypes))
-        {
-            /** @var LearningPath $learningPath */
-            $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
-            $importTypeSelector = new ImportTypeSelector($creatorParameters, $learningPath->get_allowed_types());
-            $this->importTypes = $importTypeSelector->getImportTypes();
-        }
-
-        $actionGroup = new ActionGroup('import');
-
-        foreach ($this->importTypes as $importType => $importPropertes)
-        {
-            $creatorParameters[ContentObjectImportService::PARAM_IMPORT_TYPE] = $importType;
-
-            $actionGroup->addAction(
-                new Action('import_' . $importType, $importPropertes['label'], $this->getUrlForNode($creatorParameters), ''));
-        }
-
-        return $actionGroup;
+        return new Action('view', $title, $url, 'fas fa-file fa-fw');
     }
 }

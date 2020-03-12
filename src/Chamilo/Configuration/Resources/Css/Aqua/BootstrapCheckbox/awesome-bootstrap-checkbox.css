@@ -57,7 +57,7 @@
 
 .checkbox:not(.no-awesome-style) input[type="checkbox"]:checked+label::after, .checkbox:not(.no-awesome-style) input[type="radio"]:checked+label::after
 	{
-	font-family: "FontAwesome";
+	font-family: "Font Awesome 5 Free";
 	content: "\f00c";
 }
 
@@ -346,7 +346,7 @@
 
 input[type="checkbox"].styled:checked+label:after, input[type="radio"].styled:checked+label:after
 	{
-	font-family: 'FontAwesome';
+	font-family: 'Font Awesome 5 Free';
 	content: "\f00c";
 }
 

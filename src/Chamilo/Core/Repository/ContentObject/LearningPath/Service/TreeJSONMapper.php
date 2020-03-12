@@ -5,12 +5,13 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGenerator;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -84,12 +85,9 @@ class TreeJSONMapper
      * @param bool $allowedToEditTree
      */
     public function __construct(
-        Tree $tree, User $user,
-        TrackingService $trackingService = null,
-        AutomaticNumberingService $automaticNumberingService,
-        NodeActionGenerator $nodeActionGenerator,
-        $treeMenuUrl, TreeNode $currentTreeNode,
-        $allowedToViewContentObject, $allowedToEditTree = false
+        Tree $tree, User $user, TrackingService $trackingService = null,
+        AutomaticNumberingService $automaticNumberingService, NodeActionGenerator $nodeActionGenerator, $treeMenuUrl,
+        TreeNode $currentTreeNode, $allowedToViewContentObject, $allowedToEditTree = false
     )
     {
         $this->tree = $tree;
@@ -115,40 +113,20 @@ class TreeJSONMapper
             ClassnameUtilities::getInstance()->getPackageNameFromNamespace($node->getContentObject()->package())
         )->underscored();
 
-        $class = 'type_' . $objectType;
+        $extraClasses = array('fa-fw');
 
-        if ($this->trackingService &&
-            $this->trackingService->isTreeNodeCompleted(
+        if ($this->trackingService && $this->trackingService->isTreeNodeCompleted(
                 $this->learningPath, $this->user, $node
-            )
-        )
+            ))
         {
-            $class .= ' type_completed';
+            $extraClasses[] = 'fas-ci-completed';
         }
 
-        return $class;
-    }
+        $glyph = new NamespaceIdentGlyph(
+            $node->getContentObject()->package(), true, false, false, Theme::ICON_MINI, $extraClasses
+        );
 
-    /**
-     * @param TreeNode $node
-     *
-     * @return boolean
-     */
-    protected function isSelectedItem(TreeNode $node)
-    {
-        return $this->currentTreeNode->getId() == $node->getId();
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getNodes()
-    {
-        $nodeData = array();
-
-        $nodeData[] = $this->getNodeDataForTreeNode($this->tree->getRoot());
-
-        return $nodeData;
+        return $glyph->getClassNamesString();
     }
 
     /**
@@ -189,11 +167,9 @@ class TreeJSONMapper
             $nodeData['step_blocked'] = true;
         }
 
-        if ($this->trackingService &&
-            $this->trackingService->isTreeNodeCompleted(
+        if ($this->trackingService && $this->trackingService->isTreeNodeCompleted(
                 $this->learningPath, $this->user, $node
-            )
-        )
+            ))
         {
             $nodeData['completed'] = true;
         }
@@ -232,5 +208,27 @@ class TreeJSONMapper
     protected function getNodeUrl($nodeIdentifier)
     {
         return str_replace(self::NODE_PLACEHOLDER, $nodeIdentifier, $this->treeMenuUrl);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNodes()
+    {
+        $nodeData = array();
+
+        $nodeData[] = $this->getNodeDataForTreeNode($this->tree->getRoot());
+
+        return $nodeData;
+    }
+
+    /**
+     * @param TreeNode $node
+     *
+     * @return boolean
+     */
+    protected function isSelectedItem(TreeNode $node)
+    {
+        return $this->currentTreeNode->getId() == $node->getId();
     }
 }

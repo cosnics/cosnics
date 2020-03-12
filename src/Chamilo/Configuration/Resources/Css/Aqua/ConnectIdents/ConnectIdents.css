@@ -192,7 +192,16 @@
     opacity: 0.3;
 }
 
-.fas-ci.fas-ci-new, .fa.fas-ci-new, .fas.fas-ci-new, .far.fas-ci-new, .fab.fas-ci-new {
+.fas-ci.fas-ci-new,
+.fa.fas-ci-new,
+.fas.fas-ci-new,
+.far.fas-ci-new,
+.fab.fas-ci-new,
+.fas-ci.fas-ci-completed,
+.fa.fas-ci-completed,
+.fas.fas-ci-completed,
+.far.fas-ci-completed,
+.fab.fas-ci-completed {
     position: relative;
 }
 
@@ -214,4 +223,20 @@
 
 .fas-ci-va {
     vertical-align: middle;
+}
+
+.fas-ci-completed:before {
+    opacity: 0.5;
+}
+
+.fas-ci-completed:after {
+    display: inline-block;
+    background-color: #00FF00;
+    position: absolute;
+    content: "";
+    right: 0px;
+    bottom: 0px;
+    width: 40%;
+    height: 40%;
+    border-radius: 100%;
 }
