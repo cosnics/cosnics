@@ -15,7 +15,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -114,8 +114,9 @@ class ExporterComponent extends Manager
                     }
                     else
                     {
-                        $glyph =
-                            new FontAwesomeGlyph('download', array('text-muted'), Translation::get('ExportNotAvailable'));
+                        $glyph = new FontAwesomeGlyph(
+                            'download', array('text-muted'), Translation::get('ExportNotAvailable')
+                        );
 
                         $table_row[] = $glyph->render();
                     }
@@ -123,8 +124,9 @@ class ExporterComponent extends Manager
 
                 $table_data[] = $table_row;
 
+                $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
                 $headers = array();
-                $headers[] = new StaticTableColumn('');
                 $headers[] = new StaticTableColumn(Translation::get('Type'));
                 $headers[] = new StaticTableColumn(Translation::get('ShortCount'));
 
@@ -197,10 +199,13 @@ class ExporterComponent extends Manager
             $type_namespace = ClassnameUtilities::getInstance()->getNamespaceParent($type, 3);
 
             $table_row = array();
-            $table_row[] = Theme::getInstance()->getImage(
-                'Logo/16', 'png', Translation::get('TypeName', null, $type_namespace), null, ToolbarItem::DISPLAY_ICON,
-                false, $type_namespace
+
+            $glyph = new NamespaceIdentGlyph(
+                $type_namespace, true, false, false, Theme::ICON_MINI, array('fa-fw'),
+                Translation::get('TypeName', null, $type_namespace)
             );
+
+            $table_row[] = $glyph->render();
             $table_row[] = Translation::get('TypeName', null, $type_namespace);
 
             $conditions = array();

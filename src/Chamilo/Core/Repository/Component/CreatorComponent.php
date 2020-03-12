@@ -19,9 +19,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -78,10 +76,6 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                                 $template->translate('TypeName'), null,
                                 $template_registration->get_content_object_type()
                             )
-                        ), 'ICON' => Theme::getInstance()->getImage(
-                            $content_object_type_image, 'png', Translation::get(
-                            $template->translate('TypeName'), null, $template_registration->get_content_object_type()
-                        ), null, ToolbarItem::DISPLAY_ICON, false, $template_registration->get_content_object_type()
                         )
                     )
                 )

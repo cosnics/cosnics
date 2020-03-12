@@ -30,11 +30,9 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -92,12 +90,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 null, $translator->trans(
-                'ViewContentObject', array(
-                '{CONTENT_OBJECT}' => $contentObject->get_title(), 'ICON' => Theme::getInstance()->getImage(
-                    'Logo/16', 'png', $translator->trans('TypeName', array(), $contentObject->package()), null,
-                    ToolbarItem::DISPLAY_ICON, false, $contentObject->package()
-                )
-            ), self::package()
+                'ViewContentObject', array('{CONTENT_OBJECT}' => $contentObject->get_title()), self::package()
             )
             )
         );
