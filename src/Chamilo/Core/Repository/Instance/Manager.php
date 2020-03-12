@@ -2,10 +2,12 @@
 namespace Chamilo\Core\Repository\Instance;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -68,7 +70,7 @@ abstract class Manager extends Application
      */
     public static function get_links($types = array(), $auto_open = false)
     {
-        $instances = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_active_instances($types);
+        $instances = Storage\DataManager::retrieve_active_instances($types);
 
         if ($instances->size() == 0)
         {
@@ -117,8 +119,16 @@ abstract class Manager extends Application
                 $title = Translation::get(
                     'BrowseObject', array('OBJECT' => $instance->get_title()), Utilities::COMMON_LIBRARIES
                 );
-                $buttons[] = ' . htmlspecialchars($link) .
-                    '\');"><span class="glyphicon glyphicon-upload"></span> ' . htmlspecialchars($title) . '</a>';
+
+                $glyph = new FontAwesomeGlyph('upload', array(), null, 'fas');
+
+                $buttons[] =
+                    '<a class="btn btn-default" onclick="javascript:openPopup(\'' . htmlspecialchars($link) . '\');">';
+                $buttons[] = $glyph->render();
+                $buttons[] = ' ';
+                $buttons[] = htmlspecialchars($title);
+                $buttons[] = '</a>';
+
                 $available_instances ++;
             }
 
@@ -186,7 +196,7 @@ abstract class Manager extends Application
         );
         $condition = new AndCondition($conditions);
 
-        return \Chamilo\Configuration\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             Registration::class_name(), new DataClassRetrievesParameters($condition)
         );
     }

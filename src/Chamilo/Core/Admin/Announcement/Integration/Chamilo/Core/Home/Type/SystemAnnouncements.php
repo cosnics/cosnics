@@ -64,44 +64,14 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
         return array(self::CONFIGURATION_SHOW_EMPTY);
     }
 
-    public static function getDefaultImagePath($application = '', $type = '', $size = Theme::ICON_MINI)
-    {
-        if ($type)
-        {
-            return parent::getDefaultImagePath($application, $type, $size);
-        }
-        else
-        {
-            /**
-             * SystemAnnouncement may not be available if not installed.
-             * Therefore do not use SystemAnnouncement::...
-             */
-            return Theme::getInstance()->getImagePath(
-                ContentObject::get_content_object_type_namespace('SystemAnnouncement'), 'Logo/' . $size
-            );
-        }
-    }
-
-    /**
-     * Returns the url to the icon.
-     *
-     * @return string
-     */
-    public function getIcon()
-    {
-        return self::getDefaultImagePath();
-    }
-
     public function getPublicationLink($publication)
     {
         $paremeters = array();
         $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Admin\Manager::package();
         $parameters[\Chamilo\Core\Admin\Manager::PARAM_ACTION] =
             \Chamilo\Core\Admin\Manager::ACTION_SYSTEM_ANNOUNCEMENTS;
-        $parameters[Manager::PARAM_ACTION] =
-            Manager::ACTION_VIEW;
-        $parameters[Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID] =
-            $publication[Publication::PROPERTY_ID];
+        $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW;
+        $parameters[Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID] = $publication[Publication::PROPERTY_ID];
 
         $redirect = new Redirect($parameters);
 

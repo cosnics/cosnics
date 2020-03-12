@@ -13,7 +13,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -21,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -28,26 +28,47 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 abstract class Manager extends Application
 {
-    const PARAM_GROUP_ID = 'group_id';
-    const PARAM_GROUP_REL_USER_ID = 'group_rel_user_id';
-    const PARAM_USER_ID = 'user_id';
-    const PARAM_FIRSTLETTER = 'firstletter';
-    const PARAM_COMPONENT_ACTION = 'action';
-    const ACTION_CREATE_GROUP = 'Creator';
     const ACTION_BROWSE_GROUPS = 'Browser';
-    const ACTION_EDIT_GROUP = 'Editor';
+
+    const ACTION_CREATE_GROUP = 'Creator';
+
     const ACTION_DELETE_GROUP = 'Deleter';
-    const ACTION_MOVE_GROUP = 'Mover';
-    const ACTION_TRUNCATE_GROUP = 'Truncater';
-    const ACTION_VIEW_GROUP = 'Viewer';
+
+    const ACTION_EDIT_GROUP = 'Editor';
+
     const ACTION_EXPORT = 'Exporter';
+
     const ACTION_IMPORT = 'Importer';
+
     const ACTION_IMPORT_GROUP_USERS = 'GroupUserImporter';
-    const ACTION_SUBSCRIBE_USER_TO_GROUP = 'Subscriber';
-    const ACTION_SUBSCRIBE_USER_BROWSER = 'SubscribeUserBrowser';
-    const ACTION_UNSUBSCRIBE_USER_FROM_GROUP = 'Unsubscriber';
+
     const ACTION_MANAGE_METADATA = 'MetadataManager';
+
+    const ACTION_MOVE_GROUP = 'Mover';
+
+    const ACTION_SUBSCRIBE_USER_BROWSER = 'SubscribeUserBrowser';
+
+    const ACTION_SUBSCRIBE_USER_TO_GROUP = 'Subscriber';
+
+    const ACTION_TRUNCATE_GROUP = 'Truncater';
+
+    const ACTION_UNSUBSCRIBE_USER_FROM_GROUP = 'Unsubscriber';
+
+    const ACTION_VIEW_GROUP = 'Viewer';
+
     const DEFAULT_ACTION = self::ACTION_BROWSE_GROUPS;
+
+    const PARAM_COMPONENT_ACTION = 'action';
+
+    const PARAM_FIRSTLETTER = 'firstletter';
+
+    const PARAM_GROUP_ID = 'group_id';
+
+    const PARAM_GROUP_REL_USER_ID = 'group_rel_user_id';
+
+    const PARAM_USER_ID = 'user_id';
+
+    protected $breadcrumbs;
 
     private $parameters;
 
@@ -73,8 +94,6 @@ abstract class Manager extends Application
 
     private $recycle_bin_url;
 
-    protected $breadcrumbs;
-
     /**
      * The currently selected group
      *
@@ -90,13 +109,6 @@ abstract class Manager extends Application
         $this->checkAuthorization(Manager::context());
     }
 
-    public function count_groups($condition = null)
-    {
-        $parameters = new DataClassCountParameters($condition);
-
-        return DataManager::count(Group::class_name(), $parameters);
-    }
-
     public function count_group_rel_users($condition = null)
     {
         $parameters = new DataClassCountParameters($condition);
@@ -104,52 +116,114 @@ abstract class Manager extends Application
         return DataManager::count(GroupRelUser::class_name(), $parameters);
     }
 
-    public function get_search_condition()
+    public function count_groups($condition = null)
     {
-        return $this->get_search_form()->get_condition();
+        $parameters = new DataClassCountParameters($condition);
+
+        return DataManager::count(Group::class_name(), $parameters);
     }
 
-    public function get_user_search_condition()
+    /**
+     * Returns the admin breadcrumb generator
+     *
+     * @return \libraries\format\BreadcrumbGeneratorInterface
+     */
+    public function get_breadcrumb_generator()
     {
-        return $this->get_user_search_form()->get_condition();
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
-    private function get_search_form()
+    public function get_create_group_url($parent_id)
     {
-        if (! isset($this->search_form))
-        {
-            $this->search_form = new GroupSearchForm($this, $this->get_url());
-        }
-
-        return $this->search_form;
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_CREATE_GROUP, self::PARAM_GROUP_ID => $parent_id)
+        );
     }
 
-    private function get_user_search_form()
+    public function get_export_url()
     {
-        if (! isset($this->user_search_form))
-        {
-            $this->user_search_form = new UserSearchForm(
-                $this,
-                $this->get_url(array(self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID))));
-        }
-
-        return $this->user_search_form;
+        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT));
     }
 
-    public function get_search_validate()
+    public function get_group_delete_url($group)
     {
-        return $this->get_search_form()->validate();
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_DELETE_GROUP, self::PARAM_GROUP_ID => $group->get_id())
+        );
     }
 
-    public function get_user_search_validate()
+    public function get_group_editing_url($group)
     {
-        return $this->get_user_search_form()->validate();
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_EDIT_GROUP, self::PARAM_GROUP_ID => $group->get_id())
+        );
+    }
+
+    public function get_group_emptying_url($group)
+    {
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_TRUNCATE_GROUP, self::PARAM_GROUP_ID => $group->get_id())
+        );
+    }
+
+    public function get_group_metadata_url($group)
+    {
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_MANAGE_METADATA, self::PARAM_GROUP_ID => $group->get_id())
+        );
+    }
+
+    public function get_group_rel_user_subscribing_url($group, $user)
+    {
+        return $this->get_url(
+            array(
+                self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_TO_GROUP, self::PARAM_GROUP_ID => $group->get_id(),
+                self::PARAM_USER_ID => $user->get_id()
+            )
+        );
+    }
+
+    public function get_group_rel_user_unsubscribing_url(GroupRelUser $groupreluser)
+    {
+        return $this->get_url(
+            array(
+                self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_USER_FROM_GROUP,
+                self::PARAM_GROUP_REL_USER_ID => $groupreluser->getId()
+            )
+        );
+    }
+
+    public function get_group_suscribe_user_browser_url($group)
+    {
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER, self::PARAM_GROUP_ID => $group->get_id())
+        );
+    }
+
+    public function get_group_viewing_url($group)
+    {
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $group->get_id())
+        );
+    }
+
+    public function get_import_url()
+    {
+        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_IMPORT));
+    }
+
+    public function get_move_group_url($group)
+    {
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_MOVE_GROUP, self::PARAM_GROUP_ID => $group->get_id())
+        );
     }
 
     /**
      * Gets the parameter list
      *
      * @param boolean $include_search Include the search parameters in the returned list?
+     *
      * @return array The list of parameters.
      */
     public function get_parameters($include_search = false, $include_user_search = false)
@@ -169,134 +243,46 @@ abstract class Manager extends Application
         return $parms;
     }
 
-    public function retrieve_groups($condition = null, $offset = null, $count = null, $order_property = null)
+    public function get_search_condition()
     {
-        return DataManager::retrieves(
-            Group::class_name(),
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
+        return $this->get_search_form()->get_condition();
     }
 
-    public static function retrieve_group_rel_users($condition = null, $offset = null, $count = null, $order_property = null)
+    private function get_search_form()
     {
-        return DataManager::retrieves(
-            GroupRelUser::class_name(),
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
+        if (!isset($this->search_form))
+        {
+            $this->search_form = new GroupSearchForm($this, $this->get_url());
+        }
+
+        return $this->search_form;
     }
 
-    public static function retrieve_group_rel_user($user_id, $group_id)
+    public function get_search_validate()
     {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($group_id));
-        $condition = new AndCondition($conditions);
-
-        return DataManager::retrieve(GroupRelUser::class_name(), new DataClassRetrieveParameters($condition));
-    }
-
-    public function retrieve_group($id)
-    {
-        return DataManager::retrieve_by_id(Group::class_name(), $id);
-    }
-
-    public function get_group_editing_url($group)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_EDIT_GROUP, self::PARAM_GROUP_ID => $group->get_id()));
-    }
-
-    public function get_create_group_url($parent_id)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_CREATE_GROUP, self::PARAM_GROUP_ID => $parent_id));
-    }
-
-    public function get_group_emptying_url($group)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_TRUNCATE_GROUP, self::PARAM_GROUP_ID => $group->get_id()));
-    }
-
-    public function get_group_viewing_url($group)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $group->get_id()));
-    }
-
-    public function get_group_metadata_url($group)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_MANAGE_METADATA, self::PARAM_GROUP_ID => $group->get_id()));
-    }
-
-    public function get_group_rel_user_unsubscribing_url(GroupRelUser $groupreluser)
-    {
-        return $this->get_url(
-            array(
-                self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_USER_FROM_GROUP,
-                self::PARAM_GROUP_REL_USER_ID => $groupreluser->getId()));
-    }
-
-    public function get_group_rel_user_subscribing_url($group, $user)
-    {
-        return $this->get_url(
-            array(
-                self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_TO_GROUP,
-                self::PARAM_GROUP_ID => $group->get_id(),
-                self::PARAM_USER_ID => $user->get_id()));
-    }
-
-    public function get_group_suscribe_user_browser_url($group)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER, self::PARAM_GROUP_ID => $group->get_id()));
-    }
-
-    public function get_group_delete_url($group)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_DELETE_GROUP, self::PARAM_GROUP_ID => $group->get_id()));
-    }
-
-    public function get_import_url()
-    {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_IMPORT));
-    }
-
-    public function get_export_url()
-    {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT));
-    }
-
-    public function get_move_group_url($group)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_MOVE_GROUP, self::PARAM_GROUP_ID => $group->get_id()));
+        return $this->get_search_form()->validate();
     }
 
     /**
      * Returns the selected group
      *
-     * @throws \libraries\architecture\NoObjectSelectedException
+     * @return Group
      * @throws \libraries\architecture\ObjectNotExistException
      *
-     * @return Group
+     * @throws \libraries\architecture\NoObjectSelectedException
      */
     protected function get_selected_group()
     {
-        if (! isset($this->selected_group))
+        if (!isset($this->selected_group))
         {
             $group_id = Request::get(self::PARAM_GROUP_ID);
-            if (! $group_id)
+            if (!$group_id)
             {
                 throw new NoObjectSelectedException(Translation::get('Group'));
             }
 
             $group = DataManager::retrieve_by_id(Group::class_name(), $group_id);
-            if (! $group)
+            if (!$group)
             {
                 throw new ObjectNotExistException(Translation::get('Group', $group_id));
             }
@@ -307,13 +293,65 @@ abstract class Manager extends Application
         return $this->selected_group;
     }
 
-    /**
-     * Returns the admin breadcrumb generator
-     *
-     * @return \libraries\format\BreadcrumbGeneratorInterface
-     */
-    public function get_breadcrumb_generator()
+    public function get_user_search_condition()
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+        return $this->get_user_search_form()->get_condition();
+    }
+
+    private function get_user_search_form()
+    {
+        if (!isset($this->user_search_form))
+        {
+            $this->user_search_form = new UserSearchForm(
+                $this, $this->get_url(array(self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID)))
+            );
+        }
+
+        return $this->user_search_form;
+    }
+
+    public function get_user_search_validate()
+    {
+        return $this->get_user_search_form()->validate();
+    }
+
+    /**
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group
+     */
+    public function retrieve_group($id)
+    {
+        return DataManager::retrieve_by_id(Group::class_name(), $id);
+    }
+
+    public static function retrieve_group_rel_user($user_id, $group_id)
+    {
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
+            new StaticConditionVariable($user_id)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($group_id)
+        );
+        $condition = new AndCondition($conditions);
+
+        return DataManager::retrieve(GroupRelUser::class_name(), new DataClassRetrieveParameters($condition));
+    }
+
+    public static function retrieve_group_rel_users(
+        $condition = null, $offset = null, $count = null, $order_property = null
+    )
+    {
+        return DataManager::retrieves(
+            GroupRelUser::class_name(), new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+        );
+    }
+
+    public function retrieve_groups($condition = null, $offset = null, $count = null, $order_property = null)
+    {
+        return DataManager::retrieves(
+            Group::class_name(), new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+        );
     }
 }

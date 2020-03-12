@@ -10,6 +10,7 @@ use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use DateTime;
+use Exception;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -42,6 +43,8 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $targetUser
      * @param \Chamilo\Core\User\Storage\DataClass\User $requestUser
+     *
+     * @throws \Exception
      */
     public function deleteUserPicture(User $targetUser, User $requestUser)
     {
@@ -54,13 +57,13 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $targetUser
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return boolean
      */
-    public function doesUserHavePicture(User $targetUser)
+    public function doesUserHavePicture(User $user)
     {
-        $uri = $targetUser->get_picture_uri();
+        $uri = $user->get_picture_uri();
 
         return ((strlen($uri) > 0) && (Path::getInstance()->isWebUri($uri) || file_exists(
                     $this->getConfigurablePathBuilder()->getProfilePicturePath() . $uri
@@ -77,30 +80,36 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
      */
     public function downloadUserPicture(User $targetUser, User $requestUser)
     {
-        $file = $this->getUserPicturePath($targetUser);
+        try
+        {
+            $file = $this->getUserPicturePath($targetUser);
 
-        $type = exif_imagetype($file);
-        $mime = image_type_to_mime_type($type);
-        $size = filesize($file);
+            $type = exif_imagetype($file);
+            $mime = image_type_to_mime_type($type);
+            $size = filesize($file);
 
-        $response = new StreamedResponse();
-        $response->headers->add(array('Content-Type' => $mime, 'Content-Length' => $size));
-        $response->setPublic();
-        $response->setMaxAge(3600 * 24); // 24 hours cache
+            $response = new StreamedResponse();
+            $response->headers->add(array('Content-Type' => $mime, 'Content-Length' => $size));
+            $response->setPublic();
+            $response->setMaxAge(3600 * 24); // 24 hours cache
 
-        $lastModifiedDate = new DateTime();
-        $lastModifiedDate->setTimestamp(filemtime($file));
+            $lastModifiedDate = new DateTime();
+            $lastModifiedDate->setTimestamp(filemtime($file));
 
-        $response->setLastModified($lastModifiedDate);
-        $response->setCallback(
-            function () use ($file) {
-                readfile($file);
-            }
-        );
+            $response->setLastModified($lastModifiedDate);
+            $response->setCallback(
+                function () use ($file) {
+                    readfile($file);
+                }
+            );
 
-        $response->send();
+            $response->send();
 
-        exit();
+            exit();
+        }
+        catch (Exception $exception)
+        {
+        }
     }
 
     /**
@@ -124,6 +133,25 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
     }
 
     /**
+     * @param string $filePath
+     *
+     * @return string
+     */
+    public function getPictureAsBase64String(string $filePath)
+    {
+        $type = exif_imagetype($filePath);
+        $mime = image_type_to_mime_type($type);
+
+        $fileResource = fopen($filePath, "r");
+        $imageBinary = fread($fileResource, filesize($filePath));
+        $imgString = base64_encode($imageBinary);
+
+        fclose($fileResource);
+
+        return 'data:' . $mime . ';base64,' . $imgString;
+    }
+
+    /**
      * @return \Chamilo\Libraries\Format\Theme
      */
     public function getThemeUtilities(): Theme
@@ -144,6 +172,24 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
     }
 
     /**
+     * @return string
+     */
+    public function getUnknownUserPictureAsBase64String()
+    {
+        return $this->getPictureAsBase64String($this->getUnknownUserPicturePath());
+    }
+
+    /**
+     * @return string
+     */
+    private function getUnknownUserPicturePath()
+    {
+        return $this->getThemeUtilities()->getImagePath(
+            'Chamilo\Core\User\Picture\Provider\Platform', 'Unknown', 'png', false
+        );
+    }
+
+    /**
      * Downloads the user picture
      *
      * @param User $targetUser
@@ -153,18 +199,14 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
      */
     public function getUserPictureAsBase64String(User $targetUser, User $requestUser)
     {
-        $file = $this->getUserPicturePath($targetUser);
-
-        $type = exif_imagetype($file);
-        $mime = image_type_to_mime_type($type);
-
-        $fileResource = fopen($file, "r");
-        $imageBinary = fread($fileResource, filesize($file));
-        $imgString = base64_encode($imageBinary);
-
-        fclose($fileResource);
-
-        return 'data:' . $mime . ';base64,' . $imgString;
+        try
+        {
+            return $this->getPictureAsBase64String($this->getUserPicturePath($targetUser));
+        }
+        catch (Exception $exception)
+        {
+            return '';
+        }
     }
 
     /**
@@ -172,6 +214,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
      * @param boolean $useFallback
      *
      * @return string
+     * @throws \Exception
      */
     private function getUserPicturePath(User $user, $useFallback = true)
     {
@@ -183,13 +226,11 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
         {
             if ($useFallback)
             {
-                return $this->getThemeUtilities()->getImagePath(
-                    'Chamilo\Core\User\Picture\Provider\Platform', 'Unknown', 'png', false
-                );
+                return $this->getUnknownUserPicturePath();
             }
             else
             {
-                return false;
+                throw new Exception('NoPictureForUser');
             }
         }
     }
@@ -198,6 +239,8 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
      * @param \Chamilo\Core\User\Storage\DataClass\User $targetUser
      * @param \Chamilo\Core\User\Storage\DataClass\User $requestUser
      * @param string[] $fileInformation
+     *
+     * @throws \Exception
      */
     public function setUserPicture(User $targetUser, User $requestUser, array $fileInformation)
     {

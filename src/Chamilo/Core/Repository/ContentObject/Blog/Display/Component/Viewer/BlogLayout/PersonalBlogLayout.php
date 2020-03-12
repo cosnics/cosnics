@@ -4,12 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Blog\Display\Component\Viewer\Bl
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\Component\Viewer\BlogLayout;
 use Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem;
-use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
@@ -29,29 +25,26 @@ class PersonalBlogLayout extends BlogLayout
             User::class_name(), (int) $blog_item->get_owner_id()
         );
 
-        if ($owner)
+        if ($owner instanceof User)
         {
             $name = $owner->get_fullname();
-            $profilePhotoUrl = new Redirect(
-                array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
-                    Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                    Manager::PARAM_USER_USER_ID => $owner->get_id()
-                )
-            );
-            $picture = $profilePhotoUrl->getUrl();
         }
         else
         {
             $name = Translation::get('AuthorUnknown');
-            $picture = Theme::getInstance()->getImagePath(Manager::context(), 'Unknown');
         }
 
         $html = array();
 
         $html[] = '<div class="blog_item">';
         $html[] = '<div class="information_box">';
-        $html[] = '<img class="user_image" src="' . $picture . '" /><br /><br />';
+
+        if ($owner instanceof User)
+        {
+            $html[] = '<img class="img-thumbnail" src="' .
+                $this->getUserPictureProvider()->getUserPictureAsBase64String($owner, $owner) . '" /><br /><br />';
+        }
+
         $html[] = $name . '<br />';
         $html[] = DatetimeUtilities::format_locale_date(null, $complex_blog_item->get_add_date());
         $html[] = '</div>';
@@ -76,14 +69,26 @@ class PersonalBlogLayout extends BlogLayout
     }
 
     /**
+     * @return \Chamilo\Core\User\Picture\UserPictureProviderInterface
+     */
+    public function getUserPictureProvider()
+    {
+        return $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
+    }
+
+    /**
      * Gets the layout of the attachments list
      *
      * @param BlogItem $blog_item
+     *
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function get_attached_content_objects_as_html($complex_blog_item)
     {
         $blog_item = $complex_blog_item->get_ref_object();
         $attachments = $blog_item->get_attachments();
+
         if (count($attachments))
         {
             $html[] = '<div class="attachments">';
@@ -96,21 +101,23 @@ class PersonalBlogLayout extends BlogLayout
             Utilities::order_content_objects_by_title($attachments);
             $html[] = '<ul class="attachments_list">';
 
+            /**
+             * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $attachments
+             * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject $attachment
+             */
             foreach ($attachments as $attachment)
             {
                 $url = $this->get_parent()->get_content_object_display_attachment_url(
                     $attachment, $complex_blog_item->get_id()
                 );
+
                 $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
-                $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' . Theme::getInstance()->getImagePath(
-                        ClassnameUtilities::getInstance()->getNamespaceParent($attachment->get_type(), 3),
-                        'Logo/' . Theme::ICON_MINI
-                    ) . '" alt="' . htmlentities(
-                        Translation::get(
-                            'TypeName', null,
-                            ClassnameUtilities::getInstance()->getNamespaceParent($attachment->get_type(), 3)
-                        )
-                    ) . '"/> ' . $attachment->get_title() . '</a></li>';
+
+                $glyph = $attachment->getGlyph(Theme::ICON_MINI);
+
+                $html[] =
+                    '<li><a href="#" onClick="' . $url . '">' . $glyph->render() . ' ' . $attachment->get_title() .
+                    '</a></li>';
             }
 
             $html[] = '</ul>';

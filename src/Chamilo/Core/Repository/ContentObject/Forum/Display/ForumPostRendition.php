@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\Display;
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
@@ -42,6 +41,10 @@ class ForumPostRendition
         $this->forumPost = $forumPost;
     }
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
     public function render()
     {
         $renderer = new ContentObjectResourceRenderer($this, $this->getForumPost()->get_content());
@@ -99,6 +102,10 @@ class ForumPostRendition
         $this->forumPost = $forumPost;
     }
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
     public function get_attachments()
     {
         $forumPost = $this->getForumPost();
@@ -117,6 +124,10 @@ class ForumPostRendition
             Utilities::order_content_objects_by_title($attachments);
             $html[] = '<ul class="attachments_list">';
 
+            /**
+             * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $attachments
+             * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject $attachment
+             */
             foreach ($attachments as $attachment)
             {
                 $params = array();
@@ -128,14 +139,11 @@ class ForumPostRendition
                 $url = $this->getApplication()->get_url($params);
                 $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
 
-                $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' . Theme::getInstance()->getImagePath(
-                        $attachment->package(), 'Logo/' . Theme::ICON_MINI
-                    ) . '" alt="' . htmlentities(
-                        Translation::get(
-                            'TypeName', null,
-                            ClassnameUtilities::getInstance()->getNamespaceFromClassname($attachment->get_type())
-                        )
-                    ) . '"/> ' . $attachment->get_title() . '</a></li>';
+                $glyph = $attachment->getGlyph(Theme::ICON_MINI);
+
+                $html[] =
+                    '<li><a href="#" onClick="' . $url . '">' . $glyph->render() . ' ' . $attachment->get_title() .
+                    '</a></li>';
             }
 
             $html[] = '</ul>';

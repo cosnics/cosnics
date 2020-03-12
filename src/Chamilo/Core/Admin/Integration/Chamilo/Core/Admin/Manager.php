@@ -53,11 +53,24 @@ class Manager implements ActionsSupportInterface
         $redirect = new Redirect(
             array(
                 Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
-                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_LANGUAGE
+                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_LANGUAGE,
+                \Chamilo\Core\Admin\Language\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Language\Manager::ACTION_IMPORT
             )
         );
         $links[] = new DynamicAction(
             Translation::get('TranslationsImport'), Translation::get('TranslationsImportDescription'),
+            new FontAwesomeGlyph('language', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
+        );
+
+        $redirect = new Redirect(
+            array(
+                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_LANGUAGE,
+                \Chamilo\Core\Admin\Language\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Language\Manager::ACTION_EXPORT
+            )
+        );
+        $links[] = new DynamicAction(
+            Translation::get('TranslationsExport'), Translation::get('TranslationsExportDescription'),
             new FontAwesomeGlyph('language', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 

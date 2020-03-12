@@ -10,9 +10,10 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    const PARAM_ACTION = 'language_action';
-    const ACTION_BROWSE = 'Browser';
     const ACTION_EXPORT = 'Exporter';
     const ACTION_IMPORT = 'Importer';
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    const DEFAULT_ACTION = self::ACTION_IMPORT;
+
+    const PARAM_ACTION = 'language_action';
 }

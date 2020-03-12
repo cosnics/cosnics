@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\I
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -55,30 +55,31 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             {
                 if ($valid_answer &&
                     ($best_option->matches($user_answer[0], $this->get_question()->get_tolerance_type()) ||
-                        $best_option->get_score() == $this->get_score())
-                )
+                        $best_option->get_score() == $this->get_score()))
                 {
-                    $result = ' <img style="vertical-align: middle;" src="' .
-                        Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
-                        Translation::get('Correct') . '" title="' .
-                        Translation::get('Correct', null, 'Chamilo\Core\Repository\ContentObject\Assessment') .
-                        '" style="" />';
+                    $glyph = new FontAwesomeGlyph(
+                        'check', array('text-success'),
+                        Translation::get('Correct', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
+                    );
+
+                    $result = ' ' . $glyph->render();
                 }
                 elseif ($valid_answer)
                 {
-                    $result = ' <img style="vertical-align: middle;" src="' .
-                        Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerWarning') . '" alt="' .
-                        Translation::get('CorrectButNotBest') . '" title="' . Translation::get(
-                            'CorrectButNotBest', null, 'Chamilo\Core\Repository\ContentObject\Assessment'
-                        ) .
-                        '" style="" />';
+                    $glyph = new FontAwesomeGlyph(
+                        'exclamation-triangle', array('text-warning'), Translation::get(
+                        'CorrectButNotBest', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'
+                    ), 'fas'
+                    );
+                    $result = ' ' . $glyph->render();
                 }
                 else
                 {
-                    $result = ' <img style="vertical-align: middle;" src="' .
-                        Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
-                        Translation::get('Wrong') . '" title="' .
-                        Translation::get('Wrong', null, 'Chamilo\Core\Repository\ContentObject\Assessment') . '" />';
+                    $glyph = new FontAwesomeGlyph(
+                        'times', array('text-danger'),
+                        Translation::get('Wrong', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
+                    );
+                    $result = ' ' . $glyph->render();
                 }
             }
             else
@@ -92,10 +93,11 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         {
             if ($configuration->show_correction() || $configuration->show_solution())
             {
-                $result = ' <img style="vertical-align: middle;" src="' .
-                    Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
-                    Translation::get('Wrong') . '" title="' .
-                    Translation::get('Wrong', null, 'Chamilo\Core\Repository\ContentObject\Assessment') . '" />';
+                $glyph = new FontAwesomeGlyph(
+                    'times', array('text-danger'),
+                    Translation::get('Wrong', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
+                );
+                $result = ' ' . $glyph->render();
             }
             else
             {
@@ -107,18 +109,13 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         }
 
         if (AnswerFeedbackDisplay::allowed(
-            $configuration,
-            $this->get_complex_content_object_question(),
-            true,
-            $valid_answer
-        )
-        )
+            $configuration, $this->get_complex_content_object_question(), true, $valid_answer
+        ))
         {
             if (!is_null($answer_option))
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->getViewerApplication(),
-                    $answer_option->get_feedback()
+                    $this->getViewerApplication(), $answer_option->get_feedback()
                 );
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
@@ -136,12 +133,8 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         if ($configuration->show_solution())
         {
             if (!$valid_answer || ($valid_answer && !$best_option->matches(
-                        $user_answer[0],
-                        $this->get_question()->get_tolerance_type()
-                    )
-                    && $best_option->get_score() != $this->get_score()
-                )
-            )
+                        $user_answer[0], $this->get_question()->get_tolerance_type()
+                    ) && $best_option->get_score() != $this->get_score()))
             {
                 $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
                 $html[] = '<thead>';
@@ -151,10 +144,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                     '</th>';
 
                 $answer_feedback_display = AnswerFeedbackDisplay::allowed(
-                    $configuration,
-                    $this->get_complex_content_object_question(),
-                    false,
-                    true
+                    $configuration, $this->get_complex_content_object_question(), false, true
                 );
 
                 if ($answer_feedback_display)
@@ -174,8 +164,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 if ($answer_feedback_display)
                 {
                     $object_renderer = new ContentObjectResourceRenderer(
-                        $this->getViewerApplication(),
-                        $best_option->get_feedback()
+                        $this->getViewerApplication(), $best_option->get_feedback()
                     );
                     $html[] = '<td>' . $object_renderer->run() . '</td>';
                 }

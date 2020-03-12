@@ -2,10 +2,9 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentResultProcessor;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -33,8 +32,9 @@ abstract class AssessmentQuestionResultDisplay
 
     private $hints;
 
-    public function __construct(Application $viewerApplication, $complex_content_object_question, $question_nr, $answers,
-        $score, $hints)
+    public function __construct(
+        Application $viewerApplication, $complex_content_object_question, $question_nr, $answers, $score, $hints
+    )
     {
         $this->viewerApplication = $viewerApplication;
         $this->complex_content_object_question = $complex_content_object_question;
@@ -45,39 +45,9 @@ abstract class AssessmentQuestionResultDisplay
         $this->hints = $hints;
     }
 
-    public function getViewerApplication()
+    public function add_borders()
     {
-        return $this->viewerApplication;
-    }
-
-    public function get_complex_content_object_question()
-    {
-        return $this->complex_content_object_question;
-    }
-
-    public function get_question()
-    {
-        return $this->question;
-    }
-
-    public function get_question_nr()
-    {
-        return $this->question_nr;
-    }
-
-    public function get_answers()
-    {
-        return $this->answers;
-    }
-
-    public function get_score()
-    {
-        return $this->score;
-    }
-
-    public function get_hints()
-    {
-        return $this->hints;
+        return false;
     }
 
     public function as_html()
@@ -100,47 +70,45 @@ abstract class AssessmentQuestionResultDisplay
         }
 
         $html[] = $this->footer();
+
         return implode(PHP_EOL, $html);
     }
 
-    public function get_question_result()
+    public static function factory(
+        Application $viewerApplication, $complex_content_object_question, $question_nr, $answers, $score, $hints
+    )
     {
-        return $this->get_score() . '<br />';
+        $class =
+            $complex_content_object_question->get_ref_object()->package() . '\Integration\\' . Assessment::package() .
+            '\Display\ResultDisplay';
+
+        $question_result_display = new $class(
+            $viewerApplication, $complex_content_object_question, $question_nr, $answers, $score, $hints
+        );
+
+        return $question_result_display;
     }
 
-    public function header()
+    public function footer()
     {
-        $html = array();
-
-        $html[] = '<div class="panel panel-default">';
-
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title pull-left">' . $this->question_nr . '. ' . $this->question->get_title() . '</h3>';
-
-        $html[] = '<div class="pull-right">';
-
-        if ($this->hints > 0)
-        {
-            $variable = $this->hints == 1 ? 'HintUsed' : 'HintsUsed';
-            $label = Translation::get($variable, array('COUNT' => $this->hints));
-
-            $html[] = '<img style="float: none; vertical-align: baseline;" src="' . Theme::getInstance()->getImagePath(
-                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                'Buttons/ButtonHint') . '" alt="' . $label . '" title="' . htmlentities($label) . '" />&nbsp;&nbsp;';
-        }
-
-        if ($this->getViewerApplication()->get_configuration()->show_score())
-        {
-            $html[] = $this->get_score() . ' / ' . $this->get_complex_content_object_question()->get_weight();
-        }
-
         $html[] = '</div>';
-        $html[] = '<div class="clearfix"></div>';
-        $html[] = '</div>';
-
-        $html[] = $this->get_description();
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getViewerApplication()
+    {
+        return $this->viewerApplication;
+    }
+
+    public function get_answers()
+    {
+        return $this->answers;
+    }
+
+    public function get_complex_content_object_question()
+    {
+        return $this->complex_content_object_question;
     }
 
     public function get_description()
@@ -161,37 +129,69 @@ abstract class AssessmentQuestionResultDisplay
         return implode(PHP_EOL, $html);
     }
 
-    public function footer()
+    public function get_hints()
     {
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $this->hints;
     }
 
-    public function add_borders()
+    public function get_question()
     {
-        return false;
+        return $this->question;
+    }
+
+    public function get_question_nr()
+    {
+        return $this->question_nr;
+    }
+
+    public function get_question_result()
+    {
+        return $this->get_score() . '<br />';
+    }
+
+    public function get_score()
+    {
+        return $this->score;
+    }
+
+    public function header()
+    {
+        $html = array();
+
+        $html[] = '<div class="panel panel-default">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] =
+            '<h3 class="panel-title pull-left">' . $this->question_nr . '. ' . $this->question->get_title() . '</h3>';
+
+        $html[] = '<div class="pull-right">';
+
+        if ($this->hints > 0)
+        {
+            $variable = $this->hints == 1 ? 'HintUsed' : 'HintsUsed';
+            $label = Translation::get($variable, array('COUNT' => $this->hints));
+
+            $glyph = new FontAwesomeGlyph('magic', array(), $label, 'fas');
+
+            $html[] = $glyph->render() . '&nbsp;&nbsp;';
+        }
+
+        if ($this->getViewerApplication()->get_configuration()->show_score())
+        {
+            $html[] = $this->get_score() . ' / ' . $this->get_complex_content_object_question()->get_weight();
+        }
+
+        $html[] = '</div>';
+        $html[] = '<div class="clearfix"></div>';
+        $html[] = '</div>';
+
+        $html[] = $this->get_description();
+
+        return implode(PHP_EOL, $html);
     }
 
     public function needsDescriptionBorder()
     {
         return false;
-    }
-
-    public static function factory(Application $viewerApplication, $complex_content_object_question, $question_nr,
-        $answers, $score, $hints)
-    {
-        $class = $complex_content_object_question->get_ref_object()->package() . '\Integration\\' .
-             Assessment::package() . '\Display\ResultDisplay';
-
-        $question_result_display = new $class(
-            $viewerApplication,
-            $complex_content_object_question,
-            $question_nr,
-            $answers,
-            $score,
-            $hints);
-
-        return $question_result_display;
     }
 }
