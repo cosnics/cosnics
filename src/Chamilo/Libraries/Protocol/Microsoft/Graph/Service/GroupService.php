@@ -303,8 +303,13 @@ class GroupService
                 throw new AzureUserNotExistsException($user);
             }
 
-            /** BUG IN MICROSOFT: THE OWNER SHOULD BE BOTH MEMBER AND OWNER  */
-            $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
+            try
+            {
+                /** BUG IN MICROSOFT: THE OWNER SHOULD BE BOTH MEMBER AND OWNER  */
+                $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
+            }
+            catch(\Exception $ex) {}
+
             $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
         }
     }
