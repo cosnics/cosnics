@@ -190,13 +190,15 @@ class CourseGroupOffice365Connector
         if (!$reference instanceof CourseGroupOffice365Reference || !$reference->isLinked())
         {
             $office365GroupId = $this->createOrUpdateGroupFromCourseGroup($courseGroup, $user);
+            $hasTeam = false;
         }
         else
         {
             $office365GroupId = $reference->getOffice365GroupId();
+            $hasTeam = $reference->hasTeam();
         }
 
-        if (!$reference->hasTeam())
+        if (!$hasTeam)
         {
             if ($this->teamService->getTeam($office365GroupId))
             {
