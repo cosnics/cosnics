@@ -430,12 +430,12 @@ class PlatformGroupTeamService
     {
         $team = $this->teamService->getTeam($platformGroupTeam->getTeamId());
 
-        if (is_null($team))
-        {
-            $this->deletePlatformGroupTeam($platformGroupTeam);
-
-            return null;
-        }
+//        if (is_null($team))
+//        {
+////            $this->deletePlatformGroupTeam($platformGroupTeam);
+//
+//            return null;
+//        }
 
         return $team;
     }
@@ -478,6 +478,5 @@ class PlatformGroupTeamService
 
     protected function deletePlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
     {
-        throw new \RuntimeException('Not implemented');
     }
 }

@@ -22,6 +22,10 @@
 </style>
 
 
+{% if IS_TEACHER %}
+    <div class="alert alert-info">{{ 'DelayWarning'|trans({}, appContext) }}</div>
+{% endif %}
+
 {% if IS_TEACHER and not COURSE_HAS_TEAM %}
     <a href="{{ CREATE_TEAM_URL }}" class="btn btn-default">{{ 'CreateTeam'|trans({}, appContext) }}</a>
 {% endif %}
