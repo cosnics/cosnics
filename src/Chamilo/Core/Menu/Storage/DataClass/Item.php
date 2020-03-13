@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 
@@ -59,6 +60,14 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     public function getDisplayOrderPropertyName()
     {
         return self::PROPERTY_SORT;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
+     */
+    public function getGlyph()
+    {
+        return new FontAwesomeGlyph('file', array(), null, 'fas');
     }
 
     /**

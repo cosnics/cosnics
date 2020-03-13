@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  *
@@ -12,4 +13,11 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
  */
 class WidgetItem extends Item
 {
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
+     */
+    public function getGlyph()
+    {
+        return new FontAwesomeGlyph('user', array(), null, 'fas');
+    }
 }

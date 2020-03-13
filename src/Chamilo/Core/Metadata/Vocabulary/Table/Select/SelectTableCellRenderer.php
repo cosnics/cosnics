@@ -7,7 +7,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -77,10 +76,7 @@ class SelectTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                     'fas'
                 );
 
-                return Theme::getInstance()->getImage(
-                    $image, 'png', Translation::get($translationVariable, null, $this->get_component()->package()),
-                    null, ToolbarItem::DISPLAY_ICON, false, 'Chamilo\Core\Metadata\Element'
-                );
+                return $glyph->render();
                 break;
         }
 

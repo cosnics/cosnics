@@ -425,7 +425,7 @@
                         var stepBlocked = data.node.data.step_blocked;
 
                         if(stepBlocked) {
-                            title +=  '<span class="tree-additional-icon step-blocked"></span>';
+                            title +=  '<span class="inline-glyph fas fa-lightbulb fa-fw text-primary"></span>';
                         }
                     }
 

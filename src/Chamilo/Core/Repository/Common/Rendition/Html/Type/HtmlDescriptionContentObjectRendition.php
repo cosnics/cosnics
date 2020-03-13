@@ -31,6 +31,10 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
     public function get_attachments()
     {
         $object = $this->get_content_object();
@@ -47,18 +51,19 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
                     htmlentities(Translation::get('Attachments')) . '</div>';
                 Utilities::order_content_objects_by_title($attachments);
                 $html[] = '<ul class="attachments_list">';
+
+                /**
+                 * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $attachments
+                 * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject $attachment
+                 */
                 foreach ($attachments as $attachment)
                 {
                     $url = $this->get_context()->get_content_object_display_attachment_url($attachment);
                     $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
-                    $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' . Theme::getInstance()->getImagePath(
-                            $attachment->package(), 'Logo/' . Theme::ICON_MINI
-                        ) . '" alt="' . htmlentities(
-                            Translation::get(
-                                'TypeName', null,
-                                ClassnameUtilities::getInstance()->getNamespaceFromClassname($attachment->get_type())
-                            )
-                        ) . '"/> ' . $attachment->get_title() . '</a></li>';
+
+                    $glyph = $attachment->getGlyph();
+
+                    $html[] = '<li><a href="#" onClick="' . $url . '">'. $glyph->render() .' ' . $attachment->get_title() . '</a></li>';
                 }
                 $html[] = '</ul>';
                 $html[] = '</div>';

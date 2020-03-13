@@ -263,14 +263,6 @@
     margin-left: 2px;
 }
 
-.learning-path-html-tree .tree-additional-icon.step-blocked {
-    background-image: url('../../../Display/Resources/Images/Aqua/StepBlocked.png');
-}
-
-.learning-path-html-tree .tree-additional-icon.step-completed {
-    background: url('../../../Display/Resources/Images/Aqua/StepCompleted.png')
-}
-
 .context-menu-list {
     box-sizing: content-box;
 }

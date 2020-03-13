@@ -15,7 +15,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -62,8 +61,7 @@ class ConfigurerComponent extends Manager
         {
             $actionUrl = $this->get_url(array(self::PARAM_ENTITY_TYPE => $expandedEntity->getDataClassName()));
             $actionItem = new ToolbarItem(
-                Translation::get('SetProviderLinks'),
-                Theme::getInstance()->getImagePath('Chamilo\Core\Metadata\Provider', 'SetProviderLinks'), $actionUrl,
+                Translation::get('SetProviderLinks'), new FontAwesomeGlyph('cog', array(), null, 'fas'), $actionUrl,
                 ToolbarItem::DISPLAY_ICON
             );
 

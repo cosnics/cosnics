@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  *
@@ -13,6 +14,14 @@ use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 class RepositoryApplicationItem extends ApplicationItem
 {
 
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
+     */
+    public function getGlyph()
+    {
+        return new FontAwesomeGlyph('hdd', array(), null, 'fas');
+    }
+
     public static function get_table_name()
     {
         return ApplicationItem::get_table_name();
@@ -22,7 +31,7 @@ class RepositoryApplicationItem extends ApplicationItem
      * @inheritdoc
      * Override needed because the database table parent is Item, not ApplicationItem.
      * See Chamilo\Libraries\Storage\DataManager\Doctrine\Database Create function
-     * 
+     *
      * @return string
      */
     public static function parent_class_name()

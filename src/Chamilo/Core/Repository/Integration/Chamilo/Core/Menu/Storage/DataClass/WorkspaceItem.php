@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClas
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  *
@@ -50,5 +51,13 @@ class WorkspaceItem extends Item
     public static function get_additional_property_names()
     {
         return array(self::PROPERTY_WORKSPACE_ID, self::PROPERTY_NAME);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
+     */
+    public function getGlyph()
+    {
+        return new FontAwesomeGlyph('hdd', array(), null, 'fas');
     }
 }

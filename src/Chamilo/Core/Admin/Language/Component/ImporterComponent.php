@@ -303,9 +303,7 @@ class ImporterComponent extends Manager
 
                 $row = array();
                 $row[] = $package;
-                $row[] = Theme::getInstance()->getImage(
-                    'language/' . $language, 'png', $language, null, ToolbarItem::DISPLAY_ICON, false, __NAMESPACE__
-                );
+                $row[] = $language;
                 $row[] = count($existing_translations);
                 $row[] = count($variables);
                 $row[] = count($differences);

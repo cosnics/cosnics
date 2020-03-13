@@ -3,10 +3,8 @@ namespace Chamilo\Core\Repository\Common\Rendition\Html\Type;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\Common\Rendition\Html\HtmlContentObjectRendition;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -46,19 +44,21 @@ class HtmlInlineContentObjectRendition extends HtmlContentObjectRendition
                     htmlentities(Translation::get('Attachments')) . '</div>';
                 Utilities::order_content_objects_by_title($attachments);
                 $html[] = '<ul class="attachments_list">';
+
+                /**
+                 * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $attachments
+                 * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject $attachment
+                 */
                 foreach ($attachments as $attachment)
                 {
                     $url = $this->get_context()->get_content_object_display_attachment_url($attachment);
                     $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
-                    $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' . Theme::getInstance()->getImagePath(
-                            ContentObject::get_content_object_type_namespace($attachment->get_type()),
-                            'Logo/' . Theme::ICON_MINI
-                        ) . '" alt="' . htmlentities(
-                            Translation::get(
-                                'TypeName', null,
-                                ContentObject::get_content_object_type_namespace($attachment->get_type())
-                            )
-                        ) . '"/> ' . $attachment->get_title() . '</a></li>';
+
+                    $glyph = $attachment->getGlyph();
+
+                    $html[] =
+                        '<li><a href="#" onClick="' . $url . '">' . $glyph->render() . ' ' . $attachment->get_title() .
+                        '</a></li>';
                 }
                 $html[] = '</ul>';
                 $html[] = '</div>';

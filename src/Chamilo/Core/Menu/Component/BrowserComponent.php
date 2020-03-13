@@ -1,12 +1,11 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
+use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Menu\ItemMenu;
-use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
-use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\LinkItem;
 use Chamilo\Core\Menu\Table\Item\ItemBrowserTable;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -19,7 +18,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -97,31 +95,29 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
             $commonActions->addButton(
                 new Button(
                     $translator->trans('AddApplicationItem', [], 'Chamilo\Core\Menu'),
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item::TYPE_APPLICATION),
-                    $this->get_url(
-                        array(
-                            self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => ApplicationItem::class_name()
-                        )
-                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    new FontAwesomeGlyph('desktop', array(), null, 'fas'), $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => ApplicationItem::class_name()
+                    )
+                ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $commonActions->addButton(
                 new Button(
                     $translator->trans('AddCategoryItem', [], 'Chamilo\Core\Menu'),
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item::TYPE_CATEGORY),
-                    $this->get_url(
-                        array(
-                            self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => CategoryItem::class_name()
-                        )
-                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    new FontAwesomeGlyph('folder', array(), null, 'fas'), $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => CategoryItem::class_name()
+                    )
+                ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $commonActions->addButton(
                 new Button(
                     $translator->trans('AddLinkItem', [], 'Chamilo\Core\Menu'),
-                    Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item::TYPE_LINK), $this->get_url(
+                    new FontAwesomeGlyph('link', array(), null, 'fas'), $this->get_url(
                     array(self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => LinkItem::class_name())
                 ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -132,8 +128,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                 $toolActions->addButton(
                     new Button(
 
-                        $translator->trans('Rights', [], Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('lock'),
+                        $translator->trans('Rights', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('lock'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS)),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
@@ -147,6 +142,14 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Factory\ItemRendererFactory
+     */
+    public function getItemRendererFactory()
+    {
+        return $this->getService(ItemRendererFactory::class);
     }
 
     /**
@@ -194,13 +197,5 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
      */
     public function get_table_condition($tableClassName)
     {
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Factory\ItemRendererFactory
-     */
-    public function getItemRendererFactory()
-    {
-        return $this->getService(ItemRendererFactory::class);
     }
 }

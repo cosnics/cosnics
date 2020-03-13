@@ -17,11 +17,11 @@ class RelationEntity extends DataClassEntity
 
     /**
      *
-     * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getType()
+     * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getDisplayName()
      */
-    public function getType()
+    public function getDisplayName()
     {
-        return Translation::get('Relation', null, 'Chamilo\Core\Metadata');
+        return $this->getDataClass()->getTranslationByIsocode(Translation::getInstance()->getLanguageIsocode());
     }
 
     /**
@@ -35,10 +35,10 @@ class RelationEntity extends DataClassEntity
 
     /**
      *
-     * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getDisplayName()
+     * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getType()
      */
-    public function getDisplayName()
+    public function getType()
     {
-        return $this->getDataClass()->getTranslationByIsocode(Translation::getInstance()->getLanguageIsocode());
+        return Translation::get('Relation', null, 'Chamilo\Core\Metadata');
     }
 }

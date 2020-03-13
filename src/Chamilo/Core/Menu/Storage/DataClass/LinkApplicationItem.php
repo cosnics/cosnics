@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  *
@@ -203,5 +204,13 @@ class LinkApplicationItem extends Item
         $types[self::TARGET_TOP] = self::targetString(self::TARGET_TOP);
 
         return ($typesOnly ? array_keys($types) : $types);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
+     */
+    public function getGlyph()
+    {
+        return new FontAwesomeGlyph('link', array(), null, 'fas');
     }
 }

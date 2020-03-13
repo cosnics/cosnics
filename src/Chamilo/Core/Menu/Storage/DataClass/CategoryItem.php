@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  *
@@ -28,5 +29,13 @@ class CategoryItem extends Item
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name());
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
+     */
+    public function getGlyph()
+    {
+        return new FontAwesomeGlyph('folder', array(), null, 'fas');
     }
 }

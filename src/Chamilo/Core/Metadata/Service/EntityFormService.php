@@ -16,7 +16,6 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\UUID;
@@ -206,9 +205,8 @@ class EntityFormService
                         'vocabulary-selector" onclick="javascript:openPopup(\'' . $vocabularyUrl . '\'); return false;';
 
                     $vocabularyAction = new ToolbarItem(
-                        Translation::get('ShowVocabulary'), Theme::getInstance()->getImagePath(
-                        'Chamilo\Core\Metadata\Element', 'ValueType/' . $element->get_value_type()
-                    ), $vocabularyUrl, ToolbarItem::DISPLAY_ICON, false, $onclick, '_blank'
+                        Translation::get('ShowVocabulary'), $element->getGlyph(), $vocabularyUrl,
+                        ToolbarItem::DISPLAY_ICON, false, $onclick, '_blank'
                     );
 
                     $tagElementGroup[] = $this->formValidator->createElement(

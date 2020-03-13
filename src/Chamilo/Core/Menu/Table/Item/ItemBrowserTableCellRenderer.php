@@ -291,14 +291,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
 
                 return $itemRenderer->renderTitle($item);
             case ItemBrowserTableColumnModel::PROPERTY_TYPE :
-
-                $type = $item->getType();
-
-                $typeName = ClassnameUtilities::getInstance()->getClassnameFromNamespace($type);
-                $package = ClassnameUtilities::getInstance()->getNamespaceFromObject($item);
-                $package = ClassnameUtilities::getInstance()->getNamespaceParent($package, 2);
-
-                return '<img src="' . Theme::getInstance()->getImagePath($package, 'Types/' . $typeName) . '" />';
+                return $item->getGlyph()->render();
         }
 
         return parent::render_cell($column, $item);

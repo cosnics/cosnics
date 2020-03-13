@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  *
@@ -113,5 +114,13 @@ class LanguageItem extends Item
     public function setCurrentUrl(string $currentUrl)
     {
         $this->currentUrl = $currentUrl;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
+     */
+    public function getGlyph()
+    {
+        return new FontAwesomeGlyph('language', array(), null, 'fas');
     }
 }

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  *
@@ -27,6 +28,14 @@ class ApplicationItem extends Item
     {
         parent::__construct($defaultProperties, $additionalProperties);
         $this->setType(__CLASS__);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
+     */
+    public function getGlyph()
+    {
+        return new FontAwesomeGlyph('desktop', array(), null, 'fas');
     }
 
     /**
