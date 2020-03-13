@@ -1,6 +1,1 @@
 @import url('../Aqua/Stylesheet.css');
-
-ul.tree-menu li div a.hotspot_question, ul.tree-menu li div a.type_hotspot_question,
-	ul.tree-menu li div a.type_hotspot_question_default {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}

@@ -289,14 +289,6 @@ table.collapsed tr.collapsable {
 	color: #e17009;
 }
 
-ul.tree-menu li div a.wiki {
-	background-image: url(../../Images/Aqua/Logo/16.png);
-}
-
-ul.tree-menu li div a.type_wiki {
-	background-image: url(../../Images/Aqua/Logo/16.png);
-}
-
 /*Original Wikipedia CSS */
 /* Content */
 #content {

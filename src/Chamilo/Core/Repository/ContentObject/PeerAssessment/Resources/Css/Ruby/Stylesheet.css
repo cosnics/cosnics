@@ -1,8 +1,1 @@
 @import url('../Aqua/Stylesheet.css');
-
-@charset 'utf-8';
-
-ul.tree-menu li div a.peer_assessment, ul.tree-menu li div a.type_peer_assessment,
-	ul.tree-menu li div a.type_peer_assessment_default {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}

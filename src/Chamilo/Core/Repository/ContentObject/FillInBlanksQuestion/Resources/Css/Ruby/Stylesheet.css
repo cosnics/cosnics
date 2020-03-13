@@ -1,10 +1,5 @@
 @import url('../Aqua/Stylesheet.css');
 
-ul.tree-menu li div a.fill_in_blanks_question, ul.tree-menu li div a.type_fill_in_blanks_question,
-	ul.tree-menu li div a.type_fill_in_blanks_question_default {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
-
 span.fill_in_the_blanks_gap {
 	border: 1px solid #CECECE;
 	background-color: #F4F4F4;

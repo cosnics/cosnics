@@ -7,22 +7,6 @@
     content: "\f15b";
 }
 
-ul.tree-menu li div a.file, ul.tree-menu li div a.type_file, ul.tree-menu li div a.type_file_default,
-.fancytree-custom-icon.type_file,
-.fancytree-custom-icon.type_file_default,
-.treeview .list-group .list-group-item .icon.node-icon.type_file,
-.treeview .list-group .list-group-item .icon.node-icon.type_file_default {
-    background-image: url(../../Images/Aqua/Logo/16.png);
-}
-
-ul.tree-menu li div a.file.type_completed, ul.tree-menu li div a.type_file.type_completed, ul.tree-menu li div a.type_file_default.type_completed,
-.fancytree-custom-icon.type_file.type_completed,
-.fancytree-custom-icon.type_file_default.type_completed,
-.treeview .list-group .list-group-item .icon.node-icon.type_file.type_completed,
-.treeview .list-group .list-group-item .icon.node-icon.type_file_default.type_completed {
-    background-image: url(../../Images/Aqua/Logo/16Completed.png);
-}
-
 .mejs-container {
     margin-bottom: 15px;
 }

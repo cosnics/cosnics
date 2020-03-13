@@ -1,6 +1,1 @@
 @import url('../Aqua/Stylesheet.css');
-
-ul.tree-menu li div a.hotpotatoes, ul.tree-menu li div a.type_hotpotatoes,
-	ul.tree-menu li div a.type_hotpotatoes_default {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}

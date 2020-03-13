@@ -1,6 +1,1 @@
 @import url('../Aqua/Stylesheet.css');
-
-ul.tree-menu li div a.system_announcement, ul.tree-menu li div a.type_system_announcement,
-	ul.tree-menu li div a.type_system_announcement_default {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}

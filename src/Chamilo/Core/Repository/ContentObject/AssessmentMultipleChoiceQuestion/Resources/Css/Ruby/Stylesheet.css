@@ -1,7 +1,1 @@
 @import url('../Aqua/Stylesheet.css');
-
-ul.tree-menu li div a.assessment_multiple_choice_question, ul.tree-menu li div a.type_assessment_multiple_choice_question,
-	ul.tree-menu li div a.type_assessment_multiple_choice_question_default
-	{
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}

@@ -6,11 +6,3 @@
 .fas-ci-84cae783096149e6edb5819557474a97:before {
     content: "\f02e";
 }
-
-ul.tree-menu li div a.bookmark, ul.tree-menu li div a.type_bookmark, ul.tree-menu li div a.type_bookmark_default,
-.treeview .list-group .list-group-item .icon.node-icon.type_bookmark,
-.fancytree-custom-icon.type_bookmark,
-.fancytree-custom-icon.type_bookmark_default,
-.treeview .list-group .list-group-item .icon.node-icon.type_bookmark_default {
-    background-image: url(../../Images/Aqua/Logo/16.png);
-}

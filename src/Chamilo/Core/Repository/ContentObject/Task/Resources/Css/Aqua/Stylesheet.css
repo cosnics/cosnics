@@ -13,11 +13,6 @@
 	content: "\f274";
 }
 
-ul.tree-menu li div a.task, ul.tree-menu li div a.type_task, ul.tree-menu li div a.type_task_default
-	{
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
-
 .ui-timepicker {
 	background-color: #a00007 !important;
 }

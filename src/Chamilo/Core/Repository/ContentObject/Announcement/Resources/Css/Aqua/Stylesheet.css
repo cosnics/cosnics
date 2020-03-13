@@ -6,10 +6,3 @@
 .fas-ci-28c50b25b1a6784521187a275a8770cb:before {
     content: "\f130";
 }
-
-ul.tree-menu li div a.announcement, ul.tree-menu li div a.type_announcement,
-ul.tree-menu li div a.type_announcement_default,
-.fancytree-custom-icon.type_announcement,
-.treeview .list-group .list-group-item .icon.node-icon.type_announcement {
-    background-image: url(../../Images/Aqua/Logo/16.png);
-}

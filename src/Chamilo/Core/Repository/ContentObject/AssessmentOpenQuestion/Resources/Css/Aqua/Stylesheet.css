@@ -6,12 +6,3 @@
 .fas-ci-3f0f5abccaaa8d97a24e4a1feec2548a:before {
 	content: "\f11c";
 }
-
-ul.tree-menu li div a.assessment_open_question, ul.tree-menu li div a.type_assessment_open_question,
-	.treeview .list-group .list-group-item .icon.node-icon.type_assessment_open_question,
-	.treeview .list-group .list-group-item .icon.node-icon.type_assessment_open_question_default,
-.fancytree-custom-icon.type_assessment_open_question,
-.fancytree-custom-icon.type_assessment_open_question_default,
-	ul.tree-menu li div a.type_assessment_open_question_default {
-	background-image: url(../../Images/Aqua/Logo/16.png);
-}

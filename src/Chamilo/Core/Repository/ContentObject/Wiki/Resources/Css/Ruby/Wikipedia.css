@@ -79,11 +79,3 @@ url
 	color: #996900;
 	margin-bottom: 1.5em;
 }
-
-ul.tree-menu li div a.wiki {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
-
-ul.tree-menu li div a.type_wiki {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}

@@ -293,19 +293,3 @@ table.collapsed tr.collapsable {
 .wiki-pane-content .wiki-pane-content-body a.new {
     color: #e17009;
 }
-
-ul.tree-menu li div a.wiki, ul.tree-menu li div a.type_wiki, ul.tree-menu li div a.type_wiki_default,
-.fancytree-custom-icon.type_wiki,
-.fancytree-custom-icon.type_wiki_default,
-.treeview .list-group .list-group-item .icon.node-icon.type_wiki,
-.treeview .list-group .list-group-item .icon.node-icon.type_wiki_default {
-    background-image: url(../../Images/Aqua/Logo/16.png);
-}
-
-ul.tree-menu li div a.wiki.type_completed, ul.tree-menu li div a.type_wiki.type_completed, ul.tree-menu li div a.type_wiki_default.type_completed,
-.fancytree-custom-icon.type_wiki.type_completed,
-.fancytree-custom-icon.type_wiki_default.type_completed,
-.treeview .list-group .list-group-item .icon.node-icon.type_wiki.type_completed,
-.treeview .list-group .list-group-item .icon.node-icon.type_wiki_default.type_completed {
-    background-image: url(../../Images/Aqua/Logo/16Completed.png);
-}

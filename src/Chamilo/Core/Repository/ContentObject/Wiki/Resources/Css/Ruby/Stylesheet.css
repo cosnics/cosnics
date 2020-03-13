@@ -72,7 +72,3 @@
     color: #996900;
     margin-bottom: 1.5em;
 }
-
-ul.tree-menu li div a.wiki, ul.tree-menu li div a.type_wiki, ul.tree-menu li div a.type_wiki_default {
-    background-image: url(../../Images/Ruby/Logo/16.png);
-}

@@ -6,12 +6,3 @@
 .fas-ci-19e63ee7a26fd10207d3a1343764ed4e:before {
     content: "\f022";
 }
-
-ul.tree-menu li div a.glossary_item, ul.tree-menu li div a.type_glossary_item,
-.fancytree-custom-icon.type_glossary_item,
-.fancytree-custom-icon.type_glossary_item_default,
-.treeview .list-group .list-group-item .icon.node-icon.type_glossary_item,
-.treeview .list-group .list-group-item .icon.node-icon.type_glossary_item_default,
-ul.tree-menu li div a.type_glossary_item_default {
-    background-image: url(../../Images/Aqua/Logo/16.png);
-}

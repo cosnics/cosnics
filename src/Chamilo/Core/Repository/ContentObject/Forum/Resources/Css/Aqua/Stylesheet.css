@@ -60,21 +60,3 @@
 	margin-bottom: 5px;
 	text-transform: uppercase;
 }
-
-ul.tree-menu li div a.forum, ul.tree-menu li div a.type_forum, ul.tree-menu li div a.type_forum_default,
-.fancytree-custom-icon.type_forum,
-.fancytree-custom-icon.type_forum_default,
-	.treeview .list-group .list-group-item .icon.node-icon.type_forum,
-	.treeview .list-group .list-group-item .icon.node-icon.type_forum_default
-	{
-	background-image: url(../../Images/Aqua/Logo/16.png);
-}
-
-ul.tree-menu li div a.forum.type_completed, ul.tree-menu li div a.type_forum.type_completed, ul.tree-menu li div a.type_forum_default.type_completed,
-.fancytree-custom-icon.type_forum.type_completed,
-.fancytree-custom-icon.type_forum_default.type_completed,
-.treeview .list-group .list-group-item .icon.node-icon.type_forum.type_completed,
-.treeview .list-group .list-group-item .icon.node-icon.type_forum_default.type_completed
-{
-	background-image: url(../../Images/Aqua/Logo/16Completed.png);
-}
