@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException;
 use Chamilo\Libraries\Utilities\UUID;
 
 /**
@@ -289,7 +290,16 @@ class GroupRepository
         {
             if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {
-                throw new GroupNotExistsException($groupIdentifier);
+                //could also be that the user is not found.
+                $userNotFoundMsgPosition = strpos(
+                    $exception->getResponse()->getBody()->getContents(),
+                    'Resource \'' . $azureUserIdentifier . '\' does not exist'
+                );
+                if($userNotFoundMsgPosition !== false) {
+                    throw new UnknownAzureUserIdException($azureUserIdentifier);
+                } else {
+                    throw new GroupNotExistsException($groupIdentifier);
+                }
             }
 
             throw $exception;
