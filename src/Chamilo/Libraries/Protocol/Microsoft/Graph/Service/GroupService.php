@@ -6,6 +6,7 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
 use GuzzleHttp\Exception\ClientException;
 use Microsoft\Graph\Model\Group;
@@ -161,6 +162,7 @@ class GroupService
      * @throws AzureUserNotExistsException
      * @throws GroupNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws UnknownAzureUserIdException
      */
     public function addMemberToGroup(string $groupId, User $user)
     {

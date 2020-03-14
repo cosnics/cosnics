@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\TeamRepository;
 use GuzzleHttp\Exception\ClientException;
 use Microsoft\Graph\Model\Group;
@@ -136,6 +137,7 @@ class TeamService
      * @param User $user
      * @param Team $team
      * @throws AzureUserNotExistsException
+     * @throws UnknownAzureUserIdException
      */
     public function addMember(User $user, Team $team)
     {

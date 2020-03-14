@@ -275,6 +275,7 @@ class GroupRepository
      * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
      * @throws GroupNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws UnknownAzureUserIdException
      */
     public function subscribeMemberInGroup($groupIdentifier, $azureUserIdentifier)
     {

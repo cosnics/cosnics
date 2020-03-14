@@ -12,6 +12,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Microsoft\Graph\Model\Team;
 
@@ -452,6 +453,8 @@ class PlatformGroupTeamService
     /**
      * @param \Microsoft\Graph\Model\Team $team
      * @param array $groups
+     * @throws AzureUserNotExistsException
+     * @throws UnknownAzureUserIdException
      */
     protected function addGroupUsersToTeam(Team $team, array $groups = [])
     {
@@ -463,7 +466,7 @@ class PlatformGroupTeamService
         }
 
         $users = $this->userService->findUsersByIdentifiers($userIds);
-
+        $exception = null;
         foreach ($users as $user)
         {
             try
@@ -473,6 +476,14 @@ class PlatformGroupTeamService
             catch (AzureUserNotExistsException $exception)
             {
             }
+            catch(UnknownAzureUserIdException $ex)
+            {
+                $exception = $ex;
+            }
+        }
+        if($exception instanceof UnknownAzureUserIdException)
+        {
+            throw $exception;
         }
     }
 
