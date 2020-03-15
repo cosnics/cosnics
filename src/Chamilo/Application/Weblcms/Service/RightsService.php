@@ -206,7 +206,7 @@ class RightsService implements RightsServiceInterface
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param ContentObjectPublication $publication
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
-     * TODO: Fix this like view right, quick fix now for edit right
+     * TODO: Fix this like view right, quick fix now for edit right only. Doesn't take closed categories or tools into account
      *
      * @return bool
      */
