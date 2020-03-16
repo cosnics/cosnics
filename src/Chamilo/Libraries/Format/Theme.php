@@ -234,20 +234,6 @@ class Theme
 
     /**
      *
-     * @param string $type
-     * @param integer $size
-     * @param boolean $web
-     * @return string
-     */
-    public function getFileExtension($type, $size = self::ICON_MINI, $web = true)
-    {
-        $directory_separator = ($web ? '/' : DIRECTORY_SEPARATOR);
-        return $this->getPathBuilder()->getResourcesPath('Chamilo\Configuration', $web) . 'File' . $directory_separator .
-             'Extension' . $directory_separator . $type . $directory_separator . $size . '.png';
-    }
-
-    /**
-     *
      * @return string[]
      */
     public function getAvailableThemes()
