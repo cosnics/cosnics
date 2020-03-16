@@ -29,7 +29,7 @@ class RepositoryImplementationItemRenderer extends ItemRenderer
 
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => $item->get_implementation(),
+                Application::PARAM_CONTEXT         => $item->get_implementation(),
                 Manager::PARAM_EXTERNAL_REPOSITORY => $item->get_instance_id()
             )
         );
@@ -42,9 +42,11 @@ class RepositoryImplementationItemRenderer extends ItemRenderer
 
         if ($item->showIcon())
         {
-            $imagePath = $this->getThemeUtilities()->getImagePath($item->get_implementation(), 'Menu');
+            $glyph = $item->getGlyph();
+            $glyph->setExtraClasses(array('fa-2x'));
+            $glyph->setTitle($title);
 
-            $html[] = '<img src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = $glyph->render();
         }
 
         if ($item->showTitle())

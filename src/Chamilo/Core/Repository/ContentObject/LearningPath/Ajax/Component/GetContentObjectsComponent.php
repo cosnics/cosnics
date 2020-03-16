@@ -82,7 +82,7 @@ class GetContentObjectsComponent extends Manager
                 array(
                     'id' => $contentObject->getId(),
                     'title' => $contentObject->get_title(),
-                    'icon' => $contentObject->get_icon_path(),
+                    'icon' => $contentObject->getGlyph()->render(),
                     'securityCode' => $contentObject->calculate_security_code(),
                     'type' => $type
                 )

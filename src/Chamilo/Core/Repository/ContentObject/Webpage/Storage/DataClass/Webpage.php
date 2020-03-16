@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataManager;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport;
@@ -25,31 +26,30 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
 {
 
     // Properties
-    const PROPERTY_STORAGE_PATH = 'storage_path';
-    const PROPERTY_PATH = 'path';
-    const PROPERTY_FILENAME = 'filename';
-    const PROPERTY_FILESIZE = 'filesize';
-    const PROPERTY_HASH = 'hash';
     const PROPERTY_EXTENSION = 'extension';
 
+    const PROPERTY_FILENAME = 'filename';
+
+    const PROPERTY_FILESIZE = 'filesize';
+
+    const PROPERTY_HASH = 'hash';
+
+    const PROPERTY_PATH = 'path';
+
+    const PROPERTY_STORAGE_PATH = 'storage_path';
+
     // Filetype groups
-    const TYPE_IMAGE = 'image';
-    const TYPE_FLASH = 'flash';
-    const TYPE_FLASH_VIDEO = 'flash_video';
-    const TYPE_VIDEO = 'video';
+
     const TYPE_AUDIO = 'audio';
 
+    const TYPE_FLASH = 'flash';
+    const TYPE_FLASH_VIDEO = 'flash_video';
+
+    const TYPE_IMAGE = 'image';
+
+    const TYPE_VIDEO = 'video';
+
     private $contents;
-
-    public static function get_type_name()
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
-    }
-
-    public function get_type_string()
-    {
-        return Translation::get('TypeWebpage', array('EXTENSION' => strtoupper($this->get_extension())));
-    }
 
     /**
      * In memory file content.
@@ -75,421 +75,6 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
      */
     private $save_as_new_version = false;
 
-    public function get_path()
-    {
-        return $this->get_additional_property(self::PROPERTY_PATH);
-    }
-
-    public function set_path($path)
-    {
-        return $this->set_additional_property(self::PROPERTY_PATH, $path);
-    }
-
-    public function get_storage_path()
-    {
-        return $this->get_additional_property(self::PROPERTY_STORAGE_PATH);
-    }
-
-    public function set_storage_path($storage_path)
-    {
-        return $this->set_additional_property(self::PROPERTY_STORAGE_PATH, $storage_path);
-    }
-
-    public function get_filename()
-    {
-        return $this->get_additional_property(self::PROPERTY_FILENAME);
-    }
-
-    public function set_filename($filename)
-    {
-        return $this->set_additional_property(self::PROPERTY_FILENAME, $filename);
-    }
-
-    public function get_filesize()
-    {
-        return $this->get_additional_property(self::PROPERTY_FILESIZE);
-    }
-
-    public function set_filesize($filesize)
-    {
-        return $this->set_additional_property(self::PROPERTY_FILESIZE, $filesize);
-    }
-
-    public function get_hash()
-    {
-        return $this->get_additional_property(self::PROPERTY_HASH);
-    }
-
-    public function set_hash($hash)
-    {
-        return $this->set_additional_property(self::PROPERTY_HASH, $hash);
-    }
-
-    public function get_mime_type()
-    {
-        return FileType::get_mimetype($this->get_extension());
-    }
-
-    public function delete($only_version = false)
-    {
-        if ($only_version)
-        {
-            if (DataManager::is_only_webpage_occurence($this->get_storage_path(), $this->get_path()))
-            {
-                Filesystem::remove($this->get_full_path());
-            }
-        }
-        else
-        {
-            if (Text::is_valid_path($this->get_full_path()))
-            {
-                Filesystem::remove($this->get_full_path());
-            }
-        }
-
-        return parent::delete($only_version);
-    }
-
-    public function get_url()
-    {
-        return Path::getInstance()->getRepositoryPath(true) . $this->get_path();
-    }
-
-    public function get_full_path()
-    {
-        return $this->get_storage_path() . $this->get_path();
-    }
-
-    public function get_icon_name($size = Theme :: ICON_SMALL)
-    {
-        $filename = $this->get_filename();
-        $parts = explode('.', $filename);
-        $icon_name = strtolower($parts[count($parts) - 1]);
-        $icon_name = $size . '_' . $icon_name;
-        $icon_path = Theme::getInstance()->getImagePath(
-            ContentObject::get_content_object_type_namespace($this->get_type()), 'Logo/' . $icon_name, 'png', false
-        );
-
-        if (!file_exists($icon_path))
-        {
-            return $size;
-        }
-
-        return $icon_name;
-    }
-
-    /**
-     * @return string
-     */
-    public static function get_disk_space_properties()
-    {
-        return static::getStorageSpaceProperty();
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageSpaceProperty()
-    {
-        return self::PROPERTY_FILESIZE;
-    }
-
-    public function get_extension()
-    {
-        $filename = $this->get_filename();
-        $parts = explode('.', $filename);
-
-        return strtolower($parts[count($parts) - 1]);
-    }
-
-    /**
-     * Get In memory file content.
-     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
-     *
-     * @return mixed
-     */
-    public function get_in_memory_file()
-    {
-        return $this->in_memory_file;
-    }
-
-    /**
-     * Set In memory file content.
-     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
-     *
-     * @var $in_memory_file mixed
-     * @return void
-     */
-    public function set_in_memory_file($in_memory_file)
-    {
-        if (StringUtilities::getInstance()->hasValue($in_memory_file))
-        {
-            if (StringUtilities::getInstance()->hasValue($this->get_temporary_file_path()))
-            {
-                throw new Exception('A Webpage can not have a temporary file path and in memory content');
-            }
-
-            $this->in_memory_file = $in_memory_file;
-        }
-    }
-
-    /**
-     * Get a value indicating wether the Webpage must be saved as a new version if its save() or update() method is
-     * called
-     *
-     * @return boolean
-     */
-    public function get_save_as_new_version()
-    {
-        return $this->save_as_new_version;
-    }
-
-    /**
-     * Set a value indicating wether the Webpage must be saved as a new version if its save() or update() method is
-     * called
-     *
-     * @var $save_as_new_version boolean
-     * @return void
-     */
-    public function set_save_as_new_version($save_as_new_version)
-    {
-        if (is_bool($save_as_new_version))
-        {
-            $this->save_as_new_version = $save_as_new_version;
-        }
-    }
-
-    /**
-     * Get temporary file path.
-     * A path to a file that has to be moved and renamed when the Webpage is saved
-     *
-     * @return string
-     */
-    public function get_temporary_file_path()
-    {
-        return $this->temporary_file_path;
-    }
-
-    /**
-     * Set temporary file path.
-     * A path to a file that has to be moved and renamed when the Webpage is saved
-     *
-     * @var $temporary_file_path string
-     * @return void
-     */
-    public function set_temporary_file_path($temporary_file_path)
-    {
-        if (StringUtilities::getInstance()->hasValue($temporary_file_path))
-        {
-            if (StringUtilities::getInstance()->hasValue($this->get_in_memory_file()))
-            {
-                throw new Exception('A Webpage can not have a temporary file path and in memory content');
-            }
-
-            $this->temporary_file_path = $temporary_file_path;
-        }
-    }
-
-    public function has_file_to_save()
-    {
-        return StringUtilities::getInstance()->hasValue($this->get_temporary_file_path()) ||
-            StringUtilities::getInstance()->hasValue(
-                $this->get_in_memory_file()
-            );
-    }
-
-    /**
-     * Determines if this document is an image
-     *
-     * @return boolean True if the document is an image
-     */
-    public function is_image()
-    {
-        return FileType::is_image($this->get_extension());
-    }
-
-    /**
-     * Determines if this document is a flash movie
-     *
-     * @return boolean True if the document is a flash movie
-     */
-    public function is_flash()
-    {
-        return FileType::is_flash($this->get_extension());
-    }
-
-    /**
-     * Determines if this document is a video
-     *
-     * @return boolean True if the document is a video
-     */
-    public function is_video()
-    {
-        return FileType::is_video($this->get_extension());
-    }
-
-    /**
-     * Determines if this document is an audio file
-     *
-     * @return boolean True if the document is an audio file
-     */
-    public function is_audio()
-    {
-        return FileType::is_audio($this->get_extension());
-    }
-
-    /**
-     * Get extensions for images
-     *
-     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_IMAGE) now
-     * @return string[]
-     */
-    public static function get_image_types()
-    {
-        return FileType::get_type_extensions(FileType::TYPE_IMAGE);
-    }
-
-    /**
-     * Get extensions for flash
-     *
-     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_FLASH) now
-     * @return string[]
-     */
-    public static function get_flash_types()
-    {
-        return FileType::get_type_extensions(FileType::TYPE_FLASH);
-    }
-
-    public static function get_flash_video_types()
-    {
-        $flash_types = array();
-        $flash_types[] = 'flv';
-
-        return $flash_types;
-    }
-
-    /**
-     * Get extensions for video
-     *
-     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_VIDEO) now
-     * @return string[]
-     */
-    public static function get_video_types()
-    {
-        return FileType::get_type_extensions(FileType::TYPE_VIDEO);
-    }
-
-    /**
-     * Get extensions for audio
-     *
-     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_AUDIO) now
-     * @return string[]
-     */
-    public static function get_audio_types()
-    {
-        return FileType::get_type_extensions(FileType::TYPE_AUDIO);
-    }
-
-    public static function get_showable_types()
-    {
-        $showable_types = array();
-        $showable_types[] = 'html';
-        $showable_types[] = 'htm';
-        $showable_types[] = 'txt';
-        $showable_types[] = 'pdf';
-        // $showable_types[] = 'pps';
-        // $showable_types[] = 'ppt';
-        // $showable_types[] = 'doc';
-        // $showable_types[] = 'xls';
-        // $showable_types[] = 'ppsx';
-        // $showable_types[] = 'pptx';
-        // $showable_types[] = 'docx';
-        // $showable_types[] = 'xlsx';
-        // $showable_types[] = 'mht';
-
-        return $showable_types;
-    }
-
-    public function determine_type()
-    {
-        if ($this->is_audio())
-        {
-            return 'audio';
-        }
-        elseif ($this->is_flash())
-        {
-            return 'flash';
-        }
-        elseif ($this->is_image())
-        {
-            return 'image';
-        }
-        elseif ($this->is_video())
-        {
-            return 'video';
-        }
-        else
-        {
-            return 'default';
-        }
-    }
-
-    public function send_as_download()
-    {
-        $filename = str_replace(' ', '_', $this->get_filename());
-
-        header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-        header('Cache-Control: public');
-        header('Pragma: no-cache');
-        header('Content-type: ' . $this->get_mime_type());
-        // header('Content-Type: application/force-download');
-        header('Content-length: ' . $this->get_filesize());
-        if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT']))
-        {
-            header('Content-Disposition: filename= "' . $filename . '"');
-        }
-        else
-        {
-            header('Content-Disposition: attachment; filename= "' . $filename . '"');
-        }
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-        {
-            header('Pragma: ');
-            header('Cache-Control: ');
-            header('Cache-Control: public'); // IE cannot download from sessions
-            // without a cache
-        }
-        header('Content-Description: ' . $filename);
-        header('Content-transfer-encoding: binary');
-        $fp = fopen($this->get_full_path(), 'r');
-        fpassthru($fp);
-
-        return true;
-    }
-
-    public function open_in_browser()
-    {
-        $filename = str_replace(' ', '_', $this->get_filename());
-
-        header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-        header('Content-type: ' . $this->get_mime_type());
-        header('Content-length: ' . $this->get_filesize());
-        header('Content-Description: ' . $filename);
-        header('Content-Disposition: inline; filename= "' . $filename . '"');
-        $fp = fopen($this->get_full_path(), 'r');
-        fpassthru($fp);
-
-        return true;
-    }
-
-    public static function get_additional_property_names()
-    {
-        return array(
-            self::PROPERTY_FILENAME, self::PROPERTY_FILESIZE, self::PROPERTY_PATH, self::PROPERTY_HASH,
-            self::PROPERTY_STORAGE_PATH
-        );
-    }
-
     /**
      * (non-PHPdoc)
      *
@@ -504,7 +89,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         }
 
         $descriptionRequired = Configuration::getInstance()->get_setting(
-            array(\Chamilo\Core\Repository\Manager::context(), 'description_required')
+            array(Manager::context(), 'description_required')
         );
 
         // Description
@@ -568,6 +153,406 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         }
 
         return !$this->has_errors();
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
+     * @see repository/lib/ContentObject#create()
+     */
+    public function create()
+    {
+        $this->clear_errors();
+
+        return parent::create();
+    }
+
+    public function delete($only_version = false)
+    {
+        if ($only_version)
+        {
+            if (DataManager::is_only_webpage_occurence($this->get_storage_path(), $this->get_path()))
+            {
+                Filesystem::remove($this->get_full_path());
+            }
+        }
+        else
+        {
+            if (Text::is_valid_path($this->get_full_path()))
+            {
+                Filesystem::remove($this->get_full_path());
+            }
+        }
+
+        return parent::delete($only_version);
+    }
+
+    public function determine_type()
+    {
+        if ($this->is_audio())
+        {
+            return 'audio';
+        }
+        elseif ($this->is_flash())
+        {
+            return 'flash';
+        }
+        elseif ($this->is_image())
+        {
+            return 'image';
+        }
+        elseif ($this->is_video())
+        {
+            return 'video';
+        }
+        else
+        {
+            return 'default';
+        }
+    }
+
+    /**
+     * Copy the current file to a new unique filename.
+     * Set the new values of path and hash of the current object. Useful
+     * when a Webpage is updated as a new version, without replacing the content Note: needed as when saving a new
+     * version of a Webpage, a new record is saved in the repository_document table, and the 'hash' field must be
+     * unique.
+     *
+     * @return boolean
+     */
+    private function duplicate_current_file()
+    {
+        $full_current_file_path = $this->get_full_path();
+
+        if (file_exists($full_current_file_path))
+        {
+            $filename_hash = md5($this->get_filename());
+            $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
+            $full_folder_path = Path::getInstance()->getRepositoryPath() . $relative_folder_path;
+
+            $unique_filename_hash = Filesystem::create_unique_name($full_folder_path, $filename_hash);
+
+            $path_to_copied_file = $full_folder_path . '/' . $unique_filename_hash;
+
+            $this->set_storage_path(Path::getInstance()->getRepositoryPath());
+            $this->set_path($relative_folder_path . '/' . $unique_filename_hash);
+            $this->set_hash($unique_filename_hash);
+
+            return copy($full_current_file_path, $path_to_copied_file);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageSpaceProperty()
+    {
+        return self::PROPERTY_FILESIZE;
+    }
+
+    public static function get_additional_property_names()
+    {
+        return array(
+            self::PROPERTY_FILENAME, self::PROPERTY_FILESIZE, self::PROPERTY_PATH, self::PROPERTY_HASH,
+            self::PROPERTY_STORAGE_PATH
+        );
+    }
+
+    /**
+     * Get extensions for audio
+     *
+     * @return string[]
+     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_AUDIO) now
+     */
+    public static function get_audio_types()
+    {
+        return FileType::get_type_extensions(FileType::TYPE_AUDIO);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_disk_space_properties()
+    {
+        return static::getStorageSpaceProperty();
+    }
+
+    public function get_extension()
+    {
+        $filename = $this->get_filename();
+        $parts = explode('.', $filename);
+
+        return strtolower($parts[count($parts) - 1]);
+    }
+
+    public function get_filename()
+    {
+        return $this->get_additional_property(self::PROPERTY_FILENAME);
+    }
+
+    public function get_filesize()
+    {
+        return $this->get_additional_property(self::PROPERTY_FILESIZE);
+    }
+
+    /**
+     * Get extensions for flash
+     *
+     * @return string[]
+     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_FLASH) now
+     */
+    public static function get_flash_types()
+    {
+        return FileType::get_type_extensions(FileType::TYPE_FLASH);
+    }
+
+    public static function get_flash_video_types()
+    {
+        $flash_types = array();
+        $flash_types[] = 'flv';
+
+        return $flash_types;
+    }
+
+    public function get_full_path()
+    {
+        return $this->get_storage_path() . $this->get_path();
+    }
+
+    public function get_hash()
+    {
+        return $this->get_additional_property(self::PROPERTY_HASH);
+    }
+
+    /**
+     * Get extensions for images
+     *
+     * @return string[]
+     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_IMAGE) now
+     */
+    public static function get_image_types()
+    {
+        return FileType::get_type_extensions(FileType::TYPE_IMAGE);
+    }
+
+    /**
+     * Get In memory file content.
+     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
+     *
+     * @return mixed
+     */
+    public function get_in_memory_file()
+    {
+        return $this->in_memory_file;
+    }
+
+    /**
+     * Set In memory file content.
+     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
+     *
+     * @return void
+     * @var $in_memory_file mixed
+     */
+    public function set_in_memory_file($in_memory_file)
+    {
+        if (StringUtilities::getInstance()->hasValue($in_memory_file))
+        {
+            if (StringUtilities::getInstance()->hasValue($this->get_temporary_file_path()))
+            {
+                throw new Exception('A Webpage can not have a temporary file path and in memory content');
+            }
+
+            $this->in_memory_file = $in_memory_file;
+        }
+    }
+
+    public function get_mime_type()
+    {
+        return FileType::get_mimetype($this->get_extension());
+    }
+
+    public function get_path()
+    {
+        return $this->get_additional_property(self::PROPERTY_PATH);
+    }
+
+    /**
+     * Get a value indicating wether the Webpage must be saved as a new version if its save() or update() method is
+     * called
+     *
+     * @return boolean
+     */
+    public function get_save_as_new_version()
+    {
+        return $this->save_as_new_version;
+    }
+
+    /**
+     * Set a value indicating wether the Webpage must be saved as a new version if its save() or update() method is
+     * called
+     *
+     * @return void
+     * @var $save_as_new_version boolean
+     */
+    public function set_save_as_new_version($save_as_new_version)
+    {
+        if (is_bool($save_as_new_version))
+        {
+            $this->save_as_new_version = $save_as_new_version;
+        }
+    }
+
+    public static function get_searchable_property_names()
+    {
+        return array(self::PROPERTY_FILENAME);
+    }
+
+    public static function get_showable_types()
+    {
+        $showable_types = array();
+        $showable_types[] = 'html';
+        $showable_types[] = 'htm';
+        $showable_types[] = 'txt';
+        $showable_types[] = 'pdf';
+
+        return $showable_types;
+    }
+
+    public function get_storage_path()
+    {
+        return $this->get_additional_property(self::PROPERTY_STORAGE_PATH);
+    }
+
+    /**
+     * Get temporary file path.
+     * A path to a file that has to be moved and renamed when the Webpage is saved
+     *
+     * @return string
+     */
+    public function get_temporary_file_path()
+    {
+        return $this->temporary_file_path;
+    }
+
+    /**
+     * Set temporary file path.
+     * A path to a file that has to be moved and renamed when the Webpage is saved
+     *
+     * @return void
+     * @var $temporary_file_path string
+     */
+    public function set_temporary_file_path($temporary_file_path)
+    {
+        if (StringUtilities::getInstance()->hasValue($temporary_file_path))
+        {
+            if (StringUtilities::getInstance()->hasValue($this->get_in_memory_file()))
+            {
+                throw new Exception('A Webpage can not have a temporary file path and in memory content');
+            }
+
+            $this->temporary_file_path = $temporary_file_path;
+        }
+    }
+
+    public static function get_type_name()
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+    }
+
+    public function get_type_string()
+    {
+        return Translation::get('TypeWebpage', array('EXTENSION' => strtoupper($this->get_extension())));
+    }
+
+    public function get_url()
+    {
+        return Path::getInstance()->getRepositoryPath(true) . $this->get_path();
+    }
+
+    /**
+     * Get extensions for video
+     *
+     * @return string[]
+     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_VIDEO) now
+     */
+    public static function get_video_types()
+    {
+        return FileType::get_type_extensions(FileType::TYPE_VIDEO);
+    }
+
+    public function has_file_to_save()
+    {
+        return StringUtilities::getInstance()->hasValue($this->get_temporary_file_path()) ||
+            StringUtilities::getInstance()->hasValue(
+                $this->get_in_memory_file()
+            );
+    }
+
+    /**
+     * Determines if this document is an audio file
+     *
+     * @return boolean True if the document is an audio file
+     */
+    public function is_audio()
+    {
+        return FileType::is_audio($this->get_extension());
+    }
+
+    /**
+     * Determines if this document is a flash movie
+     *
+     * @return boolean True if the document is a flash movie
+     */
+    public function is_flash()
+    {
+        return FileType::is_flash($this->get_extension());
+    }
+
+    /**
+     * Determines if this document is an image
+     *
+     * @return boolean True if the document is an image
+     */
+    public function is_image()
+    {
+        return FileType::is_image($this->get_extension());
+    }
+
+    /**
+     * Determines if this document is a video
+     *
+     * @return boolean True if the document is a video
+     */
+    public function is_video()
+    {
+        return FileType::is_video($this->get_extension());
+    }
+
+    public function open_in_browser()
+    {
+        $filename = str_replace(' ', '_', $this->get_filename());
+
+        header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
+        header('Content-type: ' . $this->get_mime_type());
+        header('Content-length: ' . $this->get_filesize());
+        header('Content-Description: ' . $filename);
+        header('Content-Disposition: inline; filename= "' . $filename . '"');
+        $fp = fopen($this->get_full_path(), 'r');
+        fpassthru($fp);
+
+        return true;
+    }
+
+    /**
+     * e.g: documents: in the html file
+     */
+    public function process_additional_include_links($pattern, $replacement_string)
+    {
+        $this->contents = preg_replace($pattern, $replacement_string, $this->contents);
     }
 
     /**
@@ -664,55 +649,66 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         return $save_success;
     }
 
-    /**
-     * Copy the current file to a new unique filename.
-     * Set the new values of path and hash of the current object. Useful
-     * when a Webpage is updated as a new version, without replacing the content Note: needed as when saving a new
-     * version of a Webpage, a new record is saved in the repository_document table, and the 'hash' field must be
-     * unique.
-     *
-     * @return boolean
-     */
-    private function duplicate_current_file()
+    public function send_as_download()
     {
-        $full_current_file_path = $this->get_full_path();
+        $filename = str_replace(' ', '_', $this->get_filename());
 
-        if (file_exists($full_current_file_path))
+        header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
+        header('Cache-Control: public');
+        header('Pragma: no-cache');
+        header('Content-type: ' . $this->get_mime_type());
+        // header('Content-Type: application/force-download');
+        header('Content-length: ' . $this->get_filesize());
+        if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT']))
         {
-            $filename_hash = md5($this->get_filename());
-            $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
-            $full_folder_path = Path::getInstance()->getRepositoryPath() . $relative_folder_path;
-
-            $unique_filename_hash = Filesystem::create_unique_name($full_folder_path, $filename_hash);
-
-            $path_to_copied_file = $full_folder_path . '/' . $unique_filename_hash;
-
-            $this->set_storage_path(Path::getInstance()->getRepositoryPath());
-            $this->set_path($relative_folder_path . '/' . $unique_filename_hash);
-            $this->set_hash($unique_filename_hash);
-
-            return copy($full_current_file_path, $path_to_copied_file);
+            header('Content-Disposition: filename= "' . $filename . '"');
         }
         else
         {
-            return false;
+            header('Content-Disposition: attachment; filename= "' . $filename . '"');
         }
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
+        {
+            header('Pragma: ');
+            header('Cache-Control: ');
+            header('Cache-Control: public'); // IE cannot download from sessions
+            // without a cache
+        }
+        header('Content-Description: ' . $filename);
+        header('Content-transfer-encoding: binary');
+        $fp = fopen($this->get_full_path(), 'r');
+        fpassthru($fp);
+
+        return true;
+    }
+
+    public function set_filename($filename)
+    {
+        return $this->set_additional_property(self::PROPERTY_FILENAME, $filename);
+    }
+
+    public function set_filesize($filesize)
+    {
+        return $this->set_additional_property(self::PROPERTY_FILESIZE, $filesize);
     }
 
     /**
      * Active record functions
      */
 
-    /**
-     * (non-PHPdoc)
-     *
-     * @see repository/lib/ContentObject#create()
-     */
-    public function create()
+    public function set_hash($hash)
     {
-        $this->clear_errors();
+        return $this->set_additional_property(self::PROPERTY_HASH, $hash);
+    }
 
-        return parent::create();
+    public function set_path($path)
+    {
+        return $this->set_additional_property(self::PROPERTY_PATH, $path);
+    }
+
+    public function set_storage_path($storage_path)
+    {
+        return $this->set_additional_property(self::PROPERTY_STORAGE_PATH, $storage_path);
     }
 
     /**
@@ -746,13 +742,6 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         }
     }
 
-    public function version($trueUpdate = true)
-    {
-        $this->clear_errors();
-
-        return parent::version($trueUpdate);
-    }
-
     public function update_include_links(array $mapping)
     {
         if ($this->get_extension() == 'html')
@@ -775,16 +764,10 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         }
     }
 
-    /**
-     * e.g: documents: in the html file
-     */
-    public function process_additional_include_links($pattern, $replacement_string)
+    public function version($trueUpdate = true)
     {
-        $this->contents = preg_replace($pattern, $replacement_string, $this->contents);
-    }
+        $this->clear_errors();
 
-    public static function get_searchable_property_names()
-    {
-        return array(self::PROPERTY_FILENAME);
+        return parent::version($trueUpdate);
     }
 }

@@ -36,12 +36,11 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
 
         if ($item->showIcon())
         {
-            $imagePath = $this->getThemeUtilities()->getImagePath(
-                'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu',
-                'ConfigureWorkspaces' . ($selected ? 'Selected' : '')
-            );
+            $glyph = $item->getGlyph();
+            $glyph->setExtraClasses(array('fa-2x'));
+            $glyph->setTitle($title);
 
-            $html[] = '<img src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = $glyph->render();
         }
 
         if ($item->showTitle())

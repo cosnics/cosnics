@@ -36,11 +36,6 @@ class SystemAnnouncement extends ContentObject implements Versionable
         return $this->get_additional_property(self::PROPERTY_ICON);
     }
 
-    public function get_icon_name()
-    {
-        return self::icon_name($this->get_icon());
-    }
-
     public static function get_possible_icons()
     {
         $icons = array();

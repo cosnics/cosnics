@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Metadata\Integration\Chamilo\Core\Metadata\Entity;
 
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -30,7 +31,11 @@ class SchemaEntity extends DataClassEntity
      */
     public function getIcon($size = Theme::ICON_MINI)
     {
-        return Theme::getInstance()->getImage('Logo/' . $size, 'png', $this->getType());
+        $glyph = new NamespaceIdentGlyph(
+            $this->getType(), true, false, false, $size, array()
+        );
+
+        return $glyph->render();
     }
 
     /**

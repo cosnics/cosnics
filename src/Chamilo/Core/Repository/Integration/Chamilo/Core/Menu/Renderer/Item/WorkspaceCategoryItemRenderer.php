@@ -79,12 +79,11 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
 
         if ($item->showIcon())
         {
-            $integrationNamespace = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu';
-            $imagePath = $this->getThemeUtilities()->getImagePath(
-                $integrationNamespace, 'WorkspaceCategory' . ($selected ? 'Selected' : '')
-            );
+            $glyph = $item->getGlyph();
+            $glyph->setExtraClasses(array('fa-2x'));
+            $glyph->setTitle($title);
 
-            $html[] = '<img src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = $glyph->render();
         }
 
         if ($item->showTitle())

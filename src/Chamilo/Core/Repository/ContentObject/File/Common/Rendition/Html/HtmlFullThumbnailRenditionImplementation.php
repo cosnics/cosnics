@@ -37,7 +37,7 @@ class HtmlFullThumbnailRenditionImplementation extends HtmlRenditionImplementati
 
         return $this->getTwig()->render(
             'Chamilo\Core\Repository:full_thumbnail.html.twig', [
-                "icon_path" => $object->get_icon_path(Theme::ICON_BIG),
+                "icon_path" => $object->getGlyph(Theme::ICON_BIG)->render(),
                 "title" => $object->get_title(),
                 "download_url" => $downloadUrl,
                 "full_view" => $fullViewHtml,

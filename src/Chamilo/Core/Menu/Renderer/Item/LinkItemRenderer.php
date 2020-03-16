@@ -7,6 +7,7 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
@@ -51,13 +52,6 @@ class LinkItemRenderer extends ItemRenderer
      */
     public function render(Item $item, User $user)
     {
-        $classnameUtilities = $this->getClassnameUtilities();
-
-        $itemNamespace = $classnameUtilities->getNamespaceFromClassname($item->getType());
-        $itemNamespace = $classnameUtilities->getNamespaceParent($itemNamespace, 2);
-        $itemType = $classnameUtilities->getClassnameFromNamespace($item->getType());
-        $imagePath = $this->getThemeUtilities()->getImagePath($itemNamespace, $itemType);
-
         $title = $this->renderTitle($item);
 
         $html = array();
@@ -73,7 +67,8 @@ class LinkItemRenderer extends ItemRenderer
             }
             else
             {
-                $html[] = '<img src="' . $imagePath . '" alt="' . $title . '" />';
+                $glyph = new FontAwesomeGlyph('link', array('fa-2x'), null, 'fas');
+                $html[] = $glyph->render();
             }
         }
 

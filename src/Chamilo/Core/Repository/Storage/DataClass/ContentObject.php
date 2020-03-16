@@ -1147,10 +1147,19 @@ class ContentObject extends CompositeDataClass
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_OWNER_ID, self::PROPERTY_TYPE, self::PROPERTY_TITLE, self::PROPERTY_DESCRIPTION,
-                self::PROPERTY_PARENT_ID, self::PROPERTY_TEMPLATE_REGISTRATION_ID, self::PROPERTY_CREATION_DATE,
-                self::PROPERTY_MODIFICATION_DATE, self::PROPERTY_OBJECT_NUMBER, self::PROPERTY_STATE,
-                self::PROPERTY_COMMENT, self::PROPERTY_CONTENT_HASH, self::PROPERTY_CURRENT
+                self::PROPERTY_OWNER_ID,
+                self::PROPERTY_TYPE,
+                self::PROPERTY_TITLE,
+                self::PROPERTY_DESCRIPTION,
+                self::PROPERTY_PARENT_ID,
+                self::PROPERTY_TEMPLATE_REGISTRATION_ID,
+                self::PROPERTY_CREATION_DATE,
+                self::PROPERTY_MODIFICATION_DATE,
+                self::PROPERTY_OBJECT_NUMBER,
+                self::PROPERTY_STATE,
+                self::PROPERTY_COMMENT,
+                self::PROPERTY_CONTENT_HASH,
+                self::PROPERTY_CURRENT
             )
         );
     }
@@ -1216,26 +1225,13 @@ class ContentObject extends CompositeDataClass
         return $this->getGlyph($size, $isAvailable, $extraClasses)->render();
     }
 
-    /**
-     * Gets the name of the icon corresponding to this object.
-     */
-    public function get_icon_name($size = Theme::ICON_SMALL)
-    {
-        return $size;
-    }
-
-    public function get_icon_path($size = Theme::ICON_SMALL)
-    {
-        return static::icon_path(
-            ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2), $size, $this->is_current()
-        );
-    }
-
     public static function get_inactive_status_types()
     {
         return array(
-            self::STATE_NORMAL + self::STATE_INACTIVE, self::STATE_RECYCLED + self::STATE_INACTIVE,
-            self::STATE_AUTOSAVE + self::STATE_INACTIVE, self::STATE_BACKUP + self::STATE_INACTIVE
+            self::STATE_NORMAL + self::STATE_INACTIVE,
+            self::STATE_RECYCLED + self::STATE_INACTIVE,
+            self::STATE_AUTOSAVE + self::STATE_INACTIVE,
+            self::STATE_BACKUP + self::STATE_INACTIVE
         );
     }
 
@@ -1664,11 +1660,6 @@ class ContentObject extends CompositeDataClass
     )
     {
         return self::glyph($glyphNamespace, $size, $isAvailable, $title, $extraClasses)->render();
-    }
-
-    public static function icon_path($context, $size = Theme::ICON_SMALL, $is_current = true)
-    {
-        return Theme::getInstance()->getImagePath($context, 'Logo/' . $size . ($is_current ? '' : 'Na'));
     }
 
     /**

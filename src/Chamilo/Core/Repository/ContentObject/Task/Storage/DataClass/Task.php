@@ -352,18 +352,6 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
             self::PROPERTY_BYMONTHDAY);
     }
 
-    public function get_icon_name($size = Theme :: ICON_SMALL)
-    {
-        if ($this->has_frequency())
-        {
-            return $size . '_repeat';
-        }
-        else
-        {
-            return $size;
-        }
-    }
-
     public function get_type_string()
     {
         if ($this->has_frequency())

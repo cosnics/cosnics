@@ -36,9 +36,7 @@
                             ck-draggable
                         >
                             <div uib-tooltip="{{co.title}}" tooltip-popup-delay="500">
-                                <img class="type-img"
-                                     ng-src="{{ co.icon }}"
-                                >{{ co.title | limitText:true:25:'...' }}
+                                {{ co.icon }}{{ co.title | limitText:true:25:'...' }}
                             </div>
                         </li>
                     </ul>

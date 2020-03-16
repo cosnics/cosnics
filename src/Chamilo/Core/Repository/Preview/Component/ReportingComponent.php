@@ -56,7 +56,7 @@ class ReportingComponent extends Manager implements PreviewSupport
                         Translation::get(
                             (string) StringUtilities::getInstance()->createString($available_action)->upperCamelize() .
                             'Component', null, $preview_context
-                        ), Theme::getInstance()->getImagePath($preview_context, 'Type/' . $available_action),
+                        ), null,
                         $this->get_url(
                             array(
                                 \Chamilo\Core\Repository\Integration\Chamilo\Core\Reporting\Preview\Manager::PARAM_ACTION => $available_action

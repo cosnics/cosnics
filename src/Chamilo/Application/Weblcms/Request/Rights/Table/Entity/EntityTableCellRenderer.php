@@ -2,9 +2,12 @@
 namespace Chamilo\Application\Weblcms\Request\Rights\Table\Entity;
 
 use Chamilo\Application\Weblcms\Request\Rights\Manager;
+use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -15,50 +18,6 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 class EntityTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
-
-    public function render_cell($column, $object)
-    {
-        switch ($column->get_name())
-        {
-            case Translation::get('Type') :
-                $location_entity_right = $object->get_location_entity_right();
-
-                switch ($location_entity_right->get_entity_type())
-                {
-                    case UserEntity::ENTITY_TYPE :
-                        $context = \Chamilo\Core\User\Storage\DataClass\User::context();
-                        break;
-                    case PlatformGroupEntity::ENTITY_TYPE :
-                        $context = \Chamilo\Core\Group\Storage\DataClass\Group::context();
-                        break;
-                }
-
-                return Theme::getInstance()->getImage(
-                    'Logo/16', 'png', Translation::get('TypeName', null, $context), null, ToolbarItem::DISPLAY_ICON,
-                    false, $context
-                );
-            case Translation::get('Entity') :
-                $location_entity_right = $object->get_location_entity_right();
-                switch ($location_entity_right->get_entity_type())
-                {
-                    case UserEntity::ENTITY_TYPE :
-                        return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                            (int) $location_entity_right->get_entity_id()
-                        )->get_fullname();
-                    case PlatformGroupEntity::ENTITY_TYPE :
-                        return \Chamilo\Core\Group\Storage\DataManager::getInstance()->retrieve_group(
-                            (int) $location_entity_right->get_entity_id()
-                        )->get_name();
-                }
-            case Translation::get('Group') :
-                return $object->get_group()->get_name();
-            case Translation::get('Path') :
-                return $object->get_group()->get_fully_qualified_name();
-        }
-
-        return parent::render_cell($column, $object);
-    }
 
     function get_actions($object)
     {
@@ -80,6 +39,52 @@ class EntityTableCellRenderer extends DataClassTableCellRenderer implements Tabl
         }
 
         return $toolbar->as_html();
+    }
+
+    public function render_cell($column, $object)
+    {
+        switch ($column->get_name())
+        {
+            case Translation::get('Type') :
+                $location_entity_right = $object->get_location_entity_right();
+
+                switch ($location_entity_right->get_entity_type())
+                {
+                    case UserEntity::ENTITY_TYPE :
+                        $context = 'Chamilo\Core\User';
+                        break;
+                    case PlatformGroupEntity::ENTITY_TYPE :
+                        $context = 'Chamilo\Core\Group';
+                        break;
+                    default:
+                        return '';
+                }
+
+                $glyph = new NamespaceIdentGlyph(
+                    $context, true, false, false, Theme::ICON_MINI, array()
+                );
+
+                return $glyph->render();
+            case Translation::get('Entity') :
+                $location_entity_right = $object->get_location_entity_right();
+                switch ($location_entity_right->get_entity_type())
+                {
+                    case UserEntity::ENTITY_TYPE :
+                        return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                            User::class_name(), (int) $location_entity_right->get_entity_id()
+                        )->get_fullname();
+                    case PlatformGroupEntity::ENTITY_TYPE :
+                        return DataManager::getInstance()->retrieve_group(
+                            (int) $location_entity_right->get_entity_id()
+                        )->get_name();
+                }
+            case Translation::get('Group') :
+                return $object->get_group()->get_name();
+            case Translation::get('Path') :
+                return $object->get_group()->get_fully_qualified_name();
+        }
+
+        return parent::render_cell($column, $object);
     }
 }
 

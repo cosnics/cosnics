@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDispl
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass\AssessmentMatrixQuestion;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -101,10 +100,13 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                         {
                             if ($option->get_matches() == $j)
                             {
-                                $result =
-                                    '<img src="' . Theme:: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') .
-                                    '" alt="' . Translation:: get('Correct') . '" title="' .
-                                    Translation:: get('Correct') . '" />';
+                                $glyph = new FontAwesomeGlyph(
+                                    'check', array('text-success'), Translation::get(
+                                    'Correct', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'
+                                ), 'fas'
+                                );
+
+                                $result = $glyph->render();
                             }
                             else
                             {

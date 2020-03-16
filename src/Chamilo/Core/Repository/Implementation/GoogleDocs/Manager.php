@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Implementation\GoogleDocs;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Implementation\GoogleDocs\Infrastructure\Service\MimeTypeExtensionParser;
 use Chamilo\Core\Repository\Implementation\GoogleDocs\Menu\CategoryTreeMenu;
+use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -108,7 +109,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
                 $actions[$export_type] = new ToolbarItem(
                     Translation::getInstance()->getTranslation(
                         'ImportAs', array('TYPE' => $exportTypeExtension), self::context()
-                    ), Theme::getInstance()->getFileExtension($camelizedExportTypeExtension), $this->get_url(
+                    ), FileType::getGlyphForExtension($camelizedExportTypeExtension), $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_IMPORT_EXTERNAL_REPOSITORY,
                         self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id(),

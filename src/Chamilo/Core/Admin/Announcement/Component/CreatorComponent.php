@@ -86,19 +86,20 @@ class CreatorComponent extends Manager implements ViewerInterface
     /**
      * @return string[]
      */
-    public function get_allowed_content_object_types()
+    public function get_additional_parameters()
     {
-        return array(SystemAnnouncement::class_name());
+        return array(
+            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID,
+            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION
+        );
     }
 
     /**
      * @return string[]
      */
-    public function get_additional_parameters()
+    public function get_allowed_content_object_types()
     {
-        return array(
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID, \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION
-        );
+        return array(SystemAnnouncement::class_name());
     }
 
     /**
@@ -138,19 +139,17 @@ class CreatorComponent extends Manager implements ViewerInterface
             while ($contentObject = $contentObjects->next_result())
             {
                 $namespace = ContentObject::get_content_object_type_namespace($contentObject->get_type());
+                $glyph = $contentObject->getGlyph(Theme::ICON_MINI);
 
                 if (RightsService::getInstance()->canUseContentObject($this->getUser(), $contentObject))
                 {
-                    $html[] = '<li><img src="' . $contentObject->get_icon_path(Theme::ICON_MINI) . '" alt="' .
-                        htmlentities(Translation::get('TypeName', null, $namespace)) . '"/> ' .
-                        $contentObject->get_title() . '</li>';
+                    $html[] = '<li>' . $glyph->render() . ' ' . $contentObject->get_title() . '</li>';
                 }
                 else
                 {
-                    $html[] = '<li><img src="' . $contentObject->get_icon_path(Theme::ICON_MINI) . '" alt="' .
-                        htmlentities(Translation::get('TypeName', null, $namespace)) . '"/> ' .
-                        $contentObject->get_title() . '<span style="color: red; font-style: italic;">' .
-                        Translation::get('NotAllowed') . '</span>' . '</li>';
+                    $html[] =
+                        '<li>' . $glyph->render() . ' ' . $contentObject->get_title() . '<em class="text-danger">' .
+                        Translation::get('NotAllowed') . '</em>' . '</li>';
                 }
             }
 

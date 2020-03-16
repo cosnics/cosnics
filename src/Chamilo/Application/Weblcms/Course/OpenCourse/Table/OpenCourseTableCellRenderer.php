@@ -43,7 +43,6 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
     public function get_actions($course)
     {
         $translator = Translation::getInstance();
-        $theme = Theme::getInstance();
 
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 

@@ -288,16 +288,18 @@ abstract class ContentObjectForm extends FormValidator
 
             $uploadUrl = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
+                    Application::PARAM_CONTEXT                          => \Chamilo\Core\Repository\Ajax\Manager::context(
+                    ),
                     \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
                 )
             );
 
             $dropZoneParameters = array(
-                'name' => 'attachments_importer', 'maxFilesize' => $calculator->getMaximumUploadSize(),
-                'uploadUrl' => $uploadUrl->getUrl(),
-                'successCallbackFunction' => 'chamilo.core.repository.importAttachment.processUploadedFile',
-                'sendingCallbackFunction' => 'chamilo.core.repository.importAttachment.prepareRequest',
+                'name'                        => 'attachments_importer',
+                'maxFilesize'                 => $calculator->getMaximumUploadSize(),
+                'uploadUrl'                   => $uploadUrl->getUrl(),
+                'successCallbackFunction'     => 'chamilo.core.repository.importAttachment.processUploadedFile',
+                'sendingCallbackFunction'     => 'chamilo.core.repository.importAttachment.prepareRequest',
                 'removedfileCallbackFunction' => 'chamilo.core.repository.importAttachment.deleteUploadedFile'
             );
 
@@ -516,7 +518,7 @@ abstract class ContentObjectForm extends FormValidator
             $group[] = $this->createElement(
                 'text', self::NEW_CATEGORY, null, array(
                     'data-workspace-type' => $this->get_workspace()->getWorkspaceType(),
-                    'data-workspace-id' => $this->get_workspace()->getId()
+                    'data-workspace-id'   => $this->get_workspace()->getId()
                 )
             );
             $group[] = $this->createElement('static', null, null, '</div>');
@@ -573,7 +575,7 @@ abstract class ContentObjectForm extends FormValidator
                     $this->addElement(
                         'checkbox', 'version', Translation::get('CreateAsNewVersion'), null, array(
                             'onclick' => 'javascript:showElement(\'' . ContentObject::PROPERTY_COMMENT . '\')',
-                            'class' => 'version'
+                            'class'   => 'version'
                         )
                     );
                     $this->add_element_hider('begin', ContentObject::PROPERTY_COMMENT);
@@ -977,10 +979,8 @@ EOT;
         $type = $content_object->get_type();
         $namespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname($type);
         $name = Translation::get('TypeName', array(), $namespace);
-        $img =
-            '<img src="' . $content_object->get_icon_path(Theme::ICON_MINI) . '" title="' . htmlentities($name) . '"/>';
 
-        return $img . ' <b>' . $name . '</b>';
+        return $content_object->getGlyph(Theme::ICON_MINI)->render() . ' <b>' . $name . '</b>';
     }
 
     public function get_form_type()

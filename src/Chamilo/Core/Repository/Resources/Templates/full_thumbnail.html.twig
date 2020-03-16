@@ -35,7 +35,7 @@
                 </a>
             {% endif %}
             <a href="#" v-on:click="showModal" data-toggle="tooltip" title="{{ title }}">
-                <img src="{{ icon_path }}" alt="" class="align-center" style="margin-bottom: 5px;">
+                {{ icon_path }}
                 {{ title|length > 10 ? title|slice(0, 10) ~ '...' : title }}
             </a>
         </div>

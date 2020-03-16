@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\DropdownButtonRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -23,12 +22,6 @@ class ShortcutToolListRenderer extends ToolListRenderer
     private $isCourseAdmin;
 
     // Inherited
-    public function toHtml()
-    {
-        $this->isCourseAdmin = $this->get_parent()->get_parent()->is_teacher();
-
-        return $this->show_tools($this->get_visible_tools());
-    }
 
     /**
      * Show the tools of a given section
@@ -40,17 +33,12 @@ class ShortcutToolListRenderer extends ToolListRenderer
     private function show_tools($tools)
     {
         $translator = Translation::getInstance();
-        $themeUtilities = Theme::getInstance();
 
         $parent = $this->get_parent();
         $course = $parent->get_course();
 
-        $currentTool = $parent->get_tool_id();
-        $toolNamespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($currentTool);
-
         $toolsButton = new DropdownButton(
-            Translation::get('NavigateTo', null, Utilities::COMMON_LIBRARIES),
-            $themeUtilities->getImagePath($toolNamespace, 'Logo/' . Theme::ICON_MINI), Button::DISPLAY_LABEL
+            Translation::get('NavigateTo', null, Utilities::COMMON_LIBRARIES), null, Button::DISPLAY_LABEL
         );
 
         $toolsButton->setDropdownClasses('dropdown-menu-right');
@@ -91,5 +79,12 @@ class ShortcutToolListRenderer extends ToolListRenderer
         $renderer = new DropdownButtonRenderer($toolsButton);
 
         return $renderer->render();
+    }
+
+    public function toHtml()
+    {
+        $this->isCourseAdmin = $this->get_parent()->get_parent()->is_teacher();
+
+        return $this->show_tools($this->get_visible_tools());
     }
 }

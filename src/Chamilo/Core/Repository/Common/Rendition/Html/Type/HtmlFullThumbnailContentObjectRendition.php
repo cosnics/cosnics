@@ -28,7 +28,7 @@ class HtmlFullThumbnailContentObjectRendition extends HtmlContentObjectRendition
 
         return $this->getTwig()->render(
             'Chamilo\Core\Repository:full_thumbnail.html.twig', [
-                "icon_path" => $object->get_icon_path(Theme::ICON_BIG),
+                "icon" => $object->getGlyph(Theme::ICON_BIG)->render(),
                 "title" => $object->get_title(),
                 "full_view" => $fullViewHtml,
                 "id" => $object->getId()

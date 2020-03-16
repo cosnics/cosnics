@@ -90,19 +90,6 @@ class CategoryItemRenderer extends ItemRenderer
 
             $html[] = $glyph->render();
 
-//            if (!empty($item->getIconClass()))
-//            {
-//                $html[] = $this->renderCssIcon($item);
-//            }
-//            else
-//            {
-//                $imagePath = $this->getThemeUtilities()->getImagePath(
-//                    'Chamilo\Core\Menu', 'Menu/Folder' . ($selected ? 'Selected' : '')
-//                );
-//
-//                $html[] = '<img src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
-//            }
-
             if (!$item->showTitle())
             {
                 $html[] = '&nbsp;<span class="caret"></span>';

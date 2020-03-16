@@ -36,7 +36,8 @@ class WorkspaceItemRenderer extends ItemRenderer
 
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => Manager::package(), Manager::PARAM_WORKSPACE_ID => $item->getWorkspaceId()
+                Application::PARAM_CONTEXT  => Manager::package(),
+                Manager::PARAM_WORKSPACE_ID => $item->getWorkspaceId()
             )
         );
 
@@ -48,9 +49,11 @@ class WorkspaceItemRenderer extends ItemRenderer
 
         if ($item->showIcon())
         {
-            $imagePath = $this->getThemeUtilities()->getImagePath(Manager::package(), 'Logo/48');
+            $glyph = $item->getGlyph();
+            $glyph->setExtraClasses(array('fa-2x'));
+            $glyph->setTitle($title);
 
-            $html[] = '<img src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = $glyph->render();
         }
 
         if ($item->showTitle())
