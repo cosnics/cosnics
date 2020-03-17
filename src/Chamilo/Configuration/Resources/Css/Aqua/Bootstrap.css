@@ -725,6 +725,11 @@ ul.nav-wizard.publication-wizard {
     margin-right: 5px !important;
 }
 
+.treeview span.icon.treeview-empty-icon {
+    width: 0 !important;
+    margin-right: 0px !important;
+}
+
 /*.treeview .list-group .list-group-item .icon.node-icon, .treeview .list-group .list-group-item .icon.glyphicon {*/
 /*    width: 1.25em;*/
 /*}*/

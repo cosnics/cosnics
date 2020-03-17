@@ -69,27 +69,14 @@ abstract class BootstrapTreeMenu
                 {
                     $('#" . $this->getMenuName() . "').treeview({
                         enableLinks : true,
-                        expandIcon: 'fas fa-chevron-right fa-fw inline-glyph',
+                        expandIcon: 'inline-glyph fas fa-chevron-right fa-fw',
                         collapseIcon: 'inline-glyph fas fa-chevron-down fa-fw',
+                        emptyIcon: 'treeview-empty-icon',
                         color: '#428bca',
                         showBorder: false,
                         checkedIcon: 'inline-glyph fas fa-check fa-fw',
                         data: " . json_encode($this->getNodes()) . "
                     })
-
-//                    $('#" . $this->getMenuName() . "').treeview(
-//                            'revealNode',
-//                            [ " . $currentNodeId . ",
-//                                { silent: true }
-//                            ]
-//                    );
-//
-//                    $('#" . $this->getMenuName() . "').treeview(
-//                            'expandNode',
-//                            [ " . $currentNodeId . ",
-//                                { silent: false }
-//                            ]
-//                    );
                 });
             });
         </script>";
