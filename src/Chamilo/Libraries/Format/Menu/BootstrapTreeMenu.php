@@ -49,6 +49,61 @@ abstract class BootstrapTreeMenu
 
     /**
      *
+     * @return string
+     * @todo Remove the revealNode and expandNode functionality due to issues with own node-ids generated
+     *       by plugin
+     */
+    public function render()
+    {
+        $currentNodeId = $this->getCurrentNodeId();
+
+        $html = array();
+
+        $html[] = '<div id="' . $this->getMenuName() . '">';
+        $html[] = '</div>';
+
+        $html[] = "<script>
+            $(function()
+            {
+                $(document).ready(function()
+                {
+                    $('#" . $this->getMenuName() . "').treeview({
+                        enableLinks : true,
+                        expandIcon: 'fas fa-chevron-right fa-fw inline-glyph',
+                        collapseIcon: 'inline-glyph fas fa-chevron-down fa-fw',
+                        color: '#428bca',
+                        showBorder: false,
+                        checkedIcon: 'inline-glyph fas fa-check fa-fw',
+                        data: " . json_encode($this->getNodes()) . "
+                    })
+
+//                    $('#" . $this->getMenuName() . "').treeview(
+//                            'revealNode',
+//                            [ " . $currentNodeId . ",
+//                                { silent: true }
+//                            ]
+//                    );
+//
+//                    $('#" . $this->getMenuName() . "').treeview(
+//                            'expandNode',
+//                            [ " . $currentNodeId . ",
+//                                { silent: false }
+//                            ]
+//                    );
+                });
+            });
+        </script>";
+
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
+            'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.js'
+        );
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function getApplication()
@@ -67,21 +122,9 @@ abstract class BootstrapTreeMenu
 
     /**
      *
-     * @return string
+     * @return integer
      */
-    public function getTreeMenuUrl()
-    {
-        return $this->treeMenuUrl;
-    }
-
-    /**
-     *
-     * @param string $treeMenuUrl
-     */
-    public function setTreeMenuUrl($treeMenuUrl)
-    {
-        $this->treeMenuUrl = $treeMenuUrl;
-    }
+    abstract function getCurrentNodeId();
 
     /**
      *
@@ -104,6 +147,7 @@ abstract class BootstrapTreeMenu
     /**
      *
      * @param integer $nodeIdentifier
+     *
      * @return string
      */
     public function getNodeUrl($nodeIdentifier)
@@ -119,65 +163,19 @@ abstract class BootstrapTreeMenu
 
     /**
      *
-     * @return integer
+     * @return string
      */
-    abstract function getCurrentNodeId();
+    public function getTreeMenuUrl()
+    {
+        return $this->treeMenuUrl;
+    }
 
     /**
      *
-     * @return string
-     * @todo Remove the revealNode and expandNode functionality due to issues with own node-ids generated
-     *       by plugin
+     * @param string $treeMenuUrl
      */
-    public function render()
+    public function setTreeMenuUrl($treeMenuUrl)
     {
-        $currentNodeId = $this->getCurrentNodeId();
-
-        $html = array();
-
-        $html[] = '<div id="' . $this->getMenuName() . '">';
-        $html[] = '</div>';
-
-        $html[] = "<script>
-            $(function()
-            {
-                $(document).ready(function()
-                {
-                    $('#" . $this->getMenuName() . "').treeview({
-                        enableLinks : true,
-                        expandIcon: 'inline-glyph fas fa-chevron-right',
-                        collapseIcon: 'inline-glyph fas fa-chevron-down',
-                        color: '#428bca',
-                        showBorder: false,
-                        checkedIcon: 'inline-glyph fas fa-check',
-                        data: " . json_encode($this->getNodes()) . "
-                    });
-
-//                    $('#" . $this->getMenuName() . "').treeview(
-//                            'revealNode',
-//                            [ " . $currentNodeId . ",
-//                                { silent: true }
-//                            ]
-//                    );
-//
-//                    $('#" . $this->getMenuName() . "').treeview(
-//                            'expandNode',
-//                            [ " . $currentNodeId . ",
-//                                { silent: false }
-//                            ]
-//                    );
-                });
-            });
-        </script>";
-
-        $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
-                 'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.js');
-
-        $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
-                 'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.css');
-
-        return implode(PHP_EOL, $html);
+        $this->treeMenuUrl = $treeMenuUrl;
     }
 }

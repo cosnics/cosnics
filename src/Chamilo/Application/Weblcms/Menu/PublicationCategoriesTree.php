@@ -31,14 +31,6 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class PublicationCategoriesTree extends GenericTree
 {
-    const CATEGORY_CLASS = 'category';
-
-    const INVISIBLE_CATEGORY_CLASS = 'invisible_category';
-
-    const NEW_CATEGORY_CLASS = 'new_category';
-
-    const ROOT_NODE_CLASS = 'category';
-
     const TREE_NAME = __CLASS__;
 
     private $browser;

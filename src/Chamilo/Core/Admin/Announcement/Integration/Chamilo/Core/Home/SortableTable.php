@@ -12,19 +12,4 @@ use Chamilo\Libraries\Format\Table\SortableTableFromArray;
  */
 class SortableTable extends SortableTableFromArray
 {
-    
-    // protected function initializeTable()
-    // {
-    // $table = parent :: initializeTable();
-    
-    // $table->setAttribute('class', 'data_table invisible_table');
-    // $headers = $table->getHeader();
-    
-    // for ($i = 0; $i <= count($headers->_cols); $i ++)
-    // {
-    // $headers->setColAttributes($i, 'class="invisible"');
-    // }
-    
-    // return $table;
-    // }
 }

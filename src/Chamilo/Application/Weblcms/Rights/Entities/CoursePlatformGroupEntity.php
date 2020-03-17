@@ -168,7 +168,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
     /**
      * Retrieves the type for the advanced element finder for the simple rights editor
      */
-    public static function get_element_finder_type()
+    public function get_element_finder_type()
     {
         return new AdvancedElementFinderElementType(
             'platform_groups', 

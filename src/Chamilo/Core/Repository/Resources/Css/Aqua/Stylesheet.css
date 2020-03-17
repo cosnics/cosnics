@@ -177,10 +177,6 @@ div.quota_statistics .data_table td.header {
     width: 20%;
 }
 
-.type_disabled {
-    background-image: url(../../Images/Aqua/Menu/Disabled.png) !important;
-}
-
 #repository-tree-container {
     margin-bottom: 15px;
 }

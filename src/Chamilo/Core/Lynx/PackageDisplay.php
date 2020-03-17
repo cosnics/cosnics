@@ -60,7 +60,7 @@ class PackageDisplay
         {
             $html[] = '<h3>' . Translation::get('Dependencies') . '</h3>';
 
-            $html[] = '<table class="table table-striped table-bordered table-hover table-data data_table_no_header">';
+            $html[] = '<table class="table table-striped table-bordered table-hover table-data">';
 
             if (!is_null($package_info->get_dependencies()))
             {

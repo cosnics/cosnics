@@ -81,9 +81,7 @@ ul.dynamic_content_menu_list {
 }
 
 li.dynamic_content_menu_item {
-	background:
-		url(../../Images/Aqua/plugin/jquery/images/UiBgGlass85Dfeffc1X400.png)
-		repeat-x scroll 50% 50% #DFEFFC;
+	background-color: #DFEFFC;
 	color: #2E6E9E;
 	font-weight: bold;
 	padding: 0.7em 1em;

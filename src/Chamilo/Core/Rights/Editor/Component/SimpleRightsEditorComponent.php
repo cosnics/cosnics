@@ -3,12 +3,6 @@ namespace Chamilo\Core\Rights\Editor\Component;
 
 use Chamilo\Core\Rights\Editor\Form\SimpleRightsEditorForm;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -21,15 +15,8 @@ use Chamilo\Libraries\Translation\Translation;
 class SimpleRightsEditorComponent extends RightsEditorComponent implements DelegateComponent
 {
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
-
     public function run()
     {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $form = new SimpleRightsEditorForm(
             $this->get_url(), $this->get_context(), $this->get_locations(), $this->get_available_rights(),
             $this->get_entities()
@@ -50,31 +37,5 @@ class SimpleRightsEditorComponent extends RightsEditorComponent implements Deleg
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * Builds the actionbar;
-     *
-     * @return ButtonToolBarRenderer
-     */
-    public function getButtonToolbarRenderer()
-    {
-        if (!isset($this->buttonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar();
-            $commonActions = new ButtonGroup();
-            $commonActions->addButton(
-                new Button(
-                    Translation::get('AdvancedRightsEditor'), new FontAwesomeGlyph('cog'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_EDIT_ADVANCED_RIGHTS)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
-
-            $buttonToolbar->addButtonGroup($commonActions);
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
-
-        return $this->buttonToolbarRenderer;
     }
 }

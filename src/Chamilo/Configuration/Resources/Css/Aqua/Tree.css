@@ -2,177 +2,97 @@
  *  TREEMENU STYLES                                  *
  *****************************************************/
 ul.tree-menu, ul.tree-menu ul {
-	list-style: none;
-	margin: 0px;
-	padding: 0px;
-	clear: both;
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    clear: both;
 }
 
 ul.tree-menu ul {
-	background-repeat: repeat-y;
-	background-image: url(../../Images/Aqua/Treemenu/TreeBranch.png);
-	padding-left: 18px;
-	clear: both;
+    background-repeat: repeat-y;
+    background-image: url(../../Images/Aqua/Treemenu/TreeBranch.png);
+    padding-left: 18px;
+    clear: both;
 }
 
 ul.tree-menu li {
-	margin: 0px;
-	padding: 0px;
-	clear: both;
+    margin: 0px;
+    padding: 0px;
+    clear: both;
 }
 
 ul.tree-menu li div, ul.tree-menu li div.last, ul.tree-menu li div.collapse,
-	ul.tree-menu li div.lastCollapse, ul.tree-menu li div.expand, ul.tree-menu li div.lastExpand
-	{
-	padding-left: 18px;
-	background-repeat: no-repeat;
-	clear: both;
+ul.tree-menu li div.lastCollapse, ul.tree-menu li div.expand, ul.tree-menu li div.lastExpand {
+    padding-left: 18px;
+    background-repeat: no-repeat;
+    clear: both;
 }
 
 ul.tree-menu li div {
-	background: url(../../Images/Aqua/Treemenu/TreeLeaf.png) top left
-		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
-		repeat-y;
+    background: url(../../Images/Aqua/Treemenu/TreeLeaf.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div.last {
-	background-image: url(../../Images/Aqua/Treemenu/TreeLeafEnd.png);
+    background-image: url(../../Images/Aqua/Treemenu/TreeLeafEnd.png);
 }
 
 ul.tree-menu li div.collapse {
-	background: url(../../Images/Aqua/Treemenu/TreeNodeOpen.png) top left
-		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
-		repeat-y;
+    background: url(../../Images/Aqua/Treemenu/TreeNodeOpen.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div.lastCollapse {
-	background-image: url(../../Images/Aqua/Treemenu/TreeNodeOpenEnd.png);
+    background-image: url(../../Images/Aqua/Treemenu/TreeNodeOpenEnd.png);
 }
 
 ul.tree-menu li div.expand {
-	background: url(../../Images/Aqua/Treemenu/TreeNode.png) top left
-		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
-		repeat-y;
+    background: url(../../Images/Aqua/Treemenu/TreeNode.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div.lastExpand {
-	background-image: url(../../Images/Aqua/Treemenu/TreeNodeEnd.png);
+    background-image: url(../../Images/Aqua/Treemenu/TreeNodeEnd.png);
 }
 
 ul.tree-menu li div a {
-	clear: both;
-	display: block;
-	font-weight: bold;
+    clear: both;
+    display: block;
+    font-weight: bold;
 }
 
 ul.tree-menu li div a.selected {
-	background-color: #ddecf7;
+    background-color: #ddecf7;
 }
 
 ul.tree-menu li div a.selected:focus {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 ul.tree-menu li div a.lastSelected {
-	border: 1px dotted #d4d4d4;
-	margin-left: -1px;
+    border: 1px dotted #d4d4d4;
+    margin-left: -1px;
 }
 
 ul.tree-menu li div a.disabled {
-	color: #9f9f9f;
-	cursor: default;
+    color: #9f9f9f;
+    cursor: default;
 }
 
 ul.tree-menu li div img {
-	height: 16px;
-	margin-left: 2px;
-	position: relative;
-	margin-top: -1px;
-	vertical-align: middle;
+    height: 16px;
+    margin-left: 2px;
+    position: relative;
+    margin-top: -1px;
+    vertical-align: middle;
 }
 
-ul.tree-menu li div a.type_category, ul.tree-menu li div a.category {
-	background: url(../../Images/Aqua/Treemenu/TreeFolderClosed.png) top
-		left no-repeat;
-}
-
-ul.tree-menu li div.collapse a.category, ul.tree-menu li div.collapse a.type_category
-	{
-	background: url(../../Images/Aqua/Treemenu/TreeFolderClosed.png) 0 0
-		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) 0 -1px
-		repeat-y;
-}
-
-ul.tree-menu li.current_path>div a.category, ul.tree-menu li.current>div a.category,
-	ul.tree-menu li.current_path>div a.type_category, ul.tree-menu li.current>div a.type_category
-	{
-	background: url(../../Images/Aqua/Treemenu/TreeFolderOpen.png) top left
-		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
-		repeat-y;
-}
-
-ul.tree-menu li div a.new_category {
-	background-image:
-		url(../../Images/Aqua/Treemenu/TreeFolderClosedNew.png);
-}
-
-ul.tree-menu li.current_path>div a.new_category, ul.tree-menu li.current>div a.new_category
-	{
-	background: url(../../Images/Aqua/Treemenu/TreeFolderOpenNew.png) top
-		left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top
-		left repeat-y;
-}
-
-ul.tree-menu li div a.invisible_category {
-	color: #666;
-	background-image:
-		url(../../Images/Aqua/Treemenu/TreeFolderClosedInvisible.png);
-}
-
-ul.tree-menu li.current_path>div a.invisible_category, ul.tree-menu li.current>div a.invisible_category
-	{
-	color: #666;
-	background: url(../../Images/Aqua/Treemenu/TreeFolderOpenInvisible.png)
-		top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top
-		left repeat-y;
-}
-
-ul.tree-menu li.current>div a {
-	text-decoration: underline;
+ul.tree-menu li.current > div a {
+    text-decoration: underline;
 }
 
 ul.tree-menu li div.collapse {
-	display: block;
-}
-
-/*
-ul.tree-menu li.current_path ul li div a.category
-{
-	background-image: url(../../Images/Aqua/Treemenu/TreeFolderClosed.png);
-}
-
-ul.tree-menu li.current_path ul li.current_path div a.category
-{
-	background-image: url(../../Images/Aqua/Treemenu/TreeFolderOpen.png);
-}
-*/
-ul.tree-menu li div a.end_node {
-	background-image: url(../../Images/Aqua/Treemenu/EndNode.png);
+    display: block;
 }
 
 ul.tree-menu li div a.no_link {
-	color: #797268;
-	cursor: default;
-}
-
-ul.tree-menu li div a.type_user {
-	background-image: url(../../Images/Aqua/Treemenu/User.png);
-}
-
-ul.tree-menu li div a.type_user_platform {
-	background-image: url(../../Images/Aqua/Treemenu/UserPlatform.png);
-}
-
-ul.tree-menu li div a.type_group {
-	background-image: url(../../Images/Aqua/Treemenu/Group.png);
+    color: #797268;
+    cursor: default;
 }

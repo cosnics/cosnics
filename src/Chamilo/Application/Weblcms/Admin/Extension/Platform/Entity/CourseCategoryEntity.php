@@ -116,7 +116,7 @@ class CourseCategoryEntity implements NestedRightsEntity
     /**
      * Retrieves the type for the advanced element finder for the simple rights editor
      */
-    public static function get_element_finder_type()
+    public function get_element_finder_type()
     {
         return new AdvancedElementFinderElementType(
             'course_categories', Translation::get('CourseCategories'), __NAMESPACE__, 'course_category_feed', array()

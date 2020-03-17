@@ -43,10 +43,6 @@ div.admin_header span.category {
     -moz-border-radius-topright: 10px;
     border-radius-topright: 10px;
     -webkit-border-top-right-radius: 10px;
-    /*
-    background-image: url('../images/admin/background_tab.png');
-    background-repeat: repeat-x;
-    */
 }
 
 div.admin_header span.category img {
