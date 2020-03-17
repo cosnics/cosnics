@@ -522,7 +522,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $details_url = $this->get_url(
             array(
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW
             )
         );
         $dropdownButton->addSubButton(
@@ -551,7 +551,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 $email_url = $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MAIL_PUBLICATION
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MAIL_PUBLICATION
                     )
                 );
 
@@ -580,7 +580,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                     Translation::get('EditContentObject', null, Utilities::COMMON_LIBRARIES),
                     new FontAwesomeGlyph('pencil'), $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_CONTENT_OBJECT,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_CONTENT_OBJECT,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
                     )
                 ), Button::DISPLAY_ICON, false, 'btn-link'
@@ -595,7 +595,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                     Translation::get('EditPublicationDetails', null, Utilities::COMMON_LIBRARIES),
                     new FontAwesomeGlyph('edit', array(), null, 'fas'), $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
                     )
                 ), SubButton::DISPLAY_LABEL
@@ -647,9 +647,9 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                         new SubButton(
                             Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => $true_up,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION                  => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID          => $publication_id,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION          => $true_up,
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $publication_type
                             )
                         ), SubButton::DISPLAY_LABEL
@@ -663,9 +663,9 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                         new SubButton(
                             Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => $true_down,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION                  => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID          => $publication_id,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION          => $true_down,
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $publication_type
                             )
                         ), SubButton::DISPLAY_LABEL
@@ -676,8 +676,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
             $visibility_url = $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_TOGGLE_VISIBILITY,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION                  => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_TOGGLE_VISIBILITY,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID          => $publication_id,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $publication_type
                 )
             );
@@ -707,7 +707,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                     new SubButton(
                         Translation::get('MoveToCategory', null, Manager::context()), null, $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
                         )
                     ), SubButton::DISPLAY_LABEL
@@ -724,7 +724,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 new SubButton(
                     Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
                     )
                 ), SubButton::DISPLAY_LABEL
@@ -739,7 +739,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                     Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
                         )
                     ), Button::DISPLAY_ICON,
@@ -802,7 +802,10 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-12 col-sm-3 panel-publication-footer-targets">';
-        $html[] = '<span class="glyphicon glyphicon-user"></span>';
+
+        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
+        $html[] = $glyph->render();
         $html[] = $this->render_publication_targets($publication);
         $html[] = '</div>';
 
@@ -926,14 +929,19 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
         {
             $html[] = '<span class="text-warning">';
-            $html[] = '<span class="glyphicon glyphicon-eye-close"></span>';
+
+            $glyph = new FontAwesomeGlyph('eye-slash', array(), null, 'fas');
+
+            $html[] = $glyph->render();
             $html[] = Translation::get('PublicationLabelHidden');
             $html[] = '</span>';
         }
         elseif ($publication[ContentObjectPublication::PROPERTY_FROM_DATE] != 0 ||
             $publication[ContentObjectPublication::PROPERTY_TO_DATE] != 0)
         {
-            $html[] = '<span class="glyphicon glyphicon-eye-open"></span>';
+            $glyph = new FontAwesomeGlyph('eye', array(), null, 'fas');
+
+            $html[] = $glyph->render();
             $html[] = $this->render_publication_period($publication);
         }
 
@@ -993,7 +1001,9 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $html[] = '<span class="text-danger">';
         }
 
-        $html[] = '<span class="glyphicon glyphicon-time"></span>';
+        $glyph = new FontAwesomeGlyph('clock', array(), null, 'far');
+
+        $html[] = $glyph->render();
         $html[] = $visibleDate;
 
         if ($contentModified)

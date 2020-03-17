@@ -11,6 +11,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseToolRelCourseSection;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -368,7 +369,10 @@ class PanelToolListRenderer extends ToolListRenderer
 
                 $html[] = '<div class="pull-right">';
                 $html[] = '<a href="' . $visibilityUrl . '">';
-                $html[] = '<span class="glyphicon glyphicon-remove"></span>';
+
+                $glyph = new FontAwesomeGlyph('times', array(), null, 'fas');
+                $html[] = $glyph->render();
+
                 $html[] = '</a>';
                 $html[] = '</div>';
             }
