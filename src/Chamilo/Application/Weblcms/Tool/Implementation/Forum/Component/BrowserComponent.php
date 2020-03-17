@@ -467,7 +467,6 @@ class BrowserComponent extends Manager implements DelegateComponent
                     if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
                     {
                         $muteClass = ' text-muted-invisible';
-                        $classes[] = 'glyphicon-muted';
                     }
 
                     $forumGlyph = new FontAwesomeGlyph($forumGlyphType, $classes);
