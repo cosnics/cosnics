@@ -182,7 +182,10 @@ EOT;
         $dropzoneHtml[] = '<div id="' . $elementName . '-template" class="thumbnail pull-left">';
         $dropzoneHtml[] = '<div class="preview">';
         $dropzoneHtml[] = '<div class="file-upload-no-preview">';
-        $dropzoneHtml[] = '<span class="glyphicon glyphicon-file"></span>';
+
+        $glyph = new FontAwesomeGlyph('file', array(), null, 'fas');
+        $dropzoneHtml[] = $glyph->render();
+
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<img data-dz-thumbnail />';
         $dropzoneHtml[] = '</div>';
@@ -200,8 +203,10 @@ EOT;
         $dropzoneHtml[] = '<div class="file-upload-buttons">';
 
         $dropzoneHtml[] = '<button data-dz-remove class="btn btn-danger delete">';
-        $dropzoneHtml[] =
-            '<i class="glyphicon glyphicon-trash"></i> <span>' . $this->getTranslation('Delete') . '</span>';
+
+        $glyph = new FontAwesomeGlyph('trash-alt', array(), null, 'fas');
+        $dropzoneHtml[] = $glyph->render() . ' <span>' . $this->getTranslation('Delete') . '</span>';
+
         $dropzoneHtml[] = '</button>';
 
         $dropzoneHtml[] = '</div>';
@@ -212,8 +217,12 @@ EOT;
         $dropzoneHtml[] = '<div class="clearfix"></div>';
         $dropzoneHtml[] = '<div class="panel panel-default">';
         $dropzoneHtml[] = '<div class="panel-body">';
+
+        $uploadGlyph = new FontAwesomeGlyph('upload', array(), null, 'fas');
+        $plusGlyph = new FontAwesomeGlyph('plus-circle', array('fileinput-button', 'dz-clickable'), null, 'fas');
+
         $dropzoneHtml[] =
-            '<span class="actions"><span class="glyphicon glyphicon-upload"></span>&nbsp;<span class="glyphicon glyphicon-plus-sign fileinput-button dz-clickable"></span></span>';
+            '<span class="actions">' . $uploadGlyph->render() . '&nbsp;' . $plusGlyph->render() . '</span>';
 
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="panel-footer">';
@@ -721,7 +730,7 @@ EOT;
         $choices[] = $this->createElement(
             'radio', $elementName . '_option', '', Translation::get($noSelection), '0', array(
                 'onclick' => 'javascript:receivers_hide(\'receivers_window_' . $elementName . '\')',
-                'id' => 'receiver_' . $elementName
+                'id'      => 'receiver_' . $elementName
             )
         );
         $choices[] = $this->createElement(
@@ -793,7 +802,7 @@ EOT;
             $choices[] = $this->createElement(
                 'radio', $elementName . '_option', '', Translation::get($radioType), $radioType, array(
                     'onclick' => 'javascript:receivers_hide(\'' . $elementName . 'receivers_window\')',
-                    'id' => $elementName . 'receiver'
+                    'id'      => $elementName . 'receiver'
                 )
             );
         }
@@ -801,7 +810,7 @@ EOT;
         $choices[] = $this->createElement(
             'radio', $elementName . '_option', '', Translation::get('SelectGroupsUsers'), '1', array(
                 'onclick' => 'javascript:receivers_show(\'' . $elementName . 'receivers_window\')',
-                'id' => $elementName . 'group'
+                'id'      => $elementName . 'group'
             )
         );
         $this->addGroup($choices, null, $elementLabel, '<br />', false);

@@ -145,11 +145,11 @@ abstract class BootstrapTreeMenu
                 {
                     $('#" . $this->getMenuName() . "').treeview({
                         enableLinks : true,
-                        expandIcon: 'glyphicon glyphicon-chevron-right',
-                        collapseIcon: 'glyphicon glyphicon-chevron-down',
+                        expandIcon: 'inline-glyph fas fa-chevron-right',
+                        collapseIcon: 'inline-glyph fas fa-chevron-down',
                         color: '#428bca',
                         showBorder: false,
-                        checkedIcon: 'glyphicon glyphicon-ok',
+                        checkedIcon: 'inline-glyph fas fa-check',
                         data: " . json_encode($this->getNodes()) . "
                     });
 

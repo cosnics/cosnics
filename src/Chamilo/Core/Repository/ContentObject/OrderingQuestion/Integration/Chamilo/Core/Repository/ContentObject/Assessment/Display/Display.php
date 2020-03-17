@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -14,6 +15,33 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class Display extends QuestionDisplay
 {
+
+    public function add_border()
+    {
+        return false;
+    }
+
+    public function add_footer()
+    {
+        $formvalidator = $this->get_formvalidator();
+
+        if ($this->get_question()->has_hint() && $this->get_configuration()->allow_hints())
+        {
+            $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
+            $glyph = new FontAwesomeGlyph('gift', array(), null, 'fas');
+
+            $html[] = '<div class="panel-body">';
+            $html[] = '<div class="splitter">' . Translation:: get('Hint') . '</div>';
+            $html[] = '<div class="with_borders"><a id="' . $hint_name . '" class="btn btn-default hint_button">' .
+                $glyph->render() . ' ' . Translation:: get('GetAHint') . '</a></div>';
+            $html[] = '</div>';
+
+            $footer = implode(PHP_EOL, $html);
+            $formvalidator->addElement('html', $footer);
+        }
+
+        parent::add_footer();
+    }
 
     public function add_question_form()
     {
@@ -52,8 +80,8 @@ class Display extends QuestionDisplay
             $group[] = $formvalidator->createElement('select', $answer_name, null, $order_options);
 
             $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_formvalidator()->get_assessment_viewer(),
-                $answer->get_value());
+                $this->get_formvalidator()->get_assessment_viewer(), $answer->get_value()
+            );
 
             $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());
 
@@ -66,7 +94,8 @@ class Display extends QuestionDisplay
 
             $renderer->setElementTemplate(
                 '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>',
-                'option_' . $question_id . '_' . $i);
+                'option_' . $question_id . '_' . $i
+            );
             $renderer->setGroupElementTemplate('<td>{element}</td>', 'option_' . $question_id . '_' . $i);
         }
 
@@ -75,14 +104,10 @@ class Display extends QuestionDisplay
         $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
 
         $formvalidator->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(Assessment::package(), true) . 'GiveHint.js'));
-    }
-
-    public function add_border()
-    {
-        return false;
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Assessment::package(), true) . 'GiveHint.js'
+        )
+        );
     }
 
     public function get_instruction()
@@ -111,27 +136,5 @@ class Display extends QuestionDisplay
         }
 
         return $options;
-    }
-
-    public function add_footer()
-    {
-        $formvalidator = $this->get_formvalidator();
-
-        if ($this->get_question()->has_hint() && $this->get_configuration()->allow_hints())
-        {
-            $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
-
-            $html[] = '<div class="panel-body">';
-            $html[] = '<div class="splitter">' . Translation :: get('Hint') . '</div>';
-            $html[] = '<div class="with_borders"><a id="' . $hint_name .
-                 '" class="btn btn-default hint_button"><span class="glyphicon glyphicon-gift"></span> ' .
-                 Translation :: get('GetAHint') . '</a></div>';
-            $html[] = '</div>';
-
-            $footer = implode(PHP_EOL, $html);
-            $formvalidator->addElement('html', $footer);
-        }
-
-        parent::add_footer();
     }
 }

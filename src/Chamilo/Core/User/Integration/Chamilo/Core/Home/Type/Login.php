@@ -16,32 +16,11 @@ use Chamilo\Libraries\Utilities\Utilities;
 class Login extends BlockRenderer
 {
 
-    public function isEditable()
-    {
-        return false;
-    }
-
-    public function isHidable()
-    {
-        return false;
-    }
-
-    public function isDeletable()
-    {
-        return false;
-    }
-
-    public function isVisible()
-    {
-        return true; // i.e.display on homepage when anonymous
-    }
-
     public function displayContent()
     {
         $html = array();
 
-        if (!$this->getUser() || ($this->getUser() instanceof User &&
-                $this->getUser()->is_anonymous_user()))
+        if (!$this->getUser() || ($this->getUser() instanceof User && $this->getUser()->is_anonymous_user()))
         {
             $request = $this->getRenderer()->getApplicationConfiguration()->getRequest();
             $message = $request->query->get(AuthenticationValidator::PARAM_AUTHENTICATION_ERROR);
@@ -69,8 +48,8 @@ class Login extends BlockRenderer
 
             $profilePhotoUrl = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
-                    Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
+                    Application::PARAM_CONTEXT  => \Chamilo\Core\User\Ajax\Manager::context(),
+                    Application::PARAM_ACTION   => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
                     Manager::PARAM_USER_USER_ID => $user->get_id()
                 )
             );
@@ -82,7 +61,7 @@ class Login extends BlockRenderer
             $redirect = new Redirect(
                 array(
                     Application::PARAM_CONTEXT => Manager::context(),
-                    Application::PARAM_ACTION => Manager::ACTION_LOGOUT
+                    Application::PARAM_ACTION  => Manager::ACTION_LOGOUT
                 )
             );
             $logoutLink = $redirect->getUrl();
@@ -136,14 +115,17 @@ class Login extends BlockRenderer
                 $redirect = new Redirect(
                     array(
                         Application::PARAM_CONTEXT => Manager::context(),
-                        Application::PARAM_ACTION => Manager::ACTION_REGISTER_USER
+                        Application::PARAM_ACTION  => Manager::ACTION_REGISTER_USER
                     )
                 );
                 $link = $redirect->getUrl();
 
+                $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
                 $buttons[] = $form->createElement(
-                    'static', null, null, '<a href="' . htmlspecialchars($link) .
-                    '" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> ' . htmlspecialchars(
+                    'static', null, null,
+                    '<a href="' . htmlspecialchars($link) . '" class="btn btn-default">' . $glyph->render() . ' ' .
+                    htmlspecialchars(
                         Translation::get('Reg')
                     ) . '</a>'
                 );
@@ -155,14 +137,16 @@ class Login extends BlockRenderer
                 $redirect = new Redirect(
                     array(
                         Application::PARAM_CONTEXT => Manager::context(),
-                        Application::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD
+                        Application::PARAM_ACTION  => Manager::ACTION_RESET_PASSWORD
                     )
                 );
                 $link = $redirect->getUrl();
 
+                $glyph = new FontAwesomeGlyph('question-circle', array(), null, 'fas');
+
                 $buttons[] = $form->createElement(
-                    'static', null, null, '<a href="' . htmlspecialchars($link) .
-                    '" class="btn btn-default"><span class="glyphicon glyphicon-question-sign"></span> ' .
+                    'static', null, null,
+                    '<a href="' . htmlspecialchars($link) . '" class="btn btn-default">' . $glyph->render() . ' ' .
                     htmlspecialchars(
                         Translation::get('ResetPassword')
                     ) . '</a>'
@@ -173,5 +157,25 @@ class Login extends BlockRenderer
         $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
         return $form->toHtml();
+    }
+
+    public function isDeletable()
+    {
+        return false;
+    }
+
+    public function isEditable()
+    {
+        return false;
+    }
+
+    public function isHidable()
+    {
+        return false;
+    }
+
+    public function isVisible()
+    {
+        return true; // i.e.display on homepage when anonymous
     }
 }

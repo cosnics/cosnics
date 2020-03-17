@@ -35,6 +35,13 @@ class Basic extends Renderer
 {
 
     /**
+     * Caching variable to check if the home page is in general mode
+     *
+     * @var boolean
+     */
+    protected $generalMode;
+
+    /**
      *
      * @var \Chamilo\Core\Home\Storage\DataClass\Element[]
      */
@@ -53,27 +60,6 @@ class Basic extends Renderer
     private $homeService;
 
     /**
-     * Caching variable to check if the home page is in general mode
-     *
-     * @var boolean
-     */
-    protected $generalMode;
-
-    /**
-     *
-     * @return \Chamilo\Core\Home\Service\HomeService
-     */
-    private function getHomeService()
-    {
-        if (! isset($this->homeService))
-        {
-            $this->homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));
-        }
-
-        return $this->homeService;
-    }
-
-    /**
      *
      * @see \Chamilo\Core\Home\Renderer\Renderer::render()
      */
@@ -90,14 +76,14 @@ class Basic extends Renderer
         if ($isEditable)
         {
             $html[] = '<script type="text/javascript" src="' .
-                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
         }
 
         if ($this->isGeneralMode())
         {
             $html[] = '<script type="text/javascript" src="' .
-                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeGeneralModeAjax.js' .
-                 '"></script>';
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeGeneralModeAjax.js' .
+                '"></script>';
         }
 
         $html[] = $this->renderTabs();
@@ -115,122 +101,134 @@ class Basic extends Renderer
         $html[] = $this->renderPackageContainer();
         $html[] = $this->renderContent();
 
-        $html[] = '<script type="text/javascript" src="' .
-             Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeView.js' . '"></script>';
+        $html[] =
+            '<script type="text/javascript" src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) .
+            'HomeView.js' . '"></script>';
 
         return implode(PHP_EOL, $html);
     }
 
     /**
      *
-     * @return string
+     * @return \Chamilo\Core\Home\Service\HomeService
      */
-    public function renderTabs()
+    private function getHomeService()
     {
-        $html = array();
-
-        $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
-
-        $tabs = $this->getHomeService()->getElements($this->get_user(), Tab::class_name());
-
-        foreach ($tabs as $tabKey => $tab)
+        if (!isset($this->homeService))
         {
-            $tabHeaderRenderer = new TabHeaderRenderer($this->getApplication(), $this->getHomeService(), $tab);
-            $html[] = $tabHeaderRenderer->render(
-                $this->getHomeService()->isActiveTab($this->getApplication()->getRequest(), $tabKey, $tab));
+            $this->homeService =
+                new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));
         }
 
-        $html[] = $this->renderButtons();
-
-        $html[] = '</ul>';
-
-        return implode(PHP_EOL, $html);
+        return $this->homeService;
     }
 
-    public function renderPanel($rowClass, $actionClass, $title, $content)
+    /**
+     * Returns whether or not the home viewer is in general mode
+     *
+     * @return bool
+     */
+    protected function isGeneralMode()
     {
-        $html = array();
+        if (!isset($this->generalMode))
+        {
+            $this->generalMode = Session::retrieve('Chamilo\Core\Home\General');
+        }
 
-        $html[] = '<div class="row ' . $rowClass . ' hidden">';
-
-        $html[] = '<div class="col-xs-12">';
-        $html[] = '<div class="panel panel-primary">';
-
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<div class="pull-right">';
-        $html[] = '<a href="#" class="' . $actionClass . '"><span class="glyphicon glyphicon-remove"></span></a>';
-        $html[] = '</div>';
-        $html[] = '<h3 class="panel-title">' . $title . '</h3>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="panel-body">';
-        $html[] = $content;
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function renderTabTitlePanel()
-    {
-        $html = array();
-
-        $html[] = '<form class="form-inline portal-action-tab-form">';
-        $html[] = '<div class="form-group">';
-        $html[] = '<input type="text" class="form-control portal-action-tab-title" data-tab-id="" placeholder="' .
-             Translation::get('EnterTabTitle') . '" />';
-        $html[] = '</div>';
-
-        $html[] = '<button type="submit" class="btn btn-primary portal-tab-title-save">' . Translation::get('Save') .
-             '</button>';
-
-        $html[] = '</form>';
-
-        return $this->renderPanel(
-            'portal-tab-panel',
-            'portal-tab-panel-hide',
-            Translation::get('EditTabTitle'),
-            implode(PHP_EOL, $html));
+        return $this->generalMode;
     }
 
     /**
      *
      * @return string
      */
-    public function renderPackageContainer()
+    public function renderButtons()
     {
+        $user = $this->get_user();
+        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
+        $generalMode = $this->isGeneralMode();
+        $homeUserIdentifier = $this->getHomeService()->determineHomeUserIdentifier($this->get_user());
+
         $html = array();
 
-        $html[] = '<form class="form-inline package-search">';
-        $html[] = '<div class="form-group">';
-        $html[] = '<div class="input-group">';
-        $html[] = '<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>';
-        $html[] = '<input type="text" class="form-control" id="portal-package-name" placeholder="' .
-             Translation::get('SearchForWidgets') . '">';
-        $html[] = '</div>';
-        $html[] = '</div>';
+        if ($user instanceof User && ($userHomeAllowed || $user->is_platform_admin()))
+        {
+            $buttonToolBar = new ButtonToolBar();
 
-        $html[] = '<div class="form-group">';
-        $html[] = '<div class="input-group">';
-        $html[] = '<select class="form-control" id="portal-package-context">';
-        $html[] = '<option value="">' . Translation::get('AllPackages') . '</option>';
-        $html[] = '</select>';
-        $html[] = '</div>';
-        $html[] = '</div>';
+            if ($userHomeAllowed || $generalMode)
+            {
+                $splitDropdownButton = new SplitDropdownButton(
+                    Translation::get('NewBlock'), new FontAwesomeGlyph('plus'), '#', SubButton::DISPLAY_ICON_AND_LABEL,
+                    false, 'portal-add-block btn-link'
+                );
+                $splitDropdownButton->setDropdownClasses('dropdown-menu-right');
 
-        $html[] = '</form>';
+                $buttonToolBar->addItem($splitDropdownButton);
 
-        $html[] = '<div class="row portal-package-blocks">';
-        $html[] = '</div>';
+                $splitDropdownButton->addSubButton(
+                    new SubButton(
+                        Translation::get('NewColumn'), null, '#', SubButton::DISPLAY_LABEL, false,
+                        'portal-add-column btn-link'
+                    )
+                );
+                $splitDropdownButton->addSubButton(
+                    new SubButton(
+                        Translation::get('NewTab'), null, '#', SubButton::DISPLAY_LABEL, false,
+                        'portal-add-tab btn-link'
+                    )
+                );
 
-        return $this->renderPanel(
-            'portal-package-container',
-            'portal-action portal-package-hide',
-            Translation::get('BrowseBlocks'),
-            implode(PHP_EOL, $html));
+                $truncateLink = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_TRUNCATE));
+
+                if ($homeUserIdentifier != '0')
+                {
+                    $splitDropdownButton->addSubButton(
+                        new SubButton(
+                            Translation::get('ResetHomepage'), null, $truncateLink->getUrl(), SubButton::DISPLAY_LABEL,
+                            true, 'portal-reset btn-link'
+                        )
+                    );
+                }
+            }
+
+            if (!$generalMode && $user->is_platform_admin())
+            {
+                $redirect = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_MANAGE_HOME));
+
+                $buttonToolBar->addItem(
+                    new Button(
+                        Translation::get('ConfigureDefault'), new FontAwesomeGlyph('wrench'), $redirect->getUrl()
+                    )
+                );
+            }
+            elseif ($generalMode && $user->is_platform_admin())
+            {
+                $redirect = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_PERSONAL));
+
+                $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
+
+                if ($splitDropdownButton)
+                {
+                    $splitDropdownButton->addSubButton(
+                        new SubButton(
+                            Translation::get($title), new FontAwesomeGlyph('home'), $redirect->getUrl(),
+                            SubButton::DISPLAY_LABEL
+                        )
+                    );
+                }
+                else
+                {
+                    $buttonToolBar->addItem(
+                        new Button(Translation::get($title), new FontAwesomeGlyph('home'), $redirect->getUrl())
+                    );
+                }
+            }
+
+            $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+            $html[] = '<li class="pull-right portal-actions">' . $buttonToolBarRenderer->render() . '</li>';
+        }
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -262,7 +260,8 @@ class Basic extends Renderer
         {
             $tabRenderer = new TabRenderer($this->getApplication(), $this->getHomeService(), $tab);
             $html[] = $tabRenderer->render(
-                $this->getHomeService()->isActiveTab($this->getApplication()->getRequest(), $tabKey, $tab));
+                $this->getHomeService()->isActiveTab($this->getApplication()->getRequest(), $tabKey, $tab)
+            );
         }
 
         $html[] = '</div>';
@@ -274,112 +273,115 @@ class Basic extends Renderer
      *
      * @return string
      */
-    public function renderButtons()
+    public function renderPackageContainer()
     {
-        $user = $this->get_user();
-        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
-        $generalMode = $this->isGeneralMode();
-        $homeUserIdentifier = $this->getHomeService()->determineHomeUserIdentifier($this->get_user());
-
         $html = array();
 
-        if ($user instanceof User && ($userHomeAllowed || $user->is_platform_admin()))
-        {
-            $buttonToolBar = new ButtonToolBar();
+        $html[] = '<form class="form-inline package-search">';
+        $html[] = '<div class="form-group">';
+        $html[] = '<div class="input-group">';
 
-            if ($userHomeAllowed || $generalMode)
-            {
-                $splitDropdownButton = new SplitDropdownButton(
-                    Translation::get('NewBlock'),
-                    new FontAwesomeGlyph('plus'),
-                    '#',
-                    SubButton::DISPLAY_ICON_AND_LABEL,
-                    false,
-                    'portal-add-block btn-link');
-                $splitDropdownButton->setDropdownClasses('dropdown-menu-right');
+        $glyph = new FontAwesomeGlyph('search', array(), null, 'fas');
 
-                $buttonToolBar->addItem($splitDropdownButton);
+        $html[] = '<div class="input-group-addon">' . $glyph->render() . '</div>';
+        $html[] = '<input type="text" class="form-control" id="portal-package-name" placeholder="' .
+            Translation::get('SearchForWidgets') . '">';
+        $html[] = '</div>';
+        $html[] = '</div>';
 
-                $splitDropdownButton->addSubButton(
-                    new SubButton(
-                        Translation::get('NewColumn'),
-                        null,
-                        '#',
-                        SubButton::DISPLAY_LABEL,
-                        false,
-                        'portal-add-column btn-link'));
-                $splitDropdownButton->addSubButton(
-                    new SubButton(
-                        Translation::get('NewTab'),
-                        null,
-                        '#',
-                        SubButton::DISPLAY_LABEL,
-                        false,
-                        'portal-add-tab btn-link'));
+        $html[] = '<div class="form-group">';
+        $html[] = '<div class="input-group">';
+        $html[] = '<select class="form-control" id="portal-package-context">';
+        $html[] = '<option value="">' . Translation::get('AllPackages') . '</option>';
+        $html[] = '</select>';
+        $html[] = '</div>';
+        $html[] = '</div>';
 
-                $truncateLink = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_TRUNCATE));
+        $html[] = '</form>';
 
-                if ($homeUserIdentifier != '0')
-                {
-                    $splitDropdownButton->addSubButton(
-                        new SubButton(
-                            Translation::get('ResetHomepage'),
-                            null,
-                            $truncateLink->getUrl(),
-                            SubButton::DISPLAY_LABEL,
-                            true,
-                            'portal-reset btn-link'));
-                }
-            }
+        $html[] = '<div class="row portal-package-blocks">';
+        $html[] = '</div>';
 
-            if (! $generalMode && $user->is_platform_admin())
-            {
-                $redirect = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_MANAGE_HOME));
+        return $this->renderPanel(
+            'portal-package-container', 'portal-action portal-package-hide', Translation::get('BrowseBlocks'),
+            implode(PHP_EOL, $html)
+        );
+    }
 
-                $buttonToolBar->addItem(
-                    new Button(Translation::get('ConfigureDefault'), new FontAwesomeGlyph('wrench'), $redirect->getUrl()));
-            }
-            elseif ($generalMode && $user->is_platform_admin())
-            {
-                $redirect = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_PERSONAL));
+    public function renderPanel($rowClass, $actionClass, $title, $content)
+    {
+        $html = array();
 
-                $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
+        $html[] = '<div class="row ' . $rowClass . ' hidden">';
 
-                if ($splitDropdownButton)
-                {
-                    $splitDropdownButton->addSubButton(
-                        new SubButton(
-                            Translation::get($title),
-                            new FontAwesomeGlyph('home'),
-                            $redirect->getUrl(),
-                            SubButton::DISPLAY_LABEL));
-                }
-                else
-                {
-                    $buttonToolBar->addItem(
-                        new Button(Translation::get($title), new FontAwesomeGlyph('home'), $redirect->getUrl()));
-                }
-            }
+        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="panel panel-primary">';
 
-            $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-            $html[] = '<li class="pull-right portal-actions">' . $buttonToolBarRenderer->render() . '</li>';
-        }
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<div class="pull-right">';
+
+        $glyph = new FontAwesomeGlyph('times', array(), null, 'fas');
+
+        $html[] = '<a href="#" class="' . $actionClass . '">' . $glyph->render() . '</a>';
+        $html[] = '</div>';
+        $html[] = '<h3 class="panel-title">' . $title . '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
+        $html[] = $content;
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Returns whether or not the home viewer is in general mode
-     *
-     * @return bool
-     */
-    protected function isGeneralMode()
+    public function renderTabTitlePanel()
     {
-        if (! isset($this->generalMode))
+        $html = array();
+
+        $html[] = '<form class="form-inline portal-action-tab-form">';
+        $html[] = '<div class="form-group">';
+        $html[] = '<input type="text" class="form-control portal-action-tab-title" data-tab-id="" placeholder="' .
+            Translation::get('EnterTabTitle') . '" />';
+        $html[] = '</div>';
+
+        $html[] = '<button type="submit" class="btn btn-primary portal-tab-title-save">' . Translation::get('Save') .
+            '</button>';
+
+        $html[] = '</form>';
+
+        return $this->renderPanel(
+            'portal-tab-panel', 'portal-tab-panel-hide', Translation::get('EditTabTitle'), implode(PHP_EOL, $html)
+        );
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderTabs()
+    {
+        $html = array();
+
+        $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
+
+        $tabs = $this->getHomeService()->getElements($this->get_user(), Tab::class_name());
+
+        foreach ($tabs as $tabKey => $tab)
         {
-            $this->generalMode = Session::retrieve('Chamilo\Core\Home\General');
+            $tabHeaderRenderer = new TabHeaderRenderer($this->getApplication(), $this->getHomeService(), $tab);
+            $html[] = $tabHeaderRenderer->render(
+                $this->getHomeService()->isActiveTab($this->getApplication()->getRequest(), $tabKey, $tab)
+            );
         }
 
-        return $this->generalMode;
+        $html[] = $this->renderButtons();
+
+        $html[] = '</ul>';
+
+        return implode(PHP_EOL, $html);
     }
 }

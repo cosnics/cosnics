@@ -219,10 +219,12 @@ class SettingsForm extends FormValidator
 
         $buttons = array();
 
+        $glyph = new FontAwesomeGlyph('chevron-left', array(), null, 'fas');
+
         $buttons[] = $this->createElement(
             'static', null, null,
             '<a href="' . $this->getApplication()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_LICENSE)) .
-            '" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>' .
+            '" class="btn btn-default">' . $glyph->render() .
             Translation::get('Previous', null, Utilities::COMMON_LIBRARIES) . '</a>'
         );
 

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
+use Chamilo\Libraries\Calendar\Renderer\Event\Configuration;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
@@ -8,6 +9,7 @@ use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -19,7 +21,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class MiniMonthRenderer extends ViewRenderer
 {
-    use \Chamilo\Libraries\Calendar\Renderer\Type\View\TableRenderer;
+    use TableRenderer;
 
     /**
      * One of 3 possible values (or null): MiniMonthCalendar :: PERIOD_MONTH, MiniMonthCalendar :: PERIOD_WEEK,
@@ -36,12 +38,35 @@ class MiniMonthRenderer extends ViewRenderer
      * @param string $linkTarget
      * @param integer $markPeriod
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $viewActions = array(), $linkTarget = '', $markPeriod = null)
+    public function __construct(
+        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = array(),
+        $linkTarget = '', $markPeriod = null
+    )
     {
         $this->markPeriod = $markPeriod;
 
         parent::__construct($dataProvider, $legend, $displayTime, $viewActions, $linkTarget);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
+     */
+    public function render()
+    {
+        $html = array();
+
+        $html[] = '<div class="panel panel-default">';
+        $html[] = $this->renderNavigation();
+
+        $html[] = '<div class="table-calendar-mini-container">';
+        $html[] = $this->renderCalendar();
+        $html[] = '</div>';
+        $html[] = '<div class="clearfix"></div>';
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -73,27 +98,6 @@ class MiniMonthRenderer extends ViewRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
-     */
-    public function render()
-    {
-        $html = array();
-
-        $html[] = '<div class="panel panel-default">';
-        $html[] = $this->renderNavigation();
-
-        $html[] = '<div class="table-calendar-mini-container">';
-        $html[] = $this->renderCalendar();
-        $html[] = '</div>';
-        $html[] = '<div class="clearfix"></div>';
-
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
      * @return string
      */
     public function renderCalendar()
@@ -116,12 +120,12 @@ class MiniMonthRenderer extends ViewRenderer
                 $endDate = $event->getEndDate();
 
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
-                     $tableDate < $endDate && $endDate <= $nextTableDate ||
-                     $startDate <= $tableDate && $nextTableDate <= $endDate)
+                    $tableDate < $endDate && $endDate <= $nextTableDate ||
+                    $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
                     $this->getLegend()->addSource($event->getSource());
 
-                    $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
+                    $configuration = new Configuration();
                     $configuration->setStartDate($tableDate);
 
                     $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
@@ -142,7 +146,8 @@ class MiniMonthRenderer extends ViewRenderer
         $html[] = '<div class="clearfix"></div>';
 
         $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js'
+        );
 
         return implode(PHP_EOL, $html);
     }
@@ -171,10 +176,15 @@ class MiniMonthRenderer extends ViewRenderer
      *
      * @return string
      */
-    public function renderTitle()
+    public function renderNextMonthNavigation()
     {
-        return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities::COMMON_LIBRARIES) . ' ' .
-             date('Y', $this->getDisplayTime());
+        $urlFormat = $this->determineNavigationUrl();
+        $nextTime = strtotime('+1 Month', $this->getDisplayTime());
+        $nextUrl = str_replace(Calendar::TIME_PLACEHOLDER, $nextTime, $urlFormat);
+
+        $glyph = new FontAwesomeGlyph('chevron-right', array('pull-right'), null, 'fas');
+
+        return '<a href="' . $nextUrl . '">' . $glyph->render() . '</a>';
     }
 
     /**
@@ -187,19 +197,18 @@ class MiniMonthRenderer extends ViewRenderer
         $previousTime = strtotime('-1 Month', $this->getDisplayTime());
         $previousUrl = str_replace(Calendar::TIME_PLACEHOLDER, $previousTime, $urlFormat);
 
-        return '<a href="' . $previousUrl . '"><span class="glyphicon glyphicon-chevron-left pull-left"></span></a>';
+        $glyph = new FontAwesomeGlyph('chevron-left', array('pull-left'), null, 'fas');
+
+        return '<a href="' . $previousUrl . '">' . $glyph->render() . '</a>';
     }
 
     /**
      *
      * @return string
      */
-    public function renderNextMonthNavigation()
+    public function renderTitle()
     {
-        $urlFormat = $this->determineNavigationUrl();
-        $nextTime = strtotime('+1 Month', $this->getDisplayTime());
-        $nextUrl = str_replace(Calendar::TIME_PLACEHOLDER, $nextTime, $urlFormat);
-
-        return '<a href="' . $nextUrl . '"><span class="glyphicon glyphicon-chevron-right pull-right"></span></a>';
+        return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities::COMMON_LIBRARIES) . ' ' .
+            date('Y', $this->getDisplayTime());
     }
 }

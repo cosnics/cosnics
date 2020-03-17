@@ -2,11 +2,12 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Storage\DataClass\AssessmentSelectQuestion;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 
 /**
  *
@@ -14,6 +15,33 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
  */
 class Display extends QuestionDisplay
 {
+
+    public function add_borders()
+    {
+        return true;
+    }
+
+    public function add_footer()
+    {
+        $formvalidator = $this->get_formvalidator();
+
+        if ($this->get_question()->has_hint() && $this->get_configuration()->allow_hints())
+        {
+            $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
+            $glyph = new FontAwesomeGlyph('gift', array(), null, 'fas');
+
+            $html[] = '<div class="panel-body">';
+            $html[] = '<div class="splitter">' . Translation:: get('Hint') . '</div>';
+            $html[] = '<div class="with_borders"><a id="' . $hint_name . '" class="btn btn-default hint_button">' .
+                $glyph->render() . ' ' . Translation:: get('GetAHint') . '</a></div>';
+            $html[] = '</div>';
+
+            $footer = implode(PHP_EOL, $html);
+            $formvalidator->addElement('html', $footer);
+        }
+
+        parent::add_footer();
+    }
 
     public function add_question_form()
     {
@@ -46,7 +74,8 @@ class Display extends QuestionDisplay
         }
 
         $element_template = array();
-        $element_template[] = '<div><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}';
+        $element_template[] =
+            '<div><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}';
         $element_template[] = '<div class="clear">&nbsp;</div>';
         $element_template[] = '<div class="form_feedback"></div>';
         $element_template[] = '<div class="clear">&nbsp;</div>';
@@ -60,14 +89,12 @@ class Display extends QuestionDisplay
         if ($type == AssessmentSelectQuestion :: ANSWER_TYPE_CHECKBOX)
         {
             $advanced_select = $formvalidator->createElement(
-                'select',
-                $question_name,
-                '',
-                $answers,
-                array(
+                'select', $question_name, '', $answers, array(
                     'multiple' => 'true',
-                    'class' => 'advanced_select_question',
-                    'size' => (count($answers) > 10 ? 10 : count($answers))));
+                    'class'    => 'advanced_select_question',
+                    'size'     => (count($answers) > 10 ? 10 : count($answers))
+                )
+            );
             $formvalidator->addElement($advanced_select);
         }
         else
@@ -78,21 +105,12 @@ class Display extends QuestionDisplay
         $renderer->setElementTemplate($element_template, $question_name);
 
         $formvalidator->addElement(
-            'html',
-            ResourceManager :: getInstance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(Assessment :: package(), true) . 'GiveHint.js'));
+            'html', ResourceManager:: getInstance()->get_resource_html(
+            Path:: getInstance()->getJavascriptPath(Assessment:: package(), true) . 'GiveHint.js'
+        )
+        );
 
         $formvalidator->addElement('html', '</div>');
-    }
-
-    public function add_borders()
-    {
-        return true;
-    }
-
-    public function needsDescriptionBorder()
-    {
-        return true;
     }
 
     public function get_instruction()
@@ -121,25 +139,8 @@ class Display extends QuestionDisplay
         return implode(PHP_EOL, $instruction);
     }
 
-    public function add_footer()
+    public function needsDescriptionBorder()
     {
-        $formvalidator = $this->get_formvalidator();
-
-        if ($this->get_question()->has_hint() && $this->get_configuration()->allow_hints())
-        {
-            $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
-
-            $html[] = '<div class="panel-body">';
-            $html[] = '<div class="splitter">' . Translation :: get('Hint') . '</div>';
-            $html[] = '<div class="with_borders"><a id="' . $hint_name .
-                 '" class="btn btn-default hint_button"><span class="glyphicon glyphicon-gift"></span> ' .
-                 Translation :: get('GetAHint') . '</a></div>';
-            $html[] = '</div>';
-
-            $footer = implode(PHP_EOL, $html);
-            $formvalidator->addElement('html', $footer);
-        }
-
-        parent::add_footer();
+        return true;
     }
 }
