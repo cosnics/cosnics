@@ -263,6 +263,9 @@ class Kernel
         $this->version = $version;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function launch()
     {
         try

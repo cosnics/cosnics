@@ -240,6 +240,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
         foreach ($registrations as $registration)
         {
+
             if ($registration[Registration::PROPERTY_STATUS])
             {
                 $context = $registration[Registration::PROPERTY_CONTEXT];

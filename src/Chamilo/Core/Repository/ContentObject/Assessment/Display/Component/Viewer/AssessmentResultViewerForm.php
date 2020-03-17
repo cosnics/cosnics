@@ -32,27 +32,6 @@ class AssessmentResultViewerForm extends FormValidator
         $this->add_buttons();
     }
 
-    public function get_page_number()
-    {
-        return $this->assessment_result_processor->get_assessment_viewer()->get_questions_page();
-    }
-
-    public function get_total_pages()
-    {
-        return $this->assessment_result_processor->get_assessment_viewer()->get_total_pages();
-    }
-
-    public function add_general()
-    {
-        $current_page = self::PAGE_NUMBER . '-' . $this->get_page_number();
-        $this->addElement('hidden', $current_page, $this->get_page_number());
-
-        $start_time = Request::post('start_time');
-        $start_time = $start_time ? $start_time : 0;
-
-        $this->addElement('hidden', 'start_time', $start_time, array('id' => 'start_time'));
-    }
-
     public function add_buttons()
     {
         $assessmentViewer = $this->assessment_result_processor->get_assessment_viewer();
@@ -116,28 +95,35 @@ class AssessmentResultViewerForm extends FormValidator
             if ($this->assessment_result_processor->get_assessment_viewer()->get_root_content_object()
                 ->has_unlimited_attempts())
             {
+                $glyph = new FontAwesomeGlyph('sync', array(), null, 'fas');
                 $buttons[] = $this->createElement(
-                    'static', null, null, '<a href="' . $current_url .
-                    '" class="btn btn-default" target="_parent"><span class="glyphicon glyphicon-refresh"></span> ' .
-                    Translation::get('DoAssessmentAgain') . '</a>'
+                    'static', null, null,
+                    '<a href="' . $current_url . '" class="btn btn-default" target="_parent">' . $glyph->render() .
+                    ' ' . Translation::get('DoAssessmentAgain') . '</a>'
                 );
             }
 
             if (!StringUtilities::getInstance()->isNullOrEmpty($back_url))
             {
+                $glyph = new FontAwesomeGlyph('stop', array(), null, 'fas');
+
                 $buttons[] = $this->createElement(
-                    'static', null, null, '<a href="' . $back_url .
-                    '" class="btn btn-danger" target="_parent"><span class="glyphicon glyphicon-stop"></span> ' .
+                    'static', null, null,
+                    '<a href="' . $back_url . '" class="btn btn-danger" target="_parent">' . $glyph->render() . ' ' .
                     Translation::get('Finish') . '</a>'
                 );
             }
 
             if (!StringUtilities::getInstance()->isNullOrEmpty($continue_url))
             {
+                $glyph = new FontAwesomeGlyph(
+                    'check-circle', array(), null, 'fas'
+                );
+
                 $buttons[] = $this->createElement(
-                    'static', null, null, '<a href="' . $continue_url .
-                    '" class="btn btn-default" target="_parent"><span class="glyphicon glyphicon-ok"></span> ' .
-                    Translation::get('ContinueSession') . '</a>'
+                    'static', null, null,
+                    '<a href="' . $continue_url . '" class="btn btn-default" target="_parent">' . $glyph->render() .
+                    ' ' . Translation::get('ContinueSession') . '</a>'
                 );
             }
         }
@@ -149,10 +135,31 @@ class AssessmentResultViewerForm extends FormValidator
         $renderer->setGroupElementTemplate('{element}', 'buttons');
     }
 
+    public function add_general()
+    {
+        $current_page = self::PAGE_NUMBER . '-' . $this->get_page_number();
+        $this->addElement('hidden', $current_page, $this->get_page_number());
+
+        $start_time = Request::post('start_time');
+        $start_time = $start_time ? $start_time : 0;
+
+        $this->addElement('hidden', 'start_time', $start_time, array('id' => 'start_time'));
+    }
+
     public function add_results()
     {
         $question_results = $this->assessment_result_processor->get_question_results();
         $question_results = implode(PHP_EOL, $question_results);
         $this->addElement('html', $question_results);
+    }
+
+    public function get_page_number()
+    {
+        return $this->assessment_result_processor->get_assessment_viewer()->get_questions_page();
+    }
+
+    public function get_total_pages()
+    {
+        return $this->assessment_result_processor->get_assessment_viewer()->get_total_pages();
     }
 }
