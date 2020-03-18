@@ -25,7 +25,7 @@ class RightsEditorComponent extends Manager implements DelegateComponent
 
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Application\Weblcms\Tool\Action\Manager::context(),
-            new ApplicationConfiguration($request, $this->get_user(), $this))->run();
+            new ApplicationConfiguration($request, $this->getUser(), $this))->run();
     }
 
     public function get_available_rights($location)

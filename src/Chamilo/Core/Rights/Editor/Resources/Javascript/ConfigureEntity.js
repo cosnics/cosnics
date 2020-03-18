@@ -3,7 +3,7 @@
 	var collapseItem = function(e) {
 		e.preventDefault();
 
-		var image = $("div", this);
+		var image = $("span", this);
 		var originalClass = image.attr("class");
 		var id = $(this).parent().attr('id');
 
