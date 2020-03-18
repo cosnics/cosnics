@@ -78,10 +78,14 @@ class ViewerComponent extends Manager
 //
 //        return implode(PHP_EOL, $html);
 
-        return new Response(
-            '<div class="alert alert-warning">' .
-            $this->getTranslator()->trans('NoLongerSupported', [], Manager::context()) . '</div>'
-        );
+        $html = [];
+
+        $html[] = $this->render_header();
+        $html[] = '<div class="alert alert-warning">' .
+            $this->getTranslator()->trans('NoLongerSupported', [], Manager::context()) . '</div>';
+        $html[] = $this->render_footer();
+
+        return new Response(implode(PHP_EOL, $html));
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
