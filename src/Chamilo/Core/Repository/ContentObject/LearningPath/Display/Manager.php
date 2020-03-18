@@ -292,7 +292,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     public function getTreeNodeNavigationUrl(TreeNode $treeNode)
     {
         $reportingActions = array(
-            self::ACTION_REPORTING, self::ACTION_VIEW_ASSESSMENT_RESULT
+            self::ACTION_REPORTING,
+            self::ACTION_VIEW_ASSESSMENT_RESULT
         );
 
         $action = (in_array($this->get_action(), $reportingActions)) ? self::ACTION_REPORTING :
@@ -349,14 +350,17 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $html = array();
 
         $javascriptFiles = array(
-            'Repository/app.js', 'Repository/service/RepositoryService.js', 'RepoDragPanel/app.js',
-            'RepoDragPanel/filter/limitText.js', 'RepoDragPanel/directive/ckDraggable.js',
+            'Repository/app.js',
+            'Repository/service/RepositoryService.js',
+            'RepoDragPanel/app.js',
+            'RepoDragPanel/filter/limitText.js',
+            'RepoDragPanel/directive/ckDraggable.js',
             'RepoDragPanel/controller/DragPanelController.js'
         );
 
         foreach ($javascriptFiles as $javascriptFile)
         {
-            $html[] = ResourceManager::getInstance()->getResourcesHtml(
+            $html[] = ResourceManager::getInstance()->getResourceHtml(
                 $this->getPathBuilder()->getResourcesPath(Manager::context(), true) . 'Javascript/' . $javascriptFile
             );
         }
