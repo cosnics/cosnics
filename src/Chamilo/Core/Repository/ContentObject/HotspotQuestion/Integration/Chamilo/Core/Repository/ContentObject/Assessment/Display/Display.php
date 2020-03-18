@@ -11,16 +11,23 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\HotspotQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
  *
- * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc.question_display
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
-    // private $colours = array('#00315b', '#00adef', '#aecee7', '#9dcfc3', '#016c62', '#c7ac21', '#ff5329', '#bd0019',
-    // '#e7ad7b', '#bd0084', '#9d8384', '#42212a', '#005b84', '#e0eeef', '#00ad9c', '#ffe62a', '#f71932', '#ff9429',
-    // '#f6d7c5', '#7a2893');
     private $colours = array(
-        '#ff0000', '#f2ef00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#0080ff', '#ff0080', '#00ff80', '#ff8000',
+        '#ff0000',
+        '#f2ef00',
+        '#00ff00',
+        '#00ffff',
+        '#0000ff',
+        '#ff00ff',
+        '#0080ff',
+        '#ff0080',
+        '#00ff80',
+        '#ff8000',
         '#8000ff'
     );
 
@@ -123,12 +130,8 @@ class Display extends QuestionDisplay
             );
             $group[] = $formvalidator->createElement('hidden', $answer_name, '', 'class="hotspot_coordinates"');
 
-            // $formvalidator->addGroup($group, 'option_' . $i, null, '', false);
             $formvalidator->addGroup($group, 'option_' . $question_id . '_' . $i, null, '', false);
 
-            // $renderer->setElementTemplate('<tr id="' . $answer_name . '" class="' . ($i % 2 == 0 ? 'row_even' :
-            // 'row_odd') . '">{element}</tr>', 'option_' . $i);
-            // $renderer->setGroupElementTemplate('<td>{element}</td>', 'option_' . $i);
             $renderer->setElementTemplate(
                 '<tr id="' . $answer_name . '" class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>',
                 'option_' . $question_id . '_' . $i
@@ -139,15 +142,6 @@ class Display extends QuestionDisplay
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
-
-        // $this->add_scripts_element($clo_question->get_id(), $formvalidator);
-        // //$formvalidator->addElement('html', '<br/>');
-        // $answers = $question->get_answers();
-        // foreach ($answers as $i => $answer)
-        // {
-        // $formvalidator->addElement('hidden', $clo_question->get_id().'_'.$i, '', array('id' =>
-        // $clo_question->get_id().'_'.$i));
-        // }
     }
 
     public function get_instruction()

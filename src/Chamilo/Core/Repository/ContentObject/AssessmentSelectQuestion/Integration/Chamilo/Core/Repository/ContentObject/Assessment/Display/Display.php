@@ -10,17 +10,12 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
  *
- * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc.question_display
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
-
-    public function add_borders()
-    {
-        return true;
-    }
-
     public function add_footer()
     {
         $formvalidator = $this->get_formvalidator();
@@ -30,10 +25,9 @@ class Display extends QuestionDisplay
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
             $glyph = new FontAwesomeGlyph('gift', array(), null, 'fas');
 
-            $html[] = '<div class="panel-body">';
-            $html[] = '<div class="splitter">' . Translation:: get('Hint') . '</div>';
-            $html[] = '<div class="with_borders"><a id="' . $hint_name . '" class="btn btn-default hint_button">' .
-                $glyph->render() . ' ' . Translation:: get('GetAHint') . '</a></div>';
+            $html[] = '<div class="panel-body panel-body-assessment-hint">';
+            $html[] = '<a id="' . $hint_name . '" class="btn btn-default hint_button">' . $glyph->render() . ' ' .
+                Translation:: get('GetAHint') . '</a>';
             $html[] = '</div>';
 
             $footer = implode(PHP_EOL, $html);
@@ -111,32 +105,6 @@ class Display extends QuestionDisplay
         );
 
         $formvalidator->addElement('html', '</div>');
-    }
-
-    public function get_instruction()
-    {
-        $instruction = array();
-        $question = $this->get_question();
-        $type = $question->get_answer_type();
-
-        if ($type == AssessmentSelectQuestion::ANSWER_TYPE_RADIO && $question->has_description())
-        {
-            $instruction[] = '<div class="splitter">';
-            $instruction[] = Translation::get('SelectCorrectAnswer');
-            $instruction[] = '</div>';
-        }
-        elseif ($type == AssessmentSelectQuestion::ANSWER_TYPE_CHECKBOX && $question->has_description())
-        {
-            $instruction[] = '<div class="splitter">';
-            $instruction[] = Translation::get('SelectCorrectAnswers');
-            $instruction[] = '</div>';
-        }
-        else
-        {
-            $instruction = array();
-        }
-
-        return implode(PHP_EOL, $instruction);
     }
 
     public function needsDescriptionBorder()

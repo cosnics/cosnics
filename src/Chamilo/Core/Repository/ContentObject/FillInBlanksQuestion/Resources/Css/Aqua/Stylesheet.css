@@ -29,14 +29,6 @@ div.fill_in_the_blanks_text {
     font-family: Ubuntu, monospace;
 }
 
-button.blanks_hint, a.blanks_hint_button {
-    background-image: url(../../Images/Aqua/Buttons/ButtonHint.png);
-}
-
-button.character_hint, a.character_hint_button {
-    background-image: url(../../Images/Aqua/Buttons/ButtonCharacterHint.png);
-}
-
 span.inline_answer_hint {
     display: inline-block;
     padding: 0px 8px;

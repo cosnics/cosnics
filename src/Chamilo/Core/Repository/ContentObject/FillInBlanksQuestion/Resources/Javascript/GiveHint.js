@@ -51,7 +51,7 @@
                     var number = parseInt(hintIdentifierParts[1]) + 1;
                     table.show();
                     $('tbody', table).append('<tr><td>' + number + '.</td><td>' + result.properties.hint + '</td></tr>');
-                    $(this).after('<span class="inline_answer_hint">Hint ' + number + '</span>').remove();
+                    $(this).after('<span class="btn btn-default disabled">Hint ' + number + '</span>').remove();
                 }
                 else
                 {

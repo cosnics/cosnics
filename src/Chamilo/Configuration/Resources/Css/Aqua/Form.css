@@ -283,67 +283,6 @@ a.last_button {
     margin: 0px;
 }
 
-a.positive_button {
-    background-image: url(../../Images/Ruby/Buttons/Confirm.png);
-    color: #529214;
-}
-
-a.positive_button:hover {
-    background-color: #E6EFC2;
-    border: 1px solid #C6D880;
-    color: #529214;
-}
-
-a.positive_button:active {
-    background-color: #5ca54d;
-    border: 1px solid #5ca54d;
-    color: #ffffff;
-}
-
-a.negative_button {
-    background-image: url(../../Images/Ruby/Buttons/Cancel.png);
-    color: #d12f19;
-}
-
-a.negative_button:hover {
-    background-color: #fbe3e4;
-    border: 1px solid #fbc2c4;
-    color: #d12f19;
-}
-
-a.negative_button:active {
-    background-color: #bf382b;
-    border: 1px solid #bf382b;
-    color: #ffffff;
-}
-
-a.normal_button {
-    background-image: url(../../Images/Ruby/Buttons/Next.png);
-}
-
-a.normal_button:hover {
-    background-color: #dff4ff;
-    border: 1px solid #c2e1ef;
-    color: #336699;
-}
-
-a.normal_button:active {
-    background-color: #6299c5;
-    border: 1px solid #6299c5;
-    color: #ffffff;
-}
-
-a.alert_button {
-    background-image: url(../../Images/Ruby/Buttons/Warning.png);
-    color: #996900;
-}
-
-a.alert_button:hover {
-    border: 1px solid #ffd89b;
-    background-color: #fff8aa;
-    color: #996900;
-}
-
 a.mini_button, a.mini_button:hover, a.mini_button:active {
     background-position: center center;
     padding: 0px;
@@ -784,13 +723,6 @@ div.search_form button.search, div.search_form button.clear {
 div.search_form button.search img, div.search_form button.clear img {
     padding: 0px;
     margin: 1px 2px 0px 2px;
-}
-
-input.visual_input {
-    background-image: url(../../Images/Aqua/Buttons/Right.png);
-    background-repeat: no-repeat;
-    background-position: 4px 50%;
-    padding-left: 24px;
 }
 
 input.width {

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Application;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+
 /**
  *
  * @package Chamilo\Libraries\Architecture\Application
@@ -13,9 +15,12 @@ interface ApplicationConfigurationInterface
 
     /**
      *
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     * @param string $key
+     * @param string $defaultValue
+     *
+     * @return string
      */
-    public function getRequest();
+    public function get($key, $defaultValue = null);
 
     /**
      *
@@ -25,24 +30,15 @@ interface ApplicationConfigurationInterface
 
     /**
      *
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     */
+    public function getRequest();
+
+    /**
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function getUser();
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function setUser(\Chamilo\Core\User\Storage\DataClass\User $user);
-
-    /**
-     *
-     * @param string $key
-     * @param string $defaultValue
-     * @return string
-     */
-    public function get($key, $defaultValue = null);
 
     /**
      *
@@ -50,4 +46,12 @@ interface ApplicationConfigurationInterface
      * @param string $value
      */
     public function set($key, $value);
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function setUser(User $user);
 }

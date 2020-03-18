@@ -13,11 +13,3 @@ span.fill_in_the_blanks_gap {
 	color: #9e021b;
 	font-size: 10px;
 }
-
-button.blanks_hint, a.blanks_hint_button {
-	background-image: url(../../Images/Ruby/Buttons/ButtonHint.png);
-}
-
-button.character_hint, a.character_hint_button {
-	background-image: url(../../Images/Ruby/Buttons/ButtonCharacterHint.png);
-}

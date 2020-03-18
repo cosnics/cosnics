@@ -9,16 +9,12 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
  *
- * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc.question_display
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
-
-    public function add_borders()
-    {
-        return true;
-    }
 
     public function add_footer()
     {
@@ -29,7 +25,7 @@ class Display extends QuestionDisplay
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
             $glyph = new FontAwesomeGlyph('gift', array(), null, 'fas');
 
-            $html[] = '<div class="panel-body">';
+            $html[] = '<div class="panel-body panel-body-assessment-hint">';
             $html[] = '<a id="' . $hint_name . '" class="btn btn-default hint_button">' . $glyph->render() . ' ' .
                 Translation::get('GetAHint', [], 'Chamilo\Core\Repository\ContentObject\Assessment') . '</a>';
             $html[] = '</div>';

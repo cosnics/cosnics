@@ -66,15 +66,15 @@ $(function(){
 
         var list = [
             {id:"course_node", parent:"#", text:$('#courseName').text(), state:{"opened":true},
-                icon: webPath + "/Chamilo/Application/Weblcms/Resources/Images/Aqua/Logo/22.png"
+                icon: "inline-glyph fas fa-chalkboard-teacher fa-fw"
             }
         ];
 
         for(var i = 0; i < categories.length; i++)
         {
             var category = categories[i];
-                addCategory({id : category.id, name : category.name, tool : category.tool,
-                    parent_id : category.parent_id}, list);
+            addCategory({id : category.id, name : category.name, tool : category.tool, tool_class : category.tool_class,
+                parent_id : category.parent_id}, list);
         }
 
         for(var i = 0; i< publications.length; i++)
@@ -91,13 +91,11 @@ $(function(){
         return list;
     };
 
-    var addTool = function(toolName, list) {
+    var addTool = function(toolName, toolClass, list) {
         var node = {};
-        var iconUrl = webPath + "/Chamilo/Application/Weblcms/Tool/Implementation/" + toolName +
-            "/Resources/Images/Aqua/Logo/22.png";
 
         node.id = getToolNodeId(toolName);
-        node.icon = iconUrl;
+        node.icon = toolClass;
         node.text = getTranslation(toolName);
         node.parent = "course_node";
         node.state = {'opened' : false};
@@ -129,7 +127,7 @@ $(function(){
     var addCategory = function(category, list) {
         var node = {};
         node.id = getCategoryNodeId(category.id);
-        //node.icon = webPath +
+        node.icon = "inline-glyph fas fa-folder fa-fw";
         node.text = category.name;
         node.state = {'opened' : false, selected : getHiddenCategoryCheckbox(category.id).checked};
         node.category_id = category.id;
@@ -138,7 +136,7 @@ $(function(){
         if(category.parent_id == (null || 0))
         {
             if(!checkIfToolWasAdded(category.tool))
-                addTool(category.tool, list);
+                addTool(category.tool, category.tool_class, list);
 
             node.parent = getToolNodeId(category.tool);
         }
@@ -158,14 +156,14 @@ $(function(){
         node.id = getPublicationNodeId(publication.id);
         node.state = {selected : getHiddenPublicationCheckbox(publication.id).checked};
         node.text = publication.title;
-        node.icon = webPath + "Chamilo/Configuration/Resources/Images/Aqua/Action/Item.png";
+        node.icon = "inline-glyph fas fa-file fa-fw";
         node.publication_id = publication.id;
         node.li_attr = {class : "publication_node"};
 
         if(publication.category_id == 0)
         {
             if(!checkIfToolWasAdded(publication.tool))
-                addTool(publication.tool, list);
+                addTool(publication.tool, publication.tool_class, list);
 
             node.parent = getToolNodeId(publication.tool);
         }

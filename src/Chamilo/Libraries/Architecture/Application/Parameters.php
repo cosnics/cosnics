@@ -11,20 +11,88 @@ class Parameters
 
     /**
      *
+     * @var \Chamilo\Libraries\Architecture\Application\Parameters
+     */
+    private static $instance;
+
+    /**
+     *
      * @var string[]
      */
     private $parameters;
 
     /**
      *
-     * @var \Chamilo\Libraries\Architecture\Application\Parameters
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     *
+     * @return string
      */
-    private static $instance;
+    private function &determine_level(Application $application)
+    {
+        $application_hashes = array();
+        $application_hashes[] = spl_object_hash($application);
+
+        while ($application->get_application() instanceof Application)
+        {
+            $application_hashes[] = spl_object_hash($application->get_application());
+            $application = $application->get_application();
+        }
+
+        $application_hashes = array_reverse($application_hashes);
+
+        $parameters = &$this->parameters;
+
+        foreach ($application_hashes as $application_hash)
+        {
+            if (!isset($parameters[$application_hash]) || !isset($parameters[$application_hash]['parameters']))
+            {
+
+                $parameters[$application_hash] = array();
+                $parameters[$application_hash]['parameters'] = array();
+            }
+            $parameters = &$parameters[$application_hash];
+        }
+
+        return $parameters['parameters'];
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\Parameters
+     */
+    public static function getInstance()
+    {
+        if (!isset(self::$instance))
+        {
+            self::$instance = new static();
+        }
+
+        return self::$instance;
+    }
+
+    /**
+     * Returns the value of the given URL parameter.
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param string $name
+     *
+     * @return string
+     */
+    public function get_parameter(Application $application, $name)
+    {
+        $parameters = &$this->determine_level($application);
+
+        if (array_key_exists($name, $parameters))
+        {
+            return $parameters[$name];
+        }
+    }
 
     /**
      * Returns the current URL parameters.
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     *
      * @return string[]
      */
     public function get_parameters(Application $application)
@@ -59,23 +127,6 @@ class Parameters
     }
 
     /**
-     * Returns the value of the given URL parameter.
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param string $name
-     * @return string
-     */
-    public function get_parameter(Application $application, $name)
-    {
-        $parameters = &$this->determine_level($application);
-
-        if (array_key_exists($name, $parameters))
-        {
-            return $parameters[$name];
-        }
-    }
-
-    /**
      * Sets the value of a URL parameter.
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
@@ -90,58 +141,10 @@ class Parameters
 
     /**
      *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @return string
-     */
-    private function &determine_level(Application $application)
-    {
-        $application_hashes = array();
-        $application_hashes[] = spl_object_hash($application);
-
-        while ($application->get_application() instanceof Application)
-        {
-            $application_hashes[] = spl_object_hash($application->get_application());
-            $application = $application->get_application();
-        }
-
-        $application_hashes = array_reverse($application_hashes);
-
-        $parameters = &$this->parameters;
-
-        foreach ($application_hashes as $application_hash)
-        {
-            if (! isset($parameters[$application_hash]) || ! isset($parameters[$application_hash]['parameters']))
-            {
-
-                $parameters[$application_hash] = array();
-                $parameters[$application_hash]['parameters'] = array();
-            }
-            $parameters = &$parameters[$application_hash];
-        }
-
-        return $parameters['parameters'];
-    }
-
-    /**
-     *
      * @param string[] $parameters
      */
     private function set_parameters($parameters)
     {
         $this->parameters = $parameters;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Parameters
-     */
-    public static function getInstance()
-    {
-        if (! isset(self::$instance))
-        {
-            self::$instance = new static();
-        }
-
-        return self::$instance;
     }
 }

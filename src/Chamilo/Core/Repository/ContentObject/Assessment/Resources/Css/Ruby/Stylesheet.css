@@ -94,7 +94,3 @@ div.time_left, div.time_left_alert {
     text-align: center;
     margin-top: -10px;
 }
-
-button.hint, a.hint_button {
-    background-image: url(../../Images/Ruby/Buttons/Hint.png);
-}

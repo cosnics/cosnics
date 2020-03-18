@@ -6,8 +6,9 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Qu
 use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass\AssessmentMatrixQuestion;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
  *
- * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc.question_display
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
@@ -55,14 +56,12 @@ class Display extends QuestionDisplay
             $group = array();
 
             $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_formvalidator()->get_assessment_viewer(),
-                $option->get_value());
+                $this->get_formvalidator()->get_assessment_viewer(), $option->get_value()
+            );
 
             $group[] = $formvalidator->createElement(
-                'static',
-                null,
-                null,
-                '<div style="text-align: left;">' . $object_renderer->run() . '</div>');
+                'static', null, null, '<div style="text-align: left;">' . $object_renderer->run() . '</div>'
+            );
 
             foreach ($matches as $j => $match)
             {
@@ -70,7 +69,7 @@ class Display extends QuestionDisplay
                 {
                     $answer_name = $question_id . '_' . $i;
                     $group[] = $formvalidator->createElement('radio', $answer_name, null, null, $j);
-                    $defaults[$answer_name] = -1;
+                    $defaults[$answer_name] = - 1;
                 }
                 elseif ($type == AssessmentMatrixQuestion::MATRIX_TYPE_CHECKBOX)
                 {
@@ -83,8 +82,8 @@ class Display extends QuestionDisplay
 
             $renderer->setElementTemplate('<tr>{element}</tr>', 'matrix_option_' . $question_id . '_' . $i);
             $renderer->setGroupElementTemplate(
-                '<td class="text-center">{element}</td>',
-                'matrix_option_' . $question_id . '_' . $i);
+                '<td class="text-center">{element}</td>', 'matrix_option_' . $question_id . '_' . $i
+            );
         }
 
         $table_footer[] = '</tbody>';
@@ -92,10 +91,5 @@ class Display extends QuestionDisplay
         $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
 
         $formvalidator->setDefaults($defaults);
-    }
-
-    public function add_border()
-    {
-        return false;
     }
 }

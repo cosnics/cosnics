@@ -139,11 +139,6 @@ abstract class QuestionDisplay
         $formvalidator->addElement('html', $footer);
     }
 
-    public function add_borders()
-    {
-        return false;
-    }
-
     public function needsDescriptionBorder()
     {
         return false;

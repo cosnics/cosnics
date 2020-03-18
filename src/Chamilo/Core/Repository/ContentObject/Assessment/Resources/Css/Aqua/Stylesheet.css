@@ -125,10 +125,6 @@ div.time {
     display: inline;
 }
 
-button.hint, a.hint_button {
-    background-image: url(../../Images/Aqua/Buttons/Hint.png);
-}
-
 img.hint, img.hint_disabled {
     vertical-align: text-bottom;
     cursor: pointer;
@@ -141,4 +137,8 @@ img.hint, img.hint_disabled {
 
 .panel .panel-body.panel-body-assessment-description {
     border-bottom: 1px dashed #dddddd;
+}
+
+.panel .panel-body.panel-body-assessment-hint {
+    border-top: 1px dashed #dddddd;
 }

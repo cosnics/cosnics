@@ -9,16 +9,17 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
  *
- * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc.question_display
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
 
-    public function add_borders()
-    {
-        return true;
-    }
+    public function needsDescriptionBorder()
+{
+    return true;
+}
 
     public function add_footer()
     {
@@ -29,10 +30,9 @@ class Display extends QuestionDisplay
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
             $glyph = new FontAwesomeGlyph('gift', array(), null, 'fas');
 
-            $html[] = '<div class="panel-body">';
-            $html[] = '<div class="splitter">' . Translation:: get('Hint') . '</div>';
-            $html[] = '<div class="with_borders"><a id="' . $hint_name . '" class="btn btn-default hint_button">' .
-                $glyph->render() . ' ' . Translation:: get('GetAHint') . '</a></div>';
+            $html[] = '<div class="panel-body panel-body-assessment-hint">';
+            $html[] = '<a id="' . $hint_name . '" class="btn btn-default hint_button">' . $glyph->render() . ' ' .
+                Translation:: get('GetAHint') . '</a>';
             $html[] = '</div>';
 
             $footer = implode(PHP_EOL, $html);
@@ -52,6 +52,7 @@ class Display extends QuestionDisplay
         $min = $question->get_low();
         $max = $question->get_high();
         $question_name = $this->get_complex_content_object_question()->get_id() . '_0';
+        $scores = array();
 
         for ($i = $min; $i <= $max; $i ++)
         {
@@ -60,7 +61,7 @@ class Display extends QuestionDisplay
 
         $element_template = array();
         $element_template[] =
-            '<div><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}';
+            '<div class="panel-body"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}';
         $element_template[] = '<div class="clear">&nbsp;</div>';
         $element_template[] = '<div class="form_feedback"></div>';
         $element_template[] = '<div class="clear">&nbsp;</div>';
@@ -84,24 +85,5 @@ class Display extends QuestionDisplay
             Path::getInstance()->getJavascriptPath(Assessment::package(), true) . 'GiveHint.js'
         )
         );
-    }
-
-    public function get_instruction()
-    {
-        $instruction = array();
-        $question = $this->get_question();
-
-        if ($question->has_description())
-        {
-            $instruction[] = '<div class="splitter">';
-            $instruction[] = Translation::get('SelectCorrectRating');
-            $instruction[] = '</div>';
-        }
-        else
-        {
-            $instruction = array();
-        }
-
-        return implode(PHP_EOL, $instruction);
     }
 }
