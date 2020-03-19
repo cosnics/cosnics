@@ -114,6 +114,7 @@ class GroupEntityFeedComponent extends Manager
     private function getElements()
     {
         $elements = new AdvancedElementFinderElements();
+        $glyph = new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('folder', array(), null, 'fas');
 
         // Add groups
         $groups = $this->findGroups();
@@ -121,7 +122,7 @@ class GroupEntityFeedComponent extends Manager
         if ($groups->count() > 0)
         {
             $groupLabel = $this->getTranslator()->trans('Groups', [], 'Chamilo\Core\Group');
-            $groupCategory = new AdvancedElementFinderElement('groups', 'category', $groupLabel, $groupLabel);
+            $groupCategory = new AdvancedElementFinderElement('groups', $glyph->getClassNamesString(), $groupLabel, $groupLabel);
             $elements->add_element($groupCategory);
 
             foreach ($groups as $group)
@@ -136,7 +137,7 @@ class GroupEntityFeedComponent extends Manager
         if ($users->count() > 0)
         {
             $userLabel = $this->getTranslator()->trans('Users', [], 'Chamilo\Core\User');
-            $userCategory = new AdvancedElementFinderElement('users', 'category', $userLabel, $userLabel);
+            $userCategory = new AdvancedElementFinderElement('users',  $glyph->getClassNamesString(), $userLabel, $userLabel);
             $elements->add_element($userCategory);
 
             foreach ($users as $user)
@@ -166,9 +167,10 @@ class GroupEntityFeedComponent extends Manager
     public function getGroupElement(Group $group)
     {
         $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
+        $glyph = new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('users', array(), null, 'fas');
 
         return new AdvancedElementFinderElement(
-            GroupEntityProvider::ENTITY_TYPE . '_' . $group->getId(), 'type type_group', $group->get_name(),
+            GroupEntityProvider::ENTITY_TYPE . '_' . $group->getId(), $glyph->getClassNamesString(), $group->get_name(),
             $description, AdvancedElementFinderElement::TYPE_SELECTABLE_AND_FILTER
         );
     }
@@ -189,8 +191,10 @@ class GroupEntityFeedComponent extends Manager
      */
     public function getUserElement(User $user)
     {
+        $glyph = new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('user', array(), null, 'fas');
+
         return new AdvancedElementFinderElement(
-            UserEntityProvider::ENTITY_TYPE . '_' . $user->getId(), 'type type_user', $user->get_fullname(),
+            UserEntityProvider::ENTITY_TYPE . '_' . $user->getId(), $glyph->getClassNamesString(), $user->get_fullname(),
             $user->get_official_code()
         );
     }

@@ -3,15 +3,17 @@ namespace Chamilo\Application\Weblcms\Course\Ajax\Component;
 
 use Chamilo\Application\Weblcms\Course\Ajax\Manager;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultGenerator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * Returns the courses formatted for the element finder
@@ -20,8 +22,9 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
  */
 class GetCoursesForElementFinderComponent extends Manager implements AjaxResultDataProviderInterface
 {
-    const PARAM_SEARCH_QUERY = 'query';
     const PARAM_OFFSET = 'offset';
+
+    const PARAM_SEARCH_QUERY = 'query';
 
     /**
      *
@@ -35,9 +38,8 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     public function run()
     {
         $this->ajaxResultGenerator = new AjaxResultGenerator(
-            $this,
-            $this->getRequest()->get(self::PARAM_SEARCH_QUERY),
-            $this->getRequest()->get(self::PARAM_OFFSET));
+            $this, $this->getRequest()->get(self::PARAM_SEARCH_QUERY), $this->getRequest()->get(self::PARAM_OFFSET)
+        );
 
         $this->ajaxResultGenerator->generateAjaxResult()->display();
     }
@@ -52,45 +54,19 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
         $courses = $this->getCourses();
         if ($courses)
         {
+            $glyph = new FontAwesomeGlyph('chalkboard', array(), null, 'fas');
+
             /** @var Course $course */
             while ($course = $courses->next_result())
             {
                 $advancedElementFinderElements->add_element(
                     new AdvancedElementFinderElement(
-                        'course_' . $course->getId(),
-                        'type type_course',
-                        $course->get_title(),
-                        $course->get_visual_code()));
+                        'course_' . $course->getId(), $glyph->getClassNamesString(), $course->get_title(),
+                        $course->get_visual_code()
+                    )
+                );
             }
         }
-    }
-
-    /**
-     * Returns the number of total elements (without the offset)
-     *
-     * @return int
-     */
-    public function getTotalNumberOfElements()
-    {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::count(
-            Course::class_name(),
-            new DataClassCountParameters($this->getCondition()));
-    }
-
-    /**
-     * Retrieves the courses for the current request
-     *
-     * @return ResultSet
-     */
-    protected function getCourses()
-    {
-        $parameters = new DataClassRetrievesParameters(
-            $this->getCondition(),
-            100,
-            $this->ajaxResultGenerator->getOffset(),
-            array(new OrderBy(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE))));
-
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(Course::class_name(), $parameters);
     }
 
     /**
@@ -102,6 +78,35 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
         return $this->ajaxResultGenerator->getSearchCondition(
             array(
                 new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE),
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE)));
+                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE)
+            )
+        );
+    }
+
+    /**
+     * Retrieves the courses for the current request
+     *
+     * @return ResultSet
+     */
+    protected function getCourses()
+    {
+        $parameters = new DataClassRetrievesParameters(
+            $this->getCondition(), 100, $this->ajaxResultGenerator->getOffset(),
+            array(new OrderBy(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE)))
+        );
+
+        return DataManager::retrieves(Course::class_name(), $parameters);
+    }
+
+    /**
+     * Returns the number of total elements (without the offset)
+     *
+     * @return int
+     */
+    public function getTotalNumberOfElements()
+    {
+        return DataManager::count(
+            Course::class_name(), new DataClassCountParameters($this->getCondition())
+        );
     }
 }

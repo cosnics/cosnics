@@ -3,9 +3,12 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Component;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
+use Chamilo\Libraries\Format\Theme;
 
 /**
  *
@@ -14,7 +17,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class AllowedTypesXmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
+class AllowedTypesXmlFeedComponent extends Manager
 {
     const PARAM_SEARCH_QUERY = 'query';
     const PROPERTY_ELEMENTS = 'elements';
@@ -36,18 +39,14 @@ class AllowedTypesXmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
                 continue;
             }
 
-            $typeClass = strtolower(
-                $this->getClassnameUtilities()->getPackageNameFromNamespace(
-                    $this->getClassnameUtilities()->getNamespaceParent($allowedType['type'])
-                )
+            $glyphNamespace = $this->getClassnameUtilities()->getNamespaceParent($allowedType['type']);
+            $glyph = new NamespaceIdentGlyph(
+                $glyphNamespace, true, false, false, Theme::ICON_MINI, array('fa-fw')
             );
 
             $elements->add_element(
                 new AdvancedElementFinderElement(
-                    $allowedType['id'],
-                    'type type_' . $typeClass,
-                    $allowedTypeTranslation,
-                    $allowedTypeTranslation
+                    $allowedType['id'], $glyph->getClassNamesString(), $allowedTypeTranslation, $allowedTypeTranslation
                 )
             );
         }

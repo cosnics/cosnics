@@ -114,8 +114,10 @@ class CourseGroupEntity implements NestedRightsEntity
             return null;
         }
 
+        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+
         return new AdvancedElementFinderElement(
-            self::ENTITY_TYPE . '_' . $id, 'type type_group', $group->get_name(), $group->get_description()
+            self::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $group->get_name(), $group->get_description()
         );
     }
 

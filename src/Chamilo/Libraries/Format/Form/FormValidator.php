@@ -218,8 +218,8 @@ EOT;
         $dropzoneHtml[] = '<div class="panel panel-default">';
         $dropzoneHtml[] = '<div class="panel-body">';
 
-        $uploadGlyph = new FontAwesomeGlyph('upload', array(), null, 'fas');
-        $plusGlyph = new FontAwesomeGlyph('plus-circle', array('fileinput-button', 'dz-clickable'), null, 'fas');
+        $uploadGlyph = new FontAwesomeGlyph('upload', array('fa-3x'), null, 'fas');
+        $plusGlyph = new FontAwesomeGlyph('plus-circle', array('fileinput-button', 'dz-clickable', 'fa-3x'), null, 'fas');
 
         $dropzoneHtml[] =
             '<span class="actions">' . $uploadGlyph->render() . '&nbsp;' . $plusGlyph->render() . '</span>';

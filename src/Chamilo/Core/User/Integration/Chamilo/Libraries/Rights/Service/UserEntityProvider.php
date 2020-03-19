@@ -7,7 +7,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -110,7 +109,7 @@ class UserEntityProvider implements RightsEntityProvider
         }
 
         return new AdvancedElementFinderElement(
-            static::ENTITY_TYPE . '_' . $entityIdentifier, 'type type_user',
+            static::ENTITY_TYPE . '_' . $entityIdentifier, $this->getEntityGlyph()->getClassNamesString(),
             $this->getEntityTitleByIdentifier($entityIdentifier),
             $this->getEntityDescriptionByIdentifier($entityIdentifier)
         );
@@ -125,6 +124,14 @@ class UserEntityProvider implements RightsEntityProvider
             'users', $this->getTranslator()->trans('Users', [], 'Chamilo\Core\User'), Manager::context(),
             'UserEntityFeed', array()
         );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
+     */
+    public function getEntityGlyph()
+    {
+        return new FontAwesomeGlyph('user', [], $this->getEntityTranslatedName());
     }
 
     /**
@@ -226,13 +233,5 @@ class UserEntityProvider implements RightsEntityProvider
     public function setUserService(UserService $userService): void
     {
         $this->userService = $userService;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
-     */
-    public function getEntityGlyph()
-    {
-        return new FontAwesomeGlyph('user', [], $this->getEntityTranslatedName());
     }
 }

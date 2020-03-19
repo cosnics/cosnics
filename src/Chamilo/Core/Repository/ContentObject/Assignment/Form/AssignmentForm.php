@@ -7,8 +7,11 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
@@ -17,11 +20,13 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -34,70 +39,12 @@ use Chamilo\Libraries\Utilities\Utilities;
 class AssignmentForm extends ContentObjectForm
 {
 
-    public function setDefaults($defaults = array())
+    /**
+     * Override the default attachments form to not show it on the default location
+     */
+    protected function add_attachments_form()
     {
-        /** @var Assignment $object */
-        $object = $this->get_content_object();
 
-        if ($object->get_id() != null)
-        {
-            $defaults[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS] = $object->get_visibility_submissions();
-            $defaults[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS] = $object->get_allow_late_submissions();
-            $defaults[Assignment::PROPERTY_START_TIME] = $object->get_start_time();
-            $defaults[Assignment::PROPERTY_END_TIME] = $object->get_end_time();
-
-            if (!is_null($object->get_visibility_feedback()))
-            {
-                $defaults[Assignment::PROPERTY_VISIBILTY_FEEDBACK] = $object->get_visibility_feedback();
-            }
-            else
-            {
-                $defaults[Assignment::PROPERTY_VISIBILTY_FEEDBACK] = Assignment::VISIBILITY_FEEDBACK_AFTER_SUBMISSION;
-            }
-
-            $defaults[Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT] = $object->get_automatic_feedback_text();
-            $defaults[Assignment::PROPERTY_SELECT_ATTACHMENT] = array();
-
-            $co_ids = explode(',', $object->get_automatic_feedback_co_ids());
-
-            if ($co_ids)
-            {
-                $condition = new InCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
-                    $co_ids,
-                    ContentObject::get_table_name()
-                );
-                $attached_objects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
-                    ContentObject::class_name(),
-                    new DataClassRetrievesParameters($condition)
-                )->as_array();
-                $defaults[Assignment::PROPERTY_SELECT_ATTACHMENT] = Utilities::content_objects_for_element_finder(
-                    $attached_objects
-                );
-            }
-
-            $active = $this->getElement(Assignment::PROPERTY_SELECT_ATTACHMENT);
-            if ($active)
-            {
-                if ($active->_elements[0])
-                {
-                    $active->_elements[0]->setValue(serialize($defaults[Assignment::PROPERTY_SELECT_ATTACHMENT]));
-                }
-            }
-        }
-        else
-        {
-            $defaults[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS] = 0;
-            $defaults[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS] = 1;
-            $defaults[Assignment::PROPERTY_VISIBILTY_FEEDBACK] = Assignment::VISIBILITY_FEEDBACK_AFTER_SUBMISSION;
-            $defaults[Assignment::PROPERTY_ALLOWED_TYPES] = array(File::class_name());
-            $defaults[Assignment::PROPERTY_START_TIME] = time();
-            $defaults[Assignment::PROPERTY_END_TIME] = strtotime('+1 day', time());
-        }
-
-        $this->setDefaultAllowedContentObjects($object);
-
-        parent::setDefaults($defaults);
     }
 
     protected function build_creation_form()
@@ -112,59 +59,33 @@ class AssignmentForm extends ContentObjectForm
         $this->build_form();
     }
 
-    /**
-     * Override the default attachments form to not show it on the default location
-     */
-    protected function add_attachments_form()
-    {
-
-    }
-
     private function build_form()
     {
         $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
 
         // Start and end time
         $this->add_timewindow(
-            Assignment::PROPERTY_START_TIME,
-            Assignment::PROPERTY_END_TIME,
-            Translation::get('StartTime'),
+            Assignment::PROPERTY_START_TIME, Assignment::PROPERTY_END_TIME, Translation::get('StartTime'),
             Translation::get('EndTime')
         );
 
         // Visibilty submissions
         $choices = array();
         $choices[] = $this->createElement(
-            'radio',
-            Assignment::PROPERTY_VISIBILITY_SUBMISSIONS,
-            null,
-            Translation::get('VisibleOthers'),
-            1
+            'radio', Assignment::PROPERTY_VISIBILITY_SUBMISSIONS, null, Translation::get('VisibleOthers'), 1
         );
         $choices[] = $this->createElement(
-            'radio',
-            Assignment::PROPERTY_VISIBILITY_SUBMISSIONS,
-            null,
-            Translation::get('InvisibleOthers'),
-            0
+            'radio', Assignment::PROPERTY_VISIBILITY_SUBMISSIONS, null, Translation::get('InvisibleOthers'), 0
         );
         $this->addGroup($choices, null, Translation::get('VisibilitySubmissions'), '', false);
 
         // Allow late submissions
         $choices = array();
         $choices[] = $this->createElement(
-            'radio',
-            Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS,
-            null,
-            Translation::get('AllowLateYes'),
-            1
+            'radio', Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS, null, Translation::get('AllowLateYes'), 1
         );
         $choices[] = $this->createElement(
-            'radio',
-            Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS,
-            null,
-            Translation::get('AllowLateNo'),
-            0
+            'radio', Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS, null, Translation::get('AllowLateNo'), 0
         );
         $this->addGroup($choices, null, Translation::get('AllowLateSubmissions'), '', false);
 
@@ -199,76 +120,59 @@ class AssignmentForm extends ContentObjectForm
 
         $calculator = new Calculator(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                (int) $this->get_owner_id()
+                User::class_name(), (int) $this->get_owner_id()
             )
         );
 
         $uploadUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
+                Application::PARAM_CONTEXT                          => \Chamilo\Core\Repository\Ajax\Manager::context(),
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
             )
         );
 
         $dropZoneParameters = array(
-            'name' => 'select_attachment_importer',
-            'maxFilesize' => $calculator->getMaximumUploadSize(),
-            'uploadUrl' => $uploadUrl->getUrl(),
-            'successCallbackFunction' => 'chamilo.core.repository.importFeedbackAttachment.processUploadedFile',
-            'sendingCallbackFunction' => 'chamilo.core.repository.importFeedbackAttachment.prepareRequest',
+            'name'                        => 'select_attachment_importer',
+            'maxFilesize'                 => $calculator->getMaximumUploadSize(),
+            'uploadUrl'                   => $uploadUrl->getUrl(),
+            'successCallbackFunction'     => 'chamilo.core.repository.importFeedbackAttachment.processUploadedFile',
+            'sendingCallbackFunction'     => 'chamilo.core.repository.importFeedbackAttachment.prepareRequest',
             'removedfileCallbackFunction' => 'chamilo.core.repository.importFeedbackAttachment.deleteUploadedFile'
         );
 
         $this->addFileDropzone('select_attachment_importer', $dropZoneParameters, true);
 
         $this->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(\Chamilo\Core\Repository\Manager::context(), true) .
-                'Plugin/jquery.file.upload.import.js'
-            )
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
+        )
         );
 
         $this->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(Assignment::package(), true) . 'UploadifyFeedback.js'
-            )
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Assignment::package(), true) . 'UploadifyFeedback.js'
+        )
         );
 
         $this->addElement(
-            'element_finder',
-            Assignment::PROPERTY_SELECT_ATTACHMENT,
-            Translation::get('SelectFeedbackAttachment'),
-            $url,
-            $locale,
-            array()
+            'element_finder', Assignment::PROPERTY_SELECT_ATTACHMENT, Translation::get('SelectFeedbackAttachment'),
+            $url, $locale, array()
         );
 
         $this->add_html_editor(Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT, Translation::get('Text'), false);
 
         $choices = array();
         $choices[] = $this->createElement(
-            'radio',
-            Assignment::PROPERTY_VISIBILTY_FEEDBACK,
-            null,
-            Translation::get('AfterEndDate'),
-            0
+            'radio', Assignment::PROPERTY_VISIBILTY_FEEDBACK, null, Translation::get('AfterEndDate'), 0
         );
         $choices[] = $this->createElement(
-            'radio',
-            Assignment::PROPERTY_VISIBILTY_FEEDBACK,
-            null,
-            Translation::get('AfterSubmission'),
-            1
+            'radio', Assignment::PROPERTY_VISIBILTY_FEEDBACK, null, Translation::get('AfterSubmission'), 1
         );
         $this->addGroup($choices, null, Translation::get('VisibiltyFeedback'), '', false);
 
         $this->addElement('category');
     }
 
-    // Inherited
     public function create_content_object()
     {
         $object = new Assignment();
@@ -307,6 +211,149 @@ class AssignmentForm extends ContentObjectForm
         $this->set_content_object($object);
 
         return parent::create_content_object();
+    }
+
+    // Inherited
+
+    /**
+     * Sets the allowed types based on the given identifiers
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @param $allowedTypeIdentifiers
+     */
+    protected function setAllowedTypes(Assignment $assignment, $allowedTypeIdentifiers)
+    {
+        $configuration = Configuration::getInstance();
+
+        $integrationPackages = $configuration->getIntegrationRegistrations(
+            'Chamilo\Core\Repository\ContentObject\Assignment'
+        );
+
+        $allowedTypes = [];
+
+        foreach ($integrationPackages as $basePackage => $integrationPackageData)
+        {
+            $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage);
+            $typeClass = $basePackage . '\Storage\DataClass\\' . $typeName;
+
+            if (in_array($integrationPackageData[Registration::PROPERTY_ID], $allowedTypeIdentifiers))
+            {
+                $allowedTypes[] = $typeClass;
+            }
+        }
+
+        $assignment->set_allowed_types(implode(',', $allowedTypes));
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     *
+     * @throws \HTML_QuickForm_Error
+     */
+    protected function setDefaultAllowedContentObjects(Assignment $assignment)
+    {
+        $allowedTypes = $assignment->get_allowed_types();
+
+        $allowedTypeClasses =
+            empty($allowedTypes) ? ['Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File'] :
+                explode(',', $allowedTypes);
+
+        $configuration = Configuration::getInstance();
+
+        $integrationPackages = $configuration->getIntegrationRegistrations(
+            'Chamilo\Core\Repository\ContentObject\Assignment'
+        );
+
+        $defaultElements = new AdvancedElementFinderElements();
+
+        foreach ($integrationPackages as $basePackage => $integrationPackageData)
+        {
+            $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage);
+            $typeClass = $basePackage . '\Storage\DataClass\\' . $typeName;
+
+            if (in_array($typeClass, $allowedTypeClasses))
+            {
+                $allowedTypeTranslation = Translation::getInstance()->getTranslation('TypeName', array(), $basePackage);
+
+                $glyph = new NamespaceIdentGlyph(
+                    $basePackage, true, false, false, Theme::ICON_MINI, array('fa-fw')
+                );
+
+                $defaultElements->add_element(
+                    new AdvancedElementFinderElement(
+                        $integrationPackageData['id'], $glyph->getClassNamesString(), $allowedTypeTranslation,
+                        $allowedTypeTranslation
+                    )
+                );
+            }
+        }
+
+        $element = $this->getElement(Assignment::PROPERTY_ALLOWED_TYPES);
+        $element->setDefaultValues($defaultElements);
+    }
+
+    public function setDefaults($defaults = array())
+    {
+        /** @var Assignment $object */
+        $object = $this->get_content_object();
+
+        if ($object->get_id() != null)
+        {
+            $defaults[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS] = $object->get_visibility_submissions();
+            $defaults[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS] = $object->get_allow_late_submissions();
+            $defaults[Assignment::PROPERTY_START_TIME] = $object->get_start_time();
+            $defaults[Assignment::PROPERTY_END_TIME] = $object->get_end_time();
+
+            if (!is_null($object->get_visibility_feedback()))
+            {
+                $defaults[Assignment::PROPERTY_VISIBILTY_FEEDBACK] = $object->get_visibility_feedback();
+            }
+            else
+            {
+                $defaults[Assignment::PROPERTY_VISIBILTY_FEEDBACK] = Assignment::VISIBILITY_FEEDBACK_AFTER_SUBMISSION;
+            }
+
+            $defaults[Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT] = $object->get_automatic_feedback_text();
+            $defaults[Assignment::PROPERTY_SELECT_ATTACHMENT] = array();
+
+            $co_ids = explode(',', $object->get_automatic_feedback_co_ids());
+
+            if ($co_ids)
+            {
+                $condition = new InCondition(
+                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), $co_ids,
+                    ContentObject::get_table_name()
+                );
+                $attached_objects = DataManager::retrieve_active_content_objects(
+                    ContentObject::class_name(), new DataClassRetrievesParameters($condition)
+                )->as_array();
+                $defaults[Assignment::PROPERTY_SELECT_ATTACHMENT] = Utilities::content_objects_for_element_finder(
+                    $attached_objects
+                );
+            }
+
+            $active = $this->getElement(Assignment::PROPERTY_SELECT_ATTACHMENT);
+            if ($active)
+            {
+                if ($active->_elements[0])
+                {
+                    $active->_elements[0]->setValue(serialize($defaults[Assignment::PROPERTY_SELECT_ATTACHMENT]));
+                }
+            }
+        }
+        else
+        {
+            $defaults[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS] = 0;
+            $defaults[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS] = 1;
+            $defaults[Assignment::PROPERTY_VISIBILTY_FEEDBACK] = Assignment::VISIBILITY_FEEDBACK_AFTER_SUBMISSION;
+            $defaults[Assignment::PROPERTY_ALLOWED_TYPES] = array(File::class_name());
+            $defaults[Assignment::PROPERTY_START_TIME] = time();
+            $defaults[Assignment::PROPERTY_END_TIME] = strtotime('+1 day', time());
+        }
+
+        $this->setDefaultAllowedContentObjects($object);
+
+        parent::setDefaults($defaults);
     }
 
     public function update_content_object()
@@ -349,82 +396,5 @@ class AssignmentForm extends ContentObjectForm
         $this->set_content_object($object);
 
         return parent::update_content_object();
-    }
-
-    /**
-     * Sets the allowed types based on the given identifiers
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
-     * @param $allowedTypeIdentifiers
-     */
-    protected function setAllowedTypes(Assignment $assignment, $allowedTypeIdentifiers)
-    {
-        $configuration = Configuration::getInstance();
-
-        $integrationPackages = $configuration->getIntegrationRegistrations(
-            'Chamilo\Core\Repository\ContentObject\Assignment'
-        );
-
-        $allowedTypes = [];
-
-        foreach ($integrationPackages as $basePackage => $integrationPackageData)
-        {
-            $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage);
-            $typeClass = $basePackage . '\Storage\DataClass\\' . $typeName;
-
-            if(in_array($integrationPackageData[Registration::PROPERTY_ID], $allowedTypeIdentifiers))
-            {
-                $allowedTypes[] = $typeClass;
-            }
-        }
-
-        $assignment->set_allowed_types(implode(',', $allowedTypes));
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
-     *
-     * @throws \HTML_QuickForm_Error
-     */
-    protected function setDefaultAllowedContentObjects(Assignment $assignment)
-    {
-        $allowedTypes = $assignment->get_allowed_types();
-
-        $allowedTypeClasses = empty($allowedTypes) ?
-            ['Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File'] :
-            explode(',', $allowedTypes);
-
-        $configuration = Configuration::getInstance();
-
-        $integrationPackages = $configuration->getIntegrationRegistrations(
-            'Chamilo\Core\Repository\ContentObject\Assignment'
-        );
-
-        $defaultElements = new AdvancedElementFinderElements();
-
-        foreach ($integrationPackages as $basePackage => $integrationPackageData)
-        {
-            $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage);
-            $typeClass = $basePackage . '\Storage\DataClass\\' . $typeName;
-
-            if(in_array($typeClass, $allowedTypeClasses))
-            {
-                $allowedTypeTranslation = Translation::getInstance()->getTranslation('TypeName', array(), $basePackage);
-
-                $typeCssClass = strtolower(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage));
-
-                $defaultElements->add_element(
-                    new AdvancedElementFinderElement(
-                        $integrationPackageData['id'],
-                        'type type_' . $typeCssClass,
-                        $allowedTypeTranslation,
-                        $allowedTypeTranslation
-                    )
-                );
-            }
-        }
-
-        $element = $this->getElement(Assignment::PROPERTY_ALLOWED_TYPES);
-        $element->setDefaultValues($defaultElements);
     }
 }

@@ -6,6 +6,7 @@ use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityPro
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 
 /**
@@ -69,9 +70,11 @@ class UserEntityFeedComponent extends Manager
      */
     protected function getElementForUser($user)
     {
+        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
         return new AdvancedElementFinderElement(
-            UserEntityProvider::ENTITY_TYPE . '_' . $user->getId(), 'type type_user', $user->get_fullname(),
-            $user->get_official_code()
+            UserEntityProvider::ENTITY_TYPE . '_' . $user->getId(), $glyph->getClassNamesString(),
+            $user->get_fullname(), $user->get_official_code()
         );
     }
 
@@ -84,9 +87,10 @@ class UserEntityFeedComponent extends Manager
     {
         $elements = new AdvancedElementFinderElements();
         $label = $this->getTranslator()->trans('Users', [], 'Chamilo\Core\User');
+        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
 
         // Add user category
-        $userCategory = new AdvancedElementFinderElement('users', 'category', $label, $label);
+        $userCategory = new AdvancedElementFinderElement('users', $glyph->getClassNamesString(), $label, $label);
         $elements->add_element($userCategory);
 
         foreach ($this->findUsers() as $user)

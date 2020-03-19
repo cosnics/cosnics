@@ -270,6 +270,28 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     }
 
     /**
+     * @param integer $size
+     * @param boolean $isAvailable
+     * @param string[] $extraClasses
+     *
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
+     */
+    public function getGlyph($size = Theme::ICON_SMALL, $isAvailable = true, $extraClasses = array())
+    {
+        $glyph = FileType::getGlyphForExtension($this->get_extension(), $size);
+
+        if (!$isAvailable)
+        {
+            $extraClasses[] = 'fas-ci-disabled';
+        }
+
+        $glyph->setExtraClasses($extraClasses);
+        $glyph->setTitle($this->get_extension());
+
+        return $glyph;
+    }
+
+    /**
      * Returns whether or not the file must be shown inline
      *
      * @return bool
@@ -368,21 +390,6 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public function get_hash()
     {
         return $this->get_additional_property(self::PROPERTY_HASH);
-    }
-
-    public function get_icon_image($size = Theme::ICON_SMALL, $isAvailable = true, $extraClasses = array())
-    {
-        $glyph = FileType::getGlyphForExtension($this->get_extension(), $size);
-
-        if (!$isAvailable)
-        {
-            $extraClasses[] = 'fas-ci-disabled';
-        }
-
-        $glyph->setExtraClasses($extraClasses);
-        $glyph->setTitle($this->get_extension());
-
-        return $glyph->render();
     }
 
     /**

@@ -172,9 +172,9 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
         $dropzoneHtml[] = '<div class="panel panel-default">';
         $dropzoneHtml[] = '<div class="panel-body">';
 
-        $uploadGlyph = new FontAwesomeGlyph('upload', array(), null, 'fas');
+        $uploadGlyph = new FontAwesomeGlyph('upload', array('fa-3x'), null, 'fas');
         $plusGlyph = new FontAwesomeGlyph(
-            'plus-circle', array('fileinput-button', 'dz-clickable'), null, 'fas'
+            'plus-circle', array('fileinput-button', 'dz-clickable', 'fa-3x'), null, 'fas'
         );
         $dropzoneHtml[] =
             '<span class="actions">' . $uploadGlyph->render() . '&nbsp;' . $plusGlyph->render() . '</span>';

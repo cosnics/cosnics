@@ -94,8 +94,10 @@ class CourseEntity implements RightsEntity
             return null;
         }
 
+        $glyph = new FontAwesomeGlyph('chalkboard', array(), null, 'fas');
+
         return new AdvancedElementFinderElement(
-            self::ENTITY_TYPE . '_' . $id, 'type type_course', $course->get_title(),
+            self::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $course->get_title(),
             strip_tags($course->get_fully_qualified_name())
         );
     }

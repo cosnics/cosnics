@@ -10,10 +10,9 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -107,8 +106,10 @@ class CourseCategoryEntity implements NestedRightsEntity
             return null;
         }
 
+        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
         return new AdvancedElementFinderElement(
-            self::ENTITY_TYPE . '_' . $id, 'type type_course_category', $course_category->get_name(),
+            self::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $course_category->get_name(),
             strip_tags($course_category->get_fully_qualified_name())
         );
     }
@@ -246,7 +247,8 @@ class CourseCategoryEntity implements NestedRightsEntity
     {
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => Manager::package(), Manager::PARAM_ACTION => 'course_category'
+                Application::PARAM_CONTEXT => Manager::package(),
+                Manager::PARAM_ACTION      => 'course_category'
             )
         );
 

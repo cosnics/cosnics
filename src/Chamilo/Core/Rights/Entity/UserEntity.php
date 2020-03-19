@@ -95,8 +95,11 @@ class UserEntity implements RightsEntity
             return null;
         }
 
+        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
         return new AdvancedElementFinderElement(
-            static::ENTITY_TYPE . '_' . $id, 'type type_user', $user->get_fullname(), $user->get_official_code()
+            static::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $user->get_fullname(),
+            $user->get_official_code()
         );
     }
 
@@ -160,7 +163,10 @@ class UserEntity implements RightsEntity
     public function get_search_properties()
     {
         return array(
-            User::PROPERTY_USERNAME, User::PROPERTY_FIRSTNAME, User::PROPERTY_LASTNAME, User::PROPERTY_OFFICIAL_CODE
+            User::PROPERTY_USERNAME,
+            User::PROPERTY_FIRSTNAME,
+            User::PROPERTY_LASTNAME,
+            User::PROPERTY_OFFICIAL_CODE
         );
     }
 

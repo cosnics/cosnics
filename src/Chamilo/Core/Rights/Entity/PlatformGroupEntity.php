@@ -97,9 +97,10 @@ class PlatformGroupEntity implements NestedRightsEntity
         }
 
         $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
+        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
 
         return new AdvancedElementFinderElement(
-            static::ENTITY_TYPE . '_' . $id, 'type type_group', $group->get_name(), $description
+            static::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $group->get_name(), $description
         );
     }
 
@@ -213,7 +214,7 @@ class PlatformGroupEntity implements NestedRightsEntity
     {
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager::package(),
+                Application::PARAM_CONTEXT                     => \Chamilo\Core\Group\Ajax\Manager::package(),
                 \Chamilo\Core\Group\Ajax\Manager::PARAM_ACTION => 'xml_group_menu_feed'
             )
         );
