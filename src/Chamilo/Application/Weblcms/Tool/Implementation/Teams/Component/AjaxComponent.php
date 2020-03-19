@@ -17,10 +17,10 @@ class AjaxComponent extends Manager implements DelegateComponent
 {
     public function run()
     {
-        if(!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
-        {
-            throw new NotAllowedException();
-        }
+//        if(!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+//        {
+//            throw new NotAllowedException();
+//        }
 
         $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
 
