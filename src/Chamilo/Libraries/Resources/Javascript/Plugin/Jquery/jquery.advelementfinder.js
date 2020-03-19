@@ -489,7 +489,7 @@
 					 */
 					function updateElements(is_search) {
 						inactiveBox
-								.html('<div class="element_finder_loading"></div>');
+								.html('<div class="element_finder_loading"><span class="fas fa-spinner fa-pulse fa-3x"></span></div>');
 
 						var selectedTypeId = $('#element_types_selector', self)
 								.val();

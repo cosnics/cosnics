@@ -212,7 +212,7 @@
 
 					function updateElements() {
 						displayMessage(
-								'<div class="element_finder_loading"></div>',
+								'<div class="element_finder_loading"><span class="fas fa-spinner fa-pulse fa-3x"></span></div>',
 								inactiveBox);
 						var searchResults = getSearchResults();
 						buildElementTree(searchResults);
