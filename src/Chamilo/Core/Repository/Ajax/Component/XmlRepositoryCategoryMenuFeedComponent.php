@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -16,31 +17,35 @@ class XmlRepositoryCategoryMenuFeedComponent extends Manager
     function run()
     {
         $groups_tree = array();
-        
+
         $parent_id = Request::get('parent_id');
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT), 
-            new StaticConditionVariable($parent_id));
+            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
+            new StaticConditionVariable($parent_id)
+        );
         $categories_tree = DataManager::retrieve_categories(
-            $condition, 
-            null, 
-            null, 
-            new OrderBy(
-                new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_NAME)));
-        
+            $condition, null, null, new OrderBy(
+                new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_NAME)
+            )
+        );
+
         header('Content-Type: text/xml');
-        echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n", '<tree>' . "\n";
+        echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL, '<tree>' . PHP_EOL;
         echo $this->dump_tree($categories_tree);
         echo '</tree>';
     }
 
     public function dump_tree($categories)
     {
+        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+
         while ($category = $categories->next_result())
         {
             $has_children = $category->has_children() ? 1 : 0;
-            echo '<leaf id="' . $category->get_id() . '" classes="category" has_children="' . $has_children . '" title="' . htmlspecialchars(
-                $category->get_name()) . '" description="' . htmlspecialchars($category->get_name()) . '"/>' . "\n";
+            echo '<leaf id="' . $category->get_id() . '" classes="' . $glyph->getClassNamesString() .
+                '" has_children="' . $has_children . '" title="' . htmlspecialchars(
+                    $category->get_name()
+                ) . '" description="' . htmlspecialchars($category->get_name()) . '"/>' . PHP_EOL;
         }
     }
 }

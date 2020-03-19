@@ -139,7 +139,7 @@ class BrowseComponent extends Manager implements TableSupport
         $html[] = '</div>';
         $html[] = '</div>';
         
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     /**

@@ -69,7 +69,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
                 ) . ' (' . $this->get_available_size_dimensions_string($available_size) . ')</a>';
         }
 
-        return implode('<br />' . "\n", $html);
+        return implode('<br />' . PHP_EOL, $html);
     }
 
     public static function get_default_property_names($extended_property_names = array())

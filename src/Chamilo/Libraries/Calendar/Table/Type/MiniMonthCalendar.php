@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
+use Exception;
+
 /**
  *
  * @package Chamilo\Libraries\Calendar\Table\Type
@@ -8,9 +10,11 @@ namespace Chamilo\Libraries\Calendar\Table\Type;
  */
 class MiniMonthCalendar extends MonthCalendar
 {
-    const PERIOD_MONTH = 0;
-    const PERIOD_WEEK = 1;
     const PERIOD_DAY = 2;
+
+    const PERIOD_MONTH = 0;
+
+    const PERIOD_WEEK = 1;
 
     /**
      *
@@ -19,6 +23,57 @@ class MiniMonthCalendar extends MonthCalendar
     public function __construct($displayTime)
     {
         parent::__construct($displayTime, null, array('table-calendar-mini'));
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar::render()
+     */
+    public function render()
+    {
+        $this->addEvents();
+
+        return $this->toHtml();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar::addEvents()
+     */
+    public function addEvents()
+    {
+        $events = $this->getEventsToShow();
+        $cellMapping = $this->getCellMapping();
+
+        foreach ($events as $time => $items)
+        {
+            $cellMappingKey = date('Ymd', $time);
+
+            $row = $cellMapping[$cellMappingKey][0];
+            $column = $cellMapping[$cellMappingKey][1];
+
+            if (is_null($row) || is_null($column))
+            {
+                continue;
+            }
+
+            $tooltip = htmlentities(implode(PHP_EOL, $items));
+
+            if (date('Ymd', $time) != date('Ymd'))
+            {
+                try
+                {
+                    $this->setCellContents(
+                        $row, $column,
+                        '<span class="badge" data-toggle="tooltip" data-placement="top" data-content="' . $tooltip .
+                        '">' . $this->getCellContents($row, $column) . '</span>'
+                    );
+                }
+                catch (Exception $exception)
+                {
+                }
+            }
+        }
     }
 
     /**
@@ -48,58 +103,8 @@ class MiniMonthCalendar extends MonthCalendar
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar::addEvents()
-     */
-    public function addEvents()
-    {
-        $events = $this->getEventsToShow();
-        $cellMapping = $this->getCellMapping();
-
-        foreach ($events as $time => $items)
-        {
-            $cellMappingKey = date('Ymd', $time);
-
-            $row = $cellMapping[$cellMappingKey][0];
-            $column = $cellMapping[$cellMappingKey][1];
-
-            if (is_null($row) || is_null($column))
-            {
-                continue;
-            }
-
-            $tooltip = htmlentities(implode("\n", $items));
-
-            if (date('Ymd', $time) != date('Ymd'))
-            {
-                try
-                {
-                    $this->setCellContents(
-                        $row,
-                        $column,
-                        '<span class="badge" data-toggle="tooltip" data-placement="top" data-content="' . $tooltip . '">' .
-                             $this->getCellContents($row, $column) . '</span>');
-                }
-                catch (\Exception $exception)
-                {
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar::render()
-     */
-    public function render()
-    {
-        $this->addEvents();
-
-        return $this->toHtml();
-    }
-
-    /**
-     *
      * @param integer $tableDate
+     *
      * @return string
      */
     protected function determineCellContent($tableDate)

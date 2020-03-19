@@ -2,26 +2,34 @@
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Form;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class PeerAssessmentGroupForm extends FormValidator
 {
     const FORM_NAME = 'peer_assessment_group_form';
-    const PARAM_NAME = 'name';
-    const PARAM_DESCRIPTION = 'description';
-    const PARAM_USER = 'user';
-    const PARAM_GROUP = 'group';
-    const PARAM_PLATFORM_GROUP = 'platform';
-    const FORM_TYPE_EDIT = 1;
+
     const FORM_TYPE_CREATE = 2;
+
+    const FORM_TYPE_EDIT = 1;
+
+    const PARAM_DESCRIPTION = 'description';
+
+    const PARAM_GROUP = 'group';
+
+    const PARAM_NAME = 'name';
+
+    const PARAM_PLATFORM_GROUP = 'platform';
+
+    const PARAM_USER = 'user';
 
     /**
      *
@@ -57,22 +65,6 @@ class PeerAssessmentGroupForm extends FormValidator
         }
     }
 
-    private function build_create_buttons()
-    {
-        $this->addElement(
-            'style_submit_button', FormValidator::PARAM_SUBMIT,
-            Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
-        );
-    }
-
-    private function build_edit_buttons()
-    {
-        $this->addElement(
-            'style_submit_button', FormValidator::PARAM_SUBMIT,
-            Translation::get('Edit', null, Utilities::COMMON_LIBRARIES)
-        );
-    }
-
     private function build_basic_form()
     {
         $this->add_textfield(self::PARAM_NAME, Translation::get('Name', null, Utilities::COMMON_LIBRARIES));
@@ -91,10 +83,11 @@ class PeerAssessmentGroupForm extends FormValidator
         if (!is_null($this->group_id))
         {
             $group_users = $this->viewer->get_group_users($this->group_id);
+            $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
 
             foreach ($group_users as $user)
             {
-                $element['classes'] = 'type type_user';
+                $element['classes'] = $glyph->getClassNamesString();
                 $element['id'] = self::PARAM_USER . '_' . $user->get_id();
                 $element['title'] = $user->get_firstname() . ' ' . $user->get_lastname();
                 $defaults[] = $element;
@@ -130,10 +123,8 @@ class PeerAssessmentGroupForm extends FormValidator
             $legend->set_type(Toolbar::TYPE_HORIZONTAL);
 
             $element_finder = $this->createElement(
-                'user_group_finder',
-                \Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager::PARAM_GROUP_USERS,
-                Translation::get('SelectUsersOrGroups'), $attributes['search_url'], $attributes['locale'],
-                $attributes['defaults'], $attributes['options']
+                'user_group_finder', Manager::PARAM_GROUP_USERS, Translation::get('SelectUsersOrGroups'),
+                $attributes['search_url'], $attributes['locale'], $attributes['defaults'], $attributes['options']
             );
             $element_finder->excludeElements($attributes['exclude']);
             $this->addElement($element_finder);
@@ -146,11 +137,37 @@ class PeerAssessmentGroupForm extends FormValidator
                 'html', Translation::get('GroupBlockedBecauseOfScores') . ': <a href="' . $this->viewer->get_url(
                     array(
                         \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::ACTION_REMOVE_SCORES,
-                        \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::PARAM_GROUP => $this->group_id
+                        \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::PARAM_GROUP  => $this->group_id
                     )
                 ) . '">' . Translation::get('RemoveScoresToUnblock') . '</a>'
             );
         }
+    }
+
+    private function build_create_buttons()
+    {
+        $this->addElement(
+            'style_submit_button', FormValidator::PARAM_SUBMIT,
+            Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+        );
+    }
+
+    private function build_edit_buttons()
+    {
+        $this->addElement(
+            'style_submit_button', FormValidator::PARAM_SUBMIT,
+            Translation::get('Edit', null, Utilities::COMMON_LIBRARIES)
+        );
+    }
+
+    public function get_enroll_errors()
+    {
+        return $this->enroll_errors;
+    }
+
+    public function set_group_id($group_id)
+    {
+        $this->group_id = $group_id;
     }
 
     /**
@@ -170,7 +187,7 @@ class PeerAssessmentGroupForm extends FormValidator
             }
 
             $values = $this->exportValue(
-                \Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager::PARAM_GROUP_USERS
+                Manager::PARAM_GROUP_USERS
             );
 
             foreach ($values as $type => $elements)
@@ -189,8 +206,8 @@ class PeerAssessmentGroupForm extends FormValidator
                             }
                             else
                             {
-                                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                                    \Chamilo\Core\User\Storage\DataClass\User::class_name(), (int) $id
+                                $user = DataManager::retrieve_by_id(
+                                    User::class_name(), (int) $id
                                 );
                                 $already_enrolled[] = $user->get_firstname() . ' ' . $user->get_lastname();
                                 unset($group_users[$id]);
@@ -249,7 +266,7 @@ class PeerAssessmentGroupForm extends FormValidator
                                     }
                                     else
                                     {
-                                        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                                        $user = DataManager::retrieve_by_id(
                                             User::class_name(), $user_id
                                         );
                                         $already_enrolled[] = $user->get_firstname() . ' ' . $user->get_lastname();
@@ -277,15 +294,5 @@ class PeerAssessmentGroupForm extends FormValidator
         {
             $this->enroll_errors = implode(',', $already_enrolled) . ' ' . Translation::get('AlreadyEnrolled');
         }
-    }
-
-    public function get_enroll_errors()
-    {
-        return $this->enroll_errors;
-    }
-
-    public function set_group_id($group_id)
-    {
-        $this->group_id = $group_id;
     }
 }

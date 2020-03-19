@@ -16,38 +16,11 @@ use Chamilo\Libraries\Translation\Translation;
 class SettingsConnector
 {
 
-    public static function get_languages()
-    {
-        return Configuration::getInstance()->getLanguages();
-    }
-
-    public static function get_themes()
-    {
-        $options = Theme::getInstance()->getAvailableThemes();
-
-        return $options;
-    }
-
     public static function getMailers()
     {
         $mailerFactory = new MailerFactory(Configuration::getInstance());
+
         return $mailerFactory->getAvailableMailers();
-    }
-
-    public static function get_time_zones()
-    {
-        $content = file_get_contents(__DIR__ . '/timezones.txt');
-        $content = explode("\n", $content);
-
-        $timezones = array();
-
-        foreach ($content as $timezone)
-        {
-            $timezone = trim($timezone);
-            $timezones[$timezone] = $timezone;
-        }
-
-        return $timezones;
     }
 
     public static function get_active_applications()
@@ -62,13 +35,24 @@ class SettingsConnector
             if ($registration[Registration::PROPERTY_STATUS])
             {
                 $options[$registration[Registration::PROPERTY_CONTEXT]] = Translation::get(
-                    'TypeName',
-                    null,
-                    $registration[Registration::PROPERTY_CONTEXT]);
+                    'TypeName', null, $registration[Registration::PROPERTY_CONTEXT]
+                );
             }
         }
 
         asort($options);
+
+        return $options;
+    }
+
+    public static function get_languages()
+    {
+        return Configuration::getInstance()->getLanguages();
+    }
+
+    public static function get_themes()
+    {
+        $options = Theme::getInstance()->getAvailableThemes();
 
         return $options;
     }
@@ -87,28 +71,33 @@ class SettingsConnector
         return $working_hours;
     }
 
-    public static function is_allowed_to_change_platform_language()
-    {
-        return Configuration::getInstance()->get_setting(
-            array(\Chamilo\Core\User\Manager::context(), 'allow_user_change_platform_language')) == 1;
-    }
-
-    // support for quick language change
     public static function is_allowed_quick_change_platform_language()
     {
         return self::is_allowed_to_change_platform_language() && Configuration::getInstance()->get_setting(
-            array(\Chamilo\Core\User\Manager::context(), 'allow_user_quick_change_platform_language')) == 1;
+                array(\Chamilo\Core\User\Manager::context(), 'allow_user_quick_change_platform_language')
+            ) == 1;
+    }
+
+    // support for quick language change
+
+    public static function is_allowed_to_change_platform_language()
+    {
+        return Configuration::getInstance()->get_setting(
+                array(\Chamilo\Core\User\Manager::context(), 'allow_user_change_platform_language')
+            ) == 1;
     }
 
     public static function is_allowed_to_change_platform_timezone()
     {
         return Configuration::getInstance()->get_setting(
-            array(\Chamilo\Core\User\Manager::context(), 'allow_user_change_platform_timezone')) == 1;
+                array(\Chamilo\Core\User\Manager::context(), 'allow_user_change_platform_timezone')
+            ) == 1;
     }
 
     public static function is_allowed_to_change_theme()
     {
         return Configuration::getInstance()->get_setting(
-            array(\Chamilo\Core\User\Manager::context(), 'allow_user_theme_selection')) == 1;
+                array(\Chamilo\Core\User\Manager::context(), 'allow_user_theme_selection')
+            ) == 1;
     }
 }

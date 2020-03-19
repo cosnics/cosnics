@@ -33,7 +33,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         $html[] = $this->renderGroupDetails();
         $html[] = $this->renderGroupUsersTable();
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -61,7 +61,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -79,7 +79,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         $html[] = '<div>' . $this->tabButtonToolbarRenderer->render() . '</div>';
         $html[] = $table->as_html();
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     /**

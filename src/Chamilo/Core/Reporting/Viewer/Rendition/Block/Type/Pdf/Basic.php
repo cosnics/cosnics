@@ -248,8 +248,8 @@ class Basic extends Pdf
         $text = strip_tags($text, '<ol><ul><li><br><br/><img>');
         
         // Handle line break
-        $text = preg_replace('/<br\/>/i', "\n", $text);
-        $text = preg_replace('/<br \/>/i', "\n", $text);
+        $text = preg_replace('/<br\/>/i', PHP_EOL, $text);
+        $text = preg_replace('/<br \/>/i', PHP_EOL, $text);
         
         // Convert back html escape sring.
         $text = html_entity_decode($text, $decode_flags, $output_encoding);
@@ -306,7 +306,7 @@ class Basic extends Pdf
             $result[] = '  ' . ($index + 1) . '. ' . trim($list_item);
         }
         
-        return implode($result, "\n");
+        return implode(PHP_EOL, $result);
     }
 
     private function replace_unordered_list($unordered_list_match)
@@ -321,6 +321,6 @@ class Basic extends Pdf
             $result[] = '  ' . chr(149) . ' ' . trim($list_item);
         }
         
-        return implode($result, "\n");
+        return implode(PHP_EOL, $result);
     }
 }

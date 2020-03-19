@@ -73,7 +73,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $table->as_html();
         $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     public function get_help_item()

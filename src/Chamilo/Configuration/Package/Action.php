@@ -77,7 +77,7 @@ abstract class Action
      */
     public function retrieve_message()
     {
-        return implode('<br />' . "\n", $this->get_message());
+        return implode('<br />' . PHP_EOL, $this->get_message());
     }
 
     public function get_type()

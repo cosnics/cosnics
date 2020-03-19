@@ -112,6 +112,6 @@ class ViewerComponent extends Manager implements TableSupport
         $html[] = $table->as_html();
         $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 }

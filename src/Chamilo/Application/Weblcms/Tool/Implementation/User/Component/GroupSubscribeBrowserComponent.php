@@ -121,7 +121,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -139,7 +139,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
 
         $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -174,7 +174,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -207,7 +207,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -224,7 +224,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $html[] = $tree->render_as_tree();
         $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     /**

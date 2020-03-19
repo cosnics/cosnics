@@ -59,6 +59,6 @@ class ExportTable extends SortableTableFromArray
         $html[] = HTML_Table::toHtml();
         $html[] = '</div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

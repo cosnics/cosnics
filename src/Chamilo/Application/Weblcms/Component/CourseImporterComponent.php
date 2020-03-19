@@ -73,7 +73,7 @@ class CourseImporterComponent extends Manager
         $html[] = '<br />D: ' . Translation::get('Delete', null, Utilities::COMMON_LIBRARIES);
         $html[] = '</blockquote>';
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

@@ -119,7 +119,7 @@ class MailNotificationHandler extends \Chamilo\Core\Repository\Feedback\Infrastr
         $html[] = '</body>';
         $html[] = '</html>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

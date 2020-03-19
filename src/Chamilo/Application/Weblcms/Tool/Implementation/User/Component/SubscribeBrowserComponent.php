@@ -111,6 +111,6 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
         $html = array();
         $html[] = $table->as_html();
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 }

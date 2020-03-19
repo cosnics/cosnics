@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Ajax\Component;
 use Chamilo\Core\User\Ajax\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -28,27 +29,28 @@ class XmlUserFeedComponent extends Manager
     public function run()
     {
         $conditions = array();
-        
+
         $query_condition = Utilities::query_to_condition(
-            $_GET['query'], 
-            array(User::PROPERTY_USERNAME, User::PROPERTY_FIRSTNAME, User::PROPERTY_LASTNAME));
+            $_GET['query'], array(User::PROPERTY_USERNAME, User::PROPERTY_FIRSTNAME, User::PROPERTY_LASTNAME)
+        );
         if (isset($query_condition))
         {
             $conditions[] = $query_condition;
         }
-        
+
         if (is_array($_GET['exclude']))
         {
             $c = array();
             foreach ($_GET['exclude'] as $id)
             {
                 $c[] = new EqualityCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
-                    new StaticConditionVariable($id));
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+                    new StaticConditionVariable($id)
+                );
             }
             $conditions[] = new NotCondition(new OrCondition($c));
         }
-        
+
         if (count($conditions) > 0)
         {
             $condition = new AndCondition($conditions);
@@ -57,26 +59,26 @@ class XmlUserFeedComponent extends Manager
         {
             $condition = null;
         }
-        
+
         $users = DataManager::retrieves(
-            User::class_name(), 
-            new DataClassRetrievesParameters(
-                $condition, 
-                null, 
-                null, 
-                array(
+            User::class_name(), new DataClassRetrievesParameters(
+                $condition, null, null, array(
                     new OrderBy(
-                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
-                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)))));
-        
+                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
+                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)
+                    )
+                )
+            )
+        );
+
         header('Content-Type: text/xml');
-        echo '<?xml version="1.0" encoding="utf-8"?>' . "\n" . '<tree>', "\n";
-        
+        echo '<?xml version="1.0" encoding="utf-8"?>' . PHP_EOL . '<tree>', PHP_EOL;
+
         if (isset($users))
         {
             $this->dump_tree($users);
         }
-        
+
         echo '</tree>';
     }
 
@@ -86,16 +88,19 @@ class XmlUserFeedComponent extends Manager
         {
             return;
         }
-        
-        echo '<node id="0" classes="category unlinked" title="' . Translation::get('Users') . '">' . "\n";
-        
+
+        $glyph = new FontAwesomeGlyph('folder', array('unlinked'), null, 'fas');
+        echo '<node id="0" classes="' . $glyph->getClassNamesString() . '" title="' . Translation::get('Users') . '">' .
+            PHP_EOL;
+        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
         while ($user = $users->next_result())
         {
-            echo '<leaf id="user_' . $user->get_id() . '" classes="type type_user" title="' .
-                 htmlspecialchars($user->get_fullname()) . '" description="' . htmlspecialchars($user->get_username()) .
-                 '"/>' . "\n";
+            echo '<leaf id="user_' . $user->get_id() . '" classes="' . $glyph->getClassNamesString() . '" title="' .
+                htmlspecialchars($user->get_fullname()) . '" description="' . htmlspecialchars($user->get_username()) .
+                '"/>' . PHP_EOL;
         }
-        
-        echo '</node>' . "\n";
+
+        echo '</node>' . PHP_EOL;
     }
 }

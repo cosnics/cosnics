@@ -221,7 +221,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
         $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -282,7 +282,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
         // $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -453,7 +453,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                 }
             }
 
-            return implode($html, "\n");
+            return implode(PHP_EOL, $html);
         }
     }
 

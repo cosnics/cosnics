@@ -237,7 +237,7 @@ class Renderer extends CourseListRenderer
 
             $html[] = '</ul>';
 
-            return implode($html, "\n");
+            return implode(PHP_EOL, $html);
         }
     }
 

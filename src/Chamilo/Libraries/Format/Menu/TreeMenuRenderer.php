@@ -65,7 +65,7 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
         $entryTemplates[self::HTML_MENU_ENTRY_ACTIVEPATH] =
             '<!--P--><div><a href="{url}" onclick="{onclick}" id="{id}" style="{style}" title="{safe_title}"><span class="{class}"></span> {title}</a></div>';
         $this->setEntryTemplate($entryTemplates);
-        $this->setItemTemplate('<li>', '</li>' . "\n");
+        $this->setItemTemplate('<li>', '</li>' . PHP_EOL);
     }
 
     /**
@@ -79,7 +79,7 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
         if ($root)
         {
             $this->setLevelTemplate(
-                '<div id="' . $this->tree_name . '"><ul class="tree-menu">' . "\n", '</ul></div>' . "\n"
+                '<div id="' . $this->tree_name . '"><ul class="tree-menu">' . PHP_EOL, '</ul></div>' . PHP_EOL
             );
         }
 
@@ -87,7 +87,7 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
 
         if ($root)
         {
-            $this->setLevelTemplate('<ul>' . "\n", '</ul>' . "\n");
+            $this->setLevelTemplate('<ul>' . PHP_EOL, '</ul>' . PHP_EOL);
         }
     }
 

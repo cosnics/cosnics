@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Test\Php\Php\Acceptance\_Files;
 
-class RequirerTestCase extends \PHPUnit_Framework_TestCase
+use PHPUnit_Framework_TestCase;
+
+class RequirerTestCase extends PHPUnit_Framework_TestCase
 {
 
     private $class_file;
@@ -19,6 +21,8 @@ class RequirerTestCase extends \PHPUnit_Framework_TestCase
         $output_array = null;
         $output_result; // 255 is bad 0 is good
         exec($command_string, $output_array, $output_result);
-        $this->assertEmpty($output_array, "Problem with file {$this->class_file} : \n" . implode($output_array, "\n"));
+        $this->assertEmpty(
+            $output_array, "Problem with file {$this->class_file} : \n" . implode(PHP_EOL, $output_array)
+        );
     }
 }

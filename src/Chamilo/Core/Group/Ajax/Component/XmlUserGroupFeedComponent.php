@@ -5,6 +5,7 @@ use Chamilo\Core\Group\Ajax\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -41,22 +42,18 @@ class XmlUserGroupFeedComponent extends Manager
             $user_conditions[] = new OrCondition(
                 array(
                     new PatternMatchCondition(
-                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
-                        $q
+                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), $q
                     ),
                     new PatternMatchCondition(
-                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-                        $q
+                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), $q
                     ),
                     new PatternMatchCondition(
-                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-                        $q
+                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), $q
                     )
                 )
             );
             $group_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME),
-                $q
+                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME), $q
             );
         }
 
@@ -121,11 +118,8 @@ class XmlUserGroupFeedComponent extends Manager
         $allowed_users = array();
 
         $group_result_set = \Chamilo\Core\Group\Storage\DataManager::retrieves(
-            Group::class_name(),
-            new DataClassRetrievesParameters(
-                $group_condition,
-                null,
-                null,
+            Group::class_name(), new DataClassRetrievesParameters(
+                $group_condition, null, null,
                 array(new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME)))
             )
         );
@@ -177,12 +171,8 @@ class XmlUserGroupFeedComponent extends Manager
         }
 
         $user_result_set = DataManager::retrieves(
-            User::class_name(),
-            new DataClassRetrievesParameters(
-                $user_condition,
-                null,
-                null,
-                array(
+            User::class_name(), new DataClassRetrievesParameters(
+                $user_condition, null, null, array(
                     new OrderBy(
                         new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
                         new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)
@@ -198,41 +188,26 @@ class XmlUserGroupFeedComponent extends Manager
         }
 
         header('Content-Type: text/xml');
-        echo '<?xml version="1.0" encoding="UTF-8"?>', "\n", '<tree>', "\n";
+        echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL, '<tree>', PHP_EOL;
 
         $this->dump_tree($users, $groups_tree);
 
         echo '</tree>';
     }
 
-    public function dump_tree($users, $groups)
+    public function contains_results($objects)
     {
-        global $group_ids;
-
-        if ($this->contains_results($users) || $this->contains_results($groups))
+        if (count($objects))
         {
-            if ($this->contains_results($users))
-            {
-                echo '<node id="user" classes="category unlinked" title="Users">', "\n";
-                foreach ($users as $user)
-                {
-                    echo '<leaf id="user_' . $user->get_id() . '" classes="' . 'type type_user' . '" title="' .
-                        htmlspecialchars($user->get_fullname()) . '" description="' .
-                        htmlentities($user->get_username()) . '"/>' . "\n";
-                }
-                echo '</node>', "\n";
-            }
-
-            if ($this->contains_results($groups))
-            {
-                $this->dump_groups_tree($groups);
-            }
+            return true;
         }
+
+        return false;
     }
 
     public function dump_groups_tree($groups)
     {
-        global $group_ids;
+        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
 
         foreach ($groups as $group)
         {
@@ -241,17 +216,43 @@ class XmlUserGroupFeedComponent extends Manager
 
             if ($this->contains_results($group['children']))
             {
-                echo '<node id="group_' . $group['group']->get_id() . '" classes="type type_group" title="' .
-                    htmlspecialchars($group['group']->get_name()) . '" description="' . htmlspecialchars($description) .
-                    '">', "\n";
+                echo '<node id="group_' . $group['group']->get_id() . '" classes="' . $glyph->getClassNamesString() .
+                    '" title="' . htmlspecialchars($group['group']->get_name()) . '" description="' .
+                    htmlspecialchars($description) . '">', PHP_EOL;
                 $this->dump_groups_tree($group['children']);
-                echo '</node>', "\n";
+                echo '</node>', PHP_EOL;
             }
             else
             {
-                echo '<leaf id="group_' . $group['group']->get_id() . '" classes="type type_group" title="' .
-                    htmlspecialchars($group['group']->get_name()) . '" description="' . htmlspecialchars($description) .
-                    '"/>' . "\n";
+                echo '<leaf id="group_' . $group['group']->get_id() . '" classes="' . $glyph->getClassNamesString() .
+                    '" title="' . htmlspecialchars($group['group']->get_name()) . '" description="' .
+                    htmlspecialchars($description) . '"/>' . PHP_EOL;
+            }
+        }
+    }
+
+    public function dump_tree($users, $groups)
+    {
+        if ($this->contains_results($users) || $this->contains_results($groups))
+        {
+            if ($this->contains_results($users))
+            {
+                $glyph = new FontAwesomeGlyph('folder', array('unlinked'), null, 'fas');
+                echo '<node id="user" classes="' . $glyph->getClassNamesString() . '" title="Users">', PHP_EOL;
+                $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
+                foreach ($users as $user)
+                {
+                    echo '<leaf id="user_' . $user->get_id() . '" classes="' . $glyph->getClassNamesString() .
+                        '" title="' . htmlspecialchars($user->get_fullname()) . '" description="' .
+                        htmlentities($user->get_username()) . '"/>' . PHP_EOL;
+                }
+                echo '</node>', PHP_EOL;
+            }
+
+            if ($this->contains_results($groups))
+            {
+                $this->dump_groups_tree($groups);
             }
         }
     }
@@ -265,15 +266,5 @@ class XmlUserGroupFeedComponent extends Manager
         }
 
         return $tree;
-    }
-
-    public function contains_results($objects)
-    {
-        if (count($objects))
-        {
-            return true;
-        }
-
-        return false;
     }
 }

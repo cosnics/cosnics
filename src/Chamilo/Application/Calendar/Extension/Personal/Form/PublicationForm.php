@@ -2,9 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Personal\Form;
 
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
-use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\Publication\Publisher\Form\BasePublicationForm;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -50,25 +48,17 @@ class PublicationForm extends BasePublicationForm
         $this->setDefaults();
     }
 
-    /**
-     * @param string[] $defaultValues
-     * @param string[] $filter
-     *
-     * @throws \Exception
-     */
-    public function setDefaults($defaultValues = null, $filter = null)
+    public function addFooter()
     {
-        $defaultValues[self::PARAM_SHARE_OPTION] = 0;
+        $buttons[] = $this->createElement(
+            'style_submit_button', 'submit', Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph('arrow-right')
+        );
+        $buttons[] = $this->createElement(
+            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
 
-        parent::setDefaults($defaultValues, $filter);
-    }
-
-    /**
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getFormUser()
-    {
-        return $this->formUser;
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     /**
@@ -96,17 +86,25 @@ class PublicationForm extends BasePublicationForm
         );
     }
 
-    public function addFooter()
+    /**
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function getFormUser()
     {
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), null, null,
-            new FontAwesomeGlyph('arrow-right')
-        );
-        $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
-        );
+        return $this->formUser;
+    }
 
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    /**
+     * @param string[] $defaultValues
+     * @param string[] $filter
+     *
+     * @throws \Exception
+     */
+    public function setDefaults($defaultValues = null, $filter = null)
+    {
+        $defaultValues[self::PARAM_SHARE_OPTION] = 0;
+
+        parent::setDefaults($defaultValues, $filter);
     }
 
     /**
@@ -120,11 +118,14 @@ class PublicationForm extends BasePublicationForm
     {
         $defaults[self::PARAM_SHARE_ELEMENTS] = array();
 
+        $groupGlyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+        $userGlyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
         foreach ($targetGroups as $targetGroup)
         {
             $selectedGroup = array();
             $selectedGroup['id'] = 'group_' . $targetGroup->getId();
-            $selectedGroup['classes'] = 'type type_group';
+            $selectedGroup['classes'] = $groupGlyph->getClassNamesString();
             $selectedGroup['title'] = $targetGroup->get_name();
             $selectedGroup['description'] = $targetGroup->get_name();
 
@@ -135,7 +136,7 @@ class PublicationForm extends BasePublicationForm
         {
             $selectedUser = array();
             $selectedUser['id'] = 'user_' . $targetUser->getId();
-            $selectedUser['classes'] = 'type type_user';
+            $selectedUser['classes'] = $userGlyph->getClassNamesString();
             $selectedUser['title'] = $targetUser->get_fullname();
             $selectedUser['description'] = $targetUser->get_username();
 

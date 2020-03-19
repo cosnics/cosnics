@@ -14,8 +14,9 @@ use CpChart\Classes\pRadar;
  */
 class PeerAssessmentGraph
 {
-    const PERSONAL_SCORE = 'PersonalScore';
     const AVG_TOTAL_SCORE = 'AverageTotalScore';
+
+    const PERSONAL_SCORE = 'PersonalScore';
 
     private $title;
 
@@ -34,25 +35,20 @@ class PeerAssessmentGraph
         $this->title = $title;
     }
 
-    public function set_range($range)
-    {
-        $this->range = $range;
-    }
-
     public function render()
     {
         $chart_data = new pData();
 
         if (count($this->competences) > 0)
         {
-            if (! is_null($this->competences))
+            if (!is_null($this->competences))
             {
                 $chart_data->addPoints($this->competences, 'Label');
             }
 
             $chart_data->setAbscissa('Label');
 
-            if (! is_null($this->personal_score))
+            if (!is_null($this->personal_score))
             {
                 $chart_data->addPoints($this->personal_score, 'Serie1');
                 $chart_data->setAbscissa('Serie1');
@@ -61,7 +57,7 @@ class PeerAssessmentGraph
             {
                 // error
             }
-            if (! is_null($this->average_total_score))
+            if (!is_null($this->average_total_score))
             {
                 $chart_data->addPoints($this->average_total_score, 'Serie2');
                 $chart_data->setAbscissa('Serie2');
@@ -79,7 +75,7 @@ class PeerAssessmentGraph
         $base_path = 'temp/' . md5(serialize(array('radar_chart', $chart_data))) . '.png';
         $path = Path::getInstance()->getStoragePath(__NAMESPACE__) . $base_path;
 
-        if (! file_exists($path))
+        if (!file_exists($path))
         {
             $graph_area_left = 70;
             $height = 700;
@@ -99,11 +95,13 @@ class PeerAssessmentGraph
             $chart_canvas->setFontProperties(
                 array(
                     'FontName' => Path::getInstance()->getVendorPath() .
-                         'szymach/c-pchart/src/Resources/fonts/verdana.ttf',
-                        'FontSize' => 8,
-                        'R' => 0,
-                        'G' => 0,
-                        'B' => 0));
+                        'szymach/c-pchart/src/Resources/fonts/verdana.ttf',
+                    'FontSize' => 8,
+                    'R'        => 0,
+                    'G'        => 0,
+                    'B'        => 0
+                )
+            );
 
             $radar_chart = new pRadar();
 
@@ -111,34 +109,36 @@ class PeerAssessmentGraph
             $chart_canvas->setGraphArea($graph_area_left, 20, 579, $height - 21);
             $options = array(
                 'BackgroundGradient' => array(
-                    'StartR' => 255,
-                    'StartG' => 255,
-                    'StartB' => 255,
+                    'StartR'     => 255,
+                    'StartG'     => 255,
+                    'StartB'     => 255,
                     'StartAlpha' => 100,
-                    'EndR' => 172,
-                    'EndG' => 214,
-                    'EndB' => 239,
-                    'EndAlpha' => 50),
-                'FontSize' => 6);
+                    'EndR'       => 172,
+                    'EndG'       => 214,
+                    'EndB'       => 239,
+                    'EndAlpha'   => 50
+                ),
+                'FontSize'           => 6
+            );
             $radar_chart->drawRadar($chart_canvas, $chart_data, $options);
 
             $chart_canvas->drawLegend(
-                20,
-                26,
-                array(
-                    'Style' => LEGEND_BOX,
-                    'Mode' => LEGEND_VERTICAL,
-                    'R' => 250,
-                    'G' => 250,
-                    'B' => 250,
-                    'Margin' => 5));
+                20, 26, array(
+                    'Style'  => LEGEND_BOX,
+                    'Mode'   => LEGEND_VERTICAL,
+                    'R'      => 250,
+                    'G'      => 250,
+                    'B'      => 250,
+                    'Margin' => 5
+                )
+            );
 
             /* Render the picture */
             $chart_canvas->render($path);
         }
 
         return '<div style="float: left;"><img src="data:image/png;base64,' . base64_encode(file_get_contents($path)) .
-             '" border="0" alt="' . $this->title . '" title="' . htmlentities($this->title) . '" /></div>';
+            '" border="0" alt="' . $this->title . '" title="' . htmlentities($this->title) . '" /></div>';
     }
 
     /**
@@ -152,23 +152,8 @@ class PeerAssessmentGraph
 
         foreach ($competences as $competence)
         {
-            $this->competences[] = wordwrap($competence, $maxlength, "\n");
+            $this->competences[] = wordwrap($competence, $maxlength, PHP_EOL);
         }
-    }
-
-    /**
-     * sets score and corrects it wth offset
-     *
-     * @param array $score
-     */
-    public function set_personal_score($score)
-    {
-        foreach ($score as $point)
-        {
-            $scores[] = $point + $this->offset;
-        }
-
-        $this->personal_score = $scores;
     }
 
     /**
@@ -194,5 +179,25 @@ class PeerAssessmentGraph
     public function set_offset($offset)
     {
         $this->offset = $offset;
+    }
+
+    /**
+     * sets score and corrects it wth offset
+     *
+     * @param array $score
+     */
+    public function set_personal_score($score)
+    {
+        foreach ($score as $point)
+        {
+            $scores[] = $point + $this->offset;
+        }
+
+        $this->personal_score = $scores;
+    }
+
+    public function set_range($range)
+    {
+        $this->range = $range;
     }
 }

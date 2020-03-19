@@ -60,10 +60,15 @@ class LogViewerComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $breadcrumbtrail->add_help('admin_log_viewer');
+    }
+
     public function build_form()
     {
         $form = new FormValidator('logviewer', 'post', $this->get_url());
-        $renderer = & $form->defaultRenderer();
+        $renderer = &$form->defaultRenderer();
         $renderer->setElementTemplate(' {element} ');
 
         $types = array('server' => Translation::get('ServerLogs'));
@@ -85,10 +90,11 @@ class LogViewerComponent extends Manager
         }
 
         $lines = array(
-            '10' => '10 ' . Translation::get('Lines'),
-            '20' => '20 ' . Translation::get('Lines'),
-            '50' => '50 ' . Translation::get('Lines'),
-            'all' => Translation::get('AllLines'));
+            '10'  => '10 ' . Translation::get('Lines'),
+            '20'  => '20 ' . Translation::get('Lines'),
+            '50'  => '50 ' . Translation::get('Lines'),
+            'all' => Translation::get('AllLines')
+        );
 
         $dir = Path::getInstance()->getLogPath();
         $content = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES, false);
@@ -103,9 +109,10 @@ class LogViewerComponent extends Manager
         }
 
         $server_types = array(
-            'php' => Translation::get('PHPErrorLog'),
+            'php'   => Translation::get('PHPErrorLog'),
             'httpd' => Translation::get('HTTPDErrorLog'),
-            'mysql' => Translation::get('MYSQLErrorLog'));
+            'mysql' => Translation::get('MYSQLErrorLog')
+        );
 
         $form->addElement('select', 'type', '', $types, array('id' => 'type'));
         $form->addElement('select', 'chamilo_type', '', $files, array('id' => 'chamilo_type'));
@@ -114,14 +121,14 @@ class LogViewerComponent extends Manager
         $form->addElement('select', 'lines', '', $lines);
 
         $form->addElement(
-            'submit',
-            'submit',
-            Translation::get('Ok', array(), Utilities::COMMON_LIBRARIES),
-            array('class' => 'positive finish'));
+            'submit', 'submit', Translation::get('Ok', array(), Utilities::COMMON_LIBRARIES),
+            array('class' => 'positive finish')
+        );
         $form->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Admin', true) . 'LogViewer.js'));
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Admin', true) . 'LogViewer.js'
+        )
+        );
 
         return $form;
     }
@@ -136,29 +143,43 @@ class LogViewerComponent extends Manager
         else
         {
             $file = Configuration::getInstance()->get_setting(
-                array('Chamilo\Core\Admin', $server_type . '_error_location'));
+                array('Chamilo\Core\Admin', $server_type . '_error_location')
+            );
             $message = Translation::get('ServerLogfileLocationNotDefined');
         }
 
-        if (! file_exists($file) || is_dir($file))
+        if (!file_exists($file) || is_dir($file))
         {
             return '<div class="warning-message">' . $message . '</div>';
         }
 
         $table = new HTML_Table(array('style' => 'background-color: lightblue; width: 100%;', 'cellspacing' => 0));
         $this->read_file($file, $table, $count);
+
         return $table->toHtml();
+    }
+
+    /**
+     * Returns the admin breadcrumb generator
+     *
+     * @return \libraries\format\BreadcrumbGeneratorInterface
+     */
+    public function get_breadcrumb_generator()
+    {
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
     public function read_file($file, &$table, $count)
     {
         $fh = fopen($file, 'r');
         $string = file_get_contents($file);
-        $lines = explode("\n", $string);
+        $lines = explode(PHP_EOL, $string);
         $lines = array_reverse($lines);
 
         if ($count == 'all' || count($lines) < $count)
+        {
             $count = count($lines) - 1;
+        }
 
         $row = 0;
         foreach ($lines as $line)
@@ -195,20 +216,5 @@ class LogViewerComponent extends Manager
         }
 
         fclose($fh);
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('admin_log_viewer');
-    }
-
-    /**
-     * Returns the admin breadcrumb generator
-     *
-     * @return \libraries\format\BreadcrumbGeneratorInterface
-     */
-    public function get_breadcrumb_generator()
-    {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

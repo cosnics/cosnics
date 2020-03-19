@@ -55,17 +55,17 @@ class CommandLineInstaller implements InstallerObserver
 
     public function afterPreProductionDatabaseCreated(StepResult $result)
     {
-        echo "\t\t DB created ... " . $this->check_result($result) . "\n";
+        echo "\t\t DB created ... " . $this->check_result($result) . PHP_EOL;
     }
 
     public function afterPreProductionConfigurationFileWritten(StepResult $result)
     {
-        echo "\t\t Config File Written ... " . $this->check_result($result) . "\n";
+        echo "\t\t Config File Written ... " . $this->check_result($result) . PHP_EOL;
     }
 
     public function afterPreProduction()
     {
-        echo "\n";
+        echo PHP_EOL;
         ob_flush();
     }
 
@@ -76,7 +76,7 @@ class CommandLineInstaller implements InstallerObserver
 
     public function afterFilesystemPrepared(StepResult $result)
     {
-        echo "\t\t File system prepared ... " . $this->check_result($result) . "\n";
+        echo "\t\t File system prepared ... " . $this->check_result($result) . PHP_EOL;
     }
 
     public function afterInstallation()
@@ -92,7 +92,7 @@ class CommandLineInstaller implements InstallerObserver
 
     public function afterPackagesInstallation()
     {
-        echo "\n";
+        echo PHP_EOL;
         ob_flush();
     }
 
@@ -103,7 +103,7 @@ class CommandLineInstaller implements InstallerObserver
 
     public function afterPackageInstallation(StepResult $result)
     {
-        echo $this->check_result($result) . "\n";
+        echo $this->check_result($result) . PHP_EOL;
         ob_flush();
     }
 }

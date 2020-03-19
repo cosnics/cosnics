@@ -307,6 +307,6 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
             $html[] = $this->handle_course_groups($children);
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

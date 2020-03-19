@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Calendar;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\User\Manager;
+use DateTimeZone;
 
 /**
  *
@@ -20,7 +22,7 @@ class SettingsConnector
     public static function get_time_zones()
     {
         $timezones = array();
-        $timezoneIdentifiers = \DateTimeZone::listIdentifiers();
+        $timezoneIdentifiers = DateTimeZone::listIdentifiers();
 
         foreach ($timezoneIdentifiers as $timezoneIdentifier)
         {
@@ -37,6 +39,7 @@ class SettingsConnector
     public static function is_allowed_to_change_platform_timezone()
     {
         return Configuration::getInstance()->get_setting(
-            array(\Chamilo\Core\User\Manager::context(), 'allow_user_change_platform_timezone')) == 1;
+                array(Manager::context(), 'allow_user_change_platform_timezone')
+            ) == 1;
     }
 }

@@ -1,10 +1,13 @@
 <?php
 namespace Chamilo\Application\Weblcms\Ajax\Component;
 
+use Chamilo\Application\Weblcms\Ajax\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -17,9 +20,8 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
-class XmlCourseUserFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
+class XmlCourseUserFeedComponent extends Manager
 {
 
     public function run()
@@ -36,26 +38,11 @@ class XmlCourseUserFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
         }
 
         header('Content-Type: text/xml');
-        echo '<?xml version="1.0" encoding="iso-8859-1"?>', "\n", '<tree>', "\n";
+        echo '<?xml version="1.0" encoding="iso-8859-1"?>', PHP_EOL, '<tree>', PHP_EOL;
 
         $this->dump_tree($users);
 
         echo '</tree>';
-    }
-
-    function dump_tree($users)
-    {
-        if ($this->contains_results($users))
-        {
-            echo '<node id="user" classes="category unlinked" title="Users">', "\n";
-            foreach ($users as $user)
-            {
-                echo '<leaf id="user_' . $user->get_id() . '" classes="' . 'type type_user' . '" title="';
-                echo htmlentities($user->get_username()) . '" description="';
-                echo htmlentities($user->get_fullname()) . '"/>' . "\n";
-            }
-            echo '</node>', "\n";
-        }
     }
 
     function contains_results($objects)
@@ -64,14 +51,34 @@ class XmlCourseUserFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
         {
             return true;
         }
+
         return false;
+    }
+
+    function dump_tree($users)
+    {
+        if ($this->contains_results($users))
+        {
+            $glyph = new FontAwesomeGlyph('folder', array('unlinked'), null, 'fas');
+            echo '<node id="user" classes="' . $glyph->getClassNamesString() . '" title="Users">', PHP_EOL;
+
+            $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
+            foreach ($users as $user)
+            {
+                echo '<leaf id="user_' . $user->get_id() . '" classes="' . $glyph->getClassNamesString() . '" title="';
+                echo htmlentities($user->get_username()) . '" description="';
+                echo htmlentities($user->get_fullname()) . '"/>' . PHP_EOL;
+            }
+            echo '</node>', PHP_EOL;
+        }
     }
 
     function retrieve_users()
     {
         $course_id = Request::get('course');
 
-        if (! $course_id)
+        if (!$course_id)
         {
             return null;
         }
@@ -80,55 +87,64 @@ class XmlCourseUserFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
         $userConditions = array();
         $userConditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($course_id));
+            new StaticConditionVariable($course_id)
+        );
         $userConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER));
+            new PropertyConditionVariable(
+                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
+            ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
+        );
 
         $parameters = new DataClassDistinctParameters(
-            new AndCondition($userConditions),
-            new DataClassProperties(
+            new AndCondition($userConditions), new DataClassProperties(
                 array(
-                    new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID))));
+                    new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID)
+                )
+            )
+        );
 
         $user_ids = DataManager::distinct(
-            \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::class_name(),
-            $parameters);
+            CourseEntityRelation::class_name(), $parameters
+        );
 
         // Retrieve the users subscribed through platform groups
         $groupConditions = array();
         $groupConditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($course_id));
+            new StaticConditionVariable($course_id)
+        );
         $groupConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP));
+            new PropertyConditionVariable(
+                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
+            ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
+        );
 
         $groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
-            Group::class_name(),
-            new DataClassRetrievesParameters(
-                new AndCondition($groupConditions),
-                null,
-                null,
-                array(),
-                new Joins(
+            Group::class_name(), new DataClassRetrievesParameters(
+                new AndCondition($groupConditions), null, null, array(), new Joins(
                     new Join(
-                        CourseEntityRelation::class_name(),
-                        new EqualityCondition(
+                        CourseEntityRelation::class_name(), new EqualityCondition(
                             new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
                             new PropertyConditionVariable(
-                                CourseEntityRelation::class_name(),
-                                CourseEntityRelation::PROPERTY_ENTITY_ID))))));
+                                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID
+                            )
+                        )
+                    )
+                )
+            )
+        );
 
         $parameters = new DataClassDistinctParameters(
-            new AndCondition($userConditions),
-            new DataClassProperties(
+            new AndCondition($userConditions), new DataClassProperties(
                 array(
-                    new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID))));
+                    new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID)
+                )
+            )
+        );
 
         $groupIdentifiers = DataManager::distinct(
-            \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::class_name(),
-            $parameters);
+            CourseEntityRelation::class_name(), $parameters
+        );
 
         $group_users = array();
 
@@ -152,8 +168,8 @@ class XmlCourseUserFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
         if ($search_query && $search_query != '')
         {
             $conditions[] = Utilities::query_to_condition(
-                $search_query,
-                array(User::PROPERTY_USERNAME, User::PROPERTY_FIRSTNAME, User::PROPERTY_LASTNAME));
+                $search_query, array(User::PROPERTY_USERNAME, User::PROPERTY_FIRSTNAME, User::PROPERTY_LASTNAME)
+            );
         }
 
         $conditions[] = new InCondition(User::PROPERTY_ID, $user_ids);
@@ -162,7 +178,7 @@ class XmlCourseUserFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
 
         if ($exclude)
         {
-            if (! is_array($exclude))
+            if (!is_array($exclude))
             {
                 $exclude = array($exclude);
             }
@@ -175,7 +191,9 @@ class XmlCourseUserFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
                 $exclude_condition = new NotCondition(
                     new EqualityCondition(
                         new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
-                        new StaticConditionVariable($id[1])));
+                        new StaticConditionVariable($id[1])
+                    )
+                );
 
                 $exclude_conditions[] = $exclude_condition;
             }
@@ -199,13 +217,12 @@ class XmlCourseUserFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
         }
 
         return \Chamilo\Core\User\Storage\DataManager::retrieves(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            new DataClassRetrievesParameters(
-                $condition,
-                null,
-                null,
-                array(
+            User::class_name(), new DataClassRetrievesParameters(
+                $condition, null, null, array(
                     new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))));
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)
+                )
+            )
+        );
     }
 }

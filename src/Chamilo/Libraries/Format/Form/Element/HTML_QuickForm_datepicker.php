@@ -97,13 +97,42 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
     }
 
     /**
-     * HTML code to display this datepicker
+     * Export the date value in MySQL format
+     *
+     * @return string YYYY-MM-DD HH:II:SS
      */
-    public function toHtml()
+    public function exportValue()
     {
-        $js = $this->getElementJS();
+        $values = parent::getValue();
+        $y = $values['Y'][0];
+        $m = $values['F'][0];
+        $d = $values['d'][0];
+        $h = $values['H'][0];
+        $i = $values['i'][0];
+        $m = $m < 10 ? '0' . $m : $m;
+        $d = $d < 10 ? '0' . $d : $d;
+        $h = $h < 10 ? '0' . $h : $h;
+        $i = $i < 10 ? '0' . $i : $i;
 
-        return $js . parent::toHtml();
+        if ($this->include_time_picker)
+        {
+            $datetime = $y . '-' . $m . '-' . $d . ' ' . $h . ':' . $i . ':00';
+        }
+        else
+        {
+            $datetime = $y . '-' . $m . '-' . $d;
+        }
+
+        if (strpos($this->getName(), '[') !== false)
+        {
+            parse_str($this->getName() . '=' . urlencode($datetime), $result);
+        }
+        else
+        {
+            $result[$this->getName()] = $datetime;
+        }
+
+        return $result;
     }
 
     /**
@@ -112,13 +141,14 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
      */
     public function getElementJS()
     {
-        $js = "\n";
+        $js = PHP_EOL;
         $js .= '<script src="';
         $js .= Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js';
         $js .= '" type="text/javascript"></script>';
-        $js .= "\n";
+        $js .= PHP_EOL;
         $js .= '<script type="text/javascript">';
-        $js .= 'var path = \'' . Path::getInstance()->namespaceToFullPath('Chamilo\Configuration', true) . '\';' . "\n";
+        $js .= 'var path = \'' . Path::getInstance()->namespaceToFullPath('Chamilo\Configuration', true) . '\';' .
+            PHP_EOL;
         $js .= 'var max_year="' . (date('Y') + 10) . '";';
         $js .= '</script>';
 
@@ -156,10 +186,22 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
             $arr = explode('-', date('w-j-n-Y-g-G-i-s-a-A-W', (int) $value));
 
             $value = array(
-                'D' => $arr[0], 'l' => $arr[0], 'd' => $arr[1], 'M' => $arr[2], 'm' => $arr[2], 'F' => $arr[2],
-                'Y' => $arr[3], 'y' => $arr[3], 'h' => $arr[4], 'g' => $arr[4], 'H' => $arr[5],
-                'i' => $this->_trimLeadingZeros($arr[6]), 's' => $this->_trimLeadingZeros($arr[7]), 'a' => $arr[8],
-                'A' => $arr[9], 'W' => $this->_trimLeadingZeros($arr[10])
+                'D' => $arr[0],
+                'l' => $arr[0],
+                'd' => $arr[1],
+                'M' => $arr[2],
+                'm' => $arr[2],
+                'F' => $arr[2],
+                'Y' => $arr[3],
+                'y' => $arr[3],
+                'h' => $arr[4],
+                'g' => $arr[4],
+                'H' => $arr[5],
+                'i' => $this->_trimLeadingZeros($arr[6]),
+                's' => $this->_trimLeadingZeros($arr[7]),
+                'a' => $arr[8],
+                'A' => $arr[9],
+                'W' => $this->_trimLeadingZeros($arr[10])
             );
         }
         else
@@ -171,41 +213,12 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
     }
 
     /**
-     * Export the date value in MySQL format
-     *
-     * @return string YYYY-MM-DD HH:II:SS
+     * HTML code to display this datepicker
      */
-    public function exportValue()
+    public function toHtml()
     {
-        $values = parent::getValue();
-        $y = $values['Y'][0];
-        $m = $values['F'][0];
-        $d = $values['d'][0];
-        $h = $values['H'][0];
-        $i = $values['i'][0];
-        $m = $m < 10 ? '0' . $m : $m;
-        $d = $d < 10 ? '0' . $d : $d;
-        $h = $h < 10 ? '0' . $h : $h;
-        $i = $i < 10 ? '0' . $i : $i;
+        $js = $this->getElementJS();
 
-        if ($this->include_time_picker)
-        {
-            $datetime = $y . '-' . $m . '-' . $d . ' ' . $h . ':' . $i . ':00';
-        }
-        else
-        {
-            $datetime = $y . '-' . $m . '-' . $d;
-        }
-
-        if (strpos($this->getName(), '[') !== false)
-        {
-            parse_str($this->getName() . '=' . urlencode($datetime), $result);
-        }
-        else
-        {
-            $result[$this->getName()] = $datetime;
-        }
-
-        return $result;
+        return $js . parent::toHtml();
     }
 }

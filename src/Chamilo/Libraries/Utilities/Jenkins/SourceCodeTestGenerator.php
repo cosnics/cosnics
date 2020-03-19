@@ -129,7 +129,7 @@ class CheckSourceCodeTest extends \libraries\architecture\test\source\CheckSourc
 
         if (!file_exists($path) && is_dir($php_class_path))
         {
-            echo $context . "\n";
+            echo $context . PHP_EOL;
             Filesystem::write_to_file($path, $content, false);
         }
     }

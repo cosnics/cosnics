@@ -71,7 +71,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         $glyph = new FontAwesomeGlyph('folder', array('fa-lg', 'fa-fw'), null, 'fas');
 
         return $this->renderResult(
-            Translation::get('Folders'), $result->get_success(), implode('<br />' . "\n", $result->get_messages()),
+            Translation::get('Folders'), $result->get_success(), implode('<br />' . PHP_EOL, $result->get_messages()),
             $glyph
         );
     }
@@ -100,7 +100,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         $glyph = new NamespaceIdentGlyph($result->get_context(), true, false, false, Theme::ICON_SMALL, array('fa-fw'));
 
         return $this->renderResult(
-            $title, $result->get_success(), implode('<br />' . "\n", $result->get_messages()), $glyph
+            $title, $result->get_success(), implode('<br />' . PHP_EOL, $result->get_messages()), $glyph
         );
     }
 
@@ -132,7 +132,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
 
         return $this->renderResult(
             Translation::get('Configuration'), $result->get_success(),
-            implode('<br />' . "\n", $result->get_messages()), $glyph
+            implode('<br />' . PHP_EOL, $result->get_messages()), $glyph
         );
     }
 
@@ -145,7 +145,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         $glyph = new FontAwesomeGlyph('database', array('fa-lg', 'fa-fw'), null, 'fas');
 
         return $this->renderResult(
-            Translation::get('Database'), $result->get_success(), implode('<br />' . "\n", $result->get_messages()),
+            Translation::get('Database'), $result->get_success(), implode('<br />' . PHP_EOL, $result->get_messages()),
             $glyph
         );
     }

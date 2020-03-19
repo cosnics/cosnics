@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
@@ -12,11 +13,10 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -26,17 +26,17 @@ use Chamilo\Libraries\Utilities\Utilities;
 class CourseGroupSubscriptionsForm extends FormValidator
 {
 
+    /**
+     * @var CourseGroupDecoratorsManager
+     */
+    protected $courseGroupDecoratorsManager;
+
     private $parent;
 
     /**
      * @var CourseGroup
      */
     private $course_group;
-
-    /**
-     * @var CourseGroupDecoratorsManager
-     */
-    protected $courseGroupDecoratorsManager;
 
     public function __construct(
         $course_group, $action, $parent, CourseGroupDecoratorsManager $courseGroupDecoratorsManager
@@ -54,9 +54,9 @@ class CourseGroupSubscriptionsForm extends FormValidator
     {
         $searchUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT => 'Chamilo\Application\Weblcms\Ajax',
+                Application::PARAM_CONTEXT                              => 'Chamilo\Application\Weblcms\Ajax',
                 \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_XML_COURSE_USER_GROUP_FEED,
-                \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $this->parent->get_course_id()
+                Manager::PARAM_COURSE                                   => $this->parent->get_course_id()
             )
         );
 
@@ -64,29 +64,23 @@ class CourseGroupSubscriptionsForm extends FormValidator
             'index.php?go=XmlCourseUserGroupFeed&application=Chamilo%5CApplication%5CWeblcms%5CAjax&course=' .
             $this->parent->get_course_id();
 
-        // Path :: getInstance()->getBasePath(true) .
-        // 'application/weblcms/php/xml_feeds/xml_course_user_group_feed.php?course=' . $this->parent->get_course_id();
-
         $course_group_users = DataManager::retrieve_course_group_users($this->course_group->get_id());
         $defaults = array();
         $current = array();
 
         if ($course_group_users)
         {
+            $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
             while ($course_group_user = $course_group_users->next_result())
             {
                 $current[$course_group_user->get_id()] = array(
-                    'id' => 'user_' . $course_group_user->get_id(),
-                    'title' => Utilities::htmlentities($course_group_user->get_fullname()),
+                    'id'          => 'user_' . $course_group_user->get_id(),
+                    'title'       => Utilities::htmlentities($course_group_user->get_fullname()),
                     'description' => Utilities::htmlentities($course_group_user->get_username()),
-                    'classes' => 'type type_user', 'sort_name' => $course_group_user->get_lastname()
+                    'classes'     => $glyph->getClassNamesString(),
+                    'sort_name'   => $course_group_user->get_lastname()
                 );
-
-                // $defaults[$course_group_user->get_id()] = array('title' =>
-                // htmlspecialchars($course_group_user->get_fullname()),
-                // 'description' =>
-                // htmlspecialchars($course_group_user->get_username()), 'class' =>
-                // 'user');
             }
         }
 
@@ -293,7 +287,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
             );
             $parameters = new DataClassRetrievesParameters($condition);
             $users_to_add = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), $parameters
+                User::class_name(), $parameters
             )->as_array();
             $succes &= $this->course_group->subscribe_users($users_to_add);
 

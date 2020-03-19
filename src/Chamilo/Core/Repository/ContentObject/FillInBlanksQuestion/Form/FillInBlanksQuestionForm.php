@@ -335,9 +335,9 @@ class FillInBlanksQuestionForm extends ContentObjectForm
             // build table
             $html[] = '<tr>';
             $html[] = '<td>' . ($answer->get_position() + 1) . '</td>';
-            $html[] = '<td>' . str_replace("\n", '<br/>', $answer->get_value()) . '</td>';
-            $html[] = '<td>' . str_replace("\n", '<br/>', $answer->get_comment()) . ' </td>';
-            $html[] = '<td>' . str_replace("\n", '<br/>', $answer->get_hint()) . ' </td>';
+            $html[] = '<td>' . str_replace(PHP_EOL, '<br/>', $answer->get_value()) . '</td>';
+            $html[] = '<td>' . str_replace(PHP_EOL, '<br/>', $answer->get_comment()) . ' </td>';
+            $html[] = '<td>' . str_replace(PHP_EOL, '<br/>', $answer->get_hint()) . ' </td>';
             $html[] = '<td>' . $answer_score . '</td>';
             $html[] = '</tr>';
         }

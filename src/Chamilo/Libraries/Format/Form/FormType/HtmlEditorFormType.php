@@ -19,9 +19,44 @@ class HtmlEditorFormType extends AbstractType
 
     /**
      *
-     * @see \Symfony\Component\Form\AbstractType::setDefaultOptions()
+     * @param \Symfony\Component\Form\FormView $view
+     * @param \Symfony\Component\Form\FormInterface $form
+     *
+     * @param array $options
+     *
+     * @see \Symfony\Component\Form\AbstractType::buildView()
+     *
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $label = !empty($view->vars['label']) ? $view->vars['label'] : Translation::get($view->vars['name']);
+
+        $html_editor = new FormValidatorHtmlEditor(
+            $view->vars['full_name'], $label, false, $options['html_editor_options'], $options['html_editor_attributes']
+        );
+
+        $javascript = array();
+
+        $includes = $html_editor->get_includes();
+        foreach ($includes as $include)
+        {
+            if (!empty($include))
+            {
+                $javascript[] = $include;
+            }
+        }
+
+        $javascript = array_merge($javascript, $html_editor->get_javascript());
+
+        $view->vars['html_editor_javascript'] = implode(PHP_EOL, $javascript);
+    }
+
+    /**
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
+     *
+     * @see \Symfony\Component\Form\AbstractType::setDefaultOptions()
+     *
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -35,37 +70,6 @@ class HtmlEditorFormType extends AbstractType
 
         $resolver->setAllowedTypes('html_editor_options', array('array'));
         $resolver->setAllowedTypes('html_editor_attributes', array('array'));
-    }
-
-    /**
-     *
-     * @see \Symfony\Component\Form\AbstractType::buildView()
-     *
-     * @param \Symfony\Component\Form\FormView $view
-     * @param \Symfony\Component\Form\FormInterface $form
-     *
-     * @param array $options
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        $label = ! empty($view->vars['label']) ? $view->vars['label'] : Translation::get($view->vars['name']);
-
-        $html_editor = new FormValidatorHtmlEditor($view->vars['full_name'], $label, false, $options['html_editor_options'], $options['html_editor_attributes']);
-
-        $javascript = array();
-
-        $includes = $html_editor->get_includes();
-        foreach ($includes as $include)
-        {
-            if (! empty($include))
-            {
-                $javascript[] = $include;
-            }
-        }
-
-        $javascript = array_merge($javascript, $html_editor->get_javascript());
-
-        $view->vars['html_editor_javascript'] = implode("\n", $javascript);
     }
 
     /**
