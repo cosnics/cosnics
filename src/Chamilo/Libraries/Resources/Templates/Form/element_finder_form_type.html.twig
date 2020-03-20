@@ -1,53 +1,69 @@
 {% block element_finder_widget %}
     {% spaceless %}
-        <button id="{{ id }}_expand_button" class="normal select" {% if not collapsed %}style="display:none;"{% endif %}>{{ translations.show }}</button>
-        <div class="element_finder" id="{{ id }}" style="margin-top: 5px;" >
+        <div class="element_finder row" id="{{ id }}" style="margin-top: 5px;">
 
-            <input type="hidden" name="{{ full_name }}" id="hidden_active_elements" />
+            <div class="col-lg-3">
+                <input type="hidden" name="{{ full_name }}" id="hidden_active_elements"/>
 
-            <div class="element_finder_types">
-                <select name="" id="element_types_selector">
-                    <option value="-1">-- {{ translations.select_element_type }} --</option>
-                    {% for option_value, option_label in element_types_selector %}
-                        <option value="{{ option_value }}">{{ option_label }}</option>
-                    {% endfor %}
-                </select>
+                <div class="element_finder_types">
+                    <div class="form-group">
+                        <select name="" id="element_types_selector" class="form-control">
+                            <option value="-1">-- {{ translations.select_element_type }} --</option>
+                            {% for option_value, option_label in element_types_selector %}
+                                <option value="{{ option_value }}">{{ option_label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="element_finder_container">
+            <div class="col-lg-4">
 
-                <div class="element_finder_search">
-                    <input type="text" class="element_query" id="search_field" name="" />
-                    <button id="{{ id }}_collapse_button" class="normal hide mini" {% if collapsed %}style="display:none;"{% endif %}>{{ translations.hide }}</button>
+                <div class="element_finder_search form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="fas fa-search"></span></span>
+                        <input type="text" class="element_query" id="search_field" name=""/>
+                    </div>
                 </div>
 
                 <div class="clear"></div>
 
-                <div class="element_finder_elements">
 
-                    <div class="element_finder_inactive">
-                        <div id="inactive_elements" class="inactive_elements" style="height: {{ height }}px; width: {{ width }}px; overflow: auto;"></div>
-                        <div class="clear"></div>
-                    </div>
-
-                    <div class="element_finder_buttons" style="height: {{ height }}px;">
-                        <div class="element_finder_buttons_container">
-                            <input type="button" id="activate_button" class="activate_elements" name="{{ id }}_activate"></button>
-                            <br />
-                            <input type="button" id="deactivate_button" class="deactivate_elements" name="{{ id }}_deactivate"></button>
-                        </div>
-                    </div>
-
-                    <div class="element_finder_active">
-                        <div id="active_elements" class="active_elements" style="height: {{ height }}px; width: {{ width }}px; overflow: auto;"></div>
-                        <div class="clear"></div>
-                    </div>
-
+                <div class="element_finder_inactive">
+                    <div id="inactive_elements" class="inactive_elements"
+                         style="height: {{ height }}px; width: {{ width }}px; overflow: auto;"></div>
                     <div class="clear"></div>
                 </div>
 
-               <div class="clear"></div>
             </div>
+
+            <div class="col-lg-1">
+
+                <div class="element_finder_buttons" style="height: {{ height }}px;">
+                    <div class="element_finder_buttons_container">
+                        <input type="button" id="activate_button" class="activate_elements"
+                               name="{{ id }}_activate"></button>
+                        <br/>
+                        <input type="button" id="deactivate_button" class="deactivate_elements"
+                               name="{{ id }}_deactivate"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="element_finder_active">
+                    <div id="active_elements" class="active_elements"
+                         style="height: {{ height }}px; width: {{ width }}px; overflow: auto;"></div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="clear"></div>
+        </div>
 
         </div>
 
@@ -59,7 +75,9 @@
         {% endif %}
 
         <script type="text/javascript">
-            $("#{{ id }}").advelementfinder({ name: "{{ id }}", elementTypes: {{ element_types|raw }}, {{ default_values_string|raw }}{{ configuration_json|raw }} });
+            $("#{{ id }}").advelementfinder({
+                name: "{{ id }}",
+                elementTypes: {{ element_types|raw }}, {{ default_values_string|raw }}{{ configuration_json|raw }} });
         </script>
     {% endspaceless %}
 {% endblock %}

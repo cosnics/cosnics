@@ -44,12 +44,6 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
 
     /**
      *
-     * @var boolean
-     */
-    private $default_collapsed;
-
-    /**
-     *
      * @var integer
      */
     private $height;
@@ -215,7 +209,7 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
         $this->_elements[] = new HTML_QuickForm_hidden($this->getName());
         $this->_elements[] = new HTML_QuickForm_text(
             $this->getName() . '_search', null,
-            array('class' => 'element_query', 'id' => $this->getName() . '_search_field')
+            array('class' => 'element_query form-control', 'id' => $this->getName() . '_search_field')
         );
     }
 
@@ -302,33 +296,6 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
 
     /**
      *
-     * @return boolean
-     */
-    public function isCollapsed()
-    {
-        return $this->isDefaultCollapsed() && !count($this->getValue());
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function isDefaultCollapsed()
-    {
-        return $this->default_collapsed;
-    }
-
-    /**
-     *
-     * @param boolean $defaultCollapsed
-     */
-    public function setDefaultCollapsed($defaultCollapsed)
-    {
-        $this->default_collapsed = $defaultCollapsed;
-    }
-
-    /**
-     *
      * @param integer[] $defaults
      */
     public function setDefaults($defaults)
@@ -346,8 +313,8 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
     }
 
     /**
-     *
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function toHTML()
     {
@@ -385,67 +352,34 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
             Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
         );
 
-        if ($this->isCollapsed())
-        {
-            $html[] = '<button id="' . $this->getName() . '_expand_button" class="normal select">' . htmlentities(
-                    $this->locale['Display']
-                ) . '</button>';
-        }
-        else
-        {
-            $html[] =
-                '<button id="' . $this->getName() . '_expand_button" style="display: none" class="normal select">' .
-                htmlentities(
-                    $this->locale['Display']
-                ) . '</button>';
-        }
-
         $id = 'tbl_' . $this->getName();
 
-        $html[] = '<div class="element_finder" id="' . $id . '" style="margin-top: 5px;' .
-            ($this->isCollapsed() ? ' display: none;' : '') . '">';
+        $html[] = '<div class="element_finder row" id="' . $id . '">';
+
+        $html[] = '<div class="col-sm-12">';
 
         // Search
-        $html[] = '<div class="element_finder_search">';
+        $html[] = '<div class="element_finder_search form-group">';
+        $html[] = '<div class="input-group">';
+        $html[] = '<span class="input-group-addon"><span class="fas fa-search"></span></span>';
 
         $this->_elements[1]->setValue('');
         $html[] = $this->_elements[1]->toHTML();
 
-        if ($this->isCollapsed())
-        {
-            $html[] =
-                '<button id="' . $this->getName() . '_collapse_button" style="display: none" class="normal hide">' .
-                htmlentities(
-                    Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)
-                ) . '</button>';
-        }
-        else
-        {
-            $html[] = '<button id="' . $this->getName() . '_collapse_button" class="normal hide mini">' . htmlentities(
-                    Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)
-                ) . '</button>';
-        }
-
         $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
+        $html[] = '</div>';
 
         // The elements
-        $html[] = '<div class="element_finder_elements">';
 
         // Inactive
-        $html[] = '<div class="element_finder_inactive">';
-        $html[] = '<div id="elf_' . $this->getName() . '_inactive" class="inactive_elements" style="height: ' .
-            $this->getHeight() . 'px; width: ' . $this->getWidth() . 'px; overflow: auto;">';
+        $html[] = '<div class="element_finder_inactive form-group">';
+        $html[] =
+            '<div id="elf_' . $this->getName() . '_inactive" class="inactive_elements form-control" style="height: ' .
+            $this->getHeight() . 'px; overflow: auto;">';
         $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-
-        // Make sure the elements are all within the div.
-        $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
 
-        // Make sure everything is within the general div.
-        $html[] = '<div class="clear"></div>';
+        $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
 

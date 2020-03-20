@@ -207,7 +207,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         $this->entities = $entities;
 
-        $this->addElement('html', '<div style="margin-left:25px; display:none;" class="entity_selector_box">');
+        $this->addElement('html', '<div style="display:none;" class="entity_selector_box">');
         $this->addElement('advanced_element_finder', $targets_name, null, $types);
 
         $this->addElement('html', '</div></div>');

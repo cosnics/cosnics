@@ -81,14 +81,6 @@ dropzoneCallbacks.chamilo.core.repository.importImage = {
                 }).success(function (json) {
                     setSelectedImage(json.properties);
                 });
-                //
-                // imageProperties =
-                // doAjaxPost("./core/repository/php/ajax/image_properties.php",
-                // {
-                // content_object : contentObjectId
-                // });
-                // imageProperties = eval('(' + imageProperties + ')');
-                // setSelectedImage(imageProperties);
             }
 
             function resetImage(ev, ui) {
@@ -99,7 +91,7 @@ dropzoneCallbacks.chamilo.core.repository.importImage = {
             }
 
             function collapseItem(e) {
-                $("ul:first", $(this).parent()).hide();
+                // $("ul:first", $(this).parent()).hide();
                 if ($(this).hasClass("lastCollapse")) {
                     $(this).removeClass("lastCollapse");
                     $(this).addClass("lastExpand");

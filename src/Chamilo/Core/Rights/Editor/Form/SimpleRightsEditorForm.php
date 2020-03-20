@@ -173,7 +173,7 @@ class SimpleRightsEditorForm extends FormValidator
             $types->add_element_type($entity->get_element_finder_type());
         }
 
-        $this->addElement('html', '<div style="margin-left:25px; display:none;" class="entity_selector_box">');
+        $this->addElement('html', '<div style="display:none;" class="entity_selector_box">');
         $this->addElement('advanced_element_finder', self::PROPERTY_TARGETS . '_' . $right_id, null, $types);
 
         $this->addElement('html', '</div></div>');

@@ -1,76 +1,83 @@
 {
-	"name" : "cosnics/cosnics",
-	"description" : "Cosnics",
-	"license" : "MIT",
-	"keywords" : [
-		"ELO",
-		"LCMS",
-		"Cosnics"
-	],
-	"support" : {
-		"source" : "https://github.com/cosnics/cosnics",
-		"issues" : "https://github.com/cosnics/cosnics/issues"
-	},
-	"minimum-stability" : "dev",
-	"prefer-stable" : true,
-	"require" : {
-		"php" : ">=7.2.0",
-		"adodb/adodb-php": "5.*",
-		"chamilo/pear-libraries" : "*",
-		"doctrine/cache" : "1.10.*",
-		"doctrine/dbal" : "2.10.*",
-		"doctrine/migrations" : "1.8.1",
-		"doctrine/orm" : "2.6.1",
-		"google/apiclient" : "1.*",
-		"guzzlehttp/guzzle" : "6.5.*",
-		"jms/serializer" : "1.12.1",
-		"monolog/monolog" : "1.23.0",
-		"symfony/cache" : "^4.4",
-		"symfony/config" : "^4.4",
-		"symfony/console" : "^4.4",
-		"symfony/dependency-injection" : "^4.4",
-		"symfony/event-dispatcher" : "^4.4",
-		"symfony/finder" : "^4.4",
-		"symfony/form" : "^4.4",
-		"symfony/http-foundation" : "^4.4",
-		"symfony/http-kernel" : "^4.4",
-		"symfony/translation" : "^4.4",
-		"symfony/twig-bridge" : "^4.4",
-		"symfony/validator" : "^4.4",
-		"symfony/yaml" : "^4.4",
-		"twig/twig": "2.*",
-		"kriswallsmith/assetic": "^1.4"
-	},
-	"require-dev" : {
-		"behat/behat" : "*",
-		"behat/mink" : "*",
-		"behat/mink-extension" : "*",
-		"behat/mink-goutte-driver" : "*",
-		"composer/composer" : "*@dev",
-		"fabpot/goutte" : "^3",
-		"nelmio/alice" : "^3.0@RC",
-		"phpunit/phpunit" : "7.2.6",
-		"phpstan/phpstan" : "0.11"
-	},
-	"repositories" : [{
-			"type" : "vcs",
-			"url" : "https://github.com/cosnics/pear-libraries"
-		}
-	],
-	"autoload" : {
-		"psr-4" : {
-			"Chamilo\\" : "src/Chamilo/"
-		}
-	},
-	"config" : {
-		"bin-dir" : "bin/"
-	},
-	"scripts" : {
-		"pre-install-cmd" : "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
-		"pre-update-cmd" : "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
-		"post-update-cmd" : "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
-		"post-install-cmd" : "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
-		"new-post-update-cmd" : "@php console chamilo:process_resources",
-		"new-post-install-cmd" : "@php console chamilo:process_resources"
-	}
+    "name": "cosnics/cosnics",
+    "description": "Cosnics",
+    "license": "MIT",
+    "keywords": [
+        "ELO",
+        "LCMS",
+        "Cosnics"
+    ],
+    "support": {
+        "source": "https://github.com/cosnics/cosnics",
+        "issues": "https://github.com/cosnics/cosnics/issues"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.2.0",
+        "adodb/adodb-php": "5.*",
+        "chamilo/pear-libraries": "*",
+        "doctrine/cache": "1.10.*",
+        "doctrine/dbal": "2.10.*",
+        "doctrine/migrations": "1.8.1",
+        "doctrine/orm": "2.6.1",
+        "google/apiclient": "1.*",
+        "guzzlehttp/guzzle": "6.5.*",
+        "jms/serializer": "1.12.1",
+        "monolog/monolog": "1.23.0",
+        "symfony/cache": "^4.4",
+        "symfony/config": "^4.4",
+        "symfony/console": "^4.4",
+        "symfony/dependency-injection": "^4.4",
+        "symfony/event-dispatcher": "^4.4",
+        "symfony/finder": "^4.4",
+        "symfony/form": "^4.4",
+        "symfony/http-foundation": "^4.4",
+        "symfony/http-kernel": "^4.4",
+        "symfony/translation": "^4.4",
+        "symfony/twig-bridge": "^4.4",
+        "symfony/validator": "^4.4",
+        "symfony/yaml": "^4.4",
+        "twig/twig": "2.*",
+        "kriswallsmith/assetic": "^1.4"
+    },
+    "require-dev": {
+        "behat/behat": "*",
+        "behat/mink": "*",
+        "behat/mink-extension": "*",
+        "behat/mink-goutte-driver": "*",
+        "composer/composer": "*@dev",
+        "fabpot/goutte": "^3",
+        "nelmio/alice": "^3.0@RC",
+        "phpunit/phpunit": "7.2.6",
+        "phpstan/phpstan": "0.11"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/cosnics/pear-libraries"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Chamilo\\": "src/Chamilo/"
+        },
+        "classmap": [
+            "src/Chamilo/Libraries/Format/Form/Element/"
+        ],
+        "exclude-from-classmap": [
+            "src/Chamilo/Libraries/Format/Form/Element/AdvancedElementFinder"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin/"
+    },
+    "scripts": {
+        "pre-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
+        "pre-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
+        "post-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
+        "post-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
+        "new-post-update-cmd": "@php console chamilo:process_resources",
+        "new-post-install-cmd": "@php console chamilo:process_resources"
+    }
 }

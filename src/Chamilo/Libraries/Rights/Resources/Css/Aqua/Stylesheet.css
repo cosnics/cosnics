@@ -132,3 +132,7 @@ ul.rights_children img, ul.rights_parents img, ul.rights_siblings img {
 ul.rights_children li span, ul.rights_parents li span, ul.rights_siblings li span {
     margin: 0px 0px 0px 4px;
 }
+
+.entity_selector_box {
+    margin-left: 30px;
+}

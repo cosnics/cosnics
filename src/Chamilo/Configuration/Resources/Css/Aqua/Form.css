@@ -346,18 +346,9 @@ div.form_splitter span.category {
  * ----------------------------------------- *
  * Don't change unless you have a death wish *
  *********************************************/
-.element_finder_inactive {
-    margin-right: 5px;
-}
-
 .active_elements, .inactive_elements {
     background-color: #f5f5f5;
     border: 1px solid #dedede;
-    padding: 2px 4px 2px 4px;
-    /*****************
-     * width: 294px; *
-     *****************/
-    width: 310px;
 }
 
 .active_elements:hover, .active_elements:focus, .inactive_elements:hover,
@@ -366,95 +357,8 @@ div.form_splitter span.category {
     border: 1px solid #4171B5;
 }
 
-input[type=text].element_query {
-    /*****************
-        * width: 278px; *
-        *****************/
-    width: 276px;
-    background-image: url('../../Images/Aqua/Buttons/Search.png');
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
-    padding: 2px 4px 2px 20px;
-    margin-right: 5px;
-}
-
-input[type=button].activate_elements, input[type=button].deactivate_elements {
-    background-color: #f5f5f5;
-    background-repeat: no-repeat;
-    background-position: center;
-    border: 1px solid #dedede;
-    border-top: 1px solid #eeeeee;
-    border-left: 1px solid #eeeeee;
-    text-decoration: none;
-    font-weight: bold;
-    color: #565656;
-    cursor: pointer;
-    padding: 0px;
-    width: 32px;
-    height: 29px;
-    margin: 2px 0px 2px -5px;
-}
-
-input[type=button].activate_elements {
-    background-image: url('../../Images/Aqua/Buttons/ActivateElement.png');
-}
-
-input[type=button].activate_elements.disabled {
-    cursor: default;
-    background-image: url('../../Images/Aqua/Buttons/ActivateElementNa.png');
-}
-
-input[type=button].deactivate_elements {
-    background-image: url('../../Images/Aqua/Buttons/DeactivateElement.png');
-}
-
-input[type=button].activate_elements:not (.disabled ):hover, input[type=button].deactivate_elements:hover {
-    background-color: #dff4ff;
-    border: 1px solid #c2e1ef;
-    color: #336699;
-}
-
-input[type=button].activate_elements:not (.disabled ):active, input[type=button].deactivate_elements:active {
-    background-color: #6299c5;
-    border: 1px solid #6299c5;
-    color: #ffffff;
-}
-
-div.element_finder {
-    margin: 0px;
-    padding: 0px;
-}
-
-div.element_finder_search {
-    margin-bottom: 5px;
-}
-
-div.element_finder_active, div.element_finder_buttons, div.element_finder_inactive {
-    float: left;
-}
-
 div.element_finder_buttons {
-    padding: 3px 0px 3px 0px;
-}
-
-div.element_finder_buttons_container {
-    margin: -31px 10px 0 10px;
-    position: relative;
-    top: 50%;
-}
-
-div.element_finder_types, div.element_finder_container {
-    float: left;
-    margin-right: 10px;
-}
-
-div.element_finder_types div.filter_box {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-div.element_finder button.hide {
-    float: right;
+    text-align: center;
 }
 
 #selected_image {
@@ -462,20 +366,23 @@ div.element_finder button.hide {
     margin-bottom: 5px;
 }
 
-div.element_finder div.inactive_elements div.previous_elements {
-    height: 20px;
-    border-bottom: 1px solid #B9D0EF;
-    background: url('../../Images/Aqua/Action/Up.png') center center no-repeat #E5EDF9;
-    margin: -2px -4px 5px -4px;
+div.element_finder div.inactive_elements div.previous_elements, div.element_finder div.inactive_elements div.next_elements {
+    padding: 4px;
     cursor: pointer;
+    margin-right: -12px;
+    margin-left: -12px;
+    text-align: center;
+}
+
+div.element_finder div.inactive_elements div.previous_elements {
+    margin-top: -6px;
+    margin-bottom: 6px;
+
 }
 
 div.element_finder div.inactive_elements div.next_elements {
-    height: 20px;
-    border-top: 1px solid #B9D0EF;
-    background: url('../../Images/Aqua/Action/Down.png') center center no-repeat #E5EDF9;
-    margin: 5px -4px -2px -4px;
-    cursor: pointer;
+    margin-top: 6px;
+    margin-bottom: -6px;
 }
 
 /**********************
@@ -652,7 +559,7 @@ input#rights_templates_expand_button :hover {
 
 input#rights_templates_collapse_button {
     border: 0;
-	background: transparent url(../../Images/Aqua/Action/Rights.png) no-repeat 0 50%;
+    background: transparent url(../../Images/Aqua/Action/Rights.png) no-repeat 0 50%;
     padding: 0 0 0 18px;
     height: 16px;
     font-weight: bold;
