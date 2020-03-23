@@ -318,8 +318,11 @@ class CourseGroupOffice365Connector
 
     /**
      * @param CourseGroup $courseGroup
+     * @param User $user
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    public function unlinkTeamFromOffice365Group(CourseGroup $courseGroup)
+    public function unlinkTeamFromOffice365Group(CourseGroup $courseGroup, User $user)
     {
         $office365Reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
         if (!$office365Reference)
@@ -333,6 +336,8 @@ class CourseGroupOffice365Connector
         }
 
         $this->courseGroupOffice365ReferenceService->unlinkTeamFromCourseGroupReference($office365Reference);
+
+        $this->unlinkOffice365GroupFromCourseGroup($courseGroup, $user);
     }
 
     /**
@@ -475,6 +480,23 @@ class CourseGroupOffice365Connector
 
             }
         }
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     *
+     * @return bool
+     */
+    public function courseGroupHasTeam(CourseGroup $courseGroup)
+    {
+        $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
+
+        if(!$reference instanceof CourseGroupOffice365Reference)
+        {
+            return false;
+        }
+
+        return $reference->hasTeam();
     }
 
     /**

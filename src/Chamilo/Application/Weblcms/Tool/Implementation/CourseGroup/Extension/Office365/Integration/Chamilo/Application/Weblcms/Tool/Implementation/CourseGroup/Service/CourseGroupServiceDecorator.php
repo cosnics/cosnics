@@ -45,9 +45,15 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function createGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
-        if ($this->usesTeam($formValues))
+        $useTeam = $formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM];
+
+        if($useTeam == CourseGroupFormDecorator::OPTION_REGULAR_TEAM)
         {
             $this->courseGroupOffice365Connector->createGroupAndTeamFromCourseGroup($courseGroup, $user);
+        }
+        if($useTeam == CourseGroupFormDecorator::OPTION_CLASS_TEAM)
+        {
+            $this->courseGroupOffice365Connector->createClassTeamFromCourseGroup($courseGroup, $user);
         }
     }
 
@@ -65,13 +71,16 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function updateGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
-        if ($this->usesTeam($formValues))
+        if($this->courseGroupOffice365Connector->courseGroupHasTeam($courseGroup))
         {
-            $this->courseGroupOffice365Connector->createOrUpdateTeamFromCourseGroup($courseGroup, $user);
+            if(!boolval($formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM]))
+            {
+                $this->courseGroupOffice365Connector->unlinkTeamFromOffice365Group($courseGroup, $user);
+            }
         }
         else
         {
-            $this->courseGroupOffice365Connector->unlinkTeamFromOffice365Group($courseGroup);
+            $this->createGroup($courseGroup, $user, $formValues);
         }
     }
 
