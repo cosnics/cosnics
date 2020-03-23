@@ -54,6 +54,7 @@ abstract class ContentObjectDifference
             $differences[$defaultPropertyName] = new Diff(
                 $this->getVisualDefaultPropertyValue($this->getContentObject(), $defaultPropertyName),
                 $this->getVisualDefaultPropertyValue($this->getContentObjectVersion(), $defaultPropertyName)
+
             );
         }
 
