@@ -45,15 +45,29 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function createGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
-        $useTeam = $formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM];
+        $this->createOrUpdateTeamByChoice($courseGroup, $user, $formValues);
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     * @param User $user
+     * @param array $formValues
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
+     */
+    protected function createOrUpdateTeamByChoice(CourseGroup $courseGroup, User $user, $formValues = [])
+    {
+        $useTeam = $formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM][0];
 
         if($useTeam == CourseGroupFormDecorator::OPTION_REGULAR_TEAM)
         {
-            $this->courseGroupOffice365Connector->createGroupAndTeamFromCourseGroup($courseGroup, $user);
+            $this->courseGroupOffice365Connector->createOrUpdateTeamFromCourseGroup($courseGroup, $user);
         }
         if($useTeam == CourseGroupFormDecorator::OPTION_CLASS_TEAM)
         {
-            $this->courseGroupOffice365Connector->createClassTeamFromCourseGroup($courseGroup, $user);
+            $this->courseGroupOffice365Connector->createOrUpdateClassTeamFromCourseGroup($courseGroup, $user);
         }
     }
 
@@ -71,16 +85,18 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function updateGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
+        $useTeam = boolval($formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM][$courseGroup->getId()]);
+
         if($this->courseGroupOffice365Connector->courseGroupHasTeam($courseGroup))
         {
-            if(!boolval($formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM]))
+            if(!$useTeam)
             {
                 $this->courseGroupOffice365Connector->unlinkTeamFromOffice365Group($courseGroup, $user);
             }
         }
         else
         {
-            $this->createGroup($courseGroup, $user, $formValues);
+            $this->createOrUpdateTeamByChoice($courseGroup, $user, $formValues);
         }
     }
 
@@ -124,13 +140,4 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
         $this->courseGroupOffice365Connector->unsubscribeUser($courseGroup, $user);
     }
 
-    /**
-     * @param array $formValues
-     *
-     * @return bool
-     */
-    protected function usesTeam($formValues = [])
-    {
-        return boolval($formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM]);
-    }
 }
