@@ -45,10 +45,10 @@ class TeamRepository
                 "description" => $description,
                 "owners@odata.bind" => [
                     "https://graph.microsoft.com/beta/users('" . $ownerAzureId . "')"
-                ],
-                null,
-                GraphRepository::API_VERSION_BETA
-            ]
+                ]
+            ],
+            null,
+            GraphRepository::API_VERSION_BETA
         );
 
         //Content-Location: /teams/{teamId}
