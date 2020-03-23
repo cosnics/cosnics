@@ -207,10 +207,12 @@ class RightsService implements RightsServiceInterface
      * @param ContentObjectPublication $publication
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * TODO: Fix this like view right, quick fix now for edit right only. Doesn't take closed categories or tools into account
+     * TODO: this will still cause strange behavior in the publication form because the right to edit the publication and the right to edit
+     * TODO: the content object are mixed here. We should extract these methods from each other and review the rights
      *
      * @return bool
      */
-    public function canUserEditPublication(User $user, ContentObjectPublication $publication, Course $course)
+    public function canUserEditPublicationObject(User $user, ContentObjectPublication $publication, Course $course)
     {
         $hasEditRightOnPublication =
             $this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin();
@@ -227,6 +229,39 @@ class RightsService implements RightsServiceInterface
         }
 
         return $hasEditRightOnPublication && $this->isCollaborationAllowed($publication);
+    }
+
+    /**
+     * @param User $user
+     * @param ContentObjectPublication $publication
+     * @param Course $course
+     *
+     * @return bool
+     */
+    public function canUserEditPublication(User $user, ContentObjectPublication $publication, Course $course)
+    {
+        if($user->is_platform_admin())
+        {
+            return true;
+        }
+
+        if($this->courseService->isUserTeacherInCourse($user, $course))
+        {
+            return true;
+        }
+
+        if($publication->is_identified())
+        {
+            return $this->weblcmsRights->is_allowed_in_courses_subtree(
+                WeblcmsRights::EDIT_RIGHT,
+                $publication->getId(),
+                WeblcmsRights::TYPE_PUBLICATION,
+                $course->getId(),
+                $user->getId()
+            );
+        }
+
+        return false;
     }
 
     /**

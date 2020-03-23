@@ -72,7 +72,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
 
         $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
-        $hasPublicationContentRight = $weblcmsRightsService->canUserEditPublication(
+        $hasPublicationContentRight = $weblcmsRightsService->canUserEditPublicationObject(
             $this->get_user(),
             $this->publication,
             $this->get_application()->get_course());
