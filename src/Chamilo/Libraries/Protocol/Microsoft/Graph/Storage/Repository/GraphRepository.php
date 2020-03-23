@@ -473,7 +473,7 @@ class GraphRepository
      * @param string $returnClass
      *
      * @param string $apiVersion
-     * @return \Microsoft\Graph\Model\Entity A Microsoft Graph Entity-instance of type $returnClass
+     * @return \Microsoft\Graph\Model\Entity | GraphResponse
      * @throws GraphException
      */
     public function executePostWithAccessTokenExpirationRetry($endpoint, $requestBody = [], $returnClass = null, $apiVersion = self::API_VERSION_V1)

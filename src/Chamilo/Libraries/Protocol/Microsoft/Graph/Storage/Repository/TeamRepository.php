@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
+use Microsoft\Graph\Http\GraphResponse;
 use Microsoft\Graph\Model\Team;
 
 /**
@@ -26,8 +27,33 @@ class TeamRepository
         $this->graphRepository = $graphRepository;
     }
 
+    public function createTeam(string $title, string $description, string $ownerAzureId)
+    {
+        $response = $this->graphRepository->executePostWithAccessTokenExpirationRetry(
+              '/teams/',
+            [
+                "template@odata.bind" => "https://graph.microsoft.com/beta/teamsTemplates('educationClass')",
+                "displayName" => $title,
+                "description" => $description,
+                "owners@odata.bind" => [
+                    "https://graph.microsoft.com/beta/users('" . $ownerAzureId . "')"
+                ],
+                null,
+                GraphRepository::API_VERSION_BETA
+            ]
+        );
+
+        //Content-Location: /teams/{teamId}
+        $contentLocationHeader = $response->getHeaders()['Content-Location'];
+        if(!$contentLocationHeader)
+            throw new \Exception("No content location header");
+
+        return substr($contentLocationHeader, 7);
+    }
+
 
     /**
+     * @deprecated
      * @param $groupId
      * @return \Microsoft\Graph\Model\Entity | Team
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
