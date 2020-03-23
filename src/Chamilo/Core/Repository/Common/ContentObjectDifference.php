@@ -58,6 +58,15 @@ abstract class ContentObjectDifference
             );
         }
 
+        foreach ($this->getAdditionalPropertyNames() as $additionalPropertyName)
+        {
+            $differences[$additionalPropertyName] = new Diff(
+                $this->getVisualAdditionalPropertyValue($this->getContentObject(), $additionalPropertyName),
+                $this->getVisualAdditionalPropertyValue($this->getContentObjectVersion(), $additionalPropertyName)
+
+            );
+        }
+
         return $differences;
     }
 
@@ -67,6 +76,14 @@ abstract class ContentObjectDifference
             ClassnameUtilities::getInstance()->getPackageNameFromNamespace($object->package()) . 'Difference';
 
         return new $class($object, $version);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAdditionalPropertyNames()
+    {
+        return $this->getContentObject()->get_additional_property_names();
     }
 
     /**
@@ -83,6 +100,23 @@ abstract class ContentObjectDifference
     public function getContentObjectVersion()
     {
         return $this->contentObjectVersion;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param string $propertyName
+     *
+     * @return string[]
+     */
+    public function getVisualAdditionalPropertyValue(ContentObject $contentObject, string $propertyName)
+    {
+        switch ($propertyName)
+        {
+            default:
+                $content = $contentObject->get_additional_property($propertyName);
+        }
+
+        return explode(PHP_EOL, $content);
     }
 
     /**
