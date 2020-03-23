@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -26,18 +27,18 @@ class VersionDeleterComponent extends Manager
         if ($complex_wiki_page_id)
         {
             $object_id = Request::get(self::PARAM_WIKI_VERSION_ID);
-            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $complex_wiki_page = DataManager::retrieve_by_id(
                 ComplexContentObjectItem::class_name(),
                 $complex_wiki_page_id);
             $wiki_page = $complex_wiki_page->get_ref_object();
 
             if ($object_id)
             {
-                $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $object = DataManager::retrieve_by_id(
                     ContentObject::class_name(),
                     $object_id);
 
-                $delete_allowed = \Chamilo\Core\Repository\Storage\DataManager::content_object_deletion_allowed(
+                $delete_allowed = DataManager::content_object_deletion_allowed(
                     $object,
                     'version');
                 if ($delete_allowed)

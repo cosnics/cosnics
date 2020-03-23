@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -44,7 +45,7 @@ class NodeActionGenerator
     {
         $contentObject = $learningPathTreeNode->getContentObject();
 
-        $subscribed = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager::retrieve_subscribe(
+        $subscribed = DataManager::retrieve_subscribe(
             $contentObject->getId(), Session::get_user_id()
         );
 

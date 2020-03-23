@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\Storage;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
@@ -405,7 +406,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             self::$helper_types = array(
                 'Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem'
-            );;
+            );
         }
 
         return self::$helper_types;
@@ -685,7 +686,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         if (!(self::$registered_types))
         {
-            $registrations = \Chamilo\Configuration\Configuration::registrations_by_type(
+            $registrations = Configuration::registrations_by_type(
                 Manager::package() . '\\ContentObject'
             );
             $types = array();

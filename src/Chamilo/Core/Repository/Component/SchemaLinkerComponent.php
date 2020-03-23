@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
@@ -11,6 +12,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -43,7 +45,7 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
      */
     public function getTargetEntities()
     {
-        $registrations = \Chamilo\Configuration\Configuration::registrations_by_type(
+        $registrations = Configuration::registrations_by_type(
             'Chamilo\Core\Repository\ContentObject');
 
         $entities = array();
@@ -83,7 +85,7 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
 
         if (! $relation instanceof Relation)
         {
-            throw new \Exception(
+            throw new Exception(
                 Translation::get(
                     'RelationNotAvailable',
                     array('TYPE' => 'isAvailableFor'),

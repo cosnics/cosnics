@@ -3,6 +3,8 @@ namespace Chamilo\Core\Repository\Display\Action\Component;
 
 use Chamilo\Core\Repository\Display\Action\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -14,7 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Sven Vanpoucke
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface
+class CreatorComponent extends Manager implements ViewerInterface
 {
 
     public function run()
@@ -52,7 +54,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
                 if ($complex_content_object_item_id)
                 {
-                    $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    $complex_content_object_item = DataManager::retrieve_by_id(
                         ComplexContentObjectItem::class_name(),
                         $complex_content_object_item_id);
                     $cloi->set_parent($complex_content_object_item->get_ref());
@@ -63,7 +65,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                 }
 
                 $cloi->set_display_order(
-                    \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order($cloi->get_parent()));
+                    DataManager::select_next_display_order($cloi->get_parent()));
 
                 $succes = $cloi->create();
                 $this->my_redirect($complex_content_object_item_id, $succes);

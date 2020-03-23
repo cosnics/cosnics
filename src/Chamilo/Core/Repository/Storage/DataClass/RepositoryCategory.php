@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
+use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
@@ -22,7 +23,7 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
  *
  * @author Sven Vanpoucke
  */
-class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory
+class RepositoryCategory extends PlatformCategory
 {
 
     /**

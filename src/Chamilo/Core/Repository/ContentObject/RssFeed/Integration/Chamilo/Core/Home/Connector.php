@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core
 
 use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -20,7 +21,7 @@ class Connector
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
             new StaticConditionVariable(Session::get_user_id()));
         
-        $objects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
+        $objects = DataManager::retrieve_active_content_objects(
             RssFeed::class_name(), 
             $condition);
         

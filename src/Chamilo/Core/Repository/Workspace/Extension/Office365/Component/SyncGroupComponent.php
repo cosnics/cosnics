@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Workspace\Extension\Office365\Manager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Exception;
 
 /**
  * @package Chamilo\Core\Repository\Workspace\Extension\Office365
@@ -26,7 +27,7 @@ class SyncGroupComponent extends Manager
         $workspace = $parentComponent->getWorkspace();
         if (!$workspace instanceof Workspace)
         {
-            throw new \Exception(
+            throw new Exception(
                 'Groups can only be created / visited from within actual workspaces, not from the personal repository'
             );
         }
@@ -38,7 +39,7 @@ class SyncGroupComponent extends Manager
             $message = 'GroupSynced';
 
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
             $success = false;

@@ -15,6 +15,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -77,7 +78,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
                 $context,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             return $this->display_error_page(
                 Translation::get(

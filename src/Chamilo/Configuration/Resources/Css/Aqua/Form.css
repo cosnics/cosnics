@@ -210,50 +210,6 @@ form input.rating_question_high_value {
     background-image: url(../../Images/Aqua/Buttons/High.png);
 }
 
-form .select_question {
-    width: 150px;
-}
-
-form .advanced_select_question select {
-    width: 150px;
-    height: 150px;
-}
-
-form .advanced_select_question input {
-    margin: 0px;
-    background-color: #f5f5f5;
-    border: 1px solid #dedede;
-    border-top: 1px solid #eeeeee;
-    border-left: 1px solid #eeeeee;
-    font-size: 0px;
-    line-height: 100%;
-    text-decoration: none;
-    font-weight: bold;
-    color: #565656;
-    cursor: pointer;
-    height: 24px;
-    width: 30px;
-    overflow: visible;
-    padding: 4px 7px 4px 7px;
-    vertical-align: middle;
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-
-form .advanced_select_question input:hover {
-    background-color: #dff4ff;
-    border: 1px solid #c2e1ef;
-    color: #336699;
-}
-
-form .advanced_select_question input.add {
-    background-image: url('../../Images/Aqua/Buttons/ActivateElement.png');
-}
-
-form .advanced_select_question input.remove {
-    background-image: url('../../Images/Aqua/Buttons/DeactivateElement.png');
-}
-
 a.button {
     background-color: #f5f5f5;
     background-repeat: no-repeat;

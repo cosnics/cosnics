@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Core\Repository\Publication\Service\PublicationResultsRenderer;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetProcessor;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Core\Repository\Publication\PublicationProcessor;
@@ -121,7 +122,7 @@ class PublisherComponent extends Manager implements DelegateComponent
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID)
         );
 
-        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_content_objects(
+        return DataManager::retrieve_content_objects(
             ContentObject::class_name(), new DataClassRetrievesParameters($condition, null, null, $order_by)
         )->as_array();
     }

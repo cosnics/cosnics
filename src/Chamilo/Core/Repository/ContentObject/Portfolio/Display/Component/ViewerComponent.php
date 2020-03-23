@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Core\Repository\Feedback\Generator\ActionsGenerator;
+use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataManager;
@@ -578,7 +579,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             $this->get_parent()->is_allowed_to_create_feedback($this->get_current_node()))
         {
             return $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Feedback\Manager::context(),
+                Manager::context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
             )->run();
         }

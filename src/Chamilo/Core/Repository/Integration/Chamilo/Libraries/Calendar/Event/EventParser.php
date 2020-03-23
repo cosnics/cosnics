@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Abstract base-class for the parsing of content object to renderable calendar events
@@ -168,7 +169,7 @@ abstract class EventParser
         
         if (! $eventClassName)
         {
-            throw new \Exception(
+            throw new Exception(
                 'Please implement a local extension of the Event class in your context (' .
                      ClassnameUtilities::getInstance()->getNamespaceFromClassname($eventClassName) . ')');
         }
@@ -178,7 +179,7 @@ abstract class EventParser
             
             if (! $event instanceof ContentObjectSupport)
             {
-                throw new \Exception(
+                throw new Exception(
                     'Your event class (' . $eventClassName .
                          ') does not seem to support content objects, please implement the EventContentObjectSupport interface');
             }

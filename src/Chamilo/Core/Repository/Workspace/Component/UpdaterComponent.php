@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -58,7 +59,7 @@ class UpdaterComponent extends TabComponent
                     array('OBJECT' => Translation::get('Workspace')), 
                     Utilities::COMMON_LIBRARIES);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();

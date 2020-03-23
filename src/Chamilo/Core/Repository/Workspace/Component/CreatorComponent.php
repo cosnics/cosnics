@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -43,14 +44,14 @@ class CreatorComponent extends TabComponent
                 
                 if (! $success)
                 {
-                    throw new \Exception($message);
+                    throw new Exception($message);
                 }
                 
                 $redirectParameters = array(
                     self::PARAM_ACTION => self::ACTION_RIGHTS, 
                     self::PARAM_WORKSPACE_ID => $workspace->getId());
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();

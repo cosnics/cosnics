@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -19,7 +20,7 @@ class WikiHomepageSetterComponent extends Manager
 
     public function run()
     {
-        $page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $page = DataManager::retrieve_by_id(
             ComplexContentObjectItem::class_name(),
             Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
         /*

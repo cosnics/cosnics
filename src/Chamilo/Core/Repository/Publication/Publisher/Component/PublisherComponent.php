@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\Publication\Publisher\Component;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
 use Chamilo\Core\Repository\Publication\Publisher\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -13,13 +15,14 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use RuntimeException;
 
 /**
  * Publisher component that executes the repo viewer, calls the publication form and executes the publisher handler
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface, DelegateComponent
+class PublisherComponent extends Manager implements ViewerInterface, DelegateComponent
 {
 
     /**
@@ -29,7 +32,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
     {
         if (!$this->getParentApplication() instanceof PublisherSupport)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'To use the publisher application the parent application must implement the ' .
                 '"Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport" interface'
             );
@@ -102,7 +105,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
             );
             $parameters = new DataClassRetrievesParameters($condition);
 
-            return \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
+            return DataManager::retrieve_active_content_objects(
                 ContentObject::class_name(), $parameters
             )->as_array();
         }

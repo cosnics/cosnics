@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -47,7 +48,7 @@ class CreatorComponent extends Manager
                 $translation = $success ? 'RightsSet' : 'RightsNotSet';
                 $message = Translation::get($translation);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();

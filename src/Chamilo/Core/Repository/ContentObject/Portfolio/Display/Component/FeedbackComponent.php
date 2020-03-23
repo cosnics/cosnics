@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
 use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
+use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
@@ -27,7 +28,7 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport, Feedba
         }
 
         $result = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\Feedback\Manager::context(),
+            Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
 
         $html = array();

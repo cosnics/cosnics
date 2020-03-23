@@ -1,12 +1,14 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass;
 
+use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
+
 /**
  * Feedback for a wiki page
  * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class WikiPageFeedback extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
+class WikiPageFeedback extends Feedback
 {
     const PROPERTY_WIKI_PAGE_ID = 'wiki_page_id';
 

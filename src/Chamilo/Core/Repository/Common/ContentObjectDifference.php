@@ -1,75 +1,66 @@
 <?php
 namespace Chamilo\Core\Repository\Common;
 
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 use Diff;
-use Diff_Renderer_Html_SideBySide;
 
 /**
+ * @package Chamilo\Core\Repository\Common
  *
- * @package repository.lib
- */
-
-/**
- * A class to display a ContentObject.
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class ContentObjectDifference
 {
 
     /**
-     * The object.
+     * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
-    private $object;
+    private $contentObject;
 
     /**
-     * The learning object version.
+     * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
-    private $version;
+    private $contentObjectVersion;
 
     /**
-     * Constructor.
-     *
-     * @param $object ContentObject The object to compare.
-     * @param $version ContentObject The object to compare with.
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObjectVersion
      */
-    public function __construct($version, $object)
+    public function __construct(ContentObject $contentObject, ContentObject $contentObjectVersion)
     {
-        $this->object = $object;
-        $this->version = $version;
-    }
-
-    public function render()
-    {
-        $object_string = $this->object->get_description();
-        $object_string = str_replace('<p>', '', $object_string);
-        $object_string = str_replace('</p>', "<br />\n", $object_string);
-        $object_string = explode(PHP_EOL, strip_tags($object_string));
-        $version_string = $this->version->get_description();
-        $version_string = str_replace('<p>', '', $version_string);
-        $version_string = str_replace('</p>', "<br />\n", $version_string);
-        $version_string = explode(PHP_EOL, strip_tags($version_string));
-
-        $difference = new Diff($version_string, $object_string);
-        $renderer = new Diff_Renderer_Html_SideBySide();
-
-        $renderedString = $difference->Render($renderer);
-
-        $translator = Translation::getInstance();
-        $renderedString = str_replace('Old Version', $translator->getTranslation('OldVersion'), $renderedString);
-        $renderedString = str_replace('New Version', $translator->getTranslation('NewVersion'), $renderedString);
-
-        return $renderedString;
+        $this->contentObject = $contentObject;
+        $this->contentObjectVersion = $contentObjectVersion;
     }
 
     /**
-     * Creates an object that can display the given object in a standardized fashion.
-     *
-     * @param $object ContentObject The object to display.
-     *
-     * @return ContentObject
+     * @return \Diff[]
      */
-    public static function factory(&$object, &$version)
+    public function compare()
+    {
+        $defaultPropertyNames = array(
+            ContentObject::PROPERTY_TITLE,
+            ContentObject::PROPERTY_DESCRIPTION,
+            ContentObject::PROPERTY_MODIFICATION_DATE
+        );
+
+        $differences = array();
+
+        foreach ($defaultPropertyNames as $defaultPropertyName)
+        {
+            $differences[$defaultPropertyName] = new Diff(
+                $this->getVisualDefaultPropertyValue($this->getContentObject(), $defaultPropertyName),
+                $this->getVisualDefaultPropertyValue($this->getContentObjectVersion(), $defaultPropertyName)
+            );
+        }
+
+        return $differences;
+    }
+
+    public static function factory(ContentObject $object, ContentObject $version)
     {
         $class = $object->package() . '\\Common\\' .
             ClassnameUtilities::getInstance()->getPackageNameFromNamespace($object->package()) . 'Difference';
@@ -78,22 +69,45 @@ abstract class ContentObjectDifference
     }
 
     /**
-     * Returns the object associated with this object.
-     *
-     * @return ContentObject The object.
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
-    public function get_object()
+    public function getContentObject()
     {
-        return $this->object;
+        return $this->contentObject;
     }
 
     /**
-     * Returns the object associated with this object.
-     *
-     * @return ContentObject The object version.
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
-    public function get_version()
+    public function getContentObjectVersion()
     {
-        return $this->version;
+        return $this->contentObjectVersion;
     }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param string $propertyName
+     *
+     * @return string[]
+     */
+    public function getVisualDefaultPropertyValue(ContentObject $contentObject, string $propertyName)
+    {
+        switch ($propertyName)
+        {
+            case ContentObject::PROPERTY_DESCRIPTION:
+                $content = strip_tags($contentObject->get_description());
+                break;
+            case ContentObject::PROPERTY_MODIFICATION_DATE:
+                $content = DatetimeUtilities::format_locale_date(
+                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+                    $contentObject->get_modification_date()
+                );
+                break;
+            default:
+                $content = $contentObject->getDefaultProperty($propertyName);
+        }
+
+        return explode(PHP_EOL, $content);
+    }
+
 }

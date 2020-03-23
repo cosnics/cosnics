@@ -81,7 +81,6 @@ class BrowserComponent extends Manager implements DelegateComponent
             if ($feedbackCount == 0)
             {
                 $html[] = $this->renderFeedbackButtonToolbar();
-                $html[] = '<div class="clearfix"></div>';
                 $html[] = '<div class="alert alert-info">';
                 $html[] = Translation::get('NoFeedbackYet');
                 $html[] = '</div>';

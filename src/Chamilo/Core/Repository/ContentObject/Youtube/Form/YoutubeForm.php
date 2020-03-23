@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Youtube\Form;
 
 use Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
+use Chamilo\Core\Repository\Instance\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -18,7 +19,7 @@ class YoutubeForm extends ContentObjectForm
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
 
-        $external_repositories = \Chamilo\Core\Repository\Instance\Manager::get_links(array(Youtube::package()), true);
+        $external_repositories = Manager::get_links(array(Youtube::package()), true);
 
         if ($external_repositories)
         {

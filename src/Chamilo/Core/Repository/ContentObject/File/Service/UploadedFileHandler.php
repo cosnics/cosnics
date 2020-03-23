@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\File\Service;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -32,7 +33,7 @@ class UploadedFileHandler
         $file->set_temporary_file_path($uploadedFile->getRealPath());
 
         if (!$file->create()) {
-            throw new \Exception("Could not create file");
+            throw new Exception("Could not create file");
         }
 
         return $file;

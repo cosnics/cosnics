@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -64,7 +65,7 @@ class ComplexWikiPage extends ComplexContentObjectItem
 
             $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
 
-            $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            $children = DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class_name(),
                 $parameters);
 

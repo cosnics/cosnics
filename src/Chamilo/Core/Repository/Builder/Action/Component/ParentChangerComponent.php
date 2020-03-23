@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Builder\Action\Component;
 use Chamilo\Core\Repository\Builder\Action\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -58,7 +59,7 @@ class ParentChangerComponent extends Manager
                 }
                 else
                 {
-                    $parent = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    $parent = DataManager::retrieve_by_id(
                         ComplexContentObjectItem::class_name(),
                         $selected_parent);
                     $parent = $parent->get_ref();
@@ -70,7 +71,7 @@ class ParentChangerComponent extends Manager
                 if ((! $parent_complex_content_object_item && $parent != $root_content_object->get_id()) ||
                      $parent_complex_content_object_item != $selected_parent)
                 {
-                    $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+                    $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
                         ComplexContentObjectItem::class_name(),
                         new InCondition(
                             new PropertyConditionVariable(
@@ -94,7 +95,7 @@ class ParentChangerComponent extends Manager
                         {
                             $complex_content_object_item->set_parent($parent);
                             $complex_content_object_item->set_display_order(
-                                \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order($parent));
+                                DataManager::select_next_display_order($parent));
                             $complex_content_object_item->update();
                         }
                         else
@@ -190,14 +191,14 @@ class ParentChangerComponent extends Manager
                 ComplexContentObjectItem::class_name(),
                 ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($content_object_id));
-        $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+        $children = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class_name(),
             $condition);
 
         while ($child = $children->next_result())
         {
             $ref_id = $child->get_ref();
-            $ref_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $ref_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $ref_id);
 
@@ -239,7 +240,7 @@ class ParentChangerComponent extends Manager
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class_name(),
                         ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER))));
-        $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+        $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class_name(),
             $parameters);
 

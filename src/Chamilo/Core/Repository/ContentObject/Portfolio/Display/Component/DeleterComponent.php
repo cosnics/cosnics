@@ -2,11 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataManager;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * Component that allows the removal of items from the portfolio (folder)
@@ -49,7 +51,7 @@ class DeleterComponent extends Manager
                     $failures++;
                 }
             }
-            catch(\Exception $ex)
+            catch(Exception $ex)
             {
                 $failures++;
             }
@@ -103,7 +105,7 @@ class DeleterComponent extends Manager
                     $hashes[] = $descendant->get_hash();
                 }
                 
-                if (! \Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataManager::delete_node_ids($hashes))
+                if (! DataManager::delete_node_ids($hashes))
                 {
                     $failures ++;
                 }

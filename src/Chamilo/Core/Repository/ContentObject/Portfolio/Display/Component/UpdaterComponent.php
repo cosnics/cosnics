@@ -3,7 +3,9 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -54,7 +56,7 @@ class UpdaterComponent extends ItemComponent
                 {
                     Event::trigger(
                         'Activity', 
-                        \Chamilo\Core\Repository\Manager::context(), 
+                        Manager::context(),
                         array(
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_UPDATED, 
                             Activity::PROPERTY_USER_ID => $this->get_user_id(), 
@@ -77,7 +79,7 @@ class UpdaterComponent extends ItemComponent
                         new StaticConditionVariable($old_id), 
                         ComplexContentObjectItem::get_table_name());
                     $parameters = new DataClassRetrievesParameters($condition);
-                    $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+                    $children = DataManager::retrieve_complex_content_object_items(
                         ComplexContentObjectItem::class_name(), 
                         $parameters);
                     

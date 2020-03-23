@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -63,7 +64,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             $toolbar = new Toolbar();
             $toolbar_item = new ToolbarItem(
                 Translation::get('Back', null, Utilities::COMMON_LIBRARIES),
-                new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('backward'),
+                new FontAwesomeGlyph('backward'),
                 'javascript:history.back();');
             $toolbar->add_item($toolbar_item);
             

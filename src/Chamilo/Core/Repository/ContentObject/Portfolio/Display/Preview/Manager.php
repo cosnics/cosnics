@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\Display\Preview;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
+abstract class Manager extends Preview
 {
     const TEMPORARY_STORAGE = 'preview_portfolio_feedbacks';
 

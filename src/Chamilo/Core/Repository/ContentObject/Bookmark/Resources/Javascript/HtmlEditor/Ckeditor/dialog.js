@@ -46,7 +46,7 @@ CKEDITOR.dialog.add( 'bookmarkDialog', function( editor )
     	    rendition = json.properties.rendition;
     	});
     	return rendition;
-    };
+    }
     
     var numbering = function( id )
 	{

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Vimeo\Form;
 
 use Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
+use Chamilo\Core\Repository\Instance\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -18,7 +19,7 @@ class VimeoForm extends ContentObjectForm
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
 
-        $external_repositories = \Chamilo\Core\Repository\Instance\Manager::get_links(Vimeo::get_type_name(), true);
+        $external_repositories = Manager::get_links(Vimeo::get_type_name(), true);
 
         if ($external_repositories)
         {

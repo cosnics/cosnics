@@ -2,8 +2,12 @@
 namespace Chamilo\Core\Repository\Builder\Action\Component;
 
 use Chamilo\Core\Repository\Builder\Action\Manager;
+use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -18,7 +22,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package repository.lib.complex_builder.component
  */
-class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface, DelegateComponent
+class CreatorComponent extends Manager implements ViewerInterface, DelegateComponent
 {
 
     /**
@@ -38,7 +42,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
         if ($type_selection)
         {
-            $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id($type_selection);
+            $template_registration = Configuration::registration_by_id($type_selection);
             $template = $template_registration->get_template();
 
             $html[] = '<h4>';
@@ -110,7 +114,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
             foreach ($objects as $content_object_id)
             {
-                $type = \Chamilo\Core\Repository\Storage\DataManager::determineDataClassType(
+                $type = DataManager::determineDataClassType(
                     ContentObject::class_name(),
                     $content_object_id);
 
@@ -125,7 +129,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                 }
 
                 // gets the type of the helper object
-                $type = \Chamilo\Core\Repository\Storage\DataManager::determineDataClassType(
+                $type = DataManager::determineDataClassType(
                     ContentObject::class_name(),
                     $content_object_id);
 
@@ -148,14 +152,14 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
     {
         $items = array();
 
-        $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::class_name(),
+        $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(),
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::class_name(),
-                    \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::PROPERTY_PARENT),
+                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($parent),
-                \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::get_table_name()));
+                ComplexContentObjectItem::get_table_name()));
         while ($complex_content_object_item = $complex_content_object_items->next_result())
         {
             if ($complex_content_object_item->is_complex())
@@ -180,13 +184,13 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
     public function create_complex_content_object_item($type, $content_object_id)
     {
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::factory(
+        $complex_content_object_item = ComplexContentObjectItem::factory(
             $type);
         $complex_content_object_item->set_ref($content_object_id);
         $parent_id = $this->get_parent_content_object_id();
         $complex_content_object_item->set_parent($parent_id);
         $complex_content_object_item->set_display_order(
-            \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order($parent_id));
+            DataManager::select_next_display_order($parent_id));
         $complex_content_object_item->set_user_id($this->get_user_id());
         $complex_content_object_item->create();
     }

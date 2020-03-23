@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataClass;
 use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\WikiPage;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -25,7 +26,6 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
-        ;
     }
 
     public function get_allowed_types()
@@ -60,7 +60,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
 
     public function get_wiki_pages($return_complex_items = false)
     {
-        $complex_content_objects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+        $complex_content_objects = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class_name(),
             new EqualityCondition(
                 new PropertyConditionVariable(
@@ -78,7 +78,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
 
         while ($complex_content_object = $complex_content_objects->next_result())
         {
-            $wiki_pages[] = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $wiki_pages[] = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $complex_content_object->get_ref());
         }
@@ -106,7 +106,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
             ContentObject::get_table_name());
         $content_object_condition = new AndCondition($content_object_conditions);
 
-        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
+        return DataManager::retrieve_active_content_objects(
             ContentObject::class_name(),
             $content_object_condition);
     }

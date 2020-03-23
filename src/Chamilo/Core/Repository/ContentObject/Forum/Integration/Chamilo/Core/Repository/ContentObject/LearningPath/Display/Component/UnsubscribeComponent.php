@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\R
 use Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\ForumSubscribe;
+use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -38,7 +39,7 @@ class UnsubscribeComponent extends Manager
             throw new ObjectNotExistException($contentObjectTranslation, $forumId);
         }
 
-        $subscription = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager::retrieve_subscribe(
+        $subscription = DataManager::retrieve_subscribe(
             $forum->getId(), $this->getUser()->getId()
         );
 

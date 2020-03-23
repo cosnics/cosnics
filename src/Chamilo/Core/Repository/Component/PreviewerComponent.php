@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -44,7 +45,7 @@ class PreviewerComponent extends Manager
     public function get_root_content_object()
     {
         $content_object_id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
-        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        return DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $content_object_id);
     }

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\Selector;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Selector\Option\ContentObjectTypeSelectorOption;
 use Chamilo\Core\Repository\Selector\TypeSelector;
@@ -151,7 +152,7 @@ class TypeSelectorFactory
                     continue;
                 }
 
-                $registration = \Chamilo\Configuration\Configuration::registration(
+                $registration = Configuration::registration(
                     $templateRegistration->get_content_object_type()
                 );
 

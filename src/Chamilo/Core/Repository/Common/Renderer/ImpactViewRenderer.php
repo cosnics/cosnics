@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Common\Renderer;
 
 use Chamilo\Configuration\Category\Form\ImpactViewForm;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Table\ImpactView\ImpactViewTable;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -50,7 +51,7 @@ class ImpactViewRenderer implements TableSupport
     /**
      * Constructs the impact view (form).
      */
-    public function __construct(\Chamilo\Core\Repository\Manager $parent, array $co_ids, $has_impact)
+    public function __construct(Manager $parent, array $co_ids, $has_impact)
     {
         $this->parent = $parent;
         $this->co_ids = $co_ids;
@@ -58,7 +59,7 @@ class ImpactViewRenderer implements TableSupport
         
         $this->form = new ImpactViewForm(
             $this->parent->get_url(
-                array(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $co_ids)), 
+                array(Manager::PARAM_CONTENT_OBJECT_ID => $co_ids)),
             $has_impact);
     }
 
@@ -149,9 +150,9 @@ class ImpactViewRenderer implements TableSupport
     {
         return $this->parent->get_url(
             array(
-                \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_VIEW_CONTENT_OBJECTS, 
-                \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
-                \Chamilo\Core\Repository\Manager::PARAM_CATEGORY_ID => $content_object->get_parent_id()));
+                Manager::PARAM_ACTION => Manager::ACTION_VIEW_CONTENT_OBJECTS,
+                Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
+                Manager::PARAM_CATEGORY_ID => $content_object->get_parent_id()));
     }
 
     /**

@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\GlossaryItem\Storage\DataClass\GlossaryItem;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -17,7 +19,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @author Anthony Hurst (Hogeschool Gent)
  */
-class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface, DelegateComponent
+class CreatorComponent extends Manager implements ViewerInterface, DelegateComponent
 {
 
     public function run()
@@ -62,7 +64,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                 $ccoi->set_ref($object_id);
                 $ccoi->set_user_id($this->get_user_id());
                 $ccoi->set_display_order(
-                    \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order($ccoi->get_parent()));
+                    DataManager::select_next_display_order($ccoi->get_parent()));
                 if (! $ccoi->create())
                 {
                     $failures ++;

@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Builder\Action\Manager;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -26,29 +27,29 @@ class AttachmentViewerComponent extends Manager
         /*
          * Retrieve data and check if it is a valid attachment
          */
-        $attachment_id = Request::get(\Chamilo\Core\Repository\Builder\Action\Manager::PARAM_ATTACHMENT_ID);
+        $attachment_id = Request::get(Manager::PARAM_ATTACHMENT_ID);
         
         if (is_null($attachment_id))
         {
             throw new ParameterNotDefinedException(
-                \Chamilo\Core\Repository\Builder\Action\Manager::PARAM_ATTACHMENT_ID);
+                Manager::PARAM_ATTACHMENT_ID);
         }
         
         $complex_content_object_item = $this->get_parent()->get_selected_complex_content_object_item();
         $reference_content_object_id = $complex_content_object_item->get_ref();
-        $reference_content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $reference_content_object = DataManager::retrieve_by_id(
             ContentObject::class_name(), 
             $reference_content_object_id);
         
-        if (\Chamilo\Core\Repository\Storage\DataManager::is_helper_type($reference_content_object->get_type()))
+        if (DataManager::is_helper_type($reference_content_object->get_type()))
         {
             $reference_content_object_id = $reference_content_object->get_additional_property('reference_id');
-            $reference_content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $reference_content_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), 
                 $reference_content_object_id);
         }
         
-        $attachment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $attachment = DataManager::retrieve_by_id(
             ContentObject::class_name(), 
             $attachment_id);
         
@@ -64,7 +65,7 @@ class AttachmentViewerComponent extends Manager
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(\Chamilo\Core\Repository\Builder\Action\Manager::PARAM_ATTACHMENT_ID => $attachment_id)), 
+                    array(Manager::PARAM_ATTACHMENT_ID => $attachment_id)),
                 Translation::get('ViewAttachment')));
         
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);

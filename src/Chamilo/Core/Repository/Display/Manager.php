@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -111,7 +112,7 @@ abstract class Manager extends Application
      */
     protected function get_complex_content_object_by_id($complex_content_object_item_id)
     {
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $complex_content_object_item = DataManager::retrieve_by_id(
             ComplexContentObjectItem::class_name(), 
             $complex_content_object_item_id);
         if (is_null($complex_content_object_item))

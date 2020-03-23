@@ -7,6 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -35,7 +36,7 @@ class ResourceFixerCommand extends Command
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(
-        ResourceFixerDirector $resourceFixerDirector, \Symfony\Component\Translation\Translator $translator
+        ResourceFixerDirector $resourceFixerDirector, Translator $translator
     )
     {
         $this->resourceFixerDirector = $resourceFixerDirector;

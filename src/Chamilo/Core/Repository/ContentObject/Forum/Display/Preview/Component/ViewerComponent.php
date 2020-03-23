@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Preview\Component;
 
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
+use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Forum\Display\Preview\Manager implements
@@ -11,7 +12,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Forum\Displ
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager::context(),
+            Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 

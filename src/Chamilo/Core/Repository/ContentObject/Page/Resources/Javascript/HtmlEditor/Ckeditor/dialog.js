@@ -295,7 +295,7 @@ CKEDITOR.dialog
                             url : ajaxUri,
                             data : parameters,
                             async : false
-                        }).responseText
+                        }).responseText;
 
                         var json = jQuery.parseJSON(response);
                         currentRendition = json.properties.rendition;

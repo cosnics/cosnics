@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
+use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\FilterDataButtonSearchForm;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
@@ -143,7 +144,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             if ($this->has_filter_type())
             {
                 $filter_type = $this->get_filter_type();
-                $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id((int) $filter_type);
+                $template_registration = Configuration::registration_by_id((int) $filter_type);
 
                 $buttonToolbar->addItem(
                     new Button(

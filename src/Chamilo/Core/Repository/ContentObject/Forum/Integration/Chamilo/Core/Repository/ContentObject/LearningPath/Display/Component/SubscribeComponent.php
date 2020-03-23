@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\R
 
 use Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
+use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
@@ -42,7 +43,7 @@ class SubscribeComponent extends Manager
             throw new ObjectNotExistException($contentObjectTranslation, $forumId);
         }
 
-        $succes = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager::create_subscribe(
+        $succes = DataManager::create_subscribe(
             $this->getUser()->getId(), $forum->getId()
         );
 

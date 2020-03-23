@@ -1,7 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\External\Action\Form;
 
+use Chamilo\Core\Repository\External\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
+use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
+use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
@@ -40,7 +43,7 @@ class SettingsForm extends FormValidator
         parent::__construct($form_name, $method, $action);
 
         $this->configurer = $configurer;
-        $this->external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_by_id(
+        $this->external_repository = DataManager::retrieve_by_id(
             Instance::class_name(),
             $external_repository_id
         );
@@ -150,7 +153,7 @@ class SettingsForm extends FormValidator
                                         Translation::get(
                                             $validation['message'],
                                             null,
-                                            \Chamilo\Core\Repository\External\Manager::get_namespace(
+                                            Manager::get_namespace(
                                                 $configuration['context']
                                             )
                                         ),
@@ -199,7 +202,7 @@ class SettingsForm extends FormValidator
                                         Translation::get(
                                             $validation['message'],
                                             null,
-                                            \Chamilo\Core\Repository\External\Manager::get_namespace(
+                                            Manager::get_namespace(
                                                 $configuration['context']
                                             )
                                         ),
@@ -431,7 +434,7 @@ class SettingsForm extends FormValidator
             {
                 if ($has_settings)
                 {
-                    $admin_value = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting::get(
+                    $admin_value = Setting::get(
                         $name,
                         $this->configurer->get_external_repository()->get_id()
                     );
@@ -463,11 +466,11 @@ class SettingsForm extends FormValidator
                 if ($setting['locked'] != 'true')
                 {
                     $setting =
-                        \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_setting_from_variable_name(
+                        DataManager::retrieve_setting_from_variable_name(
                             $name,
                             $external_repository->get_id()
                         );
-                    if ($setting instanceof \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting)
+                    if ($setting instanceof Setting)
                     {
                         if (isset($values[$name]))
                         {
@@ -484,7 +487,7 @@ class SettingsForm extends FormValidator
                     }
                     else
                     {
-                        $setting = new \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting();
+                        $setting = new Setting();
                         $setting->set_external_id($external_repository->get_id());
                         $setting->set_variable($name);
 

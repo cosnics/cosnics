@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\HtmlRenditionImplementation;
+use Chamilo\Core\Repository\Manager;
 
 /**
  *
@@ -23,7 +24,7 @@ class HtmlPreviewRenditionImplementation extends HtmlRenditionImplementation
         
         if ($contentObject->is_image())
         {
-            $url = \Chamilo\Core\Repository\Manager::get_document_downloader_url(
+            $url = Manager::get_document_downloader_url(
                 $contentObject->get_id(), 
                 $contentObject->calculate_security_code());
             

@@ -12,6 +12,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -69,14 +70,14 @@ class RightsForm extends FormValidator
             if ($this->entityRelation->get_entity_type() == UserEntity::ENTITY_TYPE)
             {
                 $entityType = UserEntity::getInstance()->get_entity_translated_name();
-                $entityName = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+                $entityName = DataManager::retrieve_by_id(
                     User::class_name(), 
                     $this->entityRelation->get_entity_id())->get_fullname();
             }
             else
             {
                 $entityType = PlatformGroupEntity::getInstance()->get_entity_translated_name();
-                $entityName = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+                $entityName = DataManager::retrieve_by_id(
                     Group::class_name(), 
                     $this->entityRelation->get_entity_id())->get_name();
             }

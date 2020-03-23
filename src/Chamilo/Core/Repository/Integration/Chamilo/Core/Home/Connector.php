@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Home;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -49,8 +50,8 @@ class Connector
         $conditions[] = new OrCondition($types_condition);
         $condition = new AndCondition($conditions);
 
-        $objects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
-            \Chamilo\Core\Repository\Storage\DataClass\ContentObject::class_name(),
+        $objects = DataManager::retrieve_active_content_objects(
+            ContentObject::class_name(),
             $condition);
 
         if ($objects->size() == 0)

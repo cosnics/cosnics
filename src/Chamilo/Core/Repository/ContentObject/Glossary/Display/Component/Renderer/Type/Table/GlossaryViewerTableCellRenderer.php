@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\GlossaryItem\Storage\DataClass\GlossaryItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -26,7 +27,7 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer
 
         if (!$this->glossary_item || $this->glossary_item->get_id() != $glossary_item->get_ref())
         {
-            $this->glossary_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $this->glossary_item = DataManager::retrieve_by_id(
                 GlossaryItem::class_name(), $glossary_item->get_ref()
             );
         }

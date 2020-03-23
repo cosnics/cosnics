@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -28,7 +29,7 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
 
         if (! $object_id)
         {
-            throw new \Exception(
+            throw new Exception(
                 Translation::get(
                     'NoObjectSelected',
                     array('OBJECT' => Translation::get('ContentObject')),

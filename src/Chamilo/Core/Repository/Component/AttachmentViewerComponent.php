@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -29,7 +30,7 @@ class AttachmentViewerComponent extends Manager
 
         if ($object_id && $attachment_id)
         {
-            $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $object = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $object_id);
 
@@ -38,7 +39,7 @@ class AttachmentViewerComponent extends Manager
                 throw new NotAllowedException();
             }
 
-            $attachment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $attachment = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $attachment_id);
 

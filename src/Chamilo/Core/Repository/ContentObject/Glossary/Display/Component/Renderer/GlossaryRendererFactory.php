@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Component\Renderer;
 
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Exception;
 
 /**
  * Factory class for the GlossaryRenderer
@@ -32,7 +33,7 @@ class GlossaryRendererFactory
              'GlossaryRenderer';
         if (! class_exists($class))
         {
-            throw new \Exception('Could not find a glossary renderer of type ' . $type);
+            throw new Exception('Could not find a glossary renderer of type ' . $type);
         }
         
         return new $class($component, $glossary, $search_query);

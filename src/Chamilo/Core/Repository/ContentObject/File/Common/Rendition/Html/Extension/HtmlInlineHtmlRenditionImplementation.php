@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Extension;
 
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineRenditionImplementation;
+use Chamilo\Core\Repository\Manager;
 
 /**
  *
@@ -19,7 +20,7 @@ class HtmlInlineHtmlRenditionImplementation extends HtmlInlineRenditionImplement
     public function render($parameters)
     {
         $object = $this->get_content_object();
-        $url = \Chamilo\Core\Repository\Manager::get_document_downloader_url(
+        $url = Manager::get_document_downloader_url(
             $object->get_id(), 
             $object->calculate_security_code()) . '&display=1';
         

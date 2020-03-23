@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Action;
 
 use Chamilo\Core\Metadata\Manager;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
+use Chamilo\Core\Metadata\Schema\Storage\DataManager;
 use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -57,7 +58,7 @@ class Installer extends \Chamilo\Core\Metadata\Action\Installer
         
         foreach ($schemaNamespaces as $schemaNamespace)
         {
-            $schema = \Chamilo\Core\Metadata\Schema\Storage\DataManager::retrieveSchemaByNamespace($schemaNamespace);
+            $schema = DataManager::retrieveSchemaByNamespace($schemaNamespace);
             
             $relationInstance = new RelationInstance();
             $relationInstance->set_source_type(Schema::class_name());

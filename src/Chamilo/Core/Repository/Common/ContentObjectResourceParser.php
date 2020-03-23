@@ -1,6 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\Common;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
+use DOMDocument;
+use DOMElement;
+use DOMXPath;
+use Exception;
 
 /**
  * Class ContentObjectResourceParser
@@ -14,11 +19,11 @@ class ContentObjectResourceParser
      */
     public function getDomDocument(string $html = null, bool $parseFullHtml = false)
     {
-        $domDocument = new \DOMDocument();
+        $domDocument = new DOMDocument();
         $domDocument->loadHTML('<?xml encoding="UTF-8">' . $html);
         $domDocument->removeChild($domDocument->firstChild);
 
-        $domXPath = new \DOMXPath($domDocument);
+        $domXPath = new DOMXPath($domDocument);
 
         if (!$parseFullHtml)
         {
@@ -36,16 +41,16 @@ class ContentObjectResourceParser
      * @param \DOMDocument $DOMDocument
      * @return \DOMXPath
      */
-    public function getDomXPath(\DOMDocument $DOMDocument)
+    public function getDomXPath(DOMDocument $DOMDocument)
     {
-        return new \DOMXPath($DOMDocument);
+        return new DOMXPath($DOMDocument);
     }
 
     /**
      * @param \DOMElement $DOMElement
      * @return array
      */
-    public function getContentObjectParametersFromDomElement(\DOMElement $DOMElement, \DOMXPath $domXPath)
+    public function getContentObjectParametersFromDomElement(DOMElement $DOMElement, DOMXPath $domXPath)
     {
         $parameters_list = $domXPath->query('@*', $DOMElement);
         $parameters = array();
@@ -62,7 +67,7 @@ class ContentObjectResourceParser
      * @param \DOMElement $contentObjectDomElement
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass|null
      */
-    public function getContentObjectFromDomElement(\DOMElement $contentObjectDomElement)
+    public function getContentObjectFromDomElement(DOMElement $contentObjectDomElement)
     {
         /**
          * @var \DOMElement $contentObjectDomElement
@@ -71,7 +76,7 @@ class ContentObjectResourceParser
 
         try
         {
-            $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $contentObject = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $contentObjectId);
 
@@ -88,7 +93,7 @@ class ContentObjectResourceParser
 
             return $contentObject;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             return null;
         }
@@ -103,7 +108,7 @@ class ContentObjectResourceParser
     {
         $domDocument = $this->getDomDocument($html, $parseFullHtml);
 
-        $contentObjectDomElements = $this->getContentObjectDomElements(new \DOMXPath($domDocument));
+        $contentObjectDomElements = $this->getContentObjectDomElements(new DOMXPath($domDocument));
 
         $contentObjects = [];
 
@@ -123,7 +128,7 @@ class ContentObjectResourceParser
      * @param \DOMDocument $domDocument
      * @param \DOMXPath $domXPath
      */
-    protected function replaceBodyWithChildren(\DOMDocument $domDocument, \DOMXPath $domXPath)
+    protected function replaceBodyWithChildren(DOMDocument $domDocument, DOMXPath $domXPath)
     {
         $body_nodes = $domXPath->query('body/*');
         $fragment = $domDocument->createDocumentFragment();
@@ -138,7 +143,7 @@ class ContentObjectResourceParser
      * @param \DOMXPath $domXPath
      * @return \DOMNodeList
      */
-    public function getContentObjectDomElements(\DOMXPath $domXPath)
+    public function getContentObjectDomElements(DOMXPath $domXPath)
     {
         return $domXPath->query('//*[@data-co-id]'); // select all elements with the data-co-id
     }

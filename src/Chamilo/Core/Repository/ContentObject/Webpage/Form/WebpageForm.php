@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Quota\Calculator;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
@@ -159,8 +161,8 @@ class WebpageForm extends ContentObjectForm
         // TODO: Do the errors need htmlentities()?
         $errors = array();
         
-        $owner = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+        $owner = DataManager::retrieve_by_id(
+            User::class_name(),
             (int) $this->get_owner_id());
         
         $calculator = new Calculator($owner);

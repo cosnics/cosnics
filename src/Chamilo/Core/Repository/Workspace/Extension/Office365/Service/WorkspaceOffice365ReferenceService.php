@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\Workspace\Extension\Office365\Service;
 use Chamilo\Core\Repository\Workspace\Extension\Office365\Storage\DataClass\WorkspaceOffice365Reference;
 use Chamilo\Core\Repository\Workspace\Extension\Office365\Storage\Repository\WorkspaceOffice365ReferenceRepository;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use RuntimeException;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Workspace\Extension\Office365\Service
@@ -46,7 +47,7 @@ class WorkspaceOffice365ReferenceService
 
         if (!$this->workspaceOffice365ReferenceRepository->createReference($workspaceOffice365Reference))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not create a new WorkspaceOffice365Reference for workspace %s', $workspace->getId()
                 )
@@ -110,7 +111,7 @@ class WorkspaceOffice365ReferenceService
 
         if (!$this->workspaceOffice365ReferenceRepository->updateReference($workspaceOffice365Reference))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not update the WorkspaceOffice365Reference for workspace %s',
                     $workspaceOffice365Reference->getWorkspaceId()

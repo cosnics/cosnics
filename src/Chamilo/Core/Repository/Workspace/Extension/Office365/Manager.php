@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Workspace\Extension\Office365\Service\WorkspaceOffic
 use Chamilo\Core\Repository\Workspace\Interfaces\WorkspaceExtensionSupport;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use InvalidArgumentException;
 
 /**
  * @package Chamilo\Core\Repository\Workspace\Extension\Office365
@@ -30,7 +31,7 @@ abstract class Manager extends Application implements WorkspaceExtensionSupport
     {
         if (!$applicationConfiguration->getApplication() instanceof ExtensionLauncherComponent)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The Office365 extension can only be run through the extension component of the workspaces'
             );
         }

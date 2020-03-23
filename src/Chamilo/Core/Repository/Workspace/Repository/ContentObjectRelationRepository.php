@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use InvalidArgumentException;
 
 /**
  *
@@ -108,7 +109,7 @@ class ContentObjectRelationRepository
     {
         if (empty($contentObjectId))
         {
-            throw new \InvalidArgumentException('The given content object id can not be empty');
+            throw new InvalidArgumentException('The given content object id can not be empty');
         }
 
         $relationConditions = array();

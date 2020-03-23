@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -48,7 +49,7 @@ class ResetComponent extends Manager
                     $is_error = true;
                 }
             }
-            catch (\Exception $exception)
+            catch (Exception $exception)
             {
                 $message = $exception->getMessage();
                 $is_error = true;

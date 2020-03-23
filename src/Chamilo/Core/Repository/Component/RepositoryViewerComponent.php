@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -42,7 +43,7 @@ class RepositoryViewerComponent extends Manager
             $html[] = $this->render_header();
 
             $object_id = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
-            $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(File::class_name(), $object_id);
+            $object = DataManager::retrieve_by_id(File::class_name(), $object_id);
 
             $html[] = '<script type="text/javascript">';
             $html[] = 'window.opener.$("input[name=' . $element_name . '_title]").val("' . addslashes(

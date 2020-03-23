@@ -10,6 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use InvalidArgumentException;
 
 /**
  *
@@ -91,7 +92,7 @@ class WorkspaceService
         {
             if (! is_numeric($identifier))
             {
-                throw new \InvalidArgumentException();
+                throw new InvalidArgumentException();
             }
             
             return $this->getWorkspaceByIdentifier($identifier);

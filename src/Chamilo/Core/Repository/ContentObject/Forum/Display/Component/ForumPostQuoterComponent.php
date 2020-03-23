@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\Display\Component\ForumPostFormA
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Form\ForumPostForm;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -47,7 +48,7 @@ class ForumPostQuoterComponent extends ForumPostFormActionCreate
         $this->forumpost->set_title($reply);
         
         $quoteUser = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+            User::class_name(),
             (int) $quote_lo->get_user_id());
         
         $quoteContent = array();

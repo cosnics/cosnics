@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\External\Action\Component;
 
+use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\External\Action\Manager;
 use Chamilo\Core\Repository\External\Table\Export\ExportTable;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -21,7 +23,7 @@ class ExporterComponent extends Manager implements TableSupport
             \Chamilo\Core\Repository\External\Manager::PARAM_EXTERNAL_REPOSITORY_ID);
         if (isset($external_repository_id))
         {
-            $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), 
                 $external_repository_id);
             $success = $this->export_external_repository_object($object);
@@ -46,7 +48,7 @@ class ExporterComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $type_conditions = array();
-        $types = array(\Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File::class_name());
+        $types = array(File::class_name());
         
         foreach ($types as $type)
         {

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Workspace\Repository;
 
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -175,7 +176,7 @@ class ContentObjectRepository
      */
     public function findAll($contentObjectClassName, DataClassRetrievesParameters $parameters)
     {
-        return \Chamilo\Core\Repository\Storage\DataManager::retrieves($contentObjectClassName, $parameters);
+        return DataManager::retrieves($contentObjectClassName, $parameters);
     }
 
     /**
@@ -187,7 +188,7 @@ class ContentObjectRepository
      */
     public function countAll($contentObjectClassName, DataClassCountParameters $parameters)
     {
-        return \Chamilo\Core\Repository\Storage\DataManager::count($contentObjectClassName, $parameters);
+        return DataManager::count($contentObjectClassName, $parameters);
     }
 
     /**
@@ -199,7 +200,7 @@ class ContentObjectRepository
      */
     public function findById($contentObjectId)
     {
-        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        return DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $contentObjectId);
     }
@@ -278,7 +279,7 @@ class ContentObjectRepository
     protected function getActiveHelperTypeConditions()
     {
         $conditions = array();
-        $types = \Chamilo\Core\Repository\Storage\DataManager::get_active_helper_types();
+        $types = DataManager::get_active_helper_types();
 
         foreach ($types as $type)
         {

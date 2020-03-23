@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -48,7 +49,7 @@ class DeleterComponent extends Manager
                 
                 if (! $success)
                 {
-                    throw new \Exception(
+                    throw new Exception(
                         Translation::get(
                             'ObjectNotDeleted', 
                             array('OBJECT' => Translation::get('WorkspaceUserFavourite')), 
@@ -62,7 +63,7 @@ class DeleterComponent extends Manager
                 array('OBJECT' => Translation::get('WorkspaceUserFavourite')), 
                 Utilities::COMMON_LIBRARIES);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();

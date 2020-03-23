@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\Service\ContentObjectTemplate;
 use Chamilo\Core\Repository\Service\ConfigurationCacheService;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Storage\Repository\ContentObjectTemplateRepository;
+use RuntimeException;
 
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -76,7 +77,7 @@ class ContentObjectTemplateSynchronizer
 
             if (!$templateRegistration->save())
             {
-                throw new \RuntimeException('Could not save the template ' . $templateName);
+                throw new RuntimeException('Could not save the template ' . $templateName);
             }
         }
 

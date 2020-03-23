@@ -6,13 +6,13 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use MediawikiParser;
 use MediawikiParserContext;
 
@@ -26,6 +26,7 @@ use MediawikiParserContext;
  */
 require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser.class.php';
 require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser_context.class.php';
+
 class WikiItemViewerComponent extends Manager implements DelegateComponent
 {
 
@@ -38,18 +39,18 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
         if ($complex_wiki_page_id)
         {
             $version_object_id = Request::get(self::PARAM_WIKI_VERSION_ID);
-            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ComplexContentObjectItem::class_name(),
-                $complex_wiki_page_id);
+            $complex_wiki_page = DataManager::retrieve_by_id(
+                ComplexContentObjectItem::class_name(), $complex_wiki_page_id
+            );
             $wiki_page = $complex_wiki_page->get_ref_object();
 
             BreadcrumbTrail::getInstance()->add(new Breadcrumb(null, $wiki_page->get_title()));
 
             if ($version_object_id)
             {
-                $version_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
-                    $version_object_id);
+                $version_object = DataManager::retrieve_by_id(
+                    ContentObject::class_name(), $version_object_id
+                );
                 if ($version_object && $version_object->get_object_number() == $wiki_page->get_object_number())
                 {
                     $display_wiki_page = $version_object;
@@ -72,34 +73,43 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
             $html = array();
 
             $html[] = $this->render_header($complex_wiki_page);
-            $html[] = '<div class="wiki-pane-content-title">' . $display_wiki_page->get_title() . '</div>';
-            $html[] = '<div class="wiki-pane-content-subtitle">' . Translation::get(
-                'From',
-                null,
-                Utilities::COMMON_LIBRARIES) . ' ' . $this->get_root_content_object()->get_title() . '</div>';
 
-            if ($version_object_id && $wiki_page->get_id() != $version_object_id)
+            $isOldVersion = $version_object_id && $wiki_page->get_id() != $version_object_id;
+
+            $panelType = $isOldVersion ? 'panel-warning' : 'panel-default';
+
+            $html[] = '<div class="panel ' . $panelType . '">';
+            $html[] = '<div class="panel-heading">';
+
+            $html[] = '<h3 class="panel-title">';
+
+            if ($isOldVersion)
             {
-                $html[] = '<div class="wiki-pane-content-version">' . Translation::get('WikiOldVersion') . '</div>';
+                $html[] = '<strong>[' . Translation::get('WikiOldVersion') . ']</strong> ';
             }
+
+            $html[] = $display_wiki_page->get_title();
+
+            $html[] = '</h3>';
+
+            $html[] = '</div>';
 
             $parser = new MediawikiParser(
                 new MediawikiParserContext(
-                    $this->get_root_content_object(),
-                    $display_wiki_page->get_title(),
-                    $display_wiki_page->get_description(),
-                    $this->get_parameters()));
+                    $this->get_root_content_object(), $display_wiki_page->get_title(),
+                    $display_wiki_page->get_description(), $this->get_parameters()
+                )
+            );
 
             $display_wiki_page->set_description($parser->parse());
             $display = ContentObjectRenditionImplementation::factory(
-                $display_wiki_page,
-                ContentObjectRendition::FORMAT_HTML,
-                ContentObjectRendition::VIEW_DESCRIPTION,
-                $this);
+                $display_wiki_page, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this
+            );
 
-            $html[] = '<div class="wiki-pane-content-body">';
+            $html[] = '<div class="panel-body">';
             $html[] = $display->render();
-            $html[] = '<div class="clear"></div>';
+            $html[] = '</div>';
+
             $html[] = '</div>';
             $html[] = $this->render_footer();
 

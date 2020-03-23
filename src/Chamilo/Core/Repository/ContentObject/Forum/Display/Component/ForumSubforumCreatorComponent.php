@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -14,12 +16,13 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
  * @package repository.lib.complex_display.forum.component
  */
-class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface,
+class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
     DelegateComponent
 {
 
@@ -71,7 +74,7 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
                     }
                     else
                     {
-                        throw new \Exception('The forum you requested has not been found');
+                        throw new Exception('The forum you requested has not been found');
                     }
                 }
 
@@ -106,7 +109,7 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
                 $cloi->set_ref(\Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
                 $cloi->set_user_id($this->get_user_id());
                 $cloi->set_display_order(
-                    \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order($cloi->get_parent()));
+                    DataManager::select_next_display_order($cloi->get_parent()));
 
                 $success = $cloi->create();
 
@@ -123,7 +126,7 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
     {
         $items = array();
         $items = array_merge($items, $this->retrieve_used_items_parents($object));
-        $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+        $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class_name(),
             new EqualityCondition(
                 new PropertyConditionVariable(
@@ -148,7 +151,7 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
     {
         $items = array();
         $items[] = $object_id;
-        $complex_content_object_items_parent = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+        $complex_content_object_items_parent = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class_name(),
             new EqualityCondition(
                 new PropertyConditionVariable(

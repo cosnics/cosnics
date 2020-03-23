@@ -1,21 +1,22 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Component;
 
+use Chamilo\Core\Repository\Common\ContentObjectDifferenceRenderer;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Table\Version\VersionTable;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -28,7 +29,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
 
     public function run()
     {
-        if (! $this->is_allowed(VIEW_RIGHT))
+        if (!$this->is_allowed(VIEW_RIGHT))
         {
             throw new NotAllowedException();
         }
@@ -37,50 +38,55 @@ class WikiHistoryComponent extends Manager implements TableSupport
 
         if ($this->complex_wiki_page_id)
         {
-            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ComplexContentObjectItem::class_name(),
-                $this->complex_wiki_page_id);
+            $complex_wiki_page = DataManager::retrieve_by_id(
+                ComplexContentObjectItem::class_name(), $this->complex_wiki_page_id
+            );
 
-            $compare_object_ids = $this->getRequest()->get(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
+            $compareObjectIdentifiers =
+                $this->getRequest()->get(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
 
             $html = array();
 
             $html[] = $this->render_header($complex_wiki_page);
 
-            if ($compare_object_ids)
+            $this->wiki_page = $complex_wiki_page->get_ref_object();
+
+            if ($compareObjectIdentifiers)
             {
-                if (count($compare_object_ids) < 2)
+                if (count($compareObjectIdentifiers) < 2)
                 {
                     $this->redirect(Translation::get('TooFewItems'), true);
                 }
-                $compare_object_id = $compare_object_ids[0];
-                $compare_version_id = $compare_object_ids[1];
+                $compareObjectIdentifier = $compareObjectIdentifiers[0];
+                $compareVersionIdentifier = $compareObjectIdentifiers[1];
 
-                $compare_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
-                    $compare_object_id);
+                $compareObject = DataManager::retrieve_by_id(
+                    ContentObject::class_name(), $compareObjectIdentifier
+                );
 
-                $html[] = $compare_object->get_difference($compare_version_id)->render();
+                $html[] = '<h3 id="page-title">' . Translation::get('ComparerComponent') . ': ' .
+                    $this->wiki_page->get_title() . '</h3>';
+
+                $difference = $compareObject->get_difference($compareVersionIdentifier);
+                $differenctRenderer = new ContentObjectDifferenceRenderer();
+
+                $html[] = $differenctRenderer->render($difference);
             }
             else
             {
-                $this->wiki_page = $complex_wiki_page->get_ref_object();
+
                 $version_parameters = $this->get_parameters();
                 $version_parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->complex_wiki_page_id;
 
                 $version_browser = new VersionTable($this);
 
-                $html[] = '<div class="wiki-pane-content-title">' . Translation::get('RevisionHistory') . ': ' .
-                     $this->wiki_page->get_title() . '</div>';
-                $html[] = '<div class="wiki-pane-content-subtitle">' .
-                     Translation::get('From', null, Utilities::COMMON_LIBRARIES) . ' ' .
-                     $this->get_root_content_object()->get_title() . '</div>';
-                $html[] = '<div class="wiki-pane-content-history">';
-                $html[] = $version_browser->as_html();
+                $html[] = '<h3 id="page-title">' . Translation::get('RevisionHistory') . ': ' .
+                    $this->wiki_page->get_title() . '</h3>';
+
+                $html[] = $version_browser->render();
                 $html[] = ResourceManager::getInstance()->get_resource_html(
-                    Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Repository.js');
-                $html[] = '<div class="clear"></div>';
-                $html[] = '</div>';
+                    Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Repository.js'
+                );
             }
 
             $html[] = $this->render_footer();
@@ -93,44 +99,25 @@ class WikiHistoryComponent extends Manager implements TableSupport
         }
     }
 
-    public function get_table_condition($class_name)
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        return new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER),
-            new StaticConditionVariable($this->wiki_page->get_object_number()));
+        $breadcrumbtrail = $this->get_breadcrumbtrail();
     }
 
     public function count_content_object_versions_resultset($condition = null)
     {
-        return \Chamilo\Core\Repository\Storage\DataManager::count_content_objects(
-            ContentObject::class_name(),
-            $condition);
-    }
-
-    public function retrieve_content_object_versions_resultset($condition = null, $order_by = array(), $offset = 0,
-        $max_objects = -1)
-    {
-        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_content_objects(
-            ContentObject::class_name(),
-            $condition);
-    }
-
-    public function get_content_object_viewing_url($content_object)
-    {
-        return $this->get_url(
-            array(
-                self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
-                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id,
-                self::PARAM_WIKI_VERSION_ID => $content_object->get_id()));
+        return DataManager::count_content_objects(
+            ContentObject::class_name(), $condition
+        );
     }
 
     public function get_content_object_deletion_url($content_object, $type = null)
     {
-        $delete_allowed = \Chamilo\Core\Repository\Storage\DataManager::content_object_deletion_allowed(
-            $content_object,
-            $type);
+        $delete_allowed = DataManager::content_object_deletion_allowed(
+            $content_object, $type
+        );
 
-        if (! $delete_allowed)
+        if (!$delete_allowed)
         {
             return null;
         }
@@ -139,14 +126,16 @@ class WikiHistoryComponent extends Manager implements TableSupport
             array(
                 self::PARAM_ACTION => self::ACTION_VERSION_DELETE,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id,
-                self::PARAM_WIKI_VERSION_ID => $content_object->get_id()));
+                self::PARAM_WIKI_VERSION_ID => $content_object->get_id()
+            )
+        );
     }
 
     public function get_content_object_revert_url($content_object)
     {
-        $revert_allowed = \Chamilo\Core\Repository\Storage\DataManager::content_object_revert_allowed($content_object);
+        $revert_allowed = DataManager::content_object_revert_allowed($content_object);
 
-        if (! $revert_allowed)
+        if (!$revert_allowed)
         {
             return null;
         }
@@ -155,11 +144,36 @@ class WikiHistoryComponent extends Manager implements TableSupport
             array(
                 self::PARAM_ACTION => self::ACTION_VERSION_REVERT,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id,
-                self::PARAM_WIKI_VERSION_ID => $content_object->get_id()));
+                self::PARAM_WIKI_VERSION_ID => $content_object->get_id()
+            )
+        );
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    public function get_content_object_viewing_url($content_object)
     {
-        $breadcrumbtrail = $this->get_breadcrumbtrail();
+        return $this->get_url(
+            array(
+                self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id,
+                self::PARAM_WIKI_VERSION_ID => $content_object->get_id()
+            )
+        );
+    }
+
+    public function get_table_condition($class_name)
+    {
+        return new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER),
+            new StaticConditionVariable($this->wiki_page->get_object_number())
+        );
+    }
+
+    public function retrieve_content_object_versions_resultset(
+        $condition = null, $order_by = array(), $offset = 0, $max_objects = - 1
+    )
+    {
+        return DataManager::retrieve_content_objects(
+            ContentObject::class_name(), $condition
+        );
     }
 }

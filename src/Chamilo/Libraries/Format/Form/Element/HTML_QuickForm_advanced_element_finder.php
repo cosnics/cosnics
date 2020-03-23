@@ -264,7 +264,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         $html[] = '</div>';
 
-        $html[] = '<div class="col-md-6 col-lg-4">';
+        $html[] = '<div class="col-md-6 col-lg-5">';
 
         // Search
         $html[] = '<div class="element_finder_search form-group">';
@@ -288,7 +288,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $html[] = '</div>';
 
         $html[] = '</div>';
-        $html[] = '<div class="col-md-6 col-lg-5">';
+        $html[] = '<div class="col-md-6 col-lg-4">';
 
         $html[] = '<div class="element_finder_buttons row form-group">';
 

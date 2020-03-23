@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 use Chamilo\Core\Repository\Ajax\Component\ThumbnailComponent;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\HtmlRenditionImplementation;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
@@ -46,7 +47,7 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(), 
                     \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_THUMBNAIL, 
-                    \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $object->getId(), 
+                    Manager::PARAM_CONTENT_OBJECT_ID => $object->getId(),
                     ThumbnailComponent::PARAM_WIDTH => $width, 
                     ThumbnailComponent::PARAM_HEIGHT => $height));
             

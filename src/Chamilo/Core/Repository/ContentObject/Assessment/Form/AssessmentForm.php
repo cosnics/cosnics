@@ -368,7 +368,7 @@ class AssessmentForm extends ContentObjectForm
 
 					var " .
                  self::RANDOM_QUESTIONS . " = document.getElementById('" . self::RANDOM_QUESTIONS . "');
-					if (" . self::RANDOM_QUESTIONS . ".checked)
+					if (" . self::RANDOM_QUESTIONS . ".checked;)
 					{
 						window_hide('" . self::RANDOM_QUESTIONS . "_window');
 					}

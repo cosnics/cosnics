@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Display\Action\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -44,17 +45,17 @@ class AttachmentViewerComponent extends Manager
         $reference_content_object = $selected_complex_content_object_item->get_ref_object();
         $reference_content_object_id = $reference_content_object->get_id();
         
-        if (\Chamilo\Core\Repository\Storage\DataManager::is_helper_type($reference_content_object->get_type()))
+        if (DataManager::is_helper_type($reference_content_object->get_type()))
         
         {
             $reference_content_object_id = $reference_content_object->get_additional_property(
                 self::PROPERTY_REFERENCE_ID);
-            $reference_content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $reference_content_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), 
                 $reference_content_object_id);
         }
         
-        $attachment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $attachment = DataManager::retrieve_by_id(
             ContentObject::class_name(), 
             $attachment_id);
         

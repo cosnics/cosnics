@@ -7,6 +7,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use InvalidArgumentException;
 
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -24,7 +25,7 @@ class InstanceRepository
     {
         if (empty($implementation) || !is_string($implementation))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given implementation must be a valid string and must not be empty'
             );
         }

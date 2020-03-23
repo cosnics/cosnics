@@ -44,7 +44,7 @@ CKEDITOR.dialog.add('taskDialog', function (editor) {
         return rendition;
     }
 
-    ;
+
 
     var numbering = function (id) {
         return CKEDITOR.tools.getNextId() + '_' + id;

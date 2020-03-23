@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Publication\Storage\Repository;
 
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -13,6 +14,9 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
+use DomainException;
+use InvalidArgumentException;
+use ReflectionClass;
 
 /**
  * Repository to manage publications with their content objects
@@ -79,7 +83,7 @@ class PublicationRepository
                 $contentObjectTypeClassName),
             $baseRecordRetrievesParameters->get_group_by());
 
-        $records = \Chamilo\Core\Repository\Storage\DataManager::records(
+        $records = DataManager::records(
             $publicationClassName,
             $recordRetrievesParameters);
 
@@ -112,7 +116,7 @@ class PublicationRepository
                 $contentObjectTypeClassName),
             $baseCountParameters->getDataClassProperties());
 
-        return \Chamilo\Core\Repository\Storage\DataManager::count($publicationClassName, $parameters);
+        return DataManager::count($publicationClassName, $parameters);
     }
 
     /**
@@ -122,10 +126,10 @@ class PublicationRepository
      */
     protected function checkPublicationClassName($publicationClassName)
     {
-        $reflectionClass = new \ReflectionClass($publicationClassName);
+        $reflectionClass = new ReflectionClass($publicationClassName);
         if (! $reflectionClass->isSubclassOf(Publication::class_name()))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'The given publication class does not extend ' .
                          'Chamilo\Core\Repository\Publication\Storage\DataClass\Publication ' .
@@ -222,7 +226,7 @@ class PublicationRepository
             }
             else
             {
-                throw new \DomainException(
+                throw new DomainException(
                     sprintf(
                         'Invalid content object type. Expected %s got %s',
                         $contentObjectTypeClassName,

@@ -3,7 +3,9 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataManager;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -168,7 +170,7 @@ class MoverComponent extends ItemComponent
 
                         Event::trigger(
                             'Activity',
-                            \Chamilo\Core\Repository\Manager::context(),
+                            Manager::context(),
                             array(
                                 Activity::PROPERTY_TYPE => Activity::ACTIVITY_MOVE_ITEM,
                                 Activity::PROPERTY_USER_ID => $this->get_user_id(),
@@ -178,7 +180,7 @@ class MoverComponent extends ItemComponent
                             )
                         );
 
-                        if (!\Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataManager::update_node_ids(
+                        if (!DataManager::update_node_ids(
                             $current_node_ids,
                             $new_node_ids
                         )

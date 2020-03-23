@@ -10,6 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 
 /**
@@ -114,7 +115,7 @@ class GroupEntityFeedComponent extends Manager
     private function getElements()
     {
         $elements = new AdvancedElementFinderElements();
-        $glyph = new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
 
         // Add groups
         $groups = $this->findGroups();
@@ -167,7 +168,7 @@ class GroupEntityFeedComponent extends Manager
     public function getGroupElement(Group $group)
     {
         $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
-        $glyph = new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('users', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
 
         return new AdvancedElementFinderElement(
             GroupEntityProvider::ENTITY_TYPE . '_' . $group->getId(), $glyph->getClassNamesString(), $group->get_name(),
@@ -191,7 +192,7 @@ class GroupEntityFeedComponent extends Manager
      */
     public function getUserElement(User $user)
     {
-        $glyph = new \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
 
         return new AdvancedElementFinderElement(
             UserEntityProvider::ENTITY_TYPE . '_' . $user->getId(), $glyph->getClassNamesString(), $user->get_fullname(),

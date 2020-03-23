@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Json;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\Json\Type\JsonImageContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\JsonRenditionImplementation;
+use Chamilo\Core\Repository\Manager;
 
 class JsonImageRenditionImplementation extends JsonRenditionImplementation
 {
@@ -14,7 +15,7 @@ class JsonImageRenditionImplementation extends JsonRenditionImplementation
         
         if ($object->is_image())
         {
-            $url = \Chamilo\Core\Repository\Manager::get_document_downloader_url(
+            $url = Manager::get_document_downloader_url(
                 $object->get_id(), 
                 $object->calculate_security_code());
             

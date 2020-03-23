@@ -9,6 +9,8 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  *
@@ -102,12 +104,12 @@ class ContentObjectRelationService
     {
         if (empty($oldContentObjectId))
         {
-            throw new \InvalidArgumentException('The given old content object id can not be empty');
+            throw new InvalidArgumentException('The given old content object id can not be empty');
         }
         
         if (empty($newContentObjectId))
         {
-            throw new \InvalidArgumentException('The given new content object id can not be empty');
+            throw new InvalidArgumentException('The given new content object id can not be empty');
         }
         
         $contentObjectRelations = $this->getContentObjectRelationRepository()->findContentObjectRelationsForContentObjectById(
@@ -119,7 +121,7 @@ class ContentObjectRelationService
             $contentObjectRelation->setContentObjectId($newContentObjectId);
             if (! $contentObjectRelation->update())
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf(
                         'Could not update the WorkspaceContentObjectRelation object with id %s', 
                         $contentObjectRelation->getId()));

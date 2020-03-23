@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Dummy;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\Manager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Platform\Session\Session;
+use Exception;
 
 /**
  * A dummy Feedback class which allows the preview to emulate the Feedback functionality
@@ -219,6 +220,6 @@ class FeedbackDummy extends Feedback
             }
         }
         
-        throw new \Exception('NoSuchFeedbackId');
+        throw new Exception('NoSuchFeedbackId');
     }
 }

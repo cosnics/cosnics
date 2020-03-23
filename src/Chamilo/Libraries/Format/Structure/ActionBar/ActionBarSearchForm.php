@@ -14,14 +14,14 @@ use Chamilo\Libraries\Utilities\Utilities;
 class ActionBarSearchForm extends FormValidator
 {
     /**
-     * #@+ Search parameter
-     */
-    const PARAM_SIMPLE_SEARCH_QUERY = 'query';
-
-    /**
      * Name of the search form
      */
     const FORM_NAME = 'search';
+
+    /**
+     * #@+ Search parameter
+     */
+    const PARAM_SIMPLE_SEARCH_QUERY = 'query';
 
     /**
      * The renderer used to display the form
@@ -52,36 +52,6 @@ class ActionBarSearchForm extends FormValidator
     }
 
     /**
-     * Build the simple search form.
-     */
-    private function build_simple_search_form()
-    {
-        $this->renderer->setElementTemplate('<div style="vertical-align: middle; float: left;">{element}</div>');
-        $this->addElement(
-            'text',
-            self::PARAM_SIMPLE_SEARCH_QUERY,
-            Translation::get('Search', null, Utilities::COMMON_LIBRARIES),
-            'size="20" class="search_query"');
-
-        $this->addElement('style_submit_button', 'submit', null, array('class' => 'search'));
-
-        if ($this->get_query())
-        {
-            $this->addElement('style_submit_button', 'clear', null, array('class' => 'clear', 'value' => 'clear'));
-        }
-    }
-
-    /**
-     *
-     * @return string
-     * @deprecated Use render() now
-     */
-    public function as_html()
-    {
-        return $this->render();
-    }
-
-    /**
      * Display the form
      */
     public function render()
@@ -96,6 +66,35 @@ class ActionBarSearchForm extends FormValidator
     }
 
     /**
+     *
+     * @return string
+     * @deprecated Use render() now
+     */
+    public function as_html()
+    {
+        return $this->render();
+    }
+
+    /**
+     * Build the simple search form.
+     */
+    private function build_simple_search_form()
+    {
+        $this->renderer->setElementTemplate('<div style="vertical-align: middle; float: left;">{element}</div>');
+        $this->addElement(
+            'text', self::PARAM_SIMPLE_SEARCH_QUERY, Translation::get('Search', null, Utilities::COMMON_LIBRARIES),
+            'size="20" class="search_query"'
+        );
+
+        $this->addElement('style_submit_button', 'submit', null, array('class' => 'search'));
+
+        if ($this->get_query())
+        {
+            $this->addElement('style_submit_button', 'clear', null, array('class' => 'clear', 'value' => 'clear'));
+        }
+    }
+
+    /**
      * Gets the conditions that this form introduces.
      *
      * @return string
@@ -104,7 +103,7 @@ class ActionBarSearchForm extends FormValidator
     {
         $query = Request::post(self::PARAM_SIMPLE_SEARCH_QUERY);
 
-        if (! $query)
+        if (!$query)
         {
             $query = Request::get(self::PARAM_SIMPLE_SEARCH_QUERY);
         }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
+use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -32,7 +33,7 @@ abstract class Manager extends Application
 
         $contentObject = $node->getContentObject();
 
-        $subscribed = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager::retrieve_subscribe(
+        $subscribed = DataManager::retrieve_subscribe(
             $contentObject->getId(),
             $this->getUser()->getId());
 

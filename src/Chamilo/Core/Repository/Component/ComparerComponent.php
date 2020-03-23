@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Component;
 
+use Chamilo\Core\Repository\Common\ContentObjectDifferenceRenderer;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
@@ -10,8 +11,8 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -32,7 +33,7 @@ class ComparerComponent extends Manager
     {
         // $trail = BreadcrumbTrail :: getInstance();
         $object_ids = $this->getRequest()->request->get(self::PARAM_CONTENT_OBJECT_ID);
-        if(empty($object_ids))
+        if (empty($object_ids))
         {
             $object_ids = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
         }
@@ -69,15 +70,11 @@ class ComparerComponent extends Manager
         }
 
         $isAllowedToViewObject = RightsService::getInstance()->canViewContentObject(
-            $this->get_user(),
-            $contentObject,
-            $this->getWorkspace()
+            $this->get_user(), $contentObject, $this->getWorkspace()
         );
 
         $isAllowedToViewVersion = RightsService::getInstance()->canViewContentObject(
-            $this->get_user(),
-            $contentObjectVersion,
-            $this->getWorkspace()
+            $this->get_user(), $contentObjectVersion, $this->getWorkspace()
         );
 
         if (!$isAllowedToViewObject || !$isAllowedToViewVersion)
@@ -90,11 +87,12 @@ class ComparerComponent extends Manager
             $this->force_menu_url($this->get_recycle_bin_url());
         }
 
+        $differenctRenderer = new ContentObjectDifferenceRenderer();
+
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = $this->renderComparedVersions($contentObject, $contentObjectVersion);
-        $html[] = $contentObject->get_difference($version_id)->render();
+        $html[] = $differenctRenderer->render($contentObject->get_difference($version_id));
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
@@ -110,59 +108,12 @@ class ComparerComponent extends Manager
                     array(
                         self::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS,
                         self::PARAM_CONTENT_OBJECT_ID => $baseContentObject->getId()
-                    ),
-                    array(self::PARAM_BASE_CONTENT_OBJECT_ID)
-                ),
-                Translation::get('ViewContentObject', array('CONTENT_OBJECT' => $baseContentObject->get_title()))
+                    ), array(self::PARAM_BASE_CONTENT_OBJECT_ID)
+                ), Translation::get('ViewContentObject', array('CONTENT_OBJECT' => $baseContentObject->get_title()))
             )
         );
 
         $breadcrumbtrail->add_help('repository_comparer');
-    }
-
-    public function get_additional_parameters($additionalParameters = array())
-    {
-        return array(
-            self::PARAM_BASE_CONTENT_OBJECT_ID, self::PARAM_CONTENT_OBJECT_ID, self::PARAM_COMPARE_OBJECT,
-            self::PARAM_COMPARE_VERSION
-        );
-    }
-
-    /**
-     * Renders the compared versions
-     */
-    protected function renderComparedVersions(ContentObject $contentObject, ContentObject $contentObjectVersion)
-    {
-        $html = array();
-
-        $html[] = '<table class="table table-bordered table-striped comparer-header-table">';
-        $html[] = '<thead>';
-        $html[] = '<tr>';
-        $html[] = '<th></th>';
-        $html[] = '<th>' . Translation::getInstance()->getTranslation('OldVersion') . '</th>';
-        $html[] = '<th>' . Translation::getInstance()->getTranslation('NewVersion') . '</th>';
-        $html[] = '</tr>';
-        $html[] = '</thead>';
-        $html[] = '<tbody>';
-        $html[] = '<tr>';
-        $html[] = '<th class="comparer-header-title">' . Translation::getInstance()->getTranslation('Title') . '</th>';
-        $html[] = '<td>' . $contentObject->get_title() . '</td>';
-        $html[] = '<td>' . $contentObjectVersion->get_title() . '</td>';
-        $html[] = '</tr>';
-
-        if($contentObject->get_comment() || $contentObjectVersion->get_comment())
-        {
-            $html[] = '<tr>';
-            $html[] = '<th class="comparer-header-title">' . Translation::getInstance()->getTranslation('VersionComment') . '</th>';
-            $html[] = '<td>' . $contentObject->get_comment() . '</td>';
-            $html[] = '<td>' . $contentObjectVersion->get_comment() . '</td>';
-            $html[] = '</tr>';
-        }
-
-        $html[] = '</tbody>';
-        $html[] = '</table>';
-
-        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -192,5 +143,15 @@ class ComparerComponent extends Manager
         }
 
         return $contentObject;
+    }
+
+    public function get_additional_parameters($additionalParameters = array())
+    {
+        return array(
+            self::PARAM_BASE_CONTENT_OBJECT_ID,
+            self::PARAM_CONTENT_OBJECT_ID,
+            self::PARAM_COMPARE_OBJECT,
+            self::PARAM_COMPARE_VERSION
+        );
     }
 }

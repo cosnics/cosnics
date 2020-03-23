@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Instance\Storage\DataClass;
 
+use Chamilo\Core\Repository\External\DataConnector;
 use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Translation\Translation;
@@ -306,10 +307,10 @@ class SynchronizationData extends DataClass
         {
             if (! $this->get_external())
             {
-                throw new \Exception(Translation::get('NoExternalnstanceFound'));
+                throw new Exception(Translation::get('NoExternalnstanceFound'));
             }
             
-            $this->external_object = \Chamilo\Core\Repository\External\DataConnector::getInstance($this->get_external())->retrieve_external_object(
+            $this->external_object = DataConnector::getInstance($this->get_external())->retrieve_external_object(
                 $this);
         }
         return $this->external_object;

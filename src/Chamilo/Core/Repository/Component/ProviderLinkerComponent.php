@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
@@ -37,7 +38,7 @@ class ProviderLinkerComponent extends Manager implements ApplicationSupport
      */
     public function getEntities()
     {
-        $registrations = \Chamilo\Configuration\Configuration::registrations_by_type(
+        $registrations = Configuration::registrations_by_type(
             'Chamilo\Core\Repository\ContentObject');
 
         $entities = array();

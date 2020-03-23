@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\Feedback\Bridge
@@ -48,7 +49,7 @@ class FeedbackServiceBridgeAdapter implements FeedbackServiceBridgeInterface
 
         if(!$feedbackObject->create())
         {
-            throw new \RuntimeException('Could not create feedback in the database');
+            throw new RuntimeException('Could not create feedback in the database');
         }
 
         return $feedbackObject;
@@ -98,7 +99,7 @@ class FeedbackServiceBridgeAdapter implements FeedbackServiceBridgeInterface
     {
         if(!$feedback->update())
         {
-            throw new \RuntimeException('Could not create feedback in the database');
+            throw new RuntimeException('Could not create feedback in the database');
         }
     }
 
@@ -111,7 +112,7 @@ class FeedbackServiceBridgeAdapter implements FeedbackServiceBridgeInterface
     {
         if(!$feedback->delete())
         {
-            throw new \RuntimeException('Could not create feedback in the database');
+            throw new RuntimeException('Could not create feedback in the database');
         }
     }
 }

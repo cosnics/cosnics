@@ -4,6 +4,10 @@ namespace Chamilo\Core\Repository\Service\ContentObjectTemplate;
 
 use Chamilo\Core\Repository\Common\Template\Template;
 use Chamilo\Libraries\File\PathBuilder;
+use DOMDocument;
+use DOMXPath;
+use Exception;
+use RuntimeException;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -57,7 +61,7 @@ class ContentObjectTemplateLoader
         $templates = $this->loadTemplatesByNameOrPattern($contentObjectNamespace, $templateName);
         if(empty($templates))
         {
-            throw new \RuntimeException('Could not load the template with the name ' . $templateName);
+            throw new RuntimeException('Could not load the template with the name ' . $templateName);
         }
 
         return array_shift($templateName);
@@ -76,14 +80,14 @@ class ContentObjectTemplateLoader
         $contentObjectPath = $this->pathBuilder->namespaceToFullPath($contentObjectNamespace);
         if (!file_exists($contentObjectPath) || !is_dir($contentObjectPath))
         {
-            throw new \Exception(sprintf('The given content object path %s does not exist', $contentObjectPath));
+            throw new Exception(sprintf('The given content object path %s does not exist', $contentObjectPath));
         }
 
         $templatePath = $contentObjectPath . 'Template';
 
         if (!file_exists($templatePath) || !is_dir($templatePath))
         {
-            throw new \Exception(
+            throw new Exception(
                 sprintf('The given content object %s does not have a valid template path', $contentObjectPath)
             );
         }
@@ -120,18 +124,18 @@ class ContentObjectTemplateLoader
     {
         if (!file_exists($templatePath))
         {
-            throw new \Exception(sprintf('The given template path %s does not exist', $templatePath));
+            throw new Exception(sprintf('The given template path %s does not exist', $templatePath));
         }
 
         $template_class_name = $contentObjectNamespace . '\Template\Template';
 
-        $dom_document = new \DOMDocument('1.0', 'UTF-8');
+        $dom_document = new DOMDocument('1.0', 'UTF-8');
         $dom_document->load($templatePath);
-        $dom_xpath = new \DOMXPath($dom_document);
+        $dom_xpath = new DOMXPath($dom_document);
 
         if (! is_subclass_of($template_class_name, 'Chamilo\Core\Repository\Common\Template\TemplateParser'))
         {
-            throw new \Exception(
+            throw new Exception(
                 $template_class_name .
                 ' doesn\'t seem to support parsing, please implement the' .
                 ' Chamilo\Core\Repository\Common\Template\TemplateParser interface');

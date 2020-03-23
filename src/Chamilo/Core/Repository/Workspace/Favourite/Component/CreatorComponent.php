@@ -8,6 +8,8 @@ use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserF
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
+use RuntimeException;
 
 /**
  *
@@ -48,7 +50,7 @@ class CreatorComponent extends Manager
                 
                 if (! $workspaceUserFavourite instanceof WorkspaceUserFavourite)
                 {
-                    throw new \RuntimeException(
+                    throw new RuntimeException(
                         Translation::getInstance()->getTranslation(
                             'CouldNotCreateWorkspaceFavorite', 
                             $workspaceIdentifier, 
@@ -57,7 +59,7 @@ class CreatorComponent extends Manager
                 }
             }
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $this->redirect(
                 Translation::get(

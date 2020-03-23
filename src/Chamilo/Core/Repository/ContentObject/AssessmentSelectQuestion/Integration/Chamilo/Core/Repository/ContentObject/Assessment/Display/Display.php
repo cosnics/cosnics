@@ -85,7 +85,7 @@ class Display extends QuestionDisplay
             $advanced_select = $formvalidator->createElement(
                 'select', $question_name, '', $answers, array(
                     'multiple' => 'true',
-                    'class'    => 'advanced_select_question',
+                    'class'    => 'advanced_select_question form-control',
                     'size'     => (count($answers) > 10 ? 10 : count($answers))
                 )
             );
@@ -93,7 +93,9 @@ class Display extends QuestionDisplay
         }
         else
         {
-            $formvalidator->addElement('select', $question_name, '', $answers, 'class="select_question"');
+            $formvalidator->addElement(
+                'select', $question_name, '', $answers, array('class' => 'select_question form-control')
+            );
         }
 
         $renderer->setElementTemplate($element_template, $question_name);

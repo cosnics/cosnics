@@ -2,11 +2,9 @@
 namespace Chamilo\Core\Group;
 
 use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
-use Chamilo\Core\Group\Form\GroupSearchForm;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\DataManager;
-use Chamilo\Core\User\Form\UserSearchForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -243,26 +241,6 @@ abstract class Manager extends Application
         return $parms;
     }
 
-    public function get_search_condition()
-    {
-        return $this->get_search_form()->get_condition();
-    }
-
-    private function get_search_form()
-    {
-        if (!isset($this->search_form))
-        {
-            $this->search_form = new GroupSearchForm($this, $this->get_url());
-        }
-
-        return $this->search_form;
-    }
-
-    public function get_search_validate()
-    {
-        return $this->get_search_form()->validate();
-    }
-
     /**
      * Returns the selected group
      *
@@ -291,28 +269,6 @@ abstract class Manager extends Application
         }
 
         return $this->selected_group;
-    }
-
-    public function get_user_search_condition()
-    {
-        return $this->get_user_search_form()->get_condition();
-    }
-
-    private function get_user_search_form()
-    {
-        if (!isset($this->user_search_form))
-        {
-            $this->user_search_form = new UserSearchForm(
-                $this, $this->get_url(array(self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID)))
-            );
-        }
-
-        return $this->user_search_form;
-    }
-
-    public function get_user_search_validate()
-    {
-        return $this->get_user_search_form()->validate();
     }
 
     /**

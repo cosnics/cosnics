@@ -1,18 +1,20 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Preview\Component;
 
+use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
+use Chamilo\Core\Repository\Display\Preview;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
 
-class ViewerComponent extends \Chamilo\Core\Repository\Display\Preview implements WikiDisplaySupport
+class ViewerComponent extends Preview implements WikiDisplaySupport
 {
 
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager::context(),
+            Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 

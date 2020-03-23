@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass;
 
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
+use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
@@ -46,7 +47,7 @@ class Youtube extends ContentObject implements Versionable, Includeable
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
 
-        $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
+        $external_repositories = DataManager::retrieves(
             Instance::class_name(),
             new DataClassRetrievesParameters($condition));
         return $external_repositories->size() == 1;

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -62,7 +63,7 @@ class HtmlEditorFileComponent extends Manager
     {
         $types = array();
 
-        $active_types = \Chamilo\Core\Repository\Storage\DataManager::get_registered_types(true);
+        $active_types = DataManager::get_registered_types(true);
 
         foreach ($active_types as $active_type)
         {

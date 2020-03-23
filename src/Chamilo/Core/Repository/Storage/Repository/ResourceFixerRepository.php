@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost
 use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\HotspotQuestion;
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\OrderingQuestion;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -360,7 +361,7 @@ class ResourceFixerRepository
      */
     public function findContentObjectById($contentObjectId)
     {
-        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        return DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $contentObjectId);
     }

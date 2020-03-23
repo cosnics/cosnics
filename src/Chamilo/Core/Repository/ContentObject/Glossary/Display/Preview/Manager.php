@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Preview;
 
-abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
+use Chamilo\Core\Repository\Display\Preview;
+
+abstract class Manager extends Preview
 {
 
     /**

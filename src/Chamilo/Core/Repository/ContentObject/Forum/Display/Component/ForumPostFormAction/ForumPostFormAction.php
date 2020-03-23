@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Exception;
 
 /**
  * Common functions for the create,edit and quote forms
@@ -65,7 +66,7 @@ abstract class ForumPostFormAction extends Manager implements DelegateComponent
         }
         else
         {
-            throw new \Exception('The forum topic you requested has not been found in this forum');
+            throw new Exception('The forum topic you requested has not been found in this forum');
         }
         
         return $trail;

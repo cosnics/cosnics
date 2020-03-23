@@ -5,6 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * the email notificator of a post extends abstract email notificator
@@ -96,7 +97,7 @@ class TopicEmailNotificator extends EmailNotificator
         {
             $mailer->sendMail($mail);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
         }
     }

@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass;
 
+use Chamilo\Core\Repository\External\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
+use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
@@ -42,13 +44,13 @@ class Vimeo extends ContentObject implements Versionable, Includeable
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION),
-            new StaticConditionVariable(\Chamilo\Core\Repository\External\Manager::get_namespace('Vimeo')));
+            new StaticConditionVariable(Manager::get_namespace('Vimeo')));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_ENABLED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
 
-        $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
+        $external_repositories = DataManager::retrieves(
             Instance::class_name(),
             new DataClassRetrievesParameters($condition));
         return $external_repositories->size() == 1;

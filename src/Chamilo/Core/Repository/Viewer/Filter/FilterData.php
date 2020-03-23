@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Viewer\Filter;
 
+use InvalidArgumentException;
+
 /**
  * Custom filter data class for repository viewer
  * 
@@ -44,7 +46,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
     {
         if(!is_array($excludedContentObjectIds))
         {
-            throw new \InvalidArgumentException('The given argument $excludedContentObjectIds should be a valid array');
+            throw new InvalidArgumentException('The given argument $excludedContentObjectIds should be a valid array');
         }
 
         $this->set_filter_property(self::FILTER_EXCLUDED_CONTENT_OBJECT_IDS, $excludedContentObjectIds);

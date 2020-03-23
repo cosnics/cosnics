@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
@@ -34,8 +36,8 @@ class FileForm extends ContentObjectForm
         $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
         
         $calculator = new Calculator(
-            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+            DataManager::retrieve_by_id(
+                User::class_name(),
                 (int) $this->get_owner_id()));
         
         $this->addSingleFileDropzone(
@@ -70,8 +72,8 @@ class FileForm extends ContentObjectForm
         $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
         
         $calculator = new Calculator(
-            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+            DataManager::retrieve_by_id(
+                User::class_name(),
                 (int) $this->get_owner_id()));
         
         /** @var File $content_object */
@@ -203,8 +205,8 @@ class FileForm extends ContentObjectForm
         
         $owner_id = $this->get_owner_id();
         
-        $owner = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+        $owner = DataManager::retrieve_by_id(
+            User::class_name(),
             (int) $owner_id);
         
         $calculator = new Calculator($owner);

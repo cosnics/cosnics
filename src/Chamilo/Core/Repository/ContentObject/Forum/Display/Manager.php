@@ -3,10 +3,12 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\Display;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
 
 /**
  *
@@ -64,7 +66,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
         else
         {
-            throw new \Exception(
+            throw new Exception(
                 get_class($applicationConfiguration->getApplication()) . ' must implement ForumDisplaySupport ');
         }
     }
@@ -106,7 +108,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $copy_children = array();
         $wrappers = array();
 
-        $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+        $children = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class_name(),
             new EqualityCondition(
                 new PropertyConditionVariable(
@@ -121,7 +123,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
             if ($child->get_id() == $complex_content_item_id)
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $content_object = DataManager::retrieve_by_id(
                     ContentObject::class_name(),
                     $child->get_ref());
 
@@ -140,7 +142,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
             if ($wrap_child)
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $content_object = DataManager::retrieve_by_id(
                     ContentObject::class_name(),
                     $value);
 
@@ -179,7 +181,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             }
             else
             {
-                $this->forum = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $this->forum = DataManager::retrieve_by_id(
                     ContentObject::class_name(),
                     $this->get_complex_content_object_item()->get_ref());
             }

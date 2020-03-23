@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Core\Menu\Renderer\Item\ApplicationItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
@@ -25,7 +26,7 @@ class RepositoryApplicationItemRenderer extends ApplicationItemRenderer
         $request = $this->getRequest();
 
         $currentWorkspace = $request->query->get(
-            \Chamilo\Core\Repository\Manager::PARAM_WORKSPACE_ID
+            Manager::PARAM_WORKSPACE_ID
         );
 
         $currentContext = $request->query->get(Application::PARAM_CONTEXT);

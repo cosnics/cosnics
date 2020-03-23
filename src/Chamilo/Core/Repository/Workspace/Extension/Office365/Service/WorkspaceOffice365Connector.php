@@ -9,6 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\Workspace\Extension\Office365\Service
@@ -77,7 +78,7 @@ class WorkspaceOffice365Connector
     {
         if ($this->workspaceOffice365ReferenceService->workspaceHasReference($workspace))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not create a new office365 group for the given workspace %s' .
                     'since there is a group already available'
@@ -104,7 +105,7 @@ class WorkspaceOffice365Connector
     {
         if (!$this->isOffice365GroupActiveForWorkspace($workspace))
         {
-            throw new \RuntimeException();
+            throw new RuntimeException();
         }
 
         $reference = $this->workspaceOffice365ReferenceService->getWorkspaceReference($workspace);

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Filter;
 
+use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
@@ -149,7 +150,7 @@ class FilterData
             if (is_numeric($type) && ! empty($type))
             {
                 $template_id = $this->get_filter_property(FilterData::FILTER_TYPE);
-                $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id((int) $template_id);
+                $template_registration = Configuration::registration_by_id((int) $template_id);
                 $this->context = $template_registration->get_content_object_type();
             }
             else
@@ -371,7 +372,7 @@ class FilterData
             if (is_numeric($type) && ! empty($type))
             {
                 $template_id = $filter_data->get_filter_property(FilterData::FILTER_TYPE);
-                $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id((int) $template_id);
+                $template_registration = Configuration::registration_by_id((int) $template_id);
                 
                 $class_name = $template_registration->get_content_object_type() . '\Filter\FilterData';
                 $filter_data = new $class_name($workspaceImplementation);

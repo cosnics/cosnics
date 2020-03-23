@@ -75,7 +75,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
     {
         if (! isset($this->reference_object))
         {
-            $this->reference_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $this->reference_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $this->get_ref());
         }
@@ -103,7 +103,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     public function get_parent_object()
     {
-        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        return DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $this->get_parent());
     }

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\HtmlRenditionImplementation;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Format\Theme;
 
 /**
@@ -31,7 +32,7 @@ class HtmlFullThumbnailRenditionImplementation extends HtmlRenditionImplementati
             ContentObjectRendition::VIEW_INLINE,
             $this->get_context())->render($parameters);
 
-        $downloadUrl = \Chamilo\Core\Repository\Manager::get_document_downloader_url(
+        $downloadUrl = Manager::get_document_downloader_url(
             $object->get_id(),
             $object->calculate_security_code());
 

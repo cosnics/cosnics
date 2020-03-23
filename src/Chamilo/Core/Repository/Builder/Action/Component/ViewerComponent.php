@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -30,15 +31,15 @@ class ViewerComponent extends Manager
 
         if ($id)
         {
-            $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $complex_content_object_item = DataManager::retrieve_by_id(
                 ComplexContentObjectItem::class_name(),
                 $id);
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $content_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $complex_content_object_item->get_ref());
-            if (\Chamilo\Core\Repository\Storage\DataManager::is_helper_type($content_object->get_type()))
+            if (DataManager::is_helper_type($content_object->get_type()))
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $content_object = DataManager::retrieve_by_id(
                     ContentObject::class_name(),
                     $content_object->get_additional_property('reference_id'));
             }

@@ -4,8 +4,12 @@ namespace Chamilo\Core\Repository\Common;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use DOMDocument;
+use DOMDocumentFragment;
+use DOMNodeList;
 use DOMXPath;
+use Exception;
 
 class ContentObjectResourceRenderer
 {
@@ -67,7 +71,7 @@ class ContentObjectResourceRenderer
      * @param \DOMDocumentFragment $documentFragment
      * @param \DOMNodeList $nodes
      */
-    protected function addNodesToDocumentFragment(\DOMDocumentFragment $documentFragment, \DOMNodeList $nodes)
+    protected function addNodesToDocumentFragment(DOMDocumentFragment $documentFragment, DOMNodeList $nodes)
     {
         foreach ($nodes as $node)
         {
@@ -128,7 +132,7 @@ class ContentObjectResourceRenderer
 
             try
             {
-                $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $object = DataManager::retrieve_by_id(
                     ContentObject::class_name(),
                     $source);
 
@@ -137,7 +141,7 @@ class ContentObjectResourceRenderer
                     continue;
                 }
             }
-            catch (\Exception $exception)
+            catch (Exception $exception)
             {
                 continue;
             }

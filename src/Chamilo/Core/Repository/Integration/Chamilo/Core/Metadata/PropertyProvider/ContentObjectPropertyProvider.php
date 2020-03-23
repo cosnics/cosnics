@@ -2,6 +2,10 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider;
 
 use Chamilo\Core\Metadata\Provider\PropertyProviderInterface;
+use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -14,7 +18,7 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  */
 abstract class ContentObjectPropertyProvider implements PropertyProviderInterface
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
     
     // Properties
     const PROPERTY_TITLE = 'title';
@@ -54,15 +58,15 @@ abstract class ContentObjectPropertyProvider implements PropertyProviderInterfac
         switch ($property)
         {
             case self::PROPERTY_OWNER_FULLNAME :
-                $author = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                $author = DataManager::retrieve_by_id(
+                    User::class_name(),
                     $contentObject->get_owner_id());
                 if ($author)
                 {
                     return $author->get_fullname();
                 }
                 
-                return Translation::get('UserUnknown', null, \Chamilo\Core\User\Manager::context());
+                return Translation::get('UserUnknown', null, Manager::context());
             case self::PROPERTY_CREATION_DATE :
                 return DatetimeUtilities::format_locale_date(null, $contentObject->get_creation_date());
             case self::PROPERTY_MODIFICATION_DATE :

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -23,7 +24,7 @@ class ForumSubscribeComponent extends Manager
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
         $params[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
         
-        $succes = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager::create_subscribe(
+        $succes = DataManager::create_subscribe(
             $this->get_user_id(), 
             $forum->get_ref());
         

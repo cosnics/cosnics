@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -58,7 +59,7 @@ class UpdaterComponent extends Manager
                 $translation = $success ? 'RightsUpdated' : 'RightsNotUpdated';
                 $message = Translation::get($translation);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();

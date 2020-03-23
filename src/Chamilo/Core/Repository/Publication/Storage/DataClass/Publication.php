@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Publication\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -28,7 +29,7 @@ abstract class Publication extends DataClass
     {
         if (is_null($this->contentObject))
         {
-            $this->contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $this->contentObject = DataManager::retrieve_by_id(
                 ContentObject::class_name(), $this->get_content_object_id()
             );
         }

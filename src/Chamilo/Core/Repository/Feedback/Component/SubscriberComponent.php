@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Component to remove the notification
@@ -35,7 +36,7 @@ class SubscriberComponent extends Manager
                 
                 if (! $notification->update())
                 {
-                    throw new \Exception(Translation::get('FeedbackNotificationNotUpdated'));
+                    throw new Exception(Translation::get('FeedbackNotificationNotUpdated'));
                 }
             }
             elseif (! $notification instanceof Notification)
@@ -47,14 +48,14 @@ class SubscriberComponent extends Manager
                 
                 if (! $notification->create())
                 {
-                    throw new \Exception(Translation::get('FeedbackNotificationNotAdded'));
+                    throw new Exception(Translation::get('FeedbackNotificationNotAdded'));
                 }
             }
             
             $success = true;
             $message = Translation::get('FeedbackNotificationAdded');
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();

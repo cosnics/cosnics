@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Exception;
 
 /**
  * @package Chamilo\Core\Repository\Component
@@ -47,7 +48,7 @@ class ExtensionLauncherComponent extends Manager implements DelegateComponent
 
         if(!$application instanceof WorkspaceExtensionSupport)
         {
-            throw new \Exception(sprintf('The given context %s does not support the workspace extension', $extensionContext));
+            throw new Exception(sprintf('The given context %s does not support the workspace extension', $extensionContext));
         }
 
         return $application->run();

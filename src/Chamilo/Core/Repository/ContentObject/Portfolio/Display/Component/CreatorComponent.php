@@ -1,12 +1,17 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
+use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\ComplexPortfolio;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
+use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\ComplexPortfolioItem;
 use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -22,7 +27,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CreatorComponent extends ItemComponent implements \Chamilo\Core\Repository\Viewer\ViewerInterface
+class CreatorComponent extends ItemComponent implements ViewerInterface
 {
 
     /**
@@ -35,7 +40,7 @@ class CreatorComponent extends ItemComponent implements \Chamilo\Core\Repository
             throw new NotAllowedException();
         }
 
-        $template = \Chamilo\Core\Repository\Configuration::registration_default_by_type(
+        $template = Configuration::registration_default_by_type(
             ClassnameUtilities::getInstance()->getNamespaceParent(Portfolio::context(), 2));
 
         $selected_template_id = TypeSelector::get_selection();
@@ -82,7 +87,7 @@ class CreatorComponent extends ItemComponent implements \Chamilo\Core\Repository
                     continue;
                 }
 
-                $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $object = DataManager::retrieve_by_id(
                     ContentObject::class_name(),
                     $object_id);
 
@@ -107,14 +112,14 @@ class CreatorComponent extends ItemComponent implements \Chamilo\Core\Repository
                 }
                 else
                 {
-                    $wrapper = new \Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\ComplexPortfolioItem();
+                    $wrapper = new ComplexPortfolioItem();
                 }
 
                 $wrapper->set_ref($new_object->get_id());
                 $wrapper->set_parent($this->get_current_content_object()->get_id());
                 $wrapper->set_user_id($this->get_user_id());
                 $wrapper->set_display_order(
-                    \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order(
+                    DataManager::select_next_display_order(
                         $this->get_current_content_object()->get_id()));
 
                 if (! $wrapper->create())
@@ -125,7 +130,7 @@ class CreatorComponent extends ItemComponent implements \Chamilo\Core\Repository
                 {
                     Event::trigger(
                         'Activity',
-                        \Chamilo\Core\Repository\Manager::context(),
+                        Manager::context(),
                         array(
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_ADD_ITEM,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),

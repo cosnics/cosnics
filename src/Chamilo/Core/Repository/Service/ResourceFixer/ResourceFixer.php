@@ -4,6 +4,9 @@ namespace Chamilo\Core\Repository\Service\ResourceFixer;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\Repository\ResourceFixerRepository;
+use DOMDocument;
+use DOMXPath;
+use Exception;
 use Monolog\Logger;
 
 /**
@@ -47,10 +50,10 @@ abstract class ResourceFixer
     {
         $originalTextContent = $textContent;
 
-        $domDocument = new \DOMDocument();
+        $domDocument = new DOMDocument();
         $domDocument->loadHTML($textContent);
 
-        $domXPath = new \DOMXPath($domDocument);
+        $domXPath = new DOMXPath($domDocument);
 
         $resourceTags = $domXPath->query('//resource');
 
@@ -73,7 +76,7 @@ abstract class ResourceFixer
             {
                 $object = $this->contentObjectResourceFixerRepository->findContentObjectById($objectId);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $this->logger->debug(
                     sprintf('The content object with ID %s is not found, skipping resource tag', $objectId)
@@ -158,7 +161,7 @@ abstract class ResourceFixer
             {
                 $this->contentObjectResourceFixerRepository->findContentObjectById($contentObjectId);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $this->logger->debug(
                     sprintf('The content object with ID %s is not found, skipping data-co-id tag', $contentObjectId)

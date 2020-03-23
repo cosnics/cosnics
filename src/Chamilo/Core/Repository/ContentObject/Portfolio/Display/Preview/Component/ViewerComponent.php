@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\Component;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\DummyFeedback;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\DummyNotification;
@@ -10,6 +11,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
+use Exception;
 
 /**
  * Container to enable previews of a portfolio in the context of the repository
@@ -24,7 +26,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::context(),
+            Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
@@ -39,7 +41,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
              \Chamilo\Core\Repository\Preview\Manager::ACTION_DISPLAY . '&' .
              \Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID . '=' .
              $this->get_root_content_object()->get_id() . '&' .
-             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_STEP . '=%s';
+             Manager::PARAM_STEP . '=%s';
     }
 
     /**
@@ -78,7 +80,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
         {
             return PreviewStorage::getInstance()->retrieve_feedback($feedback_id);
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             throw $exception;
         }

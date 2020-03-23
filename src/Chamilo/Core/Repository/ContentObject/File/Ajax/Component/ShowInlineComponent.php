@@ -2,15 +2,17 @@
 
 namespace Chamilo\Core\Repository\ContentObject\File\Ajax\Component;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Exception;
 
 /**
  * Class ClearParameterComponent
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Component
  */
-class ShowInlineComponent extends \Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Manager
+class ShowInlineComponent extends Manager
 {
     use DependencyInjectionContainerTrait;
 
@@ -49,7 +51,7 @@ class ShowInlineComponent extends \Chamilo\Core\Repository\ContentObject\Assignm
                 $file->save();
                 JsonAjaxResult::success();
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->returnError($exception->getMessage());
         }
     }

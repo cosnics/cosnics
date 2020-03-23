@@ -4,18 +4,21 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopic;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
  * @package repository.lib.complex_display.forum.component
  */
-class ForumTopicCreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface,
+class ForumTopicCreatorComponent extends Manager implements ViewerInterface,
     DelegateComponent
 {
 
@@ -55,7 +58,7 @@ class ForumTopicCreatorComponent extends Manager implements \Chamilo\Core\Reposi
                 }
                 else
                 {
-                    throw new \Exception('The forum you requested has not been found');
+                    throw new Exception('The forum you requested has not been found');
                 }
             }
 
@@ -99,7 +102,7 @@ class ForumTopicCreatorComponent extends Manager implements \Chamilo\Core\Reposi
                 $cloi->set_user_id($this->get_user_id());
 
                 $cloi->set_display_order(
-                    \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order(
+                    DataManager::select_next_display_order(
                         $cloi->get_parent(),
                         ForumTopic::class_name()));
 

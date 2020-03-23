@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -16,7 +17,7 @@ class ChangeLockComponent extends Manager
     public function run()
     {
         $wrapper = $this->get_selected_complex_content_object_item();
-        $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $object = DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $wrapper->get_ref());
 

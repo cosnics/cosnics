@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\Complex\ComplexTable;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -127,7 +128,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
      */
     protected function get_complex_content_object_by_id($complex_content_object_item_id)
     {
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $complex_content_object_item = DataManager::retrieve_by_id(
             ComplexContentObjectItem::class_name(), 
             $complex_content_object_item_id);
         
@@ -138,7 +139,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
                 $complex_content_object_item_id);
         }
         
-        if (! \Chamilo\Core\Repository\Storage\DataManager::is_child_of_content_object(
+        if (! DataManager::is_child_of_content_object(
             $this->get_root_content_object_id(), 
             $complex_content_object_item->get_ref()))
         {
@@ -198,7 +199,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     {
         if (! $this->parent_content_object)
         {
-            $this->parent_content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $this->parent_content_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), 
                 $this->get_parent_content_object_id());
         }

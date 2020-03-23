@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -15,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -35,7 +37,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                     self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item->get_id()));
 
-            $forum_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $forum_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $selected_complex_content_object_item->get_ref());
 
@@ -72,7 +74,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                 }
                 else
                 {
-                    throw new \Exception('The forum you requested has not been found');
+                    throw new Exception('The forum you requested has not been found');
                 }
             }
             BreadcrumbTrail::getInstance()->add(
@@ -97,7 +99,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                     $selected_complex_content_object_item->set_ref($new_id);
                     $selected_complex_content_object_item->update();
 
-                    $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+                    $children = DataManager::retrieve_complex_content_object_items(
                         ComplexContentObjectItem::class_name(),
                         new EqualityCondition(
                             new PropertyConditionVariable(

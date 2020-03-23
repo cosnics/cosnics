@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWikiPage;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -16,7 +18,7 @@ use Chamilo\Libraries\Translation\Translation;
 /*
  * This is the compenent that allows the user to create a wiki_page. Author: Stefan Billiet Author: Nick De Feyter
  */
-class WikiPageCreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface,
+class WikiPageCreatorComponent extends Manager implements ViewerInterface,
     DelegateComponent
 {
 
@@ -46,7 +48,7 @@ class WikiPageCreatorComponent extends Manager implements \Chamilo\Core\Reposito
                 $complex_content_object_item->set_parent($this->get_root_content_object()->get_id());
                 $complex_content_object_item->set_user_id($this->get_user_id());
                 $complex_content_object_item->set_display_order(
-                    \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order(
+                    DataManager::select_next_display_order(
                         $this->get_root_content_object()->get_id()));
                 $complex_content_object_item->set_is_homepage(0);
                 $complex_content_object_item->create();

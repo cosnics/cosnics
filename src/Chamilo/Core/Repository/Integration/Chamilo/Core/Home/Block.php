@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Home;
 
+use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
 use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
 use Chamilo\Core\Home\Service\ContentObjectPublicationService;
 use Chamilo\Core\Home\Service\HomeService;
@@ -19,7 +20,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author lopprecht
  */
-class Block extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
+class Block extends BlockRenderer
 {
     const CONFIGURATION_OBJECT_ID = 'use_object';
 

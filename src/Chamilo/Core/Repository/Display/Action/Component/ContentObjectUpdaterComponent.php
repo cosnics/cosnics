@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Display\Action\Component;
 use Chamilo\Core\Repository\Display\Action\Manager;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -24,7 +25,7 @@ class ContentObjectUpdaterComponent extends Manager
         {
             $pid = Request::get('pid') ? Request::get('pid') : $_POST['pid'];
             
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $content_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), 
                 $pid);
             
@@ -54,7 +55,7 @@ class ContentObjectUpdaterComponent extends Manager
                 $params = array();
                 $params['pid'] = Request::get('pid');
                 $params['tool_action'] = Request::get('tool_action');
-                $params[\Chamilo\Core\Repository\Display\Manager::PARAM_ACTION] = \Chamilo\Core\Repository\Display\Action\Manager::ACTION_VIEW_CLO;
+                $params[\Chamilo\Core\Repository\Display\Manager::PARAM_ACTION] = Manager::ACTION_VIEW_CLO;
                 
                 $this->redirect($message, (! $succes), $params);
             }

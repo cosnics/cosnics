@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Component\Rende
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -76,7 +77,7 @@ abstract class GlossaryRenderer
             $order_property, 
             $this->get_joins());
         
-        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+        return DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class_name(), 
             $parameters);
     }
@@ -90,7 +91,7 @@ abstract class GlossaryRenderer
     {
         $parameters = new DataClassCountParameters($this->get_condition(), $this->get_joins());
         
-        return \Chamilo\Core\Repository\Storage\DataManager::count_complex_content_object_items(
+        return DataManager::count_complex_content_object_items(
             ComplexContentObjectItem::class_name(), 
             $parameters);
     }

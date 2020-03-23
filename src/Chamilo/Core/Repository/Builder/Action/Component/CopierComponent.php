@@ -5,10 +5,13 @@ use Chamilo\Core\Repository\Builder\Action\Manager;
 use Chamilo\Core\Repository\Common\Action\ContentObjectCopier;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
+use InvalidArgumentException;
 
 /**
  *
@@ -27,7 +30,7 @@ class CopierComponent extends Manager
         
         if (! $complexContentObjectItemIdentifiers)
         {
-            throw new \InvalidArgumentException();
+            throw new InvalidArgumentException();
         }
         elseif (! is_array($complexContentObjectItemIdentifiers))
         {
@@ -39,7 +42,7 @@ class CopierComponent extends Manager
         
         foreach ($complexContentObjectItemIdentifiers as $complexContentObjectItemIdentifier)
         {
-            $complexContentObjectItem = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $complexContentObjectItem = DataManager::retrieve_by_id(
                 ComplexContentObjectItem::class_name(), 
                 $complexContentObjectItemIdentifier);
             
@@ -50,7 +53,7 @@ class CopierComponent extends Manager
                     throw new ObjectNotExistException(Translation::get('ComplexContentObjectItem'));
                 }
                 
-                $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $contentObject = DataManager::retrieve_by_id(
                     ContentObject::class_name(), 
                     $complexContentObjectItem->get_ref());
                 
@@ -71,7 +74,7 @@ class CopierComponent extends Manager
                 
                 if ($contentObjectCopier->has_messages(ContentObjectCopier::TYPE_ERROR))
                 {
-                    throw new \Exception($contentObjectCopier->get_messages(ContentObjectCopier::TYPE_ERROR));
+                    throw new Exception($contentObjectCopier->get_messages(ContentObjectCopier::TYPE_ERROR));
                 }
                 else
                 {
@@ -92,28 +95,28 @@ class CopierComponent extends Manager
                             
                             if (! $helperObject->create())
                             {
-                                throw new \Exception(Translation::get('HelperObjectCreationFailed'));
+                                throw new Exception(Translation::get('HelperObjectCreationFailed'));
                             }
                             
                             $copiedContentObjectId = $helperObject->get_id();
                         }
                     }
                     
-                    $copiedContentObjectType = \Chamilo\Core\Repository\Storage\DataManager::determineDataClassType(
+                    $copiedContentObjectType = DataManager::determineDataClassType(
                         ContentObject::class_name(), 
                         $copiedContentObjectId);
                     
-                    $complexContentObjectItem = \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::factory(
+                    $complexContentObjectItem = ComplexContentObjectItem::factory(
                         $copiedContentObjectType);
                     $complexContentObjectItem->set_ref($copiedContentObjectId);
                     $complexContentObjectItem->set_parent($parentIdentifier);
                     $complexContentObjectItem->set_display_order(
-                        \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order($parentIdentifier));
+                        DataManager::select_next_display_order($parentIdentifier));
                     $complexContentObjectItem->set_user_id($this->getUser()->getId());
                     
                     if (! $complexContentObjectItem->create())
                     {
-                        throw new \Exception(Translation::get('ComplexContentObjectItemCreationFailed'));
+                        throw new Exception(Translation::get('ComplexContentObjectItemCreationFailed'));
                     }
                     else
                     {
@@ -121,7 +124,7 @@ class CopierComponent extends Manager
                     }
                 }
             }
-            catch (\Exception $exception)
+            catch (Exception $exception)
             {
                 $failedActions ++;
             }

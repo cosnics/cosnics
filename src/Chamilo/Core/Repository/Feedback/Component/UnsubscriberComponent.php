@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * Component to remove the notification
@@ -31,7 +32,7 @@ class UnsubscriberComponent extends Manager
             
             if (! $notification->delete())
             {
-                throw new \Exception(
+                throw new Exception(
                     Translation::get(
                         'ObjectNotDeleted', 
                         array('OBJECT' => Translation::get('Notification')), 
@@ -44,7 +45,7 @@ class UnsubscriberComponent extends Manager
                 array('OBJECT' => Translation::get('Notification')), 
                 Utilities::COMMON_LIBRARIES);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();

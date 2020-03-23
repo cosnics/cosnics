@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Filter\Renderer;
 
+use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\FilterRenderer;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
@@ -20,6 +21,8 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
+use InvalidArgumentException;
 
 /**
  *
@@ -50,7 +53,7 @@ class ConditionFilterRenderer extends FilterRenderer
                         $type = $type[0];
                     }
                     
-                    $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id($type);
+                    $template_registration = Configuration::registration_by_id($type);
                     $class_name = $template_registration->get_content_object_type() . '\Storage\DataClass\\' . ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
                         $template_registration->get_content_object_type());
                 }
@@ -215,7 +218,7 @@ class ConditionFilterRenderer extends FilterRenderer
                 }
                 elseif (! is_array($types) && ! is_string($types))
                 {
-                    throw new \InvalidArgumentException(
+                    throw new InvalidArgumentException(
                         'The given filter data "type" should be an array or a numeric value');
                 }
             }
@@ -234,7 +237,7 @@ class ConditionFilterRenderer extends FilterRenderer
                 {
                     $types = $type_selector->get_category_by_type($types)->get_unique_content_object_template_ids();
                 }
-                catch (\Exception $exception)
+                catch (Exception $exception)
                 {
                     $types = array();
                 }

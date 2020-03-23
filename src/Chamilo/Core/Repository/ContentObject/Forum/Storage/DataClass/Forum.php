@@ -42,7 +42,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);;
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     public function get_locked()
@@ -161,7 +161,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
         if ($last_post_subforums)
         {
             $last_post_subforums_date =
-                \Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager::retrieve_forum_post_date(
+                DataManager::retrieve_forum_post_date(
                     $last_post_subforums[Forum::PROPERTY_LAST_POST]
                 );
         }
@@ -199,7 +199,6 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
         if ($this->get_last_post() != $lastpostid)
         {
-            ;
         }
         {
             $this->set_last_post($lastpostid);

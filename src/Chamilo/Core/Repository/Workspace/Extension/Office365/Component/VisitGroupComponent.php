@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Workspace\Extension\Office365\Manager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -27,7 +28,7 @@ class VisitGroupComponent extends Manager
         $workspace = $parentComponent->getWorkspace();
         if (!$workspace instanceof Workspace)
         {
-            throw new \Exception(
+            throw new Exception(
                 'Groups can only be created / visited from within actual workspaces, not from the personal repository'
             );
         }
@@ -44,7 +45,7 @@ class VisitGroupComponent extends Manager
 
             return new RedirectResponse($groupUrl);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
             throw new NotAllowedException();

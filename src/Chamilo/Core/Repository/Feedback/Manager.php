@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Exception;
 
 abstract class Manager extends Application
 {
@@ -55,7 +56,7 @@ abstract class Manager extends Application
     {
         parent::__construct($applicationConfiguration);
 
-        if(!$this->get_application() instanceof \Chamilo\Core\Repository\Feedback\FeedbackSupport) {
+        if(!$this->get_application() instanceof FeedbackSupport) {
             throw new NotAllowedException();
         }
 
@@ -71,7 +72,7 @@ abstract class Manager extends Application
         {
             $this->feedbackServiceBridge = $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
         }
-        catch(\Exception $ex)
+        catch(Exception $ex)
         {
             /** @var \Chamilo\Core\Repository\Feedback\FeedbackSupport $application */
             $application = $this->get_application();
@@ -82,7 +83,7 @@ abstract class Manager extends Application
         {
             $this->feedbackRightsServiceBridge = $this->getBridgeManager()->getBridgeByInterface(FeedbackRightsServiceBridgeInterface::class);
         }
-        catch(\Exception $ex)
+        catch(Exception $ex)
         {
             /** @var \Chamilo\Core\Repository\Feedback\FeedbackSupport $application */
             $application = $this->get_application();

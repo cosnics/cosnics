@@ -2,7 +2,10 @@
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
 use Chamilo\Core\Repository\Common\Template\Template;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Exception;
 
 /**
  * The registration of a template for a specific content object type
@@ -88,8 +91,8 @@ class TemplateRegistration extends DataClass
     {
         if (! isset($this->user))
         {
-            $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+            $this->user = DataManager::retrieve_by_id(
+                User::class_name(),
                 $this->get_user_id());
         }
         
@@ -122,8 +125,8 @@ class TemplateRegistration extends DataClass
     {
         if (! isset($this->creator))
         {
-            $this->creator = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+            $this->creator = DataManager::retrieve_by_id(
+                User::class_name(),
                 $this->get_creator_id());
         }
         
@@ -190,7 +193,7 @@ class TemplateRegistration extends DataClass
             $this->set_template(Template::get($this->get_content_object_type(), $this->get_name()));
             return $this->update();
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             return false;
         }

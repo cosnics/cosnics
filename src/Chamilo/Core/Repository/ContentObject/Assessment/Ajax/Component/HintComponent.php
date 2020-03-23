@@ -1,14 +1,16 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Ajax\Component;
 
+use Chamilo\Core\Repository\ContentObject\Assessment\Ajax\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 /**
  *
  * @package repository.content_object.assessment;
  */
-class HintComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\Ajax\Manager
+class HintComponent extends Manager
 {
     const PARAM_HINT_IDENTIFIER = 'hint_identifier';
     const PROPERTY_HINT = 'hint';
@@ -28,7 +30,7 @@ class HintComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\Aj
     public function run()
     {
         $identifiers = explode('_', $this->getPostDataValue(self::PARAM_HINT_IDENTIFIER));
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $complex_content_object_item = DataManager::retrieve_by_id(
             ComplexContentObjectItem::class_name(),
             $identifiers[0]);
 

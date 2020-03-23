@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Exception;
 
 /**
  *
@@ -37,7 +38,7 @@ class PublisherComponent extends Manager
     {
         if (! $this->getCurrentWorkspace() instanceof Workspace)
         {
-            throw new \Exception(Translation::get('NoValidWorkspace'));
+            throw new Exception(Translation::get('NoValidWorkspace'));
         }
 
         if (! RightsService::getInstance()->canAddContentObjects($this->get_user(), $this->getCurrentWorkspace()))

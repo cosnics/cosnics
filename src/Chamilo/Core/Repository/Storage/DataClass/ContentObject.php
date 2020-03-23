@@ -57,41 +57,26 @@ class ContentObject extends CompositeDataClass
 {
 
     const ATTACHMENT_ALL = 'all';
-
     const ATTACHMENT_NORMAL = 'normal';
 
     const CURRENT_MULTIPLE = 2;
-
     const CURRENT_OLD = 0;
-
     const CURRENT_SINGLE = 1;
 
     const PARAM_SECURITY_CODE = 'security_code';
 
     const PROPERTIES_ADDITIONAL = 'additional_properties';
-
     const PROPERTY_COMMENT = 'comment';
-
     const PROPERTY_CONTENT_HASH = 'content_hash';
-
     const PROPERTY_CREATION_DATE = 'created';
-
     const PROPERTY_CURRENT = 'current';
-
     const PROPERTY_DESCRIPTION = 'description';
-
     const PROPERTY_MODIFICATION_DATE = 'modified';
-
     const PROPERTY_OBJECT_NUMBER = 'object_number';
-
     const PROPERTY_OWNER_ID = 'owner_id';
-
     const PROPERTY_PARENT_ID = 'parent_id';
-
     const PROPERTY_STATE = 'state';
-
     const PROPERTY_TEMPLATE_REGISTRATION_ID = 'template_registration_id';
-
     const PROPERTY_TITLE = 'title';
 
     /**

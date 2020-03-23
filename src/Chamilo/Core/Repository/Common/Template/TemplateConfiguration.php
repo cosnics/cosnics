@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Common\Template;
 
 use DOMXPath;
+use Exception;
 
 /**
  *
@@ -77,7 +78,7 @@ class TemplateConfiguration
             $template_configuration_class_name, 
             'Chamilo\Core\Repository\Common\Template\TemplateConfigurationParser'))
         {
-            throw new \Exception(
+            throw new Exception(
                 $template_configuration_class_name .
                      ' doesn\'t seem to support parsing, please implement the Chamilo\Core\Repository\Common\Template\TemplateConfigurationParser interface');
         }

@@ -522,7 +522,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $html[] = DatetimeUtilities::format_locale_date(null, $lastPost->get_creation_date());
 
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                User::class_name(),
                 $lastPost->get_user_id());
 
             if ($user instanceof User)

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Preview;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -54,7 +55,7 @@ abstract class Manager extends Application
         parent::__construct($applicationConfiguration);
 
         $content_object_id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
-        $this->content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $this->content_object = DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $content_object_id);
 
@@ -241,7 +242,7 @@ abstract class Manager extends Application
     {
         if (! $contentObject instanceof ContentObject && is_numeric($contentObject))
         {
-            $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $contentObject = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $contentObject);
         }

@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\UserQuotum;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -83,7 +84,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $stringUtilities = StringUtilities::getInstance();
         
         $packages = $configuration->get_registrations_by_type(
-            \Chamilo\Core\Repository\Manager::context() . '\Implementation');
+            Manager::context() . '\Implementation');
         
         $namespaces = array();
         

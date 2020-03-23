@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Builder\Action\Component;
 
 use Chamilo\Core\Repository\Builder\Action\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -34,16 +35,16 @@ class MoverComponent extends Manager
 
         if (isset($id))
         {
-            $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $complex_content_object_item = DataManager::retrieve_by_id(
                 ComplexContentObjectItem::class_name(),
                 $id);
             $parent = $complex_content_object_item->get_parent();
-            $max = \Chamilo\Core\Repository\Storage\DataManager::count_complex_content_object_items(
-                \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::class_name(),
+            $max = DataManager::count_complex_content_object_items(
+                ComplexContentObjectItem::class_name(),
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::class_name(),
-                        \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::PROPERTY_PARENT),
+                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::PROPERTY_PARENT),
                     new StaticConditionVariable($parent)));
 
             $display_order = $complex_content_object_item->get_display_order();
@@ -56,19 +57,19 @@ class MoverComponent extends Manager
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::class_name(),
-                        \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER),
+                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER),
                     new StaticConditionVariable($new_place),
-                    \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::get_table_name());
+                    ComplexContentObjectItem::get_table_name());
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::class_name(),
-                        \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::PROPERTY_PARENT),
+                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::PROPERTY_PARENT),
                     new StaticConditionVariable($parent),
-                    \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::get_table_name());
+                    ComplexContentObjectItem::get_table_name());
                 $condition = new AndCondition($conditions);
-                $items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-                    \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::class_name(),
+                $items = DataManager::retrieve_complex_content_object_items(
+                    ComplexContentObjectItem::class_name(),
                     $condition);
                 $new_complex_content_object_item = $items->next_result();
                 $new_complex_content_object_item->set_display_order($display_order);

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
@@ -34,7 +35,7 @@ class Portfolio extends ContentObject implements ComplexContentObjectSupport, Co
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Portfolio', 
-            \Chamilo\Core\Repository\Manager::package() . '\ContentObject');
+            Manager::package() . '\ContentObject');
         $types = array();
         
         foreach ($registrations as $registration)

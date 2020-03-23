@@ -14,7 +14,7 @@
 		});
 		
 		return false;
-	};;
+	};
 
 	$(document).ready( function() 
 	{

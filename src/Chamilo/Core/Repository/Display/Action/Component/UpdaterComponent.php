@@ -2,8 +2,10 @@
 namespace Chamilo\Core\Repository\Display\Action\Component;
 
 use Chamilo\Core\Repository\Display\Action\Manager;
+use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -27,7 +29,7 @@ class UpdaterComponent extends Manager
     public function run()
     {
         $selected_complex_content_object_item = $this->get_selected_complex_content_object_item();
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $content_object = DataManager::retrieve_by_id(
             ContentObject::class_name(), 
             $selected_complex_content_object_item->get_ref());
         
@@ -41,8 +43,8 @@ class UpdaterComponent extends Manager
         
         if ($this->get_parent()->get_parent()->is_allowed_to_edit_content_object() || $isOwner)
         {
-            $form = \Chamilo\Core\Repository\Form\ContentObjectForm::factory(
-                \Chamilo\Core\Repository\Form\ContentObjectForm::TYPE_EDIT, 
+            $form = ContentObjectForm::factory(
+                ContentObjectForm::TYPE_EDIT,
                 new PersonalWorkspace($this->get_user()), 
                 $content_object, 
                 'edit', 
@@ -69,7 +71,7 @@ class UpdaterComponent extends Manager
                         new StaticConditionVariable($old_id), 
                         ComplexContentObjectItem::get_table_name());
                     $parameters = new DataClassRetrievesParameters($condition);
-                    $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+                    $children = DataManager::retrieve_complex_content_object_items(
                         ComplexContentObjectItem::class_name(), 
                         $parameters);
                     $failures = 0;

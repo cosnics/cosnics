@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Portfolio display manager which serves as a base for all matters related to the displaying of portfolios
@@ -94,7 +95,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $this->get_current_step()
             );
         }
-        catch(\Exception $ex)
+        catch(Exception $ex)
         {
             throw new UserException(
                 Translation::getInstance()->getTranslation(
