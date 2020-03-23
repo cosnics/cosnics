@@ -24,6 +24,12 @@ class TeamService
 
     /**
      *
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
+     */
+    protected $userService;
+
+    /**
+     *
      * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService
      */
     protected $groupService;
@@ -32,17 +38,33 @@ class TeamService
      * TeamService constructor.
      * @param GroupService $groupService
      * @param TeamRepository $teamRepository
+     * @param UserService $userService
      */
     public function __construct(
         GroupService $groupService,
-        TeamRepository $teamRepository
+        TeamRepository $teamRepository,
+        UserService $userService
     )
     {
+        $this->userService = $userService;
         $this->groupService = $groupService;
         $this->teamRepository = $teamRepository;
     }
 
     /**
+     * @param string $title
+     * @param string $description
+     * @param User $owner
+     * @return string
+     * @throws \Exception
+     */
+    public function createTeam(string $title, string $description, User $owner) {
+       $ownerAzureId = $this->userService->getAzureUserIdentifier($owner);
+       return $this->teamRepository->createTeam($title, $description, $ownerAzureId);
+    }
+
+    /**
+     * @deprecated
      * @param string $groupId
      * @param int $retryCounter
      * @return Team

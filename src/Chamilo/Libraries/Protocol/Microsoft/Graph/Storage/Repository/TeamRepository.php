@@ -27,6 +27,14 @@ class TeamRepository
         $this->graphRepository = $graphRepository;
     }
 
+    /**
+     * @param string $title
+     * @param string $description
+     * @param string $ownerAzureId
+     * @return string
+     * @throws GraphException
+     * @throws \Exception
+     */
     public function createTeam(string $title, string $description, string $ownerAzureId)
     {
         $response = $this->graphRepository->executePostWithAccessTokenExpirationRetry(
@@ -48,7 +56,11 @@ class TeamRepository
         if(!$contentLocationHeader)
             throw new \Exception("No content location header");
 
-        return substr($contentLocationHeader, 7);
+        $teamId = substr($contentLocationHeader, 7);
+        if(!is_string($teamId))
+            throw new \Exception("Invalid Team Id");
+
+        return $teamId;
     }
 
 
