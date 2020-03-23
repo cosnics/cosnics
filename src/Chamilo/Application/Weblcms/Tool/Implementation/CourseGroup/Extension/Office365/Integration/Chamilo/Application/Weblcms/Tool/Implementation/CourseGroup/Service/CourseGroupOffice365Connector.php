@@ -77,8 +77,66 @@ class CourseGroupOffice365Connector
     }
 
     /**
+     * @param CourseGroup $courseGroup
+     * @param User $owner
+     * @return string
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Exception
+     */
+    public function createClassTeamFromCourseGroup(CourseGroup $courseGroup, User $owner) {
+        if ($this->courseGroupOffice365ReferenceService->courseGroupHasReference($courseGroup))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not create a new office365 group for the given course group %s' .
+                    'since there is a group already available'
+                    , $courseGroup->getId()
+                )
+            );
+        }
+
+        $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup);
+        $teamId = $this->teamService->createTeam($courseGroupName, $courseGroupName, $owner);
+
+        $this->courseGroupOffice365ReferenceService->createReferenceForCourseGroup($courseGroup, $teamId);
+
+        $this->subscribeCourseGroupUsers($courseGroup, $teamId);
+        $this->courseGroupOffice365ReferenceService->addTeamToCourseGroupReference($courseGroup);
+
+        return $teamId;
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     * @param User $user
+     * @return string
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     */
+    public function createOrUpdateClassTeamFromCourseGroup(CourseGroup $courseGroup, User $user)
+    {
+        $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
+
+        if (!$reference instanceof CourseGroupOffice365Reference)
+        {
+            return $this->createClassTeamFromCourseGroup($courseGroup, $user);
+        } else if (!$reference->isLinked())
+        {
+            $this->courseGroupOffice365ReferenceService->linkCourseGroupReference($reference);
+            $this->subscribeCourseGroupUsers($courseGroup, $reference->getOffice365GroupId());
+        }
+
+        $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup);
+        $this->groupService->updateGroupName(
+            $reference->getOffice365GroupId(), $courseGroupName
+        ); //todo: check if name in group differs from course group. If so the user changed it, and we don't need to sync...
+
+        return $reference->getOffice365GroupId();
+    }
+
+    /**
      * Creates an office365 group for a given CourseGroup
-     *
+     * @deprecated
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
@@ -112,6 +170,7 @@ class CourseGroupOffice365Connector
 
     /**
      * Creates an office365 group and a Team for a given CourseGroup
+     * @deprecated
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
