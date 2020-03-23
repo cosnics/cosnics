@@ -4,3 +4,6 @@ CourseGroupSyncSuccessful = "De cursusgroep en cursusbeheerder inschrijvingen we
 CourseGroupSyncFailed = "De cursusgroep en cursusbeheerder inschrijvingen konden niet worden gesynchroniseerd in het gekoppelde office365 team"
 VisitTeam = "Ga naar het Office365 Team"
 SynchronizeUsers = "Synchroniseer de gebruikers van deze groep"
+NoTeam = "Geen team aanmaken"
+RegularTeam = "Team aanmaken"
+ClassTeam = "Team met opdrachten aanmaken"

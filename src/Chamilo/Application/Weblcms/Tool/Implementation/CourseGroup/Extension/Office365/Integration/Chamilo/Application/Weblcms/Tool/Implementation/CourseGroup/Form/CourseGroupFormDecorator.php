@@ -21,6 +21,10 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 {
     const PROPERTY_USE_TEAM = 'use_team';
 
+    const OPTION_NO_TEAM = 0;
+    const OPTION_REGULAR_TEAM = 1;
+    const OPTION_CLASS_TEAM = 2;
+
     /**
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService
      */
@@ -46,21 +50,58 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
      */
     public function decorateCourseGroupForm(FormValidator $courseGroupForm, CourseGroup $courseGroup)
     {
-        $id = $courseGroup->getId() ? $courseGroup->getId() : 0;
-
-        $courseGroupForm->addElement(
-            'checkbox', self::PROPERTY_USE_TEAM . '[' . $id . ']',
-            Translation::getInstance()->getTranslation('UseOffice365Team')
-        );
-
         $defaults = [];
+
+        $id = $courseGroup->getId() ? $courseGroup->getId() : 0;
+        $useTeamElementName = self::PROPERTY_USE_TEAM . '[' . $id . ']';
+
         $office365Reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
-        if ($office365Reference)
+        if ($office365Reference && $office365Reference->hasTeam())
         {
-            if ($office365Reference->hasTeam())
+            $courseGroupForm->addElement(
+                'checkbox', $useTeamElementName,
+                Translation::getInstance()->getTranslation('UseOffice365Team')
+            );
+
+            if ($office365Reference)
             {
-                $defaults[self::PROPERTY_USE_TEAM . '[' . $courseGroup->getId() . ']'] = true;
+                if ($office365Reference->hasTeam())
+                {
+                    $defaults[$useTeamElementName] = true;
+                }
             }
+        }
+        else
+        {
+            $group = array();
+
+            $group[] = &$courseGroupForm->createElement(
+                'radio',
+                $useTeamElementName,
+                null,
+                Translation::getInstance()->getTranslation('NoTeam'),
+                self::OPTION_NO_TEAM
+            );
+
+            $group[] = &$courseGroupForm->createElement(
+                'radio',
+                $useTeamElementName,
+                null,
+                Translation::getInstance()->getTranslation('RegularTeam'),
+                self::OPTION_REGULAR_TEAM
+            );
+
+            $group[] = &$courseGroupForm->createElement(
+                'radio',
+                $useTeamElementName,
+                null,
+                Translation::getInstance()->getTranslation('ClassTeam'),
+                self::OPTION_CLASS_TEAM
+            );
+
+            $courseGroupForm->addGroup($group, null, Translation::getInstance()->getTranslation('UseOffice365Team'), '');
+
+            $defaults[$useTeamElementName] = self::OPTION_NO_TEAM;
         }
 
         $courseGroupForm->setDefaults($defaults);
