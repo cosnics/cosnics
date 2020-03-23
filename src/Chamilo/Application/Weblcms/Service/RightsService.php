@@ -212,9 +212,12 @@ class RightsService implements RightsServiceInterface
      */
     public function canUserEditPublication(User $user, ContentObjectPublication $publication, Course $course)
     {
-        if($publication->is_identified())
+        $hasEditRightOnPublication =
+            $this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin();
+
+        if (!$hasEditRightOnPublication && $publication->is_identified())
         {
-            $hasEditRight = $this->weblcmsRights->is_allowed_in_courses_subtree(
+            $hasEditRightOnPublication = $this->weblcmsRights->is_allowed_in_courses_subtree(
                 WeblcmsRights::EDIT_RIGHT,
                 $publication->getId(),
                 WeblcmsRights::TYPE_PUBLICATION,
@@ -222,12 +225,8 @@ class RightsService implements RightsServiceInterface
                 $user->getId()
             );
         }
-        else
-        {
-            $hasEditRight = $this->courseService->isUserTeacherInCourse($user, $course);
-        }
 
-        return $hasEditRight && $this->isCollaborationAllowed($publication);
+        return $hasEditRightOnPublication && $this->isCollaborationAllowed($publication);
     }
 
     /**
