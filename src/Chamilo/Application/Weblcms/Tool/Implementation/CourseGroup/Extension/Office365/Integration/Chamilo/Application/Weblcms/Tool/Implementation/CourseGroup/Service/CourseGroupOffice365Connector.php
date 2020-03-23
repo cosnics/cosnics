@@ -79,11 +79,13 @@ class CourseGroupOffice365Connector
     /**
      * @param CourseGroup $courseGroup
      * @param User $owner
+     *
      * @return string
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      * @throws \Exception
      */
-    public function createClassTeamFromCourseGroup(CourseGroup $courseGroup, User $owner) {
+    public function createClassTeamFromCourseGroup(CourseGroup $courseGroup, User $owner)
+    {
         if ($this->courseGroupOffice365ReferenceService->courseGroupHasReference($courseGroup))
         {
             throw new \RuntimeException(
@@ -98,10 +100,8 @@ class CourseGroupOffice365Connector
         $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup);
         $teamId = $this->teamService->createTeam($courseGroupName, $courseGroupName, $owner);
 
-        $this->courseGroupOffice365ReferenceService->createReferenceForCourseGroup($courseGroup, $teamId);
-
+        $this->courseGroupOffice365ReferenceService->createReferenceForCourseGroup($courseGroup, $teamId, true);
         $this->subscribeCourseGroupUsers($courseGroup, $teamId);
-        $this->courseGroupOffice365ReferenceService->addTeamToCourseGroupReference($courseGroup);
 
         return $teamId;
     }
@@ -109,6 +109,7 @@ class CourseGroupOffice365Connector
     /**
      * @param CourseGroup $courseGroup
      * @param User $user
+     *
      * @return string
      * @throws GroupNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
@@ -120,13 +121,15 @@ class CourseGroupOffice365Connector
         if (!$reference instanceof CourseGroupOffice365Reference)
         {
             return $this->createClassTeamFromCourseGroup($courseGroup, $user);
-        } else if (!$reference->isLinked())
+        }
+        elseif(!$reference->hasTeam())
         {
-            $this->courseGroupOffice365ReferenceService->linkCourseGroupReference($reference);
+            $this->courseGroupOffice365ReferenceService->addTeamToCourseGroupReference($courseGroup);
             $this->subscribeCourseGroupUsers($courseGroup, $reference->getOffice365GroupId());
         }
 
         $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup);
+
         $this->groupService->updateGroupName(
             $reference->getOffice365GroupId(), $courseGroupName
         ); //todo: check if name in group differs from course group. If so the user changed it, and we don't need to sync...
@@ -136,7 +139,7 @@ class CourseGroupOffice365Connector
 
     /**
      * Creates an office365 group for a given CourseGroup
-     * @deprecated
+     *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
@@ -144,6 +147,7 @@ class CourseGroupOffice365Connector
      * @throws AzureUserNotExistsException
      * @throws GroupNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @deprecated
      */
     public function createGroupFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
@@ -170,7 +174,6 @@ class CourseGroupOffice365Connector
 
     /**
      * Creates an office365 group and a Team for a given CourseGroup
-     * @deprecated
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -178,6 +181,8 @@ class CourseGroupOffice365Connector
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      * @throws GroupNotExistsException
+     * @deprecated
+     *
      */
     public function createGroupAndTeamFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
@@ -289,7 +294,7 @@ class CourseGroupOffice365Connector
         try
         {
             $group = $this->groupService->getGroup($reference->getOffice365GroupId());
-            if($group instanceof Group)
+            if ($group instanceof Group)
             {
                 $this->groupService->removeAllMembersFromGroup($reference->getOffice365GroupId());
 
@@ -303,7 +308,7 @@ class CourseGroupOffice365Connector
                 }
             }
         }
-        catch(GroupNotExistsException $groupNotExistsException)
+        catch (GroupNotExistsException $groupNotExistsException)
         {
 
         }
@@ -354,7 +359,7 @@ class CourseGroupOffice365Connector
         {
 
         }
-        catch(GroupNotExistsException $ex)
+        catch (GroupNotExistsException $ex)
         {
 
         }
@@ -385,7 +390,7 @@ class CourseGroupOffice365Connector
         {
 
         }
-        catch(GroupNotExistsException $ex)
+        catch (GroupNotExistsException $ex)
         {
 
         }
@@ -465,7 +470,7 @@ class CourseGroupOffice365Connector
             {
 
             }
-            catch(GroupNotExistsException $ex)
+            catch (GroupNotExistsException $ex)
             {
 
             }
@@ -496,7 +501,7 @@ class CourseGroupOffice365Connector
             {
 
             }
-            catch(GroupNotExistsException $ex)
+            catch (GroupNotExistsException $ex)
             {
 
             }

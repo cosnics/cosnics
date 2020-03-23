@@ -33,17 +33,18 @@ class CourseGroupOffice365ReferenceService
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param string $office365GroupId
+     * @param bool $hasTeam
      *
      * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference
      *
-     * @throws \RuntimeException
      */
-    public function createReferenceForCourseGroup(CourseGroup $courseGroup, $office365GroupId)
+    public function createReferenceForCourseGroup(CourseGroup $courseGroup, $office365GroupId, $hasTeam = false)
     {
         $courseGroupOffice365Reference = new CourseGroupOffice365Reference();
         $courseGroupOffice365Reference->setCourseGroupId($courseGroup->getId());
         $courseGroupOffice365Reference->setOffice365GroupId($office365GroupId);
         $courseGroupOffice365Reference->setLinked(true);
+        $courseGroupOffice365Reference->setHasTeam($hasTeam);
 
         if (!$this->courseGroupOffice365ReferenceRepository->createReference($courseGroupOffice365Reference))
         {
@@ -306,12 +307,14 @@ class CourseGroupOffice365ReferenceService
     {
         $courseGroupOffice365Reference =
             $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
+
         if (!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference)
         {
             throw new \InvalidArgumentException('The given course group is not connected to an office365 group');
         }
 
         $courseGroupOffice365Reference->setHasTeam(true);
+        $courseGroupOffice365Reference->setLinked(true);
 
         if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
         {
@@ -330,6 +333,7 @@ class CourseGroupOffice365ReferenceService
     {
         $courseGroupOffice365Reference =
             $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
+
         if (!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference)
         {
             throw new \InvalidArgumentException('The given course group is not connected to an office365 group');
