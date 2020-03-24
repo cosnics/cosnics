@@ -104,7 +104,8 @@ class TeamRepository
                 Team::class
             );
         } catch ( \GuzzleHttp\Exception\ClientException $exception){
-            if($exception->getCode() == 404) {
+            if($exception->getCode() == 404 &&
+                $exception->getResponse()->getBody()->getContents() === 'No team found with Group Id ' . $teamId) {
                 return null;
             }
             else {
