@@ -51,16 +51,22 @@ class TeamRepository
             GraphRepository::API_VERSION_BETA
         );
 
-        //Content-Location: /teams/{teamId}
-        $contentLocationHeader = $response->getHeaders()['Content-Location'];
-        if(!$contentLocationHeader)
-            throw new \Exception("No content location header");
+        //Content-Location: /teams/{teamId}/operation/{operationId}
+        $locationHeader = $response->getHeaders()['Location'];
+        if(!$locationHeader)
+            throw new \Exception("No location header");
 
-        $teamId = substr($contentLocationHeader, 7);
-        if(!is_string($teamId))
+        $locationString = $locationHeader[0];
+        if(!$locationString)
+            throw new \Exception("Location header does not contain Team ID: " . $locationHeader);
+
+        $matches = [];
+        preg_match('/\/teams\(\'(.*?)\'\).*/', $locationString, $matches);
+
+        if(!$matches[1])
             throw new \Exception("Invalid Team Id");
 
-        return $teamId;
+        return $matches[1];
     }
 
 
