@@ -45,27 +45,26 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function createGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
-        $this->createOrUpdateTeamByChoice($courseGroup, $user, $formValues);
+        $useTeam = $formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM][0];
+        $this->createOrUpdateTeamByChoice($courseGroup, $user, $useTeam);
     }
 
     /**
      * @param CourseGroup $courseGroup
      * @param User $user
-     * @param array $formValues
+     * @param int $useTeamENUM
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
-    protected function createOrUpdateTeamByChoice(CourseGroup $courseGroup, User $user, $formValues = [])
+    protected function createOrUpdateTeamByChoice(CourseGroup $courseGroup, User $user, $useTeamENUM)
     {
-        $useTeam = $formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM][0];
-
-        if($useTeam == CourseGroupFormDecorator::OPTION_REGULAR_TEAM)
+        if($useTeamENUM == CourseGroupFormDecorator::OPTION_REGULAR_TEAM)
         {
             $this->courseGroupOffice365Connector->createOrUpdateTeamFromCourseGroup($courseGroup, $user);
         }
-        if($useTeam == CourseGroupFormDecorator::OPTION_CLASS_TEAM)
+        if($useTeamENUM == CourseGroupFormDecorator::OPTION_CLASS_TEAM)
         {
             $this->courseGroupOffice365Connector->createOrUpdateClassTeamFromCourseGroup($courseGroup, $user);
         }
@@ -96,7 +95,7 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
         }
         else
         {
-            $this->createOrUpdateTeamByChoice($courseGroup, $user, $formValues);
+            $this->createOrUpdateTeamByChoice($courseGroup, $user, $useTeam);
         }
     }
 
